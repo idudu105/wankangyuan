@@ -1,0 +1,74 @@
+/* 
+* @Author: Marte
+* @Date:   2018-04-23 09:36:29
+* @Last Modified by:   Marte
+* @Last Modified time: 2018-04-23 11:26:29
+*/
+*{
+    margin:0;
+    padding:0;
+    list-style: none;
+    text-decoration: none;
+}
+.Box{
+    text-align: center;
+    width:100%;
+}
+.box{
+    margin:0 auto;
+    width:1440px;
+}
+.top{
+    width:1440px;
+    height:83px;
+    background:#fff;
+    position:relative;
+}
+.logo{
+    float:left;
+    margin-left:10px;
+}
+.link{
+    float:left;
+    margin-left:120px;
+    margin-top:30px;
+    font-size:18px;
+    color:#013f73;
+    font-weight: bold;
+    /*font-family:PingFangSC-Regular;*/
+}
+.search{
+    margin-top:30px;
+    margin-right:40px;
+    width:23px;
+    height:23px;
+    float:right;
+}
+.login{
+    font-size:18px;
+    color:#013f73;
+    font-weight: bold;
+    float:right;
+    margin-right:40px;
+    margin-top:30px;
+}
+.register{
+    font-size:18px;
+    color:#013f73;
+    font-weight: bold;
+    float:right;
+    margin-right:20px;
+    margin-top:30px;
+}
+
+.xiangmu{
+    width:1440px;
+    height:824px;
+    background-image: url(../img/bg1.png);
+}
+.xiangmuL{
+
+}
+.xiangmuR{
+
+}
