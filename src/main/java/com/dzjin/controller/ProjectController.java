@@ -1,15 +1,14 @@
 package com.dzjin.controller;
 
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dzjin.model.Project;
 import com.dzjin.service.ProjectService;
@@ -22,49 +21,41 @@ public class ProjectController {
 	ProjectService projectService;
 	
 	@RequestMapping("/insertProject")
-	@ResponseBody
-	public Map<String, Object> insertProject(Project project){
-		Map<String , Object> map = new HashMap<String , Object>();
+	public String insertProject(Project project){
+		//设置创建时间
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		project.setCreate_datetime(simpleDateFormat.format(new Date()));
+		project.setCreator("1");
 		int num = projectService.insertProject(project);
-		if(num == 1){
-			map.put("result", true);
-		}else{
-			map.put("result", false);
-		}	
-		return map;
+
+		return "redirect:/project/selectCreatedProject?creator=1";
 	}
 	
 	@RequestMapping("/selectPublicProject")
-	@ResponseBody
-	public Map<String, Object> selectPublicProject(HttpSession httpSession){		
-		Map<String , Object> map = new HashMap<String , Object>();
+	public String selectPublicProject(HttpSession httpSession){		
 		
 		List<Project> projects = projectService.selectPublicProject();
 		httpSession.setAttribute("projects", projects);	
 		
-		return map;
+		return "/pages/project_public.jsp";
 	}
 	
 	@RequestMapping("/selectCreatedProject")
-	@ResponseBody
-	public Map<String, Object> selectCreatedProject(HttpSession httpSession , Integer creator){
-		Map<String , Object> map = new HashMap<String , Object>();
+	public String selectCreatedProject(HttpSession httpSession , Integer creator){
 		
 		List<Project> projects = projectService.selectCreatedProject(creator);
 		httpSession.setAttribute("projects", projects);
 		
-		return map;
+		return "/pages/project_create.jsp";
 	}
 	
-	@RequestMapping("/selectPublicProject")
-	@ResponseBody
-	public Map<String, Object> selectPublicProject(HttpSession httpSession , Integer user_id){
-		Map<String , Object> map = new HashMap<String , Object>();
+	@RequestMapping("/selectMyProject")
+	public String selectMyProject(HttpSession httpSession , Integer user_id){
 		
 		List<Project> projects = projectService.selectMyProject(user_id);
 		httpSession.setAttribute("projects", projects);
 		
-		return map;
+		return "/pages/project_mine.jsp";
 	}
 	
 }

@@ -17,7 +17,7 @@ public class Project {
 	private String p_name;	//项目名称
 	private String p_number;	//项目编号
 	private String creator;	//项目创建人ID
-	private Date create_datetime; //项目创建时间
+	private String create_datetime; //项目创建时间
 	private short is_open;	//项目是否公开 0不公开；1公开
 	private short is_asy;	//同步异步0同步；1异步
 	private String key_words;	//项目关键字
@@ -46,10 +46,10 @@ public class Project {
 	public void setCreator(String creator) {
 		this.creator = creator;
 	}
-	public Date getCreate_datetime() {
+	public String getCreate_datetime() {
 		return create_datetime;
 	}
-	public void setCreate_datetime(Date create_datetime) {
+	public void setCreate_datetime(String create_datetime) {
 		this.create_datetime = create_datetime;
 	}
 	public short getIs_open() {

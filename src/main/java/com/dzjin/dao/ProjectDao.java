@@ -35,7 +35,7 @@ public interface ProjectDao {
 	@Select("select * from project , project_user "
 			+ "where project.id=project_user.project_id "
 			+ "and project_user.user_id=#{user_id} "
-			+ "order by id desc")
+			+ "order by project.id desc")
 	public List<Project> selectMyProject(@Param("user_id")Integer user_id);
 	
 	

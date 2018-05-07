@@ -1059,15 +1059,14 @@ a{
 }
 
 .createPJK{
-    width:607px;
-    height:186px;
+	width:607px;
     position:fixed;
     background:#fff;
-    /*left:396.5px;*/
     top:200px;
     display:none;
     padding:20px;
     z-index: 400;
+    box-shadow:0 0 4px 0 rgba(203,198,198,0.50);
 }
 .cre_PJKtop{
     width:607px;
