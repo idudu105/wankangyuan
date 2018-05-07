@@ -274,16 +274,33 @@
 
 
             <div class="createPJK">
-                <div class="cre_PJKtop">
-                    <div class="cre_PJKtopT">创建项目</div>
-                    <img src="img/close.png" alt="" class="cre_PJKtopI" />
-                </div>
-                <div class="cre_PJKline"></div>
-                <div class="cre_PJKmid">
-                    <div class="cre_PJKmidT">项目名称：</div>
-                    <input type="text" class="cre_PJKmidK" />
-                </div>
-                <input type="button" class="cre_PJKbt" value="创建" />
+            
+            	<form action="/wankangyuan/project/insertProject">
+            	
+	                <div class="cre_PJKtop">
+	                    <div class="cre_PJKtopT">创建项目</div>
+	                    <img src="img/close.png" alt="" class="cre_PJKtopI" />
+	                </div>
+	                <div class="cre_PJKline"></div>
+	                <div class="cre_PJKmid">
+	                    <div class="cre_PJKmidT">项目名称：</div>
+	                    <input type="text" id="p_name" name="p_name" class="cre_PJKmidK" />
+	                </div>
+	                <div class="cre_PJKmid">
+	                    <div class="cre_PJKmidT">项目编号：</div>
+	                    <input type="text" id="p_number" name="p_number" class="cre_PJKmidK" />
+	                </div>
+	                <div class="cre_PJKmid">
+	                    <div class="cre_PJKmidT">异步同步：</div>
+	                    <input type="text" id="is_asy" name="is_asy" class="cre_PJKmidK" />
+	                </div>
+	                <div class="cre_PJKmid">
+	                    <div class="cre_PJKmidT">关键字：</div>
+	                    <input type="text" id="key_words" name="key_words" class="cre_PJKmidK" />
+	                </div>
+	                <input type="submit" class="cre_PJKbt" value="创建" />
+                
+                </form>
             </div>
         </div>
     </div>

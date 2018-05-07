@@ -18,7 +18,7 @@ public class GenEntityMysql {
 	private String authorName = "dzjin";// 作者名字
 	private String tablename = "user";// 表名
 	// 数据库连接
-	private static final String URL = "jdbc:mysql://localhost:3306/office";
+	private static final String URL = "jdbc:mysql://140.143.36.150:3306/wankangyuan";
 	private static final String NAME = "root";
 	private static final String PASS = "root";
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
@@ -31,7 +31,7 @@ public class GenEntityMysql {
 	public static void main(String[] args) {
 		//String[] tablename = {"meeting","article","i_e_file","i_e_group","group_user"
 				//,"student","teacher","user_role","menu","role_menu","role"};
-		String[] tablename = {"attachment"};
+		String[] tablename = {"project_user"};
 		System.out.println("共"+tablename.length+"张数据表");
 		for (int i = 0; i < tablename.length; i++) {
 			GenEntityMysql g = new GenEntityMysql();
