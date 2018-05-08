@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liutianjun.dao.ApplicationDao" >
+  <resultMap id="BaseResultMap" type="com.liutianjun.pojo.Application" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="app_name" property="appName" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="app_type" property="appType" jdbcType="VARCHAR" />
+    <result column="keywords" property="keywords" jdbcType="VARCHAR" />
+    <result column="versions" property="versions" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="para_a" property="paraA" jdbcType="VARCHAR" />
+    <result column="para_b" property="paraB" jdbcType="VARCHAR" />
+    <result column="app_overview" property="appOverview" jdbcType="VARCHAR" />
+    <result column="data_format" property="dataFormat" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    <if test="fields == null" >
+      id, app_name, creator, app_type, keywords, versions, create_time, status, para_a, 
+      para_b, app_overview, data_format
+    </if>
+    <if test="fields != null" >
+      ${fields}
+    </if>
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.liutianjun.pojo.ApplicationQuery" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from application
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="startRow != null" >
+      limit #{startRow} , #{pageSize}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    id,app_name,creator,app_type,keywords,versions,create_time,status,para_a,para_b,app_overview,data_format
+    from application
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from application
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.liutianjun.pojo.ApplicationQuery" >
+    delete from application
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.liutianjun.pojo.Application" >
+    insert into application (id, app_name, creator, 
+      app_type, keywords, versions, 
+      create_time, status, para_a, 
+      para_b, app_overview, data_format
+      )
+    values (#{id,jdbcType=INTEGER}, #{appName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{appType,jdbcType=VARCHAR}, #{keywords,jdbcType=VARCHAR}, #{versions,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{paraA,jdbcType=VARCHAR}, 
+      #{paraB,jdbcType=VARCHAR}, #{appOverview,jdbcType=VARCHAR}, #{dataFormat,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.liutianjun.pojo.Application" >
+    insert into application
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="appName != null" >
+        app_name,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="appType != null" >
+        app_type,
+      </if>
+      <if test="keywords != null" >
+        keywords,
+      </if>
+      <if test="versions != null" >
+        versions,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="paraA != null" >
+        para_a,
+      </if>
+      <if test="paraB != null" >
+        para_b,
+      </if>
+      <if test="appOverview != null" >
+        app_overview,
+      </if>
+      <if test="dataFormat != null" >
+        data_format,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="appName != null" >
+        #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="appType != null" >
+        #{appType,jdbcType=VARCHAR},
+      </if>
+      <if test="keywords != null" >
+        #{keywords,jdbcType=VARCHAR},
+      </if>
+      <if test="versions != null" >
+        #{versions,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="paraA != null" >
+        #{paraA,jdbcType=VARCHAR},
+      </if>
+      <if test="paraB != null" >
+        #{paraB,jdbcType=VARCHAR},
+      </if>
+      <if test="appOverview != null" >
+        #{appOverview,jdbcType=VARCHAR},
+      </if>
+      <if test="dataFormat != null" >
+        #{dataFormat,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.liutianjun.pojo.ApplicationQuery" resultType="java.lang.Integer" >
+    select count(*) from application
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update application
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.appName != null" >
+        app_name = #{record.appName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appType != null" >
+        app_type = #{record.appType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.keywords != null" >
+        keywords = #{record.keywords,jdbcType=VARCHAR},
+      </if>
+      <if test="record.versions != null" >
+        versions = #{record.versions,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paraA != null" >
+        para_a = #{record.paraA,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paraB != null" >
+        para_b = #{record.paraB,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appOverview != null" >
+        app_overview = #{record.appOverview,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dataFormat != null" >
+        data_format = #{record.dataFormat,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update application
+    set id = #{record.id,jdbcType=INTEGER},
+      app_name = #{record.appName,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      app_type = #{record.appType,jdbcType=VARCHAR},
+      keywords = #{record.keywords,jdbcType=VARCHAR},
+      versions = #{record.versions,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      para_a = #{record.paraA,jdbcType=VARCHAR},
+      para_b = #{record.paraB,jdbcType=VARCHAR},
+      app_overview = #{record.appOverview,jdbcType=VARCHAR},
+      data_format = #{record.dataFormat,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.liutianjun.pojo.Application" >
+    update application
+    <set >
+      <if test="appName != null" >
+        app_name = #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="appType != null" >
+        app_type = #{appType,jdbcType=VARCHAR},
+      </if>
+      <if test="keywords != null" >
+        keywords = #{keywords,jdbcType=VARCHAR},
+      </if>
+      <if test="versions != null" >
+        versions = #{versions,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="paraA != null" >
+        para_a = #{paraA,jdbcType=VARCHAR},
+      </if>
+      <if test="paraB != null" >
+        para_b = #{paraB,jdbcType=VARCHAR},
+      </if>
+      <if test="appOverview != null" >
+        app_overview = #{appOverview,jdbcType=VARCHAR},
+      </if>
+      <if test="dataFormat != null" >
+        data_format = #{dataFormat,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.liutianjun.pojo.Application" >
+    update application
+    set app_name = #{appName,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      app_type = #{appType,jdbcType=VARCHAR},
+      keywords = #{keywords,jdbcType=VARCHAR},
+      versions = #{versions,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      para_a = #{paraA,jdbcType=VARCHAR},
+      para_b = #{paraB,jdbcType=VARCHAR},
+      app_overview = #{appOverview,jdbcType=VARCHAR},
+      data_format = #{dataFormat,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
