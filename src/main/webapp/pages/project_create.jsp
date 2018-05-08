@@ -123,25 +123,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <div class="PJK">
                 <div class="PJeditK">
                     <div class="PJeditX"></div>
+                    <div class="PJeditli" style="dispaly:none;">
+                        <div class="PJeditliC">
+                            <div class="PJeditlit">ID：</div>
+                            <input type="text" class="PJeditlik" id="id_edit"/>
+                        </div>
+                    </div>
                     <div class="PJeditli">
                         <div class="PJeditliC">
                             <div class="PJeditlit">项目名称：</div>
-                            <input type="text" class="PJeditlik" />
+                            <input type="text" class="PJeditlik" id="p_name_edit"/>
                         </div>
                     </div>
                     <div class="PJeditli">
                         <div class="PJeditliC">
                             <div class="PJeditlit">异步/同步：</div>
-                            <input type="text" class="PJeditlik" />
+                            <input type="text" class="PJeditlik" id="is_asy_edit"/>
                         </div>
                     </div>
                     <div class="PJeditli">
                         <div class="PJeditliC">
                             <div class="PJeditlit">关键字：</div>
-                            <input type="text" class="PJeditlik" />
+                            <input type="text" class="PJeditlik" id="key_words_edit"/>
                         </div>
                     </div>
-                    <input type="button" class="PJeditB" value="完成" />
+                    <input type="button" class="PJeditB" value="完成" onclick="saveProject()"/>
                 </div>
                 <div class="PJList">
                     <div class="allK">
@@ -186,7 +192,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                                </c:if>
 
 	                            </a>
-	                            <div class="PJliCli PJedit">编辑</div>
+	                            <div class="PJliCli PJedit"><a onclick="edit('${project.id}','${project.p_name}','${project.is_asy}','${project.key_words}')">编辑</a></div>
 	                        </div>
 	                        <div class="PJliline"></div>
 	                    </div>
@@ -298,5 +304,54 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
         </div>
     </div>
+    
+    <script type="text/javascript" src="/wankangyuan/js/jquery.min.js"></script>
+    <script type="text/javascript">
+    	
+    	function edit(id , p_name , is_asy , key_words){
+    		
+    		$("#id_edit").val(id);
+    		$("#p_name_edit").val(p_name);
+    		$("#is_asy_edit").val(is_asy);
+    		$("#key_words_edit").val(key_words);
+    		
+    	}
+    	
+    	function saveProject(){
+    		
+    		var id = $("#id").val();
+    		var p_name = $("#p_name_edit").val();
+    		var is_asy = $("#is_asy_edit").val();
+    		var key_words = $("#key_words_edit").val();
+    		
+    		//进行ajax请求
+    		$.ajax({
+    			url:"/wankangyuan/project/editProject",
+    			type:"post",
+    			dataType:"json",
+    			data:{
+    				id:id,
+    				p_name:p_name,
+    				is_asy:is_asy,
+    				key_words:key_words
+    			},
+    			success : function(data){
+    				if(data.result == true){
+    					window.location.href="";
+    				}else{
+    					alert(data.message);
+    				}
+    			},
+    			error : function(){
+    				alert("联网失败");
+    			}
+    			
+    		});
+    		
+    	}
+    
+    
+    
+    </script>
 </body>
 </html>

@@ -146,7 +146,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                                </c:if>
 	                                <div class="PJliCli PJkeyword">${project.key_words }</div>
 	                            </a>
-	                            <div class="PJliCli PJedit">编辑</div>
 	                        </div>
 	                        <div class="PJliline"></div>
 	                    </div>
