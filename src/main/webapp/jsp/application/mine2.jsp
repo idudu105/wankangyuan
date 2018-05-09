@@ -76,18 +76,25 @@
                     </div>
                     <div class="jiangeline"></div>
                     <div class="allK">
-                        <div class="allX"></div>
+                        <div class="quanxuanK">
+                            <input type="checkbox" class="input_check" id="check0">
+                            <label for="check0"></label>
+                        </div>
                         <div class="allT">全选</div>
                     </div>
                     <div class="pro_menu pro_exit">退出</div>
                 </div>
             </div>
             <div class="PJK2">
-            <c:forEach items="${list }" var="app">
+            <c:forEach items="${list }" var="app" varStatus="appList">
                 <div class="PJK2li">
                     <div class="PJK2litop">
                         <div class="PJK2litopT2">${app.appName }</div>
-                        <div class="PJK2litopI"></div>
+                        <!-- <div class="PJK2litopI"></div> -->
+                        <div class="fuxuanK3">
+                            <input type="checkbox" class="input_check" id="check${appList.count }" value="${app.id }">
+                            <label for="check${appList.count }"></label>
+                        </div>
                     </div>
                     <div class="PJK2licre">
                         <div class="PJK2licreT1">创建人：</div>
@@ -129,5 +136,7 @@
             </div>
         </div>
     </div>
+    
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/jquery.min.js"></script>
 </body>
 </html>

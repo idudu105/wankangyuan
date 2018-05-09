@@ -3,6 +3,7 @@ package com.liutianjun.controller;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,8 +42,14 @@ public class ApplicationController {
 	public String viewMine(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="8")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
+            HttpSession httpSession,
             Model model) {
-		Map<String, Object> map = applicationService.findAll(page,rows,appName);
+		//模拟登陆
+		httpSession.setAttribute("userName", "创建人1");
+		httpSession.setAttribute("id", 1);
+		
+		Integer userId = (Integer) httpSession.getAttribute("id");
+		Map<String, Object> map = applicationService.findMine(page,rows,appName,userId);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));
 		model.addAttribute("appName", appName);
@@ -60,8 +67,10 @@ public class ApplicationController {
 	public String viewMine2(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="8")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
+            HttpSession httpSession,
             Model model) {
-		Map<String, Object> map = applicationService.findAll(page,rows,appName);
+		Integer userId = (Integer) httpSession.getAttribute("id");
+		Map<String, Object> map = applicationService.findMine(page,rows,appName,userId);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));
 		model.addAttribute("appName", appName);
@@ -134,7 +143,7 @@ public class ApplicationController {
             @RequestParam(value="rows", defaultValue="8")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
             Model model) {
-		Map<String, Object> map = applicationService.findAll(page,rows,appName);
+		Map<String, Object> map = applicationService.findAllPublic(page,rows,appName);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));
 		model.addAttribute("appName", appName);
@@ -156,7 +165,7 @@ public class ApplicationController {
             @RequestParam(value="rows", defaultValue="8")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
             Model model) {
-		Map<String, Object> map = applicationService.findAll(page,rows,appName);
+		Map<String, Object> map = applicationService.findAllPublic(page,rows,appName);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));
 		model.addAttribute("appName", appName);
@@ -164,7 +173,7 @@ public class ApplicationController {
 	}
 	
 	/**
-	 * 设置应用状态
+	 * 设置应用属性
 	 * @Title: setStatus 
 	 * @param cmd
 	 * @param id
@@ -174,7 +183,7 @@ public class ApplicationController {
 	@RequestMapping(value="/setStatus",method=RequestMethod.POST)
 	public String setStatus(String cmd,Integer[] ids) {
 		applicationService.setStatus(cmd,ids);
-		return "redirect:/application/viewCreate2";
+		return "redirect:/application/viewCreate";
 	}
 	
 	/**
