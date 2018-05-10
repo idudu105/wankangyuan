@@ -3,7 +3,7 @@
  * 
  * 
  */
-package com.xtkong.dao;
+package com.xtkong.dao.hbase;
 
 import java.io.IOException;
 import java.util.ArrayList;
