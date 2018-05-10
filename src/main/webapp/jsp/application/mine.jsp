@@ -41,7 +41,7 @@
                     <div class="search">
                         <div class="searchC">
                             <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="searchCi" />
-                            <form>
+                            <form method="get">
 	                            <input name="appName" type="text" class="searchCt" value="${appName }"  placeholder="搜索项目" />
                             </form>
                         </div>
@@ -111,10 +111,12 @@
             <div class="PJK">
                 <div class="PJList">
                     <div class="allK">
-                        <div class="allX">
-                            <!-- <img src="<%=request.getContextPath()%>/static/img/greentrue.png" alt="" class="allI" /> -->
+                        <div class="quanxuanK">
+                            <input type="checkbox" class="input_check" id="check0">
+                            <label for="check0"></label>
                         </div>
                         <div class="allT">全选</div>
+                        
                     </div>
                     <div class="PJListli PJname">应用名称</div>
                     <div class="PJListli PJcreater">创建人</div>
@@ -131,10 +133,15 @@
                 </div>
                 <div class="PJListline"></div>
                 <div class="PJul">
-                <c:forEach items="${list }" var="app">
+                <form id="appList" action="/wankangyuan/application/setStatus" method="post">
+                <c:forEach items="${list }" var="app" varStatus="appList">
                     <div class="PJli">
                         <div class="PJliC">
-                            <div class="PJXZ"></div>
+                            <!-- <div class="PJXZ"></div> -->
+                            <div class="fuxuanK2">
+                                <input name="ids" type="checkbox" class="input_check" id="check${appList.count }" value="${app.id }">
+                                <label for="check${appList.count }"></label>
+                            </div>
                             <a href="project_detail.html">
                                 <div class="PJliCli PJname">${app.appName }</div>
                                 <div class="PJliCli PJcreater">${app.creator }</div>
@@ -146,6 +153,11 @@
                         <div class="PJliline"></div>
                     </div>
                 </c:forEach>
+                <input type="submit" name="cmd" value="公开" >
+                <input type="submit" name="cmd" value="私有" >
+                <input type="button" value="添加至我的" onclick="addToMine()">
+                <input type="button" value="从我的中移除" onclick="removeFromMine()">
+                </form>
                 </div>
 
                 <div class="BTSX">
@@ -218,5 +230,18 @@
             </div>
         </div>
     </div>
+    
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/jquery.min.js"></script>
+
+<script type="text/javascript">
+function addToMine(){
+	$("#appList").attr('action',"/wankangyuan/userAppRelation/addToMine");
+	$("#appList").submit();
+}
+function removeFromMine(){
+	$("#appList").attr('action',"/wankangyuan/userAppRelation/removeFromMine");
+    $("#appList").submit();
+}
+</script>
 </body>
 </html>

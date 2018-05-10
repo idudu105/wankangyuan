@@ -298,6 +298,7 @@ a{
 .shaixuanBTiK{
     margin-left:15px;
     float:left;
+    margin-top:5px;
 }
 .shaixuanBTi{
     width:14px;
@@ -2788,4 +2789,35 @@ a{
 }
 .disdeRMzBr{
     float:right;
+}
+.quanxuanK{
+    position: relative;
+    float:left;
+    margin-right:10px;
+}
+.fuxuanK2{
+    position: relative;
+    float:left;
+    margin-right:53px;
+    margin-left:15px;
+}
+.fuxuanK3{
+    position: relative;
+    float:right;
+}
+.input_check {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    visibility: hidden;
+    background: #E92333;
+}
+.input_check+label {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url('../img/4.png') no-repeat;
+}
+.input_check:checked+label {
+    background: url('../img/3.png') no-repeat;
 }

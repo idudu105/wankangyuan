@@ -30,12 +30,15 @@ public interface ApplicationService {
 	//列出所有应用
 	Map<String,Object> findAll();
 
-	//列出所有应用带分页
-	Map<String,Object> findAll(Integer page, Integer rows, String appName);
+	//列出所有公共应用带分页
+	Map<String,Object> findAllPublic(Integer page, Integer rows, String appName);
 	
 	//查找自己创建的应用
 	Map<String, Object> findAll(Integer page, Integer rows, String appName, String creator);
 
 	//设置应用状态
 	int setStatus(String cmd, Integer[] ids);
+
+	//查找我的应用
+	Map<String, Object> findMine(Integer page, Integer rows, String appName, Integer id);
 }

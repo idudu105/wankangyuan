@@ -14,7 +14,59 @@ function project0(){
 
     // alert(window.screen.availHeight)
     // alert(document.body.scrollHeight)
+    // 全选框和复选框的动作
+    if(document.querySelectorAll('.quanxuanK')[0]){
+        oquanxuanK=document.querySelectorAll('.quanxuanK')[0];
+        var oquanxuan=oquanxuanK.querySelectorAll('.input_check')[0];
 
+        if(document.querySelectorAll('.fuxuanK2')[0]){
+            afuxuanK=document.querySelectorAll('.fuxuanK2');
+            console.log("k2");
+        }else if(document.querySelectorAll('.fuxuanK3')[0]){
+            afuxuanK=document.querySelectorAll('.fuxuanK3');
+            console.log("k3");
+        }
+
+        var afuxuan=[];
+        for(var i=0;i<afuxuanK.length;i++){
+            afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+        }
+
+        oquanxuanK.onchange=function(){
+            if(oquanxuan.checked){
+                for(var i=0;i<afuxuanK.length;i++){
+                    afuxuan[i].checked=1;
+                }
+            }else{
+                console.log(2);
+                for(var i=0;i<afuxuanK.length;i++){
+                    afuxuan[i].checked=0;
+                }
+            }
+        }
+
+        for(var i=0;i<afuxuanK.length;i++){
+            (function(index){
+                afuxuanK[i].onchange=function(){
+                    var fuxuanPD=0;
+                    for(var j=0;j<afuxuanK.length;j++){
+                        if(afuxuan[j].checked){
+                            fuxuanPD++;
+                        }
+                        console.log(afuxuan[j].checked);
+                    }
+                    console.log(fuxuanPD);
+                    if(fuxuanPD==afuxuanK.length){
+                        oquanxuan.checked=1;
+                    }else if(fuxuanPD!=afuxuanK.length){
+                        oquanxuan.checked=0;
+                    }
+                }
+            })(i)
+        }
+    }else{
+        console.log(222);
+    }
 
 }
 

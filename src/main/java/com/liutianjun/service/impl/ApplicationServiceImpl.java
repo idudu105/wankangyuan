@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import com.liutianjun.pojo.Application;
 import com.liutianjun.pojo.ApplicationQuery;
 import com.liutianjun.pojo.ApplicationQuery.Criteria;
 import com.liutianjun.service.ApplicationService;
-import com.liutianjun.tools.StringUtils;
+import com.liutianjun.service.UserAppRelationService;
 
 /**
  * 应用服务实现
@@ -29,6 +30,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 	@Autowired
 	private ApplicationDao applicationDao;
+	
+	@Autowired
+	private UserAppRelationService userAppRelationService;
 	
 	/**
 	 * 插入应用
@@ -105,12 +109,13 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * @return
 	 */
 	@Override
-	public Map<String,Object> findAll(Integer page, Integer rows, String appName) {
+	public Map<String,Object> findAllPublic(Integer page, Integer rows, String appName) {
 		ApplicationQuery example = new ApplicationQuery();
 		Criteria criteria = example.createCriteria();
-		if(StringUtils.notBlank(appName)) {
+		if(StringUtils.isNotBlank(appName)) {
 			criteria.andAppNameLike("%"+appName+"%");
 		}
+		criteria.andStatusEqualTo("公开");
 		int total = applicationDao.countByExample(example);
 		example.setPageNo(page);
 		example.setPageSize(rows);
@@ -135,7 +140,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	public Map<String, Object> findAll(Integer page, Integer rows, String appName, String creator) {
 		ApplicationQuery example = new ApplicationQuery();
 		Criteria criteria = example.createCriteria();
-		if(StringUtils.notBlank(appName)) {
+		if(StringUtils.isNotBlank(appName)) {
 			criteria.andAppNameLike("%"+appName+"%");
 		}
 		criteria.andCreatorEqualTo(creator);
@@ -165,6 +170,41 @@ public class ApplicationServiceImpl implements ApplicationService {
 		criteria.andIdIn(Arrays.asList(ids));
 		return applicationDao.updateByExampleSelective(record, example);
 		
+	}
+
+	/**
+	 * 查找我的应用
+	 * <p>Title: findMine</p>  
+	 * <p>Description: </p>  
+	 * @param page
+	 * @param rows
+	 * @param appName
+	 * @param user
+	 * @return
+	 */
+	@Override
+	public Map<String, Object> findMine(Integer page, Integer rows, String appName, Integer id) {
+		List<Integer> listId = userAppRelationService.findMine(id);
+		
+		ApplicationQuery example = new ApplicationQuery();
+		Criteria criteria = example.createCriteria();
+		if(StringUtils.isNotBlank(appName)) {
+			criteria.andAppNameEqualTo(appName);
+		}
+		if(listId != null) {
+			criteria.andIdIn(listId);
+		}else {
+			criteria.andIdIsNull();
+		}
+		
+		int total = applicationDao.countByExample(example);
+		example.setPageNo(page);
+		example.setPageSize(rows);
+		List<Application> list = applicationDao.selectByExample(example);
+		Map<String,Object> map = new HashMap<>();
+		map.put("list", list);
+		map.put("total", total);
+		return map;
 	}
 
 }
