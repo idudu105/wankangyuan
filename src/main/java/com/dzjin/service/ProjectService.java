@@ -24,6 +24,33 @@ public class ProjectService {
 	}
 	
 	/**
+	 * 获取项目基本信息
+	 * @param id
+	 * @return
+	 */
+	public Project getProjectDetail(Integer id){
+		return projectDao.getProjectDetail(id);
+	}
+	
+	/**
+	 * 更新项目简介
+	 * @param project
+	 * @return
+	 */
+	public int updateProjectIntroduction(Project project){
+		return projectDao.updateProjectIntroduction(project);
+	}
+	
+	/**
+	 * 更新项目的名称，同步异步以及关键字
+	 * @param project
+	 * @return
+	 */
+	public int updateProject(Project project){
+		return projectDao.updateProject(project);
+	}
+	
+	/**
 	 * 选取公共项目
 	 * @return	公共项目列表
 	 */

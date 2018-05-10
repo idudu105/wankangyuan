@@ -2,20 +2,68 @@
 * @Author: Marte
 * @Date:   2018-04-23 15:32:03
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-05-04 14:32:27
+* @Last Modified time: 2018-05-09 09:34:53
 */
 
 
 //  项目0
 function project0(){
-
     var obox=document.querySelectorAll('.box')[0];
     obox.style.minHeight=window.screen.availHeight-240+'px';
 
-    // alert(window.screen.availHeight)
-    // alert(document.body.scrollHeight)
+// 全选框和复选框的动作
+    if(document.querySelectorAll('.quanxuanK')[0]){
+        oquanxuanK=document.querySelectorAll('.quanxuanK')[0];
+        var oquanxuan=oquanxuanK.querySelectorAll('.input_check')[0];
 
+        if(document.querySelectorAll('.fuxuanK2')[0]){
+            afuxuanK=document.querySelectorAll('.fuxuanK2');
+            console.log("k2");
+        }else if(document.querySelectorAll('.fuxuanK3')[0]){
+            afuxuanK=document.querySelectorAll('.fuxuanK3');
+            console.log("k3");
+        }
 
+        var afuxuan=[];
+        for(var i=0;i<afuxuanK.length;i++){
+            afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+        }
+
+        oquanxuanK.onchange=function(){
+            if(oquanxuan.checked){
+                for(var i=0;i<afuxuanK.length;i++){
+                    afuxuan[i].checked=1;
+                }
+            }else{
+                console.log(2);
+                for(var i=0;i<afuxuanK.length;i++){
+                    afuxuan[i].checked=0;
+                }
+            }
+        }
+
+        for(var i=0;i<afuxuanK.length;i++){
+            (function(index){
+                afuxuanK[i].onchange=function(){
+                    var fuxuanPD=0;
+                    for(var j=0;j<afuxuanK.length;j++){
+                        if(afuxuan[j].checked){
+                            fuxuanPD++;
+                        }
+                        console.log(afuxuan[j].checked);
+                    }
+                    console.log(fuxuanPD);
+                    if(fuxuanPD==afuxuanK.length){
+                        oquanxuan.checked=1;
+                    }else if(fuxuanPD!=afuxuanK.length){
+                        oquanxuan.checked=0;
+                    }
+                }
+            })(i)
+        }
+    }else{
+        console.log(222);
+    }
 }
 
 //  项目1
@@ -213,6 +261,7 @@ function pro_detail(){
 
 
 
+
 }
 
 
@@ -299,6 +348,8 @@ function pro_dataclick(){
         
     }
 
+//
+
 //筛选按钮显示隐藏选项
     var oshaixuanZK=document.querySelectorAll('.shaixuanZK')[0];//获取筛选菜单
     var ashaixuanZKliI=document.querySelectorAll('.shaixuanZKliI');//获取所有筛选按钮
@@ -369,6 +420,41 @@ function pro_file(){
             ofileKpd=1;
         }
     }
+
+//文件树
+    var oprof_lbLmT=document.querySelectorAll('.prof_lbLmT')[0];
+    var aPJliB1L=oprof_lbLmT.querySelectorAll('.PJliB1L');
+    var aPJliB2L=oprof_lbLmT.querySelectorAll('.PJliB2L');
+
+    var aPJliBL=[];
+
+    for(var i=0;i<aPJliB1L.length;i++){
+        aPJliBL.push(aPJliB1L[i]);
+    }
+    for(var i=0;i<aPJliB2L.length;i++){
+        aPJliBL.push(aPJliB2L[i]);
+    }
+
+    console.log(aPJliBL);
+
+    for(var i=0;i<aPJliBL.length;i++){
+        (function(index){
+            aPJliBL[index].onclick=function(event){
+                for(var j=0;j<aPJliBL.length;j++){
+                    aPJliBL[j].style.color="#666";
+                }
+                aPJliBL[index].style.color="#5ca0e5";
+                event.stopPropagation();
+            }
+        })(i)
+    }
+
+    oprof_lbLmT.onclick=function(){
+        for(var j=0;j<aPJliBL.length;j++){
+            aPJliBL[j].style.color="#666";
+        }
+    }
+
 }
 
 //成员
@@ -522,10 +608,70 @@ function pro_discuss(){
         othemeaddMk.value="";
     }
 
-    
+}
 
-    
+//格式数据——我的
+function data_mine(){
 
+//格式数据添加至我的框显示隐藏
+    var opro_addK=document.querySelectorAll('.pro_addK')[0];//格式数据添加至项目
+    var opro_addk=opro_addK.querySelectorAll('.pro_addk')[0];//添加按钮
+    var opro_addul=document.querySelectorAll('.pro_addul')[0];//添加项目列表
+    var apro_addli=opro_addul.querySelectorAll('.pro_addli');//添加各个项目
+
+    pro_addkPD=0;
+
+    opro_addk.onclick=function(){
+        if(pro_addkPD==0){
+            opro_addul.style.display="block";
+            pro_addkPD=1;
+        }else{
+            opro_addul.style.display="none";
+            pro_addkPD=0;
+        }
+    }
+    for(var i=0;i<apro_addli.length;i++){
+        (function(index){
+            apro_addli[index].onclick=function(){
+                opro_addul.style.display="none";
+                pro_addkPD=0;
+            }
+        })(i)
+    }
+
+
+}
+
+//格式数据——我创建的
+function data_create(){
+//导入数据框显示隐藏
+    var opro_inport=document.querySelectorAll('.pro_inport')[0];//导入数据按钮
+    var oinportK=document.querySelectorAll('.inportK')[0];//导入数据框
+    var oinportTx=document.querySelectorAll('.inportTx')[0];//导入数据框关闭按钮
+
+    var inportPD=0;
+
+    opro_inport.onclick=function(){
+        if(inportPD==0){
+            oinportK.style.display="block";
+            inportPD=1;
+        }else{
+            oinportK.style.display="none";
+            inportPD=0;
+        }
+    }
+    oinportTx.onclick=function(){
+        oinportK.style.display="none";
+        inportPD=0;
+    }
+
+//导入数据框上传文件
+    var oinportMu=document.querySelectorAll('.inportMu')[0];//上传文件按钮
+    var oinportMf=document.querySelectorAll('.inportMf')[0];//上传文件input
+
+    oinportMu.onclick=function(){
+        oinportMf.click();
+    }
 
 
 }

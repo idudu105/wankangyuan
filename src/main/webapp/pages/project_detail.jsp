@@ -1,3 +1,11 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,13 +42,13 @@
             </div>
             <div class="top2">
                 <div class="top2C">
-                    <div class="top2Ctl active">13例结直肠癌病人的基因表达</div>
+                    <div class="top2Ctl active">${project.p_name }</div>
                     <a href="project_discuss.html"><div class="top2Ctr">讨论版</div></a>
                     <a href="project_member.html"><div class="top2Ctr">成员</div></a>
                     <a href="project_append.html"><div class="top2Ctr">应用结果</div></a>
                     <a href="project_app.html"><div class="top2Ctr">应用</div></a>
                     <a href="project_data.html"><div class="top2Ctr">格式数据</div></a>
-                    <a href="project_file.html"><div class="top2Ctr">文件</div></a>
+                    <a href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId"><div class="top2Ctr">文件</div></a>
                     <a href="javascript:;"><div class="top2Ctr active">基本信息</div></a>
                 </div>
             </div>
@@ -50,9 +58,9 @@
                     <div class="prodexqLk">
                         <div class="prodexLbk">
                             <!-- <div class="prodexLb">保存</div> -->
-                            <input type="button" class="prodexLb" value="保存" />
+                            <input type="button" class="prodexLb" value="保存" onclick="saveProjectIntroduction()"/>
                         </div>
-                        <textarea name="" id=""class="prodexLt">病例对照研究是以现在确诊的患有某特定疾病的病人作为病例，以不患有该病但具有可比性的个体作为对照，通过询问，实验室检查或复查病史，搜集既往各种可能的危险因素的暴露史，测量并比较病例组与对照组中各因素的暴露比例，经统计学检验，若两组差别有意义，则可认为因素与疾病之间存在着统计学上的关联。</textarea>
+                        <textarea name="" id="" class="prodexLt" >${project.introduction}</textarea>
 
                         <div class="prodexLtj">
                             <div class="prodexLtjt">
@@ -60,19 +68,19 @@
                             </div>
                             <div class="prodexLtjt">
                                 <div class="prodexLtjtL">文件：</div>
-                                <div class="prodexLtjtR">235</div>
+                                <div class="prodexLtjtR">${project.fileNum }</div>
                             </div>
                             <div class="prodexLtjt">
                                 <div class="prodexLtjtL">应用：</div>
-                                <div class="prodexLtjtR">15</div>
+                                <div class="prodexLtjtR">${project.appNum }</div>
                             </div>
                             <div class="prodexLtjt">
                                 <div class="prodexLtjtL">应用结果：</div>
-                                <div class="prodexLtjtR">30</div>
+                                <div class="prodexLtjtR">${project.appResultNum }</div>
                             </div>
                             <div class="prodexLtjt">
                                 <div class="prodexLtjtL">成员：</div>
-                                <div class="prodexLtjtR">30</div>
+                                <div class="prodexLtjtR">${project.memberNum }</div>
                             </div>
                         </div>
                     </div>
@@ -118,5 +126,38 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="/wankangyuan/js/jquery.min.js"></script>
+    <script type="text/javascript">
+    	
+    	//提交编辑后的结果
+    	function saveProjectIntroduction(){
+    		
+    		var introduction = $(".prodexLt").val();
+    		//进行ajax请求
+    		$.ajax({
+    			url:"/wankangyuan/project/updatePorjectIntroduction",
+    			type:"post",
+    			dataType:"json",
+    			data:{
+    				introduction:introduction
+    			},
+    			success : function(data){
+    				if(data.result == true){
+    					window.location.href="/wankangyuan/project/getProjectDetail";
+    				}else{
+    					alert(data.message);
+    				}
+    			},
+    			error : function(){
+    				alert("联网失败");
+    			}
+    			
+    		});
+    		
+    	}
+    
+    
+    
+    </script>
 </body>
 </html>

@@ -77,7 +77,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                     <div class="jiangeline"></div>
                     <div class="allK">
-                        <div class="allX"></div>
+                         <div class="quanxuanK">
+                            <input type="checkbox" class="input_check" id="check0">
+                            <label for="check0"></label>
+                        </div>
                         <div class="allT">全选</div>
                     </div>
                     <div class="pro_menu pro_delete">删除</div>
@@ -94,7 +97,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                        <a href="project_detail.html">
 	                            <div class="PJK2litopT">${project.p_name}</div>
 	                        </a>
-	                        <div class="PJK2litopI"></div>
+	                        <div class="fuxuanK3">
+	                                <input type="checkbox" class="input_check" id="check${project.id}">
+	                                <label for="check${project.id}"></label>
+	                        </div>
 	                    </div>
 	                    <div class="PJK2licre">
 	                        <div class="PJK2licreT1">创建人：</div>

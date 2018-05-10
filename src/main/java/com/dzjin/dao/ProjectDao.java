@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.dzjin.model.Project;
 
@@ -13,6 +14,17 @@ public interface ProjectDao {
 	@Insert("insert into project(p_name , p_number , creator , create_datetime , is_asy , key_words) "
 			+ "values(#{p_name},#{p_number},#{creator},#{create_datetime},#{is_asy},#{key_words})")
 	public int insertProject(Project project);
+	
+	@Select("select * from project where id=#{id}")
+	public Project getProjectDetail(@Param("id")Integer id);
+	
+	@Update("update project set introduction=#{introduction} where id=#{id}")
+	public int updateProjectIntroduction(Project project);  
+	
+	@Update("update project "
+			+ "set p_name=#{p_name} , is_asy=#{is_asy} , key_words=#{key_words} "
+			+ "where id=#{id}")
+	public int updateProject(Project project);
 	
 	/**
 	 * 选取公共项目

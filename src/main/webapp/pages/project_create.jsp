@@ -10,7 +10,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Document</title>
+    <title>我创建的项目</title>
 </head>
 <link rel="stylesheet" type="text/css" href="/wankangyuan/pages/css/project1.css" />
 <script type="text/javascript" src="/wankangyuan/pages/js/project1.js"></script>
@@ -77,13 +77,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <img src="/wankangyuan/pages/img/sanjiao_blue.png" alt="" class="shaixuanBTi" />
                         </div>
                     </div>
-                    <!-- <div class="jiangeline"></div> -->
-                    <!-- <div class="allK">
-                        <div class="allX">
-                            <img src="img/greentrue.png" alt="" class="allI active" />
-                        </div>
-                        <div class="allT">全选</div>
-                    </div> -->
+                    
                     <div class="pro_menu pro_delete">删除</div>
                     <div class="pro_menu pro_nonpublic">取消公开</div>
                     <div class="pro_menu pro_public">公开</div>
@@ -123,7 +117,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <div class="PJK">
                 <div class="PJeditK">
                     <div class="PJeditX"></div>
-                    <div class="PJeditli" style="dispaly:none;">
+                    <div class="PJeditli" style="display:none;">
                         <div class="PJeditliC">
                             <div class="PJeditlit">ID：</div>
                             <input type="text" class="PJeditlik" id="id_edit"/>
@@ -150,12 +144,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <input type="button" class="PJeditB" value="完成" onclick="saveProject()"/>
                 </div>
                 <div class="PJList">
+                
                     <div class="allK">
-                        <div class="allX">
-                            <!-- <img src="img/greentrue.png" alt="" class="allI" /> -->
+                        <div class="quanxuanK">
+                            <input type="checkbox" class="input_check" id="check0">
+                            <label for="check0"></label>
                         </div>
                         <div class="allT">全选</div>
                     </div>
+                    
                     <div class="PJListli PJname">项目名称</div>
                     <div class="PJListli PJID">项目编号</div>
                     <div class="PJListli PJcreater">创建者</div>
@@ -163,7 +160,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="PJListli PJyibu">异步/同步</div>
                     <div class="PJListli PJkeyword">关键字</div>
                     <div class="PJListli PJopenor">公开状态</div>
-                    <!-- <div class="PJListli PJother4">其他4</div> -->
                 </div>
                 <div class="PJListline"></div>
                 <div class="PJul">
@@ -171,8 +167,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 	<c:forEach items="${projects}" var="project">
 	                	<div class="PJli">
 	                        <div class="PJliC">
-	                            <div class="PJXZ"></div>
-	                            <a href="project_detail.html">
+			                    <div class="fuxuanK2">
+	                                <input type="checkbox" class="input_check" id="check${project.id }">
+	                                <label for="check${project.id }"></label>
+	                            </div>
+	                            <a href="/wankangyuan/project/getProjectDetail?id=${project.id}">
+	                            
 	                                <div class="PJliCli PJname">${project.p_name}</div>
 	                                <div class="PJliCli PJID">${project.p_number }</div>
 	                                <div class="PJliCli PJcreater">${project.creator }</div>
@@ -308,6 +308,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script type="text/javascript" src="/wankangyuan/js/jquery.min.js"></script>
     <script type="text/javascript">
     	
+    	//编辑前准备
     	function edit(id , p_name , is_asy , key_words){
     		
     		$("#id_edit").val(id);
@@ -317,9 +318,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		
     	}
     	
+    	//提交编辑后的结果
     	function saveProject(){
     		
-    		var id = $("#id").val();
+    		var id = $("#id_edit").val();
     		var p_name = $("#p_name_edit").val();
     		var is_asy = $("#is_asy_edit").val();
     		var key_words = $("#key_words_edit").val();
@@ -337,7 +339,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			},
     			success : function(data){
     				if(data.result == true){
-    					window.location.href="";
+    					window.location.href="/wankangyuan/project/selectCreatedProject?creator=1";
     				}else{
     					alert(data.message);
     				}

@@ -1,6 +1,5 @@
 package com.dzjin.model;
 
-import java.util.Date;
 	/**
 	* 表名：project 项目基础信息表
 	* 作者：dzjin
@@ -21,6 +20,12 @@ public class Project {
 	private short is_open;	//项目是否公开 0不公开；1公开
 	private short is_asy;	//同步异步0同步；1异步
 	private String key_words;	//项目关键字
+	private String introduction;	//项目简介
+	
+	private Integer fileNum;
+	private Integer appNum;
+	private Integer appResultNum;
+	private Integer memberNum;
 	
 	public int getId() {
 		return id;
@@ -70,6 +75,37 @@ public class Project {
 	public void setKey_words(String key_words) {
 		this.key_words = key_words;
 	}
+	public String getIntroduction() {
+		return introduction;
+	}
+	public void setIntroduction(String introduction) {
+		this.introduction = introduction;
+	}
+	public Integer getFileNum() {
+		return fileNum;
+	}
+	public void setFileNum(Integer fileNum) {
+		this.fileNum = fileNum;
+	}
+	public Integer getAppNum() {
+		return appNum;
+	}
+	public void setAppNum(Integer appNum) {
+		this.appNum = appNum;
+	}
+	public Integer getAppResultNum() {
+		return appResultNum;
+	}
+	public void setAppResultNum(Integer appResultNum) {
+		this.appResultNum = appResultNum;
+	}
+	public Integer getMemberNum() {
+		return memberNum;
+	}
+	public void setMemberNum(Integer memberNum) {
+		this.memberNum = memberNum;
+	}
+	
 
 }
 
