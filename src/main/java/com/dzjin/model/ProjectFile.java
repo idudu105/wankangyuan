@@ -13,7 +13,7 @@ public class ProjectFile {
 	private int floder_id;	//父文件夹ID
 	private String file_name;	//文件名称
 	private String file_location;	//文件存储地址
-	private String file_type;	//文件类型
+	private String file_type;	//文件类型，具体是什么文件类型
 	private String file_size;	//文件大小
 	private String create_datetime;		//文件上传时间
 	private int creator_id;		//文件创建者ID

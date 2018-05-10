@@ -73,7 +73,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="prodainmL2">
                                	<c:forEach items="${projectFloders}" var="projectFloder">
                                		<div class="PJliB1">
-                                	<div class="PJliB1L">
+                                	<div class="PJliB1L" onclick="clickFloder(${projectFloder.id})">
                                         <div class="PJliB2Lic"></div>
                                         <div class="PJliB1Lt">${projectFloder.floder_name }</div>
                                         <div class="PJliBLi PJliBLi2"></div>
@@ -82,7 +82,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                                    <c:if test="${projectFloder.projectFloders != null }">
 	                                    	<c:forEach items="${projectFloder.projectFloders}" var="projectFloder1">
 			                                    <div class="PJliB2">
-		                                            <div class="PJliB2L">
+		                                            <div class="PJliB2L" >
 		                                                <div class="PJliB2Lic"></div>
 		                                                <div class="PJliB2Lt">${projectFloder1.floder_name}</div>
 		                                                <div class="PJliBLi PJliBLi2"></div>
@@ -91,7 +91,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					                                    <c:if test="${projectFloder1.projectFloders != null }">
 					                                    	<c:forEach items="${projectFloder1.projectFloders}" var="projectFloder2">
 							                                    <div class="PJliB2">
-						                                            <div class="PJliB2L">
+						                                            <div class="PJliB2L" >
 						                                                <div class="PJliB2Lic"></div>
 						                                                <div class="PJliB2Lt">${projectFloder2.floder_name}</div>
 						                                                <div class="PJliBLi PJliBLi2"></div>
@@ -162,20 +162,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 <div class="prof_lbRmULtli prof_lbRmULt7">操作</div>
                             </div>
                             <div class="prof_lbRmULm">
-                                <div class="prof_lbRmULmLI">
-                                
-	                                <div class="fuxuanK2">
-		                                <input type="checkbox" class="input_check" id="check0">
-		                                <label for="check0"></label>
-		                            </div>
-		                            
-                                    <div class="prof_lbRmULmli prof_lbRmULt2">小一号里的文件1</div>
-                                    <div class="prof_lbRmULmli prof_lbRmULt3">TXT</div>
-                                    <div class="prof_lbRmULmli prof_lbRmULt4">15MB</div>
-                                    <div class="prof_lbRmULmli prof_lbRmULt5">2018-3-10</div>
-                                    <div class="prof_lbRmULmli prof_lbRmULt6">Peter</div>
-                                    <div class="prof_lbRmULmli prof_lbRmULt7 prof_lbRmULmYL">预览</div>
-                                </div>
+                            
+                            	<c:forEach items="${projectFiles }" var="projectFile">         	
+	                            	<div class="prof_lbRmULmLI">
+		                                <div class="fuxuanK2">
+			                                <input type="checkbox" class="input_check" id="check${projectFile.id }">
+			                                <label for="check${projectFile.id }"></label>
+			                            </div>
+	                                    <div class="prof_lbRmULmli prof_lbRmULt2">${projectFile.file_name }</div>
+	                                    <div class="prof_lbRmULmli prof_lbRmULt3">${projectFile.file_type }</div>
+	                                    <div class="prof_lbRmULmli prof_lbRmULt4">${projectFile.file_size }</div>
+	                                    <div class="prof_lbRmULmli prof_lbRmULt5">${projectFile.create_datetime }</div>
+	                                    <div class="prof_lbRmULmli prof_lbRmULt6">${projectFile.creator_id }</div>
+	                                    <div class="prof_lbRmULmli prof_lbRmULt7 prof_lbRmULmYL">预览</div>
+	                                </div>
+                            	</c:forEach>
+                            	
                             </div>
                         </div>
                     </div>
@@ -200,7 +202,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                     <div class="fileaddMmK" id="fileUploadList"></div>
                 </div>
-                <button class="fileaddbtn">上传</button>
+                <button class="fileaddbtn" onclick="upFiles()">上传</button>
             </div>
             
 
@@ -227,7 +229,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script type="text/javascript" src="/wankangyuan/js/jquery.min.js"></script>
     <script type="text/javascript">
     
-    	var map = new Map();
+    	var ids = [];
+    	var floder_id = 1; 
+    	
+    	function clickFloder(id){
+    		alert(floder_id);
+    		floder_id = id;
+    		alert(floder_id);
+    	}
     	
 		//点击上传附加按钮
 		function clickFile(){
@@ -255,16 +264,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                		'<div class="fileaddMm" id=\"'+data.id+'\">'+
 	                            '<img src="img/file.png" height="20" width="16" alt="" class="fileaddMi" />'+
 	                            '<div class="fileaddMz addMtzname">'+data.originalFilename+'</div>'+
-	                            '<div class="fileaddMz addMtzsize">'+data.size+' MB</div>'+
+	                            '<div class="fileaddMz addMtzsize">'+data.size+' KB</div>'+
 	                            '<div class="fileaddMz addMtznum">小一号</div>'+
 	                            '<div class="fileaddMz2 addMtzopea" onclick="removeFiv(\''+data.id+'\')">取消</div>'+
 	                        '</div>'
 	                	);
-	                	map.set(1, data.id);
-	                	for (var key in map) {
-	                        console.log(map[key]);
-	                    }
-	                	
+	                	ids.push(data.id);
+
 	                }else{
 	                	alert(data.message);
 	                }
@@ -275,15 +281,40 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        });
 		}
 	  	
-	  	//取消文件上传
+	  	//取消文件上传，remove掉数据
 	  	function removeFiv(id){
-	  		var box = document.getElementById(id);  
-	  		box.parentNode.removeChild(box);  	
-	  		
+	  		var box = document.getElementById(id);
+	  		box.parentNode.removeChild(box);
 	  	}
 	  	
-	 
-	  	
+	  	//上传一组数据
+	  	function upFiles(){
+	  		alert(ids);
+	  		
+	  		var files = ids.join(",");
+	  		
+	  		//进行ajax请求
+	  		$.ajax({
+	  			url:"/wankangyuan/projectFloderFile/upFiles",
+	  			type:"post",
+	  			data:{
+	  				ids:files,
+	  				floder_id:floder_id
+	  			},
+	  			dataType:"json",
+	  			success : function(data){
+	  				if(data.result == true){
+	  					window.location.href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId";
+	  				}else{
+	  					alert(data.message);
+	  				}
+	  			},
+	  			error : function(){
+	  				alert("联网失败");
+	  			}
+	  			
+	  		});	  	
+	  	}
 
     </script>
 </body>

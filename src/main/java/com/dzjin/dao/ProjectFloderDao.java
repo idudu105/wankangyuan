@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Update;
 
 import com.dzjin.model.ProjectFloder;
 
-public interface ProjectFloderFileDao {
+public interface ProjectFloderDao {
 	
 	
 	@Select("select * from project_floder where parent_id=#{parent_id}")
