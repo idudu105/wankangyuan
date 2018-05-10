@@ -6,17 +6,17 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.dzjin.dao.ProjectFloderFileDao;
+import com.dzjin.dao.ProjectFloderDao;
 import com.dzjin.model.ProjectFloder;
 
 @Service
-public class ProjectFloderFileService {
+public class ProjectFloderService {
 	
 	@Autowired
-	ProjectFloderFileDao projectFloderFileDao;
+	ProjectFloderDao projectFloderDao;
 
 	public List<ProjectFloder> selectProjectFloderByProjectId(Integer p_id){
-		List<ProjectFloder> projectFloders = projectFloderFileDao.selectProjectFloderByProjectId(p_id);
+		List<ProjectFloder> projectFloders = projectFloderDao.selectProjectFloderByProjectId(p_id);
 		Iterator<ProjectFloder> pIterator = projectFloders.iterator();
 		while(pIterator.hasNext()){
 			ProjectFloder projectFloder = (ProjectFloder) pIterator.next();
@@ -28,7 +28,7 @@ public class ProjectFloderFileService {
 	
 	public List<ProjectFloder> getProjectFloders(ProjectFloder projectFloderParent){
 		
-		List<ProjectFloder> projectFloders = projectFloderFileDao.selectProjectFloderByParentId(projectFloderParent.getId());
+		List<ProjectFloder> projectFloders = projectFloderDao.selectProjectFloderByParentId(projectFloderParent.getId());
 		if(projectFloders.size() > 0){
 			projectFloderParent.setProjectFloders(projectFloders);
 			Iterator<ProjectFloder> pIterator = projectFloders.iterator();
@@ -43,15 +43,15 @@ public class ProjectFloderFileService {
 	}
 	
 	public int insertProjectFloder(ProjectFloder projectFloder){
-		return projectFloderFileDao.insertProjectFloder(projectFloder);
+		return projectFloderDao.insertProjectFloder(projectFloder);
 	}
 	
 	public int deleteProjectFloder(String id){
-		return projectFloderFileDao.deleteProjectFloder(id);
+		return projectFloderDao.deleteProjectFloder(id);
 	}
 	
 	public int updateProjectFloder(ProjectFloder projectFloder){
-		return projectFloderFileDao.updateProjectFloder(projectFloder);
+		return projectFloderDao.updateProjectFloder(projectFloder);
 	}
 	
 	

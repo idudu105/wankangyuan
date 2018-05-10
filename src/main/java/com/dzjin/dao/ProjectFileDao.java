@@ -1,0 +1,28 @@
+package com.dzjin.dao;
+
+
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import com.dzjin.model.ProjectFile;
+
+public interface ProjectFileDao {
+	
+	@Insert("insert into project_file(file_name,file_location,file_type,file_size,create_datetime,creator_id) "
+			+ "values(#{file_name},#{file_location},#{file_type},#{file_size},#{create_datetime},#{creator_id})")
+	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+	public int insertPorjectFile(ProjectFile projectFile);
+	
+	@Update("update project_file set floder_id=#{floder_id} where id=#{id}")
+	public int updateFloderId(@Param("floder_id")Integer floder_id , @Param("id")Integer id);
+	
+	@Select("select * from project_file where floder_id=#{floder_id}")
+	public List<ProjectFile> selectProjectFileByFloderId(@Param("floder_id")Integer floder_id);
+ 
+}
