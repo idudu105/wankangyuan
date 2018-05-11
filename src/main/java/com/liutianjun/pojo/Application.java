@@ -1,6 +1,7 @@
 package com.liutianjun.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Application implements Serializable {
     /**
@@ -24,6 +25,11 @@ public class Application implements Serializable {
     private String appType;
 
     /**
+     * 同步/异步 0-同步 1-异步
+     */
+    private Integer isAsync;
+
+    /**
      * 关键字
      */
     private String keywords;
@@ -36,7 +42,7 @@ public class Application implements Serializable {
     /**
      * 创建时间
      */
-    private String createTime;
+    private Date createTime;
 
     /**
      * 状态
@@ -97,6 +103,14 @@ public class Application implements Serializable {
         this.appType = appType == null ? null : appType.trim();
     }
 
+    public Integer getIsAsync() {
+        return isAsync;
+    }
+
+    public void setIsAsync(Integer isAsync) {
+        this.isAsync = isAsync;
+    }
+
     public String getKeywords() {
         return keywords;
     }
@@ -113,12 +127,12 @@ public class Application implements Serializable {
         this.versions = versions == null ? null : versions.trim();
     }
 
-    public String getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime == null ? null : createTime.trim();
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public String getStatus() {
@@ -171,6 +185,7 @@ public class Application implements Serializable {
         sb.append(", appName=").append(appName);
         sb.append(", creator=").append(creator);
         sb.append(", appType=").append(appType);
+        sb.append(", isAsync=").append(isAsync);
         sb.append(", keywords=").append(keywords);
         sb.append(", versions=").append(versions);
         sb.append(", createTime=").append(createTime);

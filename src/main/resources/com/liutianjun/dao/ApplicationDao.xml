@@ -6,9 +6,10 @@
     <result column="app_name" property="appName" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="app_type" property="appType" jdbcType="VARCHAR" />
+    <result column="is_async" property="isAsync" jdbcType="INTEGER" />
     <result column="keywords" property="keywords" jdbcType="VARCHAR" />
     <result column="versions" property="versions" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="para_a" property="paraA" jdbcType="VARCHAR" />
     <result column="para_b" property="paraB" jdbcType="VARCHAR" />
@@ -75,8 +76,8 @@
   </sql>
   <sql id="Base_Column_List" >
     <if test="fields == null" >
-      id, app_name, creator, app_type, keywords, versions, create_time, status, para_a, 
-      para_b, app_overview, data_format
+      id, app_name, creator, app_type, is_async, keywords, versions, create_time, status, 
+      para_a, para_b, app_overview, data_format
     </if>
     <if test="fields != null" >
       ${fields}
@@ -101,7 +102,7 @@
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
-    id,app_name,creator,app_type,keywords,versions,create_time,status,para_a,para_b,app_overview,data_format
+    id,app_name,creator,app_type,is_async,keywords,versions,create_time,status,para_a,para_b,app_overview,data_format
     from application
     where id = #{id,jdbcType=INTEGER}
   </select>
@@ -117,15 +118,15 @@
   </delete>
   <insert id="insert" parameterType="com.liutianjun.pojo.Application" >
     insert into application (id, app_name, creator, 
-      app_type, keywords, versions, 
-      create_time, status, para_a, 
-      para_b, app_overview, data_format
-      )
+      app_type, is_async, keywords, 
+      versions, create_time, status, 
+      para_a, para_b, app_overview, 
+      data_format)
     values (#{id,jdbcType=INTEGER}, #{appName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{appType,jdbcType=VARCHAR}, #{keywords,jdbcType=VARCHAR}, #{versions,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{paraA,jdbcType=VARCHAR}, 
-      #{paraB,jdbcType=VARCHAR}, #{appOverview,jdbcType=VARCHAR}, #{dataFormat,jdbcType=VARCHAR}
-      )
+      #{appType,jdbcType=VARCHAR}, #{isAsync,jdbcType=INTEGER}, #{keywords,jdbcType=VARCHAR}, 
+      #{versions,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, 
+      #{paraA,jdbcType=VARCHAR}, #{paraB,jdbcType=VARCHAR}, #{appOverview,jdbcType=VARCHAR}, 
+      #{dataFormat,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.liutianjun.pojo.Application" >
     insert into application
@@ -141,6 +142,9 @@
       </if>
       <if test="appType != null" >
         app_type,
+      </if>
+      <if test="isAsync != null" >
+        is_async,
       </if>
       <if test="keywords != null" >
         keywords,
@@ -180,6 +184,9 @@
       <if test="appType != null" >
         #{appType,jdbcType=VARCHAR},
       </if>
+      <if test="isAsync != null" >
+        #{isAsync,jdbcType=INTEGER},
+      </if>
       <if test="keywords != null" >
         #{keywords,jdbcType=VARCHAR},
       </if>
@@ -187,7 +194,7 @@
         #{versions,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
-        #{createTime,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
@@ -227,6 +234,9 @@
       <if test="record.appType != null" >
         app_type = #{record.appType,jdbcType=VARCHAR},
       </if>
+      <if test="record.isAsync != null" >
+        is_async = #{record.isAsync,jdbcType=INTEGER},
+      </if>
       <if test="record.keywords != null" >
         keywords = #{record.keywords,jdbcType=VARCHAR},
       </if>
@@ -234,7 +244,7 @@
         versions = #{record.versions,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null" >
-        create_time = #{record.createTime,jdbcType=VARCHAR},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=VARCHAR},
@@ -262,9 +272,10 @@
       app_name = #{record.appName,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       app_type = #{record.appType,jdbcType=VARCHAR},
+      is_async = #{record.isAsync,jdbcType=INTEGER},
       keywords = #{record.keywords,jdbcType=VARCHAR},
       versions = #{record.versions,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
       status = #{record.status,jdbcType=VARCHAR},
       para_a = #{record.paraA,jdbcType=VARCHAR},
       para_b = #{record.paraB,jdbcType=VARCHAR},
@@ -286,6 +297,9 @@
       <if test="appType != null" >
         app_type = #{appType,jdbcType=VARCHAR},
       </if>
+      <if test="isAsync != null" >
+        is_async = #{isAsync,jdbcType=INTEGER},
+      </if>
       <if test="keywords != null" >
         keywords = #{keywords,jdbcType=VARCHAR},
       </if>
@@ -293,7 +307,7 @@
         versions = #{versions,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
@@ -318,9 +332,10 @@
     set app_name = #{appName,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       app_type = #{appType,jdbcType=VARCHAR},
+      is_async = #{isAsync,jdbcType=INTEGER},
       keywords = #{keywords,jdbcType=VARCHAR},
       versions = #{versions,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=VARCHAR},
       para_a = #{paraA,jdbcType=VARCHAR},
       para_b = #{paraB,jdbcType=VARCHAR},

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.liutianjun.dao.UserAppRelationDao;
 import com.liutianjun.pojo.UserAppRelation;
+import com.liutianjun.pojo.UserAppRelationQuery;
+import com.liutianjun.pojo.UserAppRelationQuery.Criteria;
 import com.liutianjun.service.UserAppRelationService;
 
 /**
@@ -66,10 +68,15 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	 * @return
 	 */
 	@Override
-	public int addToMineById(Integer userId,Integer[] ids) {
+	public int addToMineById(Integer userId, String username, Integer[] ids) {
 		if(ids != null && ids.length > 0) {
 			//根据用户id查询关系表
 			UserAppRelation userAppRelation = userAppRelationDao.selectByPrimaryKey(userId);
+			
+			if(userAppRelation == null) {
+			    insert(userId, username);
+			    userAppRelation = userAppRelationDao.selectByPrimaryKey(userId);
+			}
 			//获取应用旧ids
 			String appIds = userAppRelation.getAppIds();
 			
@@ -141,11 +148,18 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	 * @return
 	 */
 	@Override
-	public List<Integer> findMine(Integer id) {
+	public List<Integer> findMine(String username) {
 		
-		//根据用户id查询关系表
-		UserAppRelation userAppRelation = userAppRelationDao.selectByPrimaryKey(id);
-		if(StringUtils.isNotBlank(userAppRelation.getAppIds())) {
+		//根据用户名查询关系表
+	    UserAppRelationQuery example = new UserAppRelationQuery();
+	    Criteria criteria = example.createCriteria();
+	    criteria.andUsernameEqualTo(username);
+	    List<UserAppRelation> userApplist = userAppRelationDao.selectByExample(example);
+	    UserAppRelation userAppRelation = null;
+	    if(userApplist != null && userApplist.size()>0) {
+	        userAppRelation = userApplist.get(0);
+	    }
+		if(null != userAppRelation && StringUtils.isNotBlank(userAppRelation.getAppIds())) {
 			//获取用户的应用
 			String[] appIdsStr = userAppRelation.getAppIds().replaceAll(" ","").split(",");
 			Integer[] appIds = (Integer[]) ConvertUtils.convert(appIdsStr, Integer.class);

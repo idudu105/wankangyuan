@@ -2,22 +2,23 @@
 * @Author: Marte
 * @Date:   2018-04-23 15:32:03
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-05-04 14:32:27
+* @Last Modified time: 2018-05-11 14:55:29
 */
 
 
 //  项目0
 function project0(){
-
     var obox=document.querySelectorAll('.box')[0];
     obox.style.minHeight=window.screen.availHeight-240+'px';
+    console.log(document.body.clientWidth);
 
-    // alert(window.screen.availHeight)
-    // alert(document.body.scrollHeight)
-    // 全选框和复选框的动作
+// 全选框和复选框的动作
     if(document.querySelectorAll('.quanxuanK')[0]){
         oquanxuanK=document.querySelectorAll('.quanxuanK')[0];
         var oquanxuan=oquanxuanK.querySelectorAll('.input_check')[0];
+
+        var afuxuan=[];
+        var afuxuanK=[];
 
         if(document.querySelectorAll('.fuxuanK2')[0]){
             afuxuanK=document.querySelectorAll('.fuxuanK2');
@@ -27,10 +28,12 @@ function project0(){
             console.log("k3");
         }
 
-        var afuxuan=[];
-        for(var i=0;i<afuxuanK.length;i++){
-            afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+        if(afuxuanK[0]){
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
         }
+        
 
         oquanxuanK.onchange=function(){
             if(oquanxuan.checked){
@@ -45,29 +48,32 @@ function project0(){
             }
         }
 
-        for(var i=0;i<afuxuanK.length;i++){
-            (function(index){
-                afuxuanK[i].onchange=function(){
-                    var fuxuanPD=0;
-                    for(var j=0;j<afuxuanK.length;j++){
-                        if(afuxuan[j].checked){
-                            fuxuanPD++;
+
+        if(afuxuanK[0]){
+            for(var i=0;i<afuxuanK.length;i++){
+                (function(index){
+                    afuxuanK[i].onchange=function(){
+                        var fuxuanPD=0;
+                        for(var j=0;j<afuxuanK.length;j++){
+                            if(afuxuan[j].checked){
+                                fuxuanPD++;
+                            }
+                            console.log(afuxuan[j].checked);
                         }
-                        console.log(afuxuan[j].checked);
+                        console.log(fuxuanPD);
+                        if(fuxuanPD==afuxuanK.length){
+                            oquanxuan.checked=1;
+                        }else if(fuxuanPD!=afuxuanK.length){
+                            oquanxuan.checked=0;
+                        }
                     }
-                    console.log(fuxuanPD);
-                    if(fuxuanPD==afuxuanK.length){
-                        oquanxuan.checked=1;
-                    }else if(fuxuanPD!=afuxuanK.length){
-                        oquanxuan.checked=0;
-                    }
-                }
-            })(i)
+                })(i)
+            }
         }
+        
     }else{
         console.log(222);
     }
-
 }
 
 //  项目1
@@ -78,7 +84,7 @@ function project1(){
     var oshaixuanZK=document.querySelectorAll('.shaixuanZK')[0];//获取筛选菜单
     var shaixuanPD=0;
 
-    oshaixuanBT.onclick=function(){
+    oshaixuanBT.onclick=function(event){
         if(shaixuanPD==0){
             oshaixuanZK.className="shaixuanZK active";
             shaixuanPD=1;
@@ -86,8 +92,12 @@ function project1(){
             oshaixuanZK.className="shaixuanZK";
             shaixuanPD=0;
         }
-        
+        // event.stopPropagation();
+        // console.log(1);
     }
+    // document.onclick=function(){
+    //     oshaixuanZK.className="shaixuanZK";
+    // }
 
 //筛选按钮显示隐藏选项
     var oshaixuanZK=document.querySelectorAll('.shaixuanZK')[0];//获取筛选菜单
@@ -96,6 +106,8 @@ function project1(){
     var aPJListli=oPJList.querySelectorAll('.PJListli');//项目表头
     var oPJul=document.querySelectorAll('.PJul')[0];//项目栏
     var aPJli=oPJul.querySelectorAll('.PJli');//每一条项目
+
+    console.log(aPJli);
     
 
     //初始化筛选按钮判断
@@ -113,16 +125,27 @@ function project1(){
                     ashaixuanZKliI[j].className="shaixuanZKliI active";
                     aPJListli[j].style.display="block";
                     for(var o=0;o<aPJli.length;o++){
-                        var aPJliCli=aPJli[o].querySelectorAll('.PJliCli');//项目表项
-                        aPJliCli[j].style.display="block";
+                        if(aPJli[o].querySelectorAll('.PJliCli2')[0]){
+                            var aPJliCli=aPJli[o].querySelectorAll('.PJliCli2');//格式数据表项
+                            aPJliCli[j].style.display="block";
+                        }else if(aPJli[o].querySelectorAll('.PJliCli')[0]){
+                            var aPJliCli=aPJli[o].querySelectorAll('.PJliCli');//项目表项
+                            aPJliCli[j].style.display="block";
+                        }
                     }
                     shaixuanBTPD[j]=1;
                 }else{
                     ashaixuanZKliI[j].className="shaixuanZKliI";
                     aPJListli[j].style.display="none";
                     for(var o=0;o<aPJli.length;o++){
-                        var aPJliCli=aPJli[o].querySelectorAll('.PJliCli');//项目表项
-                        aPJliCli[j].style.display="none";
+                        if(aPJli[o].querySelectorAll('.PJliCli2')[0]){
+                            var aPJliCli=aPJli[o].querySelectorAll('.PJliCli2');//格式数据表项
+                            aPJliCli[j].style.display="none";
+                        }else if(aPJli[o].querySelectorAll('.PJliCli')[0]){
+                            var aPJliCli=aPJli[o].querySelectorAll('.PJliCli');//项目表项
+                            aPJliCli[j].style.display="none";
+                        }
+                        
                     }
                     // aPJliCli[j].style.display="none";
                     shaixuanBTPD[j]=0;
@@ -265,6 +288,7 @@ function pro_detail(){
 
 
 
+
 }
 
 
@@ -351,6 +375,8 @@ function pro_dataclick(){
         
     }
 
+//
+
 //筛选按钮显示隐藏选项
     var oshaixuanZK=document.querySelectorAll('.shaixuanZK')[0];//获取筛选菜单
     var ashaixuanZKliI=document.querySelectorAll('.shaixuanZKliI');//获取所有筛选按钮
@@ -421,6 +447,41 @@ function pro_file(){
             ofileKpd=1;
         }
     }
+
+//文件树
+    var oprof_lbLmT=document.querySelectorAll('.prof_lbLmT')[0];
+    var aPJliB1L=oprof_lbLmT.querySelectorAll('.PJliB1L');
+    var aPJliB2L=oprof_lbLmT.querySelectorAll('.PJliB2L');
+
+    var aPJliBL=[];
+
+    for(var i=0;i<aPJliB1L.length;i++){
+        aPJliBL.push(aPJliB1L[i]);
+    }
+    for(var i=0;i<aPJliB2L.length;i++){
+        aPJliBL.push(aPJliB2L[i]);
+    }
+
+    console.log(aPJliBL);
+
+    for(var i=0;i<aPJliBL.length;i++){
+        (function(index){
+            aPJliBL[index].onclick=function(event){
+                for(var j=0;j<aPJliBL.length;j++){
+                    aPJliBL[j].style.color="#666";
+                }
+                aPJliBL[index].style.color="#5ca0e5";
+                event.stopPropagation();
+            }
+        })(i)
+    }
+
+    oprof_lbLmT.onclick=function(){
+        for(var j=0;j<aPJliBL.length;j++){
+            aPJliBL[j].style.color="#666";
+        }
+    }
+
 }
 
 //成员
@@ -574,9 +635,225 @@ function pro_discuss(){
         othemeaddMk.value="";
     }
 
-    
+}
 
-    
+//格式数据——我的
+function data_mine(){
+
+//格式数据添加至项目框显示隐藏
+    var opro_addK=document.querySelectorAll('.pro_addK')[0];//格式数据添加至项目
+    var opro_addk=opro_addK.querySelectorAll('.pro_addk')[0];//添加按钮
+    var opro_addul=document.querySelectorAll('.pro_addul')[0];//添加项目列表
+    var apro_addli=opro_addul.querySelectorAll('.pro_addli');//添加各个项目
+
+    pro_addkPD=0;
+
+    opro_addk.onclick=function(){
+        if(pro_addkPD==0){
+            opro_addul.style.display="block";
+            pro_addkPD=1;
+        }else{
+            opro_addul.style.display="none";
+            pro_addkPD=0;
+        }
+    }
+    for(var i=0;i<apro_addli.length;i++){
+        (function(index){
+            apro_addli[index].onclick=function(){
+                opro_addul.style.display="none";
+                pro_addkPD=0;
+            }
+        })(i)
+    }
+}
+
+
+//应用——我的
+function app_mine(){
+
+//应用添加至项目框显示隐藏
+    var opro_addK=document.querySelectorAll('.pro_addK')[0];//应用添加至项目
+    var opro_addk=opro_addK.querySelectorAll('.pro_addk')[0];//添加按钮
+    var opro_addul=document.querySelectorAll('.pro_addul')[0];//添加项目列表
+    var apro_addli=opro_addul.querySelectorAll('.pro_addli');//添加各个项目
+
+    // pro_addkPD=0;
+
+    opro_addk.onclick=function(event){
+        // if(pro_addkPD==0){
+            opro_addul.style.display="block";
+        //     pro_addkPD=1;
+        // }else{
+        //     opro_addul.style.display="none";
+        //     pro_addkPD=0;
+        // }
+        event.stopPropagation();
+    }
+    for(var i=0;i<apro_addli.length;i++){
+        (function(index){
+            apro_addli[index].onclick=function(){
+                opro_addul.style.display="none";
+                // pro_addkPD=0;
+            }
+        })(i)
+    }
+
+//应用类别筛选框显示隐藏
+    var oapp_typeK=document.querySelectorAll('.app_typeK')[0];//应用添加至项目
+    var oapp_typek=oapp_typeK.querySelectorAll('.app_typek')[0];//添加按钮
+    var oapp_typeul=document.querySelectorAll('.app_typeul')[0];//添加项目列表
+    var aapp_typeli=oapp_typeul.querySelectorAll('.app_typeli');//添加各个项目
+
+    // app_typekPD=0;
+
+    oapp_typek.onclick=function(event){
+        // if(app_typekPD==0){
+            oapp_typeul.style.display="block";
+        //     app_typekPD=1;
+        // }else{
+        //     oapp_typeul.style.display="none";
+        //     app_typekPD=0;
+        // }
+        event.stopPropagation();
+    }
+    for(var i=0;i<aapp_typeli.length;i++){
+        (function(index){
+            aapp_typeli[index].onclick=function(){
+                oapp_typeul.style.display="none";
+                // app_typekPD=0;
+                console.log(index)
+            }
+        })(i)
+    }
+
+    document.onclick=function(){
+        opro_addul.style.display="none";
+        // pro_addkPD=0;
+        oapp_typeul.style.display="none";
+        // app_typekPD=0;
+    }
+}
+
+function app_public(){
+//应用类别筛选框显示隐藏
+    var oapp_typeK=document.querySelectorAll('.app_typeK')[0];//应用添加至项目
+    var oapp_typek=oapp_typeK.querySelectorAll('.app_typek')[0];//添加按钮
+    var oapp_typeul=document.querySelectorAll('.app_typeul')[0];//添加项目列表
+    var aapp_typeli=oapp_typeul.querySelectorAll('.app_typeli');//添加各个项目
+
+    // app_typekPD=0;
+
+    oapp_typek.onclick=function(event){
+        // if(app_typekPD==0){
+            oapp_typeul.style.display="block";
+        //     app_typekPD=1;
+        // }else{
+        //     oapp_typeul.style.display="none";
+        //     app_typekPD=0;
+        // }
+        event.stopPropagation();
+    }
+    for(var i=0;i<aapp_typeli.length;i++){
+        (function(index){
+            aapp_typeli[index].onclick=function(){
+                oapp_typeul.style.display="none";
+                // app_typekPD=0;
+                console.log(index)
+            }
+        })(i)
+    }
+
+    document.onclick=function(){
+        // opro_addul.style.display="none";
+        // pro_addkPD=0;
+        oapp_typeul.style.display="none";
+        // app_typekPD=0;
+    }
+}
+
+//格式数据——我创建的
+function data_create(){
+//导入数据框显示隐藏
+    var opro_inport=document.querySelectorAll('.pro_inport')[0];//导入数据按钮
+    var oinportK=document.querySelectorAll('.inportK')[0];//导入数据框
+    var oinportTx=document.querySelectorAll('.inportTx')[0];//导入数据框关闭按钮
+
+    var inportPD=0;
+
+    opro_inport.onclick=function(){
+        if(inportPD==0){
+            oinportK.style.display="block";
+            inportPD=1;
+        }else{
+            oinportK.style.display="none";
+            inportPD=0;
+        }
+    }
+    oinportTx.onclick=function(){
+        oinportK.style.display="none";
+        inportPD=0;
+    }
+
+//导入数据框上传文件
+    var oinportMu=document.querySelectorAll('.inportMu')[0];//上传文件按钮
+    var oinportMf=document.querySelectorAll('.inportMf')[0];//上传文件input
+
+    oinportMu.onclick=function(){
+        oinportMf.click();
+    }
+
+
+//添加源数据
+    var opro_adddata=document.querySelectorAll('.pro_adddata')[0];//添加源数据按钮
+    var oadddataK=document.querySelectorAll('.adddataK')[0];//添加源数据框
+    var oadddataTx=oadddataK.querySelectorAll('.adddataTx')[0];//添加源数据框关闭按钮
+    var aadddataMliTT=oadddataK.querySelectorAll('.adddataMliTT');//添加源数据框文本框
+
+
+    var adddataPD=0;//添加源数据框状态判断
+
+    opro_adddata.onclick=function(){
+        if(adddataPD==0){
+            oadddataK.style.display="block";
+            adddataPD=1;
+            for(var i=0;i<aadddataMliTT.length;i++){
+                aadddataMliTT[i].value="";//打开添加源数据框的时候清空所有文本框和文本域
+            }
+        }
+    }
+
+    oadddataTx.onclick=function(){
+        oadddataK.style.display="none";
+        adddataPD=0;
+    }
+
+
+}
+
+
+//应用-我创建的应用页面
+function app_create(){
+
+//应用创建框的显示隐藏
+    var opro_createapp=document.querySelectorAll('.pro_createapp')[0];//应用创建按钮
+    var ocreateappK=document.querySelectorAll('.createappK')[0];//应用创建框
+    var oinportTx=ocreateappK.querySelectorAll('.inportTx')[0];//应用创建框关闭按钮
+
+    var appcreatePD=0;
+
+    opro_createapp.onclick=function(){
+        // if(appcreatePD==0){
+            ocreateappK.style.display="block";
+            appcreatePD=1;
+        // }else{
+        //     ocreateappK.style.display="none";
+        //     appcreatePD=0;
+        // }
+    }
+    oinportTx.onclick=function(){
+        ocreateappK.style.display="none";
+        appcreatePD=0;
+    }
 
 
 
