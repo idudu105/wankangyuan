@@ -12,8 +12,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <meta charset="UTF-8" />
     <title>Document</title>
 </head>
-<link rel="stylesheet" type="text/css" href="css/project1.css" />
-<script type="text/javascript" src="js/project1.js"></script>
+<link rel="stylesheet" type="text/css" href="/wankangyuan/static/css/project1.css" />
+<script type="text/javascript" src="/wankangyuan/static/js/project1.js"></script>
 <script type="text/javascript">
     window.onload=function(){
         project0();
@@ -25,19 +25,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div class="Box">
         <div class="box">
             <div class="top">
-                <h1><img src="img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
+                <h1><img src="/wankangyuan/static/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
                 <a href="/wankangyuan/project/selectMyProject?user_id=1">
                 	<div class="topT active">项目</div>
                 </a>
                 <div class="topT">格式数据</div>
                 <div class="topT">应用</div>
                 <div class="touxiangK">
-                    <img src="img/touxiang.png" alt="" class="touxiang" />
+                    <img src="/wankangyuan/static/touxiang.png" alt="" class="touxiang" />
                 </div>
                 <div class="nicheng">Peter</div>
                 <div class="yanjiuquan">
                     <div class="yanjiuquanT">研究圈</div>
-                    <img src="img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
+                    <img src="/wankangyuan/static/redpoint.png" height="11" width="11" alt="" class="redpoint" />
                 </div>
             </div>
             <div class="top2">
@@ -47,7 +47,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <a href="javascript:;"><div class="top2Cli top2CliYJ">公共</div></a>
                     <div class="search">
                         <div class="searchC">
-                            <img src="img/search.png" alt="" class="searchCi" />
+                            <img src="/wankangyuan/static/search.png" alt="" class="searchCi" />
                             <input type="text" class="searchCt"  placeholder="搜索项目" />
                         </div>
                     </div>
@@ -58,8 +58,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="listZT">
                         <a href="javascript:;">
                             <div class="listZTli listZT1">
-                                <img src="img/listZT1.png"alt="" class="listZT1i" />
-                                <img src="img/listZT1.png" alt="" class="listZT1i" />
+                                <img src="/wankangyuan/static/listZT1.png"alt="" class="listZT1i" />
+                                <img src="/wankangyuan/static/listZT1.png" alt="" class="listZT1i" />
                             </div>
                         </a>
                         <a href="project_public.jsp">
@@ -74,7 +74,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="shaixuanBT">
                         <div class="shaixuanBTt">筛选</div>
                         <div class="shaixuanBTiK">
-                            <img src="img/sanjiao_blue.png" alt="" class="shaixuanBTi" />
+                            <img src="/wankangyuan/static/sanjiao_blue.png" alt="" class="shaixuanBTi" />
                         </div>
                     </div>
                     <div class="jiangeline"></div>
@@ -116,13 +116,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
             <div class="pageK">
                 <div class="pageLR">
-                    <img src="img/pageL.png" class="pageLRi" alt="" />
+                    <img src="/wankangyuan/static/pageL.png" class="pageLRi" alt="" />
                 </div>
                 <div class="pageNUM active">1</div>
                 <div class="pageNUM ">2</div>
                 <div class="pageNUM">3</div>
                 <div class="pageLR">
-                    <img src="img/pageR.png" class="pageLRi" alt="" />
+                    <img src="/wankangyuan/static/pageR.png" class="pageLRi" alt="" />
                 </div>
             </div>
 
@@ -141,7 +141,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </div>
     </div>
     
-    <script type="text/javascript" src="/wankangyuan/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
     <script type="text/javascript">
     	//点击添加到我的项目之中
     	function addToMine(){

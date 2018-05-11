@@ -12,8 +12,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <meta charset="UTF-8" />
     <title>Document</title>
 </head>
-<link rel="stylesheet" type="text/css" href="css/project1.css" />
-<script type="text/javascript" src="js/project1.js"></script>
+<link rel="stylesheet" type="text/css" href="/wankangyuan/static/css/project1.css" />
+<script type="text/javascript" src="/wankangyuan/static/js/project1.js"></script>
 <script type="text/javascript">
     window.onload=function(){
         //project0();
@@ -25,19 +25,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div class="Box">
         <div class="box">
             <div class="top">
-                <h1><img src="img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
+                <h1><img src="/wankangyuan/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
                 <a href="/wankangyuan/project/selectMyProject?user_id=1">
                 	<div class="topT active">项目</div>
                 </a>
                 <div class="topT">格式数据</div>
                 <div class="topT">应用</div>
                 <div class="touxiangK">
-                    <img src="img/touxiang.png" alt="" class="touxiang" />
+                    <img src="/wankangyuan/static/img/touxiang.png" alt="" class="touxiang" />
                 </div>
                 <div class="nicheng">Peter</div>
                 <div class="yanjiuquan">
                     <div class="yanjiuquanT">研究圈</div>
-                    <img src="img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
+                    <img src="/wankangyuan/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
                 </div>
             </div>
             <div class="top2">
@@ -224,7 +224,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    <input type="file" name="file" onchange="upFile()" id="uploadFile"/>
 	</form>
     
-    <script type="text/javascript" src="/wankangyuan/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
     <script type="text/javascript">
     
     	var ids = [];
@@ -280,7 +280,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                	var fileUploadList = $("#fileUploadList");
 	                	fileUploadList.append(
 	                		'<div class="fileaddMm" id=\"'+data.id+'\">'+
-	                            '<img src="img/file.png" height="20" width="16" alt="" class="fileaddMi" />'+
+	                            '<img src="/wankangyuan/static/img/file.png" height="20" width="16" alt="" class="fileaddMi" />'+
 	                            '<div class="fileaddMz addMtzname">'+data.originalFilename+'</div>'+
 	                            '<div class="fileaddMz addMtzsize">'+data.size+' KB</div>'+
 	                            '<div class="fileaddMz addMtznum">小一号</div>'+
