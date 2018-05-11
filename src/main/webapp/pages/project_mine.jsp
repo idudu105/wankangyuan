@@ -26,7 +26,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="box">
             <div class="top">
                 <h1><img src="/wankangyuan/pages/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
-                <div class="topT active">项目</div>
+                <a href="/wankangyuan/project/selectMyProject?user_id=1">
+                	<div class="topT active">项目</div>
+                </a>
                 <div class="topT">格式数据</div>
                 <div class="topT">应用</div>
                 <div class="touxiangK">
@@ -82,7 +84,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </div>
                         <div class="allT">全选</div>
                     </div> -->
-                    <div class="pro_menu pro_exit">退出</div>
+                    <div class="pro_menu pro_exit" onclick="exit()">退出</div>
                 </div>
                 <div class="shaixuanZK">
                     <div class="shaixuanZKli">
@@ -114,8 +116,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <div class="PJK">
                 <div class="PJList">
                     <div class="allK">
-                        <div class="allX">
-                            <!-- <img src="img/greentrue.png" alt="" class="allI" /> -->
+                        <div class="quanxuanK">
+                            <input type="checkbox" class="input_check" id="check0">
+                            <label for="check0"></label>
                         </div>
                         <div class="allT">全选</div>
                     </div>
@@ -138,8 +141,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 	<c:forEach items="${projects}" var="project">
 	                	<div class="PJli">
 	                        <div class="PJliC">
-	                            <div class="PJXZ"></div>
-	                            <a href="project_detail.html">
+	                            <div class="fuxuanK2">
+	                                <input type="checkbox" class="input_check" id="check${project.id}" value="${project.id}">
+	                                <label for="check${project.id}"></label>
+	                            </div>
+	                            <a href="/wankangyuan/project/getProjectDetail?id=${project.id}">
 	                                <div class="PJliCli PJname">${project.p_name}</div>
 	                                <div class="PJliCli PJID">${project.p_number }</div>
 	                                <div class="PJliCli PJcreater">${project.creator }</div>
@@ -230,5 +236,60 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
         </div>
     </div>
+
+    <script type="text/javascript" src="/wankangyuan/js/jquery.min.js"></script>
+    <script type="text/javascript">
+   
+    	//点击添加到我的项目之中
+    	function exit(){
+    		
+    		var afuxuanK=document.querySelectorAll('.fuxuanK2');
+    		
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].value);
+            	}
+            }
+            
+            
+            if(ids == ""){
+            	alert("请勾选项目！");
+            	return;
+            }
+            
+            //网络请求添加公共项目到我的项目中
+            $.ajax({
+            	url:"/wankangyuan/project/exit",
+            	type:"post",
+            	data:{
+            		ids:ids.join(",")
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			window.location.href="/wankangyuan/project/selectMyProject?user_id=1";
+            		}else{
+            			alert(data.message);
+            			window.location.href="/wankangyuan/project/selectMyProject?user_id=1";
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            	
+            });
+            
+    		
+    	}
+    
+    
+    </script>
+    
 </body>
 </html>

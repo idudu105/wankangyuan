@@ -26,7 +26,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="box">
             <div class="top">
                 <h1><img src="img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
-                <div class="topT active">项目</div>
+                <a href="/wankangyuan/project/selectMyProject?user_id=1">
+                	<div class="topT active">项目</div>
+                </a>
                 <div class="topT">格式数据</div>
                 <div class="topT">应用</div>
                 <div class="touxiangK">
@@ -83,9 +85,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </div>
                         <div class="allT">全选</div>
                     </div>
-                    <div class="pro_menu pro_delete">删除</div>
-                    <div class="pro_menu pro_nonpublic">取消公开</div>
-                    <div class="pro_menu pro_public">公开</div>
+                    <div class="pro_menu pro_delete" onclick="deleteProjects()">删除</div>
+                    <div class="pro_menu pro_nonpublic" onclick="updateProjectOpenState(0)">取消公开</div>
+                    <div class="pro_menu pro_public" onclick="updateProjectOpenState(1)">公开</div>
                     <div class="pro_menu pro_create">+创建项目</div>
                 </div>
             </div>
@@ -94,11 +96,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	
 		            <div class="PJK2li">
 	                    <div class="PJK2litop">
-	                        <a href="project_detail.html">
+
+	                        <a href="/wankangyuan/project/getProjectDetail?id=${project.id}">
 	                            <div class="PJK2litopT">${project.p_name}</div>
 	                        </a>
 	                        <div class="fuxuanK3">
-	                                <input type="checkbox" class="input_check" id="check${project.id}">
+	                                <input type="checkbox" class="input_check" id="check${project.id}" value="${project.id}">
 	                                <label for="check${project.id}"></label>
 	                        </div>
 	                    </div>
@@ -109,7 +112,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                    <div class="PJK2litime">
 	                        <div class="PJK2litimeT1">${project.create_datetime }</div>
 	                    </div>
-	                    <div class="PJK2lidetail">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet</div>
+	                    <div class="PJK2lidetail">${project.introduction }</div>
 	                </div>    
 	                	
                 </c:forEach>
@@ -154,5 +157,109 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
         </div>
     </div>
+    
+        <script type="text/javascript" src="/wankangyuan/js/jquery.min.js"></script>
+    <script type="text/javascript">
+    	
+    	
+    	//点击添加到我的项目之中
+    	function updateProjectOpenState(is_open){
+    		
+    		var afuxuanK=document.querySelectorAll('.fuxuanK3');
+    		
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].value);
+            	}
+            }
+            
+            if(ids == ""){
+            	alert("请勾选项目！");
+            	return;
+            }
+            
+            
+            //网络请求添加公共项目到我的项目中
+            $.ajax({
+            	url:"/wankangyuan/project/updateProjectOpenState",
+            	type:"post",
+            	data:{
+            		ids:ids.join(","),
+            		is_open:is_open
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1";
+            		}else{
+            			alert(data.message);
+            			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1";
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            	
+            });
+            
+    		
+    	}
+    	
+    	//点击添加到我的项目之中
+    	function deleteProjects(){
+    		
+    		var afuxuanK=document.querySelectorAll('.fuxuanK2');
+    		
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].value);
+            	}
+            }
+            
+            if(ids == ""){
+            	alert("请勾选项目！");
+            	return;
+            }
+            
+            //网络请求添加公共项目到我的项目中
+            $.ajax({
+            	url:"/wankangyuan/project/deleteProjects",
+            	type:"post",
+            	data:{
+            		ids:ids.join(","),
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1";
+            		}else{
+            			alert(data.message);
+            			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1";
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            	
+            });
+            
+    		
+    	}
+    
+    
+    
+    </script>
 </body>
 </html>

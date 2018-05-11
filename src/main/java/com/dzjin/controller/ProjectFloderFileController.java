@@ -9,7 +9,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.math3.analysis.function.Sin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -132,7 +131,12 @@ public class ProjectFloderFileController {
         }
         try {
 			file.transferTo(dest); //保存文件
-		} catch (IllegalStateException | IOException e) {
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+			map.put("result", false);
+	        map.put("message", "文件保存失败");
+	        return map;
+		} catch (IOException e) {
 			e.printStackTrace();
 			map.put("result", false);
 	        map.put("message", "文件保存失败");
@@ -198,8 +202,5 @@ public class ProjectFloderFileController {
 		return "redirect:/projectFloderFile/selectProjectFloderByProjectId";
 		
 	}
-	
-	
-	
 
 }

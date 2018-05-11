@@ -130,4 +130,72 @@ public class ProjectController {
 		return "redirect:/pages/project_mine.jsp";
 	}
 	
+	@RequestMapping("/addPublicProjectToMine")
+	@ResponseBody
+	public Map<String, Object> addPublicProjectToMine(HttpSession session , String ids){
+		Map<String, Object> map = new HashMap<>();
+		if(projectService.addPublicProjectToMine(ids, 1)){
+			map.put("result", true);
+		}else{
+			map.put("result", false);
+			map.put("message", "部分项目添加至我的项目失败！");
+		}
+		return map;
+	}
+	
+	/**
+	 * 
+	 * @param ids
+	 * @param type	0代表取消公开，1代表公开
+	 * @return	
+	 */
+	@RequestMapping("/updateProjectOpenState")
+	@ResponseBody
+	public Map<String, Object> updateProjectOpenState(String ids , Integer is_open){
+		Map<String, Object> map = new HashMap<>();
+		if(projectService.updateProjectOpenState(ids, is_open)){
+			map.put("result", true);
+		}else{
+			map.put("result", false);
+			map.put("message", "部分项目更新公开状态失败！");
+		}
+		return map;
+	}
+	
+	/**
+	 * 批量删除项目
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping("/deleteProjects")
+	@ResponseBody
+	public Map<String, Object> deleteProjects(String ids){
+		Map<String, Object> map = new HashMap<>();
+		if(projectService.deleteProjects(ids)){
+			map.put("result", true);
+		}else{
+			map.put("result", false);
+			map.put("message", "部分项目删除失败！");
+		}
+		return map;
+	}
+	
+	/**
+	 * 退出项目
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping("/exit")
+	@ResponseBody
+	public Map<String, Object> exit(String ids){
+		Map<String, Object> map = new HashMap<>();
+		if(projectService.exits(ids, 1)){
+			map.put("result", true);
+		}else{
+			map.put("result", false);
+			map.put("message", "部分项目退出失败！");
+		}
+		return map;
+	}	
+	
 }
