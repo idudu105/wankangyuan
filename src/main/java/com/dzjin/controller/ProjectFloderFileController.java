@@ -16,25 +16,46 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.dzjin.model.Project;
 import com.dzjin.model.ProjectFile;
 import com.dzjin.model.ProjectFloder;
 import com.dzjin.service.ProjectFileService;
 import com.dzjin.service.ProjectFloderService;
 
+/**
+ * 
+ * 项目名称：wankangyuan 
+ * 类名称：ProjectFloderFileController	项目文件相关接口
+ * 类描述： 
+ * 创建人：dzjin 
+ * 创建时间：2018年5月11日 下午3:40:51 
+ * 修改人：dzjin 
+ * 修改时间：2018年5月11日 下午3:40:51 
+ * 修改备注： 
+ * @version 
+ *
+ */
 @Controller
 @RequestMapping("/projectFloderFile")
 public class ProjectFloderFileController {
 	
 	@Autowired
-	ProjectFloderService projectFloderFileService;
+	ProjectFloderService projectFloderService;
 	@Autowired
 	ProjectFileService projectFileService;
 	
+	/**
+	 * 查询文件目录结构
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping("/selectProjectFloderByProjectId")
 	public String selectProjectFloderByProjectId(HttpSession session){
-		session.setAttribute("projectFloders", projectFloderFileService.selectProjectFloderByProjectId(1));
+		
+		Project project = (Project)session.getAttribute("project");
+		session.setAttribute("projectFloders", projectFloderService.selectProjectFloderByProjectId(project.getId()));
 		/*
-		 * 我的文件数量
+		 * 需要查询出此项目下我的文件数量
 		 */
 		session.setAttribute("myFileNum", 56);
 		
@@ -55,7 +76,7 @@ public class ProjectFloderFileController {
 	@ResponseBody
 	public Map<String, Object> addProjectFloder(ProjectFloder projectFloder){
 		Map<String, Object> map = new HashMap<>();
-		if(projectFloderFileService.insertProjectFloder(projectFloder) == 1){
+		if(projectFloderService.insertProjectFloder(projectFloder) == 1){
 			map.put("result", true);
 		}else{
 			map.put("result", false);
@@ -75,7 +96,7 @@ public class ProjectFloderFileController {
 	@ResponseBody
 	public Map<String, Object> deleteProjectFloder(String id){
 		Map<String, Object> map = new HashMap<>();
-		if(projectFloderFileService.deleteProjectFloder(id) == 1){
+		if(projectFloderService.deleteProjectFloder(id) == 1){
 			map.put("result", true);
 		}else{
 			map.put("result", false);
@@ -89,17 +110,54 @@ public class ProjectFloderFileController {
 	 * @return
 	 * 
 	 * 修改目录请求格式：http://localhost:8080/wankangyuan/projectFloderFile/updateProjectFloder?id=23&floder_name=ABCDEFG
-	 * 
+
 	 */
 	@RequestMapping("/updateProjectFloder")
 	@ResponseBody
 	public Map<String, Object> updateProjectFloder(ProjectFloder projectFloder){
 		Map<String, Object> map = new HashMap<>();
-		if(projectFloderFileService.updateProjectFloder(projectFloder) == 1){
+		if(projectFloderService.updateProjectFloder(projectFloder) == 1){
 			map.put("result", true);
 		}else{
 			map.put("result", false);
 		}
+		return map;
+	}
+
+	
+	/**
+	 * 批量提交文件
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping("/upFiles")
+	@ResponseBody
+	public Map<String, Object> upFiles(Integer floder_id , String ids){
+		Map<String, Object> map = new HashMap<>();
+		if(projectFileService.updateFloderId(floder_id, ids)){
+			map.put("result", true);	
+		}else{
+			map.put("result", false);
+			map.put("message", "部分文件提交失败，请重新选择上传");
+		}
+		return map;
+	}
+	
+	
+	/**
+	 * 
+	 * @param session
+	 * @return
+	 * 
+	 * 请求样例：http://localhost:8080/wankangyuan/projectFloderFile/selectFilesByFloderId?floder_id=1
+	 * 
+	 */
+	@RequestMapping("/selectFilesByFloderId")
+	@ResponseBody
+	public Map<String, Object> selectFilesByFloderId(HttpSession session , Integer floder_id){
+		Map<String, Object> map = new HashMap<>();
+		session.setAttribute("projectFiles", projectFileService.selectProjectFileByFloderId(floder_id));
+		map.put("result", true);
 		return map;
 	}
 	
@@ -120,7 +178,7 @@ public class ProjectFloderFileController {
 			return map;
 		}
 		//文件上传地址
-		String path ="G:/";
+		String path ="G:/projectFiles/";
         String fileName = file.getOriginalFilename();
         String type="."+fileName.substring(fileName.lastIndexOf(".")+1);
         String originalFilename = new String(fileName);
@@ -166,41 +224,19 @@ public class ProjectFloderFileController {
         return map;
 	}
 	
-	/**
-	 * 
-	 * @param session
-	 * @return
-	 */
-	@RequestMapping("/upFiles")
+	@RequestMapping("/deleteFiles")
 	@ResponseBody
-	public Map<String, Object> upFiles(Integer floder_id , String ids){
-		
-		Map<String, Object> map = new HashMap<>();
-		if(projectFileService.updateFloderId(floder_id, ids)){
-			map.put("result", true);	
+	public Map<String, Object> deleteFiles(HttpSession session , String ids){
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(projectFileService.deleteFiles(ids)){
+			map.put("result", true);
 		}else{
 			map.put("result", false);
-			map.put("message", "部分文件上传失败，请重新选择上传");
+			map.put("message", "部分文件删除失败！");
 		}
+		session.removeAttribute("projectFiles");
 		return map;
-		
 	}
 	
-	
-	/**
-	 * 
-	 * @param session
-	 * @return
-	 * 
-	 * 请求样例：http://localhost:8080/wankangyuan/projectFloderFile/selectFilesByFloderId?floder_id=1
-	 * 
-	 */
-	@RequestMapping("/selectFilesByFloderId")
-	public String selectFilesByFloderId(HttpSession session , Integer floder_id){
-		
-		session.setAttribute("projectFiles", projectFileService.selectProjectFileByFloderId(floder_id));
-		return "redirect:/projectFloderFile/selectProjectFloderByProjectId";
-		
-	}
 
 }

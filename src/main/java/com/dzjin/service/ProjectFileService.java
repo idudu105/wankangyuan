@@ -69,8 +69,22 @@ public class ProjectFileService {
 			//查看下面包含的文件
 			projectFiles.addAll(projectFileDao.selectProjectFileByFloderId(floder_id));
 		}
-		
-		
+	}
+	
+	/**
+	 * 批量删除文件
+	 * @param files
+	 * @return
+	 */
+	public Boolean deleteFiles(String files){
+		boolean result = true;
+		String ids[] = files.split(",");
+		for(int i = 0 ; i<ids.length ; i++){
+			if(1 != projectFileDao.deleteFile(Integer.valueOf(ids[i]))){
+				result = false;
+			}
+		}
+		return result;
 	}
 
 }

@@ -55,19 +55,24 @@ public class ProjectController {
 		}else{
 			project = projectService.getProjectDetail(id);
 		}
-		
+		httpSession.setAttribute("project", project);
 		
 		/*
 		 * 注意，此处还需要将项目的文件数量，应用数量，应用结果数量以及成员数量放到session中
 		 * 
+		 * 项目文件数量
 		 * 
+		 * 项目应用数量
+		 * 
+		 * 项目应用结果数量
+		 * 
+		 * 项目成员数量
 		 * 
 		 */
 		project.setFileNum(100);
 		project.setAppNum(100);
 		project.setAppResultNum(100);
 		project.setMemberNum(100);
-		httpSession.setAttribute("project", project);
 
 		return "redirect:/pages/project_detail.jsp";
 		

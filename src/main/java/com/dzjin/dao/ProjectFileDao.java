@@ -4,6 +4,7 @@ package com.dzjin.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
@@ -24,5 +25,9 @@ public interface ProjectFileDao {
 	
 	@Select("select * from project_file where floder_id=#{floder_id}")
 	public List<ProjectFile> selectProjectFileByFloderId(@Param("floder_id")Integer floder_id);
+	
+	@Delete("delete from project_file where id=#{id}")
+	public int deleteFile(@Param("id")Integer id);
+	
  
 }

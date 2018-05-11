@@ -86,7 +86,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                 </div>
                 <div class="prodexqR">
-                    <div class="prodexqRt">13例结直肠癌病人的基因表达模式研究</div>
+                    <div class="prodexqRt">${project.p_name }</div>
                     <div class="prodexqRk">
                         <div class="prodexqRbK">
                             <div class="prodexqRb active">
