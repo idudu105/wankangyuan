@@ -20,11 +20,11 @@ public interface UserAppRelationService {
 	int deleteByPrimaryKey(Integer id);
 	
 	//添加用户的应用
-	int addToMineById(Integer userId,Integer[] ids);
+	int addToMineById(Integer userId,String username, Integer[] ids);
 	
 	//删除用户的应用
 	int removeFromMineById(Integer userId,Integer[] ids);
 	
 	//查找用户的应用集合
-	List<Integer> findMine(Integer id);
+	List<Integer> findMine(String username);
 }

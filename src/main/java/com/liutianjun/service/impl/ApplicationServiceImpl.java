@@ -183,8 +183,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * @return
 	 */
 	@Override
-	public Map<String, Object> findMine(Integer page, Integer rows, String appName, Integer id) {
-		List<Integer> listId = userAppRelationService.findMine(id);
+	public Map<String, Object> findMine(Integer page, Integer rows, String appName, String username) {
+		List<Integer> listId = userAppRelationService.findMine(username);
 		
 		ApplicationQuery example = new ApplicationQuery();
 		Criteria criteria = example.createCriteria();

@@ -3,8 +3,8 @@ package com.liutianjun.controller;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,18 +42,20 @@ public class ApplicationController {
 	public String viewMine(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="8")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
-            HttpSession httpSession,
             Model model) {
-		//模拟登陆
+		/*//模拟登陆
 		httpSession.setAttribute("userName", "创建人1");
-		httpSession.setAttribute("id", 1);
+		httpSession.setAttribute("id", 1);*/
+	    
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 		
-		Integer userId = (Integer) httpSession.getAttribute("id");
-		Map<String, Object> map = applicationService.findMine(page,rows,appName,userId);
+		Map<String, Object> map = applicationService.findMine(page,rows,appName,username);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));
-		model.addAttribute("appName", appName);
-		return "jsp/application/mine.jsp";
+		model.addAttribute("page", page);
+        model.addAttribute("rows", rows);
+        model.addAttribute("appName", appName);
+		return "jsp/application/app_mine.jsp";
 	}
 	
 	/**
@@ -67,12 +69,13 @@ public class ApplicationController {
 	public String viewMine2(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="8")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
-            HttpSession httpSession,
             Model model) {
-		Integer userId = (Integer) httpSession.getAttribute("id");
-		Map<String, Object> map = applicationService.findMine(page,rows,appName,userId);
+		String username = (String)SecurityUtils.getSubject().getPrincipal();
+		Map<String, Object> map = applicationService.findMine(page,rows,appName,username);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));
+		model.addAttribute("page", page);
+        model.addAttribute("rows", rows);
 		model.addAttribute("appName", appName);
 		return "jsp/application/mine2.jsp";
 	}
@@ -91,15 +94,15 @@ public class ApplicationController {
 	public String viewCreate(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="8")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
-            HttpServletRequest request,
             Model model) {
-		//从session中获取当前用户名
-		String creator = (String) request.getSession().getAttribute("userName");
-		Map<String, Object> map = applicationService.findAll(page,rows,appName,creator);
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+		Map<String, Object> map = applicationService.findAll(page,rows,appName,username);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));
-		model.addAttribute("appName", appName);
-		return "jsp/application/mine.jsp";
+		model.addAttribute("page", page);
+        model.addAttribute("rows", rows);
+        model.addAttribute("appName", appName);
+		return "jsp/application/app_create.jsp";
 	}
 	
 	/**
@@ -120,11 +123,13 @@ public class ApplicationController {
 			HttpServletRequest request,
 			Model model) {
 		//从session中获取当前用户名
-		String creator = (String) request.getSession().getAttribute("userName");
-		Map<String, Object> map = applicationService.findAll(page,rows,appName,creator);
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+		Map<String, Object> map = applicationService.findAll(page,rows,appName,username);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));
-		model.addAttribute("appName", appName);
+		model.addAttribute("page", page);
+        model.addAttribute("rows", rows);
+        model.addAttribute("appName", appName);
 		return "jsp/application/mine2.jsp";
 	}
 	
@@ -146,8 +151,11 @@ public class ApplicationController {
 		Map<String, Object> map = applicationService.findAllPublic(page,rows,appName);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));
+		
+		model.addAttribute("page", page);
+		model.addAttribute("rows", rows);
 		model.addAttribute("appName", appName);
-		return "jsp/application/mine.jsp";
+		return "jsp/application/app_public.jsp";
 	}
 	
 	/**
@@ -168,6 +176,9 @@ public class ApplicationController {
 		Map<String, Object> map = applicationService.findAllPublic(page,rows,appName);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));
+		
+		model.addAttribute("page", page);
+		model.addAttribute("rows", rows);
 		model.addAttribute("appName", appName);
 		return "jsp/application/mine2.jsp";
 	}

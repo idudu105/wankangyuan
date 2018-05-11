@@ -1,6 +1,7 @@
 package com.liutianjun.pojo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ApplicationQuery {
@@ -416,6 +417,66 @@ public class ApplicationQuery {
             return (Criteria) this;
         }
 
+        public Criteria andIsAsyncIsNull() {
+            addCriterion("is_async is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAsyncIsNotNull() {
+            addCriterion("is_async is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAsyncEqualTo(Integer value) {
+            addCriterion("is_async =", value, "isAsync");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAsyncNotEqualTo(Integer value) {
+            addCriterion("is_async <>", value, "isAsync");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAsyncGreaterThan(Integer value) {
+            addCriterion("is_async >", value, "isAsync");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAsyncGreaterThanOrEqualTo(Integer value) {
+            addCriterion("is_async >=", value, "isAsync");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAsyncLessThan(Integer value) {
+            addCriterion("is_async <", value, "isAsync");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAsyncLessThanOrEqualTo(Integer value) {
+            addCriterion("is_async <=", value, "isAsync");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAsyncIn(List<Integer> values) {
+            addCriterion("is_async in", values, "isAsync");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAsyncNotIn(List<Integer> values) {
+            addCriterion("is_async not in", values, "isAsync");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAsyncBetween(Integer value1, Integer value2) {
+            addCriterion("is_async between", value1, value2, "isAsync");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAsyncNotBetween(Integer value1, Integer value2) {
+            addCriterion("is_async not between", value1, value2, "isAsync");
+            return (Criteria) this;
+        }
+
         public Criteria andKeywordsIsNull() {
             addCriterion("keywords is null");
             return (Criteria) this;
@@ -566,62 +627,52 @@ public class ApplicationQuery {
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeEqualTo(String value) {
+        public Criteria andCreateTimeEqualTo(Date value) {
             addCriterion("create_time =", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeNotEqualTo(String value) {
+        public Criteria andCreateTimeNotEqualTo(Date value) {
             addCriterion("create_time <>", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeGreaterThan(String value) {
+        public Criteria andCreateTimeGreaterThan(Date value) {
             addCriterion("create_time >", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeGreaterThanOrEqualTo(String value) {
+        public Criteria andCreateTimeGreaterThanOrEqualTo(Date value) {
             addCriterion("create_time >=", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeLessThan(String value) {
+        public Criteria andCreateTimeLessThan(Date value) {
             addCriterion("create_time <", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeLessThanOrEqualTo(String value) {
+        public Criteria andCreateTimeLessThanOrEqualTo(Date value) {
             addCriterion("create_time <=", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeLike(String value) {
-            addCriterion("create_time like", value, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeNotLike(String value) {
-            addCriterion("create_time not like", value, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeIn(List<String> values) {
+        public Criteria andCreateTimeIn(List<Date> values) {
             addCriterion("create_time in", values, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeNotIn(List<String> values) {
+        public Criteria andCreateTimeNotIn(List<Date> values) {
             addCriterion("create_time not in", values, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeBetween(String value1, String value2) {
+        public Criteria andCreateTimeBetween(Date value1, Date value2) {
             addCriterion("create_time between", value1, value2, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeNotBetween(String value1, String value2) {
+        public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
             addCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }

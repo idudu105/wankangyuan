@@ -1,13 +1,14 @@
 package com.liutianjun.controller;
 
-import javax.servlet.http.HttpSession;
-
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.liutianjun.pojo.User;
 import com.liutianjun.service.UserAppRelationService;
+import com.liutianjun.service.UserService;
 
 /**
  * 用户应用关系
@@ -25,6 +26,9 @@ public class UserAppRelationController {
 	@Autowired
 	private UserAppRelationService userAppRelationService;
 	
+	@Autowired
+	private UserService userService;
+	
 	/**
 	 * 添加应用到我的
 	 * @Title: addToMine 
@@ -34,9 +38,10 @@ public class UserAppRelationController {
 	 * String
 	 */
 	@RequestMapping(value="/addToMine",method=RequestMethod.POST)
-	public String addToMine(HttpSession httpSession, Integer[] ids) {
-		Integer userId = (Integer) httpSession.getAttribute("id");
-		userAppRelationService.addToMineById(userId, ids);
+	public String addToMine(Integer[] ids) {
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    User user = userService.selectByUsername(username);
+		userAppRelationService.addToMineById(user.getId(), username, ids);
 		return "redirect:/application/viewPublic";
 	}
 	
@@ -49,9 +54,10 @@ public class UserAppRelationController {
 	 * String
 	 */
 	@RequestMapping(value="/removeFromMine",method=RequestMethod.POST)
-	public String removeFromMine(HttpSession httpSession, Integer[] ids) {
-		Integer userId = (Integer) httpSession.getAttribute("id");
-		userAppRelationService.removeFromMineById(userId, ids);
+	public String removeFromMine(Integer[] ids) {
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+        User user = userService.selectByUsername(username);
+		userAppRelationService.removeFromMineById(user.getId(), ids);
 		return "redirect:/application/viewPublic";
 	}
 }

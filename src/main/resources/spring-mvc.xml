@@ -48,6 +48,14 @@
 			<value>4096</value>
 		</property>
 	</bean>
+	
+	<!-- 控制器异常处理 -->
+    <bean id="exceptionHandlerExceptionResolver" class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
+    </bean>
+
+    <bean class="com.liutianjun.exception.DefaultExceptionHandler"/>
+	
+	<import resource="classpath:springmvc-shiro.xml"/>
 
 
 </beans>
