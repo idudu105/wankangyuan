@@ -147,11 +147,11 @@
                     </div>
                 </div>
                 <div class="app_typeul">
-                    <div class="app_typeli">应用类别1</div>
-                    <div class="app_typeli">应用类别2</div>
-                    <div class="app_typeli">应用类别3</div>
-                    <div class="app_typeli">应用类别4</div>
-                    <div class="app_typeli">应用类别5</div>
+                    <c:forEach items="${typeSet }" var="appType" varStatus="appList">
+                        <c:if test="${appType ne null }">
+                            <div class="app_typeli">${appType }</div>
+                        </c:if>
+                    </c:forEach>
                 </div>
                 <div class="pro_addul">
                     <div class="pro_addli">项目1</div>
@@ -207,7 +207,7 @@
                                 <input name="ids" type="checkbox" class="input_check" id="check${appList.count }" value="${app.id }">
                                 <label for="check${appList.count }"></label>
                             </div>
-                            <a href="/wankangyuan/application/explain2?id=${app.id }">
+                            <a href="/wankangyuan/application/explain?id=${app.id }">
                                 <div class="PJliCli appname">${app.appName }</div>
                                 <div class="PJliCli appcreater">${app.creator }</div>
                                 <div class="PJliCli apptime">

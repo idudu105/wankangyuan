@@ -854,6 +854,7 @@ a{
 .PJK2{
     margin-top:35px;
     min-height: 500px;
+    position:relative;
     overflow:auto;
 
 }

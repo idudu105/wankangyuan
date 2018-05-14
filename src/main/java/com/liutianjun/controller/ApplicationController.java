@@ -51,6 +51,14 @@ public class ApplicationController {
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 		
 		Map<String, Object> map = applicationService.findMine(page,rows,appName,username);
+		@SuppressWarnings("unchecked")
+		List<Application> list = (List<Application>) map.get("list");
+		Set<String> set =new HashSet<>();
+		for (Application application : list) {
+			set.add(application.getAppType());
+		}
+		
+		model.addAttribute("typeSet", set);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));
 		model.addAttribute("page", page);
@@ -77,6 +85,14 @@ public class ApplicationController {
             Model model) {
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 		Map<String, Object> map = applicationService.findAll(page,rows,appName,username);
+		@SuppressWarnings("unchecked")
+		List<Application> list = (List<Application>) map.get("list");
+		Set<String> set =new HashSet<>();
+		for (Application application : list) {
+			set.add(application.getAppType());
+		}
+		
+		model.addAttribute("typeSet", set);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));
 		model.addAttribute("page", page);

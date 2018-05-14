@@ -152,7 +152,7 @@
                             </div>
                         </div>
                         <div class="PJK2lidetail">${app.appOverview }</div>
-                        <div class="PJK2liex">应用说明</div>
+                        <div onclick="location='/wankangyuan/application/explain?id=${app.id }'" class="PJK2liex">应用说明</div>
                     </div>
                 </c:forEach>
                 </form>
