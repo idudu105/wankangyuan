@@ -10,12 +10,12 @@
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/static/css/project1.css" />
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/project1.js"></script>
 <script type="text/javascript">
-    window.onload=function(){
-        project0();
-        project1();
-        // pro_mine();
-        app_mine();
-    }
+	window.onload=function(){
+	    project0();
+	    project2();
+	    // pro_mine();
+	    app_mine();
+	}
 </script>
 <body>
     <div class="Box">
@@ -42,14 +42,14 @@
             </div>
             <div class="top2">
                 <div class="top2C">
-                    <a href="/wankangyuan/application/viewMine"><div class="top2Cli top2CliYJ">我的</div></a>
-                    <a href="/wankangyuan/application/viewCreate"><div class="top2Cli">我创建的</div></a>
-                    <a href="/wankangyuan/application/viewPublic"><div class="top2Cli">公共</div></a>
+                    <a href="/wankangyuan/application/viewMine2"><div class="top2Cli top2CliYJ">我的</div></a>
+                    <a href="/wankangyuan/application/viewCreate2"><div class="top2Cli">我创建的</div></a>
+                    <a href="/wankangyuan/application/viewPublic2"><div class="top2Cli">公共</div></a>
                     <div class="search">
                         <div class="searchC">
                             <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="searchCi" />
                             <form method="get">
-                                <input name="appName" type="text" class="searchCt" value="${appName }"  placeholder="搜索项目" />
+                                <input name="appName" type="text" class="searchCt" value="${appName }"  placeholder="搜索应用" />
                             </form>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
             <div class="shaixuan">
                 <div class="shaixuanC">
                     <div class="listZT">
-                        <a href="/wankangyuan/application/viewMine2">
+                        <a href="/wankangyuan/application/viewMine">
                             <div class="listZTli listZT1 active">
                                 <img src="<%=request.getContextPath()%>/static/img/listZT1.png"alt="" class="listZT1i" />
                                 <img src="<%=request.getContextPath()%>/static/img/listZT1.png" alt="" class="listZT1i" />
@@ -81,14 +81,14 @@
                             <img src="<%=request.getContextPath()%>/static/img/sanjiao_blue.png" alt="" class="shaixuanBTi" />
                         </div>
                     </div>
-                    <!-- <div class="jiangeline"></div>
+                    <div class="jiangeline"></div>
                     <div class="allK">
                         <div class="quanxuanK">
                             <input type="checkbox" class="input_check" id="check0">
                             <label for="check0"></label>
                         </div>
                         <div class="allT">全选</div>
-                    </div> -->
+                    </div>
                     <!-- <div class="pro_menu pro_exit">退出</div> -->
                     <div class="pro_menu app_typeK">
                         <div class="app_typek">
@@ -112,38 +112,12 @@
                         </div>
                     </div> -->
                 </div>
-                <div class="shaixuanZK">
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">应用名称</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">创建人</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">创建时间</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">异步/同步</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">关键字</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">应用描述</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                </div>
                 <div class="app_typeul">
-                    <div class="app_typeli">应用类别1</div>
-                    <div class="app_typeli">应用类别2</div>
-                    <div class="app_typeli">应用类别3</div>
-                    <div class="app_typeli">应用类别4</div>
-                    <div class="app_typeli">应用类别5</div>
+                    <c:forEach items="${typeSet }" var="appType" varStatus="appList">
+                        <c:if test="${appType ne null }">
+                            <div class="app_typeli">${appType }</div>
+                        </c:if>
+                    </c:forEach>
                 </div>
                 <div class="pro_addul">
                     <div class="pro_addli">项目1</div>
@@ -153,95 +127,35 @@
                     <div class="pro_addli">项目5</div>
                 </div>
             </div>
-            <div class="PJK">
-                <div class="PJList">
-                    <div class="allK">
-                        <div class="quanxuanK">
-                            <input type="checkbox" class="input_check" id="check0">
-                            <label for="check0"></label>
-                        </div>
-                        <div class="allT">全选</div>
-                    </div>
-                    <div class="PJListli appname">应用名称</div>
-                    <div class="PJListli appcreater">创建人</div>
-                    <div class="PJListli apptime">创建时间</div>
-                    <div class="PJListli PJyibu">异步/同步</div>
-                    <div class="PJListli PJkeyword">关键字</div>
-                    <div class="PJListli appexplain">应用描述</div>
-                </div>
-                <div class="PJListline"></div>
-                <div class="PJul">
+            <div class="PJK2">                 
                 <form id="appList" method="post">
                 <c:forEach items="${list }" var="app" varStatus="appList">
-                    <div class="PJli">
-                        <div class="PJliC">
-                            <div class="fuxuanK2">
-                                <input name="ids" type="checkbox" class="input_check" id="check${appList.count }" value="${app.id }">
+                    <div class="PJK2li">
+                        <div class="PJK2litop">
+                            <div class="PJK2litopT2">${app.appName }</div>
+                            <!-- <div class="PJK2litopI"></div> -->
+                            <div class="fuxuanK3">
+                                <input type="checkbox" class="input_check" id="check${appList.count }" value="${app.id }">
                                 <label for="check${appList.count }"></label>
                             </div>
-                            <a href="/wankangyuan/application/explain?id=${app.id }">
-                                <div class="PJliCli appname">${app.appName }</div>
-                                <div class="PJliCli appcreater">${app.creator }</div>
-                                <div class="PJliCli apptime">
-                                    <fmt:formatDate type="date" value="${app.createTime }" />
-                                </div>
-                                <div class="PJliCli PJyibu">
-                                <c:if test="${app.isAsync eq 0}">同步</c:if>
-                                <c:if test="${app.isAsync eq 1}">异步</c:if>
-                                
-                                </div>
-                                <div class="PJliCli PJkeyword">${app.keywords }</div>
-                                <div class="PJliCli appexplain">${app.appOverview }</div>
-                            </a>
                         </div>
-                        <div class="PJliline"></div>
+                        <div class="PJK2licre">
+                            <div class="PJK2licreT1">创建人：</div>
+                            <div class="PJK2licreT2">${app.creator }</div>
+                        </div>
+                        <div class="PJK2litime">
+                            <div class="PJK2litimeT1">
+                               <fmt:formatDate type="date" value="${app.createTime }" />
+                            </div>
+                            <div class="PJK2litimeT2">
+                               <fmt:formatDate type="time" value="${app.createTime }" />
+                            </div>
+                        </div>
+                        <div class="PJK2lidetail">${app.appOverview }</div>
+                        <div class="PJK2liex">应用说明</div>
                     </div>
                 </c:forEach>
                 </form>
-                </div>
-
-                <div class="BTSX">
-                    <div class="BTSXc">
-                        <div class="BTSXcli">
-                            <div class="BTSXcliT">排序：</div>
-                            <img src="<%=request.getContextPath()%>/static/img/sort_up.png" alt="" class="BTSXcliI" />
-                            <img src="<%=request.getContextPath()%>/static/img/sort_down.png" alt="" class="BTSXcliI" />
-                        </div>
-                        <div class="BTSXcli">
-                            <div class="BTSXcliT">过滤：</div>
-                            <input type="text" class="BTSXcliGLK" />
-                        </div>
-                        <div class="BTSXcli">
-                            <div class="BTSXcliT">值筛选：</div>
-                        </div>
-                        <div class="BTSXcli2">
-                            <div class="BTSXcli2li">
-                                <div class="BTSXcli2liI"></div>
-                                <div class="BTSXcli2liT">项目编号1</div>
-                            </div>
-                            <div class="BTSXcli2li">
-                                <div class="BTSXcli2liI"></div>
-                                <div class="BTSXcli2liT">项目编号1</div>
-                            </div>
-                            <div class="BTSXcli2li">
-                                <div class="BTSXcli2liI"></div>
-                                <div class="BTSXcli2liT">项目编号1</div>
-                            </div>
-                            <div class="BTSXcli2li">
-                                <div class="BTSXcli2liI"></div>
-                                <div class="BTSXcli2liT">项目编号1</div>
-                            </div>
-                            <div class="BTSXcli2li">
-                                <div class="BTSXcli2liI"></div>
-                                <div class="BTSXcli2liT">项目编号1</div>
-                            </div>
-                        </div>
-                        <div class="BTSXcli3">
-                            <div class="BTSXcli3BT BTSXcli3BTent">筛选</div>
-                            <div class="BTSXcli3BT BTSXcli3BTres">重置</div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div class="pageK" id="box" ></div>
@@ -267,7 +181,7 @@
 
 <script type="text/javascript">
 function removeFromMine(){
-    $("#appList").attr('action',"/wankangyuan/userAppRelation/removeFromMine");
+    $("#appList").attr('action',"/wankangyuan/userAppRelation/removeFromMine2");
     $("#appList").submit();
 }
 
@@ -280,7 +194,7 @@ function removeFromMine(){
         callback: function(page) { // 回调函数
             console.log(page);
             if(page!=${page}){
-                window.location.href="/wankangyuan/application/viewMine?page="+page+"&rows=${rows}&appName=${appName}";
+                window.location.href="/wankangyuan/application/viewMine2?page="+page+"&rows=${rows}&appName=${appName}";
                
             }
         }

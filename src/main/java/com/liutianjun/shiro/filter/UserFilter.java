@@ -1,17 +1,12 @@
 package com.liutianjun.shiro.filter;
 
-import java.util.List;
-import java.util.Set;
-
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.filter.PathMatchingFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.liutianjun.pojo.Resource;
 import com.liutianjun.service.ResourceService;
 import com.liutianjun.service.UserService;
 
@@ -34,6 +29,7 @@ public class UserFilter extends PathMatchingFilter {
 
         String username = (String)SecurityUtils.getSubject().getPrincipal();
         request.setAttribute("user", userService.selectByUsername(username));
+        
         /*
         Set<String> permissions = userService.findPermissions(username);
         List<Resource> menus = resourceService.findMenus(permissions);

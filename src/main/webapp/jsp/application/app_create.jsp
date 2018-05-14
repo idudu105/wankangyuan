@@ -59,7 +59,7 @@
             <div class="shaixuan">
                 <div class="shaixuanC">
                     <div class="listZT">
-                        <a href="app_mine2.html">
+                        <a href="/wankangyuan/application/viewCreate2">
                             <div class="listZTli listZT1 active">
                                 <img src="<%=request.getContextPath()%>/static/img/listZT1.png"alt="" class="listZT1i" />
                                 <img src="<%=request.getContextPath()%>/static/img/listZT1.png" alt="" class="listZT1i" />
@@ -78,7 +78,7 @@
                     <div class="jiangeline"></div>
                     <div class="shaixuanBT">
                         <div class="shaixuanBTt">筛选</div>
-                        <div class="shaixuanBTiK">
+                        <div class="shaixuanBTiK" style="margin-top: 7px">
                             <img src="<%=request.getContextPath()%>/static/img/sanjiao_blue.png" alt="" class="shaixuanBTi" />
                         </div>
                     </div>
@@ -105,8 +105,8 @@
                     </div>
 
                     <div class="pro_menu pro_del">删除</div>
-                    <div class="pro_menu pro_open">公开</div>
-                    <div class="pro_menu pro_disopen">取消公开</div>
+                    <div class="pro_menu pro_open" onclick="to_public()">公开</div>
+                    <div class="pro_menu pro_disopen" onclick="to_private()">取消公开</div>
                     <div class="pro_menu pro_createapp">+创建应用</div>
                     <!-- <div class="pro_menu pro_run">运行</div> -->
                     <!-- <div class="search2">
@@ -167,17 +167,19 @@
                         <div class="inportTt">创建应用</div>
                         <div class="inportTx"></div>
                     </div>
-                    <div class="adddataM">
-                        <div class="adddataMli">
-                            <div class="adddataMlit">应用名称：</div>
-                            <input type="text" class="adddataMliTT adddataMliT" />
-                        </div>
-                        <div class="adddataMli">
-                            <div class="adddataMlit">应用描述：</div>
-                            <textarea name="" id=""  class="adddataMliTT adddataMliT3" ></textarea>
-                        </div>
-                    </div>
-                    <input type="button" class="inportB" value="创建" />
+                    <form action="/wankangyuan/application/create" method="post">
+	                    <div class="adddataM">
+	                        <div class="adddataMli">
+	                            <div class="adddataMlit">应用名称：</div>
+	                            <input name="appName" type="text" class="adddataMliTT adddataMliT" />
+	                        </div>
+	                        <div class="adddataMli">
+	                            <div class="adddataMlit">应用描述：</div>
+	                            <textarea name="appOverview" class="adddataMliTT adddataMliT3" ></textarea>
+	                        </div>
+	                    </div>
+	                    <input type="submit" class="inportB" value="创建" />
+                    </form>
                 </div>
                 <div class="PJList">
                     <div class="allK">
@@ -205,7 +207,7 @@
                                 <input name="ids" type="checkbox" class="input_check" id="check${appList.count }" value="${app.id }">
                                 <label for="check${appList.count }"></label>
                             </div>
-                            <a href=" ">
+                            <a href="/wankangyuan/application/explain2?id=${app.id }">
                                 <div class="PJliCli appname">${app.appName }</div>
                                 <div class="PJliCli appcreater">${app.creator }</div>
                                 <div class="PJliCli apptime">
@@ -224,6 +226,8 @@
                         <div class="PJliline"></div>
                     </div>
                 </c:forEach>
+                <input id="pub_but" type="submit" name="cmd" value="公开" style="display:none">
+                <input id="pri_but" type="submit" name="cmd" value="私有" style="display:none">
                 </form>
                 </div>
 
@@ -293,6 +297,15 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/paging.js"></script>
 
 <script type="text/javascript">
+
+function to_public(){
+    $("#pub_but").click();
+}
+
+function to_private(){
+    $("#pri_but").click();
+}
+
 
     $('#box').paging({
         initPageNo: ${page}, // 初始页码

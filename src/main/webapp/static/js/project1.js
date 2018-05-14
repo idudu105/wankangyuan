@@ -2,14 +2,14 @@
 * @Author: Marte
 * @Date:   2018-04-23 15:32:03
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-05-11 14:55:29
+* @Last Modified time: 2018-05-14 16:37:11
 */
 
 
 //  项目0
 function project0(){
     var obox=document.querySelectorAll('.box')[0];
-    obox.style.minHeight=window.screen.availHeight-240+'px';
+    obox.style.minHeight=window.screen.availHeight-200+'px';
     console.log(document.body.clientWidth);
 
 // 全选框和复选框的动作
@@ -127,10 +127,10 @@ function project1(){
                     for(var o=0;o<aPJli.length;o++){
                         if(aPJli[o].querySelectorAll('.PJliCli2')[0]){
                             var aPJliCli=aPJli[o].querySelectorAll('.PJliCli2');//格式数据表项
-                            aPJliCli[j].style.display="block";
+                            aPJliCli[j].style.display="-webkit-box";
                         }else if(aPJli[o].querySelectorAll('.PJliCli')[0]){
                             var aPJliCli=aPJli[o].querySelectorAll('.PJliCli');//项目表项
-                            aPJliCli[j].style.display="block";
+                            aPJliCli[j].style.display="-webkit-box";
                         }
                     }
                     shaixuanBTPD[j]=1;
@@ -677,11 +677,18 @@ function app_mine(){
     var opro_addul=document.querySelectorAll('.pro_addul')[0];//添加项目列表
     var apro_addli=opro_addul.querySelectorAll('.pro_addli');//添加各个项目
 
+    var oapp_typeK=document.querySelectorAll('.app_typeK')[0];//应用添加至项目
+    var oapp_typek=oapp_typeK.querySelectorAll('.app_typek')[0];//添加按钮
+    var oapp_typeul=document.querySelectorAll('.app_typeul')[0];//添加项目列表
+    var aapp_typeli=oapp_typeul.querySelectorAll('.app_typeli');//添加各个项目
+
     // pro_addkPD=0;
 
     opro_addk.onclick=function(event){
         // if(pro_addkPD==0){
             opro_addul.style.display="block";
+            opro_addul.style.zIndex+=1;
+            oapp_typeul.style.display="none";
         //     pro_addkPD=1;
         // }else{
         //     opro_addul.style.display="none";
@@ -699,16 +706,15 @@ function app_mine(){
     }
 
 //应用类别筛选框显示隐藏
-    var oapp_typeK=document.querySelectorAll('.app_typeK')[0];//应用添加至项目
-    var oapp_typek=oapp_typeK.querySelectorAll('.app_typek')[0];//添加按钮
-    var oapp_typeul=document.querySelectorAll('.app_typeul')[0];//添加项目列表
-    var aapp_typeli=oapp_typeul.querySelectorAll('.app_typeli');//添加各个项目
+    
 
     // app_typekPD=0;
 
     oapp_typek.onclick=function(event){
         // if(app_typekPD==0){
             oapp_typeul.style.display="block";
+            oapp_typeul.style.zIndex+=1;
+            opro_addul.style.display="none";
         //     app_typekPD=1;
         // }else{
         //     oapp_typeul.style.display="none";
@@ -746,6 +752,7 @@ function app_public(){
     oapp_typek.onclick=function(event){
         // if(app_typekPD==0){
             oapp_typeul.style.display="block";
+            oapp_typeul.style.zIndex+=1;
         //     app_typekPD=1;
         // }else{
         //     oapp_typeul.style.display="none";
@@ -855,6 +862,124 @@ function app_create(){
         appcreatePD=0;
     }
 
+
+
+}
+
+//项目应用结果重新运行
+function pro_appendre(){
+//选择格式数据框显示隐藏
+    var aproappendrep=document.querySelectorAll('.proappendrep');//参数框
+    var oproreK=document.querySelectorAll('.proreK')[0];//格式数据框
+    var oinportTx=oproreK.querySelectorAll('.inportTx')[0];//格式数据框关闭按钮
+    var oproreb2=oproreK.querySelectorAll('.proreb2')[0];//格式数据框关闭按钮2
+    var oproreb1=oproreK.querySelectorAll('.proreb1')[0];//格式数据框提交按钮
+
+
+    console.log(aproappendrep);
+    for(var i=0;i<aproappendrep.length;i++){
+        (function(index){
+            aproappendrep[index].onclick=function(){
+                console.log(index);
+                oproreK.style.display="block";
+            }
+        })(i)
+    }
+    oinportTx.onclick=function(){
+        oproreK.style.display="none";
+    }
+    oproreb2.onclick=function(){
+        oproreK.style.display="none";
+    }
+
+// 重新选择格式数据框格式数据显示
+    var oproreM=document.querySelectorAll('.proreM')[0];
+    var aproreMzc=oproreM.querySelectorAll('.proreMzc');
+    var aPJliB=oproreM.querySelectorAll('.PJliB');
+
+    for(var i=0;i<aproreMzc.length;i++){
+        (function(index){
+            aproreMzc[index].onclick=function(){
+                console.log(index)
+                for(var j=0;j<aPJliB.length;j++){
+                    aPJliB[j].className="PJliB";
+                }
+                aPJliB[index].className="PJliB active";
+            }
+        })(i)
+    }
+
+
+//选择格式数据
+    var aproreMli=oproreM.querySelectorAll('.proreMli');
+    var proreMliPD=[];
+    // console.log(aproreMli);
+
+    for(var i=0;i<aproreMli.length;i++){
+        proreMliPD[i]=0;
+        // console.log(proreMliPD);
+        (function(index){
+            aproreMli[index].onclick=function(){
+                if(proreMliPD[index]==0){
+                    // aproreMli.className="proreMli active";
+                    aproreMli[index].style.color="#5ca0e5";
+                    proreMliPD[index]=1;
+                }else{
+                    // aproreMli.className="proreMli";
+                    aproreMli[index].style.color="#666";
+                    proreMliPD[index]=0;
+                }
+            }
+        })(i)
+    }
+
+
+}
+
+
+//应用说明2
+function app_exp2(){
+//关键字
+    var oappexpGJZK=document.querySelectorAll('.appexpGJZK')[0];//关键字框
+    var oappexpGJZadp=oappexpGJZK.querySelectorAll('.appexpGJZadp')[0];//关键字增加框
+    var oappexpGJZadb=oappexpGJZK.querySelectorAll('.appexpGJZadb')[0];//关键字增加按钮
+    var oappexpGJZKC=oappexpGJZK.querySelectorAll('.appexpGJZKC')[0];//关键字包含框
+
+
+    add_deleteX();
+    function add_deleteX(){
+        var aappexpGJZ=oappexpGJZKC.querySelectorAll('.appexpGJZ');
+        for(var i=0;i<aappexpGJZ.length;i++){
+            (function(index){
+                var oappexpGJZx=aappexpGJZ[index].querySelectorAll('.appexpGJZx')[0];
+                oappexpGJZx.onclick=function(){
+                    oappexpGJZKC.removeChild(oappexpGJZKC.children[index]);
+                    add_deleteX();
+                }
+            })(i)
+        }
+    }
+    
+    oappexpGJZadb.onclick=function(){
+        if(oappexpGJZadp.value!=" "&&oappexpGJZadp.value!=""){
+            var oappexpGJZ=document.createElement("div");
+            oappexpGJZ.className="appexpGJZ";
+
+            var oappexpGJZt=document.createElement("div");
+            oappexpGJZt.className="appexpGJZt";
+            oappexpGJZt.innerHTML=oappexpGJZadp.value;
+            // console.log(oappexpGJZadp.value);
+
+            var oappexpGJZx=document.createElement("div");
+            oappexpGJZx.className="appexpGJZx";
+
+            oappexpGJZ.appendChild(oappexpGJZt);
+            oappexpGJZ.appendChild(oappexpGJZx);
+            oappexpGJZKC.appendChild(oappexpGJZ);
+
+            add_deleteX();
+        }
+    }
 
 
 }

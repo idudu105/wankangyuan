@@ -1,13 +1,16 @@
 package com.liutianjun.controller;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
+import java.util.Set;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,14 +41,12 @@ public class ApplicationController {
 	 * @return 
 	 * String
 	 */
-	@RequestMapping(value="/viewMine",method=RequestMethod.GET)
+	@RequestMapping(value="/viewMine{index}",method=RequestMethod.GET)
 	public String viewMine(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="8")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
+            @PathVariable String index,
             Model model) {
-		/*//模拟登陆
-		httpSession.setAttribute("userName", "创建人1");
-		httpSession.setAttribute("id", 1);*/
 	    
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 		
@@ -55,29 +56,7 @@ public class ApplicationController {
 		model.addAttribute("page", page);
         model.addAttribute("rows", rows);
         model.addAttribute("appName", appName);
-		return "jsp/application/app_mine.jsp";
-	}
-	
-	/**
-	 * 我的应用2
-	 * @Title: viewMine2 
-	 * @param model
-	 * @return 
-	 * String
-	 */
-	@RequestMapping(value="/viewMine2",method=RequestMethod.GET)
-	public String viewMine2(@RequestParam(value="page", defaultValue="1")Integer page, 
-            @RequestParam(value="rows", defaultValue="8")Integer rows, 
-            @RequestParam(value="appName",required=false)String appName,
-            Model model) {
-		String username = (String)SecurityUtils.getSubject().getPrincipal();
-		Map<String, Object> map = applicationService.findMine(page,rows,appName,username);
-		model.addAttribute("list", map.get("list"));
-		model.addAttribute("total", map.get("total"));
-		model.addAttribute("page", page);
-        model.addAttribute("rows", rows);
-		model.addAttribute("appName", appName);
-		return "jsp/application/mine2.jsp";
+		return "jsp/application/app_mine"+index+".jsp";
 	}
 	
 	/**
@@ -90,10 +69,11 @@ public class ApplicationController {
 	 * @return 
 	 * String
 	 */
-	@RequestMapping(value="/viewCreate",method=RequestMethod.GET)
+	@RequestMapping(value="/viewCreate{index}",method=RequestMethod.GET)
 	public String viewCreate(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="8")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
+            @PathVariable String index,
             Model model) {
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 		Map<String, Object> map = applicationService.findAll(page,rows,appName,username);
@@ -102,35 +82,7 @@ public class ApplicationController {
 		model.addAttribute("page", page);
         model.addAttribute("rows", rows);
         model.addAttribute("appName", appName);
-		return "jsp/application/app_create.jsp";
-	}
-	
-	/**
-	 * 我创建的应用2
-	 * @Title: viewCreate2 
-	 * @param page
-	 * @param rows
-	 * @param appName
-	 * @param request
-	 * @param model
-	 * @return 
-	 * String
-	 */
-	@RequestMapping(value="/viewCreate2",method=RequestMethod.GET)
-	public String viewCreate2(@RequestParam(value="page", defaultValue="1")Integer page, 
-			@RequestParam(value="rows", defaultValue="8")Integer rows, 
-			@RequestParam(value="appName",required=false)String appName,
-			HttpServletRequest request,
-			Model model) {
-		//从session中获取当前用户名
-	    String username = (String)SecurityUtils.getSubject().getPrincipal();
-		Map<String, Object> map = applicationService.findAll(page,rows,appName,username);
-		model.addAttribute("list", map.get("list"));
-		model.addAttribute("total", map.get("total"));
-		model.addAttribute("page", page);
-        model.addAttribute("rows", rows);
-        model.addAttribute("appName", appName);
-		return "jsp/application/mine2.jsp";
+		return "jsp/application/app_create"+index+".jsp";
 	}
 	
 	/**
@@ -143,44 +95,28 @@ public class ApplicationController {
 	 * @return 
 	 * String
 	 */
-	@RequestMapping(value="/viewPublic",method=RequestMethod.GET)
+	@RequestMapping(value="/viewPublic{index}",method=RequestMethod.GET)
 	public String viewPublic(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="8")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
+            @PathVariable String index,
             Model model) {
 		Map<String, Object> map = applicationService.findAllPublic(page,rows,appName);
+		@SuppressWarnings("unchecked")
+		List<Application> list = (List<Application>) map.get("list");
+		Set<String> set =new HashSet<>();
+		for (Application application : list) {
+			set.add(application.getAppType());
+		}
+		
+		model.addAttribute("typeSet", set);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));
 		
 		model.addAttribute("page", page);
 		model.addAttribute("rows", rows);
 		model.addAttribute("appName", appName);
-		return "jsp/application/app_public.jsp";
-	}
-	
-	/**
-	 * 公共的应用2
-	 * @Title: viewPublic2 
-	 * @param page
-	 * @param rows
-	 * @param appName
-	 * @param model
-	 * @return 
-	 * String
-	 */
-	@RequestMapping(value="/viewPublic2",method=RequestMethod.GET)
-	public String viewPublic2(@RequestParam(value="page", defaultValue="1")Integer page, 
-            @RequestParam(value="rows", defaultValue="8")Integer rows, 
-            @RequestParam(value="appName",required=false)String appName,
-            Model model) {
-		Map<String, Object> map = applicationService.findAllPublic(page,rows,appName);
-		model.addAttribute("list", map.get("list"));
-		model.addAttribute("total", map.get("total"));
-		
-		model.addAttribute("page", page);
-		model.addAttribute("rows", rows);
-		model.addAttribute("appName", appName);
-		return "jsp/application/mine2.jsp";
+		return "jsp/application/app_public"+index+".jsp";
 	}
 	
 	/**
@@ -198,28 +134,20 @@ public class ApplicationController {
 	}
 	
 	/**
-	 * 应用添加界面
-	 * @Title: ShowCreateForm 
-	 * @return 
-	 * String
-	 */
-	@RequestMapping(value="/create",method=RequestMethod.GET)
-	public String showCreateForm() {
-		
-		return "jsp/application/edit.jsp";
-	}
-	
-	/**
 	 * 创建新应用
 	 * @Title: create 
 	 * @param record
 	 * @return 
 	 * String
 	 */
-	@RequestMapping(value="/create",method=RequestMethod.POST)
-	public String create(Application record) {
+	@RequestMapping(value="/create{index}",method=RequestMethod.POST)
+	public String create(Application record,@PathVariable String index) {
+		String username = (String)SecurityUtils.getSubject().getPrincipal();
+		record.setCreator(username);
+		record.setCreateTime(new Date());
+		record.setStatus("私有");
 		applicationService.insert(record);
-		return "redirect:/application/list";
+		return "redirect:/application/viewCreate"+index;
 	}
 	
 	/**
@@ -228,10 +156,11 @@ public class ApplicationController {
 	 * @return 
 	 * String
 	 */
-	@RequestMapping(value="/update",method=RequestMethod.GET)
-	public String showUpdateForm() {
-		
-		return "jsp/application/edit.jsp";
+	@RequestMapping(value="/explain{index}",method=RequestMethod.GET)
+	public String showExplain(Integer id, Model model, @PathVariable String index) {
+		Application application = applicationService.selectByPrimaryKey(id);
+		model.addAttribute("application", application);
+		return "jsp/application/app_explain"+index+".jsp";
 	}
 	
 	/**
@@ -240,7 +169,7 @@ public class ApplicationController {
 	 * @return 
 	 * String
 	 */
-	@RequestMapping(value="/create",method=RequestMethod.POST)
+	@RequestMapping(value="/update",method=RequestMethod.POST)
 	public String update(Application record) {
 		applicationService.updateByPrimaryKey(record);
 		return "redirect:/application/list";
