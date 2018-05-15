@@ -11,21 +11,23 @@ import org.apache.ibatis.annotations.Update;
 import com.xtkong.model.FormatType;
 
 public interface FormatTypeDao {
-	@Insert("insert into format_type(higher_ft_id,ft_name , cs_id) "
-			+ "values(#{higher_ft_id},#{ft_name},#{cs_id})")
+
+	@Insert("insert into format_type(ft_name,cs_id,floder,create_datetime,create_uid,is_view) values(#{ft_name},#{cs_id},#{floder},#{create_datetime},#{create_uid},#{is_view})")
 	public int insertFormatType(FormatType formatType);
-	@Update("update format_type "
-			+ "set higher_ft_id=#{higher_ft_id} , ft_name=#{ft_name}  "
-			+ "where ft_id=#{ft_id}")
+
+	@Update("update format_type " + "set ft_name=#{ft_name} , floder=#{floder} ,update_datetime=#{update_datetime},update_uid=#{update_uid｝ " + "where ft_id=#{ft_id}")
 	public int updateFormatType(FormatType FormatType);
+
 	/**
 	 * 选取格式类型列表
-	 * @param higher_ft_id 上层格式类型
+	 * 
+	 * @param cs_id
+	 *            采集源
 	 * @return 格式类型列表
 	 */
-	@Select("select * from format_type where higher_ft_id=#{higher_ft_id} and cs_id=#{cs_id} order by ft_id ")
-	public List<FormatType> selectFormatType(@Param("higher_ft_id") Integer higher_ft_id,@Param("cs_id") Integer cs_id);
-	@Delete("delete from format_type where ft_id=#{ft_id}")
-	public int deleteFormatType(@Param("ft_id")Integer ft_id);
-}
+	@Select("select * from format_type where cs_id=#{cs_id} order by ft_id ")
+	public List<FormatType> selectFormatType(@Param("cs_id") Integer cs_id);
 
+	@Delete("delete from format_type where ft_id=#{ft_id}")
+	public int deleteFormatType(@Param("ft_id") Integer ft_id);
+}

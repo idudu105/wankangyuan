@@ -1,9 +1,8 @@
 package com.xtkong.controller;
 
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +16,16 @@ import com.xtkong.service.FormatTypeService;
 public class FormatTypeController {
 	@Autowired
 	FormatTypeService formatTypeService;
-//	@RequestMapping("/insertFormatType")
-//	public String insertFormatType(FormatType formatType){
-//		formatType.setHigher_ft_id(2);
-//		formatType.setCs_id(1);
-//		formatTypeService.insertFormatType(formatType);
-//		return "redirect:/source/selectFormatType?higher_ft_id=2";
-//	}
+	@RequestMapping("/insertFormatType")
+	public String insertFormatType(FormatType formatType){
+		formatType.setCs_id(1);
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		formatType.setCreate_datetime(simpleDateFormat.format(new Date()));
+		
+		formatTypeService.insertFormatType(formatType);
+		
+		return "redirect:/admin/datamanage.jsp";
+	}
 //	@RequestMapping("/updateFormatType")
 //	public Map<String, Object>  updateFormatType(HttpSession httpSession, String ft_name) {
 //		Map<String, Object> map = new HashMap<String, Object>();
@@ -46,9 +48,9 @@ public class FormatTypeController {
 	@RequestMapping("/selectFormatType")
 	public String selectFormatType(HttpSession httpSession,String datainname,Integer cs_id) {
 		httpSession.setAttribute("datainname", datainname);
-		List<FormatType>formatTypes=formatTypeService.selectFormatType(1,cs_id);
+		List<FormatType>formatTypes=formatTypeService.selectFormatType(cs_id);
 		for (FormatType formatType : formatTypes) {
-			formatType.setFormatTypeFloders(formatTypeService.selectFormatType(formatType.getFt_id(),cs_id));
+			formatType.setFormatTypeFloders(formatTypeService.selectFormatType(cs_id));
 		}
 		httpSession.setAttribute("formatTypes", formatTypes);
 		return "redirect:/pages/project_datain.jsp";

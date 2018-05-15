@@ -3,7 +3,6 @@ package com.xtkong.controller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -29,23 +28,22 @@ public class SourceFiledController {
 		sourceFiled.setCreate_datetime(simpleDateFormat.format(new Date()));
 //		sourceFiled.setCs_id(2);
 		sourceFiled.setCreate_uid(1);
-		return "redirect:/admin/formatdata";
+		return "redirect:/admin/formatdata?cs_id="+sourceFiled.getCs_id();
 	}
-//
-//	@RequestMapping("/updateSourceFiled")
-//	@ResponseBody
-//	public Map<String, Object> updateSourceFiled(HttpSession httpSession, String csf_name) {
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		SourceFiled sourceFiled = (SourceFiled) httpSession.getAttribute("sourceFiled");
-//		sourceFiled.setCsf_name(csf_name);
-//		if (1 == sourceFiledService.updateSourceFiled(sourceFiled)) {
-//			map.put("result", true);
-//		} else {
-//			map.put("result", false);
-//			map.put("message", "更新失败");
-//		}
-//		return map;
-//	}
+
+	@RequestMapping("/updateSourceFiled")
+	@ResponseBody
+	public Map<String, Object> updateSourceFiled(HttpSession httpSession, String csf_id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		SourceFiled sourceFiled = (SourceFiled) httpSession.getAttribute("sourceFiled");
+		if (1 == sourceFiledService.updateSourceFiled(sourceFiled)) {
+			map.put("result", true);
+		} else {
+			map.put("result", false);
+			map.put("message", "更新失败");
+		}
+		return map;
+	}
 //
 //	/**
 //	 * * 选取采集源字段列表

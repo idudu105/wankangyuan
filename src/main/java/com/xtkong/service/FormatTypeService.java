@@ -23,9 +23,9 @@ public class FormatTypeService {
 	 * @param higher_ft_id 上层格式类型
 	 * @return 格式类型列表
 	 */
-	public List<FormatType> selectFormatType(Integer higher_ft_id,Integer cs_id){
+	public List<FormatType> selectFormatType(Integer cs_id){
 		
-		return formatTypeDao.selectFormatType(higher_ft_id,cs_id);
+		return formatTypeDao.selectFormatType(cs_id);
 	}
 	public int deleteFormatType(Integer ft_id){
 		return formatTypeDao.deleteFormatType(ft_id);

@@ -228,30 +228,30 @@
 	                                                </tr>
 	                                            </div>
 	                                            <div class="biaoxiang">
-		                                            <c:forEach items="${sourceFiledViewLists[status.index]}" var="sourceFiledView">
+		                                            <c:forEach items="${source.sourceFileds}" var="sourceFiled">
 		                                                <tr role="row" class="trbx">
 		                                                    <th class="biaoxiangth"><input type="checkbox" class="xuanze"></th>
-		                                                    <th class="biaoxiangth">${sourceFiledView.csf_name}</th>
-		                                                    <th class="biaoxiangth">${sourceFiledView.type}</th>
-		                                                    <th class="biaoxiangth">${sourceFiledView.check}</th>
-		                                                    <c:if test="${sourceFiledView.enumerated== false}">
+		                                                    <th class="biaoxiangth">${sourceFiled.csf_name}</th>
+		                                                    <th class="biaoxiangth">${sourceFiled.type}</th>
+		                                                    <th class="biaoxiangth">${sourceFiled.check}</th>
+		                                                    <c:if test="${sourceFiled.enumerated== false}">
 							                                	<th class="biaoxiangth">否</th>
 							                  	            </c:if>
-		                                                    <c:if test="${sourceFiledView.enumerated== true}">
+		                                                    <c:if test="${sourceFiled.enumerated== true}">
 							                                	<th class="biaoxiangth">是</th>
 							                  	            </c:if>
-		                                                    <c:if test="${sourceFiledView.not_null== false}">
+		                                                    <c:if test="${sourceFiled.not_null== false}">
 							                                	<th class="biaoxiangth">否</th>
 							                  	            </c:if>
-		                                                    <c:if test="${sourceFiledView.not_null== true}">
+		                                                    <c:if test="${sourceFiled.not_null== true}">
 							                                	<th class="biaoxiangth">是</th>
 							                  	            </c:if>
-		                                                    <th class="biaoxiangth">${sourceFiledView.description}</th>
-		                                                    <th class="biaoxiangth">${sourceFiledView.error_msg}</th>
-		                                                    <th class="biaoxiangth">${sourceFiledView.create_datetime}</th>
-		                                                    <th class="biaoxiangth">${sourceFiledView.update_datetime}</th>
-		                                                    <th class="biaoxiangth">${sourceFiledView.creator}</th>
-		                                                    <th class="biaoxiangth">${sourceFiledView.updater}</th>
+		                                                    <th class="biaoxiangth">${sourceFiled.description}</th>
+		                                                    <th class="biaoxiangth">${sourceFiled.error_msg}</th>
+		                                                    <th class="biaoxiangth">${sourceFiled.create_datetime}</th>
+		                                                    <th class="biaoxiangth">${sourceFiled.update_datetime}</th>
+		                                                    <th class="biaoxiangth">${sourceFiled.creator}</th>
+		                                                    <th class="biaoxiangth">${sourceFiled.updater}</th>
 		                                                </tr>
 		                                          	</c:forEach>
 	                                            </div>
@@ -292,7 +292,64 @@
 	                            <!-- form表单提交数据 -->
 	         				   	<form action="/wankangyuan/sourceFiled/insertSourceFiled">
 	                                <div class="addbiaoxT">
-	                                    <div class="addbiaoxTt">新增metainfo</div>
+	                                    <div class="addbiaoxTt">新增采集源字段</div>
+	                                    <div class="addbiaoxTx" ></div>
+	                                </div>
+	                                <div class="addbiaoxli">
+	                                    <div class="addbiaoxlit">字段名：</div>
+	                                    <input type="text" class="addbiaoxlik" name="csf_name"/>
+	                                </div>
+	                                <div class="addbiaoxli">
+	                                    <div class="addbiaoxlit">类型：</div>
+	                                    <select name="type" id="">
+	                                        <option value="字符"  checked="checked">字符</option>
+	                                        <option value="数值">数值</option>
+	                                        <option value="日期">日期</option>
+	                                        <option value="图片">图片</option>
+	                                        <option value="文件">文件</option>
+	                                    </select>
+	                                </div>		                                
+	                                <div class="addbiaoxli">
+	                                    <div class="addbiaoxlit">检测规则：</div>
+	                                    <input type="text" class="addbiaoxlik" name="check"/>
+	                                </div>
+	                                <div class="addbiaoxli">
+	                                    <div class="addbiaoxlit">是否可枚举：</div>
+	                                    <select name="enumerated" id="">
+	                                        <option value="true"  checked="checked" >是</option>
+	                                        <option value="false">否</option>
+	                                    </select>
+	                                </div>
+	                                <div class="addbiaoxli">
+	                                    <div class="addbiaoxlit">是否必填：</div>
+	                                    <select name="not_null" id="">
+	                                        <option value="true"  checked="checked">是</option>
+	                                        <option value="false">否</option>
+	                                    </select>
+	                                </div>
+	                                <div class="addbiaoxli">
+	                                    <div class="addbiaoxlit">字段描述信息：</div>
+	                                    <input type="text" class="addbiaoxlik" name="description"/>
+	                                </div>
+	                                <div class="addbiaoxli">
+	                                    <div class="addbiaoxlit">错误信息提示：</div>
+	                                    <input type="text" class="addbiaoxlik" name="error_msg"/>
+	                                </div>
+	                                <div class="addbiaoxB">
+	                                    <input type="submit" value="提交" class="addbiaoxBb" />
+	                                    <input type="button" value="关闭" class="addbiaoxBb2" />
+	                                </div>
+                           		</form>
+                           		
+                            </div>
+                            <!-- 新增metainfo_end -->
+
+                            <!-- 更新metainfo_start -->
+                            <div class="addbiaoxK2">
+		                        <!-- form表单提交数据 -->
+	         				   	<form action="/wankangyuan/sourceFiled/updateSourceFiled">
+	                                <div class="addbiaoxT">
+	                                    <div class="addbiaoxTt">更新采集源字段</div>
 	                                    <div class="addbiaoxTx"></div>
 	                                </div>
 	                                <div class="addbiaoxli">
@@ -338,63 +395,8 @@
 	                                <div class="addbiaoxB">
 	                                    <input type="submit" value="提交" class="addbiaoxBb" />
 	                                    <input type="button" value="关闭" class="addbiaoxBb2" />
-	                                    <input type="text" class="addbiaoxlik" name="cs_id" value=1 disabled="disabled"/>
 	                                </div>
                            		</form>
-                           		
-                            </div>
-                            <!-- 新增metainfo_end -->
-
-                            <!-- 更新metainfo_start -->
-                            <div class="addbiaoxK2">
-                                <div class="addbiaoxT">
-                                    <div class="addbiaoxTt">更新metainfo</div>
-                                    <div class="addbiaoxTx"></div>
-                                </div>
-                                <div class="addbiaoxli">
-                                    <div class="addbiaoxlit">字段名：</div>
-                                    <input type="text" class="addbiaoxlik" />
-                                </div>
-                                <div class="addbiaoxli">
-                                    <div class="addbiaoxlit">类型：</div>
-                                    <select name="" id="">
-                                        <option value="">字符</option>
-                                        <option value="">数值</option>
-                                        <option value="">日期</option>
-                                        <option value="">图片</option>
-                                        <option value="">文件</option>
-                                    </select>
-                                </div>
-                                <div class="addbiaoxli">
-                                    <div class="addbiaoxlit">检测规则：</div>
-                                    <input type="text" class="addbiaoxlik" />
-                                </div>
-                                <div class="addbiaoxli">
-                                    <div class="addbiaoxlit">是否可枚举：</div>
-                                    <select name="" id="">
-                                        <option value="">是</option>
-                                        <option value="">否</option>
-                                    </select>
-                                </div>
-                                <div class="addbiaoxli">
-                                    <div class="addbiaoxlit">是否必填：</div>
-                                    <select name="" id="">
-                                        <option value="">是</option>
-                                        <option value="">否</option>
-                                    </select>
-                                </div>
-                                <div class="addbiaoxli">
-                                    <div class="addbiaoxlit">字段描述信息：</div>
-                                    <input type="text" class="addbiaoxlik" />
-                                </div>
-                                <div class="addbiaoxli">
-                                    <div class="addbiaoxlit">错误信息提示：</div>
-                                    <input type="text" class="addbiaoxlik" />
-                                </div>
-                                <div class="addbiaoxB">
-                                    <input type="button" value="提交" class="addbiaoxBb" />
-                                    <input type="button" value="关闭" class="addbiaoxBb2" />
-                                </div>
                             </div>
                             <!-- 更新metainfo_end -->
 
@@ -451,21 +453,21 @@
                                                 </tr>
                                             </div>
                                             <div class="biaoxiang">
-                                            	<c:forEach items="${formatTypeViews}" var="formatTypeView">
+                                            	<c:forEach items="${formatTypes}" var="formatType">
 	                                                <tr role="row" class="trbx">
 	                                                    <th class="biaoxiangth"><input type="checkbox" class="xuanze"></th>
-	                                                    <th class="biaoxiangth">${formatTypeView.ft_name}</th>
-	                                                    <th class="biaoxiangth">${formatTypeView.create_datetime}</th>
-	                                                    <th class="biaoxiangth">${formatTypeView.update_datetime}</th>
-	                                                    <th class="biaoxiangth">${formatTypeView.creator}</th>
-	                                                    <th class="biaoxiangth">${formatTypeView.updater}</th>
-	                                                    <c:if test="${formatTypeView.is_view== false}">
+	                                                    <th class="biaoxiangth">${formatType.ft_name}</th>
+	                                                    <th class="biaoxiangth">${formatType.create_datetime}</th>
+	                                                    <th class="biaoxiangth">${formatType.update_datetime}</th>
+	                                                    <th class="biaoxiangth">${formatType.creator}</th>
+	                                                    <th class="biaoxiangth">${formatType.updater}</th>
+	                                                    <c:if test="${formatType.is_view== false}">
 							                            	<th class="biaoxiangth">隐藏</th>
 							                  	       	</c:if>
-							                  	        <c:if test="${formatTypeView.is_view== true}">
+							                  	        <c:if test="${formatType.is_view== true}">
 							                            	<th class="biaoxiangth">显示</th>
 							                  	       	</c:if>
-	                                                    <th class="biaoxiangth">${formatTypeView.higher_ft_name}</th>
+	                                                    <th class="biaoxiangth">${formatType.floder}</th>
 	                                                    <th class="biaoxiangth">进入</th>
 	                                                </tr>
                                                 </c:forEach>
@@ -477,57 +479,63 @@
 
                             <!-- 添加格式化数据类型start -->
                             <div class="addbiaoxK">
-                                <div class="addbiaoxT">
-                                    <div class="addbiaoxTt">添加格式化数据类型</div>
-                                    <div class="addbiaoxTx"></div>
-                                </div>
-                                <div class="addbiaoxli">
-                                    <div class="addbiaoxlit">格式化数据名：</div>
-                                    <input type="text" class="addbiaoxlik" />
-                                </div>
-                                <div class="addbiaoxli">
-                                    <div class="addbiaoxlit">状态：</div>
-                                    <select name="" id="">
-                                        <option value="">显示</option>
-                                        <option value="">隐藏</option>
-                                    </select>
-                                </div>
-                                <div class="addbiaoxli">
-                                    <div class="addbiaoxlit">格式化数据类别：</div>
-                                    <input type="text" class="addbiaoxlik" />
-                                </div>
-                                <div class="addbiaoxB">
-                                    <input type="button" value="提交" class="addbiaoxBb" />
-                                    <input type="button" value="关闭" class="addbiaoxBb2" />
-                                </div>
+                          	 	<!-- form表单提交数据 -->
+	         				 	<form action="/wankangyuan/formatType/insertFormatType">
+	                                <div class="addbiaoxT">
+	                                    <div class="addbiaoxTt">添加格式化数据类型</div>
+	                                    <div class="addbiaoxTx"></div>
+	                                </div>
+	                                <div class="addbiaoxli">
+	                                    <div class="addbiaoxlit">格式化数据名：</div>
+	                                    <input type="text" class="addbiaoxlik" name="ft_name"/>
+	                                </div>
+	                                <div class="addbiaoxli">
+	                                    <div class="addbiaoxlit">状态：</div>
+	                                    <select name="is_view" id="">
+	                                        <option value="true">显示</option>
+	                                        <option value="false">隐藏</option>
+	                                    </select>
+	                                </div>
+	                                <div class="addbiaoxli">
+	                                    <div class="addbiaoxlit">格式化数据类别：</div>
+	                                    <input type="text" class="addbiaoxlik"name="higher_ft_name" />
+	                                </div>
+	                                <div class="addbiaoxB">
+	                                    <input type="submit" value="提交" class="addbiaoxBb" />
+	                                    <input type="button" value="关闭" class="addbiaoxBb2" />
+	                                </div>
+	                        	</form>  
                             </div>
                             <!-- 添加格式化数据类型end -->
 
                             <!-- 更新结果类型start -->
                             <div class="addbiaoxK2">
-                                <div class="addbiaoxT">
-                                    <div class="addbiaoxTt">添加格式化数据类型</div>
-                                    <div class="addbiaoxTx"></div>
-                                </div>
-                                <div class="addbiaoxli">
-                                    <div class="addbiaoxlit">格式化数据名：</div>
-                                    <input type="text" class="addbiaoxlik" />
-                                </div>
-                                <div class="addbiaoxli">
-                                    <div class="addbiaoxlit">状态：</div>
-                                    <select name="" id="">
-                                        <option value="">显示</option>
-                                        <option value="">隐藏</option>
-                                    </select>
-                                </div>
-                                <div class="addbiaoxli">
-                                    <div class="addbiaoxlit">格式化数据类别：</div>
-                                    <input type="text" class="addbiaoxlik" />
-                                </div>
-                                <div class="addbiaoxB">
-                                    <input type="button" value="提交" class="addbiaoxBb" />
-                                    <input type="button" value="关闭" class="addbiaoxBb2" />
-                                </div>
+                              <!-- form表单提交数据 -->
+	         				 	<form action="/wankangyuan/formatType/insertFormatType">
+	                                <div class="addbiaoxT">
+	                                    <div class="addbiaoxTt">添加格式化数据类型</div>
+	                                    <div class="addbiaoxTx"></div>
+	                                </div>
+	                                <div class="addbiaoxli">
+	                                    <div class="addbiaoxlit">格式化数据名：</div>
+	                                    <input type="text" class="addbiaoxlik" name="ft_name"/>
+	                                </div>
+	                                <div class="addbiaoxli">
+	                                    <div class="addbiaoxlit">状态：</div>
+	                                    <select name="is_view" id="">
+	                                        <option value="true">显示</option>
+	                                        <option value="false">隐藏</option>
+	                                    </select>
+	                                </div>
+	                                <div class="addbiaoxli">
+	                                    <div class="addbiaoxlit">格式化数据类别：</div>
+	                                    <input type="text" class="addbiaoxlik"name="higher_ft_name" />
+	                                </div>
+	                                <div class="addbiaoxB">
+	                                    <input type="submit" value="提交" class="addbiaoxBb" />
+	                                    <input type="button" value="关闭" class="addbiaoxBb2" />
+	                                </div>
+	                        	</form>  
                             </div>
                             <!-- 更新结果类型end -->
 

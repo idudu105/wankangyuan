@@ -1,6 +1,5 @@
 package com.xtkong.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -8,12 +7,12 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.xtkong.dao.FormatTypeViewDao;
-import com.xtkong.dao.SourceFiledViewDao;
+
+import com.xtkong.dao.FormatTypeDao;
 import com.xtkong.dao.TestDao;
-import com.xtkong.model.FormatTypeView;
+import com.xtkong.model.FormatType;
 import com.xtkong.model.Source;
-import com.xtkong.model.SourceFiledView;
+import com.xtkong.service.SourceFiledService;
 import com.xtkong.service.SourceService;
 
 @Controller
@@ -25,25 +24,32 @@ public class TestDataManageController {
 	@Autowired
 	SourceService sourceService;
 	@Autowired
-	SourceFiledViewDao sourceFiledViewDao;
+	SourceFiledService sourceFiledService;
 	@Autowired
-	FormatTypeViewDao formatTypeViewDao;
+	FormatTypeDao formatTypeDao;
 
 	@RequestMapping(value ="/formatdata")
-	public String test(HttpSession httpSession) {
-		List<Source> sources = sourceService.selectSource();
+	public String test(HttpSession httpSession,String cs_id) {
+		List<Source> sources = sourceService.selectSourceForAdmin();
+		for (Source source : sources) {
+			source.setSourceFileds(sourceFiledService.getSourceFileds(source.getCs_id()));
+		}
+		
 		httpSession.setAttribute("sources", sources);
 		
-//		List<SourceFiledView> sourceFiledViews = sourceFiledViewDao.selectSourceFiled(sources.get(0).getCs_id());
-//		httpSession.setAttribute("sourceFiledViews", sourceFiledViews);
-		List<List<SourceFiledView>> sourceFiledViewLists = new ArrayList<>();
-		for (Source source : sources) {
-			sourceFiledViewLists.add(sourceFiledViewDao.selectSourceFiled(source.getCs_id()));
+//		List<List<SourceFiled>> sourceFiledLists = new ArrayList<>();
+//		for (Source source : sources) {
+//			sourceFiledLists.add(sourceFiledDao.selectSourceFiled(source.getCs_id()));
+//		}
+//		httpSession.setAttribute("sourceFiledLists", sourceFiledLists);
+		int cs_id0=0;
+		try {
+			cs_id0=Integer.getInteger(cs_id);
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
-		httpSession.setAttribute("sourceFiledViewLists", sourceFiledViewLists);
-		
-		List<FormatTypeView> formatTypeViews = formatTypeViewDao.selectFormatType(sources.get(0).getCs_id());
-		httpSession.setAttribute("formatTypeViews", formatTypeViews);
+		List<FormatType> formatTypes = formatTypeDao.selectFormatType(sources.get(cs_id0).getCs_id());
+		httpSession.setAttribute("formatTypes", formatTypes);
 
 		return "redirect:/admin/datamanage.jsp";
 

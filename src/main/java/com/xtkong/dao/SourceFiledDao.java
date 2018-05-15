@@ -15,7 +15,7 @@ public interface SourceFiledDao {
 			+ "values(#{cs_id},#{csf_name},#{type},#{check},#{enumerated},#{not_null},#{error_msg},#{create_datetime},#{create_uid})")
 	public int insertSourceFiled(SourceFiled sourceFiled);
 	@Update("update collection_source_field "
-			+ "set csf_name=#{csf_name} , type=#{type} , check=#{check}, enumerated=#{enumerated}, not_null=#{not_null}, error_msg=#{error_msg} "
+			+ "set csf_name=#{csf_name} , type=#{type} , check=#{check}, enumerated=#{enumerated}, not_null=#{not_null}, description=#{description},error_msg=#{error_msg} "
 			+ "where csf_id=#{csf_id}")
 	public int updateSourceFiled(SourceFiled sourceFiled);
 	/**
@@ -25,7 +25,7 @@ public interface SourceFiledDao {
 	 * @return 采集源字段列表
 	 */	 
 	@Select("select * from collection_source_field where cs_id=#{cs_id} order by csf_id ")
-	public List<SourceFiled> selectSourceFiled(@Param("cs_id") int cs_id);
+	public List<SourceFiled> getSourceFileds(@Param("cs_id") int cs_id);
 	@Delete("delete from collection_source_field where cs_id=#{cs_id}")
 	public int deleteProjectFloder(@Param("cs_id")Integer cs_id);
 }

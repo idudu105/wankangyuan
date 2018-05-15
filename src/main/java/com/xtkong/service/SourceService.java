@@ -21,10 +21,18 @@ public class SourceService {
 		return sourceDao.insertSource(source);
 	}
 	/**
-	 * 选取数据源
+	 * 选取数据源，用户
 	 * @return	数据源列表
 	 */
 	public List<Source> selectSource() {
 		return sourceDao.selectSource();
+	}
+	
+	/**
+	 * 选取数据源，管理
+	 * @return	数据源列表
+	 */
+	public List<Source> selectSourceForAdmin() {
+		return sourceDao.selectSourceForAdmin();
 	}
 }

@@ -16,6 +16,7 @@ public class TestController {
 	
 	public String test(){
 		
+		@SuppressWarnings("unused")
 		String result  = testDao.selectString("2");
 		
 		
