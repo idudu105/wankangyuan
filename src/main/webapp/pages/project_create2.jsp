@@ -144,21 +144,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
 
             <div class="createPJK">
-                <div class="cre_PJKtop">
-                    <div class="cre_PJKtopT">创建项目</div>
-                    <img src="/wankangyuan/static/img/close.png" alt="" class="cre_PJKtopI" />
-                </div>
-                <div class="cre_PJKline"></div>
-                <div class="cre_PJKmid">
-                    <div class="cre_PJKmidT">项目名称：</div>
-                    <input type="text" class="cre_PJKmidK" />
-                </div>
-                <input type="button" class="cre_PJKbt" value="创建" />
+                <!-- form表单提交数据 -->
+            	<form action="/wankangyuan/project/insertProject">
+
+	                <div class="cre_PJKtop">
+	                    <div class="cre_PJKtopT">创建项目</div>
+	                    <img src="/wankangyuan/static/img/close.png" alt="" class="cre_PJKtopI" />
+	                </div>
+	                <div class="cre_PJKline"></div>
+	                <div class="cre_PJKmid">
+	                    <div class="cre_PJKmidT">项目名称：</div>
+	                    <input type="text" id="p_name" name="p_name" class="cre_PJKmidK" />
+	                </div>
+	                <div class="cre_PJKmid">
+	                    <div class="cre_PJKmidT">项目编号：</div>
+	                    <input type="text" id="p_number" name="p_number" class="cre_PJKmidK" />
+	                </div>
+	                <div class="cre_PJKmid">
+	                    <div class="cre_PJKmidT">关键字：</div>
+	                    <input type="text" id="key_words" name="key_words" class="cre_PJKmidK" />
+	                </div>
+	                <input type="submit" class="cre_PJKbt" value="创建" />
+	           
+	           </form>
             </div>
         </div>
     </div>
     
-        <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
     <script type="text/javascript">
     	
     	
@@ -166,12 +179,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	function updateProjectOpenState(is_open){
     		
     		var afuxuanK=document.querySelectorAll('.fuxuanK3');
-    		
             var afuxuan=[];
             for(var i=0;i<afuxuanK.length;i++){
                 afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
             }
-            
             var ids = [];
             for(var i=0;i<afuxuanK.length;i++){
             	if(afuxuan[i].checked){
