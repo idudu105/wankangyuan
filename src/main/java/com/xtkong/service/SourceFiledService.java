@@ -23,7 +23,7 @@ public class SourceFiledService {
 	 * @param cs_id  采集源
 	 * @return 采集源字段列表
 	 */
-	public List<SourceFiled> selectSourceFiled( Integer cs_id){
+	public List<SourceFiled> selectSourceFiled( int cs_id){
 		return sourceFiledDao.selectSourceFiled(cs_id);
 	}
 	public int deleteProjectFloder(Integer cs_id){

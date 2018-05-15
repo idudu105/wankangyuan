@@ -16,14 +16,14 @@ import com.xtkong.service.FormatFieldService;
 public class FormatFieldController {
 	@Autowired
 	FormatFieldService formatFieldService;
-	@RequestMapping("/insertFormatField")
-	public String insertFormatField(FormatField FormatField){
-		formatFieldService.insertFormatField(FormatField);
-		return "";
-	}
-	public String selectFormatField(HttpSession httpSession,Integer ft_id){
-		List<FormatField> formatFields=formatFieldService.selectFormatField(ft_id);
-		httpSession.setAttribute("formatFields", formatFields);
-		return "redirect:/pages/project_data.html";
-	}
+//	@RequestMapping("/insertFormatField")
+//	public String insertFormatField(FormatField FormatField){
+//		formatFieldService.insertFormatField(FormatField);
+//		return "";
+//	}
+//	public String selectFormatField(HttpSession httpSession,Integer ft_id){
+//		List<FormatField> formatFields=formatFieldService.selectFormatField(ft_id);
+//		httpSession.setAttribute("formatFields", formatFields);
+//		return "redirect:/pages/project_data.html";
+//	}
 }
