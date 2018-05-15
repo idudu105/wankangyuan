@@ -27,11 +27,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="box">
             <div class="top">
                 <h1><img src="/wankangyuan/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
-                <a href="/wankangyuan/project/selectMyProject?user_id=1">
+                <a href="/wankangyuan/project/selectMyProject">
                 	<div class="topT active">项目</div>
                 </a>
                 <div class="topT">格式数据</div>
-                <div class="topT">应用</div>
+                <a href="/wankangyuan/application/viewMine">
+                    <div class="topT ">应用</div>
+                </a>
                 <div class="touxiangK">
                     <img src="/wankangyuan/static/img/touxiang.png" alt="" class="touxiang" />
                 </div>
