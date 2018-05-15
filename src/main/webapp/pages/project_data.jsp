@@ -142,7 +142,7 @@
 								</c:forEach>		
 							</div>
 							<div class="PJliline"></div>
-							<div class="PJliB active">
+							<div class="PJliB">
 								<div class="PJliB1">
 									<div class="PJliB1L">
 										<div class="PJliB1Lt">临床数据</div>
