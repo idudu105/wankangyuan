@@ -3,6 +3,7 @@ package com.xtkong.controller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -12,22 +13,30 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.xtkong.dao.SourceDao;
+import com.xtkong.model.Source;
 import com.xtkong.model.SourceFiled;
 import com.xtkong.service.SourceFiledService;
+import com.xtkong.service.SourceService;
 
 @Controller
 @RequestMapping(value = "/sourceFiled")
 public class SourceFiledController {
 	@Autowired
+	SourceDao sourceDao;
+	@Autowired
 	SourceFiledService sourceFiledService;
 
 	@RequestMapping("/insertSourceFiled")
-	public String insertSourceFiled(SourceFiled sourceFiled) {
+	public String insertSourceFiled(SourceFiled sourceFiled,String cs_name1) {
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		sourceFiled.setCreate_datetime(simpleDateFormat.format(new Date()));
-//		sourceFiled.setCs_id(2);
+		sourceFiled.setCs_id(sourceDao.getSourceId(cs_name1));
 		sourceFiled.setCreate_uid(1);
+		
+		sourceFiledService.insertSourceFiled(sourceFiled);
+		
 		return "redirect:/admin/formatdata?cs_id="+sourceFiled.getCs_id();
 	}
 

@@ -9,6 +9,17 @@ public class Source {
 
 	private List<SourceFiled> sourceFileds;
 
+	private List<FormatType> formatTypes;
+	
+	
+	public List<FormatType> getFormatTypes() {
+		return formatTypes;
+	}
+
+	public void setFormatTypes(List<FormatType> formatTypes) {
+		this.formatTypes = formatTypes;
+	}
+
 	public List<SourceFiled> getSourceFileds() {
 		return sourceFileds;
 	}
