@@ -51,8 +51,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <a href="project_append.html"><div class="top2Ctr">应用结果</div></a>
                     <a href="project_app.html"><div class="top2Ctr">应用</div></a>
                     <a href="javascript:;"><div class="top2Ctr active">格式数据</div></a>
-                    <a href="project_file.html"><div class="top2Ctr">文件</div></a>
-                    <a href="project_detail.html"><div class="top2Ctr">基本信息</div></a>
+                    <a href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId"><div class="top2Ctr">文件</div></a>
+                    <a href="/wankangyuan/project/getProjectDetail"><div class="top2Ctr">基本信息</div></a>
                 </div>
             </div>
             <div class="shaixuan">

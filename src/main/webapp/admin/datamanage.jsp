@@ -484,7 +484,7 @@
                             <div class="addbiaoxK">
                           	 	<!-- form表单提交数据 -->
 	         				 	<form action="/wankangyuan/formatType/insertFormatType">
-	         				 		<input name="cs_name1" style="display:none;"/>
+	         				 	<input name="cs_name1" style="display:none;"/>
 	                                <div class="addbiaoxT">
 	                                    <div class="addbiaoxTt">添加格式化数据类型</div>
 	                                    <div class="addbiaoxTx"></div>

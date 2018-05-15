@@ -118,11 +118,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
             <div class="pageK">
                 <div class="pageLR">
-                    <img src="/wankangyuan/static/pageL.png" class="pageLRi" alt="" />
+                    <img src="/wankangyuan/static/img/pageL.png" class="pageLRi" alt="" />
                 </div>
                 <div class="pageNUM active">1</div>
                 <div class="pageLR">
-                    <img src="/wankangyuan/static/pageR.png" class="pageLRi" alt="" />
+                    <img src="/wankangyuan/static/img/pageR.png" class="pageLRi" alt="" />
                 </div>
             </div>
 
