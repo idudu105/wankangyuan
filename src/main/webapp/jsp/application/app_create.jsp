@@ -18,12 +18,13 @@
         app_create();
     }
 </script>
+
 <body>
     <div class="Box">
         <div class="box">
             <div class="top">
                 <h1><img src="<%=request.getContextPath()%>/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
-                <a href="project_mine.html">
+                <a href="/wankangyuan/project/selectMyProject">
                     <div class="topT">项目</div>
                 </a>
                 <a href="data_mine.html">
@@ -104,7 +105,7 @@
                         </div>
                     </div>
 
-                    <div class="pro_menu pro_del">删除</div>
+                    <div class="pro_menu pro_del" onclick="to_delete()">删除</div>
                     <div class="pro_menu pro_open" onclick="to_public()">公开</div>
                     <div class="pro_menu pro_disopen" onclick="to_private()">取消公开</div>
                     <div class="pro_menu pro_createapp">+创建应用</div>
@@ -207,7 +208,7 @@
                                 <input name="ids" type="checkbox" class="input_check" id="check${appList.count }" value="${app.id }">
                                 <label for="check${appList.count }"></label>
                             </div>
-                            <a href="/wankangyuan/application/explain?id=${app.id }">
+                            <a href="/wankangyuan/application/updateForm?id=${app.id }">
                                 <div class="PJliCli appname">${app.appName }</div>
                                 <div class="PJliCli appcreater">${app.creator }</div>
                                 <div class="PJliCli apptime">
@@ -291,20 +292,75 @@
             </div>
         </div>
     </div>
-
+    
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/jquery.min.js"></script>
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/paging.js"></script>
 
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
+<c:if test="${not empty msg}">
+    <script type="text/javascript">
+    layer.msg("${msg}");
+    </script>
+</c:if>
+
 <script type="text/javascript">
 
 function to_public(){
-    $("#pub_but").click();
+	
+	var ids = $("input[name='ids']");
+	var checkNum = 0;
+	for (var i = 0; i < ids.length; i++) {
+	    if (ids[i].checked) {
+	        checkNum++;
+	    }
+	}
+	if (checkNum == 0) {
+		layer.msg("请至少选中一个");
+	} else {
+	    $("#pub_but").click();
+	}
 }
 
 function to_private(){
-    $("#pri_but").click();
+	var ids = $("input[name='ids']");
+    var checkNum = 0;
+    for (var i = 0; i < ids.length; i++) {
+        if (ids[i].checked) {
+            checkNum++;
+        }
+    }
+    if (checkNum == 0) {
+        layer.msg("请至少选中一个");
+    } else {
+	    $("#pri_but").click();
+    }
 }
+
+function to_delete(){
+	var ids = $("input[name='ids']");
+    var checkNum = 0;
+    for (var i = 0; i < ids.length; i++) {
+        if (ids[i].checked) {
+            checkNum++;
+        }
+    }
+    if (checkNum == 0) {
+        layer.msg("请至少选中一个");
+    } else {
+        layer.confirm('删除不能撤销，请确认是否删除?',{
+       	  btn: ['确认','取消'], //按钮
+          icon: 2
+       	}, function(){
+       	    $("#appList").attr('action',"/wankangyuan/application/delete");
+            $("#appList").submit();
+       	  
+       	}, function(){
+       	    return;
+       	});
+    }
+}
+
 
 
     $('#box').paging({

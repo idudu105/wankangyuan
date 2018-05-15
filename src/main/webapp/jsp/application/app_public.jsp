@@ -24,7 +24,7 @@
         <div class="box">
             <div class="top">
                 <h1><img src="<%=request.getContextPath()%>/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
-                <a href="project_mine.html">
+                <a href="/wankangyuan/project/selectMyProject">
                     <div class="topT">项目</div>
                 </a>
                 <a href="data_mine.html">

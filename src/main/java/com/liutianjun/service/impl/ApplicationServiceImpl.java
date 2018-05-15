@@ -54,8 +54,12 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * @return
 	 */
 	@Override
-	public int deleteByPrimaryKey(Integer id) {
-		return applicationDao.deleteByPrimaryKey(id);
+	public int deleteByIds(Integer[] ids) {
+		ApplicationQuery example = new ApplicationQuery();
+		Criteria criteria = example.createCriteria();
+		criteria.andIdIn(Arrays.asList(ids));
+		
+		return applicationDao.deleteByExample(example);
 	}
 
 	/**
@@ -67,7 +71,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 */
 	@Override
 	public int updateByPrimaryKey(Application record) {
-		return applicationDao.updateByPrimaryKey(record);
+		return applicationDao.updateByPrimaryKeySelective(record);
 	}
 
 	/**

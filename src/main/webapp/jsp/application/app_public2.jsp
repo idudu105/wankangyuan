@@ -24,7 +24,7 @@
         <div class="box">
             <div class="top">
                 <h1><img src="<%=request.getContextPath()%>/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
-                <a href="project_mine.html">
+                <a href="/wankangyuan/project/selectMyProject">
                     <div class="topT">项目</div>
                 </a>
                 <a href="data_mine.html">
@@ -121,7 +121,7 @@
 	                        <div class="PJK2litopT2">${app.appName }</div>
 	                        <!-- <div class="PJK2litopI"></div> -->
 	                        <div class="fuxuanK3">
-	                            <input type="checkbox" class="input_check" id="check${appList.count }" value="${app.id }">
+	                            <input name="ids" type="checkbox" class="input_check" id="check${appList.count }" value="${app.id }">
 	                            <label for="check${appList.count }"></label>
 	                        </div>
 	                    </div>

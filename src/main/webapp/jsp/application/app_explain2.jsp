@@ -23,7 +23,7 @@
         <div class="box">
             <div class="top">
                 <h1><img src="<%=request.getContextPath()%>/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
-                <a href="project_mine.html">
+                <a href="/wankangyuan/project/selectMyProject">
                     <div class="topT">项目</div>
                 </a>
                 <a href="data_mine.html">
@@ -51,19 +51,21 @@
                         <!-- </div> -->
                         <div class="top2Ct">${application.appName }</div>
                     </div>
-                    <div class="app_expsave">保存</div>
+                    <div class="app_expsave" onclick="to_update()">保存</div>
                 </div>
             </div>
             <div class="appexpM">
+            <form id="appSub" action="/wankangyuan/application/update${index }" method="post">
                 <div class="appexpML">
                     <div class="appexpMLz">
                         <div class="appexpMLzt1">应用编号：</div>
                         <div class="appexpMLzt2">${application.id }</div>
+                        <input name="id" type="hidden" class="appexpMLzt2" value="${application.id }">
                     </div>
                     <div class="appexpMLz">
                         <div class="appexpMLzt1">应用名称：</div>
                         <!-- <div class="appexpMLzt2">张三</div> -->
-                        <input type="text" class="appexpMLzp1" value="${application.appName }" />
+                        <input name="appName" type="text" class="appexpMLzp1" value="${application.appName }" />
                     </div>
                     <div class="appexpMLz">
                         <div class="appexpMLzt1">创建人：</div>
@@ -73,8 +75,8 @@
                         <div class="appexpMLzt1">应用类别：</div>
                         <!-- <div class="appexpMLzt2">测序</div> -->
                         <select name="appType" id="" class="appexpMLzs1">
-                            <option value="测序" <c:if test="${测序 eq application.appType }">selected="selected"</c:if>>测序</option>
-                            <option value="排查" <c:if test="${排查 eq application.appType }">selected="selected"</c:if>>排查</option>
+                            <option value="测序" <c:if test="${'测序' eq application.appType }">selected="selected"</c:if>>测序</option>
+                            <option value="排查" <c:if test="${'排查' eq application.appType }">selected="selected"</c:if>>排查</option>
                         </select>
                         
                     </div>
@@ -82,8 +84,10 @@
                         <div class="appexpMLzt1">关键字：</div>
                         <!-- <div class="appexpMLzt2">DNA</div> -->
                         <!-- <div class="appexpMLzt2">RNA</div> -->
+                        <input name="keywords" type="hidden" value="" >
                         <div class="appexpGJZK">
                             <div class="appexpGJZKC">
+                            
                                 <div class="appexpGJZ">
                                     <div class="appexpGJZt">DNA</div>
                                     <div class="appexpGJZx"></div>
@@ -92,6 +96,7 @@
                                     <div class="appexpGJZt">RNA</div>
                                     <div class="appexpGJZx"></div>
                                 </div>
+                                
                             </div>
                             <div class="appexpGJZadk">
                                 <input type="text" class="appexpGJZadp" />
@@ -116,8 +121,8 @@
                         <div class="appexpMLzt1">状态：</div>
                         <!-- <div class="appexpMLzt2">隐藏</div> -->
                         <select name="status" class="appexpMLzs1">
-                            <option value="私有" <c:if test="${私有 eq application.status }">selected="selected"</c:if>>私有</option>
-                            <option value="公开" <c:if test="${公开 eq application.status }">selected="selected"</c:if>>公开</option>
+                            <option value="私有" <c:if test="${'私有' eq application.status }">selected="selected"</c:if>>私有</option>
+                            <option value="公开" <c:if test="${'公开' eq application.status }">selected="selected"</c:if>>公开</option>
                         </select>
                     </div>
                     <div class="appexpMLz">
@@ -130,7 +135,7 @@
                     <div class="appexpMLz">
                         <div class="appexpMLzt1">应用概述：</div>
                         <!-- <div class="appexpMLzt3">张三</div> -->
-                        <textarea name="appOverview" class="appexpMLzta1">${application.appOverview }</textarea>
+                        <textarea name="appOverview" class="appexpMLzta1" >${application.appOverview }</textarea>
                     </div>
                     <div class="appexpMLz">
                         <div class="appexpMLzt1">格式数据：</div>
@@ -138,6 +143,7 @@
                     </div>
                 </div>
                 <div class="appexpMR"></div>
+            </form>
             </div>
             
 
@@ -155,5 +161,26 @@
             </div>
         </div>
     </div>
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/jquery.min.js"></script>
+
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
+<c:if test="${not empty msg}">
+    <script type="text/javascript">
+    layer.msg("${msg}");
+    </script>
+</c:if>
+<script type="text/javascript">
+function to_update(){
+	var maxIndex = $('.appexpGJZt').length - 1;
+    var result = '';
+    $('.appexpGJZt').text(function(index, content){
+        result += (index === maxIndex) ? content : content + ','; 
+    });
+    $("input[name='keywords']").val(result);
+    alert(result);
+    $("#appSub").submit();
+}
+
+</script>
 </body>
 </html>
