@@ -135,15 +135,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                     <div class="PJeditli">
                         <div class="PJeditliC">
-                            <div class="PJeditlit">异步/同步：</div>
-	                        <select id="is_asy_edit" name="is_asy_edit" class="PJeditlik">
-								<option value="0">同步</option>
-								<option value="1">异步</option>
-							</select>
-                        </div>
-                    </div>
-                    <div class="PJeditli">
-                        <div class="PJeditliC">
                             <div class="PJeditlit">关键字：</div>
                             <input type="text" class="PJeditlik" id="key_words_edit"/>
                         </div>
@@ -164,7 +155,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="PJListli PJID">项目编号</div>
                     <div class="PJListli PJcreater">创建者</div>
                     <div class="PJListli PJtime">创建时间</div>
-                    <div class="PJListli PJyibu">异步/同步</div>
                     <div class="PJListli PJkeyword">关键字</div>
                     <div class="PJListli PJopenor">公开状态</div>
                 </div>
@@ -184,12 +174,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                                <div class="PJliCli PJID">${project.p_number }</div>
 	                                <div class="PJliCli PJcreater">${project.creator }</div>
 	                                <div class="PJliCli PJtime">${project.create_datetime }</div>
-	                                <c:if test="${project.is_asy == 0}">
-	                                	<div class="PJliCli PJyibu">同步</div>
-	                                </c:if>
-	                                <c:if test="${project.is_asy == 1}">
-	                                	<div class="PJliCli PJyibu">异步</div>
-	                                </c:if>
 	                                <div class="PJliCli PJkeyword">${project.key_words }</div>
 	                                <c:if test="${project.is_open == 0}">
 	                                	<div class="PJliCli PJopenor">未公开</div>
@@ -254,13 +238,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
             <div class="pageK">
                 <div class="pageLR">
-                    <img src="img/pageL.png" class="pageLRi" alt="" />
+                    <img src="/wankangyuan/static/img/pageL.png" class="pageLRi" alt="" />
                 </div>
                 <div class="pageNUM active">1</div>
-                <div class="pageNUM ">2</div>
-                <div class="pageNUM">3</div>
                 <div class="pageLR">
-                    <img src="img/pageR.png" class="pageLRi" alt="" />
+                    <img src="/wankangyuan/static/img/pageR.png" class="pageLRi" alt="" />
                 </div>
             </div>
 
@@ -295,13 +277,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                    <input type="text" id="p_number" name="p_number" class="cre_PJKmidK" />
 	                </div>
 	                <div class="cre_PJKmid">
-	                    <div class="cre_PJKmidT">异步同步：</div>
-	                    <select id="is_asy" name="is_asy" class="cre_PJKmidK">
-							<option value="0" checked>同步</option>
-							<option value="1">异步</option>
-						</select>
-	                </div>
-	                <div class="cre_PJKmid">
 	                    <div class="cre_PJKmidT">关键字：</div>
 	                    <input type="text" id="key_words" name="key_words" class="cre_PJKmidK" />
 	                </div>
@@ -320,7 +295,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		
     		$("#id_edit").val(id);
     		$("#p_name_edit").val(p_name);
-    		$("#is_asy_edit").val(is_asy);
     		$("#key_words_edit").val(key_words);
     		
     	}
@@ -330,7 +304,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		
     		var id = $("#id_edit").val();
     		var p_name = $("#p_name_edit").val();
-    		var is_asy = $("#is_asy_edit").val();
     		var key_words = $("#key_words_edit").val();
     		
     		//进行ajax请求
@@ -341,7 +314,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			data:{
     				id:id,
     				p_name:p_name,
-    				is_asy:is_asy,
     				key_words:key_words
     			},
     			success : function(data){

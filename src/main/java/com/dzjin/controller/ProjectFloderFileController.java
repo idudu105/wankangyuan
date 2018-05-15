@@ -156,8 +156,8 @@ public class ProjectFloderFileController {
 	@ResponseBody
 	public Map<String, Object> selectFilesByFloderId(HttpSession session , Integer floder_id){
 		Map<String, Object> map = new HashMap<>();
-		session.setAttribute("projectFiles", projectFileService.selectProjectFileByFloderId(floder_id));
 		map.put("result", true);
+		map.put("projectFiles", projectFileService.selectProjectFileByFloderId(floder_id));
 		return map;
 	}
 	
@@ -172,7 +172,7 @@ public class ProjectFloderFileController {
 		//返回结果
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		if(file.getSize()>1024*1024) {
+		if(file.getSize()>1024*1024*1024) {
 			map.put("result", false);
 			map.put("message", "文件不能超过10M");
 			return map;
@@ -207,7 +207,7 @@ public class ProjectFloderFileController {
         projectFile.setFile_location(fileName);
         projectFile.setFile_name(originalFilename);
         projectFile.setFile_size(String.valueOf(file.getSize()/1024));
-        projectFile.setFile_type("类型，不清楚");
+        projectFile.setFile_type(type);
         //这个ID应该是每次传过来的数据
         projectFile.setFloder_id(1);
         projectFile.setCreate_datetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));

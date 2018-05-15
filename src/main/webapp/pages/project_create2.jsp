@@ -125,8 +125,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <img src="/wankangyuan/static/img/pageL.png" class="pageLRi" alt="" />
                 </div>
                 <div class="pageNUM active">1</div>
-                <div class="pageNUM ">2</div>
-                <div class="pageNUM">3</div>
                 <div class="pageLR">
                     <img src="/wankangyuan/static/img/pageR.png" class="pageLRi" alt="" />
                 </div>

@@ -84,7 +84,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			                                    <div class="PJliB2">
 		                                            <div class="PJliB2L" >
 		                                                <div class="PJliB2Lic" onclick="clickFloder(${projectFloder1.id})"></div>
-		                                                <div class="PJliB2Lt" onclick="clickFloder(${projectFloder1.id})">${projectFloder1.floder_name}</div>
+		                                                <div class="PJliB1Lt" onclick="clickFloder(${projectFloder1.id})">${projectFloder1.floder_name}</div>
 		                                                <div class="PJliBLi PJliBLi2" onclick="clickFloder(${projectFloder1.id})"></div>
 		                                            </div>
 						                            <div class="PJliBR">
@@ -93,7 +93,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							                                    <div class="PJliB2">
 						                                            <div class="PJliB2L" >
 						                                                <div class="PJliB2Lic" onclick="clickFloder(${projectFloder2.id})"></div>
-						                                                <div class="PJliB2Lt" onclick="clickFloder(${projectFloder2.id})">${projectFloder2.floder_name}</div>
+						                                                <div class="PJliB1Lt" onclick="clickFloder(${projectFloder2.id})">${projectFloder2.floder_name}</div>
 						                                                <div class="PJliBLi PJliBLi2" onclick="clickFloder(${projectFloder2.id})"></div>
 						                                            </div>
 																	<div class="PJliBR">
@@ -102,7 +102,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 																			<div class="PJliB2">
 																			    <div class="PJliB2L">
 																		           	<div class="PJliB2Lic" onclick="clickFloder(${projectFloder2.id})"></div>
-																		           	<div class="PJliB2Lt" onclick="clickFloder(${projectFloder2.id})">${projectFloder3.floder_name}</div>
+																		           	<div class="PJliB1Lt" onclick="clickFloder(${projectFloder2.id})">${projectFloder3.floder_name}</div>
 																				   	<div class="PJliBLi PJliBLi2" onclick="clickFloder(${projectFloder2.id})"></div>
 																			    </div>
 																			</div>
