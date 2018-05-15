@@ -291,6 +291,7 @@
                             <div class="addbiaoxK">
 	                            <!-- form表单提交数据 -->
 	         				   	<form action="/wankangyuan/sourceFiled/insertSourceFiled">
+	         				   		<input name="cs_name1" style="display:none;"/>
 	                                <div class="addbiaoxT">
 	                                    <div class="addbiaoxTt">新增采集源字段</div>
 	                                    <div class="addbiaoxTx" ></div>
@@ -481,6 +482,7 @@
                             <div class="addbiaoxK">
                           	 	<!-- form表单提交数据 -->
 	         				 	<form action="/wankangyuan/formatType/insertFormatType">
+	         				 		<input name="cs_name1" style="display:none;"/>
 	                                <div class="addbiaoxT">
 	                                    <div class="addbiaoxTt">添加格式化数据类型</div>
 	                                    <div class="addbiaoxTx"></div>
@@ -647,5 +649,14 @@
 
     <script type="text/javascript" src="js/datamanage.js"></script>
     <!-- end: JavaScript-->
+    
+    <script>
+    
+    	
+    $(".box_xxtabz").click(function(){ 
+        $("input[name='cs_name1']").val($(this).text());
+    }); 
+    
+    </script>
 </body>
 </html>
