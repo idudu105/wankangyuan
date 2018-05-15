@@ -477,6 +477,7 @@ a{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    width:150px;
 }
 .PJname{
     width:281px;
@@ -849,6 +850,7 @@ a{
     -webkit-line-clamp: 1;
     overflow: hidden;
     min-height: 1px;
+     width:150px;
 }
 
 .PJK2{

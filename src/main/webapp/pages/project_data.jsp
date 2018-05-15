@@ -137,9 +137,7 @@
 										</div>
 									</c:if>
 									<c:if test="${status.index!=0}">
-										<div class="PJliCli2 dataname">
-											<div class="PJliCli2 ">${sourceDataField}</div>
-										</div>
+										<div class="PJliCli2">${sourceDataField}</div>
 									</c:if>
 								</c:forEach>		
 							</div>
