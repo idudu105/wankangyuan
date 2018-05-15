@@ -154,30 +154,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			                        <div class="allT">全选</div>
 			                    </div>
 			                    
-                                <div class="prof_lbRmULtli prof_lbRmULt2">项目名称</div>
+                                <div class="prof_lbRmULtli prof_lbRmULt2">文件名称</div>
                                 <div class="prof_lbRmULtli prof_lbRmULt3">类型</div>
                                 <div class="prof_lbRmULtli prof_lbRmULt4">大小</div>
                                 <div class="prof_lbRmULtli prof_lbRmULt5">创建时间</div>
                                 <div class="prof_lbRmULtli prof_lbRmULt6">创建人</div>
                                 <div class="prof_lbRmULtli prof_lbRmULt7">操作</div>
                             </div>
-                            <div class="prof_lbRmULm">
-                            
-                            	<c:forEach items="${projectFiles }" var="projectFile">         	
-	                            	<div class="prof_lbRmULmLI">
-		                                <div class="fuxuanK2">
-			                                <input type="checkbox" class="input_check" id="check${projectFile.id }" value="${projectFile.id}">
-			                                <label for="check${projectFile.id }"></label>
-			                            </div>
-	                                    <div class="prof_lbRmULmli prof_lbRmULt2">${projectFile.file_name }</div>
-	                                    <div class="prof_lbRmULmli prof_lbRmULt3">${projectFile.file_type }</div>
-	                                    <div class="prof_lbRmULmli prof_lbRmULt4">${projectFile.file_size }</div>
-	                                    <div class="prof_lbRmULmli prof_lbRmULt5">${projectFile.create_datetime }</div>
-	                                    <div class="prof_lbRmULmli prof_lbRmULt6">${projectFile.creator_id }</div>
-	                                    <div class="prof_lbRmULmli prof_lbRmULt7 prof_lbRmULmYL">预览</div>
-	                                </div>
-                            	</c:forEach>
-                            	
+                            <div class="prof_lbRmULm" id="filesList">
                             </div>
                         </div>
                     </div>
@@ -244,7 +228,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			dataType:"json",
     			success : function(data){
     				if(data.result == true){
-    					window.location.href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId";
+    					//这个地方直接更新右面的文件列表
+    					var filesList = $("#filesList");
+    					filesList.empty();
+    					for(var index in data.projectFiles){
+    						filesList.append('<div class="prof_lbRmULmLI">'+
+	                                '<div class="fuxuanK2">'+
+	                              ' <input type="checkbox" class="input_check" id="check'+data.projectFiles[index].id+'" value="'+data.projectFiles[index].id+'">'+
+	                                '<label for="check'+data.projectFiles[index].id+'"></label>'+
+	                           	'</div>'+
+                                '<div class="prof_lbRmULmli prof_lbRmULt2">'+data.projectFiles[index].file_name+'</div>'+
+                                '<div class="prof_lbRmULmli prof_lbRmULt3">'+data.projectFiles[index].file_type+'</div>'+
+                                '<div class="prof_lbRmULmli prof_lbRmULt4">'+data.projectFiles[index].file_size+'</div>'+
+                                '<div class="prof_lbRmULmli prof_lbRmULt5">'+data.projectFiles[index].create_datetime+'</div>'+
+                                '<div class="prof_lbRmULmli prof_lbRmULt6">'+data.projectFiles[index].creator_id+'</div>'+
+                                '<div class="prof_lbRmULmli prof_lbRmULt7 prof_lbRmULmYL">预览</div>'+
+                            '</div>');
+    					}
     				}else{
     					alert(data.message);
     				}
@@ -388,6 +388,5 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </script>
 	  	
 
-    </script>
 </body>
 </html>

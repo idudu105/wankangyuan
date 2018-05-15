@@ -24,7 +24,7 @@
         <div class="box">
             <div class="top">
                 <h1><img src="<%=request.getContextPath()%>/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
-                <a href="project_mine.html">
+                <a href="/wankangyuan/project/selectMyProject">
                     <div class="topT">项目</div>
                 </a>
                 <a href="data_mine.html">
@@ -190,7 +190,7 @@
                     <div class="PJListli appname">应用名称</div>
                     <div class="PJListli appcreater">创建人</div>
                     <div class="PJListli apptime">创建时间</div>
-                    <div class="PJListli appopen">是否公开</div>
+                    <div class="PJListli appopen">状态</div>
                     <div class="PJListli PJyibu">异步/同步</div>
                     <div class="PJListli PJkeyword">关键字</div>
                     <div class="PJListli appexplain">应用描述</div>
@@ -211,7 +211,12 @@
                                 <div class="PJliCli apptime">
                                     <fmt:formatDate type="date" value="${app.createTime }" />
                                 </div>
-                                <div class="PJliCli appopen">${app.status }</div>
+                                
+                                <div class="PJliCli appopen">
+                                <c:if test="${app.creator eq user.username }">我创建的</c:if>
+                                <c:if test="${app.creator ne user.username }">${app.status }</c:if>
+                                </div>
+                                
                                 <div class="PJliCli PJyibu">
                                 <c:if test="${app.isAsync eq 0}">同步</c:if>
                                 <c:if test="${app.isAsync eq 1}">异步</c:if>

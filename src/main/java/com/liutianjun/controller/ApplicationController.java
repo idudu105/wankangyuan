@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.liutianjun.pojo.Application;
 import com.liutianjun.service.ApplicationService;
@@ -143,10 +145,17 @@ public class ApplicationController {
 	 * @return 
 	 * String
 	 */
-	@RequestMapping(value="/setStatus",method=RequestMethod.POST)
-	public String setStatus(String cmd,Integer[] ids) {
-		applicationService.setStatus(cmd,ids);
-		return "redirect:/application/viewCreate";
+	@RequestMapping(value="/setStatus{index}",method=RequestMethod.POST)
+	public String setStatus(String cmd,Integer[] ids,
+			@PathVariable String index,
+			RedirectAttributes attributes) {
+		int i = applicationService.setStatus(cmd,ids);
+		String msg = "操作失败";
+		if(i > 0) {
+			msg = "操作成功";
+		}
+		attributes.addFlashAttribute("msg", msg);
+		return "redirect:/application/viewCreate"+index;
 	}
 	
 	/**
@@ -167,16 +176,37 @@ public class ApplicationController {
 	}
 	
 	/**
+	 * 应用说明界面
+	 * @Title: showUpdateForm 
+	 * @return 
+	 * String
+	 */
+	@RequestMapping(value="/explain",method=RequestMethod.GET)
+	public String showExplain(Integer id, Model model) {
+		Application application = applicationService.selectByPrimaryKey(id);
+		model.addAttribute("application", application);
+		return "jsp/application/app_explain.jsp";
+	}
+	
+	/**
 	 * 应用编辑界面
 	 * @Title: showUpdateForm 
 	 * @return 
 	 * String
 	 */
-	@RequestMapping(value="/explain{index}",method=RequestMethod.GET)
-	public String showExplain(Integer id, Model model, @PathVariable String index) {
+	@RequestMapping(value="/updateForm{index}",method=RequestMethod.GET)
+	public String viewUpdateForm(Integer id, Model model, @PathVariable String index) {
 		Application application = applicationService.selectByPrimaryKey(id);
+		String strkewwords = application.getKeywords();
+		if(StringUtils.isNotBlank(strkewwords)) {
+			String[] keywords = strkewwords.split(",");
+			model.addAttribute("keywords", keywords);
+		}
+		
 		model.addAttribute("application", application);
-		return "jsp/application/app_explain"+index+".jsp";
+		
+		model.addAttribute("index", index);
+		return "jsp/application/app_explain2.jsp";
 	}
 	
 	/**
@@ -185,10 +215,17 @@ public class ApplicationController {
 	 * @return 
 	 * String
 	 */
-	@RequestMapping(value="/update",method=RequestMethod.POST)
-	public String update(Application record) {
-		applicationService.updateByPrimaryKey(record);
-		return "redirect:/application/list";
+	@RequestMapping(value="/update{index}",method=RequestMethod.POST)
+	public String update(Application record, 
+			RedirectAttributes attributes,
+			@PathVariable String index) {
+		String msg = "操作失败";
+		int i = applicationService.updateByPrimaryKey(record);
+		if(i>0) {
+			msg = "更新成功";
+		}
+		attributes.addFlashAttribute("msg", msg);
+		return "redirect:/application/viewCreate"+index;
 	}
 	
 	/**
@@ -198,10 +235,18 @@ public class ApplicationController {
 	 * @return 
 	 * String
 	 */
-	@RequestMapping(value="/delete",method=RequestMethod.POST)
-	public String delete(Integer id) {
-		applicationService.deleteByPrimaryKey(id);
-		return "redirect:/application/list";
+	@RequestMapping(value="/delete{index}",method=RequestMethod.POST)
+	public String delete(Integer[] ids, 
+			@PathVariable String index,
+			RedirectAttributes attributes) {
+		
+		int i = applicationService.deleteByIds(ids);
+		String msg = "操作失败";
+		if(i>0) {
+			msg = "删除成功";
+		}
+		attributes.addFlashAttribute("msg", msg);
+		return "redirect:/application/viewCreate"+index;
 	}
 	
 }

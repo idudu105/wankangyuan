@@ -22,7 +22,7 @@
         <div class="box">
             <div class="top">
                 <h1><img src="<%=request.getContextPath()%>/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
-                <a href="project_mine.html">
+                <a href="/wankangyuan/project/selectMyProject">
                     <div class="topT">项目</div>
                 </a>
                 <a href="data_mine.html">
@@ -135,13 +135,17 @@
                             <div class="PJK2litopT2">${app.appName }</div>
                             <!-- <div class="PJK2litopI"></div> -->
                             <div class="fuxuanK3">
-                                <input type="checkbox" class="input_check" id="check${appList.count }" value="${app.id }">
+                                <input name="ids" type="checkbox" class="input_check" id="check${appList.count }" value="${app.id }">
                                 <label for="check${appList.count }"></label>
                             </div>
                         </div>
                         <div class="PJK2licre">
                             <div class="PJK2licreT1">创建人：</div>
                             <div class="PJK2licreT2">${app.creator }</div>
+                        </div>
+                        <div class="PJK2litime">
+                            <div class="PJK2licreT1">状态：</div>
+                            <div class="PJK2licreT2">${app.status }</div>
                         </div>
                         <div class="PJK2litime">
                             <div class="PJK2litimeT1">
@@ -179,10 +183,36 @@
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/paging.js"></script>
 
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
+<c:if test="${not empty msg}">
+    <script type="text/javascript">
+    layer.msg("${msg}");
+    </script>
+</c:if>
+
 <script type="text/javascript">
 function removeFromMine(){
-    $("#appList").attr('action',"/wankangyuan/userAppRelation/removeFromMine2");
-    $("#appList").submit();
+    var ids = $("input[name='ids']");
+    var checkNum = 0;
+    for (var i = 0; i < ids.length; i++) {
+        if (ids[i].checked) {
+            checkNum++;
+        }
+    }
+    if (checkNum == 0) {
+        layer.msg("请至少选中一个");
+    } else {
+        layer.confirm('请确认是否移除?',{
+          btn: ['确认','取消'], //按钮
+          icon: 2
+        }, function(){
+            $("#appList").attr('action',"/wankangyuan/userAppRelation/removeFromMine2");
+            $("#appList").submit();
+          
+        }, function(){
+            return;
+        });
+    }
 }
 
     $('#box').paging({

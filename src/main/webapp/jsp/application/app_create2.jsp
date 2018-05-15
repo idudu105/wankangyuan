@@ -23,7 +23,7 @@
         <div class="box">
             <div class="top">
                 <h1><img src="<%=request.getContextPath()%>/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
-                <a href="project_mine.html">
+                <a href="/wankangyuan/project/selectMyProject">
                     <div class="topT">项目</div>
                 </a>
                 <a href="data_mine.html">
@@ -104,7 +104,7 @@
                         </div>
                     </div>
 
-                    <div class="pro_menu pro_del">删除</div>
+                    <div class="pro_menu pro_del" onclick="to_delete()">删除</div>
                     <div class="pro_menu pro_open" onclick="to_public()">公开</div>
                     <div class="pro_menu pro_disopen" onclick="to_private()">取消公开</div>
                     <div class="pro_menu pro_createapp">+创建应用</div>
@@ -152,20 +152,24 @@
                         <input type="submit" class="inportB" value="创建" />
                     </form>
                 </div>               
-                <form id="appList" method="post">
+                <form id="appList" action="/wankangyuan/application/setStatus2" method="post">
                 <c:forEach items="${list }" var="app" varStatus="appList">
                     <div class="PJK2li">
                         <div class="PJK2litop">
                             <div class="PJK2litopT2">${app.appName }</div>
                             <!-- <div class="PJK2litopI"></div> -->
                             <div class="fuxuanK3">
-                                <input type="checkbox" class="input_check" id="check${appList.count }" value="${app.id }">
+                                <input name="ids" type="checkbox" class="input_check" id="check${appList.count }" value="${app.id }">
                                 <label for="check${appList.count }"></label>
                             </div>
                         </div>
                         <div class="PJK2licre">
                             <div class="PJK2licreT1">创建人：</div>
                             <div class="PJK2licreT2">${app.creator }</div>
+                        </div>
+                        <div class="PJK2litime">
+                            <div class="PJK2licreT1">状态：</div>
+                            <div class="PJK2licreT2">${app.status }</div>
                         </div>
                         <div class="PJK2litime">
                             <div class="PJK2litimeT1">
@@ -176,9 +180,11 @@
                             </div>
                         </div>
                         <div class="PJK2lidetail">${app.appOverview }</div>
-                        <div onclick="location='/wankangyuan/application/explain2?id=${app.id }'" class="PJK2liex">应用说明</div>
+                        <div onclick="location='/wankangyuan/application/updateForm2?id=${app.id }'" class="PJK2liex">应用说明</div>
                     </div>
                 </c:forEach>
+                <input id="pub_but" type="submit" name="cmd" value="公开" style="display:none">
+                <input id="pri_but" type="submit" name="cmd" value="私有" style="display:none">
                 </form>
             </div>
 
@@ -203,14 +209,68 @@
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/paging.js"></script>
 
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
+<c:if test="${not empty msg}">
+    <script type="text/javascript">
+    layer.msg("${msg}");
+    </script>
+</c:if>
+
 <script type="text/javascript">
 
 function to_public(){
-    $("#pub_but").click();
+    
+    var ids = $("input[name='ids']");
+    var checkNum = 0;
+    for (var i = 0; i < ids.length; i++) {
+        if (ids[i].checked) {
+            checkNum++;
+        }
+    }
+    if (checkNum == 0) {
+        layer.msg("请至少选中一个");
+    } else {
+        $("#pub_but").click();
+    }
 }
 
 function to_private(){
-    $("#pri_but").click();
+    var ids = $("input[name='ids']");
+    var checkNum = 0;
+    for (var i = 0; i < ids.length; i++) {
+        if (ids[i].checked) {
+            checkNum++;
+        }
+    }
+    if (checkNum == 0) {
+        layer.msg("请至少选中一个");
+    } else {
+        $("#pri_but").click();
+    }
+}
+
+function to_delete(){
+    var ids = $("input[name='ids']");
+    var checkNum = 0;
+    for (var i = 0; i < ids.length; i++) {
+        if (ids[i].checked) {
+            checkNum++;
+        }
+    }
+    if (checkNum == 0) {
+        layer.msg("请至少选中一个");
+    } else {
+        layer.confirm('删除不能撤销，请确认是否删除?',{
+          btn: ['确认','取消'], //按钮
+          icon: 2
+        }, function(){
+            $("#appList").attr('action',"/wankangyuan/application/delete2");
+            $("#appList").submit();
+          
+        }, function(){
+            return;
+        });
+    }
 }
 
 

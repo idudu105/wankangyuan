@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.liutianjun.pojo.User;
 import com.liutianjun.service.UserAppRelationService;
@@ -39,10 +40,17 @@ public class UserAppRelationController {
 	 * String
 	 */
 	@RequestMapping(value="/addToMine{index}",method=RequestMethod.POST)
-	public String addToMine(Integer[] ids,@PathVariable String index) {
+	public String addToMine(Integer[] ids,
+			@PathVariable String index,
+			RedirectAttributes attributes) {
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 	    User user = userService.selectByUsername(username);
-		userAppRelationService.addToMineById(user.getId(), username, ids);
+	    String msg = "操作失败";
+		int i = userAppRelationService.addToMineById(user.getId(), username, ids);
+		if(i>0) {
+			msg = "添加成功";
+		}
+		attributes.addFlashAttribute("msg", msg);
 		return "redirect:/application/viewMine"+index;
 	}
 	
@@ -55,10 +63,18 @@ public class UserAppRelationController {
 	 * String
 	 */
 	@RequestMapping(value="/removeFromMine{index}",method=RequestMethod.POST)
-	public String removeFromMine(Integer[] ids,@PathVariable String index) {
+	public String removeFromMine(Integer[] ids,
+			@PathVariable String index,
+			RedirectAttributes attributes) {
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
         User user = userService.selectByUsername(username);
-		userAppRelationService.removeFromMineById(user.getId(), ids);
+		
+		String msg = "操作失败";
+		int i = userAppRelationService.removeFromMineById(user.getId(), ids);
+		if(i>0) {
+			msg = "移除成功";
+		}
+		attributes.addFlashAttribute("msg", msg);
 		return "redirect:/application/viewMine"+index;
 	}
 }

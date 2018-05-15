@@ -13,6 +13,7 @@
 		http://www.springframework.org/schema/websocket
 		http://www.springframework.org/schema/websocket/spring-websocket.xsd">
 		
+	<mvc:annotation-driven /> 
 	<!-- 自动扫描注入 Controller -->
 	<context:component-scan base-package="com.*.controller"></context:component-scan>
 	

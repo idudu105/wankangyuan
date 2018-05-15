@@ -19,7 +19,7 @@ public interface ApplicationService {
 	int insert(Application record);
 	
 	//根据主键删除应用
-	int deleteByPrimaryKey(Integer id);
+	int deleteByIds(Integer[] ids);
 	
 	//更新应用
 	int updateByPrimaryKey(Application record);

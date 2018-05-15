@@ -22,7 +22,7 @@
         <div class="box">
             <div class="top">
                 <h1><img src="<%=request.getContextPath()%>/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
-                <a href="project_mine.html">
+                <a href="/wankangyuan/project/selectMyProject">
                     <div class="topT">项目</div>
                 </a>
                 <a href="data_mine.html">
@@ -265,10 +265,36 @@
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/paging.js"></script>
 
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
+<c:if test="${not empty msg}">
+    <script type="text/javascript">
+    layer.msg("${msg}");
+    </script>
+</c:if>
+
 <script type="text/javascript">
 function removeFromMine(){
-    $("#appList").attr('action',"/wankangyuan/userAppRelation/removeFromMine");
-    $("#appList").submit();
+    var ids = $("input[name='ids']");
+    var checkNum = 0;
+    for (var i = 0; i < ids.length; i++) {
+        if (ids[i].checked) {
+            checkNum++;
+        }
+    }
+    if (checkNum == 0) {
+        layer.msg("请至少选中一个");
+    } else {
+        layer.confirm('请确认是否移除?',{
+          btn: ['确认','取消'], //按钮
+          icon: 2
+        }, function(){
+		    $("#appList").attr('action',"/wankangyuan/userAppRelation/removeFromMine");
+		    $("#appList").submit();
+          
+        }, function(){
+            return;
+        });
+    }
 }
 
     $('#box').paging({
