@@ -88,14 +88,20 @@
                         <div class="appexpGJZK">
                             <div class="appexpGJZKC">
                             
-                                <div class="appexpGJZ">
+                                <!-- <div class="appexpGJZ">
                                     <div class="appexpGJZt">DNA</div>
                                     <div class="appexpGJZx"></div>
                                 </div>
                                 <div class="appexpGJZ">
                                     <div class="appexpGJZt">RNA</div>
                                     <div class="appexpGJZx"></div>
+                                </div> -->
+                            <c:forEach items="${keywords }" var="keyword">
+                                <div class="appexpGJZ">
+                                    <div class="appexpGJZt">${keyword }</div>
+                                    <div class="appexpGJZx"></div>
                                 </div>
+                            </c:forEach>
                                 
                             </div>
                             <div class="appexpGJZadk">
@@ -177,7 +183,7 @@ function to_update(){
         result += (index === maxIndex) ? content : content + ','; 
     });
     $("input[name='keywords']").val(result);
-    alert(result);
+    //alert(result);
     $("#appSub").submit();
 }
 

@@ -144,6 +144,10 @@
                             <div class="PJK2licreT2">${app.creator }</div>
                         </div>
                         <div class="PJK2litime">
+                            <div class="PJK2licreT1">状态：</div>
+                            <div class="PJK2licreT2">${app.status }</div>
+                        </div>
+                        <div class="PJK2litime">
                             <div class="PJK2litimeT1">
                                <fmt:formatDate type="date" value="${app.createTime }" />
                             </div>

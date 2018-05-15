@@ -130,6 +130,13 @@
 	                        <div class="PJK2licreT2">${app.creator }</div>
 	                    </div>
 	                    <div class="PJK2litime">
+                            <div class="PJK2licreT1">状态：</div>
+                            <div class="PJK2licreT2">
+                                <c:if test="${app.creator eq user.username }">我创建的</c:if>
+                                <c:if test="${app.creator ne user.username }">${app.status }</c:if>
+                            </div>
+                        </div>
+	                    <div class="PJK2litime">
 	                        <div class="PJK2litimeT1">
 	                           <fmt:formatDate type="date" value="${app.createTime }" />
 	                        </div>

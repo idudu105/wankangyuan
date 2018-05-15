@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -181,7 +182,7 @@ public class ApplicationController {
 	 * String
 	 */
 	@RequestMapping(value="/explain",method=RequestMethod.GET)
-	public String showExplain(Integer id, Model model, @PathVariable String index) {
+	public String showExplain(Integer id, Model model) {
 		Application application = applicationService.selectByPrimaryKey(id);
 		model.addAttribute("application", application);
 		return "jsp/application/app_explain.jsp";
@@ -196,8 +197,11 @@ public class ApplicationController {
 	@RequestMapping(value="/updateForm{index}",method=RequestMethod.GET)
 	public String viewUpdateForm(Integer id, Model model, @PathVariable String index) {
 		Application application = applicationService.selectByPrimaryKey(id);
-		String string = application.getKeywords();
-		
+		String strkewwords = application.getKeywords();
+		if(StringUtils.isNotBlank(strkewwords)) {
+			String[] keywords = strkewwords.split(",");
+			model.addAttribute("keywords", keywords);
+		}
 		
 		model.addAttribute("application", application);
 		
