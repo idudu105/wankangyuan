@@ -2,8 +2,8 @@ package com.xtkong.model;
 
 public class SourceFiled {
 	private int csf_id; // 采集源字段ID
-	private int cs_id; // 采集源ID
 	private String csf_name; // 采集字段名
+	private int cs_id; // 采集源ID
 	private String type; // 类型
 	private String check; // 校验规则
 	private boolean enumerated; // 是否可枚举 0 不可；1 可枚举
@@ -14,6 +14,25 @@ public class SourceFiled {
 	private int create_uid; // 创建人
 	private String update_datetime; // 更新时间
 	private int update_uid; // 更新人
+
+	private String creator; // 创建人
+	private String updater; // 更新人
+	
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+
+	public String getUpdater() {
+		return updater;
+	}
+
+	public void setUpdater(String updater) {
+		this.updater = updater;
+	}
 
 	public int getCsf_id() {
 		return csf_id;

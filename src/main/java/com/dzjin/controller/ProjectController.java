@@ -118,18 +118,18 @@ public class ProjectController {
 	}
 	
 	@RequestMapping("/selectCreatedProject")
-	public String selectCreatedProject(HttpSession httpSession){
+	public String selectCreatedProject(HttpSession httpSession , Integer creator){
 		
-		List<Project> projects = projectService.selectCreatedProject(1);
+		List<Project> projects = projectService.selectCreatedProject(creator);
 		httpSession.setAttribute("projects", projects);
 		
 		return "redirect:/pages/project_create.jsp";
 	}
 	
 	@RequestMapping("/selectMyProject")
-	public String selectMyProject(HttpSession httpSession){
+	public String selectMyProject(HttpSession httpSession , Integer user_id){
 		
-		List<Project> projects = projectService.selectMyProject(1);
+		List<Project> projects = projectService.selectMyProject(user_id);
 		httpSession.setAttribute("projects", projects);
 		
 		return "redirect:/pages/project_mine.jsp";

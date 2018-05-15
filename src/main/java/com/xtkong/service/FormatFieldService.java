@@ -20,7 +20,7 @@ public class FormatFieldService {
 	 * @param ft_id 格式类型
 	 * @return 选取格式字段列表
 	 */
-	public List<FormatField> selectFormatField(Integer ft_id){
-		return formatFieldDao.selectFormatField(ft_id);
+	public List<FormatField> getFormatFields(Integer ft_id){
+		return formatFieldDao.getFormatFields(ft_id);
 	}
 }

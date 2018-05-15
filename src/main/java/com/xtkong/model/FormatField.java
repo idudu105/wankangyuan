@@ -2,8 +2,8 @@ package com.xtkong.model;
 
 public class FormatField {
 	private int ff_id;// 格式字段ID
-	private int ft_id;	// 格式类型ID
 	private String ff_name;	// 格式字段名
+	private int ft_id;	// 格式类型ID
 	public int getFf_id() {
 		return ff_id;
 	}
