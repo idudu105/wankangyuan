@@ -2,6 +2,10 @@ package com.xtkong.model;
 
 import java.util.List;
 
+/**
+ * 格式类型
+ *
+ */
 public class FormatType {
 	private int ft_id;// 格式类型ID
 	private String ft_name; // 格式类型名
@@ -12,11 +16,21 @@ public class FormatType {
 	private int update_uid;
 	private String update_datetime;// 更新时间
 	private boolean is_view;// 状态
-	
+
 	private String updater;// 更新人
 	private String creator;// 创建人
-	
+
 	private List<FormatType> formatTypeFloders;
+
+	private List<FormatField> formatFields;
+
+	public List<FormatField> getFormatFields() {
+		return formatFields;
+	}
+
+	public void setFormatFields(List<FormatField> formatFields) {
+		this.formatFields = formatFields;
+	}
 
 	public int getFt_id() {
 		return ft_id;
@@ -113,7 +127,5 @@ public class FormatType {
 	public void setFormatTypeFloders(List<FormatType> formatTypeFloders) {
 		this.formatTypeFloders = formatTypeFloders;
 	}
-
-	
 
 }

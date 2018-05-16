@@ -2,16 +2,19 @@ package com.xtkong.model;
 
 import java.util.List;
 
+/**
+ * 采集源
+ *
+ */
 public class Source {
 	private int cs_id;// 采集源ID
 	private String cs_name;// 采集源名
 	private boolean is_view;// 是否显示到前端 0不显示；1显示
 
-	private List<SourceField> sourceFileds;
+	private List<SourceField> sourceFields;
 
 	private List<FormatType> formatTypes;
-	
-	
+
 	public List<FormatType> getFormatTypes() {
 		return formatTypes;
 	}
@@ -20,12 +23,12 @@ public class Source {
 		this.formatTypes = formatTypes;
 	}
 
-	public List<SourceField> getSourceFileds() {
-		return sourceFileds;
+	public List<SourceField> getSourceFields() {
+		return sourceFields;
 	}
 
-	public void setSourceFileds(List<SourceField> sourceFileds) {
-		this.sourceFileds = sourceFileds;
+	public void setSourceFields(List<SourceField> sourceFields) {
+		this.sourceFields = sourceFields;
 	}
 
 	public int getCs_id() {

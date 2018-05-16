@@ -2,7 +2,6 @@ package com.xtkong.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +36,10 @@ public class SourceService {
 		return sourceDao.selectSourceForAdmin();
 	}
 	
-	public Source getSource(Integer cs_id){
-		return sourceDao.getSource(cs_id);
+	public Source getSourceByCs_id(Integer cs_id){
+		return sourceDao.getSourceByCs_id(cs_id);
+	}
+	public Source getSourceLimit( Integer num){
+		return sourceDao.getSourceLimit(num);
 	}
 }
