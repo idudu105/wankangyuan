@@ -199,6 +199,70 @@
 	                                <div class="box_xytabz active">
 	                                </c:if>
 	                                <c:if test="${status.index!=whichactive}">
+<<<<<<< HEAD
+	                              	 <div class="box_xytabz">
+	                                </c:if> 
+	                                    <div class="box_xytabzK">
+	                                        <div class="box_xytabzT">${source.cs_name}-配置</div>
+	                                        <div class="tableedit">
+	                                            <div class="tableeditz tableeditzadd">+新增</div>
+	                                            <div class="tableeditz tableeditzedit">/编辑</div>
+	                                            <div class="tableeditz tableeditzdel">-删除</div>
+	                                        </div>
+	                                        <div class="tablebox">
+	                                            <table class="biaoge table-bordered">
+	                                                <div class="biaotou">
+	                                                    <tr role="row">
+	                                                        <th class="biaotouth">
+	                                                            <input type="checkbox" class="quanxuan">全选
+	                                                        </th>
+	                                                        <th class="biaotouth">字段名</th>
+	                                                        <th class="biaotouth">类型</th>
+	                                                        <th class="biaotouth">校验规则</th>
+	                                                        <th class="biaotouth">是否可枚举</th>
+	                                                        <th class="biaotouth">是否必填</th>
+	                                                        <th class="biaotouth">错误信息提示</th>
+	                                                        <th class="biaotouth">创建时间</th>
+	                                                        <th class="biaotouth">更新时间</th>
+	                                                        <th class="biaotouth">创建人</th>
+	                                                        <th class="biaotouth">更新人</th>
+	                                                    </tr>
+	                                                </div>
+	                                                <div class="biaoxiang">
+	                                            		<c:forEach items="${source.sourceFileds}" var="sourceFiled">
+	                                      	            	<tr role="row" class="trbx" >
+	                                                       		<th class="biaoxiangth"><input type="checkbox" class="xuanze"id="${sourceFiled.csf_id}"></th>
+			                                                    <th class="biaoxiangth" id="csf_name${sourceFiled.csf_id}">${sourceFiled.csf_name}</th>
+			                                                    <th class="biaoxiangth" id="type${sourceFiled.csf_id}">${sourceFiled.type}</th>
+			                                                    <th class="biaoxiangth" id="check_rule${sourceFiled.csf_id}">${sourceFiled.check_rule}</th>
+			                                                    <th class="biaoxiangth" id="enumerated${sourceFiled.csf_id}">
+				                                                    <c:if test="${sourceFiled.enumerated== false}">
+									                                	否
+									                  	            </c:if>
+				                                                    <c:if test="${sourceFiled.enumerated== true}">
+									                                	是
+									                  	            </c:if>
+			                                                    </th>
+			                                                    <th class="biaoxiangth" id="not_null${sourceFiled.csf_id}">
+				                                                    <c:if test="${sourceFiled.not_null== false}">
+									                                	否
+									                  	            </c:if>
+				                                                    <c:if test="${sourceFiled.not_null== true}">
+									                                	是
+									                  	            </c:if>
+			                                                    </th>
+			                                                    <th class="biaoxiangth" id="description${sourceFiled.csf_id}">${sourceFiled.description}</th>
+			                                                    <th class="biaoxiangth" id="error_msg${sourceFiled.csf_id}">${sourceFiled.error_msg}</th>
+			                                                    <th class="biaoxiangth">${sourceFiled.create_datetime}</th>
+			                                                    <th class="biaoxiangth">${sourceFiled.update_datetime}</th>
+			                                                    <th class="biaoxiangth">${sourceFiled.creator}</th>
+			                                                    <th class="biaoxiangth">${sourceFiled.updater}</th>
+	                                                 	   </tr>
+	                                               		</c:forEach>
+	                                                </div>
+	                                            </table>
+	                                        </div>
+=======
 	                                <div class="box_xytabz">
 	                                </c:if>
 	                                    <div class="box_xytabzT">${source.cs_name}配置</div>
@@ -206,6 +270,7 @@
 	                                        <div class="tableeditz tableeditzadd">+新增</div>
 	                                        <div class="tableeditz tableeditzedit">/编辑</div>
 	                                        <div class="tableeditz tableeditzdel">-删除</div>
+>>>>>>> 9584e23ea7e219f4f861cf6cbfe09e707ad951df
 	                                    </div>
 	                                    <div class="tablebox">
 	                                        <table class="biaoge table-bordered">
@@ -289,9 +354,13 @@
 
                             <!-- 新增metainfo_start -->
                             <div class="addbiaoxK">
+<<<<<<< HEAD
+                  		    	<form name="insertSourceFieldForm" >
+=======
 	                            <!-- form表单提交数据 -->
 	         				   	<form action="/wankangyuan/sourceFiled/insertSourceFiled">
 	         				   		<input name="cs_name1" style="display:none;"/>
+>>>>>>> 9584e23ea7e219f4f861cf6cbfe09e707ad951df
 	                                <div class="addbiaoxT">
 	                                    <div class="addbiaoxTt">新增采集源字段</div>
 	                                    <div class="addbiaoxTx" ></div>
@@ -303,7 +372,7 @@
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">类型：</div>
 	                                    <select name="type" id="">
-	                                        <option value="字符"  checked="checked">字符</option>
+	                                        <option value="字符" checked="checked">字符</option>
 	                                        <option value="数值">数值</option>
 	                                        <option value="日期">日期</option>
 	                                        <option value="图片">图片</option>
@@ -337,7 +406,11 @@
 	                                    <input type="text" class="addbiaoxlik" name="error_msg"/>
 	                                </div>
 	                                <div class="addbiaoxB">
+<<<<<<< HEAD
+	                                    <input type="button" value="提交" class="addbiaoxBb" id="insertSourceFieldSubmit"/>
+=======
 	                                    <input type="submit" value="提交" class="addbiaoxBb" />
+>>>>>>> 9584e23ea7e219f4f861cf6cbfe09e707ad951df
 	                                    <input type="button" value="关闭" class="addbiaoxBb2" />
 	                                </div>
                            		</form>
@@ -347,20 +420,33 @@
 
                             <!-- 更新metainfo_start -->
                             <div class="addbiaoxK2">
+<<<<<<< HEAD
+                            	<form name="updateSourceFieldForm" >
+=======
 		                        <!-- form表单提交数据 -->
 	         				   	<form action="/wankangyuan/sourceFiled/updateSourceFiled">
+>>>>>>> 9584e23ea7e219f4f861cf6cbfe09e707ad951df
 	                                <div class="addbiaoxT">
 	                                    <div class="addbiaoxTt">更新采集源字段</div>
 	                                    <div class="addbiaoxTx"></div>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">字段名：</div>
+<<<<<<< HEAD
+	                                    <input type="text" class="addbiaoxlik" name="edit_csf_name" id="edit_csf_name"/>
+	                                </div>
+	                                <div class="addbiaoxli">
+	                                    <div class="addbiaoxlit">类型：</div>
+	                                    <select name="edit_type">
+	                                        <option value="字符" >字符</option>
+=======
 	                                    <input type="text" class="addbiaoxlik" name="csf_name"/>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">类型：</div>
 	                                    <select name="type" id="">
 	                                        <option value="字符"  checked="checked">字符</option>
+>>>>>>> 9584e23ea7e219f4f861cf6cbfe09e707ad951df
 	                                        <option value="数值">数值</option>
 	                                        <option value="日期">日期</option>
 	                                        <option value="图片">图片</option>
@@ -369,6 +455,15 @@
 	                                </div>		                                
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">检测规则：</div>
+<<<<<<< HEAD
+	                                    <input type="text" class="addbiaoxlik" name="edit_check_rule" id="edit_check_rule"/>
+	                                </div>
+	                                <div class="addbiaoxli">
+	                                    <div class="addbiaoxlit">是否可枚举：</div>
+	                                    <select name="edit_enumerated" id="edit_enumerated">
+	                                        <option value="是">是</option>
+	                                        <option value="否">否</option>
+=======
 	                                    <input type="text" class="addbiaoxlik" name="check_rule"/>
 	                                </div>
 	                                <div class="addbiaoxli">
@@ -376,17 +471,37 @@
 	                                    <select name="enumerated" id="">
 	                                        <option value="true"  checked="checked" >是</option>
 	                                        <option value="false">否</option>
+>>>>>>> 9584e23ea7e219f4f861cf6cbfe09e707ad951df
 	                                    </select>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">是否必填：</div>
+<<<<<<< HEAD
+	                                    <select name="edit_not_null" id="edit_not_null">
+	                                        <option value="是">是</option>
+	                                        <option value="否">否</option>
+=======
 	                                    <select name="not_null" id="">
 	                                        <option value="true"  checked="checked">是</option>
 	                                        <option value="false">否</option>
+>>>>>>> 9584e23ea7e219f4f861cf6cbfe09e707ad951df
 	                                    </select>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">字段描述信息：</div>
+<<<<<<< HEAD
+	                                    <input type="text" class="addbiaoxlik" name="edit_description" id="edit_description"/>
+	                                </div>
+	                                <div class="addbiaoxli">
+	                                    <div class="addbiaoxlit">错误信息提示：</div>
+	                                    <input type="text" class="addbiaoxlik" name="edit_error_msg" id="edit_error_msg"/>
+	                                </div>
+	                                <div class="addbiaoxB">
+                                    <input type="button" value="提交" class="addbiaoxBb" id="updateSourceFieldSubmit"/>
+                                    <input type="button" value="关闭" class="addbiaoxBb2" />
+                                </div>
+                            	</form>
+=======
 	                                    <input type="text" class="addbiaoxlik" name="description"/>
 	                                </div>
 	                                <div class="addbiaoxli">
@@ -398,6 +513,7 @@
 	                                    <input type="button" value="关闭" class="addbiaoxBb2" />
 	                                </div>
                            		</form>
+>>>>>>> 9584e23ea7e219f4f861cf6cbfe09e707ad951df
                             </div>
                             <!-- 更新metainfo_end -->
 
@@ -415,6 +531,8 @@
                             </div>
                             <!-- 删除metainfo_end -->
 
+<<<<<<< HEAD
+=======
                         </div>
                     </div>
                     <!-- 数据采集表end -->
@@ -480,6 +598,7 @@
 
                                 
                             </div>
+>>>>>>> 9584e23ea7e219f4f861cf6cbfe09e707ad951df
                             <!-- 添加格式化数据类型start -->
                             <div class="addbiaoxK">
                           	 	<!-- form表单提交数据 -->
@@ -651,6 +770,109 @@
 
     <script type="text/javascript" src="js/datamanage.js"></script>
     <!-- end: JavaScript-->
+<<<<<<< HEAD
+    <script type="text/javascript">
+    
+    //获取采集源
+    $(".box_xxtabz").click(function(){ 
+        $("input[name='cs_id']").val(this.id);
+    });
+    
+    //新增数据源字段提交按钮，OK
+    $("#insertSourceFieldSubmit").click(function (){
+    	$.ajax({
+			url:"/wankangyuan/sourceFiled/insertSourceFiled",
+			type:"post",
+			dataType:"json",
+			data:{
+				cs_id:insertSourceFieldForm.cs_id.value,
+				csf_name:insertSourceFieldForm.csf_name.value,
+				type:insertSourceFieldForm.type.value,
+				check_rule:insertSourceFieldForm.check_rule.value,
+				enumerated:insertSourceFieldForm.enumerated.value,
+				not_null:insertSourceFieldForm.not_null.value,
+				description:insertSourceFieldForm.description.value,
+				error_msg:insertSourceFieldForm.error_msg.value
+			},
+			success : function(data){
+				if(data.result == true){
+					window.location.href=data.url;
+				}else{
+					alert(data.message);
+				}
+			},
+			error : function(){
+				alert("联网失败");
+			}
+		});		
+    });
+    
+    $("#updateSourceFieldSubmit").click(function (){
+    	alert("更新数据源的字段");
+    	
+    	
+    	
+    });
+    
+ 	
+	//编辑前准备
+	function getEditCs_fid(csf_id){
+		$("input[name='edit_csf_id']").val(csf_id);
+		
+	}
+	
+	function edit(){
+		
+		alert(updateSourceFiledForm.edit_csf_id.value);
+		alert("22222222222222222");
+		//进行ajax请求
+		$.ajax({
+			url:"/wankangyuan/sourceFiled/getSourceFiled",
+			type:"post",
+			dataType:"json",
+			data:{
+				csf_id:updateSourceFiledForm.edit_csf_id.value
+			},
+			success : function(data){
+				if(data.result == true){
+					updateSourceFiledForm.csf_name.val(data.sourceFiled.csf_name);
+				}else{
+					alert(data.message);
+				}
+			},
+			error : function(){
+				alert("联网失败");
+			}
+		});		
+	}
+	//提交编辑后结果
+	
+	 //提交新建的结果
+	function insertSourceFiled1(){
+		//进行ajax请求
+		$.ajax({
+			url:"/wankangyuan/formatType/insertFormatType",
+			type:"post",
+			dataType:"json",
+			data:{
+				cs_id:insertFormatTypeForm.cs_id.value,
+				ft_name:insertFormatTypeForm.ft_name.value,
+				is_view:insertFormatTypeForm.is_view.value,
+				floder:insertFormatTypeForm.floder.value
+			},
+			success : function(data){
+				if(data.result == true){
+					window.location.href=data.url;
+				}else{
+					alert(data.message);
+				}
+			},
+			error : function(){
+				alert("联网失败");
+			}
+		});			
+	}
+=======
     
     <script>
     
@@ -659,6 +881,7 @@
         $("input[name='cs_name1']").val($(this).text());
     }); 
     
+>>>>>>> 9584e23ea7e219f4f861cf6cbfe09e707ad951df
     </script>
 </body>
 </html>
