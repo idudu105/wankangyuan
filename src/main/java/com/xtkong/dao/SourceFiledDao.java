@@ -33,7 +33,7 @@ public interface SourceFiledDao {
 	@Select("select * from collection_source_field where csf_id=#{csf_id}")
 	public SourceFiled getSourceFiled(Integer csf_id);
 
-	@Delete("delete from collection_source_field where cs_id=#{cs_id}")
-	public int deleteProjectFloder(@Param("cs_id") Integer cs_id);
+	@Delete("delete from collection_source_field where csf_id=#{csf_id}")
+	public int deleteSourceFiled(@Param("csf_id") Integer csf_id);
 
 }
