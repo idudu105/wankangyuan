@@ -177,8 +177,8 @@ public class ProjectFloderFileController {
 			map.put("message", "文件不能超过10M");
 			return map;
 		}
-		//文件上传地址
-		String path ="G:/projectFiles/";
+		//文件上传地址String path ="G:/projectFiles/";
+		String path ="/usr/projectFiles/";
         String fileName = file.getOriginalFilename();
         String type="."+fileName.substring(fileName.lastIndexOf(".")+1);
         String originalFilename = new String(fileName);
