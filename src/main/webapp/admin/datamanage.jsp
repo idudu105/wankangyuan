@@ -205,7 +205,7 @@
 	                                        <div class="box_xytabzT">${source.cs_name}-配置</div>
 	                                        <div class="tableedit">
 	                                            <div class="tableeditz tableeditzadd">+新增</div>
-	                                            <div class="tableeditz tableeditzedit"onclick="edit()">/编辑</div>
+	                                            <div class="tableeditz tableeditzedit">/编辑</div>
 	                                            <div class="tableeditz tableeditzdel">-删除</div>
 	                                        </div>
 	                                        <div class="tablebox">
@@ -230,24 +230,28 @@
 	                                                <div class="biaoxiang">
 	                                            		<c:forEach items="${source.sourceFileds}" var="sourceFiled">
 	                                      	            	<tr role="row" class="trbx" >
-	                                                       		<th class="biaoxiangth"><input type="checkbox" class="xuanze"id="${sourceFiled.csf_id}"onclick="getEditCs_fid(${sourceFiled.csf_id})"></th>
-			                                                    <th class="biaoxiangth">${sourceFiled.csf_name}</th>
-			                                                    <th class="biaoxiangth">${sourceFiled.type}</th>
-			                                                    <th class="biaoxiangth">${sourceFiled.check_rule}</th>
-			                                                    <c:if test="${sourceFiled.enumerated== false}">
-								                                	<th class="biaoxiangth">否</th>
-								                  	            </c:if>
-			                                                    <c:if test="${sourceFiled.enumerated== true}">
-								                                	<th class="biaoxiangth">是</th>
-								                  	            </c:if>
-			                                                    <c:if test="${sourceFiled.not_null== false}">
-								                                	<th class="biaoxiangth">否</th>
-								                  	            </c:if>
-			                                                    <c:if test="${sourceFiled.not_null== true}">
-								                                	<th class="biaoxiangth">是</th>
-								                  	            </c:if>
-			                                                    <th class="biaoxiangth">${sourceFiled.description}</th>
-			                                                    <th class="biaoxiangth">${sourceFiled.error_msg}</th>
+	                                                       		<th class="biaoxiangth"><input type="checkbox" class="xuanze"id="${sourceFiled.csf_id}"></th>
+			                                                    <th class="biaoxiangth" id="csf_name${sourceFiled.csf_id}">${sourceFiled.csf_name}</th>
+			                                                    <th class="biaoxiangth" id="type${sourceFiled.csf_id}">${sourceFiled.type}</th>
+			                                                    <th class="biaoxiangth" id="check_rule${sourceFiled.csf_id}">${sourceFiled.check_rule}</th>
+			                                                    <th class="biaoxiangth" id="enumerated${sourceFiled.csf_id}">
+				                                                    <c:if test="${sourceFiled.enumerated== false}">
+									                                	否
+									                  	            </c:if>
+				                                                    <c:if test="${sourceFiled.enumerated== true}">
+									                                	是
+									                  	            </c:if>
+			                                                    </th>
+			                                                    <th class="biaoxiangth" id="not_null${sourceFiled.csf_id}">
+				                                                    <c:if test="${sourceFiled.not_null== false}">
+									                                	否
+									                  	            </c:if>
+				                                                    <c:if test="${sourceFiled.not_null== true}">
+									                                	是
+									                  	            </c:if>
+			                                                    </th>
+			                                                    <th class="biaoxiangth" id="description${sourceFiled.csf_id}">${sourceFiled.description}</th>
+			                                                    <th class="biaoxiangth" id="error_msg${sourceFiled.csf_id}">${sourceFiled.error_msg}</th>
 			                                                    <th class="biaoxiangth">${sourceFiled.create_datetime}</th>
 			                                                    <th class="biaoxiangth">${sourceFiled.update_datetime}</th>
 			                                                    <th class="biaoxiangth">${sourceFiled.creator}</th>
@@ -338,7 +342,7 @@
 
                             <!-- 新增采集源字段start -->
                             <div class="addbiaoxK">
-                  		    	<form name="insertSourceFileForm" >
+                  		    	<form name="insertSourceFieldForm" >
 	                                <div class="addbiaoxT">
 	                            	    <input name="cs_id" style="display:none;"/>
 	                                    <div class="addbiaoxTt">新增采集源字段</div>
@@ -351,7 +355,7 @@
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">类型：</div>
 	                                    <select name="type" id="">
-	                                        <option value="字符"  checked="checked">字符</option>
+	                                        <option value="字符" checked="checked">字符</option>
 	                                        <option value="数值">数值</option>
 	                                        <option value="日期">日期</option>
 	                                        <option value="图片">图片</option>
@@ -385,7 +389,7 @@
 	                                    <input type="text" class="addbiaoxlik" name="error_msg"/>
 	                                </div>
 	                                <div class="addbiaoxB">
-	                                    <input type="button" value="提交" class="addbiaoxBb" onclick="insertSourceFiled()"/>
+	                                    <input type="button" value="提交" class="addbiaoxBb" id="insertSourceFieldSubmit"/>
 	                                    <input type="button" value="关闭" class="addbiaoxBb2" />
 	                                </div>
 	                        	</form>
@@ -394,7 +398,7 @@
 
                             <!-- 更新采集源字段_start -->
                             <div class="addbiaoxK2">
-                            	<form name="updateSourceFiledForm" >
+                            	<form name="updateSourceFieldForm" >
 	                                <div class="addbiaoxT">
 	                                    <input name="edit_csf_id" style="display:none;"/>
 	                                    <div class="addbiaoxTt">更新metainfo</div>
@@ -402,46 +406,46 @@
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">字段名：</div>
-	                                    <input type="text" class="addbiaoxlik" />
+	                                    <input type="text" class="addbiaoxlik" name="edit_csf_name" id="edit_csf_name"/>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">类型：</div>
-	                                    <select name="" id="">
-	                                        <option value="">字符</option>
-	                                        <option value="">数值</option>
-	                                        <option value="">日期</option>
-	                                        <option value="">图片</option>
-	                                        <option value="">文件</option>
+	                                    <select name="edit_type">
+	                                        <option value="字符" >字符</option>
+	                                        <option value="数值">数值</option>
+	                                        <option value="日期">日期</option>
+	                                        <option value="图片">图片</option>
+	                                        <option value="文件">文件</option>
 	                                    </select>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">检测规则：</div>
-	                                    <input type="text" class="addbiaoxlik" />
+	                                    <input type="text" class="addbiaoxlik" name="edit_check_rule" id="edit_check_rule"/>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">是否可枚举：</div>
-	                                    <select name="" id="">
-	                                        <option value="">是</option>
-	                                        <option value="">否</option>
+	                                    <select name="edit_enumerated" id="edit_enumerated">
+	                                        <option value="是">是</option>
+	                                        <option value="否">否</option>
 	                                    </select>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">是否必填：</div>
-	                                    <select name="" id="">
-	                                        <option value="">是</option>
-	                                        <option value="">否</option>
+	                                    <select name="edit_not_null" id="edit_not_null">
+	                                        <option value="是">是</option>
+	                                        <option value="否">否</option>
 	                                    </select>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">字段描述信息：</div>
-	                                    <input type="text" class="addbiaoxlik" />
+	                                    <input type="text" class="addbiaoxlik" name="edit_description" id="edit_description"/>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">错误信息提示：</div>
-	                                    <input type="text" class="addbiaoxlik" />
+	                                    <input type="text" class="addbiaoxlik" name="edit_error_msg" id="edit_error_msg"/>
 	                                </div>
 	                                <div class="addbiaoxB">
-                                    <input type="button" value="提交" class="addbiaoxBb" onclick="updateSourceFiled()"/>
+                                    <input type="button" value="提交" class="addbiaoxBb" id="updateSourceFieldSubmit"/>
                                     <input type="button" value="关闭" class="addbiaoxBb2" />
                                 </div>
                             	</form>
@@ -461,10 +465,6 @@
                                 </div>
                             </div>
                             <!-- 删除metainfo_end -->
-
-
-
-
 
                             <!-- 添加格式化数据类型start -->
                             <div class="addbiaoxK_2">
@@ -837,29 +837,27 @@
     <script type="text/javascript" src="/wankangyuan/admin/js/datamanage.js"></script>
     <!-- end: JavaScript-->
     <script type="text/javascript">
+    
     //获取采集源
     $(".box_xxtabz").click(function(){ 
         $("input[name='cs_id']").val(this.id);
     });
-    function getsource(cs_id){
     
-    }
- 	 //提交新建的结果
-	function insertSourceFiled(){
-		//进行ajax请求
-		$.ajax({
+    //新增数据源字段提交按钮，OK
+    $("#insertSourceFieldSubmit").click(function (){
+    	$.ajax({
 			url:"/wankangyuan/sourceFiled/insertSourceFiled",
 			type:"post",
 			dataType:"json",
 			data:{
-				cs_id:insertSourceFiledForm.cs_id.value,
-				csf_name:insertSourceFiledForm.csf_name.value,
-				type:insertSourceFiledForm.type.value,
-				check_rule:insertSourceFiledForm.check_rule.value,
-				enumerated:insertSourceFiledForm.enumerated.value,
-				not_null:insertSourceFiledForm.not_null.value,
-				description:insertSourceFiledForm.description.value,
-				error_msg:insertSourceFiledForm.error_msg.value
+				cs_id:insertSourceFieldForm.cs_id.value,
+				csf_name:insertSourceFieldForm.csf_name.value,
+				type:insertSourceFieldForm.type.value,
+				check_rule:insertSourceFieldForm.check_rule.value,
+				enumerated:insertSourceFieldForm.enumerated.value,
+				not_null:insertSourceFieldForm.not_null.value,
+				description:insertSourceFieldForm.description.value,
+				error_msg:insertSourceFieldForm.error_msg.value
 			},
 			success : function(data){
 				if(data.result == true){
@@ -871,8 +869,17 @@
 			error : function(){
 				alert("联网失败");
 			}
-		});			
-	}
+		});		
+    });
+    
+    $("#updateSourceFieldSubmit").click(function (){
+    	alert("更新数据源的字段");
+    	
+    	
+    	
+    });
+    
+ 	
 	//编辑前准备
 	function getEditCs_fid(csf_id){
 		$("input[name='edit_csf_id']").val(csf_id);
@@ -906,7 +913,7 @@
 	//提交编辑后结果
 	
 	 //提交新建的结果
-	function insertSourceFiled(){
+	function insertSourceFiled1(){
 		//进行ajax请求
 		$.ajax({
 			url:"/wankangyuan/formatType/insertFormatType",

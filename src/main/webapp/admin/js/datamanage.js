@@ -70,7 +70,7 @@ $(document).ready(function(){
     // var atableeditzadd=obox_xytabzK.querySelectorAll('.tableeditzadd');//新增metainfo按钮
     var oaddbiaoxK=document.querySelectorAll('.addbiaoxK')[0];//新增metainfo框
     var oaddbiaoxTx=oaddbiaoxK.querySelectorAll('.addbiaoxTx')[0];//新增metainfo框关闭按钮
-//    var oaddbiaoxBb=oaddbiaoxK.querySelectorAll('.addbiaoxBb')[0];//新增metainfo框提交按钮
+    var oaddbiaoxBb=oaddbiaoxK.querySelectorAll('.addbiaoxBb')[0];//新增metainfo框提交按钮
     var oaddbiaoxBb2=oaddbiaoxK.querySelectorAll('.addbiaoxBb2')[0];//新增metainfo框关闭按钮2
     var aaddbiaoxlik=oaddbiaoxK.querySelectorAll('.addbiaoxlik');//新增metainfo框名称框
 
@@ -101,11 +101,11 @@ $(document).ready(function(){
             oaddbiaoxK.style.display="none";
             oaddbiaoxPD=0;
     }
-//    oaddbiaoxBb.onclick=function(){
-//            // alert("提交成功")
-//            oaddbiaoxK.style.display="none";
-//            oaddbiaoxPD=0;
-//    }
+    oaddbiaoxBb.onclick=function(){
+            // alert("提交成功")
+            oaddbiaoxK.style.display="none";
+            oaddbiaoxPD=0;
+    }
 
 
     // 更新metainfo
@@ -126,21 +126,54 @@ $(document).ready(function(){
     var aaddbiaoxlik=oaddbiaoxK2.querySelectorAll('.addbiaoxlik');//更新metainfo框名称框
 
     var oaddbiaoxPD2=0;
+    
+    for(var i=0;i<atableeditzedit.length;i++){
+        (function(index){
+            atableeditzedit[index].onclick=function(){
+                if(oaddbiaoxPD2==0){
+                    //在此处查询出选中的复选框
+            		var afuxuanK=document.querySelectorAll('.trbx');
+                    var afuxuan=[];
+                    for(var i=0;i<afuxuanK.length;i++){
+                        afuxuan.push(afuxuanK[i].querySelectorAll('.xuanze')[0]);
+                    }
+                    var ids = [];
+                    for(var i=0;i<afuxuanK.length;i++){
+                    	if(afuxuan[i].checked){
+                    		ids.push(afuxuan[i].id);
+                    	}
+                    }
+                    if(ids.length == 0){
+                    	alert("请勾选数据源字段！");
+                    }else if(ids.length > 1){
+                    	alert("最多只能编辑一条记录！");
+                    }else{
+                    	//先对数据进行填充
+                    	$("#edit_csf_id").val(ids[0]);
+                    	//字段名
+                    	$("#edit_csf_name").val($('#csf_name'+ids[0]).text());
+                    	//类型
+                    	$("#edit_type").val($('#type'+ids[0]).text());
+                    	//检测规则
+                    	$("#edit_check_rule").val($('#check_rule'+ids[0]).text());
+                    	//是否可枚举
+                    	$("#edit_csf_name").val($('#csf_name'+ids[0]).text());
+                    	//是否必填
+                    	$("#edit_csf_name").val($('#csf_name'+ids[0]).text());
+                    	//字段描述信息
+                    	$("#edit_csf_name").val($('#csf_name'+ids[0]).text());
+                    	//错误提示信息
+                    	$("#edit_csf_name").val($('#csf_name'+ids[0]).text());
 
+                    	oaddbiaoxK2.style.display="block";
+                        oaddbiaoxPD2=1;
+                        
+                    }
 
-//    for(var i=0;i<atableeditzedit.length;i++){
-//        (function(index){
-//            atableeditzedit[index].onclick=function(){
-//                if(oaddbiaoxPD2==0){
-//                    oaddbiaoxK2.style.display="block";
-//                    oaddbiaoxPD2=1;
-//                    for(var j=0;j<aaddbiaoxlik.length;j++){
-//                        aaddbiaoxlik[j].value="";
-//                    }
-//                }
-//            }
-//        })(i)
-//    }
+                }
+            }
+        })(i)
+    }
     
     oaddbiaoxTx.onclick=function(){
             oaddbiaoxK2.style.display="none";
