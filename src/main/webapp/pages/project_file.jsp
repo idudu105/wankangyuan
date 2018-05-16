@@ -16,7 +16,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="/wankangyuan/static/js/project1.js"></script>
 <script type="text/javascript">
     window.onload=function(){
-        //project0();
+        project0();
         pro_data();
         pro_file();
     }
@@ -29,7 +29,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <a href="/wankangyuan/project/selectMyProject?user_id=1">
                 	<div class="topT active">项目</div>
                 </a>
-                <div class="topT">格式数据</div>
+                <a href="/wankangyuan/admin/formatdata" target="_blank">
+                	<div class="topT">格式数据</div>
+                </a>
                 <a href="/wankangyuan/application/viewMine">
                     <div class="topT ">应用</div>
                 </a>
@@ -59,7 +61,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="prof_lbLt">
                         <div class="prof_lbLtL">文件树</div>
                         <div class="prof_lbLtR">
-                            <input type="button" class="prof_lbLtRt prof_lbLtRadd" value="添加" />
+                            <input type="button" class="prof_lbLtRt prof_lbLtRaddg" value="添加根" />
+                            <div class="prof_lbLtRline"></div>
+                            <input type="button" class="prof_lbLtRt prof_lbLtRaddy" value="添加叶" />
                             <div class="prof_lbLtRline"></div>
                             <input type="button" class="prof_lbLtRt prof_lbLtRtup" value="上传" />
                             <div class="prof_lbLtRline"></div>
@@ -74,36 +78,36 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                	<c:forEach items="${projectFloders}" var="projectFloder">
                                		<div class="PJliB1" >
                                 	<div class="PJliB1L">
-                                        <div class="PJliB2Lic" onclick="clickFloder(${projectFloder.id})"></div>
-                                        <div class="PJliB1Lt" onclick="clickFloder(${projectFloder.id})">${projectFloder.floder_name }</div>
-                                        <div class="PJliBLi PJliBLi2" onclick="clickFloder(${projectFloder.id})"></div>
+                                        <div class="PJliB2Lic"></div>
+                                        <div class="PJliB1Lt" id="${projectFloder.id}">${projectFloder.floder_name}</div>
+                                        <div class="PJliBLi PJliBLi2" ></div>
                                     </div>
                                     <div class="PJliBR">
 	                                    <c:if test="${projectFloder.projectFloders != null }">
 	                                    	<c:forEach items="${projectFloder.projectFloders}" var="projectFloder1">
 			                                    <div class="PJliB2">
 		                                            <div class="PJliB2L" >
-		                                                <div class="PJliB2Lic" onclick="clickFloder(${projectFloder1.id})"></div>
-		                                                <div class="PJliB1Lt" onclick="clickFloder(${projectFloder1.id})">${projectFloder1.floder_name}</div>
-		                                                <div class="PJliBLi PJliBLi2" onclick="clickFloder(${projectFloder1.id})"></div>
+		                                                <div class="PJliB2Lic" ></div>
+		                                                <div class="PJliB1Lt" id="${projectFloder1.id}">${projectFloder1.floder_name}</div>
+		                                                <div class="PJliBLi PJliBLi2" ></div>
 		                                            </div>
 						                            <div class="PJliBR">
 					                                    <c:if test="${projectFloder1.projectFloders != null }">
 					                                    	<c:forEach items="${projectFloder1.projectFloders}" var="projectFloder2">
 							                                    <div class="PJliB2">
 						                                            <div class="PJliB2L" >
-						                                                <div class="PJliB2Lic" onclick="clickFloder(${projectFloder2.id})"></div>
-						                                                <div class="PJliB1Lt" onclick="clickFloder(${projectFloder2.id})">${projectFloder2.floder_name}</div>
-						                                                <div class="PJliBLi PJliBLi2" onclick="clickFloder(${projectFloder2.id})"></div>
+						                                                <div class="PJliB2Lic" ></div>
+						                                                <div class="PJliB1Lt" id="${projectFloder2.id}">${projectFloder2.floder_name}</div>
+						                                                <div class="PJliBLi PJliBLi2" ></div>
 						                                            </div>
 																	<div class="PJliBR">
 																		<c:if test="${projectFloder2.projectFloders != null }">
 																		<c:forEach items="${projectFloder2.projectFloders}" var="projectFloder3">
 																			<div class="PJliB2">
 																			    <div class="PJliB2L">
-																		           	<div class="PJliB2Lic" onclick="clickFloder(${projectFloder2.id})"></div>
-																		           	<div class="PJliB1Lt" onclick="clickFloder(${projectFloder2.id})">${projectFloder3.floder_name}</div>
-																				   	<div class="PJliBLi PJliBLi2" onclick="clickFloder(${projectFloder2.id})"></div>
+																		           	<div class="PJliB2Lic" ></div>
+																		           	<div class="PJliB1Lt" id="${projectFloder3.id}">${projectFloder3.floder_name}</div>
+																				   	<div class="PJliBLi PJliBLi2" ></div>
 																			    </div>
 																			</div>
 																		</c:forEach>
@@ -131,6 +135,48 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 <div class="prof_lbLmBt2">${myFileNum}</div>
                             </div>
                         </div>
+                        <div class="prof_addK">
+                            <div class="prof_aeT">
+                                <div class="prof_aeTt">添加文件夹</div>
+                                <div class="prof_aeTx"></div>
+                            </div>
+                            <div class="prof_aeM">
+                                <div class="prof_aeMz">
+                                    <div class="prof_aeMzt">文件夹名：</div>
+                                    <input type="text" class="prof_aeMzp" id="leafFloderName"/>
+                                </div>
+                            </div>
+                            <div class="prof_aeB">
+                                <input type="button" class="prof_aeb" value="提交" id="submitLeaf"/>
+                            </div>
+                        </div>
+                        <div class="prof_editK">
+                            <div class="prof_aeT">
+                                <div class="prof_aeTt">修改文件夹</div>
+                                <div class="prof_aeTx"></div>
+                            </div>
+                            <div class="prof_aeM">
+                                <div class="prof_aeMz">
+                                    <div class="prof_aeMzt">文件夹名：</div>
+                                    <input type="text" class="prof_aeMzp" id="floderNameEdit"/>
+                                </div>
+                            </div>
+                            <div class="prof_aeB">
+                                <input type="button" class="prof_aeb" value="提交" />
+                            </div>
+                        </div>
+                        <div class="prof_delK">
+                            <div class="prof_aeT">
+                                <div class="prof_aeTt">删除文件夹</div>
+                                <div class="prof_aeTx"></div>
+                            </div>
+                            <div class="prof_aeM">
+                                <div class="prof_aeMt">确定删除选中的文件夹吗？</div>
+                            </div>
+                            <div class="prof_aeB">
+                                <input type="button" class="prof_aeb" value="确定" />
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="prof_lbR">
@@ -145,15 +191,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </div>
                         <div class="prof_lbRmUL">
                             <div class="prof_lbRmULt">
-                            
-			                   	<div class="allK">
+			                            
+						        <div class="allK">
 			                        <div class="quanxuanK">
 			                            <input type="checkbox" class="input_check" id="check0">
 			                            <label for="check0"></label>
 			                        </div>
 			                        <div class="allT">全选</div>
 			                    </div>
-			                    
+
                                 <div class="prof_lbRmULtli prof_lbRmULt2">文件名称</div>
                                 <div class="prof_lbRmULtli prof_lbRmULt3">类型</div>
                                 <div class="prof_lbRmULtli prof_lbRmULt4">大小</div>
@@ -215,48 +261,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
     	var ids = [];
     	var floder_id = 0; 
-    	
-    	function clickFloder(id){
-    		floder_id = id;
-    		//进行网络请求显示右面的文件夹
-    		$.ajax({
-    			url:"/wankangyuan/projectFloderFile/selectFilesByFloderId",
-    			type:"post",
-    			data:{
-    				floder_id:floder_id
-    			},
-    			dataType:"json",
-    			success : function(data){
-    				if(data.result == true){
-    					//这个地方直接更新右面的文件列表
-    					var filesList = $("#filesList");
-    					filesList.empty();
-    					for(var index in data.projectFiles){
-    						filesList.append('<div class="prof_lbRmULmLI">'+
-	                                '<div class="fuxuanK2">'+
-	                              ' <input type="checkbox" class="input_check" id="check'+data.projectFiles[index].id+'" value="'+data.projectFiles[index].id+'">'+
-	                                '<label for="check'+data.projectFiles[index].id+'"></label>'+
-	                           	'</div>'+
-                                '<div class="prof_lbRmULmli prof_lbRmULt2">'+data.projectFiles[index].file_name+'</div>'+
-                                '<div class="prof_lbRmULmli prof_lbRmULt3">'+data.projectFiles[index].file_type+'</div>'+
-                                '<div class="prof_lbRmULmli prof_lbRmULt4">'+data.projectFiles[index].file_size+'</div>'+
-                                '<div class="prof_lbRmULmli prof_lbRmULt5">'+data.projectFiles[index].create_datetime+'</div>'+
-                                '<div class="prof_lbRmULmli prof_lbRmULt6">'+data.projectFiles[index].creator_id+'</div>'+
-                                '<div class="prof_lbRmULmli prof_lbRmULt7 prof_lbRmULmYL">预览</div>'+
-                            '</div>');
-    					}
-    				}else{
-    					alert(data.message);
-    				}
-    			},
-    			error : function(){
-    				alert("联网失败");
-    			}
-    			
-    		});
-    		
-    		
-    	}
+    	var g_y;
     	
 		//点击上传附加按钮
 		function clickFile(){
@@ -308,9 +313,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  	}
 	  	
 	  	//提交一组文件
-	  	function upFiles(){
-	  		alert(ids);
-	  		
+	  	function upFiles(){	  		
 	  		var files = ids.join(",");
 	  		
 	  		//进行ajax请求

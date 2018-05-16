@@ -13,7 +13,7 @@ import java.util.Date;
 
 public class GenEntityMysql {
 
-	private String filePath = "F:/workspace/eclipseTemp/wankangyuan/src/main/java/com/dzjin/model";
+	private String filePath = "F:/workspace/eclipseWork/wankangyuan/src/main/java/com/dzjin/model";
 	private String packageOutPath = "com.dzjin.model";// 指定实体生成所在包的路径
 	private String authorName = "dzjin";// 作者名字
 	private String tablename = "user";// 表名

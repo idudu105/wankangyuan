@@ -74,8 +74,16 @@ public class ProjectFloderFileController {
 	 */
 	@RequestMapping("/addProjectFloder")
 	@ResponseBody
-	public Map<String, Object> addProjectFloder(ProjectFloder projectFloder){
+	public Map<String, Object> addProjectFloder(HttpSession session , ProjectFloder projectFloder , Integer g_y){
 		Map<String, Object> map = new HashMap<>();
+		projectFloder.setIs_root(Short.valueOf("0"));
+		if(g_y == 1){
+			//是添加根目录
+			projectFloder.setParent_id(null);
+			Project project = (Project) session.getAttribute("project");
+			projectFloder.setP_id(project.getId());
+			projectFloder.setIs_root(Short.valueOf("1"));
+		}
 		if(projectFloderService.insertProjectFloder(projectFloder) == 1){
 			map.put("result", true);
 		}else{
@@ -94,9 +102,9 @@ public class ProjectFloderFileController {
 	 */
 	@RequestMapping("/deleteProjectFloder")
 	@ResponseBody
-	public Map<String, Object> deleteProjectFloder(String id){
+	public Map<String, Object> deleteProjectFloder(String floder_id){
 		Map<String, Object> map = new HashMap<>();
-		if(projectFloderService.deleteProjectFloder(id) == 1){
+		if(projectFloderService.deleteProjectFloder(floder_id) == 1){
 			map.put("result", true);
 		}else{
 			map.put("result", false);
@@ -126,7 +134,7 @@ public class ProjectFloderFileController {
 
 	
 	/**
-	 * 批量提交文件
+	 * 批量提交文件，绑定到文件夹，如果没有选中文件夹，那么提交绑定操作将不会执行任何操作
 	 * @param session
 	 * @return
 	 */
@@ -145,8 +153,9 @@ public class ProjectFloderFileController {
 	
 	
 	/**
-	 * 
+	 * 查询某个文件夹下面的文件
 	 * @param session
+	 * @param floder_id	文件夹的ID
 	 * @return
 	 * 
 	 * 请求样例：http://localhost:8080/wankangyuan/projectFloderFile/selectFilesByFloderId?floder_id=1
@@ -162,7 +171,7 @@ public class ProjectFloderFileController {
 	}
 	
 	/**
-	 * 文件上传功能
+	 * 文件上传
 	 * @param file
 	 * @return
 	 */
@@ -177,7 +186,8 @@ public class ProjectFloderFileController {
 			map.put("message", "文件不能超过10M");
 			return map;
 		}
-		//文件上传地址
+		//文件上传地址String path ="/usr/projectFiles/";
+		
 		String path ="G:/projectFiles/";
         String fileName = file.getOriginalFilename();
         String type="."+fileName.substring(fileName.lastIndexOf(".")+1);
@@ -224,6 +234,12 @@ public class ProjectFloderFileController {
         return map;
 	}
 	
+	/**
+	 * 批量删除文件
+	 * @param session
+	 * @param ids
+	 * @return
+	 */
 	@RequestMapping("/deleteFiles")
 	@ResponseBody
 	public Map<String, Object> deleteFiles(HttpSession session , String ids){

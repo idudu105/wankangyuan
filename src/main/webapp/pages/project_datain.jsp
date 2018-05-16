@@ -32,7 +32,9 @@
                 <a href="/wankangyuan/project/selectMyProject?user_id=1">
                 	<div class="topT active">项目</div>
                 </a>
-                <div class="topT">格式数据</div>
+                <a href="/wankangyuan/admin/formatdata" target="_blank">
+                	<div class="topT">格式数据</div>
+                </a>
                 <div class="topT">应用</div>
                 <div class="touxiangK">
                     <img src="/wankangyuan/static/img/touxiang.png" alt="" class="touxiang" />

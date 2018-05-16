@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2018-04-23 15:32:03
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-05-14 16:37:11
+* @Last Modified time: 2018-05-16 10:36:25
 */
 
 
@@ -181,7 +181,10 @@ function project1(){
                     oBTSX.style.display="block";
                     BTSXpd=j;
                 }
-                var BTSXleft=aPJListli[j].getBoundingClientRect().left;
+                var BTSXleft=aPJListli[j].offsetLeft;
+                oBTSX.name=aPJListli[j].innerHTML;
+                console.log(oBTSX.name);
+                console.log(BTSXleft);
                 if(BTSXleft>1118){
                     BTSXleft=1118;
                 }
@@ -440,11 +443,16 @@ function pro_file(){
     }
     oprof_lbLtRtup.onclick=function(){
         if(ofileKpd==0){
-            ofileaddK.style.display="block";
-            console.log(owidth/2);
-            console.log(ofileaddK.offsetWidth/2);
-            ofileaddK.style.left=owidth/2-ofileaddK.offsetWidth/2+"px";//创建框居中
-            ofileKpd=1;
+        	if(floder_id != 0){
+                ofileaddK.style.display="block";
+                console.log(owidth/2);
+                console.log(ofileaddK.offsetWidth/2);
+                ofileaddK.style.left=owidth/2-ofileaddK.offsetWidth/2+"px";//创建框居中
+                ofileKpd=1;
+        	}else{
+        		alert("请选择文件夹！");
+        	}
+
         }
     }
 
@@ -463,7 +471,7 @@ function pro_file(){
     }
 
     console.log(aPJliBL);
-
+    /*
     for(var i=0;i<aPJliBL.length;i++){
         (function(index){
             aPJliBL[index].onclick=function(event){
@@ -474,12 +482,213 @@ function pro_file(){
                 event.stopPropagation();
             }
         })(i)
-    }
+    }*/
 
     oprof_lbLmT.onclick=function(){
         for(var j=0;j<aPJliBL.length;j++){
             aPJliBL[j].style.color="#666";
         }
+    }
+
+    var aPJliB1Lt=document.querySelectorAll('.PJliB1Lt');
+    var aPJliB2Lt=document.querySelectorAll('.PJliB2Lt');
+    var awenjian=[];
+    for(var i=0;i<aPJliB1Lt.length;i++){
+        awenjian.push(aPJliB1Lt[i]);
+    }
+    for(var i=0;i<aPJliB2Lt.length;i++){
+        awenjian.push(aPJliB2Lt[i]);
+    }
+
+    //文件树文字点击变蓝
+    for(var i=0;i<awenjian.length;i++){
+        (function(index){
+            awenjian[index].onclick=function(){
+                for(var j=0;j<awenjian.length;j++){
+                    awenjian[j].style.color="#666";
+                }
+                awenjian[index].style.color="#5ca0e5";
+                //将floderID更新一下并进行网络请求
+                floder_id = awenjian[index].id;
+                var id = awenjian[index].id;
+        		//进行网络请求显示右面的文件夹
+        		$.ajax({
+        			url:"/wankangyuan/projectFloderFile/selectFilesByFloderId",
+        			type:"post",
+        			data:{
+        				floder_id:id
+        			},
+        			dataType:"json",
+        			success : function(data){
+        				if(data.result == true){
+        					//这个地方直接更新右面的文件列表
+        					var filesList = $("#filesList");
+        					filesList.empty();
+        					for(var index in data.projectFiles){
+        						filesList.append(
+        							'<div class="prof_lbRmULmLI">'+
+    	                                '<div class="fuxuanK2">'+
+    	                                	'<input type="checkbox" class="input_check" id="check'+data.projectFiles[index].id+'" value="'+data.projectFiles[index].id+'">'+
+    	                                	'<label for="check'+data.projectFiles[index].id+'"></label>'+
+	    	                           	'</div>'+
+	                                    '<div class="prof_lbRmULmli prof_lbRmULt2">'+data.projectFiles[index].file_name+'</div>'+
+	                                    '<div class="prof_lbRmULmli prof_lbRmULt3">'+data.projectFiles[index].file_type+'</div>'+
+	                                    '<div class="prof_lbRmULmli prof_lbRmULt4">'+data.projectFiles[index].file_size+'</div>'+
+	                                    '<div class="prof_lbRmULmli prof_lbRmULt5">'+data.projectFiles[index].create_datetime+'</div>'+
+	                                    '<div class="prof_lbRmULmli prof_lbRmULt6">'+data.projectFiles[index].creator_id+'</div>'+
+	                                    '<div class="prof_lbRmULmli prof_lbRmULt7 prof_lbRmULmYL">预览</div>'+
+        							'</div>');
+        					}
+        				}else{
+        					alert(data.message);
+        				}
+        			},
+        			error : function(){
+        				alert("联网失败");
+        			}
+        			
+        		});
+                
+                
+            }
+        })(i)
+    }
+
+//文件树添加根/叶、修改、删除
+    var oprof_lbLtRaddg=document.querySelectorAll('.prof_lbLtRaddg')[0];//添加根按钮
+    var oprof_lbLtRaddy=document.querySelectorAll('.prof_lbLtRaddy')[0];//添加叶按钮
+    var oprof_lbLtRtch=document.querySelectorAll('.prof_lbLtRtch')[0];//修改按钮
+    var oprof_lbLtRtde=document.querySelectorAll('.prof_lbLtRtde')[0];//删除按钮
+
+    //添加
+    var oprof_addK=document.querySelectorAll('.prof_addK')[0];//添加根、叶框
+    var oprof_aeTx=oprof_addK.querySelectorAll('.prof_aeTx')[0];//添加根、叶框关闭按钮
+    var oprof_aeb=oprof_addK.querySelectorAll('.prof_aeb')[0];//添加根、叶框提交按钮
+
+    oprof_lbLtRaddg.onclick=function(){
+    	g_y = 1;
+        oprof_addK.style.display="block";
+    }
+
+    oprof_lbLtRaddy.onclick=function(){
+    	g_y = 0;
+        if(floder_id == 0){
+        	alert("请选中父文件夹");
+        	return;
+        }else{
+        	 oprof_addK.style.display="block";
+        }
+    }
+
+    oprof_aeTx.onclick=function(){
+        oprof_addK.style.display="none";
+    }
+    oprof_aeb.onclick=function(){
+        oprof_addK.style.display="none";
+        var floder_name  = $("#leafFloderName").val();
+        $.ajax({
+        	url:"/wankangyuan/projectFloderFile/addProjectFloder",
+        	type:"post",
+        	data:{
+        		g_y:g_y,
+        		parent_id:floder_id,
+        		floder_name:floder_name
+        	},
+        	dataType:"json",
+        	success : function(data){
+        		if(data.result == true){
+        			window.location.href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId";
+        		}else{
+        			alert("叶目录添加失败！");
+        		}
+        	},
+        	error : function(){
+        		alert("联网失败");
+        	}
+        });
+        
+        
+    }
+
+
+    //修改
+    var oprof_editK=document.querySelectorAll('.prof_editK')[0];//添加根、叶框
+    var oprof_aeTx=oprof_editK.querySelectorAll('.prof_aeTx')[0];//添加根、叶框关闭按钮
+    var oprof_aeb=oprof_editK.querySelectorAll('.prof_aeb')[0];//添加根、叶框提交按钮
+
+    oprof_lbLtRtch.onclick=function(){
+    	if(floder_id == 0){
+    		alert("请选中待修改文件夹");
+    	}else{
+    		oprof_editK.style.display="block";
+    	}     
+    }
+    oprof_aeTx.onclick=function(){
+        oprof_editK.style.display="none";
+    }
+    oprof_aeb.onclick=function(){
+        oprof_editK.style.display="none";
+        var floder_name  = $("#floderNameEdit").val();
+        $.ajax({
+        	url:"/wankangyuan/projectFloderFile/updateProjectFloder",
+        	type:"post",
+        	data:{
+        		id:floder_id,
+        		floder_name:floder_name
+        	},
+        	dataType:"json",
+        	success : function(data){
+        		if(data.result == true){
+        			window.location.href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId";
+        		}else{
+        			alert("文件名称修改失败！");
+        		}
+        	},
+        	error : function(){
+        		alert("联网失败");
+        	}
+        });
+        
+    }
+
+
+    //删除
+    var oprof_delK=document.querySelectorAll('.prof_delK')[0];//添加根、叶框
+    var oprof_aeTx=oprof_delK.querySelectorAll('.prof_aeTx')[0];//添加根、叶框关闭按钮
+    var oprof_aeb=oprof_delK.querySelectorAll('.prof_aeb')[0];//添加根、叶框提交按钮
+
+    oprof_lbLtRtde.onclick=function(){
+    	if(floder_id == 0){
+    		alert("请选中待删除文件夹！");
+    	}else{
+    		oprof_delK.style.display="block";
+    	}    
+    }
+    oprof_aeTx.onclick=function(){
+        oprof_delK.style.display="none";
+    }
+    oprof_aeb.onclick=function(){
+    	$.ajax({
+    		url:"/wankangyuan/projectFloderFile/deleteProjectFloder",
+    		type:"post",
+    		data:{
+    			floder_id:floder_id
+    		},
+    		dataType:"json",
+    		success : function(data){
+    			if(data.result == true){
+    				alert("删除成功！");
+    				window.location.href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId";
+    			}else{
+    				alert("删除失败！");
+    			}
+    		},
+    		error : function(){
+    			alert("联网失败");
+    		}
+    		
+    	});
+        oprof_delK.style.display="none";
     }
 
 }
@@ -646,16 +855,20 @@ function data_mine(){
     var opro_addul=document.querySelectorAll('.pro_addul')[0];//添加项目列表
     var apro_addli=opro_addul.querySelectorAll('.pro_addli');//添加各个项目
 
-    pro_addkPD=0;
+    // pro_addkPD=0;
 
-    opro_addk.onclick=function(){
-        if(pro_addkPD==0){
+    opro_addk.onclick=function(event){
+        // if(pro_addkPD==0){
             opro_addul.style.display="block";
-            pro_addkPD=1;
-        }else{
-            opro_addul.style.display="none";
-            pro_addkPD=0;
-        }
+        //     pro_addkPD=1;
+        // }else{
+        //     opro_addul.style.display="none";
+        //     pro_addkPD=0;
+        // }
+        event.stopPropagation();
+    }
+    document.onclick=function(){
+        opro_addul.style.display="none";
     }
     for(var i=0;i<apro_addli.length;i++){
         (function(index){
@@ -665,6 +878,11 @@ function data_mine(){
             }
         })(i)
     }
+
+
+    var opro_addul=document.querySelectorAll('.pro_addul')[0];
+
+    opro_addul.style.right="0";
 }
 
 
@@ -977,8 +1195,208 @@ function app_exp2(){
             oappexpGJZ.appendChild(oappexpGJZx);
             oappexpGJZKC.appendChild(oappexpGJZ);
 
+            oappexpGJZadp.value="";
+
             add_deleteX();
         }
+    }
+
+
+}
+
+function data_dataclick2(){
+    var oPJliBK=document.querySelectorAll('.PJliBK')[0];
+
+    var aPJliBLt=[];
+    var aPJliB1Lt=oPJliBK.querySelectorAll('.PJliB1Lt');
+    var aPJliB2Lt=oPJliBK.querySelectorAll('.PJliB2Lt');
+
+    for(var i=0;i<aPJliB1Lt.length;i++){
+        aPJliBLt.push(aPJliB1Lt[i]);
+    }
+    for(var i=0;i<aPJliB2Lt.length;i++){
+        aPJliBLt.push(aPJliB2Lt[i]);
+    }
+    // console.log(aPJliBLt);
+
+
+    // for(var i=0;i<aPJliBLt.length;i++){
+    //     (function(index){
+    //         aPJliBLt[index].onclick=function(event){
+    //             for(var j=0;j<aPJliBLt.length;j++){
+    //                 aPJliBLt[j].style.color="#666";
+    //             }
+    //             aPJliBLt[index].style.color="#5ca0e5";
+    //             // event.stopPropagation();
+    //         }
+    //     })(i)
+    // }
+
+
+    // document.onclick=function(){
+    //     for(var j=0;j<aPJliBLt.length;j++){
+    //         aPJliBLt[j].style.color="#666";
+    //     }
+    // }
+
+//添加修改节点框
+    var odaclLb_add=document.querySelectorAll('.daclLb_add')[0];//添加按钮
+    var odaclLb_mod=document.querySelectorAll('.daclLb_mod')[0];//修改按钮
+    var odaclLb_addroot=document.querySelectorAll('.daclLb_addroot')[0];//添加根按钮
+    var odataeditK=document.querySelectorAll('.dataeditK')[0];//框
+    var odataeditTx=odataeditK.querySelectorAll('.dataeditTx')[0];//关闭按钮
+
+    odaclLb_add.onclick=function(){
+        odataeditK.style.display="block";
+    }
+    odaclLb_mod.onclick=function(){
+        odataeditK.style.display="block";
+    }
+    odaclLb_addroot.onclick=function(){
+        odataeditK.style.display="block";
+    }
+    odataeditTx.onclick=function(){
+        odataeditK.style.display="none";
+    }
+}
+
+function data_dataclick(){
+    var oprodaclmRz=document.querySelectorAll('.prodaclmRz')[0];
+    var oquanxuanK=oprodaclmRz.querySelectorAll('.quanxuanK')[0];
+    var oquanxuan=oquanxuanK.querySelectorAll('.input_check')[0];
+    var afuxuanK=oprodaclmRz.querySelectorAll('.fuxuanK5');
+
+    var afuxuan=[];
+    // var afuxuanK=[];
+
+    if(afuxuanK[0]){
+        for(var i=0;i<afuxuanK.length;i++){
+            afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+        }
+    }
+    console.log(afuxuanK)
+    
+        
+    oquanxuanK.onchange=function(){
+        if(oquanxuan.checked){
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan[i].checked=1;
+            }
+        }else{
+            // console.log(2);
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan[i].checked=0;
+            }
+        }
+    }
+    
+
+
+    if(afuxuanK[0]){
+        for(var i=0;i<afuxuanK.length;i++){
+            (function(index){
+                afuxuanK[i].onchange=function(){
+                    var fuxuanPD=0;
+                    for(var j=0;j<afuxuanK.length;j++){
+                        if(afuxuan[j].checked){
+                            fuxuanPD++;
+                        }
+                        console.log(afuxuan[j].checked);
+                    }
+                    console.log(fuxuanPD);
+                    if(fuxuanPD==afuxuanK.length){
+                        oquanxuan.checked=1;
+                    }else if(fuxuanPD!=afuxuanK.length){
+                        oquanxuan.checked=0;
+                    }
+                }
+            })(i)
+        }
+    }
+
+
+
+
+    var oprodaclmRz2=document.querySelectorAll('.prodaclmRz2')[0];
+    var oquanxuanK2=oprodaclmRz2.querySelectorAll('.quanxuanK')[0];
+    var oquanxuan2=oquanxuanK2.querySelectorAll('.input_check')[0];
+    var afuxuanK2=oprodaclmRz2.querySelectorAll('.fuxuanK5');
+
+
+    var afuxuan2=[];
+    // var afuxuanK2=[];
+
+    if(afuxuanK2[0]){
+        for(var i=0;i<afuxuanK2.length;i++){
+            afuxuan2.push(afuxuanK2[i].querySelectorAll('.input_check')[0]);
+        }
+    }
+
+    oquanxuanK2.onchange=function(){
+        if(oquanxuan2.checked){
+            for(var i=0;i<afuxuanK2.length;i++){
+                afuxuan2[i].checked=1;
+            }
+        }else{
+            // console.log(2);
+            for(var i=0;i<afuxuanK2.length;i++){
+                afuxuan2[i].checked=0;
+            }
+        }
+    }
+
+    if(afuxuanK2[0]){
+        for(var i=0;i<afuxuanK2.length;i++){
+            (function(index){
+                afuxuanK2[i].onchange=function(){
+                    var fuxuanPD2=0;
+                    for(var j=0;j<afuxuanK2.length;j++){
+                        if(afuxuan2[j].checked){
+                            fuxuanPD2++;
+                        }
+                        console.log(afuxuan2[j].checked);
+                    }
+                    console.log(fuxuanPD2);
+                    if(fuxuanPD2==afuxuanK2.length){
+                        oquanxuan2.checked=1;
+                    }else if(fuxuanPD2!=afuxuanK2.length){
+                        oquanxuan2.checked=0;
+                    }
+                }
+            })(i)
+        }
+    }
+
+
+//添加修改单个数据
+    var oclmRsb_add=document.querySelectorAll('.clmRsb_add')[0];//添加数据按钮
+    var oclmRsb_modify=document.querySelectorAll('.clmRsb_modify')[0];//修改数据按钮
+    var oclmRsb_inport=document.querySelectorAll('.clmRsb_inport')[0];//导入按钮
+    var oclmReditK=document.querySelectorAll('.clmReditK')[0];//添加修改数据框
+    var oclmReditTx=oclmReditK.querySelectorAll('.clmReditTx')[0];//添加修改数据框关闭按钮
+    var oclmReditb=oclmReditK.querySelectorAll('.clmReditb')[0];//添加修改数据框提交按钮
+
+    var oclmRinportK=document.querySelectorAll('.clmRinportK')[0];//导入框
+    var oinportTx=oclmRinportK.querySelectorAll('.inportTx')[0];//导入框
+
+
+    oclmRsb_add.onclick=function(){
+        oclmReditK.style.display="block";
+    }
+    oclmRsb_modify.onclick=function(){
+        oclmReditK.style.display="block";
+    }
+
+    oclmReditTx.onclick=function(){
+        oclmReditK.style.display="none";
+    }
+
+
+    oclmRsb_inport.onclick=function(){
+        oclmRinportK.style.display="block";
+    }
+    oinportTx.onclick=function(){
+        oclmRinportK.style.display="none";
     }
 
 

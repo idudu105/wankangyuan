@@ -34,8 +34,12 @@
 				<a href="project_mine.html">
 					<div class="topT active">项目</div>
 				</a>
-				<div class="topT">格式数据</div>
-				<div class="topT">应用</div>
+				<a href="/wankangyuan/admin/formatdata" target="_blank">
+                	<div class="topT">格式数据</div>
+                </a>
+				<a href="/wankangyuan/application/viewMine">
+                    <div class="topT ">应用</div>
+                </a>
 				<div class="touxiangK">
 					<img src="img/touxiang.png" alt="" class="touxiang" />
 				</div>
