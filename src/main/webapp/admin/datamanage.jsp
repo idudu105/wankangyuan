@@ -195,14 +195,14 @@
                             	
                                 <div class="box_xytabz active">
                                     <div class="box_xytabzK">
-                                        <div class="box_xytabzT">${sources[0].cs_name}-配置</div>
+                                        <div class="box_xytabzT" id="cs_name">${sources[0].cs_name}-配置</div>
                                         <div class="tableedit">
                                             <div class="tableeditz tableeditzadd">+新增</div>
                                             <div class="tableeditz tableeditzedit">/编辑</div>
                                             <div class="tableeditz tableeditzdel">-删除</div>
                                         </div>
                                         <div class="tablebox">
-                                            <table class="biaoge table-bordered">
+                                            <table class="biaoge table-bordered" id="sourceFieldTable">
                                                 <div class="biaotou">
                                                     <tr role="row">
                                                         <th class="biaotouth">
@@ -213,6 +213,7 @@
                                                         <th class="biaotouth">校验规则</th>
                                                         <th class="biaotouth">是否可枚举</th>
                                                         <th class="biaotouth">是否必填</th>
+                                                        <th class="biaotouth">字段描述信息</th>
                                                         <th class="biaotouth">错误信息提示</th>
                                                         <th class="biaotouth">创建时间</th>
                                                         <th class="biaotouth">更新时间</th>
@@ -288,7 +289,7 @@
                             <!-- 新增metainfo_start -->
                             <div class="addbiaoxK">
                   		    	<form name="insertSourceFieldForm" >
-	         				   		<input name="cs_name1" style="display:none;"/>
+	         				   		<input name="cs_id" style="display:none;"/>
 	                                <div class="addbiaoxT">
 	                                    <div class="addbiaoxTt">新增采集源字段</div>
 	                                    <div class="addbiaoxTx" ></div>
@@ -345,6 +346,7 @@
                             <!-- 更新metainfo_start -->
                             <div class="addbiaoxK2">
                             	<form name="updateSourceFieldForm" >
+                            		<input name="edit_csf_id" id="edit_csf_id" style="display:none;"/>
 	                                <div class="addbiaoxT">
 	                                    <div class="addbiaoxTt">更新采集源字段</div>
 	                                    <div class="addbiaoxTx"></div>
@@ -355,7 +357,7 @@
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">类型：</div>
-	                                    <select name="type" id="">
+	                                    <select name="edit_type" id="edit_type">
 	                                        <option value="字符"  checked="checked">字符</option>
 	                                        <option value="数值">数值</option>
 	                                        <option value="日期">日期</option>
@@ -369,14 +371,14 @@
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">是否可枚举：</div>
-	                                    <select name="enumerated" id="">
+	                                    <select name="edit_enumerated" id="edit_enumerated">
 	                                        <option value="true"  checked="checked" >是</option>
 	                                        <option value="false">否</option>
 	                                    </select>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">是否必填：</div>
-	                                    <select name="not_null" id="">
+	                                    <select name="edit_not_null" id="edit_not_null">
 	                                        <option value="true"  checked="checked">是</option>
 	                                        <option value="false">否</option>
 	                                    </select>
@@ -656,9 +658,91 @@
     //获取采集源
     $(".box_xxtabz").click(function(){ 
         $("input[name='cs_id']").val(this.id);
-        alert(this.id);
+        //$("input[name='edit_cs_id']").val(this.id);
+        
+        var cs_id = this.id;
+       	var sourceFieldTable = $("#sourceFieldTable");
+       	
+       	$.ajax({
+       		url:"/wankangyuan/source/getSourceAll",
+       		type:"post",
+       		data:{
+       			cs_id:cs_id
+       		},
+       		dataType:"json",
+       		success : function(data){
+       			if(data.result == true){
+       				
+       				//设置数据源的名称
+       				$("#cs_name").text(data.source.cs_name+'-配置');
+       				var sourceFields = data.source.sourceFileds;
+       				sourceFieldTable.empty();
+       				
+       				var str = '';
+       				str+='<div class="biaotou">';
+       				str+='<tr role="row">';
+       				str+='<th class="biaotouth">';
+       				str+='<input type="checkbox" class="quanxuan">全选';
+       				str+='</th>';
+       				str+='<th class="biaotouth">字段名</th>';
+       				str+='<th class="biaotouth">类型</th>';
+       				str+='<th class="biaotouth">校验规则</th>';
+       				str+='<th class="biaotouth">是否可枚举</th>';
+       				str+='<th class="biaotouth">是否必填</th>';
+       				str+='<th class="biaotouth">字段描述信息</th>';
+       				str+='<th class="biaotouth">错误信息提示</th>';
+       				str+='<th class="biaotouth">创建时间</th>';
+       				str+='<th class="biaotouth">更新时间</th>';
+       				str+='<th class="biaotouth">创建人</th>';
+       				str+='<th class="biaotouth">更新人</th>';
+       				str+='</tr>';
+       				str+='</div>';
+       				str+='<div class="biaoxiang">';
+       				for(var i in sourceFields){
+       					str+='<tr role="row" class="trbx" >';
+       					str+='<th class="biaoxiangth"><input type="checkbox" class="xuanze" id="'+sourceFields[i].csf_id+'"></th>';
+       					str+='<th class="biaoxiangth" id="csf_name'+sourceFields[i].csf_id+'">'+sourceFields[i].csf_name+'</th>';
+						str+='<th class="biaoxiangth" id="type'+sourceFields[i].csf_id+'">'+sourceFields[i].type+'</th>';
+						str+='<th class="biaoxiangth" id="check_rule'+sourceFields[i].csf_id+'">'+sourceFields[i].check_rule+'</th>';
+						if(sourceFields[i].enumerated == false){
+							str+='<th class="biaoxiangth" id="enumerated'+sourceFields[i].csf_id+'">否</th>';
+						}else{
+							str+='<th class="biaoxiangth" id="enumerated'+sourceFields[i].csf_id+'">是</th>';
+						}
+						
+						if(sourceFields[i].enumerated == false){
+							str+='<th class="biaoxiangth" id="enumerated'+sourceFields[i].not_null+'">否</th>';
+						}else{
+							str+='<th class="biaoxiangth" id="enumerated'+sourceFields[i].not_null+'">是</th>';
+						}
+						str+='<th class="biaoxiangth" id="description'+sourceFields[i].csf_id+'">'+sourceFields[i].description+'</th>';
+						
+						str+='<th class="biaoxiangth" id="error_msg'+sourceFields[i].csf_id+'">'+sourceFields[i].error_msg+'</th>';
+						str+='<th class="biaoxiangth">'+sourceFields[i].create_datetime+'</th>';
+						str+='<th class="biaoxiangth">'+sourceFields[i].update_datetime+'</th>';
+						str+='<th class="biaoxiangth">'+sourceFields[i].creator+'</th>';
+						str+='<th class="biaoxiangth">'+sourceFields[i].updater+'</th>';
+
+       					str+='</tr>';
+       				}
+       				str+='</div>';
+       				sourceFieldTable.html(str);
+
+       			}else{
+       				alert(data.message);
+       			}
+       		},
+       		error : function(){
+       			alert("联网失败");
+       		}
+       		
+       	});
+        
     });
-    /*
+    
+    
+    
+    
     //新增数据源字段提交按钮，OK
     $("#insertSourceFieldSubmit").click(function (){
     	$.ajax({
@@ -688,31 +772,27 @@
 		});		
     });
     
+    //更新数据源字段提交按钮，OK
     $("#updateSourceFieldSubmit").click(function (){
-    	alert("更新数据源的字段");
-    });
-    
- 	
-	//编辑前准备
-	function getEditCs_fid(csf_id){
-		$("input[name='edit_csf_id']").val(csf_id);
-	}
-	
-	function edit(){
-		
-		alert(updateSourceFiledForm.edit_csf_id.value);
-		alert("22222222222222222");
-		//进行ajax请求
-		$.ajax({
-			url:"/wankangyuan/sourceFiled/getSourceFiled",
+
+    	$.ajax({
+			url:"/wankangyuan/sourceFiled/updateSourceFiled",
 			type:"post",
 			dataType:"json",
 			data:{
-				csf_id:updateSourceFiledForm.edit_csf_id.value
+				csf_id:updateSourceFieldForm.edit_csf_id.value,
+				csf_name:updateSourceFieldForm.edit_csf_name.value,
+				type:updateSourceFieldForm.edit_type.value,
+				check_rule:updateSourceFieldForm.edit_check_rule.value,
+				enumerated:updateSourceFieldForm.edit_enumerated.value,
+				not_null:updateSourceFieldForm.edit_not_null.value,
+				description:updateSourceFieldForm.edit_description.value,
+				error_msg:updateSourceFieldForm.edit_error_msg.value
 			},
 			success : function(data){
 				if(data.result == true){
-					updateSourceFiledForm.csf_name.val(data.sourceFiled.csf_name);
+					alert("数据源字段更新成功！");
+					window.location.href="/wankangyuan/admin/formatdata";
 				}else{
 					alert(data.message);
 				}
@@ -720,8 +800,12 @@
 			error : function(){
 				alert("联网失败");
 			}
-		});		
-	}
+		});
+    	
+    });
+    
+ 	/*
+
 	//提交编辑后结果
 	
 	 //提交新建的结果
