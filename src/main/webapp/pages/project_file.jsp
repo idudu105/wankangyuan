@@ -261,6 +261,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
     	var ids = [];
     	var floder_id = 0; 
+    	var g_y;
     	
 		//点击上传附加按钮
 		function clickFile(){

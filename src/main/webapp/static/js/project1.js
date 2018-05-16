@@ -443,11 +443,16 @@ function pro_file(){
     }
     oprof_lbLtRtup.onclick=function(){
         if(ofileKpd==0){
-            ofileaddK.style.display="block";
-            console.log(owidth/2);
-            console.log(ofileaddK.offsetWidth/2);
-            ofileaddK.style.left=owidth/2-ofileaddK.offsetWidth/2+"px";//创建框居中
-            ofileKpd=1;
+        	if(floder_id != 0){
+                ofileaddK.style.display="block";
+                console.log(owidth/2);
+                console.log(ofileaddK.offsetWidth/2);
+                ofileaddK.style.left=owidth/2-ofileaddK.offsetWidth/2+"px";//创建框居中
+                ofileKpd=1;
+        	}else{
+        		alert("请选择文件夹！");
+        	}
+
         }
     }
 
@@ -560,11 +565,12 @@ function pro_file(){
     var oprof_aeb=oprof_addK.querySelectorAll('.prof_aeb')[0];//添加根、叶框提交按钮
 
     oprof_lbLtRaddg.onclick=function(){
+    	g_y = 1;
         oprof_addK.style.display="block";
     }
 
     oprof_lbLtRaddy.onclick=function(){
-       
+    	g_y = 0;
         if(floder_id == 0){
         	alert("请选中父文件夹");
         	return;
@@ -583,6 +589,7 @@ function pro_file(){
         	url:"/wankangyuan/projectFloderFile/addProjectFloder",
         	type:"post",
         	data:{
+        		g_y:g_y,
         		parent_id:floder_id,
         		floder_name:floder_name
         	},

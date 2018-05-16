@@ -74,10 +74,10 @@ public class ProjectFloderFileController {
 	 */
 	@RequestMapping("/addProjectFloder")
 	@ResponseBody
-	public Map<String, Object> addProjectFloder(HttpSession session , ProjectFloder projectFloder){
+	public Map<String, Object> addProjectFloder(HttpSession session , ProjectFloder projectFloder , Integer g_y){
 		Map<String, Object> map = new HashMap<>();
 		projectFloder.setIs_root(Short.valueOf("0"));
-		if(projectFloder.getParent_id() == 0){
+		if(g_y == 1){
 			//是添加根目录
 			projectFloder.setParent_id(null);
 			Project project = (Project) session.getAttribute("project");
