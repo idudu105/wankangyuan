@@ -12,7 +12,7 @@ import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.PrefixFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 
-import com.xtkong.model.SourceFiled;
+import com.xtkong.model.SourceField;
 import com.xtkong.util.ConstantsHBase;
 import com.xtkong.util.HBaseDB;
 
@@ -68,7 +68,7 @@ public class HBaseSourceDao {
 	 *            采集源字段 ids、names
 	 * @return
 	 */
-	public List<List<String>> getSourceDatasByUid(String source, String uid, List<SourceFiled> sourceFields) {
+	public List<List<String>> getSourceDatasByUid(String source, String uid, List<SourceField> sourceFields) {
 		List<List<String>> list = new ArrayList<List<String>>();
 		try {
 			HBaseDB db = HBaseDB.getInstance();
@@ -89,7 +89,7 @@ public class HBaseSourceDao {
 //						sourceData.put(source_field.getValue(),Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_SOURCE_INFO),
 //								Bytes.toBytes(source_field.getKey()))));
 //					}
-					for (SourceFiled sourceField : sourceFields) {
+					for (SourceField sourceField : sourceFields) {
 						sourceData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_SOURCE_INFO),
 								Bytes.toBytes(sourceField.getCsf_id()))));
 					}
