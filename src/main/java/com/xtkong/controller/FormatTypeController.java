@@ -9,18 +9,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.xtkong.dao.SourceDao;
 import com.xtkong.model.FormatType;
 import com.xtkong.service.FormatTypeService;
 @Controller
 @RequestMapping(value = "/formatType")
 public class FormatTypeController {
 	@Autowired
+	SourceDao sourceDao;
+	@Autowired
 	FormatTypeService formatTypeService;
 	@RequestMapping("/insertFormatType")
-	public String insertFormatType(FormatType formatType){
-		formatType.setCs_id(1);
+	public String insertFormatType(FormatType formatType,String cs_name1){
+		formatType.setCs_id(sourceDao.getSourceId(cs_name1));
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		formatType.setCreate_datetime(simpleDateFormat.format(new Date()));
+		formatType.setCreate_uid(1);
 		
 		formatTypeService.insertFormatType(formatType);
 		

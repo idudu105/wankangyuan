@@ -419,6 +419,7 @@
                     </div>
                     <!-- 数据采集表end -->
 
+
                     <!-- 格式化数据类型配置表start -->
                     <div class="box span12 datatypeconfig">
                         <div class="box-header" data-original-title="">
@@ -429,8 +430,6 @@
                         </div>
                         <div class="box-content">
                             <div class="box_xytab">
-                            
-<c:forEach items="${sources}" var="source" varStatus="status">
                                 <div class="box_xytabz active">
                                     <div class="tableedit">
                                         <div class="tableeditz tableeditzadd">+新增</div>
@@ -455,7 +454,7 @@
                                                 </tr>
                                             </div>
                                             <div class="biaoxiang">
-                                            	<c:forEach items="${sources.formatTypes}" var="formatType">
+                                            	<c:forEach items="${formatTypes}" var="formatType">
 	                                                <tr role="row" class="trbx">
 	                                                    <th class="biaoxiangth"><input type="checkbox" class="xuanze"></th>
 	                                                    <th class="biaoxiangth">${formatType.ft_name}</th>
@@ -477,14 +476,13 @@
                                         </table>
                                     </div>
                                 </div>
-
-                                
                             </div>
+
                             <!-- 添加格式化数据类型start -->
                             <div class="addbiaoxK">
                           	 	<!-- form表单提交数据 -->
 	         				 	<form action="/wankangyuan/formatType/insertFormatType">
-	         				 	<input name="cs_name1" style="display:none;"/>
+	         				 		<input name="cs_name1" style="display:none;"/>
 	                                <div class="addbiaoxT">
 	                                    <div class="addbiaoxTt">添加格式化数据类型</div>
 	                                    <div class="addbiaoxTx"></div>
@@ -560,7 +558,7 @@
                         </div>
                     </div>
                     <!-- 格式化数据类型配置表end -->
-</c:forEach>
+
 
                 </div><!--/row-->
 

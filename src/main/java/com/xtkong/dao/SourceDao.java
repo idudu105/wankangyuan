@@ -3,6 +3,7 @@ package com.xtkong.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import com.xtkong.model.Source;
 
@@ -19,5 +20,7 @@ public interface SourceDao {
 	public List<Source> selectSourceForAdmin();
 	@Select("select * from collection_source where is_view=1 order by cs_id")
 	public List<Source> selectSource();
+	@Select("select cs_id from collection_source where cs_name=#{cs_name}")
+	public int  getSourceId(@Param("cs_name") String cs_name);
 	
 }

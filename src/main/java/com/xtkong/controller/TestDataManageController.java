@@ -31,8 +31,10 @@ public class TestDataManageController {
 	@RequestMapping(value ="/formatdata")
 	public String test(HttpSession httpSession,String cs_id) {
 		List<Source> sources = sourceService.selectSourceForAdmin();
+		
 		for (Source source : sources) {
 			source.setSourceFileds(sourceFiledService.getSourceFileds(source.getCs_id()));
+			source.setFormatTypes(formatTypeDao.selectFormatType(source.getCs_id()));
 		}
 		
 		httpSession.setAttribute("sources", sources);
@@ -50,8 +52,9 @@ public class TestDataManageController {
 		}
 		List<FormatType> formatTypes = formatTypeDao.selectFormatType(sources.get(cs_id0).getCs_id());
 		httpSession.setAttribute("formatTypes", formatTypes);
-
-		return "redirect:/admin/datamanage.jsp";
+		
+		httpSession.setAttribute("whichactive", cs_id0);
+		return "redirect:/admin/datamanage2.jsp";
 
 	}
 //	@RequestMapping(value ="/insertSource")

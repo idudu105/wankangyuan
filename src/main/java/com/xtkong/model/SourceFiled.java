@@ -5,7 +5,7 @@ public class SourceFiled {
 	private String csf_name; // 采集字段名
 	private int cs_id; // 采集源ID
 	private String type; // 类型
-	private String check; // 校验规则
+	private String check_rule; // 校验规则
 	private boolean enumerated; // 是否可枚举 0 不可；1 可枚举
 	private boolean not_null; // 是否必填 0 可空；1 必填
 	private String description;//字段描述信息
@@ -66,12 +66,13 @@ public class SourceFiled {
 		this.type = type;
 	}
 
-	public String getCheck() {
-		return check;
+	
+	public String getCheck_rule() {
+		return check_rule;
 	}
 
-	public void setCheck(String check) {
-		this.check = check;
+	public void setCheck_rule(String check_rule) {
+		this.check_rule = check_rule;
 	}
 
 	public boolean isEnumerated() {
