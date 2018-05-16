@@ -3,10 +3,7 @@ package com.xtkong.controller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,10 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xtkong.dao.SourceDao;
-import com.xtkong.model.Source;
 import com.xtkong.model.SourceFiled;
 import com.xtkong.service.SourceFiledService;
-import com.xtkong.service.SourceService;
 
 @Controller
 @RequestMapping(value = "/sourceFiled")
@@ -56,7 +51,7 @@ public class SourceFiledController {
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		sourceFiled.setCreate_datetime(simpleDateFormat.format(new Date()));
-		
+
 		sourceFiled.setUpdate_uid(1);
 
 		if (1 == sourceFiledService.updateSourceFiled(sourceFiled)) {
@@ -68,35 +63,39 @@ public class SourceFiledController {
 		}
 		return map;
 	}
+
 	@RequestMapping("/getSourceFiled")
 	@ResponseBody
 	public Map<String, Object> getSourceFiled(Integer csf_id) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
-			map.put("result", true);
-			map.put("sourceFiled", sourceFiledService.getSourceFiled(csf_id));
-			
+		map.put("result", true);
+		map.put("sourceFiled", sourceFiledService.getSourceFiled(csf_id));
+
 		return map;
 	}
-//	/**
-//	 * * 选取采集源字段列表
-//	 * 
-//	 * @param httpSession
-//	 * @param cs_id
-//	 *            采集源
-//	 * @return 采集源字段列表
-//	 */
-//	@RequestMapping("/selectSourceFiled")
-//	public String selectSourceFiled(HttpSession httpSession, Integer cs_id) {
-//
-//		List<SourceFiled> sourceFileds = sourceFiledService.getSourceFileds(cs_id);
-//		httpSession.setAttribute("sourceFileds", sourceFileds);
-//		return "redirect:/pages/project_data.jsp";
-//
-//	}
+	// /**
+	// * * 选取采集源字段列表
+	// *
+	// * @param httpSession
+	// * @param cs_id
+	// * 采集源
+	// * @return 采集源字段列表
+	// */
+	// @RequestMapping("/selectSourceFiled")
+	// public String selectSourceFiled(HttpSession httpSession, Integer cs_id) {
 	//
-	// @RequestMapping("/deleteProjectFloder")
-	// public int deleteProjectFloder(Integer cs_id) {
-	// return sourceFiledService.deleteProjectFloder(cs_id);
+	// List<SourceFiled> sourceFileds =
+	// sourceFiledService.getSourceFileds(cs_id);
+	// httpSession.setAttribute("sourceFileds", sourceFileds);
+	// return "redirect:/pages/project_data.jsp";
+	//
 	// }
+
+	@RequestMapping("/deleteSourceFiled")
+	public String deleteSourceFiled(Integer csf_id) {
+		SourceFiled sourceFiled = sourceFiledService.getSourceFiled(csf_id);
+		sourceFiledService.deleteSourceFiled(csf_id);
+		return "redirect:/admin/formatdata?cs_id=" + sourceFiled.getCs_id();
+	}
 }

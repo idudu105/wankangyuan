@@ -34,8 +34,6 @@ public class FormatTypeController {
 		formatType.setCreate_datetime(simpleDateFormat.format(new Date()));
 		formatType.setCreate_uid(1);
 
-		;
-
 		if (1 == formatTypeService.insertFormatType(formatType)) {
 			map.put("result", true);
 			map.put("url", "/wankangyuan/admin/formatdata?cs_id=" + formatType.getCs_id());
@@ -45,24 +43,26 @@ public class FormatTypeController {
 		}
 		return map;
 
-//		return "redirect:/admin/datamanage.jsp";
+		// return "redirect:/admin/datamanage.jsp";
 	}
 
-	// @RequestMapping("/updateFormatType")
-	// public Map<String, Object> updateFormatType(HttpSession httpSession,
-	// String ft_name) {
-	// Map<String, Object> map = new HashMap<String, Object>();
-	// FormatType formatType = (FormatType)
-	// httpSession.getAttribute("formatType");
-	// formatType.setFt_name(ft_name);
-	// if (1 == formatTypeService.updateFormatType(formatType)) {
-	// map.put("result", true);
-	// } else {
-	// map.put("result", false);
-	// map.put("message", "更新失败");
-	// }
-	// return map;
-	// }
+	@RequestMapping("/updateFormatType")
+	public Map<String, Object> updateFormatType(FormatType formatType) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		formatType.setUpdate_datetime(simpleDateFormat.format(new Date()));
+		formatType.setUpdate_uid(1);
+
+		if (1 == formatTypeService.updateFormatType(formatType)) {
+			map.put("result", true);
+			map.put("url", "/wankangyuan/admin/formatdata?cs_id=" + formatType.getCs_id());
+		} else {
+			map.put("result", false);
+			map.put("message", "更新失败");
+		}
+		return map;
+	}
+
 	/**
 	 * 选取格式类型列表
 	 * 
@@ -81,8 +81,11 @@ public class FormatTypeController {
 		httpSession.setAttribute("formatTypes", formatTypes);
 		return "redirect:/pages/project_datain.jsp";
 	}
-	// @RequestMapping("/deleteFormatType")
-	// public int deleteFormatType(Integer ft_id){
-	// return formatTypeService.deleteFormatType(ft_id);
-	// }
+
+	@RequestMapping("/deleteFormatType")
+	public String deleteFormatType(Integer ft_id) {
+		FormatType formatType = formatTypeService.getFormatType(ft_id);
+		formatTypeService.deleteFormatType(ft_id);
+		return "redirect:/admin/formatdata?cs_id=" + formatType.getCs_id();
+	}
 }

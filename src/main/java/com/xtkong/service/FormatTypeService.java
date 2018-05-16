@@ -27,6 +27,11 @@ public class FormatTypeService {
 		
 		return formatTypeDao.selectFormatType(cs_id);
 	}
+public FormatType getFormatType(Integer ft_id){
+		
+		return formatTypeDao.getFormatType(ft_id);
+	}
+	
 	public int deleteFormatType(Integer ft_id){
 		return formatTypeDao.deleteFormatType(ft_id);
 	}

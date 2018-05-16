@@ -32,8 +32,8 @@ public class SourceFiledService {
 		return sourceFiledDao.getSourceFileds(cs_id);
 	}
 
-	public int deleteProjectFloder(Integer cs_id) {
-		return sourceFiledDao.deleteProjectFloder(cs_id);
+	public int deleteSourceFiled(Integer cs_id) {
+		return sourceFiledDao.deleteSourceFiled(cs_id);
 	}
 
 	public SourceFiled getSourceFiled(Integer csf_id) {
