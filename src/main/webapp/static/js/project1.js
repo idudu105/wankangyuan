@@ -525,18 +525,19 @@ function pro_file(){
         					var filesList = $("#filesList");
         					filesList.empty();
         					for(var index in data.projectFiles){
-        						filesList.append('<div class="prof_lbRmULmLI">'+
+        						filesList.append(
+        							'<div class="prof_lbRmULmLI">'+
     	                                '<div class="fuxuanK2">'+
-    	                              ' <input type="checkbox" class="input_check" id="check'+data.projectFiles[index].id+'" value="'+data.projectFiles[index].id+'">'+
-    	                                '<label for="check'+data.projectFiles[index].id+'"></label>'+
-    	                           	'</div>'+
-                                    '<div class="prof_lbRmULmli prof_lbRmULt2">'+data.projectFiles[index].file_name+'</div>'+
-                                    '<div class="prof_lbRmULmli prof_lbRmULt3">'+data.projectFiles[index].file_type+'</div>'+
-                                    '<div class="prof_lbRmULmli prof_lbRmULt4">'+data.projectFiles[index].file_size+'</div>'+
-                                    '<div class="prof_lbRmULmli prof_lbRmULt5">'+data.projectFiles[index].create_datetime+'</div>'+
-                                    '<div class="prof_lbRmULmli prof_lbRmULt6">'+data.projectFiles[index].creator_id+'</div>'+
-                                    '<div class="prof_lbRmULmli prof_lbRmULt7 prof_lbRmULmYL">预览</div>'+
-                                '</div>');
+    	                                	'<input type="checkbox" class="input_check" id="check'+data.projectFiles[index].id+'" value="'+data.projectFiles[index].id+'">'+
+    	                                	'<label for="check'+data.projectFiles[index].id+'"></label>'+
+	    	                           	'</div>'+
+	                                    '<div class="prof_lbRmULmli prof_lbRmULt2">'+data.projectFiles[index].file_name+'</div>'+
+	                                    '<div class="prof_lbRmULmli prof_lbRmULt3">'+data.projectFiles[index].file_type+'</div>'+
+	                                    '<div class="prof_lbRmULmli prof_lbRmULt4">'+data.projectFiles[index].file_size+'</div>'+
+	                                    '<div class="prof_lbRmULmli prof_lbRmULt5">'+data.projectFiles[index].create_datetime+'</div>'+
+	                                    '<div class="prof_lbRmULmli prof_lbRmULt6">'+data.projectFiles[index].creator_id+'</div>'+
+	                                    '<div class="prof_lbRmULmli prof_lbRmULt7 prof_lbRmULmYL">预览</div>'+
+        							'</div>');
         					}
         				}else{
         					alert(data.message);

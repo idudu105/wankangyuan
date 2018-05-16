@@ -16,7 +16,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="/wankangyuan/static/js/project1.js"></script>
 <script type="text/javascript">
     window.onload=function(){
-        //project0();
+        project0();
         pro_data();
         pro_file();
     }
@@ -191,15 +191,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </div>
                         <div class="prof_lbRmUL">
                             <div class="prof_lbRmULt">
-                            
-			                   	<div class="allK">
+			                            
+						        <div class="allK">
 			                        <div class="quanxuanK">
 			                            <input type="checkbox" class="input_check" id="check0">
 			                            <label for="check0"></label>
 			                        </div>
 			                        <div class="allT">全选</div>
 			                    </div>
-			                    
+
                                 <div class="prof_lbRmULtli prof_lbRmULt2">文件名称</div>
                                 <div class="prof_lbRmULtli prof_lbRmULt3">类型</div>
                                 <div class="prof_lbRmULtli prof_lbRmULt4">大小</div>
