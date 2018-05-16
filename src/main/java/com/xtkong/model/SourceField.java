@@ -1,6 +1,6 @@
 package com.xtkong.model;
 
-public class SourceFiled {
+public class SourceField {
 	private int csf_id; // 采集源字段ID
 	private String csf_name; // 采集字段名
 	private int cs_id; // 采集源ID

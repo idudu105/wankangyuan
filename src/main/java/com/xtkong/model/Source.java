@@ -7,7 +7,7 @@ public class Source {
 	private String cs_name;// 采集源名
 	private boolean is_view;// 是否显示到前端 0不显示；1显示
 
-	private List<SourceFiled> sourceFileds;
+	private List<SourceField> sourceFileds;
 
 	private List<FormatType> formatTypes;
 	
@@ -20,11 +20,11 @@ public class Source {
 		this.formatTypes = formatTypes;
 	}
 
-	public List<SourceFiled> getSourceFileds() {
+	public List<SourceField> getSourceFileds() {
 		return sourceFileds;
 	}
 
-	public void setSourceFileds(List<SourceFiled> sourceFileds) {
+	public void setSourceFileds(List<SourceField> sourceFileds) {
 		this.sourceFileds = sourceFileds;
 	}
 

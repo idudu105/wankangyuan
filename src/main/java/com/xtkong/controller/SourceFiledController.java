@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xtkong.dao.SourceDao;
-import com.xtkong.model.SourceFiled;
+import com.xtkong.model.SourceField;
 import com.xtkong.service.SourceFiledService;
 
 @Controller
@@ -24,7 +24,7 @@ public class SourceFiledController {
 
 	@RequestMapping("/insertSourceFiled")
 	@ResponseBody
-	public Map<String, Object> insertSourceFiled(SourceFiled sourceFiled) {
+	public Map<String, Object> insertSourceFiled(SourceField sourceFiled) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -46,7 +46,7 @@ public class SourceFiledController {
 
 	@RequestMapping("/updateSourceFiled")
 	@ResponseBody
-	public Map<String, Object> updateSourceFiled(SourceFiled sourceFiled) {
+	public Map<String, Object> updateSourceFiled(SourceField sourceFiled) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -94,7 +94,7 @@ public class SourceFiledController {
 
 	@RequestMapping("/deleteSourceFiled")
 	public String deleteSourceFiled(Integer csf_id) {
-		SourceFiled sourceFiled = sourceFiledService.getSourceFiled(csf_id);
+		SourceField sourceFiled = sourceFiledService.getSourceFiled(csf_id);
 		sourceFiledService.deleteSourceFiled(csf_id);
 		return "redirect:/admin/formatdata?cs_id=" + sourceFiled.getCs_id();
 	}

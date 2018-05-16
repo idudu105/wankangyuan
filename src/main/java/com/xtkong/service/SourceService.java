@@ -2,6 +2,7 @@ package com.xtkong.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +35,9 @@ public class SourceService {
 	 */
 	public List<Source> selectSourceForAdmin() {
 		return sourceDao.selectSourceForAdmin();
+	}
+	
+	public Source getSource(Integer cs_id){
+		return sourceDao.getSource(cs_id);
 	}
 }

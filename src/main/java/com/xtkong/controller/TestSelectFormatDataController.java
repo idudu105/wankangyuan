@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.dzjin.model.ProjectFile;
 import com.xtkong.dao.TestDao;
 import com.xtkong.model.Source;
-import com.xtkong.model.SourceFiled;
+import com.xtkong.model.SourceField;
 import com.xtkong.service.SourceFiledService;
 import com.xtkong.service.SourceService;
 
@@ -41,7 +41,7 @@ public class TestSelectFormatDataController {
 		List<Source> sources = sourceService.selectSource();
 		httpSession.setAttribute("sources", sources);
 
-		List<SourceFiled> sourceFileds = sourceFiledService.getSourceFileds(sources.get(0).getCs_id());
+		List<SourceField> sourceFileds = sourceFiledService.getSourceFileds(sources.get(0).getCs_id());
 		httpSession.setAttribute("sourceFileds", sourceFileds);
 
 		List<List<String>> sourceDatas = new ArrayList<>();
@@ -75,7 +75,7 @@ public class TestSelectFormatDataController {
 		List<Source> sources = sourceService.selectSource();
 		httpSession.setAttribute("sources", sources);
 
-		List<SourceFiled> sourceFileds = sourceFiledService.getSourceFileds(sources.get(0).getCs_id());
+		List<SourceField> sourceFileds = sourceFiledService.getSourceFileds(sources.get(0).getCs_id());
 		httpSession.setAttribute("sourceFileds", sourceFileds);
 
 		List<List<String>> sourceDatas = new ArrayList<>();
