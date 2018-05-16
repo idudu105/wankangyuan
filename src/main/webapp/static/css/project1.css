@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2018-04-23 11:25:49
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-05-14 17:03:05
+* @Last Modified time: 2018-05-16 10:30:32
 */
 @font-face {
     font-family: PingFangSC-Semibold;
@@ -35,9 +35,11 @@
 a{
     color:#fff;
 }
+textarea{
+    resize:none;
+}
 
-
-.quanxuanK{
+.quanxuanK,.quanxuanK1{
     position: relative;
     float:left;
     margin-right:10px;
@@ -58,6 +60,23 @@ a{
 .fuxuanK3{
     position: relative;
     float:right;
+}
+.fuxuanK4{
+    position: relative;
+    float:left;
+    margin:3px 5px;
+}
+.fuxuanK5{
+    position: relative;
+    float:left;
+}
+.fxK1{
+    position: relative;
+    float:left;
+    margin-top: 12.5px;
+    margin-bottom: 12.5px;
+    margin-right: 18px;
+    font-size:0;    
 }
 .input_check {
     position: absolute;
@@ -573,34 +592,34 @@ a{
     width:200px;
 }
 
-.dataname{
+.PJliCli2.dataname,.PJListli.dataname{
     width:260px;
 }
 .PJliCli2.dataname span{
     color:#5ca0e5;
 }
-.dataage{
+.PJliCli2.dataage,.PJListli.dataage{
     width:160px;
 }
-.datasex{
+.PJliCli2.datasex,.PJListli.datasex{
     width:160px;
 }
-.datahistory{
+.PJliCli2.datahistory,.PJListli.datahistory{
     width:160px;
 }
-.datainfor{
+.PJliCli2.datainfor,.PJListli.datainfor{
     width:160px;
 }
-.data_data6{
+.PJliCli2.data_data6,.PJListli.data_data6{
     width:160px;
 }
-.data_data7{
+.PJliCli2.data_data7,.PJListli.data_data7{
     width:85px;
 }
-.datacreater{
+.PJliCli2.datacreater,.PJListli.datacreater{
     width:93px;
 }
-.datatime{
+.PJliCli2.datatime,.PJListli.datatime{
     width:100px;
 }
 
@@ -850,15 +869,14 @@ a{
     -webkit-line-clamp: 1;
     overflow: hidden;
     min-height: 1px;
-     width:150px;
+    width:150px;
 }
 
 .PJK2{
     margin-top:35px;
-    min-height: 500px;
-    position:relative;
+    min-height: 600px;
     overflow:auto;
-
+    position:relative;
 }
 .PJK2li{
     float:left;
@@ -912,7 +930,6 @@ a{
 }
 .PJK2litime{
     margin-top:10px;
-    min-height: 21px;
     overflow:auto;
 }
 .PJK2litimeT1{
@@ -1053,7 +1070,7 @@ a{
     /*width:200px;*/
     /*height:100px;*/
     /*background:red;*/
-    margin:0 auto;
+    margin:20px auto;
     /*margin-top:300px;*/
     /*height:31px;*/
 }
@@ -1385,6 +1402,7 @@ a{
     /*overflow:auto;*/
     margin-top:20px;
     /*position:relative;*/
+    position:relative;
 }
 .prof_lbLmT{
     width:473px;
@@ -1408,6 +1426,70 @@ a{
 .prof_lbLmBt2{
     color:#013f73;
     float:left;
+}
+
+.prof_addK,.prof_editK,.prof_delK{
+    position:absolute;
+    top:30px;
+    right:30px;
+    background:#fff;
+    z-index: 300;
+    width:300px;
+    padding:10px;
+    box-shadow: 0 0 4px 0;
+    display:none;
+}
+.prof_aeT{
+    overflow:auto;
+    padding-bottom:8px;
+    border-bottom:1px solid #666;
+}
+.prof_aeTt{
+    font-size:16px;
+    float:left;
+    color:#666;
+}
+.prof_aeTx{
+    width:14px;
+    height:14px;
+    float:right;
+    background:url(../img/close.png);
+    margin-top:3px;
+    cursor:pointer;
+}
+
+.prof_aeM{
+    margin:10px 0;
+}
+.prof_aeMz{
+    overflow:auto;
+    margin-top:10px;
+}
+.prof_aeMt{
+    font-size: 16px;
+    color:#666;
+}
+.prof_aeMzt{
+    float:left;
+    width:110px;
+    font-size:16px;
+    color:#666;
+    text-align: left;
+}
+.prof_aeMzp{
+    float:left;
+    width:180px;
+}
+.prof_aeb{
+    height:30px;
+    background: #5ca0e5;
+    border-radius: 1px;
+    font-size: 14px;
+    color: #ffffff;
+    padding:0 10px;
+    border:0;
+    outline:0;
+    cursor:pointer;
 }
 
 .prof_lbR{
@@ -1648,6 +1730,7 @@ a{
     border-right:1px solid #dadada;
     overflow:auto;
     padding-left:36px;
+    position:relative;
 }
 .prodainmL2{
     float:left;
@@ -1695,6 +1778,7 @@ a{
     height:639px;
     padding:50px 24px;
     float:left;
+    position:relative;
 }
 .prodaclmRz{
     overflow:auto;
@@ -1777,12 +1861,11 @@ a{
 .prodaclmRsxK{
     margin-bottom:26px;
     margin-left:5px;
-    /*overflow:auto;*/
+    overflow:auto;
     position:relative;
 }
 .prodaclmRsx{
-    display:inline-block;
-    vertical-align: middle;
+    float:left;
     cursor:pointer;
 }
 .prodaclmRsxT{
@@ -1804,8 +1887,7 @@ a{
 
 
 .prodaclmRss{
-    display:inline-block;
-    vertical-align: middle;
+    float:left;
     margin-left:35px;
 }
 .prodaclmRssC{
@@ -1817,6 +1899,17 @@ a{
     overflow:auto;
 }
 
+.prodaclmRsB{
+    float:right;
+    overflow:auto;
+}
+.prodaclmRsb{
+    float:right;
+    font-size:16px;
+    color:#5ca0e5;
+    margin-left:40px;
+    cursor:pointer;
+}
 
 .prodaclmRzTit{
     font-family:PingFangSC-Medium;
@@ -1840,15 +1933,115 @@ a{
     font-size:16px;
     color:#16579b;
     line-height: 45px;
-    width:200px;
+    width:150px;
     float:left;
 }
 .prodaclmRzTt3{
     font-size:16px;
     color:#16579b;
     line-height: 45px;
-    width:200px;
+    width:150px;
     float:left;
+}
+.clmReditK{
+    position:absolute;
+    top:100px;
+    z-index: 300;
+    background:#ffffff;
+    box-shadow:0 0 4px 0 rgba(203,198,198,0.50);
+    width:700px;
+    /*height:520px;*/
+    left:59px;
+    padding:10px 30px;
+    display:none;
+}
+.clmReditT{
+    padding-bottom:8px;
+    border-bottom:1px solid #dadada;
+    overflow:auto;
+}
+.clmReditTt{
+    float:left;
+    font-family:PingFangSC-Medium;
+    font-size:18px;
+    color:#666666;
+}
+.clmReditTx{
+    float:right;
+    width:14px;
+    height:14px;
+    margin-top:5px;
+    background:url(../img/close.png);
+    cursor:pointer;
+}
+.clmReditM{
+    /*overflow:auto;*/
+}
+.clmReditMz{
+    overflow:auto;
+    margin-top:20px;
+}
+.clmReditMzt{
+    float:left;
+    width:100px;
+    font-family:PingFangSC-Medium;
+    font-size:18px;
+    color:#696969;
+}
+.clmReditMzp{
+    float:left;
+    border:1px solid #999999;
+    border-radius:4px;
+    width:300px;
+    height:30px;
+    padding:5px;
+}
+.clmReditMzp2{
+    float:left;
+    border:1px solid #999999;
+    border-radius:4px;
+    width:50px;
+    height:30px;
+    padding:5px;
+}
+.clmReditMzta{
+    border:1px solid #999999;
+    border-radius:4px;
+    width:300px;
+    height:100px;
+    padding:5px;
+}
+.clmReditB{
+    overflow:auto;
+    margin-bottom:20px;
+}
+.clmReditb{
+    float:right;
+    background:#5ca0e5;
+    border-radius:2px;
+    width:60px;
+    height:30px;
+    font-family:PingFangSC-Medium;
+    font-size:16px;
+    color:#ffffff;
+    line-height: 30px;
+    outline:none;
+    border:0;
+    cursor:pointer;
+    text-align: center;
+}
+
+.clmRinportK{
+    width:620px;
+    height:430px;
+    position:absolute;
+    top:50px;
+    left:129px;
+    background:#fff;
+    z-index: 400;
+    padding:10px 25px;
+    box-shadow:0 0 4px 0 rgba(203,198,198,0.50);
+    display:none;
 }
 
 .proappendreK{
@@ -3103,6 +3296,7 @@ a{
     color:#5ca0e5;
     margin:0 auto;
     margin-top:20px;
+    text-align: center;
 }
 .inportMd{
     display:block;
@@ -3391,7 +3585,7 @@ a{
     cursor:pointer;
 }
 
-.app_expsave{
+.app_expsave,.app_expexport{
     float:right;
     cursor:pointer;
     font-size:20px;
@@ -3399,4 +3593,86 @@ a{
     margin-top: 25px;
     line-height: 46px;
     margin-right:20px;
+}
+
+.dataclLbk{
+    overflow:auto;
+    padding:10px;
+}
+.dataclLb{
+    float:right;
+    margin-left:30px;
+    font-family:PingFangSC-Medium;
+    font-size:16px;
+    color:#5ca0e5;
+    cursor:pointer;
+}
+.dataeditK{
+    background:#ffffff;
+    box-shadow:0 0 4px 0 rgba(203,198,198,0.50);
+    width:230px;
+    /*height:210px;*/
+    position:absolute;
+    top:50px;
+    right:0;
+    text-align: center;
+    display:none;
+    z-index: 300;
+}
+.dataeditT{
+    overflow:auto;
+}
+
+.dataeditTx{
+    width:14px;
+    height:14px;
+    float:right;
+    background:url(../img/close.png);
+    margin:5px;
+    cursor:pointer;
+    /*margin-top:5px;*/
+}
+.dataeditMt{
+    font-family:PingFangSC-Semibold;
+    font-size:16px;
+    color:#5ca0e5;
+    margin-top:10px;
+    margin-bottom:5px;
+    text-align: left;
+    margin-left:20px;
+}
+.dataeditTs{
+    border:1px solid #999999;
+    border-radius:4px;
+    width:200px;
+    height:25px;
+    padding:0 10px;
+    text-align: left;
+}
+.dataeditTta{
+    border:1px solid #999999;
+    border-radius:4px;
+    width:190px;
+    height:40px;
+    padding:5px;
+    resize:none;
+}
+.dataeditB{
+    overflow:auto;
+}
+.dataeditb{
+    float:right;
+    background:#5ca0e5;
+    border-radius:2px;
+    width:60px;
+    height:30px;
+    font-family:PingFangSC-Medium;
+    font-size:16px;
+    color:#ffffff;
+    outline:0;
+    border:0;
+    cursor:pointer;
+    line-height: 30px;
+    margin:10px;
+    margin-bottom:20px;
 }
