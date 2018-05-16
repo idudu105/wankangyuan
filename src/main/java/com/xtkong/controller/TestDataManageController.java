@@ -16,7 +16,7 @@ import com.xtkong.service.SourceFiledService;
 import com.xtkong.service.SourceService;
 
 @Controller
-@RequestMapping(value ="/admin")
+@RequestMapping(value = "/admin")
 public class TestDataManageController {
 
 	@Autowired
@@ -28,39 +28,43 @@ public class TestDataManageController {
 	@Autowired
 	FormatTypeDao formatTypeDao;
 
-	@RequestMapping(value ="/formatdata")
-	public String test(HttpSession httpSession,String cs_id) {
+	@RequestMapping(value = "/formatdata")
+	public String test(HttpSession httpSession, Integer cs_id) {
 		List<Source> sources = sourceService.selectSourceForAdmin();
-		
+		int cs_index = 0;
 		for (Source source : sources) {
 			source.setSourceFileds(sourceFiledService.getSourceFileds(source.getCs_id()));
 			source.setFormatTypes(formatTypeDao.selectFormatType(source.getCs_id()));
+			
+			try {
+				if (source.getCs_id() == cs_id) {
+					httpSession.setAttribute("whichactive", cs_index);
+				} else {
+					cs_index++;
+				}
+			} catch (Exception e) {
+				httpSession.setAttribute("whichactive", 0);
+			}
 		}
-		
+
 		httpSession.setAttribute("sources", sources);
-		
-//		List<List<SourceFiled>> sourceFiledLists = new ArrayList<>();
-//		for (Source source : sources) {
-//			sourceFiledLists.add(sourceFiledDao.selectSourceFiled(source.getCs_id()));
-//		}
-//		httpSession.setAttribute("sourceFiledLists", sourceFiledLists);
-		int cs_id0=0;
-		try {
-			cs_id0=Integer.getInteger(cs_id);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		List<FormatType> formatTypes = formatTypeDao.selectFormatType(sources.get(cs_id0).getCs_id());
-		httpSession.setAttribute("formatTypes", formatTypes);
-		
-		httpSession.setAttribute("whichactive", cs_id0);
-		return "redirect:/admin/datamanage2.jsp";
+
+		// List<List<SourceFiled>> sourceFiledLists = new ArrayList<>();
+		// for (Source source : sources) {
+		// sourceFiledLists.add(sourceFiledDao.selectSourceFiled(source.getCs_id()));
+		// }
+		// httpSession.setAttribute("sourceFiledLists", sourceFiledLists);
+		// List<FormatType> formatTypes =
+		// formatTypeDao.selectFormatType(sources.get(cs_id0).getCs_id());
+		// httpSession.setAttribute("formatTypes", formatTypes);
+
+		return "redirect:/admin/datamanage.jsp";
 
 	}
-//	@RequestMapping(value ="/insertSource")
-//	public String insertSource(Source source){
-//		sourceService.insertSource(source);
-//		return "redirect:/admin/formatdata";
-//	}
-	
+	// @RequestMapping(value ="/insertSource")
+	// public String insertSource(Source source){
+	// sourceService.insertSource(source);
+	// return "redirect:/admin/formatdata";
+	// }
+
 }

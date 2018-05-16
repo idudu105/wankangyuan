@@ -28,49 +28,75 @@ public class SourceFiledController {
 	SourceFiledService sourceFiledService;
 
 	@RequestMapping("/insertSourceFiled")
-	public String insertSourceFiled(SourceFiled sourceFiled,String cs_name1) {
+	@ResponseBody
+	public Map<String, Object> insertSourceFiled(SourceFiled sourceFiled) {
+		Map<String, Object> map = new HashMap<String, Object>();
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		sourceFiled.setCreate_datetime(simpleDateFormat.format(new Date()));
-		sourceFiled.setCs_id(sourceDao.getSourceId(cs_name1));
+
 		sourceFiled.setCreate_uid(1);
-		
-		sourceFiledService.insertSourceFiled(sourceFiled);
-		
-		return "redirect:/admin/formatdata?cs_id="+sourceFiled.getCs_id();
+
+		if (1 == sourceFiledService.insertSourceFiled(sourceFiled)) {
+			map.put("result", true);
+			map.put("url", "/wankangyuan/admin/formatdata?cs_id=" + sourceFiled.getCs_id());
+		} else {
+			map.put("result", false);
+			map.put("message", "新增失败");
+		}
+		return map;
+
+		// return "redirect:/admin/formatdata";
 	}
 
 	@RequestMapping("/updateSourceFiled")
 	@ResponseBody
-	public Map<String, Object> updateSourceFiled(HttpSession httpSession, String csf_id) {
+	public Map<String, Object> updateSourceFiled(SourceFiled sourceFiled) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		SourceFiled sourceFiled = (SourceFiled) httpSession.getAttribute("sourceFiled");
+		// 设置创建时间
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		sourceFiled.setCreate_datetime(simpleDateFormat.format(new Date()));
+		
+		sourceFiled.setUpdate_uid(1);
+
 		if (1 == sourceFiledService.updateSourceFiled(sourceFiled)) {
 			map.put("result", true);
+			map.put("url", "/wankangyuan/admin/formatdata?cs_id=" + sourceFiled.getCs_id());
 		} else {
 			map.put("result", false);
 			map.put("message", "更新失败");
 		}
 		return map;
 	}
-//
+	@RequestMapping("/getSourceFiled")
+	@ResponseBody
+	public Map<String, Object> getSourceFiled(Integer csf_id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+			map.put("result", true);
+			map.put("sourceFiled", sourceFiledService.getSourceFiled(csf_id));
+			
+		return map;
+	}
 //	/**
 //	 * * 选取采集源字段列表
+//	 * 
 //	 * @param httpSession
-//	 * @param cs_id  采集源
+//	 * @param cs_id
+//	 *            采集源
 //	 * @return 采集源字段列表
 //	 */
 //	@RequestMapping("/selectSourceFiled")
 //	public String selectSourceFiled(HttpSession httpSession, Integer cs_id) {
 //
-//		List<SourceFiled> sourceFileds = sourceFiledService.selectSourceFiled(cs_id);
+//		List<SourceFiled> sourceFileds = sourceFiledService.getSourceFileds(cs_id);
 //		httpSession.setAttribute("sourceFileds", sourceFileds);
 //		return "redirect:/pages/project_data.jsp";
 //
 //	}
-//
-//	@RequestMapping("/deleteProjectFloder")
-//	public int deleteProjectFloder(Integer cs_id) {
-//		return sourceFiledService.deleteProjectFloder(cs_id);
-//	}
+	//
+	// @RequestMapping("/deleteProjectFloder")
+	// public int deleteProjectFloder(Integer cs_id) {
+	// return sourceFiledService.deleteProjectFloder(cs_id);
+	// }
 }

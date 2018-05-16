@@ -896,7 +896,7 @@ ul.messages li .message {
 
 .box-content {
 	position: relative;
-/*	z-index: 50;*/
+	/*z-index: 50;*/
   	margin-top: -1px;
 	padding: 10px;
 	background: #fff !important;
@@ -3015,7 +3015,8 @@ ul.messagesList li span.date {
     margin-bottom:10px;
 }
 .box_xxtabz{
-    width:100px;
+    /*width:100px;*/
+    padding:0 30px;
     height:40px;
     border:1px solid #dadada;
     border-left:0;
@@ -3045,7 +3046,9 @@ ul.messagesList li span.date {
 .box_xytabz.active{
     display:block;
 }
-
+.box_xytabzK,.box_xytabzK2{
+    margin-bottom:30px;
+}
 .box_xytabzT{
     height:40px;
     line-height: 40px;
@@ -3091,6 +3094,10 @@ ul.messagesList li span.date {
     width:100px;
     height:30px;
     font-size:10px;
+}
+.biaoxiangthin{
+    color:#578EBE;
+    cursor:pointer;
 }
 .trbx:nth-child(even){
     background:#fff;
@@ -3173,7 +3180,7 @@ input[type="text"].addboxlik{
     outline: 0;
 }
 
-.addbiaoxK,.addbiaoxK2,.delbiaoxK{
+.addbiaoxK,.addbiaoxK2,.delbiaoxK,.addbiaoxK_2,.addbiaoxK2_2,.delbiaoxK_2,.endconfigK{
     width:700px;
     /*height:230px;*/
     padding:10px;
@@ -3186,6 +3193,27 @@ input[type="text"].addboxlik{
     text-align: center;
     display:none;
 }
+.addbiaoxK_2,.addbiaoxK2_2,.delbiaoxK_2{
+    top:160px;
+}
+.endconfigK{
+    top:150px;
+}
+.enco1aK,.enco1eK,.enco1dK,.enco2aK,.enco2eK,.enco2dK{
+    width:300px;
+    padding:10px;
+    position:absolute;
+    top:20px;
+    left:190px;
+    z-index: 400;
+    background:#fff;
+    border:1px solid #ccc;
+    text-align: center;
+    display:none;
+}
+
+
+
 .delbiaoxM{
     font-size:20px;
     color:#333;
@@ -3249,4 +3277,85 @@ input[type="text"].addbiaoxlik{
     padding:0 20px;
     outline: 0;
     margin-left:50px;
+}
+
+
+.endconfigT{
+    padding-bottom:10px;
+    border-bottom: 2px solid #578EBE;
+    overflow:auto;
+}
+.endconfigTt{
+    float:left;
+    font-size:16px;
+    color:#578EBE;
+}
+.endconfigTx{
+    float:right;
+    background:url(../img/close.png);
+    width:14px;
+    height:14px;
+    margin-top:3px;
+    cursor:pointer;
+}
+.endconfigzB{
+    overflow:auto;
+    margin-bottom:10px;
+    border-left:1px solid #dadada;
+}
+.endconfigzb{
+    height: 25px;
+    width: 60px;
+    line-height: 25px;
+    color: #578EBE;
+    border: 1px solid #dadada;
+    text-align: center;
+    border-left: 0;
+    float: left;
+    cursor: pointer;
+    background: #F4F4F4;
+}
+
+.endconfigz1,.endconfigz2{
+    margin-top:10px;
+    margin-bottom:20px;
+}
+.endconfigzT{
+    text-align: left;
+    color: #578EBE;
+    font-size: 18px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #578EBE;
+}
+.encoMz{
+    overflow:auto;
+    margin:10px 0;
+}
+.encoMzt{
+    float:left;
+    width:70px;
+    line-height: 30px;
+}
+.encoMzp{
+    float:left;
+    height:30px;
+}
+.encoB{
+    display:flex;
+    justify-content: space-around;
+}
+.encob,.encob2{
+    padding:0 20px;
+    text-align: center;
+    font-size:16px;
+    background:#578EBE;
+    color:#fff;
+    outline:0;
+    border:0;
+}
+
+.encodM{
+    font-size: 16px;
+    color: #333;
+    margin: 30px 0;
 }
