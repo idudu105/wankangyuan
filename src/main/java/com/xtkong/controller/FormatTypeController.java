@@ -42,7 +42,7 @@ public class FormatTypeController {
 		if (formatType != null) {
 			formatType.setFormatFields(formatFieldService.getFormatFields(ft_id));
 			map.put("result", true);
-			map.put("source", formatType);
+			map.put("formatType", formatType);
 		} else {
 			map.put("result", false);
 			map.put("message", "查询失败");
