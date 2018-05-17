@@ -30,7 +30,7 @@ public class FormatFieldController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (1 == formatFieldService.insertFormatField(formatField)) {
 			map.put("result", true);
-			// map.put("ft_id", formatField.getFt_id());
+			map.put("message", "新增成功");
 		} else {
 			map.put("result", false);
 			map.put("message", "新增失败");
@@ -48,12 +48,10 @@ public class FormatFieldController {
 	@RequestMapping("/updateFormatField")
 	@ResponseBody
 	public Map<String, Object> updateFormatField(FormatField formatField) {
-		// Integer ft_id =
-		// formatFieldService.getFormatField_ft_id(formatField.getFf_id());
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (1 == formatFieldService.updateFormatField(formatField)) {
 			map.put("result", true);
-			// map.put("ft_id", ft_id);
+			map.put("message", "更新成功");
 		} else {
 			map.put("result", false);
 			map.put("message", "更新失败");

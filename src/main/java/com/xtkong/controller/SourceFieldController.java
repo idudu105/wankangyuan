@@ -34,14 +34,12 @@ public class SourceFieldController {
 
 		if (1 == sourceFieldService.insertSourceField(sourceField)) {
 			map.put("result", true);
-			map.put("url", "/wankangyuan/admin/formatdata?cs_id=" + sourceField.getCs_id());
+			map.put("message", "新增成功");
 		} else {
 			map.put("result", false);
 			map.put("message", "新增失败");
 		}
 		return map;
-
-		// return "redirect:/admin/formatdata";
 	}
 
 	@RequestMapping("/updateSourceField")
@@ -56,7 +54,7 @@ public class SourceFieldController {
 
 		if (1 == sourceFieldService.updateSourceField(sourceField)) {
 			map.put("result", true);
-			map.put("url", "/wankangyuan/admin/formatdata?cs_id=" + sourceField.getCs_id());
+			map.put("message", "更新成功");
 		} else {
 			map.put("result", false);
 			map.put("message", "更新失败");

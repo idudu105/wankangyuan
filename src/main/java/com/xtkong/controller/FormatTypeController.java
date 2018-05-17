@@ -62,7 +62,7 @@ public class FormatTypeController {
 
 		if (1 == formatTypeService.insertFormatType(formatType)) {
 			map.put("result", true);
-			map.put("cs_id", formatType.getCs_id());
+			map.put("message", "新增成功");
 		} else {
 			map.put("result", false);
 			map.put("message", "新增失败");
@@ -85,8 +85,10 @@ public class FormatTypeController {
 
 		if (1 == formatTypeService.updateFormatType(formatType)) {
 			map.put("result", true);
+			map.put("message", "更新成功");
 		} else {
 			map.put("result", false);
+			map.put("message", "更新失败");
 		}
 		
 		return map;

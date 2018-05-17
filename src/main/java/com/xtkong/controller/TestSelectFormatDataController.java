@@ -38,7 +38,7 @@ public class TestSelectFormatDataController {
 
 	@RequestMapping("/firstIn")
 	public String test(HttpSession httpSession) {
-		List<Source> sources = sourceService.selectSource();
+		List<Source> sources = sourceService.getSources();
 		httpSession.setAttribute("sources", sources);
 
 		List<SourceField> sourceFields = sourceFieldService.getSourceFields(sources.get(0).getCs_id());
@@ -72,7 +72,7 @@ public class TestSelectFormatDataController {
 	}
 	@RequestMapping("/project")
 	public String testproject(HttpSession httpSession) {
-		List<Source> sources = sourceService.selectSource();
+		List<Source> sources = sourceService.getSources();
 		httpSession.setAttribute("sources", sources);
 
 		List<SourceField> sourceFields = sourceFieldService.getSourceFields(sources.get(0).getCs_id());
