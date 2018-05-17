@@ -184,9 +184,10 @@
                         <div class="box-content">
                         
                             <div class="box_xxtab">
-	                            <c:forEach items="${sources}" var="source">
+	                            <!-- <c:forEach items="${sources}" var="source">
 	                                <div class="box_xxtabz" id="${source.cs_id }">${source.cs_name}</div>
-								</c:forEach>
+								</c:forEach> -->
+								<div class="box_xxtabz" id="${source.cs_id }">${source.cs_name}</div>
                                 <div class="box_addxxtabz">+</div>
                             </div>
                             
@@ -194,70 +195,31 @@
                             	
                                 <div class="box_xytabz active">
                                     <div class="box_xytabzK">
-                                        <div class="box_xytabzT" id="cs_name">${sources[0].cs_name}-配置</div>
+                                        <div class="box_xytabzT" id="cs_name">${source.cs_name}-配置</div>
                                         <div class="tableedit">
                                             <div class="tableeditz tableeditzadd">+新增</div>
                                             <div class="tableeditz tableeditzedit">/编辑</div>
                                             <div class="tableeditz tableeditzdel">-删除</div>
                                         </div>
                                         <div class="tablebox">
-                                            <table class="biaoge table-bordered" id="sourceFieldTable">
-                                                <div class="biaotou">
-                                                    <tr role="row">
-                                                        <th class="biaotouth">
-                                                            <input type="checkbox" class="quanxuan">全选
-                                                        </th>
-                                                        <th class="biaotouth">字段名</th>
-                                                        <th class="biaotouth">类型</th>
-                                                        <th class="biaotouth">校验规则</th>
-                                                        <th class="biaotouth">是否可枚举</th>
-                                                        <th class="biaotouth">是否必填</th>
-                                                        <th class="biaotouth">字段描述信息</th>
-                                                        <th class="biaotouth">错误信息提示</th>
-                                                        <th class="biaotouth">创建时间</th>
-                                                        <th class="biaotouth">更新时间</th>
-                                                        <th class="biaotouth">创建人</th>
-                                                        <th class="biaotouth">更新人</th>
-                                                    </tr>
-                                                </div>
-                                                <div class="biaoxiang">
-                                            		<c:forEach items="${sources[0].sourceFileds}" var="sourceFiled">
-                                      	            	<tr role="row" class="trbx" >
-                                                       		<th class="biaoxiangth"><input type="checkbox" class="xuanze"id="${sourceFiled.csf_id}"></th>
-		                                                    <th class="biaoxiangth" id="csf_name${sourceFiled.csf_id}">${sourceFiled.csf_name}</th>
-		                                                    <th class="biaoxiangth" id="type${sourceFiled.csf_id}">${sourceFiled.type}</th>
-		                                                    <th class="biaoxiangth" id="check_rule${sourceFiled.csf_id}">${sourceFiled.check_rule}</th>
-		                                                    <th class="biaoxiangth" id="enumerated${sourceFiled.csf_id}">
-			                                                    <c:if test="${sourceFiled.enumerated== false}">
-								                                	否
-								                  	            </c:if>
-			                                                    <c:if test="${sourceFiled.enumerated== true}">
-								                                	是
-								                  	            </c:if>
-		                                                    </th>
-		                                                    <th class="biaoxiangth" id="not_null${sourceFiled.csf_id}">
-			                                                    <c:if test="${sourceFiled.not_null== false}">
-								                                	否
-								                  	            </c:if>
-			                                                    <c:if test="${sourceFiled.not_null== true}">
-								                                	是
-								                  	            </c:if>
-		                                                    </th>
-		                                                    <th class="biaoxiangth" id="description${sourceFiled.csf_id}">${sourceFiled.description}</th>
-		                                                    <th class="biaoxiangth" id="error_msg${sourceFiled.csf_id}">${sourceFiled.error_msg}</th>
-		                                                    <th class="biaoxiangth">${sourceFiled.create_datetime}</th>
-		                                                    <th class="biaoxiangth">${sourceFiled.update_datetime}</th>
-		                                                    <th class="biaoxiangth">${sourceFiled.creator}</th>
-		                                                    <th class="biaoxiangth">${sourceFiled.updater}</th>
-                                                 	   </tr>
-                                               		</c:forEach>
-                                                </div>
-                                            </table>
+                                            <table class="biaoge table-bordered" id="sourceFieldTable"></table>
                                         </div>
 	                                </div>
-                                </div>
-	                                
+	                                <div class=box_xytabzK2>
+                                        <div class="box_xytabzT" >格式化数据类型配置</div>
+                                        <div class="tableedit">
+	                                        <div class="tableeditz tableeditzadd">+新增</div>
+	                                        <div class="tableeditz tableeditzedit">/编辑</div>
+	                                        <div class="tableeditz tableeditzdel">-删除</div>
+                                    	</div>
+                                        <div class="tablebox">
+                                        	<table class="biaoge table-bordered" id="formatTypeTable"></table>
+                                    	</div>
+	                                </div>
+                                </div> 
+                                  
                              </div>
+                             
 
                             <!-- 新增数据采集源start -->
                             <div class="addboxK">
@@ -411,106 +373,40 @@
                                 </div>
                             </div>
                             <!-- 删除metainfo_end -->
-
-                        </div>
-                    </div>
-                    <!-- 数据采集表end -->
-
-                    <!-- 格式化数据类型配置表start -->
-                    <div class="box span12 datatypeconfig">
-                        <div class="box-header" data-original-title="">
-                            <h2>
-                                <i class="halflings-icon white user"></i>
-                                <span class="break"></span>格式化数据类型配置
-                            </h2>
-                        </div>
-                        <div class="box-content">
-                            <div class="box_xytab">
-                            
-                                <div class="box_xytabz active">
-                                    <div class="tableedit">
-                                        <div class="tableeditz tableeditzadd">+新增</div>
-                                        <div class="tableeditz tableeditzedit">/编辑</div>
-                                        <div class="tableeditz tableeditzdel">-删除</div>
-                                    </div>
-                                    <div class="tablebox">
-                                        <table class="biaoge table-bordered" id="formatTypeTable">
-                                            <div class="biaotou">
-                                                <tr role="row">
-                                                    <th class="biaotouth">
-                                                        <input type="checkbox" class="quanxuan">全选
-                                                    </th>
-                                                    <th class="biaotouth">格式化数据类型名</th>
-                                                    <th class="biaotouth">创建时间</th>
-                                                    <th class="biaotouth">更新时间</th>
-                                                    <th class="biaotouth">创建人</th>
-                                                    <th class="biaotouth">更新人</th>
-                                                    <th class="biaotouth">状态</th>
-                                                    <th class="biaotouth">格式化数据类别</th>
-                                                    <th class="biaotouth">操作</th>
-                                                </tr>
-                                            </div>
-                                            <div class="biaoxiang">
-                                            	<c:forEach items="${sources[0].formatTypes}" var="formatType">
-	                                                <tr role="row" class="trbx">
-	                                                    <th class="biaoxiangth"><input type="checkbox" class="xuanze"></th>
-	                                                    <th class="biaoxiangth">${formatType.ft_name}</th>
-	                                                    <th class="biaoxiangth">${formatType.create_datetime}</th>
-	                                                    <th class="biaoxiangth">${formatType.update_datetime}</th>
-	                                                    <th class="biaoxiangth">${formatType.creator}</th>
-	                                                    <th class="biaoxiangth">${formatType.updater}</th>
-	                                                    <c:if test="${formatType.is_view== false}">
-							                            	<th class="biaoxiangth">隐藏</th>
-							                  	       	</c:if>
-							                  	        <c:if test="${formatType.is_view== true}">
-							                            	<th class="biaoxiangth">显示</th>
-							                  	       	</c:if>
-	                                                    <th class="biaoxiangth">${formatType.floder}</th>
-	                                                    <th class="biaoxiangth">进入</th>
-	                                                </tr>
-                                                </c:forEach>
-                                            </div>
-                                        </table>
-                                    </div>
-                                </div>
-                            
-                            </div>
-                            
                             
                             <!-- 添加格式化数据类型start -->
-                            <div class="addbiaoxK">
-                          	 	<!-- form表单提交数据 -->
-	         				 	<form action="/wankangyuan/formatType/insertFormatType">
-	         				 		<input name="cs_name1" style="display:none;"/>
+                            <div class="addbiaoxK_2">
+                            	<form name="insertFormatTypeForm">
+	                            	<input name="format_add_cs_id" id="format_add_cs_id" style="display:none;"/>
 	                                <div class="addbiaoxT">
 	                                    <div class="addbiaoxTt">添加格式化数据类型</div>
 	                                    <div class="addbiaoxTx"></div>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">格式化数据名：</div>
-	                                    <input type="text" class="addbiaoxlik" name="ft_name"/>
+	                                    <input type="text" class="addbiaoxlik" name="format_add_ft_name" id="format_add_ft_name"/>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">状态：</div>
-	                                    <select name="is_view" id="">
-	                                        <option value="true">显示</option>
-	                                        <option value="false">隐藏</option>
+	                                    <select name="format_add_is_view" id="format_add_is_view">
+	                                        <option value="">显示</option>
+	                                        <option value="">隐藏</option>
 	                                    </select>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">格式化数据类别：</div>
-	                                    <input type="text" class="addbiaoxlik"name="higher_ft_name" />
+	                                    <input type="text" class="addbiaoxlik" name="format_add_floder" id="format_add_floder"/>
 	                                </div>
 	                                <div class="addbiaoxB">
-	                                    <input type="submit" value="提交" class="addbiaoxBb" />
+	                                    <input type="button" value="提交" class="addbiaoxBb" id="insertFormatTypeSubmit"/>
 	                                    <input type="button" value="关闭" class="addbiaoxBb2" />
 	                                </div>
-	                        	</form>  
+                                </form>
                             </div>
                             <!-- 添加格式化数据类型end -->
 
                             <!-- 更新结果类型start -->
-                            <div class="addbiaoxK2">
+                            <div class="addbiaoxK2_2">
                               <!-- form表单提交数据 -->
 	         				 	<form action="/wankangyuan/formatType/insertFormatType">
 	                                <div class="addbiaoxT">
@@ -541,7 +437,7 @@
                             <!-- 更新结果类型end -->
 
                             <!-- 删除格式化数据类型start -->
-                            <div class="delbiaoxK">
+                            <div class="delbiaoxK_2">
                                 <div class="addbiaoxT">
                                     <div class="addbiaoxTt">通知</div>
                                     <div class="addbiaoxTx"></div>
@@ -556,7 +452,7 @@
 
                         </div>
                     </div>
-                    <!-- 格式化数据类型配置表end -->
+                    <!-- 数据采集表end -->
 
                 </div><!--/row-->
 
@@ -657,6 +553,8 @@
 	    $(".box_xxtabz").click(function(){
 	    	
 	        $("input[name='cs_id']").val(this.id);
+	        $("input[name='format_add_cs_id']").val(this.id);
+	        
 	        var cs_id = this.id;
 	       	var sourceFieldTable = $("#sourceFieldTable");
 	       	var formatTypeTable = $("#formatTypeTable");
@@ -675,7 +573,7 @@
 	       				$("#cs_name").text(data.source.cs_name+'-配置');
 	       				
 	       				//获取基本字段并展示
-	       				var sourceFields = data.source.sourceFileds;
+	       				var sourceFields = data.source.sourceFields;
 	       				sourceFieldTable.empty();
 	       				
 	       				var str = '';
@@ -770,51 +668,7 @@
 	       				}
 	       				strFormatTypes+='</div>';
 	       				formatTypeTable.html(strFormatTypes);
-	       				
-	       				
-	       				/*
-	       				<div class="biaotou">
-                            <tr role="row">
-                                <th class="biaotouth">
-                                    <input type="checkbox" class="quanxuan">全选
-                                </th>
-                                <th class="biaotouth">格式化数据类型名</th>
-                                <th class="biaotouth">创建时间</th>
-                                <th class="biaotouth">更新时间</th>
-                                <th class="biaotouth">创建人</th>
-                                <th class="biaotouth">更新人</th>
-                                <th class="biaotouth">状态</th>
-                                <th class="biaotouth">格式化数据类别</th>
-                                <th class="biaotouth">操作</th>
-                            </tr>
-                        </div>
-                        <div class="biaoxiang">
-                        	<c:forEach items="${sources[0].formatTypes}" var="formatType">
-                             <tr role="row" class="trbx">
-                                 <th class="biaoxiangth"><input type="checkbox" class="xuanze"></th>
-                                 <th class="biaoxiangth">${formatType.ft_name}</th>
-                                 <th class="biaoxiangth">${formatType.create_datetime}</th>
-                                 <th class="biaoxiangth">${formatType.update_datetime}</th>
-                                 <th class="biaoxiangth">${formatType.creator}</th>
-                                 <th class="biaoxiangth">${formatType.updater}</th>
-                                 <c:if test="${formatType.is_view== false}">
-					               	<th class="biaoxiangth">隐藏</th>
-					     	       	</c:if>
-					     	        <c:if test="${formatType.is_view== true}">
-					               	<th class="biaoxiangth">显示</th>
-					     	     </c:if>
-                                 <th class="biaoxiangth">${formatType.floder}</th>
-                                 <th class="biaoxiangth">进入</th>
-                             </tr>
-                            </c:forEach>
-                        </div>
 
-	       				*/
-	       				
-	       				
-	       				
-	       				
-	
 	       			}else{
 	       				alert(data.message);
 	       			}
@@ -860,7 +714,7 @@
 	    $("#updateSourceFieldSubmit").click(function (){
 	
 	    	$.ajax({
-				url:"/wankangyuan/sourceFiled/updateSourceFiled",
+				url:"/wankangyuan/sourceField/updateSourceField",
 				type:"post",
 				dataType:"json",
 				data:{
@@ -887,10 +741,34 @@
 			});
 	    	
 	    });
-	    
-	 	
+
+	    //新增数据源格式数据字段提交按钮，
+	    $("#insertFormatTypeSubmit").click(function (){
+	    	$.ajax({
+				url:"/wankangyuan/sourceFiled/insertSourceFiled",
+				type:"post",
+				dataType:"json",
+				data:{
+					cs_id:insertFormatTypeForm.format_add_cs_id.value,
+					ft_name:insertFormatTypeForm.format_add_ft_name.value,
+					is_view:insertFormatTypeForm.format_add_is_view.value,
+					floder:insertFormatTypeForm.format_add_floder.value,
+				},
+				success : function(data){
+					if(data.result == true){
+						window.location.href=data.url;
+					}else{
+						alert(data.message);
+					}
+				},
+				error : function(){
+					alert("联网失败");
+				}
+			});		
+	    });
 		
 		//提交新建的结果
+		/*
 		function insertSourceFiled1(){
 			//进行ajax请求
 			$.ajax({
@@ -914,7 +792,7 @@
 					alert("联网失败");
 				}
 			});			
-		}
+		}*/
     	
     </script>
     

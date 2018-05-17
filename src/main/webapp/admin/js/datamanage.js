@@ -17,7 +17,7 @@ $(document).ready(function(){
 
     var obox_xytab=odatacollec.querySelectorAll('.box_xytab')[0];
     var abox_xytabz=obox_xytab.querySelectorAll('.box_xytabz');
-    /*
+
     for(var i=0;i<abox_xxtabz.length;i++){
         (function(index){
             abox_xxtabz[index].onclick=function(){
@@ -27,7 +27,7 @@ $(document).ready(function(){
                 abox_xytabz[index].className="box_xytabz active";
             }
         })(i)
-    }*/
+    }
 
     // 新增数据采集源
     var obox_addxxtabz=odatacollec.querySelectorAll('.box_addxxtabz')[0];//新增数据采集源按钮
@@ -132,7 +132,6 @@ $(document).ready(function(){
         (function(index){
             atableeditzedit[index].onclick=function(){
                 if(oaddbiaoxPD2==0){
-                	
                 	//在此处查询出选中的复选框
             		var afuxuanK=document.querySelectorAll('.trbx');
                     var afuxuan=[];
@@ -243,61 +242,7 @@ $(document).ready(function(){
 
 
 
-    //数据采集表的全选效果
-    // var odatacollec=document.querySelectorAll('.datacollec')[0];//数据采集表
-    // var abox_xytabz=odatacollec.querySelectorAll('.box_xytabz');//三（多）个表
-
-    var abox_xytabzK=document.querySelectorAll('.box_xytabzK');//三个数据采集表
-    console.log(abox_xytabzK);
-
-    // console.log(abox_xytabz);
-    for(var a=0;a<abox_xytabzK.length;a++){
-        (function(i){
-            var oquanxuan=abox_xytabzK[i].querySelectorAll('.quanxuan')[0];//每个表的全选
-            // console.log(oquanxuan);
-            var axuanze=abox_xytabzK[i].querySelectorAll('.xuanze');//每个表的选择
-
-            var afuxuan=[];
-            for(var i=0;i<axuanze.length;i++){
-                afuxuan.push(axuanze[i]);
-            }
-
-            oquanxuan.onchange=function(){
-                if(oquanxuan.checked){
-                    for(var i=0;i<axuanze.length;i++){
-                        afuxuan[i].checked=1;
-                    }
-                }else{
-                    // console.log(2);
-                    for(var i=0;i<axuanze.length;i++){
-                        afuxuan[i].checked=0;
-                    }
-                }
-            }
-
-            for(var i=0;i<axuanze.length;i++){
-                (function(index){
-                    axuanze[i].onchange=function(){
-                        var fuxuanPD=0;
-                        for(var j=0;j<axuanze.length;j++){
-                            if(afuxuan[j].checked){
-                                fuxuanPD++;
-                            }
-                            console.log(afuxuan[j].checked);
-                        }
-                        console.log(fuxuanPD);
-                        if(fuxuanPD==axuanze.length){
-                            oquanxuan.checked=1;
-                        }else if(fuxuanPD!=axuanze.length){
-                            oquanxuan.checked=0;
-                        }
-                    }
-                })(i)
-            }
-        })(a)
-
-    }
-
+  
 
 
     //格式化数据类型配置表
@@ -306,12 +251,11 @@ $(document).ready(function(){
     // console.log(abox_xytabzK2);
 
 
-// 新增格式化数据类型
+    // 新增格式化数据类型
     var atableeditzadd2=[];
     for(var i=0;i<abox_xytabzK2.length;i++){
         var otableeditzadd=abox_xytabzK2[i].querySelectorAll('.tableeditzadd')[0];
-        // console.log(otableeditzadd)
-        atableeditzadd2.push(otableeditzadd);//新增metainfo按钮
+        atableeditzadd2.push(otableeditzadd);
     }
     // console.log(atableeditzadd2);
 
@@ -449,7 +393,7 @@ $(document).ready(function(){
     // var odatatypeconfig=document.querySelectorAll('.datatypeconfig')[0];//格式化数据类型配置表
     // var obox_xytabz=odatatypeconfig.querySelectorAll('.box_xytabz')[0];//表格
     
-    var abox_xytabzK2=document.querySelectorAll('.box_xytabzK2');//三个数据采集表
+    /*var abox_xytabzK2=document.querySelectorAll('.box_xytabzK2');//三个数据采集表
     console.log(abox_xytabzK2);
 
 
@@ -499,7 +443,7 @@ $(document).ready(function(){
             }
         })(a)
 
-    }
+    }*/
 
     var abiaoxiangthin=document.querySelectorAll('.biaoxiangthin');//进入按钮
 
