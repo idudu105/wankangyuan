@@ -22,7 +22,7 @@ import com.dzjin.model.ProjectFile;
 import com.xtkong.dao.TestDao;
 import com.xtkong.model.Source;
 import com.xtkong.model.SourceField;
-import com.xtkong.service.SourceFiledService;
+import com.xtkong.service.SourceFieldService;
 import com.xtkong.service.SourceService;
 
 @Controller
@@ -34,19 +34,19 @@ public class TestSelectFormatDataController {
 	@Autowired
 	SourceService sourceService;
 	@Autowired
-	SourceFiledService sourceFiledService;
+	SourceFieldService sourceFieldService;
 
 	@RequestMapping("/firstIn")
 	public String test(HttpSession httpSession) {
 		List<Source> sources = sourceService.selectSource();
 		httpSession.setAttribute("sources", sources);
 
-		List<SourceField> sourceFileds = sourceFiledService.getSourceFileds(sources.get(0).getCs_id());
-		httpSession.setAttribute("sourceFileds", sourceFileds);
+		List<SourceField> sourceFields = sourceFieldService.getSourceFields(sources.get(0).getCs_id());
+		httpSession.setAttribute("sourceFields", sourceFields);
 
 		List<List<String>> sourceDatas = new ArrayList<>();
 		// =hBaseSourceDao.getSourceDatasByUid(Integer.toString(sources.get(0).getCs_id()),
-		// "1", sourceFileds);
+		// "1", sourceFields);
 		List<String> list1 = new ArrayList<>();
 		list1.add("张三");
 		list1.add("25");
@@ -75,12 +75,12 @@ public class TestSelectFormatDataController {
 		List<Source> sources = sourceService.selectSource();
 		httpSession.setAttribute("sources", sources);
 
-		List<SourceField> sourceFileds = sourceFiledService.getSourceFileds(sources.get(0).getCs_id());
-		httpSession.setAttribute("sourceFileds", sourceFileds);
+		List<SourceField> sourceFields = sourceFieldService.getSourceFields(sources.get(0).getCs_id());
+		httpSession.setAttribute("sourceFields", sourceFields);
 
 		List<List<String>> sourceDatas = new ArrayList<>();
 		// =hBaseSourceDao.getSourceDatasByUid(Integer.toString(sources.get(0).getCs_id()),
-		// "1", sourceFileds);
+		// "1", sourceFields);
 		List<String> list1 = new ArrayList<>();
 		list1.add("张三");
 		list1.add("25");

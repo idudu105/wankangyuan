@@ -1,5 +1,9 @@
 package com.xtkong.model;
 
+/**
+ * 采集源字段
+ *
+ */
 public class SourceField {
 	private int csf_id; // 采集源字段ID
 	private String csf_name; // 采集字段名
@@ -8,7 +12,7 @@ public class SourceField {
 	private String check_rule; // 校验规则
 	private boolean enumerated; // 是否可枚举 0 不可；1 可枚举
 	private boolean not_null; // 是否必填 0 可空；1 必填
-	private String description;//字段描述信息
+	private String description;// 字段描述信息
 	private String error_msg; // 错误信息提示
 	private String create_datetime; // 创建时间
 	private int create_uid; // 创建人
@@ -17,7 +21,7 @@ public class SourceField {
 
 	private String creator; // 创建人
 	private String updater; // 更新人
-	
+
 	public String getCreator() {
 		return creator;
 	}
@@ -66,7 +70,6 @@ public class SourceField {
 		this.type = type;
 	}
 
-	
 	public String getCheck_rule() {
 		return check_rule;
 	}

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xtkong.dao.SourceDao;
 import com.xtkong.model.FormatType;
+import com.xtkong.service.FormatFieldService;
 import com.xtkong.service.FormatTypeService;
 
 @Controller
@@ -24,6 +25,30 @@ public class FormatTypeController {
 	SourceDao sourceDao;
 	@Autowired
 	FormatTypeService formatTypeService;
+	@Autowired
+	FormatFieldService formatFieldService;
+
+	/**
+	 * 	提供：格式类别id
+	 * 返回：执行情况，格式类型基础信息、该类型所有格式字段
+	 * @param ft_id
+	 * @return 执行情况，格式类型基础信息、该类型所有格式字段
+	 */
+	@RequestMapping(value = "/getFormatFields")
+	@ResponseBody
+	public Map<String, Object> getFormatFields(Integer ft_id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		FormatType formatType = formatTypeService.getFormatType(ft_id);
+		if (formatType != null) {
+			formatType.setFormatFields(formatFieldService.getFormatFields(ft_id));
+			map.put("result", true);
+			map.put("source", formatType);
+		} else {
+			map.put("result", false);
+			map.put("message", "查询失败");
+		}
+		return map;
+	}
 
 	@RequestMapping("/insertFormatType")
 	@ResponseBody
