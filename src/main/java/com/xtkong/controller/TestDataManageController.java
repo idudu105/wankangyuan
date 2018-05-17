@@ -38,7 +38,7 @@ public class TestDataManageController {
 		List<Source>sources=sourceService.getSourcesForAdmin();
 		if (sources != null) {
 			sources.get(0).setSourceFields(sourceFieldService.getSourceFields(sources.get(0).getCs_id()));
-			sources.get(0).setFormatTypes(formatTypeService.selectFormatType(sources.get(0).getCs_id()));
+			sources.get(0).setFormatTypes(formatTypeService.getFormatTypes(sources.get(0).getCs_id()));
 		}
 		httpSession.setAttribute("sources", sources);
 

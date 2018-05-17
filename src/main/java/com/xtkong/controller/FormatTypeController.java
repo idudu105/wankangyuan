@@ -3,10 +3,7 @@ package com.xtkong.controller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,7 +46,11 @@ public class FormatTypeController {
 		}
 		return map;
 	}
-
+/**
+ * 新增一条格式类型
+ * @param formatType  待增格式类型
+ * @return 执行情况，采集源id
+ */ 
 	@RequestMapping("/insertFormatType")
 	@ResponseBody
 	public Map<String, Object> insertFormatType(FormatType formatType) {
@@ -61,17 +62,21 @@ public class FormatTypeController {
 
 		if (1 == formatTypeService.insertFormatType(formatType)) {
 			map.put("result", true);
-			map.put("url", "/wankangyuan/admin/formatdata?cs_id=" + formatType.getCs_id());
+			map.put("cs_id", formatType.getCs_id());
 		} else {
 			map.put("result", false);
 			map.put("message", "新增失败");
 		}
 		return map;
-
-		// return "redirect:/admin/datamanage.jsp";
 	}
-
+	
+	/**
+	 * 更新一条格式类型
+	 * @param formatType 待更新格式类型
+	 * @return 执行情况，采集源id
+	 */
 	@RequestMapping("/updateFormatType")
+	@ResponseBody
 	public Map<String, Object> updateFormatType(FormatType formatType) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -80,37 +85,58 @@ public class FormatTypeController {
 
 		if (1 == formatTypeService.updateFormatType(formatType)) {
 			map.put("result", true);
-			map.put("url", "/wankangyuan/admin/formatdata?cs_id=" + formatType.getCs_id());
 		} else {
 			map.put("result", false);
-			map.put("message", "更新失败");
+		}
+		
+		return map;
+	}
+	/**
+	 * 删除一条格式类型
+	 * 
+	 * @param ft_id
+	 *            待删除格式类型id
+	 * @return 执行情况，采集源id
+	 */
+	@RequestMapping("/deleteFormatType")
+	@ResponseBody
+	public Map<String, Object> deleteFormatType(String ft_ids) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		String[]ft_idStrs= ft_ids.split(",");
+		int i = 0;
+		for (String ft_id : ft_idStrs) {
+			if (1 == formatTypeService.deleteFormatType(Integer.valueOf(ft_id))) {
+				i++;
+			}
+		}
+		if (i==ft_idStrs.length) {
+			map.put("result", true);
+			map.put("message", "成功删除"+i+"行");
+		}else{
+			map.put("result", false);
+			map.put("message", "已删除："+i+"行，剩余"+(ft_idStrs.length-i)+"行未删除");
 		}
 		return map;
 	}
 
 	/**
-	 * 选取格式类型列表
-	 * 
-	 * @param httpSession
-	 * @param higher_ft_id
-	 *            上层格式类型
-	 * @return 格式类型列表
-	 */
-	@RequestMapping("/selectFormatType")
-	public String selectFormatType(HttpSession httpSession, String datainname, Integer cs_id) {
-		httpSession.setAttribute("datainname", datainname);
-		List<FormatType> formatTypes = formatTypeService.selectFormatType(cs_id);
-		for (FormatType formatType : formatTypes) {
-			formatType.setFormatTypeFloders(formatTypeService.selectFormatType(cs_id));
-		}
-		httpSession.setAttribute("formatTypes", formatTypes);
-		return "redirect:/pages/project_datain.jsp";
-	}
+//	 * 选取格式类型列表
+//	 * 
+//	 * @param httpSession
+//	 * @param higher_ft_id
+//	 *            上层格式类型
+//	 * @return 格式类型列表
+//	 */
+//	@RequestMapping("/selectFormatType")
+//	public String selectFormatType(HttpSession httpSession, String datainname, Integer cs_id) {
+//		httpSession.setAttribute("datainname", datainname);
+//		List<FormatType> formatTypes = formatTypeService.getFormatTypes(cs_id);
+//		for (FormatType formatType : formatTypes) {
+//			formatType.setFormatTypeFloders(formatTypeService.getFormatTypes(cs_id));
+//		}
+//		httpSession.setAttribute("formatTypes", formatTypes);
+//		return "redirect:/pages/project_datain.jsp";
+//	}
 
-	@RequestMapping("/deleteFormatType")
-	public String deleteFormatType(Integer ft_id) {
-		FormatType formatType = formatTypeService.getFormatType(ft_id);
-		formatTypeService.deleteFormatType(ft_id);
-		return "redirect:/admin/formatdata?cs_id=" + formatType.getCs_id();
-	}
+	
 }
