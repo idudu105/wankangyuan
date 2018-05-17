@@ -14,6 +14,7 @@ import com.liutianjun.pojo.Application;
 import com.liutianjun.pojo.ApplicationQuery;
 import com.liutianjun.pojo.ApplicationQuery.Criteria;
 import com.liutianjun.service.ApplicationService;
+import com.liutianjun.service.ProjectAppRelationService;
 import com.liutianjun.service.UserAppRelationService;
 
 /**
@@ -33,6 +34,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 	
 	@Autowired
 	private UserAppRelationService userAppRelationService;
+	
+	@Autowired
+	private ProjectAppRelationService projectAppRelationService;
 	
 	/**
 	 * 插入应用
@@ -96,6 +100,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	public Map<String,Object> findAll() {
 		ApplicationQuery example = new ApplicationQuery();
 		int total = applicationDao.countByExample(example);
+		example.setOrderByClause("id DESC");
 		List<Application> list = applicationDao.selectByExample(example);
 		Map<String,Object> map = new HashMap<>();
 		map.put("list", list);
@@ -121,6 +126,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 		}
 		criteria.andStatusEqualTo("公开");
 		int total = applicationDao.countByExample(example);
+		example.setOrderByClause("id DESC");
 		example.setPageNo(page);
 		example.setPageSize(rows);
 		List<Application> list = applicationDao.selectByExample(example);
@@ -149,6 +155,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 		}
 		criteria.andCreatorEqualTo(creator);
 		int total = applicationDao.countByExample(example);
+		example.setOrderByClause("id DESC");
 		example.setPageNo(page);
 		example.setPageSize(rows);
 		List<Application> list = applicationDao.selectByExample(example);
@@ -202,6 +209,39 @@ public class ApplicationServiceImpl implements ApplicationService {
 		}
 		
 		int total = applicationDao.countByExample(example);
+		example.setOrderByClause("id DESC");
+		example.setPageNo(page);
+		example.setPageSize(rows);
+		List<Application> list = applicationDao.selectByExample(example);
+		Map<String,Object> map = new HashMap<>();
+		map.put("list", list);
+		map.put("total", total);
+		return map;
+	}
+
+	/**
+	 * 查找我的项目下的应用
+	 * <p>Title: findMineProjectApp</p>  
+	 * <p>Description: </p>  
+	 * @param page
+	 * @param rows
+	 * @param ProjectId
+	 * @return
+	 */
+	@Override
+	public Map<String, Object> findMineProjectApp(Integer page, Integer rows, Integer ProjectId) {
+		
+		List<Integer> appIdList = projectAppRelationService.findByProjectId(ProjectId);
+		
+		ApplicationQuery example = new ApplicationQuery();
+		Criteria criteria = example.createCriteria();
+		if(appIdList != null) {
+		criteria.andIdIn(appIdList);
+		} else {
+			criteria.andIdIsNull();
+		}
+		int total = applicationDao.countByExample(example);
+		example.setOrderByClause("id DESC");
 		example.setPageNo(page);
 		example.setPageSize(rows);
 		List<Application> list = applicationDao.selectByExample(example);

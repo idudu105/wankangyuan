@@ -2,34 +2,15 @@
 * @Author: Marte
 * @Date:   2018-04-23 11:25:49
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-05-16 10:30:32
+* @Last Modified time: 2018-05-17 09:58:28
 */
-@font-face {
-    font-family: PingFangSC-Semibold;
-    font-weight: normal;
-    font-style: normal;
-    src: url('../font/PingFangSC-Semibold.ttf') format('truetype');
-}
-@font-face {
-    font-family: PingFangSC-Medium;
-    font-weight: normal;
-    font-style: normal;
-    src: url('../font/PingFangSC-Medium.ttf') format('truetype');
-}
-@font-face {
-    font-family: PingFangSC-Regular;
-    font-weight: normal;
-    font-style: normal;
-    src: url('../font/PingFangSC-Regular.ttf') format('truetype');
-}
-
 
 *{
     margin:0;
     padding:0;
     list-style: none;
     text-decoration: none;
-    font-family: PingFangSC-Semibold;
+    font-family: Microsoft YaHei;
     /*background:#fff;*/
 }
 a{
@@ -232,7 +213,8 @@ textarea{
     color:#666666;
     float:right;
     cursor:pointer;
-    font-family: PingFangSC-Medium;
+    /*font-family: PingFangSC-Medium;*/
+    font-weight: 700;
 }
 .top2Ctr.active{
     border-bottom: 2px solid #16579b;
@@ -1116,7 +1098,8 @@ textarea{
     margin:0 auto;
     background:#16579b;
     height:40px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:14px;
     color:#ffffff;
     /*padding-top:10px;*/
@@ -1261,7 +1244,7 @@ textarea{
     font-size:14px;
     color:#0d0d0d;
     line-height:20px;
-    font-family: PingFangSC-Regular;
+    /*font-family: PingFangSC-Regular;*/
     overflow-y: auto;
     resize:none;
     border:0;
@@ -1364,7 +1347,8 @@ textarea{
 .prof_lbLt{
     height:24px;
     /*overflow:auto;*/
-    font-family: PingFangSC-Medium;
+    /*font-family: PingFangSC-Medium;*/
+    font-weight: 700;
 }
 .prof_lbLtL{
     float:left;
@@ -1499,7 +1483,8 @@ textarea{
 .prof_lbRt{
     /*overflow:auto;*/
     height:24px;
-    font-family: PingFangSC-Medium;
+    /*font-family: PingFangSC-Medium;*/
+    font-weight: 700;
 }
 .prof_lbRtL{
     float:left;
@@ -1525,7 +1510,8 @@ textarea{
     height:20px;
     background:#5ca0e5;
     border-radius:1px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:14px;
     color:#ffffff;
     border:0;
@@ -1808,7 +1794,8 @@ textarea{
 .prodaclmRzTt{
     font-size:16px;
     color:#16579b;
-    font-family: PingFangSC-Medium;
+    /*font-family: PingFangSC-Medium;*/
+    font-weight: 700;
     /*vertical-align: middle;*/
     /*display:inline-block;*/
     float:left;
@@ -1832,7 +1819,8 @@ textarea{
     font-size:14px;
     color:#666666;
     float:left;
-    font-family: PingFangSC-Medium;
+    /*font-family: PingFangSC-Medium;*/
+    font-weight: 700;
     line-height: 45px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -1851,7 +1839,8 @@ textarea{
     font-size:14px;
     color:#666666;
     float:left;
-    font-family: PingFangSC-Medium;
+    /*font-family: PingFangSC-Medium;*/
+    font-weight: 700;
     line-height: 45px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -1871,7 +1860,8 @@ textarea{
 .prodaclmRsxT{
     font-size:16px;
     color:#5ca0e5;
-    font-family: PingFangSC-Medium;
+    /*font-family: PingFangSC-Medium;*/
+    font-weight: 700;
     display:inline-block;
     vertical-align: middle;
 }
@@ -1912,7 +1902,8 @@ textarea{
 }
 
 .prodaclmRzTit{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#666666;
     float:left;
@@ -1922,7 +1913,8 @@ textarea{
     display:inline-block;
 }
 .prodaclmRzBzid{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     width:78px;
     font-size:16px;
     color:#16579b;
@@ -1962,7 +1954,8 @@ textarea{
 }
 .clmReditTt{
     float:left;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:18px;
     color:#666666;
 }
@@ -1984,7 +1977,8 @@ textarea{
 .clmReditMzt{
     float:left;
     width:100px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:18px;
     color:#696969;
 }
@@ -2021,7 +2015,8 @@ textarea{
     border-radius:2px;
     width:60px;
     height:30px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#ffffff;
     line-height: 30px;
@@ -2074,7 +2069,8 @@ textarea{
     cursor:pointer;
 }
 .proappendreRT{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:18px;
     color:#666666;
     line-height: 30px;
@@ -2124,7 +2120,8 @@ textarea{
 }
 .proreM{
     width:max-content;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:14px;
     color:#5ca0e5;
     overflow:auto;
@@ -2211,7 +2208,8 @@ textarea{
     text-align: left;
 }
 .fileaddTl{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:18px;
     color:#16579b;
     float:left;
@@ -2234,7 +2232,8 @@ textarea{
 .fileaddT2l{
     margin-right:13px;
     line-height: 25px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:18px;
     color:#5ca0e5;
     vertical-align: middle;
@@ -2267,13 +2266,15 @@ textarea{
     overflow:auto;
 }
 .fileaddMz{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#6c6c6c;
     float:left;
 }
 .fileaddMz2{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#5ca0e5;
     cursor:pointer;
@@ -2302,7 +2303,8 @@ textarea{
     height:30px;
     background:#5ca0e5;
     border-radius:2px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#ffffff;
     text-align: center;
@@ -2333,7 +2335,8 @@ textarea{
 }
 .QXGLkTl{
     float:left;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#666666;
 }
@@ -2404,7 +2407,8 @@ textarea{
     margin-top:30px;
 }
 .QXGLkMrzT{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#17589b;
     margin-bottom:10px;
@@ -2425,7 +2429,8 @@ textarea{
     margin-right:10px;
 }
 .QXGLkMrzMzt{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:14px;
     color:#666666;
     vertical-align: middle;
@@ -2444,7 +2449,8 @@ textarea{
     bottom:29px;
     right:51px;
     color:#fff;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     cursor:pointer;
 }
@@ -2474,7 +2480,8 @@ textarea{
     bottom:31px;
     right:57px;
     color:#fff;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     cursor:pointer;
 }
@@ -2493,7 +2500,8 @@ textarea{
 }
 .memaddTl{
     margin-left:10px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#16579b;
     float:left;
@@ -2524,7 +2532,7 @@ textarea{
     outline:0;
     margin-left:20px;
     margin-top:1px;
-    font-family:PingFangSC-Regular;
+    /*font-family:PingFangSC-Regular;*/
     font-size:14px;
     color:#aeaeae;
 }
@@ -2541,7 +2549,8 @@ textarea{
     width:270px;
 }
 .mimaddMlz1Z{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:18px;
     color:#5ca0e5;
     margin:8px 0;
@@ -2586,7 +2595,8 @@ textarea{
     vertical-align: middle;
 }
 .mimaddMlz1ZBzt{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:14px;
     color:#666666;
     display:inline-block;
@@ -2594,7 +2604,8 @@ textarea{
 }
 
 .mimaddMlz2z{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:18px;
     color:#5ca0e5;
     text-align: left;
@@ -2689,7 +2700,8 @@ textarea{
 
 
 .miadMrMz{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#666666;
     float:left;
@@ -2714,7 +2726,8 @@ textarea{
     /*overflow:auto;*/
 }
 .sortt{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#16579b;
     float:left;
@@ -2738,7 +2751,8 @@ textarea{
     cursor:pointer;
 }
 .sortZt{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#5ca0e5;
     padding-right:20px;
@@ -2814,7 +2828,8 @@ textarea{
     text-align: left;
 }
 .themeMzt1{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#73aeea;
     float:left;
@@ -2862,7 +2877,8 @@ textarea{
     padding-bottom:6px;
     border-bottom:1px solid #dadada;
     text-align: left;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:18px;
     color:#666666;
 }
@@ -2873,7 +2889,8 @@ textarea{
     position:relative;
 }
 .themeaddMt{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:18px;
     color:#666666;
     float:left;
@@ -2903,7 +2920,8 @@ textarea{
     height:28px;
     line-height: 28px;
     text-align: center;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#8e8e8e;
     cursor:pointer;
@@ -2916,7 +2934,8 @@ textarea{
     height:30px;
     line-height: 30px;
     text-align: center;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#ffffff;
     border:0;
@@ -2929,7 +2948,8 @@ textarea{
     position:absolute;
     right:40px;
     bottom:10px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:12px;
     color:#e1e1e1;
 }
@@ -3032,7 +3052,8 @@ textarea{
 .eisdeLTrT{
     width:712px;
     /*height:100px;*/
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#16579b;
     text-align: left;
@@ -3048,13 +3069,15 @@ textarea{
 }
 .eisdeLTrBde{
     float:right;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#666666;
     cursor:pointer;
 }
 .eisdeLTrBre{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#5ca0e5;
     float:right;
@@ -3104,7 +3127,8 @@ textarea{
     margin-right:10px;
 }
 .disdeLBzrt{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#16579b;
     text-align: left;
@@ -3121,14 +3145,16 @@ textarea{
 }
 .disdeLBzrbde{
     float:right;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#666666;
     cursor:pointer;
 }
 .disdeLBzrbre{
     float:right;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#5ca0e5;
     margin-right:80px;
@@ -3159,7 +3185,8 @@ textarea{
     border-bottom:1px solid #e7e7e7;
 }
 .disdeRMzT{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#5ca0e5;
     text-align: left;
@@ -3184,7 +3211,8 @@ textarea{
 .pro_addk,.app_typek{
     overflow:auto;
     width:150px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#5ca0e5;
     border:0;
@@ -3262,7 +3290,8 @@ textarea{
 }
 .inportTt{
     float:left;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:18px;
     color:#666666;
 }
@@ -3279,7 +3308,8 @@ textarea{
     padding:80px 0 70px;
 }
 .inportMt{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#696969;
     width:390px;
@@ -3291,7 +3321,8 @@ textarea{
     width:260px;
     height:50px;
     line-height: 50px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:18px;
     color:#5ca0e5;
     margin:0 auto;
@@ -3316,7 +3347,8 @@ textarea{
     right:50px;
     bottom:25px;
     line-height: 30px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#fff;
     outline:0;
@@ -3342,7 +3374,8 @@ textarea{
     overflow:auto;
 }
 .adddataTt{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:18px;
     color:#666;
     float:left;
@@ -3368,7 +3401,8 @@ textarea{
 .adddataMlit{
     float:left;
     width:120px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:18px;
     color:#696969;
     line-height: 35px;
@@ -3429,7 +3463,8 @@ textarea{
     text-align: center;
     float:right;
     margin-right:22px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#ffffff;
     cursor:pointer;
@@ -3457,7 +3492,8 @@ textarea{
 }
 .appexpMLz{
     margin-bottom:20px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     overflow:auto;
 }
@@ -3501,7 +3537,8 @@ textarea{
     width:198px;
     /*height:26px;*/
     padding:0 5px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#696969;
     float:left;
@@ -3516,7 +3553,8 @@ textarea{
     padding:5px;
 }
 .appexpMLzs1{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#5ca0e5;
 }
@@ -3541,7 +3579,8 @@ textarea{
 }
 .appexpGJZt{
     /*float:left;*/
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#696969;
     margin-right:13px;
@@ -3571,13 +3610,15 @@ textarea{
     width:70px;
     height:20px;
     padding:0 5px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#696969;
     float:left;
 }
 .appexpGJZadb{
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#5ca0e5;
     float:left;
@@ -3602,7 +3643,8 @@ textarea{
 .dataclLb{
     float:right;
     margin-left:30px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#5ca0e5;
     cursor:pointer;
@@ -3633,7 +3675,8 @@ textarea{
     /*margin-top:5px;*/
 }
 .dataeditMt{
-    font-family:PingFangSC-Semibold;
+    /*font-family:PingFangSC-Semibold;*/
+    font-weight: 600;
     font-size:16px;
     color:#5ca0e5;
     margin-top:10px;
@@ -3666,7 +3709,8 @@ textarea{
     border-radius:2px;
     width:60px;
     height:30px;
-    font-family:PingFangSC-Medium;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
     font-size:16px;
     color:#ffffff;
     outline:0;
@@ -3675,4 +3719,74 @@ textarea{
     line-height: 30px;
     margin:10px;
     margin-bottom:20px;
+}
+
+
+
+.xiangmuR{
+    float:right;
+    /*height:690px;*/
+    width:947px;
+    padding:10px;
+    background:rgba(255,255,255,0.53);
+    border:1px solid #979797;
+}
+.xiangmuRT{
+    font-size:18px;
+    color:#ffffff;
+    margin-bottom:24px;
+    text-align: left;
+}
+.xiangmuRM{
+    /*overflow:hidden;*/
+
+}
+.xiangmuRMzK{
+    overflow:hidden;
+    position:relative;
+    width:947px;
+    height:588px;
+}
+.xiangmuRMzKC{
+    width:max-content;
+    position:absolute;
+    left:0;
+    top:0;
+    /*overflow:auto;*/
+    transition-duration: 1s;
+}
+.xiangmuRMz{
+    width:947px;
+    height:588px;
+    float:left;
+}
+
+.xiangmuRMi{
+    width:947px;
+    height:588px;
+}
+.xiangmuRMt{
+    margin-bottom:10px;
+    font-size:16px;
+    font-weight: bold;
+    color:#16579c;
+    text-align: center;
+}
+.xiangmuRMB{
+    display: flex;
+    justify-content: space-around;
+    width:150px;
+    margin:0 auto;
+}
+.xiangmuRMb{
+    border:1px solid #16579b;
+    width:10px;
+    height:10px;
+    cursor:pointer;
+}
+.xiangmuRMb.active{
+    background:#16579b;
+    border:0;
+    width:12px;
+    height:12px;
 }

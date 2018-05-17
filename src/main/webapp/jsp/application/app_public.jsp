@@ -51,7 +51,7 @@
                         <div class="searchC">
                             <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="searchCi" />
                             <form method="get">
-                                <input name="appName" type="text" class="searchCt" value="${appName }"  placeholder="搜索项目" />
+                                <input name="appName" type="text" class="searchCt" value="${appName }"  placeholder="搜索应用" />
                             </form>
                         </div>
                     </div>

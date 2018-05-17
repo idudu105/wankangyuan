@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <title>Document</title>
 </head>
 <link rel="stylesheet" type="text/css" href="/wankangyuan/static/css/project1.css" />
-<script type="text/javascript" src="/wankangyuan/static/js/project1.js"></script>
+<script type="text/javascript" src="/wankangyuan/pages/js/project1.js"></script>
 <script type="text/javascript">
     window.onload=function(){
         project0();

@@ -66,7 +66,7 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+	public Integer getId() {
         return id;
     }
 

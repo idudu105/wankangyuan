@@ -123,5 +123,14 @@
             </div>
         </div>
     </div>
+    
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/jquery.min.js"></script>
+
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
+<c:if test="${not empty msg}">
+    <script type="text/javascript">
+    layer.msg("${msg}");
+    </script>
+</c:if>
 </body>
 </html>

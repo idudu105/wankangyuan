@@ -41,4 +41,7 @@ public interface ApplicationService {
 
 	//查找我的应用
 	Map<String, Object> findMine(Integer page, Integer rows, String appName, String username);
+	
+	//查询项目下的应用
+	Map<String, Object> findMineProjectApp(Integer page, Integer rows, Integer ProjectId);
 }

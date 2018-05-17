@@ -1,12 +1,6 @@
 package com.liutianjun.controller;
 
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>User: Zhang Kaitao
@@ -15,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 public class LoginController {
-
+/*
     @RequestMapping(value = "/login"    )
     public String showLoginForm(HttpServletRequest req, Model model) {
         String exceptionClassName = (String)req.getAttribute("shiroLoginFailure");
@@ -30,5 +24,5 @@ public class LoginController {
         model.addAttribute("error", error);
         return "jsp/login.jsp";
     }
-
+*/
 }
