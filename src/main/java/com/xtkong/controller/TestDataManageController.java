@@ -1,5 +1,7 @@
 package com.xtkong.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,20 +28,19 @@ public class TestDataManageController {
 	FormatTypeService formatTypeService;
 
 	/**
-	 * 说明：首次进入格式数据管理页面，默认显示第一个数据源； 返回：采集源基础信息、采集源字段、采集源所有格式类型
+	 * 说明：首次进入格式数据管理页面，默认显示第一个数据源所有内容； 返回：所有采集源基础信息，第一个采集源字段、采集源所有格式类型
 	 * 
 	 * @param httpSession
 	 * @return 采集源基础信息、采集源字段、采集源所有格式类型
 	 */
 	@RequestMapping(value = "/formatdata")
 	public String formatDataFirstIn(HttpSession httpSession) {
-		int num = 1;
-		Source source = sourceService.getSourceLimit(num);
-		if (source != null) {
-			source.setSourceFields(sourceFieldService.getSourceFields(source.getCs_id()));
-			source.setFormatTypes(formatTypeService.selectFormatType(source.getCs_id()));
+		List<Source>sources=sourceService.getSourcesForAdmin();
+		if (sources != null) {
+			sources.get(0).setSourceFields(sourceFieldService.getSourceFields(sources.get(0).getCs_id()));
+			sources.get(0).setFormatTypes(formatTypeService.selectFormatType(sources.get(0).getCs_id()));
 		}
-		httpSession.setAttribute("source", source);
+		httpSession.setAttribute("sources", sources);
 
 		return "redirect:/admin/datamanage.jsp";
 

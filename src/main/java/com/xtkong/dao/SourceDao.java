@@ -18,7 +18,7 @@ public interface SourceDao {
 	 * @return 数据源列表
 	 */
 	@Select("select * from collection_source order by cs_id")
-	public List<Source> selectSourceForAdmin();
+	public List<Source> getSourcesForAdmin();
 
 	@Select("select * from collection_source where is_view=1 order by cs_id")
 	public List<Source> selectSource();
