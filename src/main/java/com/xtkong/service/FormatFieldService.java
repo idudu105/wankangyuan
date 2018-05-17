@@ -39,4 +39,7 @@ public class FormatFieldService {
 	public FormatField getFormatField(Integer ff_id) {
 		return formatFieldDao.getFormatField(ff_id);
 	}
+	public Integer getFormatField_ft_id(Integer ff_id) {
+		return formatFieldDao.getFormatField_ft_id(ff_id);
+	}
 }

@@ -29,7 +29,7 @@ public class FormatTypeController {
 	FormatFieldService formatFieldService;
 
 	/**
-	 * 	提供：格式类别id
+	 * 	提供：格式类型id
 	 * 返回：执行情况，格式类型基础信息、该类型所有格式字段
 	 * @param ft_id
 	 * @return 执行情况，格式类型基础信息、该类型所有格式字段
