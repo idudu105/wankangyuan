@@ -94,21 +94,27 @@ public class FormatTypeController {
 	/**
 	 * 删除一条格式类型
 	 * 
-	 * @param ff_id
+	 * @param ft_id
 	 *            待删除格式类型id
 	 * @return 执行情况，采集源id
 	 */
 	@RequestMapping("/deleteFormatType")
 	@ResponseBody
-	public Map<String, Object> deleteFormatType(Integer ft_id) {
-		Integer cs_id = formatTypeService.getFormatType_cs_id(ft_id);
+	public Map<String, Object> deleteFormatType(String ft_ids) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (1 == formatTypeService.deleteFormatType(ft_id)) {
+		String[]ft_idStrs= ft_ids.split(",");
+		int i = 0;
+		for (String ft_id : ft_idStrs) {
+			if (1 == formatTypeService.deleteFormatType(Integer.valueOf(ft_id))) {
+				i++;
+			}
+		}
+		if (i==ft_idStrs.length) {
 			map.put("result", true);
-			map.put("cs_id", cs_id);
-		} else {
+			map.put("message", "成功删除"+i+"行");
+		}else{
 			map.put("result", false);
-			map.put("message", "删除失败");
+			map.put("message", "已删除："+i+"行，剩余"+(ft_idStrs.length-i)+"行未删除");
 		}
 		return map;
 	}

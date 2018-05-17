@@ -22,7 +22,7 @@ public class FormatFieldController {
 	 * 
 	 * @param formatField
 	 *            待增格式字段
-	 * @return 执行情况，格式类型id
+	 * @return 执行情况
 	 */
 	@RequestMapping("/insertFormatField")
 	@ResponseBody
@@ -30,7 +30,7 @@ public class FormatFieldController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (1 == formatFieldService.insertFormatField(formatField)) {
 			map.put("result", true);
-			map.put("ft_id", formatField.getFt_id());
+			// map.put("ft_id", formatField.getFt_id());
 		} else {
 			map.put("result", false);
 			map.put("message", "新增失败");
@@ -43,16 +43,17 @@ public class FormatFieldController {
 	 * 
 	 * @param formatField
 	 *            待更新格式字段
-	 * @return 执行情况，格式类型id
+	 * @return 执行情况
 	 */
 	@RequestMapping("/updateFormatField")
 	@ResponseBody
 	public Map<String, Object> updateFormatField(FormatField formatField) {
-		Integer ft_id = formatFieldService.getFormatField_ft_id(formatField.getFf_id());
+		// Integer ft_id =
+		// formatFieldService.getFormatField_ft_id(formatField.getFf_id());
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (1 == formatFieldService.updateFormatField(formatField)) {
 			map.put("result", true);
-			map.put("ft_id", ft_id);
+			// map.put("ft_id", ft_id);
 		} else {
 			map.put("result", false);
 			map.put("message", "更新失败");
@@ -65,26 +66,33 @@ public class FormatFieldController {
 	 * 
 	 * @param ff_id
 	 *            待删除格式字段id
-	 * @return 执行情况，格式类型id
+	 * @return 执行情况
 	 */
 	@RequestMapping("/deleteFormatField")
 	@ResponseBody
-	public Map<String, Object> deleteFormatField(Integer ff_id) {
-		Integer ft_id = formatFieldService.getFormatField_ft_id(ff_id);
+	public Map<String, Object> deleteFormatField(String ff_ids) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (1 == formatFieldService.deleteFormatField(ff_id)) {
+		String[]ff_idStrs= ff_ids.split(",");
+		int i = 0;
+		for (String ff_id : ff_idStrs) {
+			if (1 == formatFieldService.deleteFormatField(Integer.valueOf(ff_id))) {
+				i++;
+			}
+		}
+		if (i==ff_idStrs.length) {
 			map.put("result", true);
-			map.put("ft_id", ft_id);
-		} else {
+			map.put("message", "成功删除"+i+"行");
+		}else{
 			map.put("result", false);
-			map.put("message", "删除失败");
+			map.put("message", "已删除："+i+"行，剩余"+(ff_idStrs.length-i)+"行未删除");
 		}
 		return map;
 	}
 
-//	public String getFormatFields(HttpSession httpSession, Integer ft_id) {
-//		List<FormatField> formatFields = formatFieldService.getFormatFields(ft_id);
-//		httpSession.setAttribute("formatFields", formatFields);
-//		return "redirect:/pages/project_data.html";
-//	}
+	// public String getFormatFields(HttpSession httpSession, Integer ft_id) {
+	// List<FormatField> formatFields =
+	// formatFieldService.getFormatFields(ft_id);
+	// httpSession.setAttribute("formatFields", formatFields);
+	// return "redirect:/pages/project_data.html";
+	// }
 }

@@ -93,9 +93,23 @@ public class SourceFieldController {
 	// }
 
 	@RequestMapping("/deleteSourceField")
-	public String deleteSourceField(Integer csf_id) {
-		SourceField sourceField = sourceFieldService.getSourceField(csf_id);
-		sourceFieldService.deleteSourceField(csf_id);
-		return "redirect:/admin/formatdata?cs_id=" + sourceField.getCs_id();
+	@ResponseBody
+	public Map<String, Object> deleteSourceField(String csf_ids) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		String[]csf_idStrs= csf_ids.split(",");
+		int i = 0;
+		for (String csf_id : csf_idStrs) {
+			if (1 == sourceFieldService.deleteSourceField(Integer.valueOf(csf_id))) {
+				i++;
+			}
+		}
+		if (i==csf_idStrs.length) {
+			map.put("result", true);
+			map.put("message", "成功删除"+i+"行");
+		}else{
+			map.put("result", false);
+			map.put("message", "已删除："+i+"行，剩余"+(csf_idStrs.length-i)+"行未删除");
+		}
+		return map;
 	}
 }
