@@ -32,8 +32,8 @@ public class SourceService {
 	 * 选取数据源，管理
 	 * @return	数据源列表
 	 */
-	public List<Source> selectSourceForAdmin() {
-		return sourceDao.selectSourceForAdmin();
+	public List<Source> getSourcesForAdmin() {
+		return sourceDao.getSourcesForAdmin();
 	}
 	
 	public Source getSourceByCs_id(Integer cs_id){
