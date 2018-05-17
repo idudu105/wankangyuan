@@ -12,27 +12,37 @@ import com.xtkong.model.FormatType;
 public class FormatTypeService {
 	@Autowired
 	FormatTypeDao formatTypeDao;
-	public int insertFormatType(FormatType formatType){
+
+	public int insertFormatType(FormatType formatType) {
 		return formatTypeDao.insertFormatType(formatType);
 	}
-	public int updateFormatType(FormatType FormatType){
+
+	public int updateFormatType(FormatType FormatType) {
 		return formatTypeDao.updateFormatType(FormatType);
 	}
+
 	/**
 	 * 选取格式类型列表
-	 * @param higher_ft_id 上层格式类型
+	 * 
+	 * @param higher_ft_id
+	 *            上层格式类型
 	 * @return 格式类型列表
 	 */
-	public List<FormatType> selectFormatType(Integer cs_id){
-		
-		return formatTypeDao.selectFormatType(cs_id);
+	public List<FormatType> getFormatTypes(Integer cs_id) {
+
+		return formatTypeDao.getFormatTypes(cs_id);
 	}
-public FormatType getFormatType(Integer ft_id){
-		
+	public FormatType getFormatType(Integer ft_id) {
+
 		return formatTypeDao.getFormatType(ft_id);
 	}
-	
-	public int deleteFormatType(Integer ft_id){
+
+	public Integer getFormatType_cs_id(Integer ft_id) {
+
+		return formatTypeDao.getFormatType_cs_id(ft_id);
+	}
+
+	public int deleteFormatType(Integer ft_id) {
 		return formatTypeDao.deleteFormatType(ft_id);
 	}
 }

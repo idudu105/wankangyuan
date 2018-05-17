@@ -15,7 +15,9 @@ public interface FormatTypeDao {
 	@Insert("insert into format_type(ft_name,cs_id,floder,create_datetime,create_uid,is_view) values(#{ft_name},#{cs_id},#{floder},#{create_datetime},#{create_uid},#{is_view})")
 	public int insertFormatType(FormatType formatType);
 
-	@Update("update format_type " + "set ft_name=#{ft_name} , floder=#{floder} ,update_datetime=#{update_datetime},update_uid=#{update_uid｝ " + "where ft_id=#{ft_id}")
+	@Update("update format_type "
+			+ "set ft_name=#{ft_name} , floder=#{floder} ,update_datetime=#{update_datetime},update_uid=#{update_uid} "
+			+ "where ft_id=#{ft_id}")
 	public int updateFormatType(FormatType FormatType);
 
 	/**
@@ -26,9 +28,14 @@ public interface FormatTypeDao {
 	 * @return 格式类型列表
 	 */
 	@Select("select * from format_type where cs_id=#{cs_id} order by ft_id ")
-	public List<FormatType> selectFormatType(@Param("cs_id") Integer cs_id);
+	public List<FormatType> getFormatTypes(@Param("cs_id") Integer cs_id);
+
 	@Select("select * from format_type where ft_id=#{ft_id}  ")
 	public FormatType getFormatType(@Param("ft_id") Integer ft_id);
+
+	@Select("select cs_id from format_type where ft_id=#{ft_id}  ")
+	public Integer getFormatType_cs_id(@Param("ft_id") Integer ft_id);
+
 	@Delete("delete from format_type where ft_id=#{ft_id}")
 	public int deleteFormatType(@Param("ft_id") Integer ft_id);
 }

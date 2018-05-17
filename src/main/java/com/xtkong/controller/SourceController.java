@@ -51,7 +51,7 @@ public class SourceController {
 		Source source = sourceService.getSourceByCs_id(cs_id);
 		if (source != null) {
 			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
-			source.setFormatTypes(formatTypeService.selectFormatType(cs_id));
+			source.setFormatTypes(formatTypeService.getFormatTypes(cs_id));
 			map.put("result", true);
 			map.put("source", source);
 		} else {
