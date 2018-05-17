@@ -1,5 +1,8 @@
 package com.liutianjun.shiro.realm;
 
+import java.util.Date;
+
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -10,6 +13,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,6 +30,9 @@ public class UserRealm extends AuthorizingRealm {
     @Autowired
     private UserService userService;
 
+    /**
+     * 授权
+     */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String username = (String)principals.getPrimaryPrincipal();
@@ -36,6 +43,9 @@ public class UserRealm extends AuthorizingRealm {
         return authorizationInfo;
     }
 
+    /**
+     * 认证，登录
+     */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 
@@ -45,15 +55,17 @@ public class UserRealm extends AuthorizingRealm {
 
         if(user == null) {
             throw new UnknownAccountException();//没找到帐号
-        }
-
-        if(Boolean.TRUE.equals(user.getStatus())) {
+        } else if(Boolean.TRUE.equals(user.getStatus())) {
             throw new LockedAccountException(); //帐号锁定
-        }
+        } else {
+			//更新登录时间
+        	user.setLastLoginTime(new Date());
+        	userService.updateByPrimaryKey(user);
+		}
 
         //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                user.getUsername(), //用户名
+                username, //用户名
                 user.getPassword(), //密码
                 ByteSource.Util.bytes(user.getUsername()+user.getSalt()),//salt=username+salt
                 getName()  //realm name
@@ -61,6 +73,16 @@ public class UserRealm extends AuthorizingRealm {
         return authenticationInfo;
     }
 
+    /**
+     * 清空当前用户权限信息
+     */
+	public void clearCachedAuthorizationInfo() {
+		PrincipalCollection principalCollection = SecurityUtils.getSubject().getPrincipals();
+		SimplePrincipalCollection principals = new SimplePrincipalCollection(
+				principalCollection, getName());
+		super.clearCachedAuthorizationInfo(principals);
+	}
+    
     @Override
     public void clearCachedAuthorizationInfo(PrincipalCollection principals) {
         super.clearCachedAuthorizationInfo(principals);

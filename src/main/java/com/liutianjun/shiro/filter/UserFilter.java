@@ -3,7 +3,6 @@ package com.liutianjun.shiro.filter;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.filter.PathMatchingFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,10 +26,10 @@ public class UserFilter extends PathMatchingFilter {
     @Override
     protected boolean onPreHandle(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
 
-        String username = (String)SecurityUtils.getSubject().getPrincipal();
-        request.setAttribute("user", userService.selectByUsername(username));
+    	/*
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        request.setAttribute("user", userService.selectByUsername(user.getUsername()));
         
-        /*
         Set<String> permissions = userService.findPermissions(username);
         List<Resource> menus = resourceService.findMenus(permissions);
         HttpServletRequest req = (HttpServletRequest) request;

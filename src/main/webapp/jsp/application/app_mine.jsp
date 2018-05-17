@@ -49,7 +49,7 @@
                         <div class="searchC">
                             <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="searchCi" />
                             <form method="get">
-                                <input name="appName" type="text" class="searchCt" value="${appName }"  placeholder="搜索项目" />
+                                <input name="appName" type="text" class="searchCt" value="${appName }"  placeholder="搜索应用" />
                             </form>
                         </div>
                     </div>
@@ -146,11 +146,9 @@
                     </c:forEach>
                 </div>
                 <div class="pro_addul">
-                    <div class="pro_addli">项目1</div>
-                    <div class="pro_addli">项目2</div>
-                    <div class="pro_addli">项目3</div>
-                    <div class="pro_addli">项目4</div>
-                    <div class="pro_addli">项目5</div>
+                <c:forEach items="${projectList}" var="project">
+                    <div class="pro_addli" onclick="addToProjrct(${project.id})" >${project.p_name }</div>
+                </c:forEach>
                 </div>
             </div>
             <div class="PJK">
@@ -197,6 +195,7 @@
                         <div class="PJliline"></div>
                     </div>
                 </c:forEach>
+                <input id="projectId" name="projectId" type="hidden" disabled="disabled">
                 </form>
                 </div>
 
@@ -273,6 +272,33 @@
 </c:if>
 
 <script type="text/javascript">
+
+function addToProjrct(projectId){
+	var ids = $("input[name='ids']");
+    var checkNum = 0;
+    for (var i = 0; i < ids.length; i++) {
+        if (ids[i].checked) {
+            checkNum++;
+        }
+    }
+    if (checkNum == 0) {
+        layer.msg("请至少选中一个");
+    } else {
+        layer.confirm('请确认是否添加?',{
+          btn: ['确认','取消'], //按钮
+          icon: 2
+        }, function(){
+            $("#appList").attr('action',"/wankangyuan/ProjectAppRelation/addToProject");
+            $("#projectId").removeAttr("disabled");
+            $("#projectId").val(projectId);
+            $("#appList").submit();
+          
+        }, function(){
+            return;
+        });
+    }
+}
+
 function removeFromMine(){
     var ids = $("input[name='ids']");
     var checkNum = 0;

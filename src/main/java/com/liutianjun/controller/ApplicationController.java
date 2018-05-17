@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.dzjin.service.ProjectService;
 import com.liutianjun.pojo.Application;
+import com.liutianjun.pojo.User;
 import com.liutianjun.service.ApplicationService;
+import com.liutianjun.service.UserService;
 
 /**
  * 应用控制层
@@ -36,9 +39,19 @@ public class ApplicationController {
 	@Autowired
 	private ApplicationService applicationService;
 	
+	@Autowired
+	private ProjectService projectService;
+	
+	@Autowired
+	private UserService userService;
+	
 	/**
 	 * 我的应用
 	 * @Title: viewMine 
+	 * @param page
+	 * @param rows
+	 * @param appName
+	 * @param index
 	 * @param model
 	 * @return 
 	 * String
@@ -49,8 +62,10 @@ public class ApplicationController {
             @RequestParam(value="appName",required=false)String appName,
             @PathVariable String index,
             Model model) {
-	    
+	    //获取用户名
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    //获取用户
+	    User user = userService.selectByUsername(username);
 		
 		Map<String, Object> map = applicationService.findMine(page,rows,appName,username);
 		@SuppressWarnings("unchecked")
@@ -59,6 +74,8 @@ public class ApplicationController {
 		for (Application application : list) {
 			set.add(application.getAppType());
 		}
+		
+		model.addAttribute("projectList", projectService.selectMyProject(user.getId()));
 		
 		model.addAttribute("typeSet", set);
 		model.addAttribute("list", map.get("list"));
@@ -86,6 +103,7 @@ public class ApplicationController {
             @PathVariable String index,
             Model model) {
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    User user = userService.selectByUsername(username);
 		Map<String, Object> map = applicationService.findAll(page,rows,appName,username);
 		@SuppressWarnings("unchecked")
 		List<Application> list = (List<Application>) map.get("list");
@@ -93,6 +111,8 @@ public class ApplicationController {
 		for (Application application : list) {
 			set.add(application.getAppType());
 		}
+		
+		model.addAttribute("projectList", projectService.selectMyProject(user.getId()));
 		
 		model.addAttribute("typeSet", set);
 		model.addAttribute("list", map.get("list"));
@@ -166,12 +186,19 @@ public class ApplicationController {
 	 * String
 	 */
 	@RequestMapping(value="/create{index}",method=RequestMethod.POST)
-	public String create(Application record,@PathVariable String index) {
+	public String create(Application record,
+			@PathVariable String index,
+			RedirectAttributes attributes) {
 		String username = (String)SecurityUtils.getSubject().getPrincipal();
 		record.setCreator(username);
 		record.setCreateTime(new Date());
 		record.setStatus("私有");
-		applicationService.insert(record);
+		int i = applicationService.insert(record);
+		String msg = "创建失败";
+		if(i>0) {
+			msg = "创建成功";
+		}
+		attributes.addFlashAttribute("msg", msg);
 		return "redirect:/application/viewCreate"+index;
 	}
 	
@@ -184,6 +211,9 @@ public class ApplicationController {
 	@RequestMapping(value="/explain",method=RequestMethod.GET)
 	public String showExplain(Integer id, Model model) {
 		Application application = applicationService.selectByPrimaryKey(id);
+		if(null == application) {
+			model.addAttribute("msg", "应用未公开，或已被删除");
+		}
 		model.addAttribute("application", application);
 		return "jsp/application/app_explain.jsp";
 	}

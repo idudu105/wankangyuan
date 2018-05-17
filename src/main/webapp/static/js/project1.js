@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2018-04-23 15:32:03
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-05-16 10:36:25
+* @Last Modified time: 2018-05-17 13:52:49
 */
 
 
@@ -270,21 +270,64 @@ function pro_public(){
 // 项目详情
 function pro_detail(){
 //项目详情右侧banner
-    var oprodexqRbK=document.querySelectorAll('.prodexqRbK')[0];//banner图-容器
-    var aprodexqRb=oprodexqRbK.querySelectorAll('.prodexqRb');//banner图
+    // var oprodexqRbK=document.querySelectorAll('.prodexqRbK')[0];//banner图-容器
+    // var aprodexqRb=oprodexqRbK.querySelectorAll('.prodexqRb');//banner图
 
-    var oprodexqRaK=document.querySelectorAll('.prodexqRaK')[0];//banner按钮-容器
-    var aprodexqRa=oprodexqRaK.querySelectorAll('.prodexqRa');//banner按钮
+    // var oprodexqRaK=document.querySelectorAll('.prodexqRaK')[0];//banner按钮-容器
+    // var aprodexqRa=oprodexqRaK.querySelectorAll('.prodexqRa');//banner按钮
 
-    for(var i=0;i<aprodexqRa.length;i++){
-        (function(j){
-            aprodexqRa[j].onclick=function(){
-                for(var k=0;k<aprodexqRa.length;k++){
-                    aprodexqRa[k].className="prodexqRa";
-                    aprodexqRb[k].className="prodexqRb";
+    // for(var i=0;i<aprodexqRa.length;i++){
+    //     (function(j){
+    //         aprodexqRa[j].onclick=function(){
+    //             for(var k=0;k<aprodexqRa.length;k++){
+    //                 aprodexqRa[k].className="prodexqRa";
+    //                 aprodexqRb[k].className="prodexqRb";
+    //             }
+    //             aprodexqRa[j].className="prodexqRa active";
+    //             aprodexqRb[j].className="prodexqRb active";
+    //         }
+    //     })(i)
+    // }
+    
+    var oxiangmuRMzKC=document.querySelectorAll('.xiangmuRMzKC')[0];//长图
+    var axiangmuRMi=oxiangmuRMzKC.querySelectorAll('.xiangmuRMi');//图
+    var DWlength=oxiangmuRMzKC.querySelectorAll('.xiangmuRMz')[0].offsetWidth;//取单位图宽度
+
+    var oxiangmuRMB=document.querySelectorAll('.xiangmuRMB')[0];//按钮框
+    var axiangmuRMb=oxiangmuRMB.querySelectorAll('.xiangmuRMb');//按钮
+
+    var oxiangmuRMt=document.querySelectorAll('.xiangmuRMt')[0];//按钮框上面的文字
+    var xiangmuRMtCC=axiangmuRMi[0].name;//按钮框文字存储
+
+    oxiangmuRMt.innerHTML=axiangmuRMi[0].name;
+
+    var yiruPD=0;//移入判断
+
+    for(var i=0;i<axiangmuRMb.length;i++){
+        (function(index){
+            axiangmuRMb[index].onmouseenter=function(){
+                xiangmuRMtCC=oxiangmuRMt.innerHTML;
+                oxiangmuRMt.innerHTML=axiangmuRMi[index].name;
+                yiruPD=1;
+                
+                axiangmuRMb[index].onclick=function(){
+                    for(var j=0;j<axiangmuRMb.length;j++){
+                        axiangmuRMb[j].className="xiangmuRMb";
+                    }
+                    axiangmuRMb[index].className="xiangmuRMb active";
+                    oxiangmuRMt.innerHTML=axiangmuRMi[index].name;
+
+                    oxiangmuRMzKC.style.left=-DWlength*index+"px";
+
+                    xiangmuRMtCC=axiangmuRMi[index].name;
                 }
-                aprodexqRa[j].className="prodexqRa active";
-                aprodexqRb[j].className="prodexqRb active";
+
+                axiangmuRMb[index].onmouseout=function(){
+                    if(yiruPD==1){
+                        oxiangmuRMt.innerHTML=xiangmuRMtCC;
+                        yiruPD=0;
+                    }
+                }
             }
         })(i)
     }
@@ -443,16 +486,11 @@ function pro_file(){
     }
     oprof_lbLtRtup.onclick=function(){
         if(ofileKpd==0){
-        	if(floder_id != 0){
-                ofileaddK.style.display="block";
-                console.log(owidth/2);
-                console.log(ofileaddK.offsetWidth/2);
-                ofileaddK.style.left=owidth/2-ofileaddK.offsetWidth/2+"px";//创建框居中
-                ofileKpd=1;
-        	}else{
-        		alert("请选择文件夹！");
-        	}
-
+            ofileaddK.style.display="block";
+            console.log(owidth/2);
+            console.log(ofileaddK.offsetWidth/2);
+            ofileaddK.style.left=owidth/2-ofileaddK.offsetWidth/2+"px";//创建框居中
+            ofileKpd=1;
         }
     }
 
@@ -471,7 +509,7 @@ function pro_file(){
     }
 
     console.log(aPJliBL);
-    /*
+
     for(var i=0;i<aPJliBL.length;i++){
         (function(index){
             aPJliBL[index].onclick=function(event){
@@ -482,7 +520,7 @@ function pro_file(){
                 event.stopPropagation();
             }
         })(i)
-    }*/
+    }
 
     oprof_lbLmT.onclick=function(){
         for(var j=0;j<aPJliBL.length;j++){
@@ -500,7 +538,9 @@ function pro_file(){
         awenjian.push(aPJliB2Lt[i]);
     }
 
-    //文件树文字点击变蓝
+
+    //文件树点击变蓝
+    // console.log(awenjian);
     for(var i=0;i<awenjian.length;i++){
         (function(index){
             awenjian[index].onclick=function(){
@@ -508,48 +548,6 @@ function pro_file(){
                     awenjian[j].style.color="#666";
                 }
                 awenjian[index].style.color="#5ca0e5";
-                //将floderID更新一下并进行网络请求
-                floder_id = awenjian[index].id;
-                var id = awenjian[index].id;
-        		//进行网络请求显示右面的文件夹
-        		$.ajax({
-        			url:"/wankangyuan/projectFloderFile/selectFilesByFloderId",
-        			type:"post",
-        			data:{
-        				floder_id:id
-        			},
-        			dataType:"json",
-        			success : function(data){
-        				if(data.result == true){
-        					//这个地方直接更新右面的文件列表
-        					var filesList = $("#filesList");
-        					filesList.empty();
-        					for(var index in data.projectFiles){
-        						filesList.append(
-        							'<div class="prof_lbRmULmLI">'+
-    	                                '<div class="fuxuanK2">'+
-    	                                	'<input type="checkbox" class="input_check" id="check'+data.projectFiles[index].id+'" value="'+data.projectFiles[index].id+'">'+
-    	                                	'<label for="check'+data.projectFiles[index].id+'"></label>'+
-	    	                           	'</div>'+
-	                                    '<div class="prof_lbRmULmli prof_lbRmULt2">'+data.projectFiles[index].file_name+'</div>'+
-	                                    '<div class="prof_lbRmULmli prof_lbRmULt3">'+data.projectFiles[index].file_type+'</div>'+
-	                                    '<div class="prof_lbRmULmli prof_lbRmULt4">'+data.projectFiles[index].file_size+'</div>'+
-	                                    '<div class="prof_lbRmULmli prof_lbRmULt5">'+data.projectFiles[index].create_datetime+'</div>'+
-	                                    '<div class="prof_lbRmULmli prof_lbRmULt6">'+data.projectFiles[index].creator_id+'</div>'+
-	                                    '<div class="prof_lbRmULmli prof_lbRmULt7 prof_lbRmULmYL">预览</div>'+
-        							'</div>');
-        					}
-        				}else{
-        					alert(data.message);
-        				}
-        			},
-        			error : function(){
-        				alert("联网失败");
-        			}
-        			
-        		});
-                
-                
             }
         })(i)
     }
@@ -566,18 +564,11 @@ function pro_file(){
     var oprof_aeb=oprof_addK.querySelectorAll('.prof_aeb')[0];//添加根、叶框提交按钮
 
     oprof_lbLtRaddg.onclick=function(){
-    	g_y = 1;
         oprof_addK.style.display="block";
     }
 
     oprof_lbLtRaddy.onclick=function(){
-    	g_y = 0;
-        if(floder_id == 0){
-        	alert("请选中父文件夹");
-        	return;
-        }else{
-        	 oprof_addK.style.display="block";
-        }
+        oprof_addK.style.display="block";
     }
 
     oprof_aeTx.onclick=function(){
@@ -585,29 +576,6 @@ function pro_file(){
     }
     oprof_aeb.onclick=function(){
         oprof_addK.style.display="none";
-        var floder_name  = $("#leafFloderName").val();
-        $.ajax({
-        	url:"/wankangyuan/projectFloderFile/addProjectFloder",
-        	type:"post",
-        	data:{
-        		g_y:g_y,
-        		parent_id:floder_id,
-        		floder_name:floder_name
-        	},
-        	dataType:"json",
-        	success : function(data){
-        		if(data.result == true){
-        			window.location.href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId";
-        		}else{
-        			alert("叶目录添加失败！");
-        		}
-        	},
-        	error : function(){
-        		alert("联网失败");
-        	}
-        });
-        
-        
     }
 
 
@@ -617,38 +585,13 @@ function pro_file(){
     var oprof_aeb=oprof_editK.querySelectorAll('.prof_aeb')[0];//添加根、叶框提交按钮
 
     oprof_lbLtRtch.onclick=function(){
-    	if(floder_id == 0){
-    		alert("请选中待修改文件夹");
-    	}else{
-    		oprof_editK.style.display="block";
-    	}     
+        oprof_editK.style.display="block";
     }
     oprof_aeTx.onclick=function(){
         oprof_editK.style.display="none";
     }
     oprof_aeb.onclick=function(){
         oprof_editK.style.display="none";
-        var floder_name  = $("#floderNameEdit").val();
-        $.ajax({
-        	url:"/wankangyuan/projectFloderFile/updateProjectFloder",
-        	type:"post",
-        	data:{
-        		id:floder_id,
-        		floder_name:floder_name
-        	},
-        	dataType:"json",
-        	success : function(data){
-        		if(data.result == true){
-        			window.location.href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId";
-        		}else{
-        			alert("文件名称修改失败！");
-        		}
-        	},
-        	error : function(){
-        		alert("联网失败");
-        	}
-        });
-        
     }
 
 
@@ -658,36 +601,12 @@ function pro_file(){
     var oprof_aeb=oprof_delK.querySelectorAll('.prof_aeb')[0];//添加根、叶框提交按钮
 
     oprof_lbLtRtde.onclick=function(){
-    	if(floder_id == 0){
-    		alert("请选中待删除文件夹！");
-    	}else{
-    		oprof_delK.style.display="block";
-    	}    
+        oprof_delK.style.display="block";
     }
     oprof_aeTx.onclick=function(){
         oprof_delK.style.display="none";
     }
     oprof_aeb.onclick=function(){
-    	$.ajax({
-    		url:"/wankangyuan/projectFloderFile/deleteProjectFloder",
-    		type:"post",
-    		data:{
-    			floder_id:floder_id
-    		},
-    		dataType:"json",
-    		success : function(data){
-    			if(data.result == true){
-    				alert("删除成功！");
-    				window.location.href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId";
-    			}else{
-    				alert("删除失败！");
-    			}
-    		},
-    		error : function(){
-    			alert("联网失败");
-    		}
-    		
-    	});
         oprof_delK.style.display="none";
     }
 
@@ -914,14 +833,13 @@ function app_mine(){
         // }
         event.stopPropagation();
     }
-    for(var i=0;i<apro_addli.length;i++){
-        (function(index){
-            apro_addli[index].onclick=function(){
-                opro_addul.style.display="none";
-                // pro_addkPD=0;
-            }
-        })(i)
-    }
+    // for(var i=0;i<apro_addli.length;i++){
+    //     (function(index){
+    //         apro_addli[index].onclick=function(){
+    //             opro_addul.style.display="none";
+    //         }
+    //     })(i)
+    // }
 
 //应用类别筛选框显示隐藏
     
@@ -940,15 +858,14 @@ function app_mine(){
         // }
         event.stopPropagation();
     }
-    for(var i=0;i<aapp_typeli.length;i++){
-        (function(index){
-            aapp_typeli[index].onclick=function(){
-                oapp_typeul.style.display="none";
-                // app_typekPD=0;
-                console.log(index)
-            }
-        })(i)
-    }
+    // for(var i=0;i<aapp_typeli.length;i++){
+    //     (function(index){
+    //         aapp_typeli[index].onclick=function(){
+    //             oapp_typeul.style.display="none";
+    //             console.log(index)
+    //         }
+    //     })(i)
+    // }
 
     document.onclick=function(){
         opro_addul.style.display="none";
@@ -978,15 +895,14 @@ function app_public(){
         // }
         event.stopPropagation();
     }
-    for(var i=0;i<aapp_typeli.length;i++){
-        (function(index){
-            aapp_typeli[index].onclick=function(){
-                oapp_typeul.style.display="none";
-                // app_typekPD=0;
-                console.log(index)
-            }
-        })(i)
-    }
+    // for(var i=0;i<aapp_typeli.length;i++){
+    //     (function(index){
+    //         aapp_typeli[index].onclick=function(){
+    //             oapp_typeul.style.display="none";
+    //             console.log(index)
+    //         }
+    //     })(i)
+    // }
 
     document.onclick=function(){
         // opro_addul.style.display="none";
@@ -1398,6 +1314,141 @@ function data_dataclick(){
     oinportTx.onclick=function(){
         oclmRinportK.style.display="none";
     }
+
+
+}
+
+
+//首页
+function index(){
+    var osearchI2=document.querySelectorAll('.searchI2')[0];//外置搜索按钮
+    var osearchK=document.querySelectorAll('.searchK')[0];//搜索框
+    var osearchI=osearchK.querySelectorAll('.searchI')[0];//搜索按钮
+    var osearchX=osearchK.querySelectorAll('.searchX')[0];//搜索关闭
+    var osearchP=osearchK.querySelectorAll('.searchP')[0];//搜索输入栏
+
+    
+//搜索框
+    osearchI2.onclick=function(){
+        osearchK.style.display="block";
+        osearchI2.style.display="none";
+        osearchP.value="";
+    }
+
+    osearchX.onclick=function(){
+        osearchK.style.display="none";
+        osearchI2.style.display="block";
+    }
+    
+//banner
+    var oxiangmuRMzKC=document.querySelectorAll('.xiangmuRMzKC')[0];//长图
+    var axiangmuRMi=oxiangmuRMzKC.querySelectorAll('.xiangmuRMi');//图
+    var DWlength=oxiangmuRMzKC.querySelectorAll('.xiangmuRMz')[0].offsetWidth;//取单位图宽度
+
+    var oxiangmuRMB=document.querySelectorAll('.xiangmuRMB')[0];//按钮框
+    var axiangmuRMb=oxiangmuRMB.querySelectorAll('.xiangmuRMb');//按钮
+
+    var oxiangmuRMt=document.querySelectorAll('.xiangmuRMt')[0];//按钮框上面的文字
+    var xiangmuRMtCC=axiangmuRMi[0].name;//按钮框文字存储
+
+    oxiangmuRMt.innerHTML=axiangmuRMi[0].name;
+
+    var yiruPD=0;//移入判断
+
+    for(var i=0;i<axiangmuRMb.length;i++){
+        (function(index){
+            axiangmuRMb[index].onmouseenter=function(){
+                xiangmuRMtCC=oxiangmuRMt.innerHTML;
+                oxiangmuRMt.innerHTML=axiangmuRMi[index].name;
+                yiruPD=1;
+                
+                axiangmuRMb[index].onclick=function(){
+                    for(var j=0;j<axiangmuRMb.length;j++){
+                        axiangmuRMb[j].className="xiangmuRMb";
+                    }
+                    axiangmuRMb[index].className="xiangmuRMb active";
+                    oxiangmuRMt.innerHTML=axiangmuRMi[index].name;
+
+                    oxiangmuRMzKC.style.left=-DWlength*index+"px";
+
+                    xiangmuRMtCC=axiangmuRMi[index].name;
+                }
+
+                axiangmuRMb[index].onmouseout=function(){
+                    if(yiruPD==1){
+                        oxiangmuRMt.innerHTML=xiangmuRMtCC;
+                        yiruPD=0;
+                    }
+                }
+            }
+        })(i)
+    }
+
+//左侧项目列表
+    var axiangmuLMz=document.querySelectorAll('.xiangmuLMz');//多个项目
+    var axiangmuLMzT=document.querySelectorAll('.xiangmuLMzT');//多个项目标题
+    var axiangmuLMzM=document.querySelectorAll('.xiangmuLMzM');//多个项目详情
+
+    for(var i=0;i<axiangmuLMz.length;i++){
+        (function(index){
+            axiangmuLMz[index].onclick=function(){
+                for(var j=0;j<axiangmuLMz.length;j++){
+                    axiangmuLMz[j].className="xiangmuLMz";
+                }
+                axiangmuLMz[index].className="xiangmuLMz active";
+            }
+        })(i)
+    }
+    
+
+
+}
+
+
+//登录
+function login(){
+
+}
+
+
+//找回密码
+function forget_ps(){
+    var ologinMzRb=document.querySelectorAll('.loginMzRb')[0];//发送验证码
+    var ologinMzRb2=document.querySelectorAll('.loginMzRb2')[0];//禁用发送验证码
+    var ofor_zh=document.querySelectorAll('.for_zh')[0];//手机号框
+    var ofor_ps=document.querySelectorAll('.for_ps')[0];//密码
+    var ofor_ps2=document.querySelectorAll('.for_ps2')[0];//重复密码
+    var opro_enter=document.querySelectorAll('.pro_enter')[0];//确认
+
+
+    ologinMzRb.onclick=function(){
+        //手机号正则  
+        var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;  
+        //电话  
+        var phone = ofor_zh.value;  
+        if (!phoneReg.test(phone)) {  
+            alert('请输入有效的手机号码！');  
+            return false;  
+        }else{
+            ologinMzRb.style.display="none";
+            ologinMzRb2.style.display="block";
+
+            var time=60;
+            var YZMjishi=0;
+            ologinMzRb2.innerHTML=time+"s后重试";
+        
+            YZMjishi=setInterval(function(){
+                time--;
+                ologinMzRb2.innerHTML=time+"s后重试";
+                if(time<=0){
+                    clearInterval(YZMjishi);
+                    ologinMzRb.style.display="block";
+                    ologinMzRb2.style.display="none";
+                }
+            },1000);
+        }
+    }
+
 
 
 }
