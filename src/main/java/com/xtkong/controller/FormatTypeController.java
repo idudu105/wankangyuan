@@ -69,15 +69,15 @@ public class FormatTypeController {
 		}
 		return map;
 	}
-/**
- * 更新一条格式类型
- * @param formatType 待更新格式类型
- * @return 执行情况，采集源id
- */
+	
+	/**
+	 * 更新一条格式类型
+	 * @param formatType 待更新格式类型
+	 * @return 执行情况，采集源id
+	 */
 	@RequestMapping("/updateFormatType")
 	@ResponseBody
 	public Map<String, Object> updateFormatType(FormatType formatType) {
-		Integer cs_id = formatTypeService.getFormatType_cs_id(formatType.getFt_id());
 		Map<String, Object> map = new HashMap<String, Object>();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		formatType.setUpdate_datetime(simpleDateFormat.format(new Date()));
@@ -85,11 +85,10 @@ public class FormatTypeController {
 
 		if (1 == formatTypeService.updateFormatType(formatType)) {
 			map.put("result", true);
-			map.put("cs_id", cs_id);
 		} else {
 			map.put("result", false);
-			map.put("message", "更新失败");
 		}
+		
 		return map;
 	}
 	/**
