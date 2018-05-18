@@ -37,18 +37,24 @@ public class FormatDataController {
 	@Autowired
 	FormatTypeService formatTypeService;
 
+	/**
+	 * 首次进入
+	 * 
+	 * @param httpSession
+	 * @return
+	 */
 	@RequestMapping("/firstIn")
-	public String test(HttpSession httpSession) {
-		int uid=1;
+	public String firstIn(HttpSession httpSession) {
+		int uid = 1;
 		// 源数据字段
 		List<Source> sources = sourceService.getSourcesForUser();
-		List<List<String>> sourceDatas=new ArrayList<>();
+		List<List<String>> sourceDatas = new ArrayList<>();
 		if (sources != null) {
 			sources.get(0).setSourceFields(sourceFieldService.getSourceFields(sources.get(0).getCs_id()));
 			// sources.get(0).setFormatTypes(formatTypeService.getFormatTypes(sources.get(0).getCs_id()));
 			// 源数据字数据，注：每个列表第一个值sourceDataId不显示
-			sourceDatas= HBaseSourceDao.getSourceDatasByUid(
-					Integer.toString(sources.get(0).getCs_id()), String.valueOf(uid), sources.get(0).getSourceFields());
+			sourceDatas = HBaseSourceDao.getSourceDatasByUid(Integer.toString(sources.get(0).getCs_id()),
+					String.valueOf(uid), sources.get(0).getSourceFields());
 		}
 		List<String> list = new ArrayList<>();
 		list.add("李");
@@ -60,17 +66,27 @@ public class FormatDataController {
 		sourceDatas.add(list);
 		httpSession.setAttribute("sources", sources);
 		httpSession.setAttribute("sourceDatas", sourceDatas);
-		
+
 		return "redirect:/jsp/formatdata/data_create.jsp";
 
 	}
-	
+
+	/**
+	 * 节点树 
+	 * List<String>依次为formatDataNodeId（节点id）： 不显示、ft_id： 不显示、ft_name： 显示、节点名： 显示
+	 * 
+	 * @param cs_id
+	 * @param uid
+	 * @param sourceDataId
+	 * @return
+	 */
 	@RequestMapping("/formatTypeFloders")
 	@ResponseBody
-	public Map<String, Object> formatTypeFloders(Integer cs_id,Integer uid,String sourceDataId ) {
+	public Map<String, Object> formatTypeFloders(Integer cs_id, Integer uid, String sourceDataId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<List<String>> formatTypeFloders=HBaseSourceDao.getFormatTypeFloders(Integer.toString(cs_id),sourceDataId);
-		if (formatTypeFloders!=null) {
+		List<List<String>> formatTypeFloders = HBaseSourceDao.getFormatTypeFloders(Integer.toString(cs_id),
+				sourceDataId);
+		if (formatTypeFloders != null) {
 			map.put("result", true);
 			map.put("formatTypeFloders", formatTypeFloders);
 		} else {
@@ -79,6 +95,7 @@ public class FormatDataController {
 		}
 		return map;
 	}
+
 	@RequestMapping("/project")
 	public String testproject(HttpSession httpSession) {
 		List<Source> sources = sourceService.getSourcesForUser();
