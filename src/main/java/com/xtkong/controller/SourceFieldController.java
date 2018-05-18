@@ -24,13 +24,13 @@ public class SourceFieldController {
 
 	@RequestMapping("/insertSourceField")
 	@ResponseBody
-	public Map<String, Object> insertSourceField(SourceField sourceField) {
+	public Map<String, Object> insertSourceField(SourceField sourceField,Integer uid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		sourceField.setCreate_datetime(simpleDateFormat.format(new Date()));
 
-		sourceField.setCreate_uid(1);
+		sourceField.setCreate_uid(uid);
 
 		if (1 == sourceFieldService.insertSourceField(sourceField)) {
 			map.put("result", true);
@@ -44,13 +44,12 @@ public class SourceFieldController {
 
 	@RequestMapping("/updateSourceField")
 	@ResponseBody
-	public Map<String, Object> updateSourceField(SourceField sourceField) {
+	public Map<String, Object> updateSourceField(SourceField sourceField,Integer uid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		sourceField.setCreate_datetime(simpleDateFormat.format(new Date()));
-
-		sourceField.setUpdate_uid(1);
+		sourceField.setUpdate_uid(uid);
 
 		if (1 == sourceFieldService.updateSourceField(sourceField)) {
 			map.put("result", true);
@@ -72,23 +71,6 @@ public class SourceFieldController {
 
 		return map;
 	}
-	// /**
-	// * * 选取采集源字段列表
-	// *
-	// * @param httpSession
-	// * @param cs_id
-	// * 采集源
-	// * @return 采集源字段列表
-	// */
-	// @RequestMapping("/selectSourceField")
-	// public String selectSourceField(HttpSession httpSession, Integer cs_id) {
-	//
-	// List<SourceField> sourceFields =
-	// sourceFieldService.getSourceFields(cs_id);
-	// httpSession.setAttribute("sourceFields", sourceFields);
-	// return "redirect:/pages/project_data.jsp";
-	//
-	// }
 
 	@RequestMapping("/deleteSourceField")
 	@ResponseBody

@@ -53,15 +53,6 @@ public class SourceController {
 		sourceService.insertSource(source);
 		return "redirect:/admin/formatdata";
 	}
-	/*
-	 * @RequestMapping("/insertSource")
-	 * 
-	 * @ResponseBody public Map<String, Object> insertSource(Source source) {
-	 * Map<String, Object> map = new HashMap<String, Object>(); if (1 ==
-	 * sourceService.insertSource(source)) { map.put("result", true);
-	 * map.put("message", "新增成功"); } else { map.put("result", false);
-	 * map.put("message", "新增失败"); } return map; }
-	 */
 
 	@RequestMapping("/updateSource")
 	@ResponseBody

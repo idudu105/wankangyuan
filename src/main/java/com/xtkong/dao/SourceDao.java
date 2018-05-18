@@ -27,7 +27,7 @@ public interface SourceDao {
 	public List<Source> getSourcesForAdmin();
 
 	@Select("select * from collection_source where is_view=1 order by cs_id")
-	public List<Source> getSources();
+	public List<Source> getSourcesForUser();
 
 	@Select("select cs_id from collection_source where cs_name=#{cs_name}")
 	public int getSourceId(@Param("cs_name") String cs_name);

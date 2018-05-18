@@ -27,8 +27,8 @@ public class SourceService {
 	 * 选取数据源，用户
 	 * @return	数据源列表
 	 */
-	public List<Source> getSources() {
-		return sourceDao.getSources();
+	public List<Source> getSourcesForUser() {
+		return sourceDao.getSourcesForUser();
 	}
 	
 	/**
