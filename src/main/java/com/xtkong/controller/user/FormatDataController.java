@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.dzjin.model.ProjectFile;
 import com.xtkong.dao.hbase.HBaseSourceDao;
-import com.xtkong.model.FormatField;
 import com.xtkong.model.Source;
 import com.xtkong.model.SourceField;
 import com.xtkong.service.FormatTypeService;
@@ -65,18 +64,19 @@ public class FormatDataController {
 		return "redirect:/jsp/formatdata/data_create.jsp";
 
 	}
+	
 	@RequestMapping("/formatTypeFloders")
 	@ResponseBody
 	public Map<String, Object> formatTypeFloders(Integer cs_id,Integer uid,String sourceDataId ) {
-		
 		Map<String, Object> map = new HashMap<String, Object>();
-//		if (1 == formatFieldService.insertFormatField(formatField)) {
-//			map.put("result", true);
-//			map.put("message", "新增成功");
-//		} else {
-//			map.put("result", false);
-//			map.put("message", "新增失败");
-//		}
+		List<List<String>> formatTypeFloders=HBaseSourceDao.getFormatTypeFloders(Integer.toString(cs_id),sourceDataId);
+		if (formatTypeFloders!=null) {
+			map.put("result", true);
+			map.put("formatTypeFloders", formatTypeFloders);
+		} else {
+			map.put("result", false);
+			map.put("message", "获取失败");
+		}
 		return map;
 	}
 	@RequestMapping("/project")

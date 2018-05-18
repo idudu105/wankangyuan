@@ -27,7 +27,7 @@ public class SourceDao {
 	 */
 	public static void createSource(String source, int version) {
 		createSource(ConstantsHBase.TABLE_PREFIX_SOURCE + "_" + source,
-				new String[] { ConstantsHBase.FAMILY_SOURCE_INFO }, version);
+				new String[] { ConstantsHBase.FAMILY_INFO }, version);
 	}
 
 	public static void createSource(String tableName, String[] columnFamilies, int version) {
@@ -54,7 +54,7 @@ public class SourceDao {
 		Long count = db.getNewId(ConstantsHBase.TABLE_GID, uid + "_" + source, ConstantsHBase.FAMILY_GID_GID,
 				ConstantsHBase.QUALIFIER_GID_GID_GID);
 		db.put(ConstantsHBase.TABLE_PREFIX_SOURCE + "_" + source, uid + "_" + source + "_" + count,
-				ConstantsHBase.FAMILY_SOURCE_INFO, source_field, value);
+				ConstantsHBase.FAMILY_INFO, source_field, value);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class SourceDao {
 			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_SOURCE + "_" + source);
 			Scan scan = new Scan();
 			// 列簇约束结果集
-			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_SOURCE_INFO));
+			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
 			// 前缀uid+"_"+source+"_"过滤
 			Filter filter = new PrefixFilter(Bytes.toBytes(uid + "_" + source + "_"));
 			scan.setFilter(filter);
@@ -84,7 +84,7 @@ public class SourceDao {
 			while (iterator.hasNext()) {
 				Result result = iterator.next();
 				if (!result.isEmpty()) {
-					list.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_SOURCE_INFO),
+					list.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
 							Bytes.toBytes(source_field))));
 				}
 			}

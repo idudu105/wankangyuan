@@ -23,6 +23,15 @@ public class FormatType {
 	private List<FormatType> formatTypeFloders;
 
 	private List<FormatField> formatFields;
+	private List<String> formatDataNodes; //数据节点
+	
+	public List<String> getFormatDataNodes() {
+		return formatDataNodes;
+	}
+
+	public void setFormatDataNodes(List<String> formatDataNodes) {
+		this.formatDataNodes = formatDataNodes;
+	}
 
 	public List<FormatField> getFormatFields() {
 		return formatFields;
