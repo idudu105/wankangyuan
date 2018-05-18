@@ -37,7 +37,7 @@ public class FormatTypeController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		FormatType formatType = formatTypeService.getFormatType(ft_id);
 		if (formatType != null) {
-			formatType.setFormatFields(formatFieldService.getFormatFields(ft_id));
+			formatType.setFormatFields(formatFieldService.getFormatFieldsForAdmin(ft_id));
 			map.put("result", true);
 			map.put("formatType", formatType);
 		} else {

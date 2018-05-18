@@ -11,12 +11,21 @@ import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.PrefixFilter;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
+import com.xtkong.model.FormatField;
+import com.xtkong.model.FormatType;
 import com.xtkong.model.SourceField;
+import com.xtkong.service.FormatTypeService;
 import com.xtkong.util.ConstantsHBase;
 import com.xtkong.util.HBaseDB;
 
+@Controller
 public class HBaseSourceDao {
+	@Autowired
+	static FormatTypeService formatTypeService;
+
 	/***
 	 * 新增采集源
 	 * 
@@ -26,8 +35,8 @@ public class HBaseSourceDao {
 	 *            存储版本数量
 	 */
 	public static void createSource(String source, int version) {
-		createSource(ConstantsHBase.TABLE_PREFIX_SOURCE + "_" + source,
-				new String[] { ConstantsHBase.FAMILY_INFO }, version);
+		createSource(ConstantsHBase.TABLE_PREFIX_SOURCE + "_" + source, new String[] { ConstantsHBase.FAMILY_INFO },
+				version);
 	}
 
 	public static void createSource(String tableName, String[] columnFamilies, int version) {
@@ -65,7 +74,7 @@ public class HBaseSourceDao {
 	 * @param uid
 	 *            用户 id
 	 * @param sourceFields
-	 *            采集源字段 ids、names
+	 *           源数据字数据，注：每个列表第一个值sourceDataId不显示
 	 * @return
 	 */
 	public static List<List<String>> getSourceDatasByUid(String cs_id, String uid, List<SourceField> sourceFields) {
@@ -107,14 +116,17 @@ public class HBaseSourceDao {
 		}
 		return sourceDatas;
 	}
-/**
- * 
- * @param cs_id
- * @param sourceDataId
- * @param formatTypes
- * @return formatDataNodeId、ft_id、ft_name、节点名
- */
-	public static List<List<String>> getFormatTypeFloders(String cs_id, String sourceDataId) {
+
+	/**
+	 * 
+	 * @param cs_id
+	 * @param sourceDataId
+	 * @param formatTypes
+	 * @param formatTypes
+	 * @return formatDataNodeId、ft_id、ft_name、节点名
+	 */
+	public static List<List<String>> getFormatTypeFloders(String cs_id, String sourceDataId,
+			List<FormatType> formatTypes) {
 		List<List<String>> formatTypeFloders = new ArrayList<List<String>>();
 		try {
 			HBaseDB db = HBaseDB.getInstance();
@@ -122,7 +134,7 @@ public class HBaseSourceDao {
 			Scan scan = new Scan();
 			// 列簇约束结果集
 			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
-			// 前缀uid+"_"+source+"_"过滤
+			// 前缀sourceDataId+"_"过滤
 			Filter filter = new PrefixFilter(Bytes.toBytes(sourceDataId + "_"));
 			scan.setFilter(filter);
 			ResultScanner resultScanner = table.getScanner(scan);
@@ -131,15 +143,78 @@ public class HBaseSourceDao {
 				Result result = iterator.next();
 				if (!result.isEmpty()) {
 					List<String> formatTypeFloder = new ArrayList<>();
-					
+
 					formatTypeFloder.add(Bytes.toString(result.getRow()));// 获取行键formatDataNodeId，不显示
-					formatTypeFloder.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-							Bytes.toBytes(ConstantsHBase.QUALIFIER_ft_id))));//// 获取ft_id，不显示
+					// 获取ft_id，不显示
+					String ft_id = Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+							Bytes.toBytes(ConstantsHBase.QUALIFIER_ft_id)));
+					formatTypeFloder.add(ft_id);//
 					formatTypeFloder.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
 							Bytes.toBytes(ConstantsHBase.QUALIFIER_ft_name))));// 获取ft_name，显示
 					formatTypeFloder.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
 							Bytes.toBytes(ConstantsHBase.QUALIFIER_node))));// 获取节点名，显示
 					formatTypeFloders.add(formatTypeFloder);
+					try {
+						formatTypes.remove(formatTypeService.getFormatType(Integer.valueOf(ft_id)));
+					} catch (NumberFormatException e) {
+						continue;
+					}
+				}
+			}
+			resultScanner.close();
+			table.close();
+			for (FormatType formatType : formatTypes) {
+				List<String> formatTypeFloder = new ArrayList<>();
+				formatTypeFloder.add("");
+				formatTypeFloder.add(String.valueOf(formatType.getFt_id()));
+				formatTypeFloder.add(formatType.getFt_name());
+				formatTypeFloder.add("");
+				formatTypeFloders.add(formatTypeFloder);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return formatTypeFloders;
+	}
+
+	/**
+	 * 格式数据明细
+	 * 
+	 * @param cs_id
+	 *            采集源id
+	 * @param ft_id
+	 *            格式类型id
+	 * @param formatDataNodeId
+	 *            节点id
+	 * @param formatFields
+	 *            格式字段
+	 * @return 格式数据明细数据，注：每个列表第一个值formatDataId不显示
+	 */
+	public static List<List<String>> getFormatFields(String cs_id, String ft_id, String formatDataNodeId,
+			List<FormatField> formatFields) {
+		List<List<String>> formatDatas = new ArrayList<>();
+		try {
+			HBaseDB db = HBaseDB.getInstance();
+			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_FORMAT + "_" + cs_id + "_" + ft_id);
+			Scan scan = new Scan();
+			// 列簇约束结果集
+			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
+			// 前缀formatDataNodeId+"_"过滤
+			Filter filter = new PrefixFilter(Bytes.toBytes(formatDataNodeId + "_"));
+			scan.setFilter(filter);
+			ResultScanner resultScanner = table.getScanner(scan);
+			Iterator<Result> iterator = resultScanner.iterator();
+			while (iterator.hasNext()) {
+				Result result = iterator.next();
+				if (!result.isEmpty()) {
+					List<String> formatData = new ArrayList<>();
+					formatData.add(Bytes.toString(result.getRow()));// 获取行键formatDataId，不显示
+					for (FormatField formatField : formatFields) {
+						formatData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+								Bytes.toBytes(formatField.getFf_id()))));
+					}
+					formatDatas.add(formatData);
 				}
 			}
 			resultScanner.close();
@@ -148,7 +223,8 @@ public class HBaseSourceDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return formatTypeFloders;
+		// TODO Auto-generated method stub
+		return formatDatas;
 	}
 
 }

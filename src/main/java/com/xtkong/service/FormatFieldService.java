@@ -32,13 +32,22 @@ public class FormatFieldService {
 	 *            格式类型
 	 * @return 选取格式字段列表
 	 */
-	public List<FormatField> getFormatFields(Integer ft_id) {
-		return formatFieldDao.getFormatFields(ft_id);
+	public List<FormatField> getFormatFieldsForAdmin(Integer ft_id) {
+		return formatFieldDao.getFormatFieldsForAdmin(ft_id);
+	}
+
+	public List<FormatField> getFormatFieldsForUser(Integer ft_id) {
+		return formatFieldDao.getFormatFieldsForUser(ft_id);
+	}
+
+	public List<FormatField> getFormatFieldsIs_meta(Integer ft_id, Integer is_meta) {
+		return formatFieldDao.getFormatFieldsIs_meta(ft_id, is_meta);
 	}
 
 	public FormatField getFormatField(Integer ff_id) {
 		return formatFieldDao.getFormatField(ff_id);
 	}
+
 	public Integer getFormatField_ft_id(Integer ff_id) {
 		return formatFieldDao.getFormatField_ft_id(ff_id);
 	}

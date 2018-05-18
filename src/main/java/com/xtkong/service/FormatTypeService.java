@@ -24,8 +24,7 @@ public class FormatTypeService {
 	/**
 	 * 选取格式类型列表
 	 * 
-	 * @param higher_ft_id
-	 *            上层格式类型
+	 * @param cs_id
 	 * @return 格式类型列表
 	 */
 	public List<FormatType> getFormatTypes(Integer cs_id) {

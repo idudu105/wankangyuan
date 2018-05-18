@@ -20,8 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.dzjin.model.ProjectFile;
 import com.xtkong.dao.hbase.HBaseSourceDao;
+import com.xtkong.model.FormatField;
+import com.xtkong.model.FormatType;
 import com.xtkong.model.Source;
-import com.xtkong.model.SourceField;
+import com.xtkong.service.FormatFieldService;
 import com.xtkong.service.FormatTypeService;
 import com.xtkong.service.SourceFieldService;
 import com.xtkong.service.SourceService;
@@ -36,9 +38,13 @@ public class FormatDataController {
 	SourceFieldService sourceFieldService;
 	@Autowired
 	FormatTypeService formatTypeService;
+	@Autowired
+	FormatFieldService formatFieldService;
 
 	/**
-	 * 首次进入
+	 * 首次进入 
+	 * 
+	 * // 源数据字数据，注：每个列表第一个值sourceDataId不显示
 	 * 
 	 * @param httpSession
 	 * @return
@@ -72,20 +78,21 @@ public class FormatDataController {
 	}
 
 	/**
-	 * 节点树 
-	 * List<String>依次为formatDataNodeId（节点id）： 不显示、ft_id： 不显示、ft_name： 显示、节点名： 显示
+	 * 节点树 List<String>依次为
+	 * 
+	 * formatDataNodeId（节点id）： 不显示、ft_id： 不显示、ft_name：显示、节点名： 显示
 	 * 
 	 * @param cs_id
-	 * @param uid
 	 * @param sourceDataId
 	 * @return
 	 */
 	@RequestMapping("/formatTypeFloders")
 	@ResponseBody
-	public Map<String, Object> formatTypeFloders(Integer cs_id, Integer uid, String sourceDataId) {
+	public Map<String, Object> formatTypeFloders(String cs_id, String sourceDataId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<List<String>> formatTypeFloders = HBaseSourceDao.getFormatTypeFloders(Integer.toString(cs_id),
-				sourceDataId);
+		List<FormatType> formatTypes = formatTypeService.getFormatTypes(Integer.valueOf(cs_id));
+		List<List<String>> formatTypeFloders = HBaseSourceDao.getFormatTypeFloders(cs_id, sourceDataId, formatTypes);
+
 		if (formatTypeFloders != null) {
 			map.put("result", true);
 			map.put("formatTypeFloders", formatTypeFloders);
@@ -96,39 +103,40 @@ public class FormatDataController {
 		return map;
 	}
 
-	@RequestMapping("/project")
-	public String testproject(HttpSession httpSession) {
-		List<Source> sources = sourceService.getSourcesForUser();
-		httpSession.setAttribute("sources", sources);
-
-		List<SourceField> sourceFields = sourceFieldService.getSourceFields(sources.get(0).getCs_id());
-		httpSession.setAttribute("sourceFields", sourceFields);
-
-		List<List<String>> sourceDatas = new ArrayList<>();
-		// =hBaseSourceDao.getSourceDatasByUid(Integer.toString(sources.get(0).getCs_id()),
-		// "1", sourceFields);
-		List<String> list1 = new ArrayList<>();
-		list1.add("张三");
-		list1.add("25");
-		list1.add("男");
-		list1.add("无");
-		list1.add("个人信息");
-		list1.add("孙");
-		list1.add("2018-4-20");
-		sourceDatas.add(list1);
-		List<String> list = new ArrayList<>();
-		list.add("李");
-		list.add("男");
-		list.add("无");
-		list.add("个人信息");
-		list.add("孙");
-		list.add("2018-4-22");
-		sourceDatas.add(list);
-
-		httpSession.setAttribute("sourceDatas", sourceDatas);
-
-		return "redirect:/pages/project_data.jsp";
-
+	/**
+	 * 格式数据明细 List<List<String>>
+	 * 
+	 * 格式数据明细数据，注：每个列表第一个值formatDataId不显示
+	 * 
+	 * @param cs_id
+	 *            采集源id
+	 * @param ft_id
+	 *            格式类型id
+	 * @param formatDataNodeId
+	 *            节点id
+	 * @return
+	 */
+	@RequestMapping("/formatFields")
+	@ResponseBody
+	public Map<String, Object> formatFields(Integer cs_id, Integer ft_id, String formatDataNodeId) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		// meta数据
+		List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(ft_id, 1);
+		List<List<String>> metaDatas = HBaseSourceDao.getFormatFields(Integer.toString(cs_id), Integer.toString(ft_id),
+				formatDataNodeId, meta);
+		//data数据
+		List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(ft_id, 0);
+		List<List<String>> dataDatas = HBaseSourceDao.getFormatFields(Integer.toString(cs_id), Integer.toString(ft_id),
+				formatDataNodeId, data);
+		if (metaDatas != null) {
+			map.put("result", true);
+			map.put("metaDatas", metaDatas);
+			map.put("dataDatas", dataDatas);
+		} else {
+			map.put("result", false);
+			map.put("message", "获取失败");
+		}
+		return map;
 	}
 
 	@RequestMapping("/datain")

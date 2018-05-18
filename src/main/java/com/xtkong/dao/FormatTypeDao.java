@@ -16,7 +16,7 @@ public interface FormatTypeDao {
 	public int insertFormatType(FormatType formatType);
 
 	@Update("update format_type "
-			+ "set ft_name=#{ft_name} , floder=#{floder} ,update_datetime=#{update_datetime},update_uid=#{update_uid} "
+			+ "set ft_name=#{ft_name} , floder=#{floder} ,update_datetime=#{update_datetime},update_uid=#{update_uid} ，is_view=#{is_view}"
 			+ "where ft_id=#{ft_id}")
 	public int updateFormatType(FormatType FormatType);
 
