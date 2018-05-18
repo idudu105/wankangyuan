@@ -3040,6 +3040,22 @@ ul.messagesList li span.date {
     cursor:pointer;
 }
 
+.box_xx2tab{
+    overflow:auto;
+}
+.box_xx2tabz{
+    float:right;
+    padding:0 20px;
+    height:30px;
+    border:1px solid #dadada;
+    line-height: 30px;
+    font-size:16px;
+    color:#578EBE;
+    text-align: center;
+    cursor:pointer;
+    margin-right:20px;
+}
+
 .box_xytabz{
     display:none;
 }
@@ -3116,7 +3132,7 @@ input.quanxuan{
     position:relative;
     margin-left:0;
 }
-.addboxK{
+.addboxK,.editboxK,.delboxK{
     width:380px;
     /*height:230px;*/
     padding:10px;
@@ -3185,7 +3201,7 @@ input[type="text"].addboxlik{
     /*height:230px;*/
     padding:10px;
     position:absolute;
-    top:-60px;
+    top:-150px;
     left:200px;
     z-index: 300;
     background:#fff;
