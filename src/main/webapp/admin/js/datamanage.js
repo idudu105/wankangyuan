@@ -8,7 +8,7 @@
 $(document).ready(function(){
 
     // 数据采集源选项卡切换
-
+	
     var odatacollec=document.querySelectorAll('.datacollec')[0];//数据采集表
 
     var obox_xxtab=odatacollec.querySelectorAll('.box_xxtab')[0];
@@ -17,7 +17,7 @@ $(document).ready(function(){
 
     var obox_xytab=odatacollec.querySelectorAll('.box_xytab')[0];
     var abox_xytabz=obox_xytab.querySelectorAll('.box_xytabz');
-
+    /*
     for(var i=0;i<abox_xxtabz.length;i++){
         (function(index){
             abox_xxtabz[index].onclick=function(){
@@ -27,7 +27,7 @@ $(document).ready(function(){
                 abox_xytabz[index].className="box_xytabz active";
             }
         })(i)
-    }
+    }*/
 
     // 新增数据采集源
     var obox_addxxtabz=odatacollec.querySelectorAll('.box_addxxtabz')[0];//新增数据采集源按钮
@@ -133,6 +133,7 @@ $(document).ready(function(){
             atableeditzedit[index].onclick=function(){
                 if(oaddbiaoxPD2==0){
                 	//在此处查询出选中的复选框
+                	/*
             		var afuxuanK=document.querySelectorAll('.trbx');
                     var afuxuan=[];
                     for(var i=0;i<afuxuanK.length;i++){
@@ -142,6 +143,13 @@ $(document).ready(function(){
                     for(var i=0;i<afuxuanK.length;i++){
                     	if(afuxuan[i].checked){
                     		ids.push(afuxuan[i].id);
+                    	}
+                    }*/
+                	var checkboxs=document.querySelectorAll('.source_field_checkbox');
+                    var ids = [];
+                    for(var i=0;i<checkboxs.length;i++){
+                    	if(checkboxs[i].checked){
+                    		ids.push(checkboxs[i].id);
                     	}
                     }
                     if(ids.length == 0){
@@ -321,8 +329,40 @@ $(document).ready(function(){
         (function(index){
             atableeditzedit2[index].onclick=function(){
                 if(oaddbiaoxPD_2==0){
-                    oaddbiaoxK_2.style.display="block";
-                    oaddbiaoxPD_2=1;
+                	
+                	var checkboxs=document.querySelectorAll('.format_type_checkbox');
+                    var ids = [];
+                    for(var i=0;i<checkboxs.length;i++){
+                    	if(checkboxs[i].checked){
+                    		ids.push(checkboxs[i].id);
+                    	}
+                    }
+                    if(ids.length == 0){
+                    	alert("请勾选数据源字段！");
+                    }else if(ids.length > 1){
+                    	alert("最多只能编辑一条记录！");
+                    }else{
+                    	
+                    	//先对数据进行填充
+                    	$("#edit_ft_id").val(ids[0]);
+                    	//
+                    	$("#edit_ft_name").val($('#ft_name'+ids[0]).text());
+                    	
+                    	if($('#is_view'+ids[0]).text() == '显示'){
+                    		$("#edit_is_view").val("true");
+                    	}else{
+                    		$("#edit_is_view").val("false");
+                    	}
+                    	
+                    	
+                    	$("#edit_floder").val($('#floder'+ids[0]).text());
+                    	
+                    	oaddbiaoxK_2.style.display="block";
+                        oaddbiaoxPD_2=1;
+                        
+                    }
+                	
+ 
                 }
             }
         })(i)
@@ -444,25 +484,26 @@ $(document).ready(function(){
         })(a)
 
     }*/
-
+    //初始化的时候，没有数据，无法响应
+    /*
     var abiaoxiangthin=document.querySelectorAll('.biaoxiangthin');//进入按钮
-
     var oendconfigK=document.querySelectorAll('.endconfigK')[0];//配置结果类型框
     var oendconfigTx=oendconfigK.querySelectorAll('.endconfigTx')[0];//配置结果类型框关闭按钮
-    
     for(var i=0;i<abiaoxiangthin.length;i++){
         (function(index){
             abiaoxiangthin[index].onclick=function(){
+            	
                 oendconfigK.style.display="block";
             }
         })(i)
     }
     oendconfigTx.onclick=function(){
         oendconfigK.style.display="none";
-    }
+    }*/
 
 
-//metainfo表
+    //metainfo表
+  /*
     var oendconfigz1=document.querySelectorAll('.endconfigz1')[0];
     var oencozadd=oendconfigz1.querySelectorAll('.encozadd')[0];//新增metainfo按钮
     var oenco1aK=oendconfigz1.querySelectorAll('.enco1aK')[0];//新增metainfo框
@@ -505,7 +546,8 @@ $(document).ready(function(){
         oenco1dK.style.display="none";
     }
 
-//metainfo表全选
+    //metainfo表全选
+    
     var oquanxuan3=oendconfigz1.querySelectorAll('.quanxuan')[0];//全选
     var axuanze3=oendconfigz1.querySelectorAll('.xuanze');//复选
     console.log(oquanxuan3);
@@ -547,10 +589,11 @@ $(document).ready(function(){
 
 
 
-
+*/
 
 
 //data表
+    
     var oendconfigz2=document.querySelectorAll('.endconfigz2')[0];
     var oencozadd=oendconfigz2.querySelectorAll('.encozadd')[0];//新增metainfo按钮
     var oenco2aK=oendconfigz2.querySelectorAll('.enco2aK')[0];//新增metainfo框
@@ -594,6 +637,7 @@ $(document).ready(function(){
     }
       
 //data表全选
+    
     var oquanxuan4=oendconfigz2.querySelectorAll('.quanxuan')[0];//全选
     var axuanz4=oendconfigz2.querySelectorAll('.xuanze');//复选
     console.log(oquanxuan4);

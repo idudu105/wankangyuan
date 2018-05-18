@@ -184,10 +184,11 @@
                         <div class="box-content">
                         
                             <div class="box_xxtab">
-	                            <!-- <c:forEach items="${sources}" var="source">
+                            
+	                            <c:forEach items="${sources}" var="source">
 	                                <div class="box_xxtabz" id="${source.cs_id }">${source.cs_name}</div>
-								</c:forEach> -->
-								<div class="box_xxtabz" id="${source.cs_id }">${source.cs_name}</div>
+								</c:forEach>
+								
                                 <div class="box_addxxtabz">+</div>
                             </div>
                             
@@ -195,7 +196,7 @@
                             	
                                 <div class="box_xytabz active">
                                     <div class="box_xytabzK">
-                                        <div class="box_xytabzT" id="cs_name">${source.cs_name}-配置</div>
+                                        <div class="box_xytabzT" id="cs_name">配置</div>
                                         <div class="tableedit">
                                             <div class="tableeditz tableeditzadd">+新增</div>
                                             <div class="tableeditz tableeditzedit">/编辑</div>
@@ -368,7 +369,7 @@
                                 </div>
                                 <div class="delbiaoxM">确认删除选中的metainfo项吗?（该操作无法恢复，请谨慎操作！）</div>
                                 <div class="addbiaoxB">
-                                    <input type="button" value="确认" class="addbiaoxBb" />
+                                    <input type="button" value="确认" class="addbiaoxBb" id="deleteSourceFieldSubmit"/>
                                     <input type="button" value="取消" class="addbiaoxBb2" />
                                 </div>
                             </div>
@@ -389,8 +390,8 @@
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">状态：</div>
 	                                    <select name="format_add_is_view" id="format_add_is_view">
-	                                        <option value="">显示</option>
-	                                        <option value="">隐藏</option>
+	                                        <option value="true">显示</option>
+	                                        <option value="false">隐藏</option>
 	                                    </select>
 	                                </div>
 	                                <div class="addbiaoxli">
@@ -405,31 +406,34 @@
                             </div>
                             <!-- 添加格式化数据类型end -->
 
+
+
                             <!-- 更新结果类型start -->
                             <div class="addbiaoxK2_2">
                               <!-- form表单提交数据 -->
-	         				 	<form action="/wankangyuan/formatType/insertFormatType">
+	         				 	<form name="updateFormatTypeForm">
+	         				 		<input type="text" id="edit_ft_id" style="display:none;"/>
 	                                <div class="addbiaoxT">
 	                                    <div class="addbiaoxTt">添加格式化数据类型</div>
 	                                    <div class="addbiaoxTx"></div>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">格式化数据名：</div>
-	                                    <input type="text" class="addbiaoxlik" name="ft_name"/>
+	                                    <input type="text" class="addbiaoxlik" name="edit_ft_name" id="edit_ft_name"/>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">状态：</div>
-	                                    <select name="is_view" id="">
+	                                    <select name="edit_is_view" id="edit_is_view">
 	                                        <option value="true">显示</option>
 	                                        <option value="false">隐藏</option>
 	                                    </select>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">格式化数据类别：</div>
-	                                    <input type="text" class="addbiaoxlik"name="higher_ft_name" />
+	                                    <input type="text" class="addbiaoxlik" name="edit_floder" id="edit_floder"/>
 	                                </div>
 	                                <div class="addbiaoxB">
-	                                    <input type="submit" value="提交" class="addbiaoxBb" />
+	                                    <input type="button" value="提交" class="addbiaoxBb" id="updateFormatTypeFormSubmit"/>
 	                                    <input type="button" value="关闭" class="addbiaoxBb2" />
 	                                </div>
 	                        	</form>  
@@ -449,6 +453,152 @@
                                 </div>
                             </div>
                             <!-- 删除格式化数据类型end -->
+                            
+                            <!-- 配置结果类型框start -->
+                            <div class="endconfigK" id="endConfig">
+                                <div class="endconfigT">
+                                    <div class="endconfigTt">配置结果类型</div>
+                                    <input id="ft_id" style="display:none;"/>
+                                    <div class="endconfigTx" onclick="exitEnter()"></div>
+                                </div>
+                                <div class="endconfigM">
+                                    
+                                    <div class="endconfigz2">
+                                        <div class="endconfigzB">
+                                            <div class="endconfigzb encozadd">+新增</div>
+                                            <div class="endconfigzb encozedit">/修改</div>
+                                            <div class="endconfigzb encozdel">-删除</div>
+                                        </div>
+                                        <div class="tablebox">
+                                            <table class="biaoge table-bordered">
+                                                <div class="biaotou">
+                                                    <tr role="row">
+                                                        <th class="biaotouth">
+                                                            <input type="checkbox" class="quanxuan">全选
+                                                        </th>
+                                                        <th class="biaotouth">metainfo</th>
+                                                        <th class="biaotouth">字段名</th>
+                                                        <th class="biaotouth">类型</th>
+                                                        <th class="biaotouth">校验规则</th>
+                                                        <th class="biaotouth">是否可枚举</th>
+                                                        <th class="biaotouth">是否必填</th>
+                                                        <th class="biaotouth">是否显示</th>
+                                                        <th class="biaotouth">字段描述信息</th>
+                                                        <th class="biaotouth">错误提示信息</th>
+                                                        <th class="biaotouth">创建时间</th>
+                                                        <th class="biaotouth">更新时间</th>
+                                                        <th class="biaotouth">创建人</th>
+                                                        <th class="biaotouth">更新人</th>
+                                                    </tr>
+                                                </div>
+                                                <div class="biaoxiang">
+                                                    <tr role="row" class="trbx">
+                                                        <th class="biaoxiangth"><input type="checkbox" class="xuanze"></th>
+                                                        <th class="biaoxiangth">Column1</th>
+                                                    </tr>
+                                                    <tr role="row" class="trbx">
+                                                        <th class="biaoxiangth"><input type="checkbox" class="xuanze"></th>
+                                                        <th class="biaoxiangth">Column1</th>
+                                                    </tr>
+                                                </div>
+                                            </table>
+                                        </div>
+
+
+                                        <div class="enco2aK">
+                                            <div class="endconfigT">
+                                                <div class="endconfigTt">新增</div>
+                                                <div class="endconfigTx"></div>
+                                            </div>
+                                            <div class="encoM">
+                                                <div class="encoMz">
+                                                    <div class="encoMzt">metainfo:</div>                          
+                                                    <select class="encoMzp" id="add_ff_is_meta">
+                                                    	<option value="true">是</option>
+                                                    	<option value="false">否</option>
+                                                    </select>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >字段名:</div>                          
+                                                    <input type="text" class="encoMzp" id="add_ff_ff_name"/>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >类型:</div>                          
+                                                    <input type="text" class="encoMzp" id="add_ff_type" />
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >校验规则:</div>                          
+                                                    <input type="text" class="encoMzp" id="add_ff_check_rule"/>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt">可枚举:</div>                          
+                                                    <select class="encoMzp"  id="add_ff_enumerated">
+                                                    	<option value="true">是</option>
+                                                    	<option value="false">否</option>
+                                                    </select>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >必填:</div>                          
+                                                    <select class="encoMzp" id="add_ff_not_null">
+                                                    	<option value="true">是</option>
+                                                    	<option value="false">否</option>
+                                                    </select>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >显示:</div>                          
+                                                    <select class="encoMzp" id="add_ff_is_view">
+                                                    	<option value="true">是</option>
+                                                    	<option value="false">否</option>
+                                                    </select>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >字段描述:</div>                          
+                                                    <input type="text" class="encoMzp" id="add_ff_description"/>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >错误提示:</div>                          
+                                                    <input type="text" class="encoMzp" id="add_ff_error_msg" />
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="encoB">
+                                                <input type="button" class="encob" value="提交" id="addFormatFieldSubmit"/>
+                                            </div>
+                                        </div>
+                                        
+                                        
+										<!-- 更新格式类型结果字段悬浮窗 -->
+                                        <div class="enco2eK">
+                                            <div class="endconfigT">
+                                                <div class="endconfigTt">更新data</div>
+                                                <div class="endconfigTx"></div>
+                                            </div>
+                                            <div class="encoM">
+                                                <div class="encoMz">
+                                                    <div class="encoMzt">格式字段名：</div>
+                                                    <input type="text" class="encoMzp" />
+                                                </div>
+                                            </div>
+                                            <div class="encoB">
+                                                <input type="button" class="encob" value="提交" />
+                                            </div>
+                                        </div>
+                                        <div class="enco2dK">
+                                            <div class="endconfigT">
+                                                <div class="endconfigTt">删除data</div>
+                                                <div class="endconfigTx"></div>
+                                            </div>
+                                            <div class="encodM">确认删除选中的data项吗?（该操作无法恢复，请谨慎操作！）</div>
+                                            <div class="encoB">
+                                                <input type="button" class="encob" value="确认" />
+                                                <input type="button" class="encob2" value="关闭" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 配置结果类型框end -->
+                            
 
                         </div>
                     </div>
@@ -549,7 +699,7 @@
     
     <script type="text/javascript">
     	
-	    //获取采集源的字段以及格式数据
+	    //获取某个采集源的基本信息配置以及格式数据类型配置
 	    $(".box_xxtabz").click(function(){
 	    	
 	        $("input[name='cs_id']").val(this.id);
@@ -568,7 +718,6 @@
 	       		dataType:"json",
 	       		success : function(data){
 	       			if(data.result == true){
-	       				
 	       				//设置数据源的名称
 	       				$("#cs_name").text(data.source.cs_name+'-配置');
 	       				
@@ -598,7 +747,7 @@
 	       				str+='<div class="biaoxiang">';
 	       				for(var i in sourceFields){
 	       					str+='<tr role="row" class="trbx" >';
-	       					str+='<th class="biaoxiangth"><input type="checkbox" class="xuanze" id="'+sourceFields[i].csf_id+'"></th>';
+	       					str+='<th class="biaoxiangth"><input type="checkbox" class="xuanze source_field_checkbox" id="'+sourceFields[i].csf_id+'"></th>';
 	       					str+='<th class="biaoxiangth" id="csf_name'+sourceFields[i].csf_id+'">'+sourceFields[i].csf_name+'</th>';
 							str+='<th class="biaoxiangth" id="type'+sourceFields[i].csf_id+'">'+sourceFields[i].type+'</th>';
 							str+='<th class="biaoxiangth" id="check_rule'+sourceFields[i].csf_id+'">'+sourceFields[i].check_rule+'</th>';
@@ -650,7 +799,7 @@
 	       				strFormatTypes+='<div class="biaoxiang">';
 	       				for(var i in formatTypes){
 	       					strFormatTypes+='<tr role="row" class="trbx" >';
-	       					strFormatTypes+='<th class="biaoxiangth"><input type="checkbox" class="xuanze" id="'+formatTypes[i].ft_id+'"></th>';
+	       					strFormatTypes+='<th class="biaoxiangth"><input type="checkbox" class="xuanze format_type_checkbox" id="'+formatTypes[i].ft_id+'"></th>';
 	       					strFormatTypes+='<th class="biaoxiangth" id="ft_name'+formatTypes[i].ft_id+'">'+formatTypes[i].ft_name+'</th>';
 							strFormatTypes+='<th class="biaoxiangth" id="create_datetime'+formatTypes[i].ft_id+'">'+formatTypes[i].create_datetime+'</th>';
 							strFormatTypes+='<th class="biaoxiangth" id="check_rule'+formatTypes[i].ft_id+'">'+formatTypes[i].update_datetime+'</th>';
@@ -662,7 +811,7 @@
 								strFormatTypes+='<th class="biaoxiangth" id="is_view'+formatTypes[i].ft_id+'">显示</th>';
 							}
 							strFormatTypes+='<th class="biaoxiangth" id="floder'+formatTypes[i].ft_id+'">'+formatTypes[i].floder+'</th>';
-							strFormatTypes+='<th class="biaoxiangth">进入</th>';
+							strFormatTypes+='<th class="biaoxiangth biaoxiangthin" onclick="enter('+formatTypes[i].ft_id+')">进入</th>';
 	
 	       					strFormatTypes+='</tr>';
 	       				}
@@ -681,7 +830,7 @@
 	        
 	    });
 	    
-	    //新增数据源字段提交按钮，OK
+	    //新增数据源基本信息字段提交按钮，OK
 	    $("#insertSourceFieldSubmit").click(function (){
 	    	$.ajax({
 				url:"/wankangyuan/sourceFiled/insertSourceFiled",
@@ -710,7 +859,7 @@
 			});		
 	    });
 	    
-	    //更新数据源字段提交按钮，OK
+	    //更新数据源基本信息字段提交按钮，OK
 	    $("#updateSourceFieldSubmit").click(function (){
 	
 	    	$.ajax({
@@ -741,11 +890,47 @@
 			});
 	    	
 	    });
+	    
+	    //删除采集源基本信息字段，NOT OK
+	    $("#deleteSourceFieldSubmit").click(function (){
+	    	
+	    	//首先是获取所有选中的基本信息字段
+	    	var ids = [];
+	    	var source_field_checkbox=document.querySelectorAll('.source_field_checkbox');
+	    	for(var i = 0 ;  i < source_field_checkbox.length ; i++){
+	    		if(source_field_checkbox[i].checked == true){
+	    			ids.push(source_field_checkbox[i].id);
+	    		}
+	    	}
+	    	//进行ajax请求
+	    	$.ajax({
+	    		url:"/wankangyuan/*****/****",
+	    		type:"post",
+	    		data:{
+	    			ids:ids.join(",")
+	    		},
+	    		dataType:"json",
+	    		success : function(data){
+					if(data.result == true){
+						//进行删除成功后的跳页处理
+						alert("删除成功！");
+						window.location.href="/wankangyuan/admin/formatdata";
+
+					}else{
+						alert("部分行删除失败!");
+					}
+	    		},
+	    		error : function(){
+	    			alert("联网失败");
+	    		}	
+	    	});
+	    });
+	    
 
 	    //新增数据源格式数据字段提交按钮，
 	    $("#insertFormatTypeSubmit").click(function (){
 	    	$.ajax({
-				url:"/wankangyuan/sourceFiled/insertSourceFiled",
+				url:"/wankangyuan/formatType/insertFormatType",
 				type:"post",
 				dataType:"json",
 				data:{
@@ -766,6 +951,103 @@
 				}
 			});		
 	    });
+
+	    //编辑数据源格式数据字段提交按钮，
+	    $("#updateFormatTypeFormSubmit").click(function (){
+	    	
+	    	$.ajax({
+				url:"/wankangyuan/formatType/updateFormatType",
+				type:"post",
+				dataType:"json",
+				data:{
+					ft_id:updateFormatTypeForm.edit_ft_id.value,
+					ft_name:updateFormatTypeForm.edit_ft_name.value,
+					is_view:updateFormatTypeForm.edit_is_view.value,
+					floder:updateFormatTypeForm.edit_floder.value,
+				},
+				success:function(data){
+					if(data.result == true){
+						alert("格式数据类型更新成功！");
+						window.location.href="/wankangyuan/admin/formatdata";
+					}else{
+						alert(data.message);
+					}
+				},
+				error:function(){
+					alert("联网失败");
+				}
+			});
+	    });
+	    
+	    function enter(id){
+	    	var oendconfigK=document.querySelectorAll('.endconfigK')[0];//配置结果类型框
+	    	oendconfigK.style.display="block";
+	    	$("#ft_id").val(id);//设置进入的格式类型ID
+	    	
+	    	
+	    	//此处需要去数据库中查询当前格式类型下面的格式字段列表并对弹出的格式字段列表进行更新展示。
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    }
+	    
+	    function exitEnter(){
+	    	document.querySelectorAll('.endconfigK')[0].style.display="none";
+	    }
+	    
+	    
+	    $("#addFormatFieldSubmit").click(function (){
+	    	
+	    	//提交格式数据字段
+	    	var ft_id = $("#ft_id").val();
+	    	var is_meta = $("#add_ff_is_meta").val();
+	    	var ff_name = $("#add_ff_ff_name").val();
+	    	var type = $("#add_ff_type").val();
+	    	var check_rule = $("#add_ff_check_rule").val();
+	    	var enumerated = $("#add_ff_enumerated").val();
+	    	var not_null = $("#add_ff_not_null").val();
+	    	var is_view = $("#add_ff_is_view").val();
+	    	var description = $("#add_ff_description").val();
+	    	var error_msg = $("#add_ff_error_msg").val();
+	    	
+	    	$.ajax({
+	    		url:"/wankangyuan/formatField/insertFormatField",
+	    		type:"post",
+	    		data:{
+	    			ft_id:ft_id,
+	    			is_meta:is_meta,
+	    			ff_name:ff_name,
+	    			type:type,
+	    			check_rule:check_rule,
+	    			enumerated:enumerated,
+	    			not_null:not_null,
+	    			is_view:is_view,
+	    			description:description,
+	    			error_msg:error_msg
+	    		},
+	    		dataType:"json",
+	    		success : function(data){
+	    			if(data.result == true){
+	    				alert("增加格式字段成功");
+	    			}else{
+	    				alert(data.message);
+	    			}
+	    		},
+	    		error : function(){
+	    			alert("联网失败");
+	    		}
+	    		
+	    	});
+	    	
+
+	    	
+	    });
+	    
 		
 		//提交新建的结果
 		/*
