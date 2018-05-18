@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
@@ -27,16 +28,32 @@
                 <a href="/wankangyuan/project/selectMyProject">
                     <div class="topT">项目</div>
                 </a>
-                <a href="data_mine.html">
+                <a href="/wankangyuan/admin/formatdata">
                     <div class="topT">格式数据</div>
                 </a>
                 <a href="/wankangyuan/application/viewMine">
                     <div class="topT active">应用</div>
                 </a>
                 <div class="touxiangK">
-                    <img src="<%=request.getContextPath()%>/static/img/touxiang.png" alt="" class="touxiang" />
+                    <a href=" ">
+                        <img src="<%=request.getContextPath()%>/static/img/touxiang.png" alt="" class="touxiang" />
+                    </a>
+                    <div class="userbutK">
+                        <a href="user_info.html">
+                            <div class="userbut">用户信息</div>
+                        </a>
+                        <a href="javascript:;">
+                            <div class="userbut">系统消息
+                                <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint2" />
+                            </div>
+                        </a>
+                        <div class="userbutline"></div>
+                        <a href="/wankangyuan/logout">
+                            <div class="userbut">退出登录</div>
+                        </a>
+                    </div>
                 </div>
-                <div class="nicheng">Peter</div>
+                <div class="nicheng"><shiro:principal/></div>
                 <div class="yanjiuquan">
                     <div class="yanjiuquanT">研究圈</div>
                     <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />

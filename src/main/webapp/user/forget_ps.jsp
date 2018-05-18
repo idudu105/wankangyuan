@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>注册</title>
+    <title>找回密码</title>
 </head>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/static/css/index.css" />
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/project1.js"></script>
@@ -24,44 +24,21 @@
             </div>
             <div class="xiangmu">
                 <div class="loginK">
-                    <div class="loginT">注册</div>
+                    <div class="loginT">找回密码</div>
                     <a href="/wankangyuan/login">
-                        <div class="loginBB1">已有账号</div>
+                        <div class="loginBB1">马上登录</div>
                     </a>
-                    
                     <form id="_form" method="post">
-                    <div class="loginM_2">
+                    <div class="loginM">
                         <div class="loginMz">
-                            <div class="loginMzL">账户名称：</div>
+                            <!-- <div class="loginMzL">账户名称：</div> -->
                             <div class="loginMzR">
-                                <input id="username" name="username" type="text" class="loginMzRp" placeholder="" />
-                            </div>
-                            <div class="loginMzt">*不少于2个字符</div>
-                        </div>
-                        <div class="loginMz">
-                            <div class="loginMzL">密码：</div>
-                            <div class="loginMzR">
-                                <input id="password" name="password" type="password" class="loginMzRp" placeholder="" />
-                            </div>
-                            <div class="loginMzt">*不少于8个字符</div>
-                        </div>
-                        <div class="loginMz">
-                            <div class="loginMzL">再次输入：</div>
-                            <div class="loginMzR">
-                                <input id="re_password" type="password" class="loginMzRp" placeholder="" />
+                                <input id="phone" name="phone" type="text" class="loginMzRp for_zh" placeholder="请输入手机号" />
                             </div>
                         </div>
                         <div class="loginMz">
-                            <div class="loginMzL">手机号：</div>
                             <div class="loginMzR">
-                                <input id="phone" name="phone" type="text" class="loginMzRp for_zh" placeholder="" />
-                            </div>
-                            <div class="loginMzt">*请填写常用手机号</div>
-                        </div>
-                        <div class="loginMz">
-                            <div class="loginMzL">验证码：</div>
-                            <div class="loginMzR">
-                                <input id="phoneCode" name="phoneCode" type="text" class="loginMzRp3" placeholder="" />
+                                <input id="phoneCode" name="phoneCode" type="text" class="loginMzRp3" placeholder="验证码" />
                                 <div class="loginMzRbK">
                                     <input id="sendPhoneCode" type="button" class="loginMzRb" value="发送验证码" />
                                     <div class="loginMzRb2"></div>
@@ -69,29 +46,24 @@
                             </div>
                         </div>
                         <div class="loginMz">
-                            <div class="loginMzL">邮箱：</div>
                             <div class="loginMzR">
-                                <input id="email" name="email" type="email" class="loginMzRp for_zh" placeholder="" />
+                                <input id="password" name="password" type="password" class="loginMzRp for_ps" placeholder="请输入新密码" />
                             </div>
-                            <div class="loginMzt">*请务必正确填写常用邮箱</div>
                         </div>
                         <div class="loginMz">
-                            <div class="loginMzL">动态验证码：</div>
                             <div class="loginMzR">
-                                <input name="randomCode" type="text" class="loginMzRp2" />
-                                <div class="loginMzRiK">
-                                    <img src="/wankangyuan/open/getGifCode" class="loginMzRi" onclick="random(this)" title="点击更换"/>
-                                </div>
+                                <input id="re_password" type="password" class="loginMzRp for_ps2" placeholder="请再次输入新密码" />
                             </div>
                         </div>
-                    </div>
-                    <!-- <div class="loginM3">
-                        <div class="loginMt">*手机号不能接受验证码，请联系客服</div>
-                    </div> -->
-                    <div class="loginB">
-                        <input type="button" class="loginb pro_enter" value="注册" onclick="register()" />
+                        
                     </div>
                     </form>
+                    <div class="loginM3">
+                        <div class="loginMt">*手机号不能接受验证码，请联系客服</div>
+                    </div>
+                    <div class="loginB">
+                        <input type="button" class="loginb pro_enter" value="确认" onclick="resetPassword()" />
+                    </div>
                 </div>
             </div>
             <div class="bottom">
@@ -135,49 +107,43 @@
 </c:if>
 <script type="text/javascript">
 $("#sendPhoneCode").click(function(){
-	var phone = $("#phone").val();
+    var phone = $("#phone").val();
   $.get("/wankangyuan/open/getPhoneCode?phone="+phone, function(result){
     if(result != 0){
-    	layer.msg("已发送验证码，请注意接收!");
+        layer.msg("已发送验证码，请注意接收!");
     }else{
-    	layer.msg("验证码发送失败，请联系管理员!");
+        layer.msg("验证码发送失败，请联系管理员!");
     }
   });
 });
 
-function register(){
-	
-	if($("#username").val().length < 2){
-		return layer.msg('账户名称不少于2个字符！',function(){}),!1;
-	}
-	
-	if($("#password").val().length < 8){
-		return layer.msg('密码不少于8个字符！',function(){}),!1;
-	}
-	
+function resetPassword(){
 	if($("#phone").val().trim() == ''){
-		return layer.msg('请输入手机号',function(){}),!1;
-	}
-	
-	if($("#password").val() != $("#re_password").val()){
-        return layer.msg('2次密码输出不一样！',function(){}),!1;
+        return layer.msg('请输入手机号',function(){}),!1;
     }
 	
 	if($('#phoneCode').val().length != 6){
         return layer.msg('手机验证码的长度为6位！',function(){}),!1;
     }
 	
-	//$("#_form").submit();
+	if($("#password").val().length < 8){
+        return layer.msg('密码不少于8个字符！',function(){}),!1;
+    }
+	
+	if($("#password").val() != $("#re_password").val()){
+        return layer.msg('2次密码输出不一样！',function(){}),!1;
+    }
+	
 	var load = layer.load();
-    $.post("/wankangyuan/register",$("#_form").serialize() ,function(result){
+    $.post("/wankangyuan/forgetPassword",$("#_form").serialize() ,function(result){
         layer.close(load);
         if(result && result.status!= 200){
             return layer.msg(result.message,function(){}),!1;
         }else{
-            layer.msg('注册成功!', {
+            layer.msg('密码重置成功,请重新登录!', {
                 anim: 0,
                 end: function (index) {
-	            	window.location.href= "/wankangyuan/login";
+                    window.location.href= "/wankangyuan/login";
                 }
             });
             
@@ -185,11 +151,6 @@ function register(){
     },"json");
 	
 }
-
-function random(tmp){  
-     tmp.src = '/wankangyuan/open/getGifCode?'  + Math.random();
-}
-   
-</script>  
+</script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
@@ -25,16 +26,32 @@
                 <a href="/wankangyuan/project/selectMyProject">
                     <div class="topT">项目</div>
                 </a>
-                <a href="data_mine.html">
+                <a href="/wankangyuan/admin/formatdata">
                     <div class="topT">格式数据</div>
                 </a>
                 <a href="/wankangyuan/application/viewMine">
                     <div class="topT active">应用</div>
                 </a>
                 <div class="touxiangK">
-                    <img src="<%=request.getContextPath()%>/static/img/touxiang.png" alt="" class="touxiang" />
+                    <a href=" ">
+                        <img src="<%=request.getContextPath()%>/static/img/touxiang.png" alt="" class="touxiang" />
+                    </a>
+                    <div class="userbutK">
+                        <a href="user_info.html">
+                            <div class="userbut">用户信息</div>
+                        </a>
+                        <a href="javascript:;">
+                            <div class="userbut">系统消息
+                                <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint2" />
+                            </div>
+                        </a>
+                        <div class="userbutline"></div>
+                        <a href="/wankangyuan/logout">
+                            <div class="userbut">退出登录</div>
+                        </a>
+                    </div>
                 </div>
-                <div class="nicheng">Peter</div>
+                <div class="nicheng"><shiro:principal/></div>
                 <div class="yanjiuquan">
                     <div class="yanjiuquanT">研究圈</div>
                     <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
@@ -159,6 +176,7 @@
                         <div onclick="location='/wankangyuan/application/explain?id=${app.id }'" class="PJK2liex">应用说明</div>
                     </div>
                 </c:forEach>
+                <input id="projectId" name="projectId" type="hidden" disabled="disabled">
                 </form>
             </div>
 
@@ -191,6 +209,32 @@
 </c:if>
 
 <script type="text/javascript">
+function addToProjrct(projectId){
+    var ids = $("input[name='ids']");
+    var checkNum = 0;
+    for (var i = 0; i < ids.length; i++) {
+        if (ids[i].checked) {
+            checkNum++;
+        }
+    }
+    if (checkNum == 0) {
+        layer.msg("请至少选中一个");
+    } else {
+        layer.confirm('请确认是否添加?',{
+          btn: ['确认','取消'], //按钮
+          icon: 2
+        }, function(){
+            $("#appList").attr('action',"/wankangyuan/ProjectAppRelation/addToProject");
+            $("#projectId").removeAttr("disabled");
+            $("#projectId").val(projectId);
+            $("#appList").submit();
+          
+        }, function(){
+            return;
+        });
+    }
+}
+
 function removeFromMine(){
     var ids = $("input[name='ids']");
     var checkNum = 0;

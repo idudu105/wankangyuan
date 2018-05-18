@@ -184,18 +184,19 @@
                         <div class="box-content">
                         
                             <div class="box_xxtab">
-	                            <!-- <c:forEach items="${sources}" var="source">
+	                            <c:forEach items="${sources}" var="source">
 	                                <div class="box_xxtabz" id="${source.cs_id }">${source.cs_name}</div>
-								</c:forEach> -->
-								<div class="box_xxtabz" id="${source.cs_id }">${source.cs_name}</div>
+								</c:forEach>
                                 <div class="box_addxxtabz">+</div>
                             </div>
-                            
+                            <div class="box_xx2tab">
+                                <div class="box_xx2tabz box_delxxtabz">删除Tab</div>
+                                <div class="box_xx2tabz box_editxxtabz">编辑Tab</div>
+	                        </div>
                             <div class="box_xytab">
-                            	
                                 <div class="box_xytabz active">
                                     <div class="box_xytabzK">
-                                        <div class="box_xytabzT" id="cs_name">${source.cs_name}-配置</div>
+                                        <div class="box_xytabzT" id="cs_name">配置</div>
                                         <div class="tableedit">
                                             <div class="tableeditz tableeditzadd">+新增</div>
                                             <div class="tableeditz tableeditzedit">/编辑</div>
@@ -217,9 +218,7 @@
                                     	</div>
 	                                </div>
                                 </div> 
-                                  
                              </div>
-                             
 
                             <!-- 新增数据采集源start -->
                             <div class="addboxK">
@@ -236,8 +235,10 @@
 	                                <div class="addboxli">
 	                                    <div class="addboxlit">状态（是否显示）：</div>
 	                                    <div class="addboxliR">
-	                                        <input type="radio"  class="addboxlir" name="is_view"  value="true" checked="checked"/>是
-	                                        <input type="radio" class="addboxlir" name="is_view" value="false" />否
+	                                        <select name="is_view">
+	                                        	<option value="true">是</option>
+	                                        	<option value="false">否</option>
+	                                        </select>
 	                                    </div>
 	                                </div>
 	                                <div class="addboxB">
@@ -246,6 +247,45 @@
                            		</form>
                             </div>
                             <!-- 新增数据采集源end -->
+                            
+                            <!-- 编辑数据采集源start -->
+                            <div class="editboxK">
+                                <div class="addboxT">
+                                    <div class="addboxTt">编辑数据采集源</div>
+                                    <div class="addboxTx"></div>
+                                </div>
+                                <input id="edit_cs_cs_id" style="display:none;"/>
+                                <div class="addboxli">
+                                    <div class="addboxlit">状态（是否显示）：</div>
+                                    <div class="addboxliR" >
+                                        <select name="edit_cs_is_view" id="edit_cs_is_view">
+                                        	<option value="true">是</option>
+                                        	<option value="false">否</option>
+	                                    </select>
+                                    </div>
+                                </div>
+                                <div class="addboxli">
+                                    <div class="addboxlit">采集源名称：</div>
+                                    <input type="text" class="addboxlik" id="edit_cs_cs_name"/>
+                                </div>
+                                <div class="addboxB">
+                                    <input type="button" value="提交" class="addboxBb" id="editSourceSubmit"/>
+                                </div>
+                            </div>
+                            <!-- 编辑数据采集源end -->
+
+                            <!-- 删除数据采集源start -->
+                            <div class="delboxK">
+                                <div class="addboxT">
+                                    <div class="addboxTt">通知</div>
+                                    <div class="addboxTx"></div>
+                                </div>
+                                <div class="addboxli">确认删除选中的收集源吗?（该操作无法恢复，请谨慎操作！）</div>
+                                <div class="addboxB">
+                                    <input type="button" value="确定" class="addboxBb" id="deleteSourceSubmit"/>
+                                </div>
+                            </div>
+                            <!-- 删除数据采集源end -->
 
                             <!-- 新增metainfo_start -->
                             <div class="addbiaoxK">
@@ -368,7 +408,7 @@
                                 </div>
                                 <div class="delbiaoxM">确认删除选中的metainfo项吗?（该操作无法恢复，请谨慎操作！）</div>
                                 <div class="addbiaoxB">
-                                    <input type="button" value="确认" class="addbiaoxBb" />
+                                    <input type="button" value="确认" class="addbiaoxBb" id="deleteSourceFieldSubmit"/>
                                     <input type="button" value="取消" class="addbiaoxBb2" />
                                 </div>
                             </div>
@@ -389,8 +429,8 @@
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">状态：</div>
 	                                    <select name="format_add_is_view" id="format_add_is_view">
-	                                        <option value="">显示</option>
-	                                        <option value="">隐藏</option>
+	                                        <option value="true">显示</option>
+	                                        <option value="false">隐藏</option>
 	                                    </select>
 	                                </div>
 	                                <div class="addbiaoxli">
@@ -405,31 +445,34 @@
                             </div>
                             <!-- 添加格式化数据类型end -->
 
+
+
                             <!-- 更新结果类型start -->
                             <div class="addbiaoxK2_2">
                               <!-- form表单提交数据 -->
-	         				 	<form action="/wankangyuan/formatType/insertFormatType">
+	         				 	<form name="updateFormatTypeForm">
+	         				 		<input type="text" id="edit_ft_id" style="display:none;"/>
 	                                <div class="addbiaoxT">
 	                                    <div class="addbiaoxTt">添加格式化数据类型</div>
 	                                    <div class="addbiaoxTx"></div>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">格式化数据名：</div>
-	                                    <input type="text" class="addbiaoxlik" name="ft_name"/>
+	                                    <input type="text" class="addbiaoxlik" name="edit_ft_name" id="edit_ft_name"/>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">状态：</div>
-	                                    <select name="is_view" id="">
+	                                    <select name="edit_is_view" id="edit_is_view">
 	                                        <option value="true">显示</option>
 	                                        <option value="false">隐藏</option>
 	                                    </select>
 	                                </div>
 	                                <div class="addbiaoxli">
 	                                    <div class="addbiaoxlit">格式化数据类别：</div>
-	                                    <input type="text" class="addbiaoxlik"name="higher_ft_name" />
+	                                    <input type="text" class="addbiaoxlik" name="edit_floder" id="edit_floder"/>
 	                                </div>
 	                                <div class="addbiaoxB">
-	                                    <input type="submit" value="提交" class="addbiaoxBb" />
+	                                    <input type="button" value="提交" class="addbiaoxBb" id="updateFormatTypeFormSubmit"/>
 	                                    <input type="button" value="关闭" class="addbiaoxBb2" />
 	                                </div>
 	                        	</form>  
@@ -444,12 +487,172 @@
                                 </div>
                                 <div class="delbiaoxM">确认删除选中的格式化数据类型吗?（该操作无法恢复，请谨慎操作！）</div>
                                 <div class="addbiaoxB">
-                                    <input type="button" value="确认" class="addbiaoxBb" />
+                                    <input type="button" value="确认" class="addbiaoxBb" id="deleteFormatTypeSubmit"/>
                                     <input type="button" value="取消" class="addbiaoxBb2" />
                                 </div>
                             </div>
                             <!-- 删除格式化数据类型end -->
+                            
+                            <!-- 配置结果类型框start -->
+                            <div class="endconfigK" id="endConfig">
+                                <div class="endconfigT">
+                                    <div class="endconfigTt">配置结果类型</div>
+                                    <input id="ft_id" style="display:none;"/>
+                                    <div class="endconfigTx" onclick="exitEnter()"></div>
+                                </div>
+                                <div class="endconfigM">
+                                    
+                                    <div class="endconfigz2">
+                                        <div class="endconfigzB">
+                                            <div class="endconfigzb encozadd">+新增</div>
+                                            <div class="endconfigzb encozedit">/修改</div>
+                                            <div class="endconfigzb encozdel" id="deleteFormatFieldsButton">-删除</div>
+                                        </div>
+                                        <div class="tablebox">
+                                            <table class="biaoge table-bordered" id="formatFieldsTable"></table>
+                                        </div>
 
+
+                                        <div class="enco2aK">
+                                            <div class="endconfigT">
+                                                <div class="endconfigTt">新增</div>
+                                                <div class="endconfigTx"></div>
+                                            </div>
+                                            <div class="encoM">
+                                                <div class="encoMz">
+                                                    <div class="encoMzt">metainfo:</div>                          
+                                                    <select class="encoMzp" id="add_ff_is_meta">
+                                                    	<option value="true">是</option>
+                                                    	<option value="false">否</option>
+                                                    </select>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >字段名:</div>                          
+                                                    <input type="text" class="encoMzp" id="add_ff_ff_name"/>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >类型:</div>                          
+                                                    <input type="text" class="encoMzp" id="add_ff_type" />
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >校验规则:</div>                          
+                                                    <input type="text" class="encoMzp" id="add_ff_check_rule"/>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt">可枚举:</div>                          
+                                                    <select class="encoMzp"  id="add_ff_enumerated">
+                                                    	<option value="true">是</option>
+                                                    	<option value="false">否</option>
+                                                    </select>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >必填:</div>                          
+                                                    <select class="encoMzp" id="add_ff_not_null">
+                                                    	<option value="true">是</option>
+                                                    	<option value="false">否</option>
+                                                    </select>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >显示:</div>                          
+                                                    <select class="encoMzp" id="add_ff_is_view">
+                                                    	<option value="true">是</option>
+                                                    	<option value="false">否</option>
+                                                    </select>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >字段描述:</div>                          
+                                                    <input type="text" class="encoMzp" id="add_ff_description"/>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >错误提示:</div>                          
+                                                    <input type="text" class="encoMzp" id="add_ff_error_msg" />
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="encoB">
+                                                <input type="button" class="encob" value="提交" id="addFormatFieldSubmit"/>
+                                            </div>
+                                        </div>
+                                        
+                                        
+										<!-- 更新格式类型结果字段悬浮窗 -->
+                                        <div class="enco2eK">
+                                            <div class="endconfigT">
+                                                <div class="endconfigTt">更新</div>
+                                                <div class="endconfigTx"></div>
+                                            </div>
+                                            <div class="encoM">
+                                        		<input id="edit_ff_ff_id" style="display:none;"/>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt">metainfo:</div>                          
+                                                    <select class="encoMzp" id="edit_ff_is_meta">
+                                                    	<option value="true">是</option>
+                                                    	<option value="false">否</option>
+                                                    </select>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >字段名:</div>                          
+                                                    <input type="text" class="encoMzp" id="edit_ff_ff_name"/>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >类型:</div>                          
+                                                    <input type="text" class="encoMzp" id="edit_ff_type" />
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >校验规则:</div>                          
+                                                    <input type="text" class="encoMzp" id="edit_ff_check_rule"/>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt">可枚举:</div>                          
+                                                    <select class="encoMzp"  id="edit_ff_enumerated">
+                                                    	<option value="true">是</option>
+                                                    	<option value="false">否</option>
+                                                    </select>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >必填:</div>                          
+                                                    <select class="encoMzp" id="edit_ff_not_null">
+                                                    	<option value="true">是</option>
+                                                    	<option value="false">否</option>
+                                                    </select>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >显示:</div>                          
+                                                    <select class="encoMzp" id="edit_ff_is_view">
+                                                    	<option value="true">是</option>
+                                                    	<option value="false">否</option>
+                                                    </select>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >字段描述:</div>                          
+                                                    <input type="text" class="encoMzp" id="edit_ff_description"/>
+                                                </div>
+                                                <div class="encoMz">
+                                                    <div class="encoMzt" >错误提示:</div>                          
+                                                    <input type="text" class="encoMzp" id="edit_ff_error_msg" />
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="encoB">
+                                                <input type="button" class="encob" value="提交" id="editFormatFieldSubmit"/>
+                                            </div>
+                                        </div>
+                                        <div class="enco2dK" id="deleteFormatFieldsConfirm">
+                                            <div class="endconfigT">
+                                                <div class="endconfigTt">删除格式化结果类型字段</div>
+                                                <div class="endconfigTx"></div>
+                                            </div>
+                                            <div class="encodM">确认删除选中的项吗?（该操作无法恢复，请谨慎操作！）</div>
+                                            <div class="encoB">
+                                                <input type="button" class="encob" value="确认"  id="deleteFormatFieldsSubmit"/>
+                                                <input type="button" class="encob2" value="关闭" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 配置结果类型框end -->
+                            
                         </div>
                     </div>
                     <!-- 数据采集表end -->
@@ -545,256 +748,14 @@
     <script src="js/custom.js"></script>
 
     <script type="text/javascript" src="js/datamanage.js"></script>
-    <!-- end: JavaScript -->
     
-    <script type="text/javascript">
-    	
-	    //获取采集源的字段以及格式数据
-	    $(".box_xxtabz").click(function(){
-	    	
-	        $("input[name='cs_id']").val(this.id);
-	        $("input[name='format_add_cs_id']").val(this.id);
-	        
-	        var cs_id = this.id;
-	       	var sourceFieldTable = $("#sourceFieldTable");
-	       	var formatTypeTable = $("#formatTypeTable");
-	       	
-	       	$.ajax({
-	       		url:"/wankangyuan/source/getSourceAll",
-	       		type:"post",
-	       		data:{
-	       			cs_id:cs_id
-	       		},
-	       		dataType:"json",
-	       		success : function(data){
-	       			if(data.result == true){
-	       				
-	       				//设置数据源的名称
-	       				$("#cs_name").text(data.source.cs_name+'-配置');
-	       				
-	       				//获取基本字段并展示
-	       				var sourceFields = data.source.sourceFields;
-	       				sourceFieldTable.empty();
-	       				
-	       				var str = '';
-	       				str+='<div class="biaotou">';
-	       				str+='<tr role="row">';
-	       				str+='<th class="biaotouth">';
-	       				str+='<input type="checkbox" class="quanxuan">全选';
-	       				str+='</th>';
-	       				str+='<th class="biaotouth">字段名</th>';
-	       				str+='<th class="biaotouth">类型</th>';
-	       				str+='<th class="biaotouth">校验规则</th>';
-	       				str+='<th class="biaotouth">是否可枚举</th>';
-	       				str+='<th class="biaotouth">是否必填</th>';
-	       				str+='<th class="biaotouth">字段描述信息</th>';
-	       				str+='<th class="biaotouth">错误信息提示</th>';
-	       				str+='<th class="biaotouth">创建时间</th>';
-	       				str+='<th class="biaotouth">更新时间</th>';
-	       				str+='<th class="biaotouth">创建人</th>';
-	       				str+='<th class="biaotouth">更新人</th>';
-	       				str+='</tr>';
-	       				str+='</div>';
-	       				str+='<div class="biaoxiang">';
-	       				for(var i in sourceFields){
-	       					str+='<tr role="row" class="trbx" >';
-	       					str+='<th class="biaoxiangth"><input type="checkbox" class="xuanze" id="'+sourceFields[i].csf_id+'"></th>';
-	       					str+='<th class="biaoxiangth" id="csf_name'+sourceFields[i].csf_id+'">'+sourceFields[i].csf_name+'</th>';
-							str+='<th class="biaoxiangth" id="type'+sourceFields[i].csf_id+'">'+sourceFields[i].type+'</th>';
-							str+='<th class="biaoxiangth" id="check_rule'+sourceFields[i].csf_id+'">'+sourceFields[i].check_rule+'</th>';
-							if(sourceFields[i].enumerated == false){
-								str+='<th class="biaoxiangth" id="enumerated'+sourceFields[i].csf_id+'">否</th>';
-							}else{
-								str+='<th class="biaoxiangth" id="enumerated'+sourceFields[i].csf_id+'">是</th>';
-							}
-							
-							if(sourceFields[i].enumerated == false){
-								str+='<th class="biaoxiangth" id="enumerated'+sourceFields[i].not_null+'">否</th>';
-							}else{
-								str+='<th class="biaoxiangth" id="enumerated'+sourceFields[i].not_null+'">是</th>';
-							}
-							str+='<th class="biaoxiangth" id="description'+sourceFields[i].csf_id+'">'+sourceFields[i].description+'</th>';
-							
-							str+='<th class="biaoxiangth" id="error_msg'+sourceFields[i].csf_id+'">'+sourceFields[i].error_msg+'</th>';
-							str+='<th class="biaoxiangth">'+sourceFields[i].create_datetime+'</th>';
-							str+='<th class="biaoxiangth">'+sourceFields[i].update_datetime+'</th>';
-							str+='<th class="biaoxiangth">'+sourceFields[i].creator+'</th>';
-							str+='<th class="biaoxiangth">'+sourceFields[i].updater+'</th>';
-	
-	       					str+='</tr>';
-	       				}
-	       				str+='</div>';
-	       				sourceFieldTable.html(str);
-	       				
-	       				
-	       				//获取格式字段并展示
-	       				var formatTypes = data.source.formatTypes;
-	       				formatTypeTable.empty();
-	       				
-	       				var strFormatTypes = '';
-	       				strFormatTypes+='<div class="biaotou">';
-	       				strFormatTypes+='<tr role="row">';
-	       				strFormatTypes+='<th class="biaotouth">';
-	       				strFormatTypes+='<input type="checkbox" class="quanxuan">全选';
-	       				strFormatTypes+='</th>';
-	       				strFormatTypes+='<th class="biaotouth">格式化数据类型名</th>';
-	       				strFormatTypes+='<th class="biaotouth">创建时间</th>';
-	       				strFormatTypes+='<th class="biaotouth">更新时间</th>';
-	       				strFormatTypes+='<th class="biaotouth">创建人</th>';
-	       				strFormatTypes+='<th class="biaotouth">更新人</th>';
-	       				strFormatTypes+='<th class="biaotouth">状态</th>';
-	       				strFormatTypes+='<th class="biaotouth">格式化数据类别</th>';
-	       				strFormatTypes+='<th class="biaotouth">操作</th>';
-	       				strFormatTypes+='</tr>';
-	       				strFormatTypes+='</div>';
-	       				strFormatTypes+='<div class="biaoxiang">';
-	       				for(var i in formatTypes){
-	       					strFormatTypes+='<tr role="row" class="trbx" >';
-	       					strFormatTypes+='<th class="biaoxiangth"><input type="checkbox" class="xuanze" id="'+formatTypes[i].ft_id+'"></th>';
-	       					strFormatTypes+='<th class="biaoxiangth" id="ft_name'+formatTypes[i].ft_id+'">'+formatTypes[i].ft_name+'</th>';
-							strFormatTypes+='<th class="biaoxiangth" id="create_datetime'+formatTypes[i].ft_id+'">'+formatTypes[i].create_datetime+'</th>';
-							strFormatTypes+='<th class="biaoxiangth" id="check_rule'+formatTypes[i].ft_id+'">'+formatTypes[i].update_datetime+'</th>';
-							strFormatTypes+='<th class="biaoxiangth" id="creator'+formatTypes[i].ft_id+'">'+formatTypes[i].creator+'</th>';
-							strFormatTypes+='<th class="biaoxiangth" id="updater'+formatTypes[i].ft_id+'">'+formatTypes[i].updater+'</th>';
-							if(formatTypes[i].is_view == false){
-								strFormatTypes+='<th class="biaoxiangth" id="is_view'+formatTypes[i].ft_id+'">隐藏</th>';
-							}else{
-								strFormatTypes+='<th class="biaoxiangth" id="is_view'+formatTypes[i].ft_id+'">显示</th>';
-							}
-							strFormatTypes+='<th class="biaoxiangth" id="floder'+formatTypes[i].ft_id+'">'+formatTypes[i].floder+'</th>';
-							strFormatTypes+='<th class="biaoxiangth">进入</th>';
-	
-	       					strFormatTypes+='</tr>';
-	       				}
-	       				strFormatTypes+='</div>';
-	       				formatTypeTable.html(strFormatTypes);
-
-	       			}else{
-	       				alert(data.message);
-	       			}
-	       		},
-	       		error : function(){
-	       			alert("联网失败");
-	       		}
-	       		
-	       	});
-	        
-	    });
-	    
-	    //新增数据源字段提交按钮，OK
-	    $("#insertSourceFieldSubmit").click(function (){
-	    	$.ajax({
-				url:"/wankangyuan/sourceFiled/insertSourceFiled",
-				type:"post",
-				dataType:"json",
-				data:{
-					cs_id:insertSourceFieldForm.cs_id.value,
-					csf_name:insertSourceFieldForm.csf_name.value,
-					type:insertSourceFieldForm.type.value,
-					check_rule:insertSourceFieldForm.check_rule.value,
-					enumerated:insertSourceFieldForm.enumerated.value,
-					not_null:insertSourceFieldForm.not_null.value,
-					description:insertSourceFieldForm.description.value,
-					error_msg:insertSourceFieldForm.error_msg.value
-				},
-				success : function(data){
-					if(data.result == true){
-						window.location.href=data.url;
-					}else{
-						alert(data.message);
-					}
-				},
-				error : function(){
-					alert("联网失败");
-				}
-			});		
-	    });
-	    
-	    //更新数据源字段提交按钮，OK
-	    $("#updateSourceFieldSubmit").click(function (){
-	
-	    	$.ajax({
-				url:"/wankangyuan/sourceField/updateSourceField",
-				type:"post",
-				dataType:"json",
-				data:{
-					csf_id:updateSourceFieldForm.edit_csf_id.value,
-					csf_name:updateSourceFieldForm.edit_csf_name.value,
-					type:updateSourceFieldForm.edit_type.value,
-					check_rule:updateSourceFieldForm.edit_check_rule.value,
-					enumerated:updateSourceFieldForm.edit_enumerated.value,
-					not_null:updateSourceFieldForm.edit_not_null.value,
-					description:updateSourceFieldForm.edit_description.value,
-					error_msg:updateSourceFieldForm.edit_error_msg.value
-				},
-				success : function(data){
-					if(data.result == true){
-						alert("数据源字段更新成功！");
-						window.location.href="/wankangyuan/admin/formatdata";
-					}else{
-						alert(data.message);
-					}
-				},
-				error : function(){
-					alert("联网失败");
-				}
-			});
-	    	
-	    });
-
-	    //新增数据源格式数据字段提交按钮，
-	    $("#insertFormatTypeSubmit").click(function (){
-	    	$.ajax({
-				url:"/wankangyuan/sourceFiled/insertSourceFiled",
-				type:"post",
-				dataType:"json",
-				data:{
-					cs_id:insertFormatTypeForm.format_add_cs_id.value,
-					ft_name:insertFormatTypeForm.format_add_ft_name.value,
-					is_view:insertFormatTypeForm.format_add_is_view.value,
-					floder:insertFormatTypeForm.format_add_floder.value,
-				},
-				success : function(data){
-					if(data.result == true){
-						window.location.href=data.url;
-					}else{
-						alert(data.message);
-					}
-				},
-				error : function(){
-					alert("联网失败");
-				}
-			});		
-	    });
-		
-		//提交新建的结果
-		/*
-		function insertSourceFiled1(){
-			//进行ajax请求
-			$.ajax({
-				url:"/wankangyuan/formatType/insertFormatType",
-				type:"post",
-				dataType:"json",
-				data:{
-					cs_id:insertFormatTypeForm.cs_id.value,
-					ft_name:insertFormatTypeForm.ft_name.value,
-					is_view:insertFormatTypeForm.is_view.value,
-					floder:insertFormatTypeForm.floder.value
-				},
-				success : function(data){
-					if(data.result == true){
-						window.location.href=data.url;
-					}else{
-						alert(data.message);
-					}
-				},
-				error : function(){
-					alert("联网失败");
-				}
-			});			
-		}*/
-    	
-    </script>
+    <script type="text/javascript" src="source.js"></script>
+    
+    <script type="text/javascript" src="formatType.js"></script>
+    
+    <script type="text/javascript" src="formatField.js"></script>
+    
+    <!-- end: JavaScript -->
     
 </body>
 
