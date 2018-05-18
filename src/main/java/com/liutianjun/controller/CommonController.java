@@ -12,11 +12,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UrlPathHelper;
 
 import com.liutianjun.service.RoleService;
 import com.liutianjun.utils.LoggerUtils;
+import com.liutianjun.utils.SendViaAspx;
 import com.liutianjun.utils.StringUtils;
 import com.liutianjun.utils.VerifyCodeUtils;
 import com.liutianjun.utils.vcode.Captcha;
@@ -106,6 +108,30 @@ public class CommonController {
 			LoggerUtils.fmtError(getClass(),e, "获取验证码异常：%s",e.getMessage());
 		}
 	}
+	
+	/**
+	 * 获取手机验证码
+	 * @Title: getVCode 
+	 * @param response
+	 * @param request 
+	 * void
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="getPhoneCode",method=RequestMethod.GET)
+	@ResponseBody
+	public Integer getVPhoneCode(String phone) throws Exception{
+		
+		//生成验证码
+		String verifyPhoneCode = VerifyCodeUtils.generateVerifyPhoneCode(6);
+		//存入Shiro会话session
+		SecurityUtils.getSubject().getSession().setAttribute(VerifyCodeUtils.V_PHONECODE, verifyPhoneCode);
+		//发送手机验证码
+		//int i = SendViaAspx.sendPhoneCode(phone, verifyPhoneCode);
+		System.out.println(phone+"-----"+verifyPhoneCode);
+		return 1;
+		
+	}
+	
 	
 	/**
 	 * 获取验证码（Gif版本）
