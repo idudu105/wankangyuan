@@ -24,8 +24,14 @@ public class VerifyCodeUtils{
   
     //使用到Algerian字体，系统里没有的话需要安装字体，字体只显示大写，去掉了1,0,i,o几个容易混淆的字符  
     public static final String VERIFY_CODES = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";  
+    //数字
+    public static final String VERIFY_PHONECODES = "0123456789";  
+    
     //验证码的Key
     public static final String V_CODE = "validateCode";
+    //手机验证码Key
+    public static final String V_PHONECODE = "validatePhoneCode";
+    
     private static Random random = new Random();  
   
     
@@ -79,6 +85,17 @@ public class VerifyCodeUtils{
     public static String generateVerifyCode(int verifySize){  
         return generateVerifyCode(verifySize, VERIFY_CODES);  
     }  
+    
+    /**
+     * 生成纯数字验证码
+     * @Title: generateVerifyCode 
+     * @param verifySize
+     * @return 
+     * String
+     */
+    public static String generateVerifyPhoneCode(int verifySize){  
+    	return generateVerifyCode(verifySize, VERIFY_PHONECODES);  
+    }  
     /**
      * 清除验证码
      */
@@ -112,7 +129,7 @@ public class VerifyCodeUtils{
         }  
         return verifyCode.toString();  
     }  
-      
+    
     /** 
      * 生成随机验证码文件,并返回验证码值 
      * @param w 

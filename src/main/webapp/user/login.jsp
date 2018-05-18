@@ -49,7 +49,7 @@
                         </div>
                     </div>
                     <div class="loginM2">
-                        <a href="forget_ps.html">
+                        <a href="/wankangyuan/forgetPassword">
                             <div class="loginM2z">忘记密码？</div>
                         </a>
                         <a href="/wankangyuan/register">

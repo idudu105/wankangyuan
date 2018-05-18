@@ -30,6 +30,12 @@ public interface UserService {
     //根据用户名查找用户
     User selectByUsername(String username);
     
+    //根据手机号查找用户
+    User selectByPhone(String phone);
+    
+    //根据邮箱查找用户
+    User selectByEmail(String email);
+    
     //查找所有用户
     Map<String,Object> findAll();
     

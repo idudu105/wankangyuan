@@ -2,6 +2,7 @@ package com.liutianjun.shiro.realm;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -49,9 +50,14 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 
-        String username = (String)token.getPrincipal();
-
-        User user = userService.selectByUsername(username);
+        String userStr = (String)token.getPrincipal();
+        
+        User user = null;
+        if(StringUtils.isNumeric(userStr)) {
+        	user = userService.selectByPhone(userStr);
+        }else {
+        	user = userService.selectByUsername(userStr);
+		}
 
         if(user == null) {
             throw new UnknownAccountException();//没找到帐号
@@ -65,7 +71,7 @@ public class UserRealm extends AuthorizingRealm {
 
         //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                username, //用户名
+        		user.getUsername(), //用户名
                 user.getPassword(), //密码
                 ByteSource.Util.bytes(user.getUsername()+user.getSalt()),//salt=username+salt
                 getName()  //realm name
