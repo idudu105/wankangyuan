@@ -1,5 +1,7 @@
 package com.xtkong.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,17 +22,23 @@ public class FormatFieldController {
 	/**
 	 * 新增一条格式字段
 	 * 
-	 * @param formatField
+	 * @param formatField 
 	 *            待增格式字段
+	 * @param uid
 	 * @return 执行情况
 	 */
 	@RequestMapping("/insertFormatField")
 	@ResponseBody
-	public Map<String, Object> insertFormatField(FormatField formatField) {
+	public Map<String, Object> insertFormatField(FormatField formatField,Integer uid) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		// 设置创建时间
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		formatField.setCreate_datetime(simpleDateFormat.format(new Date()));
+		formatField.setCreate_uid(uid);
+
 		if (1 == formatFieldService.insertFormatField(formatField)) {
 			map.put("result", true);
-			// map.put("ft_id", formatField.getFt_id());
+			map.put("message", "新增成功");
 		} else {
 			map.put("result", false);
 			map.put("message", "新增失败");
@@ -43,17 +51,19 @@ public class FormatFieldController {
 	 * 
 	 * @param formatField
 	 *            待更新格式字段
+	 * @param uid
 	 * @return 执行情况
 	 */
 	@RequestMapping("/updateFormatField")
 	@ResponseBody
-	public Map<String, Object> updateFormatField(FormatField formatField) {
-		// Integer ft_id =
-		// formatFieldService.getFormatField_ft_id(formatField.getFf_id());
+	public Map<String, Object> updateFormatField(FormatField formatField,Integer uid) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		formatField.setUpdate_datetime(simpleDateFormat.format(new Date()));
+		formatField.setUpdate_uid(uid);
 		if (1 == formatFieldService.updateFormatField(formatField)) {
 			map.put("result", true);
-			// map.put("ft_id", ft_id);
+			map.put("message", "更新成功");
 		} else {
 			map.put("result", false);
 			map.put("message", "更新失败");
@@ -88,11 +98,4 @@ public class FormatFieldController {
 		}
 		return map;
 	}
-
-	// public String getFormatFields(HttpSession httpSession, Integer ft_id) {
-	// List<FormatField> formatFields =
-	// formatFieldService.getFormatFields(ft_id);
-	// httpSession.setAttribute("formatFields", formatFields);
-	// return "redirect:/pages/project_data.html";
-	// }
 }

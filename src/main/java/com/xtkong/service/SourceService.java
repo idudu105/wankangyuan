@@ -20,12 +20,15 @@ public class SourceService {
 	public int insertSource(Source source){
 		return sourceDao.insertSource(source);
 	}
+	public int updateSource(Source source){
+		return sourceDao.updateSource(source);
+	}
 	/**
 	 * 选取数据源，用户
 	 * @return	数据源列表
 	 */
-	public List<Source> selectSource() {
-		return sourceDao.selectSource();
+	public List<Source> getSourcesForUser() {
+		return sourceDao.getSourcesForUser();
 	}
 	
 	/**
@@ -41,5 +44,8 @@ public class SourceService {
 	}
 	public Source getSourceLimit( Integer num){
 		return sourceDao.getSourceLimit(num);
+	}
+	public int deleteSource(Integer cs_id) {
+		return sourceDao.deleteSource(cs_id);
 	}
 }

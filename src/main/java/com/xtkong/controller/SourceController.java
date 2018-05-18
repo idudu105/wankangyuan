@@ -23,19 +23,6 @@ public class SourceController {
 	@Autowired
 	FormatTypeService formatTypeService;
 
-	@RequestMapping(value = "/insertSource")
-	public String insertSource(Source source) {
-		sourceService.insertSource(source);
-		return "redirect:/admin/formatdata";
-	}
-
-	// @RequestMapping("/selectSource")
-	// public String selectSource(HttpSession httpSession){
-	// List<Source> sources = sourceService.selectSource();
-	// httpSession.setAttribute("sources", sources);
-	// return "redirect:/pages/project_data.jsp";
-	//
-	// }
 	/**
 	 * 提供：采集源id 返回：执行状况，采集源基础信息、采集源字段、采集源所有格式类型
 	 * 
@@ -60,4 +47,45 @@ public class SourceController {
 		}
 		return map;
 	}
+
+	@RequestMapping(value = "/insertSource")
+	public String insertSource(Source source) {
+		sourceService.insertSource(source);
+		return "redirect:/admin/formatdata";
+	}
+
+	@RequestMapping("/updateSource")
+	@ResponseBody
+	public Map<String, Object> updateSource(Source source) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		if (1 == sourceService.updateSource(source)) {
+			map.put("result", true);
+			map.put("message", "更新成功");
+		} else {
+			map.put("result", false);
+			map.put("message", "更新失败");
+		}
+		return map;
+	}
+
+	@RequestMapping("/deleteSource")
+	@ResponseBody
+	public Map<String, Object> deleteSource(Integer cs_id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			if (1 == sourceService.deleteSource(cs_id)) {
+				map.put("result", true);
+				map.put("message", "删除成功");
+			} else {
+				map.put("result", false);
+				map.put("message", "删除失败");
+			}
+		} catch (Exception e) {
+			map.put("result", false);
+			map.put("message", "请先删除该采集源所有字段");
+		}
+		return map;
+	}
+
 }

@@ -1,4 +1,4 @@
-package com.xtkong.controller;
+package com.xtkong.controller.admin;
 
 import java.util.List;
 
@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.xtkong.dao.TestDao;
 import com.xtkong.model.Source;
 import com.xtkong.service.FormatTypeService;
 import com.xtkong.service.SourceFieldService;
@@ -16,10 +15,8 @@ import com.xtkong.service.SourceService;
 
 @Controller
 @RequestMapping(value = "/admin")
-public class TestDataManageController {
+public class DataManageController {
 
-	@Autowired
-	TestDao testDao;
 	@Autowired
 	SourceService sourceService;
 	@Autowired
@@ -45,10 +42,5 @@ public class TestDataManageController {
 		return "redirect:/admin/datamanage.jsp";
 
 	}
-	// @RequestMapping(value ="/insertSource")
-	// public String insertSource(Source source){
-	// sourceService.insertSource(source);
-	// return "redirect:/admin/formatdata";
-	// }
 
 }

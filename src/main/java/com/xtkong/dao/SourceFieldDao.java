@@ -16,7 +16,7 @@ public interface SourceFieldDao {
 	public int insertSourceField(SourceField sourceField);
 
 	@Update("update collection_source_field "
-			+ "set csf_name=#{csf_name} , type=#{type} , check_rule=#{check_rule}, enumerated=#{enumerated}, not_null=#{not_null}, description=#{description},error_msg=#{error_msg},update_datetime={update_datetime},update_uid={update_uid}  "
+			+ "set csf_name=#{csf_name} , type=#{type} , check_rule=#{check_rule}, enumerated=#{enumerated}, not_null=#{not_null}, description=#{description},error_msg=#{error_msg},update_datetime=#{update_datetime},update_uid=#{update_uid}  "
 			+ "where csf_id=#{csf_id}")
 	public int updateSourceField(SourceField sourceField);
 

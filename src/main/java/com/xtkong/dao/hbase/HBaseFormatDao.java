@@ -24,11 +24,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 import com.xtkong.util.ConstantsHBase;
 import com.xtkong.util.HBaseDB;
 
-/**
- * @author 沫
- *
- */
-public class FormatDao {
+public class HBaseFormatDao {
 
 	/**
 	 * 新增格式数据类型
@@ -44,7 +40,7 @@ public class FormatDao {
 	 */
 	public static void createFormat(String source, String uid, String format_type, int version) {
 		createFormat(ConstantsHBase.TABLE_PREFIX_FORMAT + "_" + source + "_" + format_type,
-				new String[] { ConstantsHBase.FAMILY_SOURCE_FormatDataName, format_type }, version);
+				new String[] { ConstantsHBase.FAMILY_INFO, format_type }, version);
 	}
 
 	public static void createFormat(String tableName, String[] columnFamilies, int version) {
@@ -87,13 +83,13 @@ public class FormatDao {
 	 * @param value
 	 *            格式数据命名
 	 */
-	public static void insertFormatDataName(String source, String format_type, String sourceDataId, String value) {
-		HBaseDB db = HBaseDB.getInstance();
-		Long count = db.getNewId(ConstantsHBase.TABLE_GID, sourceDataId, ConstantsHBase.FAMILY_GID_GID,
-				ConstantsHBase.QUALIFIER_GID_GID_GID);
-		db.put(ConstantsHBase.TABLE_PREFIX_FORMAT + "_" + source + "_" + format_type, sourceDataId + "_" + count,
-				ConstantsHBase.FAMILY_SOURCE_FormatDataName, ConstantsHBase.QUALIFIER_SOURCE_FormatDataName, value);
-	}
+//	public static void insertFormatDataName(String source, String format_type, String sourceDataId, String value) {
+//		HBaseDB db = HBaseDB.getInstance();
+//		Long count = db.getNewId(ConstantsHBase.TABLE_GID, sourceDataId, ConstantsHBase.FAMILY_GID_GID,
+//				ConstantsHBase.QUALIFIER_GID_GID_GID);
+//		db.put(ConstantsHBase.TABLE_PREFIX_FORMAT + "_" + source + "_" + format_type, sourceDataId + "_" + count,
+//				ConstantsHBase.FAMILY_INFO, ConstantsHBase.QUALIFIER_SOURCE_FormatDataName, value);
+//	}
 
 	/**
 	 * 获取指定源数据（采集源、用户已知）的所有格式数据
@@ -116,7 +112,7 @@ public class FormatDao {
 			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_SOURCE + "_" + source);
 			Scan scan = new Scan();
 			// 列簇约束结果集
-			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_SOURCE_INFO));
+			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
 			// 前缀sourceDataId+"_"过滤
 			Filter filter = new PrefixFilter(Bytes.toBytes(sourceDataId + "_"));
 			scan.setFilter(filter);
@@ -125,7 +121,7 @@ public class FormatDao {
 			while (iterator.hasNext()) {
 				Result result = iterator.next();
 				if (!result.isEmpty()) {
-					list.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_SOURCE_INFO),
+					list.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
 							Bytes.toBytes(format_field))));
 				}
 			}
@@ -159,7 +155,7 @@ public class FormatDao {
 			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_SOURCE + "_" + source);
 			Scan scan = new Scan();
 			// 列簇约束结果集
-			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_SOURCE_INFO));
+			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
 			// 行键formatDataId过滤
 			Filter filter = new RowFilter(CompareOp.EQUAL, new BinaryComparator(Bytes.toBytes(formatDataId)));
 			scan.setFilter(filter);
@@ -168,7 +164,7 @@ public class FormatDao {
 			while (iterator.hasNext()) {
 				Result result = iterator.next();
 				if (!result.isEmpty()) {
-					list.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_SOURCE_INFO),
+					list.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
 							Bytes.toBytes(format_field))));
 				}
 			}
@@ -199,7 +195,7 @@ public class FormatDao {
 			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_FORMAT + "_" + source + "_" + format_type);
 			Scan scan = new Scan();
 			// 列簇约束结果集
-			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_SOURCE_INFO));
+			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
 			// 前缀sourceDataId+"_"过滤
 			Filter filter = new PrefixFilter(Bytes.toBytes(sourceDataId + "_"));
 			scan.setFilter(filter);
@@ -208,8 +204,8 @@ public class FormatDao {
 			while (iterator.hasNext()) {
 				Result result = iterator.next();
 				if (!result.isEmpty()) {
-					list.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_SOURCE_FormatDataName),
-							Bytes.toBytes(ConstantsHBase.QUALIFIER_SOURCE_FormatDataName))));
+//					list.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+//							Bytes.toBytes(ConstantsHBase.QUALIFIER_SOURCE_FormatDataName))));
 				}
 			}
 			resultScanner.close();

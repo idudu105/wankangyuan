@@ -27,7 +27,7 @@ public class HBaseSourceDao {
 	 */
 	public static void createSource(String source, int version) {
 		createSource(ConstantsHBase.TABLE_PREFIX_SOURCE + "_" + source,
-				new String[] { ConstantsHBase.FAMILY_SOURCE_INFO }, version);
+				new String[] { ConstantsHBase.FAMILY_INFO }, version);
 	}
 
 	public static void createSource(String tableName, String[] columnFamilies, int version) {
@@ -54,13 +54,13 @@ public class HBaseSourceDao {
 		Long count = db.getNewId(ConstantsHBase.TABLE_GID, uid + "_" + source, ConstantsHBase.FAMILY_GID_GID,
 				ConstantsHBase.QUALIFIER_GID_GID_GID);
 		db.put(ConstantsHBase.TABLE_PREFIX_SOURCE + "_" + source, uid + "_" + source + "_" + count,
-				ConstantsHBase.FAMILY_SOURCE_INFO, source_field, value);
+				ConstantsHBase.FAMILY_INFO, source_field, value);
 	}
 
 	/**
 	 * 获取指定采集源、用户的源数据基础信息
 	 * 
-	 * @param source
+	 * @param cs_id
 	 *            采集源 id
 	 * @param uid
 	 *            用户 id
@@ -68,32 +68,35 @@ public class HBaseSourceDao {
 	 *            采集源字段 ids、names
 	 * @return
 	 */
-	public List<List<String>> getSourceDatasByUid(String source, String uid, List<SourceField> sourceFields) {
-		List<List<String>> list = new ArrayList<List<String>>();
+	public static List<List<String>> getSourceDatasByUid(String cs_id, String uid, List<SourceField> sourceFields) {
+		List<List<String>> sourceDatas = new ArrayList<List<String>>();
 		try {
 			HBaseDB db = HBaseDB.getInstance();
-			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_SOURCE + "_" + source);
+			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_SOURCE + "_" + cs_id);
 			Scan scan = new Scan();
 			// 列簇约束结果集
-			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_SOURCE_INFO));
+			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
 			// 前缀uid+"_"+source+"_"过滤
-			Filter filter = new PrefixFilter(Bytes.toBytes(uid + "_" + source + "_"));
+			Filter filter = new PrefixFilter(Bytes.toBytes(uid + "_" + cs_id + "_"));
 			scan.setFilter(filter);
 			ResultScanner resultScanner = table.getScanner(scan);
 			Iterator<Result> iterator = resultScanner.iterator();
 			while (iterator.hasNext()) {
 				Result result = iterator.next();
 				if (!result.isEmpty()) {
-					List<String> sourceData=new ArrayList<>();
-//					for (Entry<String, String> source_field : sourceFields.entrySet()) {
-//						sourceData.put(source_field.getValue(),Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_SOURCE_INFO),
-//								Bytes.toBytes(source_field.getKey()))));
-//					}
+					List<String> sourceData = new ArrayList<>();
+					// for (Entry<String, String> source_field :
+					// sourceFields.entrySet()) {
+					// sourceData.put(source_field.getValue(),Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_SOURCE_INFO),
+					// Bytes.toBytes(source_field.getKey()))));
+					// }
+					// 获取行键sourceDataId
+					sourceData.add(Bytes.toString(result.getRow()));
 					for (SourceField sourceField : sourceFields) {
-						sourceData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_SOURCE_INFO),
+						sourceData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
 								Bytes.toBytes(sourceField.getCsf_id()))));
 					}
-					list.add(sourceData);
+					sourceDatas.add(sourceData);
 				}
 			}
 			resultScanner.close();
@@ -102,8 +105,50 @@ public class HBaseSourceDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return list;
+		return sourceDatas;
 	}
-	
+/**
+ * 
+ * @param cs_id
+ * @param sourceDataId
+ * @param formatTypes
+ * @return formatDataNodeId、ft_id、ft_name、节点名
+ */
+	public static List<List<String>> getFormatTypeFloders(String cs_id, String sourceDataId) {
+		List<List<String>> formatTypeFloders = new ArrayList<List<String>>();
+		try {
+			HBaseDB db = HBaseDB.getInstance();
+			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_FORMAT + "_" + cs_id);
+			Scan scan = new Scan();
+			// 列簇约束结果集
+			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
+			// 前缀uid+"_"+source+"_"过滤
+			Filter filter = new PrefixFilter(Bytes.toBytes(sourceDataId + "_"));
+			scan.setFilter(filter);
+			ResultScanner resultScanner = table.getScanner(scan);
+			Iterator<Result> iterator = resultScanner.iterator();
+			while (iterator.hasNext()) {
+				Result result = iterator.next();
+				if (!result.isEmpty()) {
+					List<String> formatTypeFloder = new ArrayList<>();
+					
+					formatTypeFloder.add(Bytes.toString(result.getRow()));// 获取行键formatDataNodeId，不显示
+					formatTypeFloder.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+							Bytes.toBytes(ConstantsHBase.QUALIFIER_ft_id))));//// 获取ft_id，不显示
+					formatTypeFloder.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+							Bytes.toBytes(ConstantsHBase.QUALIFIER_ft_name))));// 获取ft_name，显示
+					formatTypeFloder.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+							Bytes.toBytes(ConstantsHBase.QUALIFIER_node))));// 获取节点名，显示
+					formatTypeFloders.add(formatTypeFloder);
+				}
+			}
+			resultScanner.close();
+			table.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return formatTypeFloders;
+	}
 
 }

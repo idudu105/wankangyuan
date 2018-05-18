@@ -14,7 +14,7 @@ public interface FormatFieldDao {
 	@Insert("insert into format_field(ft_id,ff_name,type,check_rule,enumerated,not_null,is_view,description,error_msg,create_datetime,create_uid) values(#{ft_id},#{ff_name},#{type},#{check_rule},#{enumerated},#{not_null},#{is_view},#{description},#{error_msg},#{create_datetime},#{create_uid})")
 	public int insertFormatField(FormatField formatField);
 
-	@Update("update format_field " + "set ff_name=#{ff_name},type={type},check_rule={check_rule},enumerated={enumerated},not_null={not_null},is_view={is_view},description={description},error_msg={error_msg},update_datetime={update_datetime},update_uid={update_uid} " + "where ff_id=#{ff_id}")
+	@Update("update format_field " + "set ff_name=#{ff_name},type=#{type},check_rule=#{check_rule},enumerated=#{enumerated},not_null=#{not_null},is_view=#{is_view},description=#{description},error_msg=#{error_msg},update_datetime=#{update_datetime},update_uid=#{update_uid} " + "where ff_id=#{ff_id}")
 	public int updateFormatField(FormatField formatField);
 
 	/**

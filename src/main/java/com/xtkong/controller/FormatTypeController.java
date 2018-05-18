@@ -49,20 +49,21 @@ public class FormatTypeController {
 /**
  * 新增一条格式类型
  * @param formatType  待增格式类型
+	 * @param uid
  * @return 执行情况，采集源id
  */ 
 	@RequestMapping("/insertFormatType")
 	@ResponseBody
-	public Map<String, Object> insertFormatType(FormatType formatType) {
+	public Map<String, Object> insertFormatType(FormatType formatType,Integer uid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		formatType.setCreate_datetime(simpleDateFormat.format(new Date()));
-		formatType.setCreate_uid(1);
+		formatType.setCreate_uid(uid);
 
 		if (1 == formatTypeService.insertFormatType(formatType)) {
 			map.put("result", true);
-			map.put("cs_id", formatType.getCs_id());
+			map.put("message", "新增成功");
 		} else {
 			map.put("result", false);
 			map.put("message", "新增失败");
@@ -73,20 +74,23 @@ public class FormatTypeController {
 	/**
 	 * 更新一条格式类型
 	 * @param formatType 待更新格式类型
+	 * @param uid
 	 * @return 执行情况，采集源id
 	 */
 	@RequestMapping("/updateFormatType")
 	@ResponseBody
-	public Map<String, Object> updateFormatType(FormatType formatType) {
+	public Map<String, Object> updateFormatType(FormatType formatType,Integer uid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		formatType.setUpdate_datetime(simpleDateFormat.format(new Date()));
-		formatType.setUpdate_uid(1);
+		formatType.setUpdate_uid(uid);
 
 		if (1 == formatTypeService.updateFormatType(formatType)) {
 			map.put("result", true);
+			map.put("message", "更新成功");
 		} else {
 			map.put("result", false);
+			map.put("message", "更新失败");
 		}
 		
 		return map;
@@ -119,24 +123,6 @@ public class FormatTypeController {
 		return map;
 	}
 
-	/**
-//	 * 选取格式类型列表
-//	 * 
-//	 * @param httpSession
-//	 * @param higher_ft_id
-//	 *            上层格式类型
-//	 * @return 格式类型列表
-//	 */
-//	@RequestMapping("/selectFormatType")
-//	public String selectFormatType(HttpSession httpSession, String datainname, Integer cs_id) {
-//		httpSession.setAttribute("datainname", datainname);
-//		List<FormatType> formatTypes = formatTypeService.getFormatTypes(cs_id);
-//		for (FormatType formatType : formatTypes) {
-//			formatType.setFormatTypeFloders(formatTypeService.getFormatTypes(cs_id));
-//		}
-//		httpSession.setAttribute("formatTypes", formatTypes);
-//		return "redirect:/pages/project_datain.jsp";
-//	}
 
 	
 }
