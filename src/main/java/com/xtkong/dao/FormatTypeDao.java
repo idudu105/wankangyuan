@@ -35,6 +35,8 @@ public interface FormatTypeDao {
 
 	@Select("select cs_id from format_type where ft_id=#{ft_id}  ")
 	public Integer getFormatType_cs_id(@Param("ft_id") Integer ft_id);
+	@Select("select ft_id from format_type where cs_id=#{cs_id} order by ft_id desc	limit 1")
+	public Integer getFormatTypeId(@Param("cs_id") Integer cs_id,@Param("ft_name") String ft_name);
 
 	@Delete("delete from format_type where ft_id=#{ft_id}")
 	public int deleteFormatType(@Param("ft_id") Integer ft_id);

@@ -1,5 +1,6 @@
 package com.xtkong.model;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,16 +21,27 @@ public class FormatType {
 	private String updater;// 更新人
 	private String creator;// 创建人
 
-	private List<FormatType> formatTypeFloders;
+	private List<FormatType> formatTypeFolders;
 
-	private List<FormatField> formatFields;
-	private List<String> formatDataNodes; //数据节点
+	private List<FormatField> formatFields;//格式字段
 	
-	public List<String> getFormatDataNodes() {
+	
+	private HashMap<String, String>formatDataNodes;//数据节点
+
+	public List<FormatType> getFormatTypeFolders() {
+		return formatTypeFolders;
+	}
+
+	public void setFormatTypeFolders(List<FormatType> formatTypeFolders) {
+		this.formatTypeFolders = formatTypeFolders;
+	}
+
+
+	public HashMap<String, String> getFormatDataNodes() {
 		return formatDataNodes;
 	}
 
-	public void setFormatDataNodes(List<String> formatDataNodes) {
+	public void setFormatDataNodes(HashMap<String, String> formatDataNodes) {
 		this.formatDataNodes = formatDataNodes;
 	}
 
@@ -129,12 +141,6 @@ public class FormatType {
 		this.creator = creator;
 	}
 
-	public List<FormatType> getFormatTypeFloders() {
-		return formatTypeFloders;
-	}
 
-	public void setFormatTypeFloders(List<FormatType> formatTypeFloders) {
-		this.formatTypeFloders = formatTypeFloders;
-	}
 
 }

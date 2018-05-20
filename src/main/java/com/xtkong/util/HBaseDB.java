@@ -13,6 +13,7 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -24,17 +25,19 @@ public class HBaseDB {
 	static {
 		System.out.println("--");
 		Configuration configuration = HBaseConfiguration.create();
-	//	configuration.set("hbase.master", "60.29.25.133");  
+		// configuration.set("hbase.master", "60.29.25.133");
 		// zookeeper的主机地址，虚拟机主机名
 		configuration.set("hbase.zookeeper.quorum", "60.29.25.133");
-//		configuration.set("hbase.zookeeper.property.clientPort", "2181");
+		// configuration.set("hbase.zookeeper.property.clientPort", "2181");
 		// hbase存储数据的位置，hbase-site.xml中配置
-		configuration.set("hbase:rootdir","hdfs://0.0.0.0:9000/hbase");
-	//configuration.set("hbase.master.port", "60000");
+		configuration.set("hbase:rootdir", "hdfs://0.0.0.0:9000/hbase");
+		// configuration.set("hbase.master.port", "60000");
 		System.out.println("--34");
 		try {
 			connection = ConnectionFactory.createConnection(configuration);
 			System.out.println("---37");
+			HBaseDB.getInstance().createTable(ConstantsHBase.TABLE_GID, new String[] { ConstantsHBase.FAMILY_GID_GID },
+					1);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -46,7 +49,6 @@ public class HBaseDB {
 	public static HBaseDB getInstance() {
 		return hBaseDBTool;
 	}
-	
 
 	/**
 	 * 创建HBase表
@@ -97,41 +99,6 @@ public class HBaseDB {
 				System.out.println("表：" + tableName + "不存在");
 			}
 			admin.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	/**新增列簇
-	 * @param tableName  表名称
-	 * @param columnFamilies 列簇，可能有多个
-	 * @param version  列表存储的版本数量
-	 */
-	public void addColumnFamilys(String tableName, String[] columnFamilies, int version) {
-		try {
-			Admin admin = connection.getAdmin();
-			TableName tableNameObject = TableName.valueOf(tableName);
-			if (admin.tableExists(tableNameObject)) {
-				System.out.println("表：" + tableName + "已存在");
-				admin.disableTable(tableNameObject);
-				//admin.getAlterStatus(tableNameObject);
-				//HTableDescriptor tableDescriptor =admin.getTableDescriptor(tableNameObject);
-				for (String columnFamily : columnFamilies) {
-					// 添加列簇
-					admin.addColumn(tableNameObject, new HColumnDescriptor(columnFamily).setMaxVersions(version));
-					//tableDescriptor.addFamily(new HColumnDescriptor(columnFamily).setMaxVersions(version));
-				}
-				//admin.modifyTable(tableNameObject, tableDescriptor);
-				admin.enableTableAsync(tableNameObject);
-				System.out.println("表：" + tableName + "添加列簇");
-				/*
-				 * admin.disableTable(tableNameObject);
-				 * admin.deleteTable(tableNameObject); System.out.println("删除表："
-				 * + tableName);
-				 */
-				admin.close();
-			} else {
-				createTable( tableName,  columnFamilies, version) ;
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -197,7 +164,7 @@ public class HBaseDB {
 	 * @param value
 	 *            列值
 	 */
-	public void put(Object tableName, Object rowKey, Object family, Object quelifier, Object value) {
+	public boolean put(Object tableName, Object rowKey, Object family, Object quelifier, Object value) {
 		try {
 			Table table = getTable(tableName.toString());
 			// 设置行键
@@ -208,10 +175,80 @@ public class HBaseDB {
 			System.out.println("tableName:" + tableName + ",rowKey:" + rowKey + ",family:" + family + ",quelifier:"
 					+ quelifier + ",value:" + value);
 			table.close();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+
+	}
+
+	/**
+	 * 从表中删除一条数据 Object.toString()
+	 * 
+	 * @param tableName
+	 * @param rowKey
+	 * @return
+	 */
+	public boolean delete(Object tableName, Object rowKey) {
+		try {
+			Table table = getTable(tableName.toString());
+			// 设置行键
+			Delete delete = new Delete(Bytes.toBytes(rowKey.toString()));
+			// delete.addFamily(Bytes.toBytes(family.toString()));
+			// delete.addColumn(Bytes.toBytes(family.toString()),
+			// Bytes.toBytes(quelifier.toString()));
+			table.delete(delete);
+			System.out.println("tableName:" + tableName + ",rowKey:" + rowKey);
+			table.close();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * 新增列簇
+	 * 
+	 * @param tableName
+	 *            表名称
+	 * @param columnFamilies
+	 *            列簇，可能有多个
+	 * @param version
+	 *            列表存储的版本数量
+	 */
+	public void addColumnFamilys(String tableName, String[] columnFamilies, int version) {
+		try {
+			Admin admin = connection.getAdmin();
+			TableName tableNameObject = TableName.valueOf(tableName);
+			if (admin.tableExists(tableNameObject)) {
+				System.out.println("表：" + tableName + "已存在");
+				admin.disableTable(tableNameObject);
+				// admin.getAlterStatus(tableNameObject);
+				// HTableDescriptor tableDescriptor
+				// =admin.getTableDescriptor(tableNameObject);
+				for (String columnFamily : columnFamilies) {
+					// 添加列簇
+					admin.addColumn(tableNameObject, new HColumnDescriptor(columnFamily).setMaxVersions(version));
+					// tableDescriptor.addFamily(new
+					// HColumnDescriptor(columnFamily).setMaxVersions(version));
+				}
+				// admin.modifyTable(tableNameObject, tableDescriptor);
+				admin.enableTableAsync(tableNameObject);
+				System.out.println("表：" + tableName + "添加列簇");
+				/*
+				 * admin.disableTable(tableNameObject);
+				 * admin.deleteTable(tableNameObject); System.out.println("删除表："
+				 * + tableName);
+				 */
+				admin.close();
+			} else {
+				createTable(tableName, columnFamilies, version);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 }

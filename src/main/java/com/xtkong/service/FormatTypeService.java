@@ -40,7 +40,9 @@ public class FormatTypeService {
 
 		return formatTypeDao.getFormatType_cs_id(ft_id);
 	}
-
+	public Integer getFormatTypeId( Integer cs_id, String ft_name){
+		return formatTypeDao.getFormatTypeId(cs_id, ft_name);
+	}
 	public int deleteFormatType(Integer ft_id) {
 		return formatTypeDao.deleteFormatType(ft_id);
 	}

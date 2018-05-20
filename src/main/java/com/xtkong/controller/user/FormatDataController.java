@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dzjin.model.ProjectFile;
-import com.xtkong.dao.hbase.HBaseSourceDao;
+import com.xtkong.dao.hbase.HBaseFormatDataDao;
+import com.xtkong.dao.hbase.HBaseFormatNodeDao;
+import com.xtkong.dao.hbase.HBaseSourceDataDao;
 import com.xtkong.model.FormatField;
 import com.xtkong.model.FormatType;
 import com.xtkong.model.Source;
@@ -42,7 +44,7 @@ public class FormatDataController {
 	FormatFieldService formatFieldService;
 
 	/**
-	 * 首次进入 
+	 * 首次进入 格式数据页面
 	 * 
 	 * // 源数据字数据，注：每个列表第一个值sourceDataId不显示
 	 * 
@@ -59,7 +61,7 @@ public class FormatDataController {
 			sources.get(0).setSourceFields(sourceFieldService.getSourceFields(sources.get(0).getCs_id()));
 			// sources.get(0).setFormatTypes(formatTypeService.getFormatTypes(sources.get(0).getCs_id()));
 			// 源数据字数据，注：每个列表第一个值sourceDataId不显示
-			sourceDatas = HBaseSourceDao.getSourceDatasByUid(Integer.toString(sources.get(0).getCs_id()),
+			sourceDatas = HBaseSourceDataDao.getSourceDatasByUid(Integer.toString(sources.get(0).getCs_id()),
 					String.valueOf(uid), sources.get(0).getSourceFields());
 		}
 		List<String> list = new ArrayList<>();
@@ -78,20 +80,123 @@ public class FormatDataController {
 	}
 
 	/**
-	 * 节点树 List<String>依次为
+	 * 添加一条源数据
 	 * 
-	 * formatDataNodeId（节点id）： 不显示、ft_id： 不显示、ft_name：显示、节点名： 显示
+	 * @param cs_id
+	 *            采集源
+	 * @param uid
+	 *            用户
+	 * @param soufieldDatas
+	 *            采集源字段、 数据值
+	 */
+	@RequestMapping("/insertSourceData")
+	@ResponseBody
+	public Map<String, Object> insertSourceData(String cs_id, String uid, HashMap<String, String> soufieldDatas) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		if (HBaseSourceDataDao.insertSourceData(cs_id, uid, soufieldDatas)) {
+			map.put("result", true);
+			map.put("message", "新增成功");
+		} else {
+			map.put("result", false);
+			map.put("message", "新增失败");
+		}
+		return map;
+	}
+
+	/**
+	 * 更新一条源数据
+	 * 
+	 * @param cs_id
+	 *            采集源
+	 * @param sourceDataId
+	 * @param sourceFieldDatas
+	 *            采集源字段、 数据值
+	 */
+	@RequestMapping("/updateSourceData")
+	@ResponseBody
+	public Map<String, Object> updateSourceData(String cs_id, String sourceDataId,
+			HashMap<String, String> soufieldDatas) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		if (HBaseSourceDataDao.updateSourceData(cs_id, sourceDataId, soufieldDatas)) {
+			map.put("result", true);
+			map.put("message", "更新成功");
+		} else {
+			map.put("result", false);
+			map.put("message", "更新失败");
+		}
+		return map;
+	}
+
+	/**
+	 * 批量删除源数据
+	 * 
+	 * @param cs_id
+	 * @param sourceDataIds
+	 * @return
+	 */
+	@RequestMapping("/deleteSourceDatas")
+	@ResponseBody
+	public Map<String, Object> deleteSourceDatas(String cs_id, List<String> sourceDataIds) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (HBaseSourceDataDao.deleteSourceDatas(cs_id, sourceDataIds)) {
+			map.put("result", true);
+			map.put("message", "删除成功");
+		} else {
+			map.put("result", false);
+			map.put("message", "删除失败");
+		}
+		return map;
+	}
+
+	/**
+	 * 新增数据节点
+	 * 
+	 * @param cs_id
+	 * @param sourceDataId
+	 * @param ft_id
+	 * @param nodeName
+	 * @return
+	 */
+	@RequestMapping("/insertFormatNode")
+	@ResponseBody
+	public Map<String, Object> insertFormatNode(String cs_id, String sourceDataId, String ft_id, String nodeName) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName)) {
+			map.put("result", true);
+			map.put("message", "新增成功");
+		} else {
+			map.put("result", false);
+			map.put("message", "新增失败");
+		}
+		return map;
+	}
+
+	/**
+	 * 获取节点树 List<FormatType>
+	 * 
+	 * formatType.ft_id： 不显示
+	 * 
+	 * formatType.ft_name：显示
+	 * 
+	 * formatType.List<FormatDataNode>:formatNodeId（节点id）： 不显示,节点名： 显示
 	 * 
 	 * @param cs_id
 	 * @param sourceDataId
 	 * @return
 	 */
-	@RequestMapping("/formatTypeFloders")
+	@RequestMapping("/formatTypeFolders")
 	@ResponseBody
-	public Map<String, Object> formatTypeFloders(String cs_id, String sourceDataId) {
+	public Map<String, Object> formatTypeFolders(String cs_id, String sourceDataId) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		HashMap<String, FormatType> formatTypeMap = new HashMap<>();
 		List<FormatType> formatTypes = formatTypeService.getFormatTypes(Integer.valueOf(cs_id));
-		List<List<String>> formatTypeFloders = HBaseSourceDao.getFormatTypeFloders(cs_id, sourceDataId, formatTypes);
+		for (FormatType formatType : formatTypes) {
+			formatTypeMap.put(String.valueOf(formatType.getFt_id()), formatType);
+		}
+		List<FormatType> formatTypeFloders = HBaseFormatNodeDao.getFormatTypeFolders(cs_id, sourceDataId,
+				formatTypeMap);
 
 		if (formatTypeFloders != null) {
 			map.put("result", true);
@@ -104,7 +209,104 @@ public class FormatDataController {
 	}
 
 	/**
-	 * 格式数据明细 List<List<String>>
+	 * 编辑数据节点
+	 * 
+	 * @param cs_id
+	 * @param formatNodeId
+	 * @param ft_id
+	 * @param nodeName
+	 * @return
+	 */
+	@RequestMapping("/updateFormatNode")
+	@ResponseBody
+	public Map<String, Object> updateFormatNode(String cs_id, String formatNodeId, String ft_id, String nodeName) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (HBaseFormatNodeDao.updateFormatNode(cs_id, formatNodeId, ft_id, nodeName)) {
+			map.put("result", true);
+			map.put("message", "更新成功");
+		} else {
+			map.put("result", false);
+			map.put("message", "更新失败");
+		}
+		return map;
+	}
+
+	/**
+	 * 删除数据节点
+	 * 
+	 * @param cs_id
+	 * @param formatNodeId
+	 * @return
+	 */
+	@RequestMapping("/deleteFormatNode")
+	@ResponseBody
+	public Map<String, Object> deleteFormatNode(String cs_id, String formatNodeId) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (HBaseFormatNodeDao.deleteFormatNode(cs_id, formatNodeId)) {
+			map.put("result", true);
+			map.put("message", "删除成功");
+		} else {
+			map.put("result", false);
+			map.put("message", "删除失败");
+		}
+		return map;
+	}
+
+	/**
+	 * 添加一条格式数据
+	 * 
+	 * @param cs_id
+	 * @param ft_id
+	 *            格式类型id
+	 * @param formatNodeId
+	 *            节点id
+	 * @param formatFieldDatas
+	 *            格式数据字段、 数据值
+	 * @return
+	 */
+	@RequestMapping("/insertFormatData")
+	@ResponseBody
+	public Map<String, Object> insertFormatData(String cs_id, String ft_id, String formatNodeId,
+			HashMap<String, String> formatFieldDatas) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (HBaseFormatDataDao.insertFormatData(cs_id, ft_id, formatNodeId, formatFieldDatas)) {
+			map.put("result", true);
+			map.put("message", "新增成功");
+		} else {
+			map.put("result", false);
+			map.put("message", "新增失败");
+		}
+		return map;
+	}
+
+	/**
+	 * 更新一条格式数据
+	 * 
+	 * @param cs_id
+	 * @param ft_id
+	 *            格式类型id
+	 * @param formatDataId
+	 * @param formatFieldDatas
+	 *            格式数据字段、 数据值
+	 * @return
+	 */
+	@RequestMapping("/updateFormatData")
+	@ResponseBody
+	public Map<String, Object> updateFormatData(String cs_id, String ft_id, String formatDataId,
+			HashMap<String, String> formatFieldDatas) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (HBaseFormatDataDao.updateFormatData(cs_id, ft_id, formatDataId, formatFieldDatas)) {
+			map.put("result", true);
+			map.put("message", "更新成功");
+		} else {
+			map.put("result", false);
+			map.put("message", "更新失败");
+		}
+		return map;
+	}
+
+	/**
+	 * 获取格式数据明细 List<List<String>>
 	 * 
 	 * 格式数据明细数据，注：每个列表第一个值formatDataId不显示
 	 * 
@@ -112,22 +314,22 @@ public class FormatDataController {
 	 *            采集源id
 	 * @param ft_id
 	 *            格式类型id
-	 * @param formatDataNodeId
+	 * @param formatNodeId
 	 *            节点id
 	 * @return
 	 */
-	@RequestMapping("/formatFields")
+	@RequestMapping("/formatDatas")
 	@ResponseBody
-	public Map<String, Object> formatFields(Integer cs_id, Integer ft_id, String formatDataNodeId) {
+	public Map<String, Object> formatDatas(Integer cs_id, Integer ft_id, String formatNodeId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// meta数据
 		List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(ft_id, 1);
-		List<List<String>> metaDatas = HBaseSourceDao.getFormatFields(Integer.toString(cs_id), Integer.toString(ft_id),
-				formatDataNodeId, meta);
-		//data数据
+		List<List<String>> metaDatas = HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
+				Integer.toString(ft_id), formatNodeId, meta);
+		// data数据
 		List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(ft_id, 0);
-		List<List<String>> dataDatas = HBaseSourceDao.getFormatFields(Integer.toString(cs_id), Integer.toString(ft_id),
-				formatDataNodeId, data);
+		List<List<String>> dataDatas = HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
+				Integer.toString(ft_id), formatNodeId, data);
 		if (metaDatas != null) {
 			map.put("result", true);
 			map.put("metaDatas", metaDatas);
@@ -138,7 +340,28 @@ public class FormatDataController {
 		}
 		return map;
 	}
+	/**
+	 * 批量删除格式数据
+	 * @param cs_id
+	 * @param ft_id
+	 * @param formatDataIds
+	 * @return
+	 */
+	@RequestMapping("/deleteFormatDatas")
+	@ResponseBody
+	public Map<String, Object> deleteFormatDatas(String cs_id,String ft_id,  List<String> formatNodeIds) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (HBaseFormatDataDao.deleteFormatDatas(cs_id,ft_id, formatNodeIds)) {
+			map.put("result", true);
+			map.put("message", "删除成功");
+		} else {
+			map.put("result", false);
+			map.put("message", "删除失败");
+		}
+		return map;
+	}
 
+	// ---------------------------------------------------
 	@RequestMapping("/datain")
 	public String datain(HttpSession httpSession, String datainname) {
 		httpSession.setAttribute("datainname", datainname);

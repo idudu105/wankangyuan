@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.xtkong.dao.hbase.HBaseFormatNodeDao;
+import com.xtkong.dao.hbase.HBaseSourceDataDao;
 import com.xtkong.model.Source;
 import com.xtkong.service.FormatTypeService;
 import com.xtkong.service.SourceFieldService;
@@ -22,6 +24,21 @@ public class SourceController {
 	SourceFieldService sourceFieldService;
 	@Autowired
 	FormatTypeService formatTypeService;
+
+	/**
+	 * 新增采集源
+	 * 
+	 * @param source
+	 * @return
+	 */
+	@RequestMapping(value = "/insertSource")
+	public String insertSource(Source source) {
+		sourceService.insertSource(source);
+		Integer cs_id=sourceService.getSourceId(source.getCs_name());
+		HBaseSourceDataDao.createSourceDataTable(String.valueOf(cs_id));
+		HBaseFormatNodeDao.createFormatNodeTable(String.valueOf(cs_id));
+		return "redirect:/admin/formatdata";
+	}
 
 	/**
 	 * 提供：采集源id 返回：执行状况，采集源基础信息、采集源字段、采集源所有格式类型
@@ -46,12 +63,6 @@ public class SourceController {
 			map.put("message", "查询失败");
 		}
 		return map;
-	}
-
-	@RequestMapping(value = "/insertSource")
-	public String insertSource(Source source) {
-		sourceService.insertSource(source);
-		return "redirect:/admin/formatdata";
 	}
 
 	@RequestMapping("/updateSource")

@@ -45,6 +45,10 @@ public class SourceService {
 	public Source getSourceLimit( Integer num){
 		return sourceDao.getSourceLimit(num);
 	}
+	
+	public Integer getSourceId( String cs_name){
+		return sourceDao.getSourceId(cs_name);
+	}
 	public int deleteSource(Integer cs_id) {
 		return sourceDao.deleteSource(cs_id);
 	}

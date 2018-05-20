@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xtkong.dao.SourceDao;
+import com.xtkong.dao.hbase.HBaseFormatDataDao;
 import com.xtkong.model.FormatType;
 import com.xtkong.service.FormatFieldService;
 import com.xtkong.service.FormatTypeService;
@@ -26,8 +27,37 @@ public class FormatTypeController {
 	FormatFieldService formatFieldService;
 
 	/**
-	 * 	提供：格式类型id
-	 * 返回：执行情况，格式类型基础信息、该类型所有格式字段
+	 * 新增格式类型:创建格式数据表
+	 * 
+	 * @param formatType
+	 *            待增格式类型
+	 * @param uid
+	 * @return 执行情况，采集源id
+	 */
+	@RequestMapping("/insertFormatType")
+	@ResponseBody
+	public Map<String, Object> insertFormatType(FormatType formatType, Integer uid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		// 设置创建时间
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		formatType.setCreate_datetime(simpleDateFormat.format(new Date()));
+		formatType.setCreate_uid(uid);
+
+		if (1 == formatTypeService.insertFormatType(formatType)) {
+			map.put("result", true);
+			map.put("message", "新增成功");
+			Integer ft_id=formatTypeService.getFormatTypeId(formatType.getCs_id(), formatType.getFt_name());
+			HBaseFormatDataDao.createFormatDataTable(String.valueOf(formatType.getCs_id()), String.valueOf(ft_id));
+		} else {
+			map.put("result", false);
+			map.put("message", "新增失败");
+		}
+		return map;
+	}
+
+	/**
+	 * 提供：格式类型id 返回：执行情况，格式类型基础信息、该类型所有格式字段
+	 * 
 	 * @param ft_id
 	 * @return 执行情况，格式类型基础信息、该类型所有格式字段
 	 */
@@ -46,40 +76,18 @@ public class FormatTypeController {
 		}
 		return map;
 	}
-/**
- * 新增一条格式类型
- * @param formatType  待增格式类型
-	 * @param uid
- * @return 执行情况，采集源id
- */ 
-	@RequestMapping("/insertFormatType")
-	@ResponseBody
-	public Map<String, Object> insertFormatType(FormatType formatType,Integer uid) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		// 设置创建时间
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		formatType.setCreate_datetime(simpleDateFormat.format(new Date()));
-		formatType.setCreate_uid(uid);
 
-		if (1 == formatTypeService.insertFormatType(formatType)) {
-			map.put("result", true);
-			map.put("message", "新增成功");
-		} else {
-			map.put("result", false);
-			map.put("message", "新增失败");
-		}
-		return map;
-	}
-	
 	/**
 	 * 更新一条格式类型
-	 * @param formatType 待更新格式类型
+	 * 
+	 * @param formatType
+	 *            待更新格式类型
 	 * @param uid
 	 * @return 执行情况，采集源id
 	 */
 	@RequestMapping("/updateFormatType")
 	@ResponseBody
-	public Map<String, Object> updateFormatType(FormatType formatType,Integer uid) {
+	public Map<String, Object> updateFormatType(FormatType formatType, Integer uid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		formatType.setUpdate_datetime(simpleDateFormat.format(new Date()));
@@ -92,9 +100,10 @@ public class FormatTypeController {
 			map.put("result", false);
 			map.put("message", "更新失败");
 		}
-		
+
 		return map;
 	}
+
 	/**
 	 * 删除一条格式类型
 	 * 
@@ -106,23 +115,21 @@ public class FormatTypeController {
 	@ResponseBody
 	public Map<String, Object> deleteFormatType(String ft_ids) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		String[]ft_idStrs= ft_ids.split(",");
+		String[] ft_idStrs = ft_ids.split(",");
 		int i = 0;
 		for (String ft_id : ft_idStrs) {
 			if (1 == formatTypeService.deleteFormatType(Integer.valueOf(ft_id))) {
 				i++;
 			}
 		}
-		if (i==ft_idStrs.length) {
+		if (i == ft_idStrs.length) {
 			map.put("result", true);
-			map.put("message", "成功删除"+i+"行");
-		}else{
+			map.put("message", "成功删除" + i + "行");
+		} else {
 			map.put("result", false);
-			map.put("message", "已删除："+i+"行，剩余"+(ft_idStrs.length-i)+"行未删除");
+			map.put("message", "已删除：" + i + "行，剩余" + (ft_idStrs.length - i) + "行未删除");
 		}
 		return map;
 	}
 
-
-	
 }

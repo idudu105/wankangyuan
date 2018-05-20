@@ -24,7 +24,7 @@ public class SourceFieldController {
 
 	@RequestMapping("/insertSourceField")
 	@ResponseBody
-	public Map<String, Object> insertSourceField(SourceField sourceField,Integer uid) {
+	public Map<String, Object> insertSourceField(SourceField sourceField, Integer uid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -42,9 +42,20 @@ public class SourceFieldController {
 		return map;
 	}
 
+	@RequestMapping("/getSourceField")
+	@ResponseBody
+	public Map<String, Object> getSourceField(Integer csf_id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("result", true);
+		map.put("sourceField", sourceFieldService.getSourceField(csf_id));
+
+		return map;
+	}
+
 	@RequestMapping("/updateSourceField")
 	@ResponseBody
-	public Map<String, Object> updateSourceField(SourceField sourceField,Integer uid) {
+	public Map<String, Object> updateSourceField(SourceField sourceField, Integer uid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -61,34 +72,23 @@ public class SourceFieldController {
 		return map;
 	}
 
-	@RequestMapping("/getSourceField")
-	@ResponseBody
-	public Map<String, Object> getSourceField(Integer csf_id) {
-		Map<String, Object> map = new HashMap<String, Object>();
-
-		map.put("result", true);
-		map.put("sourceField", sourceFieldService.getSourceField(csf_id));
-
-		return map;
-	}
-
 	@RequestMapping("/deleteSourceField")
 	@ResponseBody
 	public Map<String, Object> deleteSourceField(String csf_ids) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		String[]csf_idStrs= csf_ids.split(",");
+		String[] csf_idStrs = csf_ids.split(",");
 		int i = 0;
 		for (String csf_id : csf_idStrs) {
 			if (1 == sourceFieldService.deleteSourceField(Integer.valueOf(csf_id))) {
 				i++;
 			}
 		}
-		if (i==csf_idStrs.length) {
+		if (i == csf_idStrs.length) {
 			map.put("result", true);
-			map.put("message", "成功删除"+i+"行");
-		}else{
+			map.put("message", "成功删除" + i + "行");
+		} else {
 			map.put("result", false);
-			map.put("message", "已删除："+i+"行，剩余"+(csf_idStrs.length-i)+"行未删除");
+			map.put("message", "已删除：" + i + "行，剩余" + (csf_idStrs.length - i) + "行未删除");
 		}
 		return map;
 	}
