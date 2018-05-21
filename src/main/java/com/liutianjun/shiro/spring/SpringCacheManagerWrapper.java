@@ -5,12 +5,13 @@
  */
 package com.liutianjun.shiro.spring;
 
-import net.sf.ehcache.Ehcache;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.util.CollectionUtils;
 import org.springframework.cache.support.SimpleValueWrapper;
+
+import net.sf.ehcache.Ehcache;
 
 import java.util.*;
 
