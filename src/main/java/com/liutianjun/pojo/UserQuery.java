@@ -417,6 +417,206 @@ public class UserQuery {
             return (Criteria) this;
         }
 
+        public Criteria andGenderIsNull() {
+            addCriterion("gender is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenderIsNotNull() {
+            addCriterion("gender is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenderEqualTo(Integer value) {
+            addCriterion("gender =", value, "gender");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenderNotEqualTo(Integer value) {
+            addCriterion("gender <>", value, "gender");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenderGreaterThan(Integer value) {
+            addCriterion("gender >", value, "gender");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenderGreaterThanOrEqualTo(Integer value) {
+            addCriterion("gender >=", value, "gender");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenderLessThan(Integer value) {
+            addCriterion("gender <", value, "gender");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenderLessThanOrEqualTo(Integer value) {
+            addCriterion("gender <=", value, "gender");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenderIn(List<Integer> values) {
+            addCriterion("gender in", values, "gender");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenderNotIn(List<Integer> values) {
+            addCriterion("gender not in", values, "gender");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenderBetween(Integer value1, Integer value2) {
+            addCriterion("gender between", value1, value2, "gender");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenderNotBetween(Integer value1, Integer value2) {
+            addCriterion("gender not between", value1, value2, "gender");
+            return (Criteria) this;
+        }
+
+        public Criteria andResearchDirectionIsNull() {
+            addCriterion("research_direction is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andResearchDirectionIsNotNull() {
+            addCriterion("research_direction is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andResearchDirectionEqualTo(String value) {
+            addCriterion("research_direction =", value, "researchDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andResearchDirectionNotEqualTo(String value) {
+            addCriterion("research_direction <>", value, "researchDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andResearchDirectionGreaterThan(String value) {
+            addCriterion("research_direction >", value, "researchDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andResearchDirectionGreaterThanOrEqualTo(String value) {
+            addCriterion("research_direction >=", value, "researchDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andResearchDirectionLessThan(String value) {
+            addCriterion("research_direction <", value, "researchDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andResearchDirectionLessThanOrEqualTo(String value) {
+            addCriterion("research_direction <=", value, "researchDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andResearchDirectionLike(String value) {
+            addCriterion("research_direction like", value, "researchDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andResearchDirectionNotLike(String value) {
+            addCriterion("research_direction not like", value, "researchDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andResearchDirectionIn(List<String> values) {
+            addCriterion("research_direction in", values, "researchDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andResearchDirectionNotIn(List<String> values) {
+            addCriterion("research_direction not in", values, "researchDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andResearchDirectionBetween(String value1, String value2) {
+            addCriterion("research_direction between", value1, value2, "researchDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andResearchDirectionNotBetween(String value1, String value2) {
+            addCriterion("research_direction not between", value1, value2, "researchDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileIsNull() {
+            addCriterion("personal_profile is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileIsNotNull() {
+            addCriterion("personal_profile is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileEqualTo(String value) {
+            addCriterion("personal_profile =", value, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileNotEqualTo(String value) {
+            addCriterion("personal_profile <>", value, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileGreaterThan(String value) {
+            addCriterion("personal_profile >", value, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileGreaterThanOrEqualTo(String value) {
+            addCriterion("personal_profile >=", value, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileLessThan(String value) {
+            addCriterion("personal_profile <", value, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileLessThanOrEqualTo(String value) {
+            addCriterion("personal_profile <=", value, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileLike(String value) {
+            addCriterion("personal_profile like", value, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileNotLike(String value) {
+            addCriterion("personal_profile not like", value, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileIn(List<String> values) {
+            addCriterion("personal_profile in", values, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileNotIn(List<String> values) {
+            addCriterion("personal_profile not in", values, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileBetween(String value1, String value2) {
+            addCriterion("personal_profile between", value1, value2, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileNotBetween(String value1, String value2) {
+            addCriterion("personal_profile not between", value1, value2, "personalProfile");
+            return (Criteria) this;
+        }
+
         public Criteria andRoleIdsIsNull() {
             addCriterion("role_ids is null");
             return (Criteria) this;

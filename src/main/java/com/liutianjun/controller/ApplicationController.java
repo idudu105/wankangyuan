@@ -60,6 +60,7 @@ public class ApplicationController {
 	public String viewMine(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="8")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
+            @RequestParam(value="appType",required=false)String appType,
             @PathVariable String index,
             Model model) {
 	    //获取用户名
@@ -67,7 +68,7 @@ public class ApplicationController {
 	    //获取用户
 	    User user = userService.selectByUsername(username);
 		
-		Map<String, Object> map = applicationService.findMine(page,rows,appName,username);
+		Map<String, Object> map = applicationService.findMine(page,rows,appName,username,appType);
 		@SuppressWarnings("unchecked")
 		List<Application> list = (List<Application>) map.get("list");
 		Set<String> set =new HashSet<>();
@@ -100,11 +101,12 @@ public class ApplicationController {
 	public String viewCreate(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="8")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
+            @RequestParam(value="appType",required=false)String appType,
             @PathVariable String index,
             Model model) {
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 	    User user = userService.selectByUsername(username);
-		Map<String, Object> map = applicationService.findAll(page,rows,appName,username);
+		Map<String, Object> map = applicationService.findAll(page,rows,appName,username,appType);
 		@SuppressWarnings("unchecked")
 		List<Application> list = (List<Application>) map.get("list");
 		Set<String> set =new HashSet<>();
@@ -137,9 +139,10 @@ public class ApplicationController {
 	public String viewPublic(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="8")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
+            @RequestParam(value="appType",required=false)String appType,
             @PathVariable String index,
             Model model) {
-		Map<String, Object> map = applicationService.findAllPublic(page,rows,appName);
+		Map<String, Object> map = applicationService.findAllPublic(page,rows,appName,appType);
 		@SuppressWarnings("unchecked")
 		List<Application> list = (List<Application>) map.get("list");
 		Set<String> set =new HashSet<>();

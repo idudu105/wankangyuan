@@ -1,8 +1,13 @@
 package com.liutianjun.controller;
 
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
@@ -19,6 +24,8 @@ import com.liutianjun.pojo.User;
 import com.liutianjun.service.UserService;
 import com.liutianjun.utils.VerifyCodeUtils;
 
+import sun.misc.BASE64Decoder;
+
 /**
  * 用户Controller
  * @Title: UserController.java  
@@ -30,6 +37,8 @@ import com.liutianjun.utils.VerifyCodeUtils;
  */
 @Controller
 public class UserController {
+	private static String upPicUrl = UserController.class.getResource("/").getFile().toString()
+			.split("WEB-INF/classes/")[0] + "userPic/";
 
 	protected Map<String, Object> resultMap = new HashMap<String, Object>();
 	
@@ -144,6 +153,135 @@ public class UserController {
 		resultMap.put("status", 200);
 		
 		return resultMap;
+	}
+	
+	/**
+	 * 用户信息显示
+	 * @Title: userInfo 
+	 * @param model
+	 * @return 
+	 * String
+	 */
+	@RequestMapping(value="/userInfo",method=RequestMethod.GET)
+	public String userInfo(Model model) {
+		//获取用户名
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    //获取用户
+	    User user = userService.selectByUsername(username);
+	    
+	    model.addAttribute("user", user);
+		return "user/user_info.jsp";
+	}
+	
+	/**
+	 * 更新用户信息
+	 * @Title: updateUserInfo 
+	 * @param user
+	 * @return 
+	 * Map<String,Object>
+	 */
+	@RequestMapping(value="/updateUserInfo",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> updateUserInfo(User user) {
+		resultMap.put("status", 400);
+		if(0 == userService.updateByPrimaryKey(user)) {
+			resultMap.put("message", "修改失败");
+			return resultMap;
+		}
+		resultMap.put("message", "修改成功");
+		resultMap.put("status", 200);
+		return resultMap;
+		
+	}
+	
+	/**
+	 * 修改手机号
+	 * @Title: updateUserPhone 
+	 * @param phoneCode
+	 * @param phone
+	 * @param newPhoneCode
+	 * @return 
+	 * Map<String,Object>
+	 */
+	@RequestMapping(value="/updateUserPhone",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> updateUserPhone(String phoneCode, String phone, String newPhoneCode) {
+		resultMap.put("status", 400);
+		//检查手机验证码
+		String vPhoneCode = (String) SecurityUtils.getSubject().getSession().getAttribute(VerifyCodeUtils.V_PHONECODE);
+		if(null ==phoneCode || !phoneCode.equals(vPhoneCode)) {
+			resultMap.put("message", "手机验证码错误！");
+			return resultMap;
+		}
+		
+		//检查手机号
+		if(null != userService.selectByPhone(phone)){
+			resultMap.put("message", "手机号已存在！");
+			return resultMap;
+		}
+		
+		//检查新手机验证码
+		String vNewPhoneCode = (String) SecurityUtils.getSubject().getSession().getAttribute(VerifyCodeUtils.V_NEWPHONECODE);
+		if(null ==newPhoneCode || !newPhoneCode.equals(vNewPhoneCode)) {
+			resultMap.put("message", "新手机验证码错误！");
+			return resultMap;
+		}
+		
+		//获取用户名
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    //获取用户
+	    User user = userService.selectByUsername(username);
+	    user.setPhone(phone);
+		
+		if(0 == userService.updateByPrimaryKey(user)) {
+			resultMap.put("message", "修改失败");
+			return resultMap;
+		}
+		resultMap.put("message", "修改成功");
+		resultMap.put("status", 200);
+		return resultMap;
+		
+	}
+	
+	@RequestMapping(value="/upPic",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> updateUserPhone(String imgBase) {
+		resultMap.put("status", 400);
+		imgBase = imgBase.replace("data:image/jpeg;base64,", "");
+		
+		//获取用户名
+	    String name = (String)SecurityUtils.getSubject().getPrincipal();
+		String toImagePath = upPicUrl + name+"/"+ name + ".jpg";
+		String imageType = "jpg";
+		try {
+			BASE64Decoder decoder = new sun.misc.BASE64Decoder();
+			byte[] bytes1 = decoder.decodeBuffer(imgBase);
+			ByteArrayInputStream bais = new ByteArrayInputStream(bytes1);
+			RenderedImage bi1 = ImageIO.read(bais);
+			File w2 = new File(toImagePath);// 可以是jpg,png,gif格式
+			if (!w2.getParentFile().exists()) { // 判断文件父目录是否存在
+				w2.getParentFile().mkdir();
+			}
+			if (!w2.exists()) {
+				w2.createNewFile();
+			}
+			ImageIO.write(bi1, imageType, w2);// 不管输出什么格式图片，此处不需改动
+			//获取用户
+		    User user = userService.selectByUsername(name);
+		    user.setHeadimg(toImagePath);
+		    if(0 ==userService.updateByPrimaryKey(user)) {
+		    	resultMap.put("message", "修改失败");
+		    	return resultMap;
+		    }
+			resultMap.put("message", "修改成功");
+			resultMap.put("status", 200);
+			return resultMap;
+		} catch (IOException e) {
+			e.printStackTrace();
+			resultMap.put("message", "修改失败");
+			return resultMap;
+		}
+		
 	}
 	
 }

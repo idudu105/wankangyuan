@@ -6,6 +6,9 @@
     <result column="username" property="username" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="salt" property="salt" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="INTEGER" />
+    <result column="research_direction" property="researchDirection" jdbcType="VARCHAR" />
+    <result column="personal_profile" property="personalProfile" jdbcType="VARCHAR" />
     <result column="role_ids" property="roleIds" jdbcType="VARCHAR" />
     <result column="organization_id" property="organizationId" jdbcType="INTEGER" />
     <result column="phone" property="phone" jdbcType="VARCHAR" />
@@ -75,8 +78,8 @@
   </sql>
   <sql id="Base_Column_List" >
     <if test="fields == null" >
-      id, username, password, salt, role_ids, organization_id, phone, email, headimg, create_time, 
-      last_login_time, status
+      id, username, password, salt, gender, research_direction, personal_profile, role_ids, 
+      organization_id, phone, email, headimg, create_time, last_login_time, status
     </if>
     <if test="fields != null" >
       ${fields}
@@ -101,7 +104,7 @@
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
-    id,username,password,salt,role_ids,organization_id,phone,email,headimg,create_time,last_login_time,status
+    id,username,password,salt,gender,research_direction,personal_profile,role_ids,organization_id,phone,email,headimg,create_time,last_login_time,status
     from user
     where id = #{id,jdbcType=INTEGER}
   </select>
@@ -117,12 +120,14 @@
   </delete>
   <insert id="insert" parameterType="com.liutianjun.pojo.User" >
     insert into user (id, username, password, 
-      salt, role_ids, organization_id, 
+      salt, gender, research_direction, 
+      personal_profile, role_ids, organization_id, 
       phone, email, headimg, 
       create_time, last_login_time, status
       )
     values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{salt,jdbcType=VARCHAR}, #{roleIds,jdbcType=VARCHAR}, #{organizationId,jdbcType=INTEGER}, 
+      #{salt,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{researchDirection,jdbcType=VARCHAR}, 
+      #{personalProfile,jdbcType=VARCHAR}, #{roleIds,jdbcType=VARCHAR}, #{organizationId,jdbcType=INTEGER}, 
       #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{headimg,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{lastLoginTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}
       )
@@ -141,6 +146,15 @@
       </if>
       <if test="salt != null" >
         salt,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="researchDirection != null" >
+        research_direction,
+      </if>
+      <if test="personalProfile != null" >
+        personal_profile,
       </if>
       <if test="roleIds != null" >
         role_ids,
@@ -179,6 +193,15 @@
       </if>
       <if test="salt != null" >
         #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="researchDirection != null" >
+        #{researchDirection,jdbcType=VARCHAR},
+      </if>
+      <if test="personalProfile != null" >
+        #{personalProfile,jdbcType=VARCHAR},
       </if>
       <if test="roleIds != null" >
         #{roleIds,jdbcType=VARCHAR},
@@ -227,6 +250,15 @@
       <if test="record.salt != null" >
         salt = #{record.salt,jdbcType=VARCHAR},
       </if>
+      <if test="record.gender != null" >
+        gender = #{record.gender,jdbcType=INTEGER},
+      </if>
+      <if test="record.researchDirection != null" >
+        research_direction = #{record.researchDirection,jdbcType=VARCHAR},
+      </if>
+      <if test="record.personalProfile != null" >
+        personal_profile = #{record.personalProfile,jdbcType=VARCHAR},
+      </if>
       <if test="record.roleIds != null" >
         role_ids = #{record.roleIds,jdbcType=VARCHAR},
       </if>
@@ -262,6 +294,9 @@
       username = #{record.username,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
       salt = #{record.salt,jdbcType=VARCHAR},
+      gender = #{record.gender,jdbcType=INTEGER},
+      research_direction = #{record.researchDirection,jdbcType=VARCHAR},
+      personal_profile = #{record.personalProfile,jdbcType=VARCHAR},
       role_ids = #{record.roleIds,jdbcType=VARCHAR},
       organization_id = #{record.organizationId,jdbcType=INTEGER},
       phone = #{record.phone,jdbcType=VARCHAR},
@@ -285,6 +320,15 @@
       </if>
       <if test="salt != null" >
         salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="researchDirection != null" >
+        research_direction = #{researchDirection,jdbcType=VARCHAR},
+      </if>
+      <if test="personalProfile != null" >
+        personal_profile = #{personalProfile,jdbcType=VARCHAR},
       </if>
       <if test="roleIds != null" >
         role_ids = #{roleIds,jdbcType=VARCHAR},
@@ -318,6 +362,9 @@
     set username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       salt = #{salt,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=INTEGER},
+      research_direction = #{researchDirection,jdbcType=VARCHAR},
+      personal_profile = #{personalProfile,jdbcType=VARCHAR},
       role_ids = #{roleIds,jdbcType=VARCHAR},
       organization_id = #{organizationId,jdbcType=INTEGER},
       phone = #{phone,jdbcType=VARCHAR},

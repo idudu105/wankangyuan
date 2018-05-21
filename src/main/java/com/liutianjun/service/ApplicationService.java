@@ -31,16 +31,16 @@ public interface ApplicationService {
 	Map<String,Object> findAll();
 
 	//列出所有公共应用带分页
-	Map<String,Object> findAllPublic(Integer page, Integer rows, String appName);
+	Map<String,Object> findAllPublic(Integer page, Integer rows, String appName, String appType);
 	
-	//查找自己创建的应用
-	Map<String, Object> findAll(Integer page, Integer rows, String appName, String creator);
+	//查找自己创建的应用带分页
+	Map<String, Object> findAll(Integer page, Integer rows, String appName, String creator, String appType);
 
 	//设置应用状态
 	int setStatus(String cmd, Integer[] ids);
 
 	//查找我的应用
-	Map<String, Object> findMine(Integer page, Integer rows, String appName, String username);
+	Map<String, Object> findMine(Integer page, Integer rows, String appName, String username, String appType);
 	
 	//查询项目下的应用
 	Map<String, Object> findMineProjectApp(Integer page, Integer rows, Integer ProjectId);

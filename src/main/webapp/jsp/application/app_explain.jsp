@@ -37,7 +37,7 @@
                         <img src="<%=request.getContextPath()%>/static/img/touxiang.png" alt="" class="touxiang" />
                     </a>
                     <div class="userbutK">
-                        <a href="user_info.html">
+                        <a href="/wankangyuan/userInfo">
                             <div class="userbut">用户信息</div>
                         </a>
                         <a href="javascript:;">

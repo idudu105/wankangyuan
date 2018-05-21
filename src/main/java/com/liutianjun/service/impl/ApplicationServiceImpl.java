@@ -118,11 +118,14 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * @return
 	 */
 	@Override
-	public Map<String,Object> findAllPublic(Integer page, Integer rows, String appName) {
+	public Map<String,Object> findAllPublic(Integer page, Integer rows, String appName, String appType) {
 		ApplicationQuery example = new ApplicationQuery();
 		Criteria criteria = example.createCriteria();
 		if(StringUtils.isNotBlank(appName)) {
 			criteria.andAppNameLike("%"+appName+"%");
+		}
+		if(appType != null && StringUtils.trim(appType) != "") {
+			criteria.andAppTypeLike("%"+appType+"%");
 		}
 		criteria.andStatusEqualTo("公开");
 		int total = applicationDao.countByExample(example);
@@ -147,11 +150,14 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * @return
 	 */
 	@Override
-	public Map<String, Object> findAll(Integer page, Integer rows, String appName, String creator) {
+	public Map<String, Object> findAll(Integer page, Integer rows, String appName, String creator, String appType) {
 		ApplicationQuery example = new ApplicationQuery();
 		Criteria criteria = example.createCriteria();
 		if(StringUtils.isNotBlank(appName)) {
 			criteria.andAppNameLike("%"+appName+"%");
+		}
+		if(appType != null && StringUtils.trim(appType) != "") {
+			criteria.andAppTypeLike("%"+appType+"%");
 		}
 		criteria.andCreatorEqualTo(creator);
 		int total = applicationDao.countByExample(example);
@@ -194,7 +200,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * @return
 	 */
 	@Override
-	public Map<String, Object> findMine(Integer page, Integer rows, String appName, String username) {
+	public Map<String, Object> findMine(Integer page, Integer rows, String appName, String username, String appType) {
 		List<Integer> listId = userAppRelationService.findMine(username);
 		
 		ApplicationQuery example = new ApplicationQuery();
@@ -206,6 +212,10 @@ public class ApplicationServiceImpl implements ApplicationService {
 			criteria.andIdIn(listId);
 		}else {
 			criteria.andIdIsNull();
+		}
+		
+		if(appType != null && StringUtils.trim(appType) != "") {
+			criteria.andAppTypeLike("%"+appType+"%");
 		}
 		
 		int total = applicationDao.countByExample(example);
