@@ -36,7 +36,7 @@
                 </a>
                 <div class="touxiangK">
                     <a href=" ">
-                        <img src="<%=request.getContextPath()%>/static/img/touxiang.png" alt="" class="touxiang" />
+                        <img src="${user.headimg }" alt="" class="touxiang" />
                     </a>
                     <div class="userbutK">
                         <a href="/wankangyuan/userInfo">

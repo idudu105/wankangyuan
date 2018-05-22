@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2018-04-23 15:32:03
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-05-21 15:44:25
+* @Last Modified time: 2018-05-21 18:02:01
 */
 
 
@@ -1637,6 +1637,8 @@ function user_info(){
 
     ouserMRTts.onclick=function(){
         otouxiangupK.style.display="block";
+        document.querySelectorAll('.touxiangupp')[0].value="";
+        otouxiangupp.onchange();
     }
     otouxiangupTx.onclick=function(){
         otouxiangupK.style.display="none";
@@ -1661,7 +1663,8 @@ function user_info(){
     var ouser_mo_phone=document.querySelectorAll('.user_mo_phone')[0];//修改手机
     var ouser_mo_email=document.querySelectorAll('.user_mo_email')[0];//修改邮箱
     var ouser_mo_passw=document.querySelectorAll('.user_mo_passw')[0];//修改密码
-    console.log(ouser_mo_passw)
+
+    
 
     var ouserM=document.querySelectorAll('.userM')[0];
     var aupdateinfoKd=document.querySelectorAll('.updateinfoK');//所有修改框
@@ -1672,11 +1675,11 @@ function user_info(){
 
     var oudPHphone=oupdate_phoneK.querySelectorAll('.udPHphone')[0];//修改手机框手机号
     var oudPHyzfs=oupdate_phoneK.querySelectorAll('.udPHyzfs')[0];//修改手机框发送验证码按钮
-    var oudPHyzfs2=oupdate_phoneK.querySelectorAll('.udPHyzfs2')[0];//修改手机框发送验证码按钮
+    var oudPHyzfs2=oupdate_phoneK.querySelectorAll('.udPHyzfs2')[0];//修改手机框发送验证码按2
 
     var oudPHphone2=oupdate_phoneK.querySelectorAll('.udPHphone2')[0];//修改手机框手机号2
-    var oudPHyzfs3=oupdate_phoneK.querySelectorAll('.udPHyzfs3')[0];//修改手机框发送验证码按钮2
-    var oudPHyzfs4=oupdate_phoneK.querySelectorAll('.udPHyzfs4')[0];//修改手机框发送验证码按钮2
+    var oudPHyzfs3=oupdate_phoneK.querySelectorAll('.udPHyzfs3')[0];//修改手机框发送验证码按钮3
+    var oudPHyzfs4=oupdate_phoneK.querySelectorAll('.udPHyzfs4')[0];//修改手机框发送验证码按钮4
 
     oudPHyzfs.onclick=function(){
         phonezhengze(oudPHphone,oudPHyzfs,oudPHyzfs2,60);
@@ -1684,6 +1687,7 @@ function user_info(){
     oudPHyzfs3.onclick=function(){
         phonezhengze(oudPHphone2,oudPHyzfs3,oudPHyzfs4,60);
     }
+
 
     var oupdate_emailK=document.querySelectorAll('.update_emailK')[0];//修改邮箱框
     var oudinfoRbca2=oupdate_emailK.querySelectorAll('.udinfoRbca')[0];//修改邮箱框取消按钮
@@ -1709,27 +1713,66 @@ function user_info(){
         aupdateinfoKd[i].style.height=ouserM.offsetHeight+"px";
     }
 
+    function updateQL(){
+        var aupdateQLk=document.querySelectorAll('.updateQLk');//点击后需要清理的框
+        for(var i=0;i<aupdateQLk.length;i++){
+            aupdateQLk[i].value="";
+        }
+    }
+
     ouser_mo_phone.onclick=function(){
         oupdate_phoneK.style.display="block";
         oudinfoRbca.onclick=function(){
             oupdate_phoneK.style.display="none";
         }
+        updateQL();
     }
     ouser_mo_email.onclick=function(){
         oupdate_emailK.style.display="block";
         oudinfoRbca2.onclick=function(){
             oupdate_emailK.style.display="none";
         }
+        updateQL();
     }
     ouser_mo_passw.onclick=function(){
         oupdate_passwK.style.display="block";
         oudinfoRbca3.onclick=function(){
             oupdate_passwK.style.display="none";
         }
+        updateQL();
     }
 
 
 
 
 
+}
+//kongjian(40,36);//空间存储调用
+function kongjian(zong,yi){
+
+    var kongjian_zong=zong||20;//存储总空间
+    var kongjian_yi=yi||5;//存储已用空间
+    var kongjian_bi=0;//空间使用比
+    if(kongjian_zong!=0&&kongjian_yi<kongjian_zong){
+        kongjian_bi=kongjian_yi/kongjian_zong;
+    }else{
+        kongjian_bi=1;
+    }
+
+//存储空间条
+    if(document.querySelectorAll('.user_kongjianT')[0]){
+        var ouser_kongjianT=document.querySelectorAll('.user_kongjianT')[0];//存储空间文字
+        var ospan1=ouser_kongjianT.querySelectorAll('span')[0];//存储空间文字
+        var ospan2=ouser_kongjianT.querySelectorAll('span')[1];//存储空间文字
+//        ospan1.innerHTML=kongjian_yi;
+        ospan2.innerHTML=kongjian_zong;
+
+
+        if(document.querySelectorAll('.user_kongjianK')[0]){
+            var ouser_kongjianK=document.querySelectorAll('.user_kongjianK')[0];//存储空间外条
+            var ouser_kongjianZ=ouser_kongjianK.querySelectorAll('.user_kongjianZ')[0];//存储空间内条
+
+            ouser_kongjianZ.style.width=kongjian_bi*350+"px";//内条长度
+        }
+    }
 }
