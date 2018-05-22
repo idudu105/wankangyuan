@@ -48,50 +48,12 @@ public class FormatDataController {
 	/**
 	 * 首次进入 格式数据页面
 	 * 
-	 * // 源数据字数据，注：每个列表第一个值sourceDataId不显示
-	 * 
 	 * @param httpSession
-	 * @return
+	 * @param type
 	 */
 	@RequestMapping("/firstIn")
-	public String firstIn(HttpSession httpSession) {
-		int uid = 1;
-		// 源数据字段
-		List<Source> sources = sourceService.getSourcesForUser();
-		List<List<String>> sourceDatas = new ArrayList<>();
-		if (sources != null) {
-			sources.get(0).setSourceFields(sourceFieldService.getSourceFields(sources.get(0).getCs_id()));
-			// sources.get(0).setFormatTypes(formatTypeService.getFormatTypes(sources.get(0).getCs_id()));
-			// 源数据字数据，注：每个列表第一个值sourceDataId不显示
-			// sourceDatas =
-			// HBaseSourceDataDao.getSourceDatasByUid(Integer.toString(sources.get(0).getCs_id()),
-			// String.valueOf(uid), sources.get(0).getSourceFields());
-		}
-		// -----------------------
-		List<String> list1 = new ArrayList<>();
-		list1.add("id001");
-		list1.add("李");
-		list1.add("男");
-		list1.add("无");
-		list1.add("个人信息");
-		list1.add("孙");
-		list1.add("2018-4-22");
-		sourceDatas.add(list1);
-		List<String> list2 = new ArrayList<>();
-		list2.add("id002");
-		list2.add("张");
-		list2.add("男");
-		list2.add("无");
-		list2.add("个人信息");
-		list2.add("孙");
-		list2.add("2018-4-22");
-		sourceDatas.add(list2);
-		// ------------------------
-		httpSession.setAttribute("sources", sources);
-		httpSession.setAttribute("sourceDatas", sourceDatas);
-
-		return "redirect:/jsp/formatdata/data_create.jsp";
-
+	public void getSourceDatas(HttpSession httpSession, String type) {
+		getSourceDatas(httpSession, type, 0);
 	}
 
 	/**
@@ -142,6 +104,66 @@ public class FormatDataController {
 			map.put("message", "更新失败");
 		}
 		return map;
+	}
+
+	/**
+	 * 
+	 * sources 采集源列表
+	 * 
+	 * source 选中采集源的字段列表
+	 * 
+	 * sourceDatas 源数据字数据，注：每个列表第一个值sourceDataId不显示
+	 * 
+	 * @param httpSession
+	 * @param type
+	 * @param cs_id
+	 * @return
+	 */
+	@RequestMapping("/getSourceDatas")
+	public String getSourceDatas(HttpSession httpSession, String type, Integer cs_id) {
+		int uid = 1;
+		List<Source> sources = sourceService.getSourcesForUser();
+		
+		httpSession.setAttribute("sources", sources);// 采集源列表
+		
+		// 源数据字段
+		List<List<String>> sourceDatas = new ArrayList<>();
+		if (sources != null) {
+			Source source = sourceService.getSourceByCs_id(cs_id);
+			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
+			
+			httpSession.setAttribute("source", source);// 采集源字段列表
+			
+			// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
+			// sourceDatas =
+			// HBaseSourceDataDao.getSourceDatasByUid(Integer.toString(sources.get(0).getCs_id()),
+			// String.valueOf(uid), sources.get(0).getSourceFields());
+		}
+		// -----------------------
+		List<String> list1 = new ArrayList<>();
+		list1.add("id001");
+		list1.add("李");
+		list1.add("男");
+		list1.add("无");
+		list1.add("个人信息");
+		list1.add("孙");
+		list1.add("2018-4-22");
+		sourceDatas.add(list1);
+		List<String> list2 = new ArrayList<>();
+		list2.add("id002");
+		list2.add("张");
+		list2.add("男");
+		list2.add("无");
+		list2.add("个人信息");
+		list2.add("孙");
+		list2.add("2018-4-22");
+		sourceDatas.add(list2);
+		// ------------------------
+		
+		httpSession.setAttribute("sourceDatas", sourceDatas);//
+
+		return "redirect:/jsp/formatdata/data_create.jsp";
+
 	}
 
 	/**
@@ -201,9 +223,9 @@ public class FormatDataController {
 	 * @param sourceDataId
 	 * @return
 	 */
-	@RequestMapping("/formatTypeFolders")
+	@RequestMapping("/getformatTypeFolders")
 	@ResponseBody
-	public Map<String, Object> formatTypeFolders(String cs_id, String sourceDataId) {
+	public Map<String, Object> getformatTypeFolders(String cs_id, String sourceDataId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		HashMap<String, FormatType> formatTypeMap = new HashMap<>();
 		List<FormatType> formatTypes = formatTypeService.getFormatTypes(Integer.valueOf(cs_id));
@@ -365,9 +387,9 @@ public class FormatDataController {
 	 *            节点id
 	 * @return
 	 */
-	@RequestMapping("/formatDatas")
+	@RequestMapping("/getformatDatas")
 	@ResponseBody
-	public Map<String, Object> formatDatas(Integer cs_id, Integer ft_id, String formatNodeId) {
+	public Map<String, Object> getformatDatas(Integer cs_id, Integer ft_id, String formatNodeId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// meta数据
 		List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(ft_id, 1);
