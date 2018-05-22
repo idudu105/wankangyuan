@@ -34,8 +34,8 @@
 				<a href="project_mine.html">
 					<div class="topT active">项目</div>
 				</a>
-				<a href="/wankangyuan/admin/formatdata" target="_blank">
-                	<div class="topT">格式数据</div>
+				<a href="/wankangyuan/formatData/firstIn?type=1">
+                    <div class="topT">格式数据</div>
                 </a>
 				<a href="/wankangyuan/application/viewMine">
                     <div class="topT ">应用</div>
