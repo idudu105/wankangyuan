@@ -85,7 +85,7 @@ public class HBaseFormatNodeDao {
 			while (iterator.hasNext()) {
 				Result result = iterator.next();
 				if (!result.isEmpty()) {
-					// 获取ft_id，ft_name，节点名
+					// 获取ft_id，节点名
 					String[] node = Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
 							Bytes.toBytes(ConstantsHBase.QUALIFIER_NODE))).split(",");
 					try {

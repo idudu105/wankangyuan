@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.hadoop.hbase.util.Bytes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,7 @@ import com.xtkong.service.FormatFieldService;
 import com.xtkong.service.FormatTypeService;
 import com.xtkong.service.SourceFieldService;
 import com.xtkong.service.SourceService;
+import com.xtkong.util.ConstantsHBase;
 
 @Controller
 @RequestMapping("/formatData")
@@ -61,17 +63,30 @@ public class FormatDataController {
 			sources.get(0).setSourceFields(sourceFieldService.getSourceFields(sources.get(0).getCs_id()));
 			// sources.get(0).setFormatTypes(formatTypeService.getFormatTypes(sources.get(0).getCs_id()));
 			// 源数据字数据，注：每个列表第一个值sourceDataId不显示
-			sourceDatas = HBaseSourceDataDao.getSourceDatasByUid(Integer.toString(sources.get(0).getCs_id()),
-					String.valueOf(uid), sources.get(0).getSourceFields());
+			// sourceDatas =
+			// HBaseSourceDataDao.getSourceDatasByUid(Integer.toString(sources.get(0).getCs_id()),
+			// String.valueOf(uid), sources.get(0).getSourceFields());
 		}
-		List<String> list = new ArrayList<>();
-		list.add("李");
-		list.add("男");
-		list.add("无");
-		list.add("个人信息");
-		list.add("孙");
-		list.add("2018-4-22");
-		sourceDatas.add(list);
+		// -----------------------
+		List<String> list1 = new ArrayList<>();
+		list1.add("id001");
+		list1.add("李");
+		list1.add("男");
+		list1.add("无");
+		list1.add("个人信息");
+		list1.add("孙");
+		list1.add("2018-4-22");
+		sourceDatas.add(list1);
+		List<String> list2 = new ArrayList<>();
+		list2.add("id002");
+		list2.add("张");
+		list2.add("男");
+		list2.add("无");
+		list2.add("个人信息");
+		list2.add("孙");
+		list2.add("2018-4-22");
+		sourceDatas.add(list2);
+		// ------------------------
 		httpSession.setAttribute("sources", sources);
 		httpSession.setAttribute("sourceDatas", sourceDatas);
 
@@ -195,12 +210,44 @@ public class FormatDataController {
 		for (FormatType formatType : formatTypes) {
 			formatTypeMap.put(String.valueOf(formatType.getFt_id()), formatType);
 		}
-		List<FormatType> formatTypeFloders = HBaseFormatNodeDao.getFormatTypeFolders(cs_id, sourceDataId,
-				formatTypeMap);
+		// List<FormatType> formatTypeFloders =
+		// HBaseFormatNodeDao.getFormatTypeFolders(cs_id, sourceDataId,
+		// formatTypeMap);
+		// ------------------------------
+		List<FormatType> formatTypeFolders = new ArrayList<>();
+		for (FormatType formatType : formatTypeMap.values()) {
+			if (!formatType.getFt_name().equals("CT")) {
+				formatTypeFolders.add(formatType);
+			}
+		}
 
-		if (formatTypeFloders != null) {
+		FormatType formatType1 = new FormatType();
+		formatType1.setFt_id(1);
+		formatType1.setFt_name("CT");
+		HashMap<String, String> formatDataNodes1 = new HashMap<>();
+		formatDataNodes1.put("nid1", "CT1");
+		formatDataNodes1.put("nid2", "CT2");
+		formatDataNodes1.put("nid3", "CT3");
+		formatType1.setFormatDataNodes(formatDataNodes1);
+
+		FormatType formatType2 = new FormatType();
+		formatType2.setFt_id(1);
+		formatType2.setFt_name("CT");
+		HashMap<String, String> formatDataNodes2 = new HashMap<>();
+		formatDataNodes2.put("nid4", "CT4");
+		formatDataNodes2.put("nid5", "CT5");
+		formatDataNodes2.put("nid6", "CT6");
+		formatType2.setFormatDataNodes(formatDataNodes2);
+
+		if (sourceDataId.equals("id001")) {
+			formatTypeFolders.add(formatType1);
+		} else {
+			formatTypeFolders.add(formatType2);
+		}
+		// --------------------------
+		if (formatTypeFolders != null) {
 			map.put("result", true);
-			map.put("formatTypeFloders", formatTypeFloders);
+			map.put("formatTypeFloders", formatTypeFolders);
 		} else {
 			map.put("result", false);
 			map.put("message", "获取失败");
@@ -324,15 +371,37 @@ public class FormatDataController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// meta数据
 		List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(ft_id, 1);
-		List<List<String>> metaDatas = HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
-				Integer.toString(ft_id), formatNodeId, meta);
+		// List<List<String>> metaDatas =
+		// HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
+		// Integer.toString(ft_id), formatNodeId, meta);
 		// data数据
 		List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(ft_id, 0);
-		List<List<String>> dataDatas = HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
-				Integer.toString(ft_id), formatNodeId, data);
+		// List<List<String>> dataDatas =
+		// HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
+		// Integer.toString(ft_id), formatNodeId, data);
+		// --------------------------
+
+		List<List<String>> metaDatas = new ArrayList<>();
+		List<String> formatData = new ArrayList<>();
+		formatData.add("fd001");// 获取行键formatDataId，不显示
+		for (FormatField formatField : meta) {
+			formatData.add("test" + formatNodeId);
+		}
+		metaDatas.add(formatData);
+
+		List<List<String>> dataDatas = new ArrayList<>();
+		List<String> formatDatad = new ArrayList<>();
+		formatDatad.add("fd001");// 获取行键formatDataId，不显示
+		for (FormatField formatField : data) {
+			formatDatad.add("test" + formatNodeId);
+		}
+		dataDatas.add(formatDatad);
+		// --------------------------
 		if (metaDatas != null) {
 			map.put("result", true);
+			map.put("meta", meta);
 			map.put("metaDatas", metaDatas);
+			map.put("data", data);
 			map.put("dataDatas", dataDatas);
 		} else {
 			map.put("result", false);
@@ -340,8 +409,10 @@ public class FormatDataController {
 		}
 		return map;
 	}
+
 	/**
 	 * 批量删除格式数据
+	 * 
 	 * @param cs_id
 	 * @param ft_id
 	 * @param formatDataIds
@@ -349,9 +420,9 @@ public class FormatDataController {
 	 */
 	@RequestMapping("/deleteFormatDatas")
 	@ResponseBody
-	public Map<String, Object> deleteFormatDatas(String cs_id,String ft_id,  List<String> formatNodeIds) {
+	public Map<String, Object> deleteFormatDatas(String cs_id, String ft_id, List<String> formatNodeIds) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (HBaseFormatDataDao.deleteFormatDatas(cs_id,ft_id, formatNodeIds)) {
+		if (HBaseFormatDataDao.deleteFormatDatas(cs_id, ft_id, formatNodeIds)) {
 			map.put("result", true);
 			map.put("message", "删除成功");
 		} else {

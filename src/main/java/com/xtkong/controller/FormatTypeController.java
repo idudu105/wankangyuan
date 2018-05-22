@@ -46,8 +46,8 @@ public class FormatTypeController {
 		if (1 == formatTypeService.insertFormatType(formatType)) {
 			map.put("result", true);
 			map.put("message", "新增成功");
-			Integer ft_id=formatTypeService.getFormatTypeId(formatType.getCs_id(), formatType.getFt_name());
-			HBaseFormatDataDao.createFormatDataTable(String.valueOf(formatType.getCs_id()), String.valueOf(ft_id));
+//			Integer ft_id=formatTypeService.getFormatTypeId(formatType.getCs_id(), formatType.getFt_name());
+//			HBaseFormatDataDao.createFormatDataTable(String.valueOf(formatType.getCs_id()), String.valueOf(ft_id));
 		} else {
 			map.put("result", false);
 			map.put("message", "新增失败");

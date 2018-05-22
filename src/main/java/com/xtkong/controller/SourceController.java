@@ -34,9 +34,9 @@ public class SourceController {
 	@RequestMapping(value = "/insertSource")
 	public String insertSource(Source source) {
 		sourceService.insertSource(source);
-		Integer cs_id=sourceService.getSourceId(source.getCs_name());
-		HBaseSourceDataDao.createSourceDataTable(String.valueOf(cs_id));
-		HBaseFormatNodeDao.createFormatNodeTable(String.valueOf(cs_id));
+//		Integer cs_id=sourceService.getSourceId(source.getCs_name());
+//		HBaseSourceDataDao.createSourceDataTable(String.valueOf(cs_id));
+//		HBaseFormatNodeDao.createFormatNodeTable(String.valueOf(cs_id));
 		return "redirect:/admin/formatdata";
 	}
 
