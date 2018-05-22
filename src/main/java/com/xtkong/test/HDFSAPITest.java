@@ -78,7 +78,7 @@ public class HDFSAPITest {
 			 * 1.修改HDFS目录的权限； 2.关闭HDFS权限检测，hdfs-site.xml
 			 * 3.指定api获取的用户，与hadoop用户一致，-DHADOOP_USER_NAME=mo
 			 */
-			fileSystem.mkdirs(new Path("/aa/bb/cc"));
+			fileSystem.mkdirs(new Path("/GG8"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -90,7 +90,7 @@ public class HDFSAPITest {
 		System.out.println("Deldirs");
 		try {
 			// true递归删除hdfs://single:9000/testwc/output/1
-			fileSystem.delete(new Path("/testwc/output"), true);
+			fileSystem.delete(new Path("/GG8"), true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

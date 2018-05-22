@@ -55,16 +55,16 @@ public class HbaseTest {
 				while(scanner.hasNextLine()) {
 					if (heads==null) {
 						heads=scanner.nextLine().split("\t");
-						db.createTable(ConstantsHBase.TABLE_USER,new String[] { ConstantsHBase.FAMILY_USER_INFO }, 1);
+						db.createTable("USER",new String[] { ConstantsHBase.FAMILY_INFO }, 1);
 					}
 					else{
 						datas=scanner.nextLine().split("\t");
 						for (int i=0;i<heads.length;i++) {
 							try {
 								//System.out.println(json[i]+":"+dataStr[i]);
-							//	db.put(ConstantsHBase.TABLE_USER, values[0], ConstantsHBase.FAMILY_USER_INFO, names[i], values[i]);
+							//	db.put("USER", values[0], ConstantsHBase.FAMILY_USER_INFO, names[i], values[i]);
 								Put put = new Put(Bytes.toBytes(datas[0]));// "row-key-00001".getBytes()
-								put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_USER_INFO), Bytes.toBytes(heads[i]), Bytes.toBytes(datas[i]));
+								put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(heads[i]), Bytes.toBytes(datas[i]));
 								puts.add(put);
 							} catch (Exception e) {
 								continue;
@@ -85,10 +85,10 @@ public class HbaseTest {
 	//扫描
 	
 	public void testScan() {
-		String tableStr=ConstantsHBase.TABLE_USER;
+		String tableStr="USER";
 		String rowkeyStr1="IRNA0003338";
 		String rowkeyStr2="IRNA0003339";
-		String familyStr=ConstantsHBase.FAMILY_USER_INFO;
+		String familyStr=ConstantsHBase.FAMILY_INFO;
 		String columnStr1="DONOR_NAME";
 		String columnStr2="AGE";
 		int  cachingStr=10;// 一次扫描请求返回数据量
@@ -135,9 +135,9 @@ public class HbaseTest {
 	// 混合批量操作
 		
 		public void testBatch() {
-			String tableStr=ConstantsHBase.TABLE_USER;
+			String tableStr="USER";
 			String rowkeyStr1="IRNA0003338";
-			String familyStr=ConstantsHBase.FAMILY_USER_INFO;
+			String familyStr=ConstantsHBase.FAMILY_INFO;
 			String columnStr1="DONOR_NAME";
 			String valueStr1="张三";
 			try {
@@ -167,9 +167,9 @@ public class HbaseTest {
 	//判断删除
 	
 	public void testCheckAndDelete() {
-		String tableStr=ConstantsHBase.TABLE_USER;
+		String tableStr="USER";
 		String rowkeyStr1="IRNA0003338";
-		String familyStr=ConstantsHBase.FAMILY_USER_INFO;
+		String familyStr=ConstantsHBase.FAMILY_INFO;
 		String columnStr1="DONOR_NAME";
 		String valueStr1="张三";
 		try {
@@ -189,10 +189,10 @@ public class HbaseTest {
 	//删除List
 	
 	public void testDeleteList() {
-		String tableStr=ConstantsHBase.TABLE_USER;
+		String tableStr="USER";
 		String rowkeyStr1="IRNA0003338";
 		String rowkeyStr2="IRNA0003339";
-		String familyStr=ConstantsHBase.FAMILY_USER_INFO;
+		String familyStr=ConstantsHBase.FAMILY_INFO;
 		String columnStr1="DONOR_NAME";
 		try {
 			HBaseDB db=HBaseDB.getInstance();
@@ -217,9 +217,9 @@ public class HbaseTest {
 	
 	public void testDelete() {
 
-		String tableStr=ConstantsHBase.TABLE_USER;
+		String tableStr="USER";
 		String rowkeyStr="IRNA0003338";
-		String familyStr=ConstantsHBase.FAMILY_USER_INFO;
+		String familyStr=ConstantsHBase.FAMILY_INFO;
 		String columnStr1="DONOR_NAME";
 		try {
 			HBaseDB db=HBaseDB.getInstance();
@@ -238,10 +238,10 @@ public class HbaseTest {
 	//获取List
 	
 	public void testGetList() {
-		String tableStr=ConstantsHBase.TABLE_USER;
+		String tableStr="USER";
 		String rowkeyStr1="IRNA0003338";
 		String rowkeyStr2="IRNA0003339";
-		String familyStr=ConstantsHBase.FAMILY_USER_INFO;
+		String familyStr=ConstantsHBase.FAMILY_INFO;
 		String columnStr1="DONOR_NAME";
 		try {
 			HBaseDB db=HBaseDB.getInstance();
@@ -267,9 +267,9 @@ public class HbaseTest {
 	//获取单条记录
 	
 	public void testGet() {
-		String tableStr=ConstantsHBase.TABLE_USER;
+		String tableStr="USER";
 		String rowkeyStr="IRNA0003338";
-		String familyStr=ConstantsHBase.FAMILY_USER_INFO;
+		String familyStr=ConstantsHBase.FAMILY_INFO;
 		String columnStr1="DONOR_NAME";
 		String columnStr2="AGE";
 		try {
@@ -303,9 +303,9 @@ public class HbaseTest {
 	//修改数据
 	
 	public void testCheckAndPut() {
-		String tableStr=ConstantsHBase.TABLE_USER;
+		String tableStr="USER";
 		String rowkeyStr="IRNA0003338";
-		String familyStr=ConstantsHBase.FAMILY_USER_INFO;
+		String familyStr=ConstantsHBase.FAMILY_INFO;
 		String columnStr1="DONOR_NAME";
 		String columnStr2="AGE";
 		String valueStr1="张三";
@@ -330,7 +330,7 @@ public class HbaseTest {
 	
 	public void testPutList(List<Put> puts) {
 
-		String tableStr=ConstantsHBase.TABLE_USER;
+		String tableStr="USER";
 		try {
 			HBaseDB db=HBaseDB.getInstance();
 			Table table = db.getTable(tableStr);
@@ -343,9 +343,9 @@ public class HbaseTest {
 	// 添加/修改数据
 	
 	public void testPut() {
-		String tableStr=ConstantsHBase.TABLE_USER;
+		String tableStr="USER";
 		String rowkeyStr="IRNA0003338";
-		String familyStr=ConstantsHBase.FAMILY_USER_INFO;
+		String familyStr=ConstantsHBase.FAMILY_INFO;
 		String columnStr1="DONOR_NAME";
 		String valueStr1="张三";
 		String valueStr2="张";

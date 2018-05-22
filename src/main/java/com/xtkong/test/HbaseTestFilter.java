@@ -290,10 +290,10 @@ public class HbaseTestFilter {
 	/** 行键值过滤 :基于行键来过滤数据*/
 	
 	public void testRowFilter() {
-		String tableStr=ConstantsHBase.TABLE_USER;
+		String tableStr="USER";
 		String rowkeyStr1="IRNA0003338";
 		String rowkeyStr2="IRNA0003339";
-		String familyStr=ConstantsHBase.FAMILY_USER_INFO;
+		String familyStr=ConstantsHBase.FAMILY_INFO;
 		String columnStr1="DONOR_NAME";
 		String columnStr2="AGE";
 		try {
