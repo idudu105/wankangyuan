@@ -95,7 +95,7 @@ public class FormatDataController {
 		
 		httpSession.setAttribute("sourceDatas", sourceDatas);//
 
-		return "redirect:/jsp/formatdata/data_create.jsp";
+		return "redirect:/jsp/formatdata/data_mine.jsp";
 	}
 
 	/**
@@ -204,7 +204,7 @@ public class FormatDataController {
 		
 		httpSession.setAttribute("sourceDatas", sourceDatas);//
 
-		return "redirect:/jsp/formatdata/data_create.jsp";
+		return "redirect:/jsp/formatdata/data_mine.jsp";
 
 	}
 
