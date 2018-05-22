@@ -36,21 +36,48 @@ public class RoleServiceImpl implements RoleService {
         return roleDao.insert(record);
     }
 
+    /**
+     * 根据主键删除角色
+     * <p>Title: deleteByPrimaryKey</p>  
+     * <p>Description: </p>  
+     * @param id
+     * @return
+     */
     @Override
     public int deleteByPrimaryKey(Integer id) {
         return roleDao.deleteByPrimaryKey(id);
     }
 
+    /**
+     * 根据主键修改角色
+     * <p>Title: updateByPrimaryKey</p>  
+     * <p>Description: </p>  
+     * @param record
+     * @return
+     */
     @Override
     public int updateByPrimaryKey(Role record) {
         return roleDao.updateByPrimaryKeySelective(record);
     }
 
+    /**
+     * 根据主键查找角色
+     * <p>Title: selectByPrimaryKey</p>  
+     * <p>Description: </p>  
+     * @param id
+     * @return
+     */
     @Override
     public Role selectByPrimaryKey(Integer id) {
         return roleDao.selectByPrimaryKey(id);
     }
 
+    /**
+     * 查找全部角色
+     * <p>Title: findAll</p>  
+     * <p>Description: </p>  
+     * @return
+     */
     @Override
     public Map<String, Object> findAll() {
         RoleQuery example = new RoleQuery();
@@ -63,6 +90,15 @@ public class RoleServiceImpl implements RoleService {
         return map;
     }
 
+    /**
+     * 查找全部角色带分页
+     * <p>Title: findAll</p>  
+     * <p>Description: </p>  
+     * @param page
+     * @param rows
+     * @param role
+     * @return
+     */
     @Override
     public Map<String, Object> findAll(Integer page, Integer rows, String role) {
         RoleQuery example = new RoleQuery();
@@ -83,6 +119,13 @@ public class RoleServiceImpl implements RoleService {
         return map;
     }
 
+    /**
+     * 根据角色ids查找权限
+     * <p>Title: findPermissions</p>  
+     * <p>Description: </p>  
+     * @param roleIds
+     * @return
+     */
     @Override
     public Set<String> findPermissions(Integer[] roleIds) {
         Set<Integer> ResourceIds = new HashSet<>();
@@ -102,6 +145,13 @@ public class RoleServiceImpl implements RoleService {
         return resourceService.findPermissions(ResourceIds);
     }
 
+    /**
+     * 根据角色ids查找角色Set
+     * <p>Title: findRoles</p>  
+     * <p>Description: </p>  
+     * @param roleIds
+     * @return
+     */
     @Override
     public Set<String> findRoles(Integer... roleIds) {
         Set<String> roles = new HashSet<String>();

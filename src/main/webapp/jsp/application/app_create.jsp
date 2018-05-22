@@ -35,11 +35,11 @@
                     <div class="topT active">应用</div>
                 </a>
                 <<%-- div class="touxiangK">
-                    <img src="<%=request.getContextPath()%>/static/img/touxiang.png" alt="" class="touxiang" />
+                    <img src="${user.headimg }" alt="" class="touxiang" />
                 </div> --%>
                 <div class="touxiangK">
                     <a href=" ">
-                        <img src="<%=request.getContextPath()%>/static/img/touxiang.png" alt="" class="touxiang" />
+                        <img src="${user.headimg }" alt="" class="touxiang" />
                     </a>
                     <div class="userbutK">
                         <a href="user_info.html">

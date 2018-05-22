@@ -142,6 +142,13 @@ public class ResourceServiceImpl implements ResourceService {
         return permissions;
     }
 
+    /**
+     * 根据权限Set查找菜单列表
+     * <p>Title: findMenus</p>  
+     * <p>Description: </p>  
+     * @param permissions
+     * @return
+     */
     @Override
     public List<Resource> findMenus(Set<String> permissions) {
         @SuppressWarnings("unchecked")
@@ -162,6 +169,14 @@ public class ResourceServiceImpl implements ResourceService {
         return menus;
     }
     
+    /**
+     * 判断是否有权限
+     * @Title: hasPermission 
+     * @param permissions
+     * @param resource
+     * @return 
+     * boolean
+     */
     private boolean hasPermission(Set<String> permissions, Resource resource) {
         if(StringUtils.isEmpty(resource.getPermission())) {
             return true;
