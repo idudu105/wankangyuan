@@ -30,7 +30,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <a href="/wankangyuan/project/selectMyProject?user_id=1">
                 	<div class="topT active">项目</div>
                 </a>
-                <div class="topT">格式数据</div>
+                <a href="/wankangyuan/formatData/firstIn?type=1">
+                    <div class="topT">格式数据</div>
+                </a>
                 <a href="/wankangyuan/application/viewMine">
                     <div class="topT ">应用</div>
                 </a>
