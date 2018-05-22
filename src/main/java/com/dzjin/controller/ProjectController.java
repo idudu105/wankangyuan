@@ -74,7 +74,7 @@ public class ProjectController {
 		project.setAppResultNum(100);
 		project.setMemberNum(100);
 
-		return "redirect:/pages/project_detail.jsp";
+		return "redirect:/jsp/project/project_detail.jsp";
 		
 	}
 	
@@ -114,7 +114,7 @@ public class ProjectController {
 		List<Project> projects = projectService.selectPublicProject();
 		httpSession.setAttribute("projects", projects);	
 		
-		return "redirect:/pages/project_public.jsp";
+		return "redirect:/jsp/project/project_public.jsp";
 	}
 	
 	@RequestMapping("/selectCreatedProject")
@@ -123,7 +123,7 @@ public class ProjectController {
 		List<Project> projects = projectService.selectCreatedProject(creator);
 		httpSession.setAttribute("projects", projects);
 		
-		return "redirect:/pages/project_create.jsp";
+		return "redirect:/jsp/project/project_create.jsp";
 	}
 	
 	@RequestMapping("/selectMyProject")
@@ -132,7 +132,7 @@ public class ProjectController {
 		List<Project> projects = projectService.selectMyProject(user_id);
 		httpSession.setAttribute("projects", projects);
 		
-		return "redirect:/pages/project_mine.jsp";
+		return "redirect:/jsp/project/project_mine.jsp";
 	}
 	
 	@RequestMapping("/addPublicProjectToMine")

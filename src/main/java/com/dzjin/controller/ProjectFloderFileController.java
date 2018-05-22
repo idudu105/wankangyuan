@@ -59,7 +59,7 @@ public class ProjectFloderFileController {
 		 */
 		session.setAttribute("myFileNum", 56);
 		
-		return "redirect:/pages/project_file.jsp";
+		return "redirect:/jsp/project/project_file.jsp";
 	}
 	
 	/**

@@ -1,3 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +22,8 @@
         // pro_mine();
         // pro_dataLB();
         pro_data();
+        pro_dataclick();
+        data_dataclick();
     }
 </script>
 <body>
@@ -233,31 +244,122 @@
                         </div>
                     </div>
                 </div>
-                <div class="prodainmR">
-                    <div class="prodainmRz1">
-                        <div class="prodainmRz1L">姓名：</div>
-                        <div class="prodainmRz1R">张三</div>
+                <div class="prodaclmR">
+                    <div class="prodaclmRz">
+                        <div class="prodaclmRzT">
+                            <div class="quanxuanK fxK1">
+                                <input type="checkbox" class="input_check" id="check3_0">
+                                <label for="check3_0"></label>
+                            </div>
+                            <div class="prodaclmRzTt prodaclmRzTtmz">名称</div>
+                            <div class="prodaclmRzTt prodaclmRzTtnr">内容</div>
+                        </div>
+                        <div class="prodaclmRzB">
+                            <div class="prodaclmRzBz">
+                                <div class="fuxuanK5 fxK1">
+                                    <input type="checkbox" class="input_check" id="check3_1">
+                                    <label for="check3_1"></label>
+                                </div>
+                                <div class="prodaclmRzBzt prodaclmRzTtmz">机器1</div>
+                                <div class="prodaclmRzBzt prodaclmRzTtnr">机器人信息1</div>
+                            </div>
+                            <div class="prodaclmRzBz">
+                                <div class="fuxuanK5 fxK1">
+                                    <input type="checkbox" class="input_check" id="check3_2">
+                                    <label for="check3_2"></label>
+                                </div>
+                                <div class="prodaclmRzBzt prodaclmRzTtmz">采集人1</div>
+                                <div class="prodaclmRzBzt prodaclmRzTtnr">采集人信息1</div>
+                            </div>
+                            <div class="prodaclmRzBz">
+                                <div class="fuxuanK5 fxK1">
+                                    <input type="checkbox" class="input_check" id="check3_3">
+                                    <label for="check3_3"></label>
+                                </div>
+                                <div class="prodaclmRzBzt prodaclmRzTtmz">XX</div>
+                                <div class="prodaclmRzBzt prodaclmRzTtnr"></div>
+                            </div>
+                            <!-- <div class="prodaclmRzBz">
+                                <div class="prodaclmRzTi"></div>
+                                <div class="prodaclmRzBzt prodaclmRzTtmz">XX</div>
+                                <div class="prodaclmRzBzt prodaclmRzTtnr"></div>
+                            </div> -->
+                        </div>
                     </div>
-                    <div class="prodainmRz1">
-                        <div class="prodainmRz1L">年龄：</div>
-                        <div class="prodainmRz1R">25</div>
+                    <div class="prodaclmRz2">
+                        <div class="prodaclmRsxK">
+                            <div class="prodaclmRsx">
+                                <div class="prodaclmRsxT">筛选</div>
+                                <img src="img/sanjiao_blue.png" alt="" class="prodaclmRsxI" />
+                            </div>
+                            <div class="prodaclmRss">
+                                <div class="prodaclmRssC">
+                                    <img src="img/search.png" alt="" class="searchCi" />
+                                    <input type="text" class="searchCt"  placeholder="搜索项目" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="shaixuanZK">
+                            <div class="shaixuanZKli">
+                                <div class="shaixuanZKliT">数据1</div>
+                                <div class="shaixuanZKliI active"></div>
+                            </div>
+                            <div class="shaixuanZKli">
+                                <div class="shaixuanZKliT">数据2</div>
+                                <div class="shaixuanZKliI active"></div>
+                            </div>
+                            <div class="shaixuanZKli">
+                                <div class="shaixuanZKliT">数据3</div>
+                                <div class="shaixuanZKliI active"></div>
+                            </div>
+                        </div>
+                        <div class="prodaclmRsjK">
+                            <div class="prodaclmRzT">
+                                <div class="quanxuanK fxK1">
+                                    <input type="checkbox" class="input_check" id="check4_0">
+                                    <label for="check4_0"></label>
+                                </div>
+                                <div class="prodaclmRzTit">全选</div>
+                                <div class="prodaclmRzTt2 prodaclmRzTtsj1">数据1</div>
+                                <div class="prodaclmRzTt2 prodaclmRzTtsj2">数据2</div>
+                                <div class="prodaclmRzTt2 prodaclmRzTtsj3">数据3</div>
+                            </div>
+                            <div class="prodaclmRzB">
+                                <div class="prodaclmRzBz">
+                                    <div class="fuxuanK5 fxK1">
+                                        <input type="checkbox" class="input_check" id="check4_1">
+                                        <label for="check4_1"></label>
+                                    </div>
+                                    <div class="prodaclmRzBzid">李四</div>
+                                    <div class="prodaclmRzTt3 prodaclmRzTtsj1">数据11</div>
+                                    <div class="prodaclmRzTt3 prodaclmRzTtsj2">数据22</div>
+                                    <div class="prodaclmRzTt3 prodaclmRzTtsj3">数据33</div>
+                                </div>
+                                <div class="prodaclmRzBz">
+                                    <div class="fuxuanK5 fxK1">
+                                        <input type="checkbox" class="input_check" id="check4_2">
+                                        <label for="check4_2"></label>
+                                    </div>
+                                    <div class="prodaclmRzBzid">李四</div>
+                                    <div class="prodaclmRzTt3 prodaclmRzTtsj1">数据11</div>
+                                    <div class="prodaclmRzTt3 prodaclmRzTtsj2">数据22</div>
+                                    <div class="prodaclmRzTt3 prodaclmRzTtsj3">数据33</div>
+                                </div>
+                                <div class="prodaclmRzBz">
+                                    <div class="fuxuanK5 fxK1">
+                                        <input type="checkbox" class="input_check" id="check4_3">
+                                        <label for="check4_3"></label>
+                                    </div>
+                                    <div class="prodaclmRzBzid">李四</div>
+                                    <div class="prodaclmRzTt3 prodaclmRzTtsj1">数据11</div>
+                                    <div class="prodaclmRzTt3 prodaclmRzTtsj2">数据22</div>
+                                    <div class="prodaclmRzTt3 prodaclmRzTtsj3">数据33</div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
-                    <div class="prodainmRz1">
-                        <div class="prodainmRz1L">性别：</div>
-                        <div class="prodainmRz1R">男</div>
-                    </div>
-                    <div class="prodainmRz1">
-                        <div class="prodainmRz1L">病史：</div>
-                        <div class="prodainmRz1R">无</div>
-                    </div>
-                    <div class="prodainmRz2">
-                        <div class="prodainmRz2T">个人信息：</div>
-                        <div class="prodainmRz2B"></div>
-                    </div>
-                    <div class="prodainmRz2">
-                        <div class="prodainmRz2T">个人信息2：</div>
-                        <div class="prodainmRz2B"></div>
-                    </div>
+                    
                 </div>
             </div>
             

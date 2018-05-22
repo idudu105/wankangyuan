@@ -1,3 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,9 +86,7 @@
                                                     <input type="checkbox" class="input_check" id="check2">
                                                     <label for="check2"></label>
                                                 </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">CT1</div>
-                                                </a>
+                                                <div class="PJliB2Lt">CT1</div>
                                             </div>
                                         </div>
                                         <div class="PJliB2">
@@ -88,9 +95,7 @@
                                                     <input type="checkbox" class="input_check" id="check3">
                                                     <label for="check3"></label>
                                                 </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">CT2</div>
-                                                </a>
+                                                <div class="PJliB2Lt">CT2</div>
                                             </div>
                                         </div>
                                         <div class="PJliB2">
@@ -99,9 +104,7 @@
                                                     <input type="checkbox" class="input_check" id="check4">
                                                     <label for="check4"></label>
                                                 </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">CT3</div>
-                                                </a>
+                                                <div class="PJliB2Lt">CT3</div>
                                             </div>
                                         </div>
                                     </div>
@@ -122,9 +125,7 @@
                                                     <input type="checkbox" class="input_check" id="check6">
                                                     <label for="check6"></label>
                                                 </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">XG1</div>
-                                                </a>
+                                                <div class="PJliB2Lt">XG1</div>
                                             </div>
                                         </div>
                                         <div class="PJliB2">
@@ -133,9 +134,7 @@
                                                     <input type="checkbox" class="input_check" id="check7">
                                                     <label for="check7"></label>
                                                 </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">XG2</div>
-                                                </a>
+                                                <div class="PJliB2Lt">XG2</div>
                                             </div>
                                         </div>
                                         <div class="PJliB2">
@@ -144,9 +143,7 @@
                                                     <input type="checkbox" class="input_check" id="check8">
                                                     <label for="check8"></label>
                                                 </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">XG3</div>
-                                                </a>
+                                                <div class="PJliB2Lt">XG3</div>
                                             </div>
                                         </div>
                                     </div>
@@ -179,9 +176,7 @@
                                                     <input type="checkbox" class="input_check" id="check1_2">
                                                     <label for="check1_2"></label>
                                                 </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">CT1</div>
-                                                </a>
+                                                <div class="PJliB2Lt">CT1</div>
                                             </div>
                                         </div>
                                         <div class="PJliB2">
@@ -190,9 +185,7 @@
                                                     <input type="checkbox" class="input_check" id="check1_3">
                                                     <label for="check1_3"></label>
                                                 </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">CT2</div>
-                                                </a>
+                                                <div class="PJliB2Lt">CT2</div>
                                             </div>
                                         </div>
                                         <div class="PJliB2">
@@ -201,9 +194,7 @@
                                                     <input type="checkbox" class="input_check" id="check1_4">
                                                     <label for="check1_4"></label>
                                                 </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">CT3</div>
-                                                </a>
+                                                <div class="PJliB2Lt">CT3</div>
                                             </div>
                                         </div>
                                     </div>
@@ -224,9 +215,7 @@
                                                     <input type="checkbox" class="input_check" id="check1_6">
                                                     <label for="check1_6"></label>
                                                 </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">XG1</div>
-                                                </a>
+                                                <div class="PJliB2Lt">XG1</div>
                                             </div>
                                         </div>
                                         <div class="PJliB2">
@@ -235,9 +224,7 @@
                                                     <input type="checkbox" class="input_check" id="check1_7">
                                                     <label for="check1_7"></label>
                                                 </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">XG2</div>
-                                                </a>
+                                                <div class="PJliB2Lt">XG2</div>
                                             </div>
                                         </div>
                                         <div class="PJliB2">
@@ -246,9 +233,7 @@
                                                     <input type="checkbox" class="input_check" id="check1_8">
                                                     <label for="check1_8"></label>
                                                 </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">XG3</div>
-                                                </a>
+                                                <div class="PJliB2Lt">XG3</div>
                                             </div>
                                         </div>
                                     </div>
