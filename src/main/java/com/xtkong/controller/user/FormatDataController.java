@@ -52,8 +52,8 @@ public class FormatDataController {
 	 * @param type
 	 */
 	@RequestMapping("/firstIn")
-	public void getSourceDatas(HttpSession httpSession, String type) {
-		getSourceDatas(httpSession, type, 0);
+	public String getSourceDatas(HttpSession httpSession, String type) {
+		return getSourceDatas(httpSession, type, sourceService.getSourcesForUserLimit(1).get(0).getCs_id());
 	}
 
 	/**

@@ -30,7 +30,9 @@ public class SourceService {
 	public List<Source> getSourcesForUser() {
 		return sourceDao.getSourcesForUser();
 	}
-	
+	public List<Source> getSourcesForUserLimit(Integer num) {
+		return sourceDao.getSourcesForUserLimit(num);
+	}
 	/**
 	 * 选取数据源，管理
 	 * @return	数据源列表
