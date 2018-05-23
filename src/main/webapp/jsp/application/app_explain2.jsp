@@ -38,7 +38,7 @@
                         <img src="${user.headimg }" alt="" class="touxiang" />
                     </a>
                     <div class="userbutK">
-                        <a href="user_info.html">
+                        <a href="/wankangyuan/userInfo">
                             <div class="userbut">用户信息</div>
                         </a>
                         <a href="javascript:;">

@@ -6,7 +6,6 @@
 <head>
     <meta charset="UTF-8" />
     <title>Document</title>
-</head>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/static/css/project1.css" />
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/project1.js"></script>
@@ -18,6 +17,7 @@
         user_info();
     }
 </script>
+</head>
 <body>
     <div class="Box">
         <div class="box">
@@ -189,7 +189,7 @@
                                     <textarea name="personalProfile" id="" class="userMRMtabzta">${user.personalProfile }</textarea>
                                 </div>
                                 <div class="userMRMtabz">
-                                    <div class="user_kongjianT"><span>${map.size}</span>${map.unit}/<span></span>GB</div>
+                                    <div class="user_kongjianT"><span>${map.size }</span>${map.unit}/<span></span>GB</div>
                                 </div>
                                 <div class="userMRMtabz">
                                     <div class="userMRMtabzt">个人存储空间：</div>
@@ -252,8 +252,7 @@
             </div>
         </div>
     </div>
-</body>
-
+    
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
 
 <c:if test="${not empty error}">
@@ -266,20 +265,18 @@ var fileSize = ${map.size};
 var fileUnit = '${map.unit}';
 var realSize
 if(fileUnit == 'B'){
-	realSize = fileSize/1024/1024/1024;
+    realSize = fileSize/1024/1024/1024;
 }
 if(fileUnit == 'KB'){
-	realSize = fileSize/1024/1024;
+    realSize = fileSize/1024/1024;
 }
 if(fileUnit == 'MB'){
-	realSize = fileSize/1024;
+    realSize = fileSize/1024;
 }
 if(fileUnit == 'GB'){
-	realSize = fileSize;
+    realSize = fileSize;
 }
-
 kongjian(20,realSize);
-
 $("#sendPhoneCode,#sendPhoneCode1").click(function(){
     var phone = ${user.phone};
   $.get("/wankangyuan/open/getPhoneCode?phone="+phone, function(result){
@@ -290,7 +287,6 @@ $("#sendPhoneCode,#sendPhoneCode1").click(function(){
     }
   });
 });
-
 $("#sendNewPhoneCode").click(function(){
     var phone = $("#newPhone").val();
   $.get("/wankangyuan/open/getNewPhoneCode?phone="+phone, function(result){
@@ -301,35 +297,33 @@ $("#sendNewPhoneCode").click(function(){
     }
   });
 });
-
 function updateUserInfo() {
-	var load = layer.load();
-	$.post("/wankangyuan/updateUserInfo",$("#userForm").serialize() ,function(result){
-	    layer.close(load);
-	    if(result && result.status!= 200){
-	        return layer.msg(result.message,function(){}),!1;
-	    }else{
-	    	layer.msg(result.message, {
+    var load = layer.load();
+    $.post("/wankangyuan/updateUserInfo",$("#userForm").serialize() ,function(result){
+        layer.close(load);
+        if(result && result.status!= 200){
+            return layer.msg(result.message,function(){}),!1;
+        }else{
+            layer.msg(result.message, {
                 anim: 0,
                 end: function (index) {
                     window.location.reload();
                 }
             });
-	    }
-	},"json");
-	
-	$("#sendPhoneCode").click(function(){
-	    var phone = $("#phone").val();
-	  $.get("/wankangyuan/open/getPhoneCode?phone="+phone, function(result){
-	    if(result != 0){
-	        layer.msg("已发送验证码，请注意接收!");
-	    }else{
-	        layer.msg("验证码发送失败，请联系管理员!");
-	    }
-	  });
-	});
+        }
+    },"json");
+    
+    $("#sendPhoneCode").click(function(){
+        var phone = $("#phone").val();
+      $.get("/wankangyuan/open/getPhoneCode?phone="+phone, function(result){
+        if(result != 0){
+            layer.msg("已发送验证码，请注意接收!");
+        }else{
+            layer.msg("验证码发送失败，请联系管理员!");
+        }
+      });
+    });
 }
-
 function updateUserPhone(){
     
     if($('#phoneCode_ph').val().length != 6){
@@ -347,16 +341,15 @@ function updateUserPhone(){
             layer.msg(result.message, {
                 anim: 0,
                 end: function (index) {
-		            window.location.reload();
+                    window.location.reload();
                 }
             });
         }
     },"json");
 }
-
 function updateUserEmail() {
-	var load = layer.load();
-	$.post("/wankangyuan/updateUserEmail",$("#emailForm").serialize() ,function(result){
+    var load = layer.load();
+    $.post("/wankangyuan/updateUserEmail",$("#emailForm").serialize() ,function(result){
         layer.close(load);
         if(result && result.status!= 200){
             return layer.msg(result.message,function(){}),!1;
@@ -370,9 +363,8 @@ function updateUserEmail() {
         }
     },"json");
 }
-
 function updateUserPassword() {
-	if($("#password").val().length < 8){
+    if($("#password").val().length < 8){
         return layer.msg('密码不少于8个字符！',function(){}),!1;
     }
     
@@ -398,14 +390,13 @@ function updateUserPassword() {
         }
     },"json");
 }
-
 function updateHeadImg() {
-	var file = $("#headImg")[0].files[0];
-	if(file.size >= 1024*1024*2){
-		return layer.msg('头像大小超过2M,请更换图片!',function(){}),!1;
-	}
-	
-	
+    var file = $("#headImg")[0].files[0];
+    if(file.size >= 1024*1024*2){
+        return layer.msg('头像大小超过2M,请更换图片!',function(){}),!1;
+    }
+    
+    
     if(!/image\/\w+/.test(file.type)) {
         return layer.msg('请确保文件为图像文件',function(){}),!1;
     }
@@ -428,8 +419,11 @@ function updateHeadImg() {
                 });
             }
         },"json");
-    	
+        
     }
 }
 </script>
+
+</body>
+
 </html>

@@ -39,7 +39,7 @@
                         <img src="${user.headimg }" alt="" class="touxiang" />
                     </a>
                     <div class="userbutK">
-                        <a href="user_info.html">
+                        <a href="/wankangyuan/userInfo">
                             <div class="userbut">用户信息</div>
                         </a>
                         <a href="javascript:;">
@@ -67,8 +67,9 @@
                     <div class="search">
                         <div class="searchC">
                             <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="searchCi" />
-                            <form method="get">
+                            <form id="filterFrom" method="get">
                                 <input name="appName" type="text" class="searchCt" value="${appName }"  placeholder="搜索应用" />
+                                <input name="appType" type="hidden">
                             </form>
                         </div>
                     </div>
@@ -118,7 +119,7 @@
                 <div class="app_typeul">
                     <c:forEach items="${typeSet }" var="appType" varStatus="appList">
                         <c:if test="${appType ne null }">
-                            <div class="app_typeli">${appType }</div>
+                            <div class="app_typeli" onclick="filtrateAppType('${appType }')">${appType }</div>
                         </c:if>
                     </c:forEach>
                 </div>
@@ -190,6 +191,11 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/paging.js"></script>
 
 <script type="text/javascript">
+function filtrateAppType(appType){
+    $("input[name='appType']").val(appType);
+    $("#filterFrom").submit();
+}
+
 function addToMine(){
     $("#appList").attr('action',"/wankangyuan/userAppRelation/addToMine2");
     $("#appList").submit();
@@ -204,7 +210,7 @@ function addToMine(){
         callback: function(page) { // 回调函数
             console.log(page);
             if(page!=${page}){
-                window.location.href="/wankangyuan/application/viewPublic2?page="+page+"&rows=${rows}&appName=${appName}";
+                window.location.href="/wankangyuan/application/viewPublic2?page="+page+"&rows=${rows}&appName=${appName}&appType=${appType}";
                
             }
         }

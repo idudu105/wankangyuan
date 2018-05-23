@@ -1,6 +1,5 @@
 package com.liutianjun.utils;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class SendViaAspx {
 		nvps.add(new BasicNameValuePair("sendTime", ""));
 		nvps.add(new BasicNameValuePair("extno", ""));
 
-		post.setEntity(new UrlEncodedFormEntity(nvps,StandardCharsets.UTF_8));
+		post.setEntity(new UrlEncodedFormEntity(nvps,"UTF-8"));
 
 		HttpResponse response = httpclient.execute(post);
 

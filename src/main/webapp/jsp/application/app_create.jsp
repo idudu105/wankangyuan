@@ -42,7 +42,7 @@
                         <img src="${user.headimg }" alt="" class="touxiang" />
                     </a>
                     <div class="userbutK">
-                        <a href="user_info.html">
+                        <a href="/wankangyuan/userInfo">
                             <div class="userbut">用户信息</div>
                         </a>
                         <a href="javascript:;">
@@ -70,8 +70,9 @@
                     <div class="search">
                         <div class="searchC">
                             <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="searchCi" />
-                            <form method="get">
+                            <form id="filterFrom" method="get">
                                 <input name="appName" type="text" class="searchCt" value="${appName }"  placeholder="搜索应用" />
+                                <input name="appType" type="hidden">
                             </form>
                         </div>
                     </div>
@@ -170,7 +171,7 @@
                 <div class="app_typeul">
                     <c:forEach items="${typeSet }" var="appType" varStatus="appList">
                         <c:if test="${appType ne null }">
-                            <div class="app_typeli">${appType }</div>
+                            <div class="app_typeli" onclick="filtrateAppType('${appType }')">${appType }</div>
                         </c:if>
                     </c:forEach>
                 </div>
@@ -187,17 +188,17 @@
                         <div class="inportTx"></div>
                     </div>
                     <form action="/wankangyuan/application/create" method="post">
-	                    <div class="adddataM">
-	                        <div class="adddataMli">
-	                            <div class="adddataMlit">应用名称：</div>
-	                            <input name="appName" type="text" class="adddataMliTT adddataMliT" />
-	                        </div>
-	                        <div class="adddataMli">
-	                            <div class="adddataMlit">应用描述：</div>
-	                            <textarea name="appOverview" class="adddataMliTT adddataMliT3" ></textarea>
-	                        </div>
-	                    </div>
-	                    <input type="submit" class="inportB" value="创建" />
+                        <div class="adddataM">
+                            <div class="adddataMli">
+                                <div class="adddataMlit">应用名称：</div>
+                                <input name="appName" type="text" class="adddataMliTT adddataMliT" />
+                            </div>
+                            <div class="adddataMli">
+                                <div class="adddataMlit">应用描述：</div>
+                                <textarea name="appOverview" class="adddataMliTT adddataMliT3" ></textarea>
+                            </div>
+                        </div>
+                        <input type="submit" class="inportB" value="创建" />
                     </form>
                 </div>
                 <div class="PJList">
@@ -324,7 +325,10 @@
 </c:if>
 
 <script type="text/javascript">
-
+function filtrateAppType(appType){
+    $("input[name='appType']").val(appType);
+    $("#filterFrom").submit();
+}
 function addToProjrct(projectId){
     var ids = $("input[name='ids']");
     var checkNum = 0;
@@ -350,25 +354,9 @@ function addToProjrct(projectId){
         });
     }
 }
-
 function to_public(){
-	
-	var ids = $("input[name='ids']");
-	var checkNum = 0;
-	for (var i = 0; i < ids.length; i++) {
-	    if (ids[i].checked) {
-	        checkNum++;
-	    }
-	}
-	if (checkNum == 0) {
-		layer.msg("请至少选中一个");
-	} else {
-	    $("#pub_but").click();
-	}
-}
-
-function to_private(){
-	var ids = $("input[name='ids']");
+    
+    var ids = $("input[name='ids']");
     var checkNum = 0;
     for (var i = 0; i < ids.length; i++) {
         if (ids[i].checked) {
@@ -378,12 +366,25 @@ function to_private(){
     if (checkNum == 0) {
         layer.msg("请至少选中一个");
     } else {
-	    $("#pri_but").click();
+        $("#pub_but").click();
     }
 }
-
+function to_private(){
+    var ids = $("input[name='ids']");
+    var checkNum = 0;
+    for (var i = 0; i < ids.length; i++) {
+        if (ids[i].checked) {
+            checkNum++;
+        }
+    }
+    if (checkNum == 0) {
+        layer.msg("请至少选中一个");
+    } else {
+        $("#pri_but").click();
+    }
+}
 function to_delete(){
-	var ids = $("input[name='ids']");
+    var ids = $("input[name='ids']");
     var checkNum = 0;
     for (var i = 0; i < ids.length; i++) {
         if (ids[i].checked) {
@@ -394,20 +395,17 @@ function to_delete(){
         layer.msg("请至少选中一个");
     } else {
         layer.confirm('删除不能撤销，请确认是否删除?',{
-       	  btn: ['确认','取消'], //按钮
+          btn: ['确认','取消'], //按钮
           icon: 2
-       	}, function(){
-       	    $("#appList").attr('action',"/wankangyuan/application/delete");
+        }, function(){
+            $("#appList").attr('action',"/wankangyuan/application/delete");
             $("#appList").submit();
-       	  
-       	}, function(){
-       	    return;
-       	});
+          
+        }, function(){
+            return;
+        });
     }
 }
-
-
-
     $('#box').paging({
         initPageNo: ${page}, // 初始页码
         totalPages: Math.ceil(${total}/${rows}), //总页数
@@ -417,13 +415,11 @@ function to_delete(){
         callback: function(page) { // 回调函数
             console.log(page);
             if(page!=${page}){
-                window.location.href="/wankangyuan/application/viewCreate?page="+page+"&rows=${rows}&appName=${appName}";
+                window.location.href="/wankangyuan/application/viewCreate?page="+page+"&rows=${rows}&appName=${appName}&appType=${appType}";
                
             }
         }
     });
-
-
 </script>
     
 </body>

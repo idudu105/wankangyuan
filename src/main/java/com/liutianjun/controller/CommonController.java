@@ -18,7 +18,6 @@ import org.springframework.web.util.UrlPathHelper;
 
 import com.liutianjun.service.RoleService;
 import com.liutianjun.utils.LoggerUtils;
-import com.liutianjun.utils.SendViaAspx;
 import com.liutianjun.utils.StringUtils;
 import com.liutianjun.utils.VerifyCodeUtils;
 import com.liutianjun.utils.vcode.Captcha;
@@ -125,6 +124,29 @@ public class CommonController {
 		String verifyPhoneCode = VerifyCodeUtils.generateVerifyPhoneCode(6);
 		//存入Shiro会话session
 		SecurityUtils.getSubject().getSession().setAttribute(VerifyCodeUtils.V_PHONECODE, verifyPhoneCode);
+		//发送手机验证码
+		//int i = SendViaAspx.sendPhoneCode(phone, verifyPhoneCode);
+		System.out.println(phone+"-----"+verifyPhoneCode);
+		return 1;
+		
+	}
+	
+	/**
+	 * 获取新手机验证码
+	 * @Title: getVCode 
+	 * @param response
+	 * @param request 
+	 * void
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="getNewPhoneCode",method=RequestMethod.GET)
+	@ResponseBody
+	public Integer getVNewPhoneCode(String phone) throws Exception{
+		
+		//生成验证码
+		String verifyPhoneCode = VerifyCodeUtils.generateVerifyPhoneCode(6);
+		//存入Shiro会话session
+		SecurityUtils.getSubject().getSession().setAttribute(VerifyCodeUtils.V_NEWPHONECODE, verifyPhoneCode);
 		//发送手机验证码
 		//int i = SendViaAspx.sendPhoneCode(phone, verifyPhoneCode);
 		System.out.println(phone+"-----"+verifyPhoneCode);

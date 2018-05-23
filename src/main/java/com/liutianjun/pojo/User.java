@@ -25,6 +25,21 @@ public class User implements Serializable {
     private String salt;
 
     /**
+     * 性别 0:女 1:男
+     */
+    private Integer gender;
+
+    /**
+     * 研究方向
+     */
+    private String researchDirection;
+
+    /**
+     * 个人简介
+     */
+    private String personalProfile;
+
+    /**
      * 角色ids
      */
     private String roleIds;
@@ -66,7 +81,7 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-	public Integer getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -96,6 +111,30 @@ public class User implements Serializable {
 
     public void setSalt(String salt) {
         this.salt = salt == null ? null : salt.trim();
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public String getResearchDirection() {
+        return researchDirection;
+    }
+
+    public void setResearchDirection(String researchDirection) {
+        this.researchDirection = researchDirection == null ? null : researchDirection.trim();
+    }
+
+    public String getPersonalProfile() {
+        return personalProfile;
+    }
+
+    public void setPersonalProfile(String personalProfile) {
+        this.personalProfile = personalProfile == null ? null : personalProfile.trim();
     }
 
     public String getRoleIds() {
@@ -172,6 +211,9 @@ public class User implements Serializable {
         sb.append(", username=").append(username);
         sb.append(", password=").append(password);
         sb.append(", salt=").append(salt);
+        sb.append(", gender=").append(gender);
+        sb.append(", researchDirection=").append(researchDirection);
+        sb.append(", personalProfile=").append(personalProfile);
         sb.append(", roleIds=").append(roleIds);
         sb.append(", organizationId=").append(organizationId);
         sb.append(", phone=").append(phone);

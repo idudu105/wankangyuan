@@ -31,6 +31,8 @@ public class VerifyCodeUtils{
     public static final String V_CODE = "validateCode";
     //手机验证码Key
     public static final String V_PHONECODE = "validatePhoneCode";
+    //新手机验证码
+    public static final String V_NEWPHONECODE = "validateNewPhoneCode";
     
     private static Random random = new Random();  
   

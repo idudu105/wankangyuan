@@ -2,9 +2,16 @@ package com.liutianjun.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -13,11 +20,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.liutianjun.pojo.User;
 import com.liutianjun.service.UserService;
 import com.liutianjun.utils.VerifyCodeUtils;
+
+import sun.misc.BASE64Decoder;
 
 /**
  * 用户Controller
@@ -30,7 +40,6 @@ import com.liutianjun.utils.VerifyCodeUtils;
  */
 @Controller
 public class UserController {
-
 	protected Map<String, Object> resultMap = new HashMap<String, Object>();
 	
 	@Autowired
@@ -144,6 +153,257 @@ public class UserController {
 		resultMap.put("status", 200);
 		
 		return resultMap;
+	}
+	
+	/**
+	 * 用户信息显示
+	 * @Title: userInfo 
+	 * @param model
+	 * @return 
+	 * String
+	 */
+	@RequestMapping(value="/userInfo",method=RequestMethod.GET)
+	public String userInfo(Model model,HttpServletRequest request) {
+		//获取用户名
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    //获取用户
+	    User user = userService.selectByUsername(username);
+	    
+	    model.addAttribute("user", user);
+	    
+	    String contentUrl = request.getSession().getServletContext().getRealPath( "/userFiles/" ).replace("\\", "/")+ username+"/";
+	    
+	    File file = new File(contentUrl);
+	    
+	    if (!file.exists()) { // 判断文件父目录是否存在
+	    	file.mkdirs();
+	    }
+	    long size = FileUtils.sizeOfDirectory(file);
+	    
+	    
+	    Map<String,Object> map = new HashMap<>();
+	    //如果字节数少于1024，则直接以B为单位，否则先除于1024，后3位因太少无意义  
+	    if (size < 1024) {  
+	        map.put("size", String.valueOf(size));
+	        map.put("unit", "B");
+	        model.addAttribute("map", map);
+			return "user/user_info.jsp";
+	    } else {  
+	        size = size / 1024;  
+	    }  
+	    //如果原字节数除于1024之后，少于1024，则可以直接以KB作为单位  
+	    //因为还没有到达要使用另一个单位的时候  
+	    //接下去以此类推  
+	    if (size < 1024) {
+	    	map.put("size", String.valueOf(size));
+	        map.put("unit", "KB");
+	        model.addAttribute("map", map);
+			return "user/user_info.jsp";
+	    } else {  
+	        size = size / 1024;  
+	    }  
+	    if (size < 1024) {  
+	        //因为如果以MB为单位的话，要保留最后1位小数，  
+	        //因此，把此数乘以100之后再取余  
+	        size = size * 100;
+	        map.put("size", String.valueOf((size / 100)) + "."  
+	                + String.valueOf((size % 100)));
+	        map.put("unit", "MB");
+	        model.addAttribute("map", map);
+			return "user/user_info.jsp";
+	    } else {  
+	        //否则如果要以GB为单位的，先除于1024再作同样的处理  
+	        size = size * 100 / 1024;
+	        map.put("size", String.valueOf((size / 100)) + "."  
+	                + String.valueOf((size % 100)));
+	        map.put("unit", "GB");
+	        model.addAttribute("map", map);
+			return "user/user_info.jsp";
+	    }  
+	}
+	
+	/**
+	 * 更新用户信息
+	 * @Title: updateUserInfo 
+	 * @param user
+	 * @return 
+	 * Map<String,Object>
+	 */
+	@RequestMapping(value="/updateUserInfo",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> updateUserInfo(User user) {
+		resultMap.put("status", 400);
+		if(0 == userService.updateByPrimaryKey(user)) {
+			resultMap.put("message", "修改失败");
+			return resultMap;
+		}
+		resultMap.put("message", "修改成功");
+		resultMap.put("status", 200);
+		return resultMap;
+		
+	}
+	
+	/**
+	 * 修改手机号
+	 * @Title: updateUserPhone 
+	 * @param phoneCode
+	 * @param phone
+	 * @param newPhoneCode
+	 * @return 
+	 * Map<String,Object>
+	 */
+	@RequestMapping(value="/updateUserPhone",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> updateUserPhone(String phoneCode, String newPhone, String newPhoneCode) {
+		resultMap.put("status", 400);
+		//检查手机验证码
+		String vPhoneCode = (String) SecurityUtils.getSubject().getSession().getAttribute(VerifyCodeUtils.V_PHONECODE);
+		if(null ==phoneCode || !phoneCode.equals(vPhoneCode)) {
+			resultMap.put("message", "手机验证码错误！");
+			return resultMap;
+		}
+		//销毁验证码
+		SecurityUtils.getSubject().getSession().removeAttribute(VerifyCodeUtils.V_PHONECODE);
+		
+		//检查手机号
+		if(null != userService.selectByPhone(newPhone)){
+			resultMap.put("message", "手机号已存在！");
+			return resultMap;
+		}
+		
+		//检查新手机验证码
+		String vNewPhoneCode = (String) SecurityUtils.getSubject().getSession().getAttribute(VerifyCodeUtils.V_NEWPHONECODE);
+		if(null ==newPhoneCode || !newPhoneCode.equals(vNewPhoneCode)) {
+			resultMap.put("message", "新手机验证码错误！");
+			return resultMap;
+		}
+		//销毁新手机验证码
+		SecurityUtils.getSubject().getSession().removeAttribute(VerifyCodeUtils.V_NEWPHONECODE);
+		
+		//获取用户名
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    //获取用户
+	    User user = userService.selectByUsername(username);
+	    user.setPhone(newPhone);
+		
+		if(0 == userService.updateByPrimaryKey(user)) {
+			resultMap.put("message", "修改失败");
+			return resultMap;
+		}
+		resultMap.put("message", "修改成功");
+		resultMap.put("status", 200);
+		return resultMap;
+		
+	}
+	
+	/**
+	 * 修改邮箱
+	 * @Title: updateUserEmail 
+	 * @param user
+	 * @return 
+	 * Map<String,Object>
+	 */
+	@RequestMapping(value="/updateUserEmail",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> updateUserEmail(User user) {
+		resultMap.put("status", 400);
+		if(0 == userService.updateByPrimaryKey(user)) {
+			resultMap.put("message", "修改失败");
+			return resultMap;
+		}
+		resultMap.put("message", "修改成功");
+		resultMap.put("status", 200);
+		return resultMap;
+	}
+	
+	/**
+	 * 修改用户密码
+	 * @Title: updateUserPassword 
+	 * @param phoneCode
+	 * @param password
+	 * @return 
+	 * Map<String,Object>
+	 */
+	@RequestMapping(value="/updateUserPassword",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> updateUserPassword(String phoneCode,String password) {
+		resultMap.put("status", 400);
+		
+	    //检查手机验证码
+  		String vPhoneCode = (String) SecurityUtils.getSubject().getSession().getAttribute(VerifyCodeUtils.V_PHONECODE);
+  		if(null ==phoneCode || !phoneCode.equals(vPhoneCode)) {
+  			resultMap.put("message", "手机验证码错误！");
+  			return resultMap;
+  		}
+  		//销毁验证码
+  		SecurityUtils.getSubject().getSession().removeAttribute(VerifyCodeUtils.V_PHONECODE);
+  		//获取用户名
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    //获取用户
+	    User user = userService.selectByUsername(username);
+	    userService.changePassword(user.getId(), password);
+		resultMap.put("message", "重置密码成功！");
+		resultMap.put("status", 200);
+		
+		return resultMap;
+	}
+	
+	@RequestMapping(value="/upPic",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> updateUserPhone(String imgBase,HttpServletRequest request) {
+		resultMap.put("status", 400);
+		imgBase = imgBase.replace("data:image/jpeg;base64,", "");
+		
+		//获取用户名
+	    String name = (String)SecurityUtils.getSubject().getPrincipal();
+	    String upPicUrl = request.getSession().getServletContext().getRealPath( "/userFiles/" ).replace("\\", "/");
+		String toImagePath = upPicUrl + name+"/"+ name + ".jpg";
+		String imageType = "jpg";
+		try {
+			BASE64Decoder decoder = new sun.misc.BASE64Decoder();
+			byte[] bytes1 = decoder.decodeBuffer(imgBase);
+			ByteArrayInputStream bais = new ByteArrayInputStream(bytes1);
+			RenderedImage bi1 = ImageIO.read(bais);
+			File w2 = new File(toImagePath);// 可以是jpg,png,gif格式
+			if (!w2.getParentFile().exists()) { // 判断文件父目录是否存在
+				w2.getParentFile().mkdirs();
+			}
+			if (!w2.exists()) {
+				w2.createNewFile();
+			}
+			ImageIO.write(bi1, imageType, w2);// 不管输出什么格式图片，此处不需改动
+			//获取用户
+		    User user = userService.selectByUsername(name);
+		    
+		    String urlPic = StringUtils.substringAfter(toImagePath, "wtpwebapps");
+		    
+		    user.setHeadimg(urlPic);
+		    if(0 ==userService.updateByPrimaryKey(user)) {
+		    	resultMap.put("message", "修改失败");
+		    	return resultMap;
+		    }
+			resultMap.put("message", "修改成功");
+			resultMap.put("status", 200);
+			return resultMap;
+		} catch (IOException e) {
+			e.printStackTrace();
+			resultMap.put("message", "修改失败");
+			return resultMap;
+		}
+		
+	}
+	
+	@RequestMapping(value="/viewUserManager",method=RequestMethod.GET)
+	public String viewUserManager(@RequestParam(value="page", defaultValue="1")Integer page, 
+            @RequestParam(value="rows", defaultValue="8")Integer rows,
+            @RequestParam(value="username", required=false)String username,
+            Model model) {
+		Map<String, Object> map = userService.findAll(page, rows, username);
+		
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("total", map.get("list"));
+		
+		return "admin/usermanage.jsp";
 	}
 	
 }

@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2018-04-23 15:32:03
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-05-17 13:52:49
+* @Last Modified time: 2018-05-22 14:14:00
 */
 
 
@@ -1174,6 +1174,121 @@ function data_dataclick2(){
     odataeditTx.onclick=function(){
         odataeditK.style.display="none";
     }
+
+
+//编辑右侧上方数据框
+    
+    // var opdclmRz_ul=document.querySelectorAll('.pdclmRz_ul')[0];//右侧上方按钮列表
+    // var opdclmRz_edit=opdclmRz_ul.querySelectorAll('.pdclmRz_edit')[0];//右侧上方编辑按钮
+
+    // var opdclmRz_ul2=document.querySelectorAll('.pdclmRz_ul2')[0];//右侧上方编辑框
+    // var opdclmRz_ul2Tx=opdclmRz_ul2.querySelectorAll('.pdclmRz_ul2Tx')[0];//右侧上方编辑按钮
+
+    // opdclmRz_edit.onclick=function(){
+    //     opdclmRz_ul2.style.display="block";
+    // }
+    // opdclmRz_ul2Tx.onclick=function(){
+    //     opdclmRz_ul2.style.display="none";
+    // }
+
+
+    var opdclmRz_ul=document.querySelectorAll('.pdclmRz_ul')[0];//右侧上方按钮列表
+    var opdclmRz_save=opdclmRz_ul.querySelectorAll('.pdclmRz_save')[0];//右侧上方保存按钮
+    var opdclmRz_edit=opdclmRz_ul.querySelectorAll('.pdclmRz_edit')[0];//右侧上方编辑按钮
+
+
+
+    var oprodaclmRzB=document.querySelectorAll('.prodaclmRzB')[0];//右侧上方框
+
+    var ainput_check=oprodaclmRzB.querySelectorAll('.input_check');//多选框
+
+
+    // var aprodaclmRzTtnr=oprodaclmRzB.querySelectorAll('.prodaclmRzTtnr');//右侧上方内容
+    // var aprodaclmRzTtnr2=oprodaclmRzB.querySelectorAll('.prodaclmRzTtnr2');//右侧上方内容可编辑
+
+    // opdclmRz_edit.onclick=function(){
+    //     for(var i=0;i<aprodaclmRzTtnr.length;i++){
+    //         aprodaclmRzTtnr[i].style.display="none";
+    //     }
+    //     for(var i=0;i<aprodaclmRzTtnr2.length;i++){
+    //         aprodaclmRzTtnr2[i].style.display="block";
+    //     }
+    // }
+
+    // opdclmRz_save.onclick=function(){
+    //     for(var i=0;i<aprodaclmRzTtnr.length;i++){
+    //         aprodaclmRzTtnr[i].style.display="block";
+    //     }
+    //     for(var i=0;i<aprodaclmRzTtnr2.length;i++){
+    //         aprodaclmRzTtnr2[i].style.display="none";
+    //     }
+    // }
+    
+    
+
+
+
+    // opdclmRz_edit.onclick=function(){
+    //     for(var i=0;i<ainput_check.length;i++){
+    //         // aprodaclmRzTtnr[i].style.display="none";
+    //         if(ainput_check[i].checked){
+    //             var oa=ainput_check[i].parentNode;
+    //             var ob=oa.parentNode;
+    //             var oc=ob.querySelectorAll('.prodaclmRzTtnr')[0];
+    //             var od=ob.querySelectorAll('.prodaclmRzTtnr2')[0];
+    //             oc.style.display="none";
+    //             od.style.display="block";
+    //         }
+    //     }
+    // }
+    // opdclmRz_save.onclick=function(){
+    //     for(var i=0;i<ainput_check.length;i++){
+    //         // aprodaclmRzTtnr[i].style.display="none";
+    //         if(ainput_check[i].checked){
+    //             var oa=ainput_check[i].parentNode;
+    //             var ob=oa.parentNode;
+    //             var oc=ob.querySelectorAll('.prodaclmRzTtnr')[0];
+    //             var od=ob.querySelectorAll('.prodaclmRzTtnr2')[0];
+
+    //             oc.innerHTML=od.value;
+    //             oc.style.display="block";
+    //             od.style.display="none";
+                
+            
+    //         }
+    //     }
+    // }
+    
+    
+    opdclmRz_edit.onclick=function(){
+        for(var i=0;i<ainput_check.length;i++){
+            // aprodaclmRzTtnr[i].style.display="none";
+            if(ainput_check[i].checked){
+                var oa=ainput_check[i].parentNode;
+                var ob=oa.parentNode;
+                // var oc=ob.querySelectorAll('.prodaclmRzTtnr')[0];
+                var od=ob.querySelectorAll('.prodaclmRzTtnr2')[0];
+                // oc.style.display="none";
+                console.log(od);
+                od.readOnly=false;
+            }
+        }
+    }
+    opdclmRz_save.onclick=function(){
+        for(var i=0;i<ainput_check.length;i++){
+            // aprodaclmRzTtnr[i].style.display="none";
+            if(ainput_check[i].checked){
+                var oa=ainput_check[i].parentNode;
+                var ob=oa.parentNode;
+                // var oc=ob.querySelectorAll('.prodaclmRzTtnr')[0];
+                var od=ob.querySelectorAll('.prodaclmRzTtnr2')[0];
+
+                // oc.innerHTML=od.value;
+                // oc.style.display="block";
+                od.readOnly=true;
+            }
+        }
+    }
 }
 
 function data_dataclick(){
@@ -1422,33 +1537,237 @@ function forget_ps(){
 
 
     ologinMzRb.onclick=function(){
-        //手机号正则  
-        var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;  
-        //电话  
-        var phone = ofor_zh.value;  
-        if (!phoneReg.test(phone)) {  
-            alert('请输入有效的手机号码！');  
-            return false;  
-        }else{
-            ologinMzRb.style.display="none";
-            ologinMzRb2.style.display="block";
+        phonezhengze(ofor_zh,ologinMzRb,ologinMzRb2,60);
+    }
+}
 
-            var time=60;
-            var YZMjishi=0;
-            ologinMzRb2.innerHTML=time+"s后重试";
-        
-            YZMjishi=setInterval(function(){
-                time--;
-                ologinMzRb2.innerHTML=time+"s后重试";
-                if(time<=0){
-                    clearInterval(YZMjishi);
-                    ologinMzRb.style.display="block";
-                    ologinMzRb2.style.display="none";
+
+//手机号正则
+function phonezhengze(shoujiK,anniu,anniu2,timesz){
+    var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;  
+    //电话  
+    var phone = shoujiK.value;  
+    if (!phoneReg.test(phone)) {  
+        alert('请输入有效的手机号码！');  
+        return false;  
+    }else{
+        anniu.style.display="none";
+        anniu2.style.display="block";
+
+        var time=timesz;
+        var YZMjishi=0;
+        anniu2.innerHTML=time+"s后重试";
+    
+        YZMjishi=setInterval(function(){
+            time--;
+            anniu2.innerHTML=time+"s后重试";
+            if(time<=0){
+                clearInterval(YZMjishi);
+                anniu.style.display="block";
+                anniu2.style.display="none";
+            }
+        },1000);
+    }
+}
+
+//用户信息页面
+function user_info(){
+
+//选项卡
+    var ouserMLtabK=document.querySelectorAll('.userMLtabK')[0];//选项卡按钮列表
+    var auserMLtab=ouserMLtabK.querySelectorAll('.userMLtab');//选项卡按钮
+
+    var ouserMRMtabK=document.querySelectorAll('.userMRMtabK')[0];//选项卡显示列表
+    var auserMRMtab=ouserMRMtabK.querySelectorAll('.userMRMtab');//选项卡显示
+
+    for(var i=0;i<auserMLtab.length;i++){
+        (function(index){
+            auserMLtab[index].onclick=function(){
+                for(var j=0;j<auserMLtab.length;j++){
+                    auserMLtab[j].className="userMLtab";
+                    auserMRMtab[j].className="userMRMtab";
                 }
-            },1000);
+                auserMLtab[index].className="userMLtab active";
+                auserMRMtab[index].className="userMRMtab active";
+            }
+        })(i)
+    }
+
+    // kongjian(40,36);//空间存储调用
+    function kongjian(zong,yi){
+
+        var kongjian_zong=zong||20;//存储总空间
+        var kongjian_yi=yi||5;//存储已用空间
+        var kongjian_bi=0;//空间使用比
+        if(kongjian_zong!=0&&kongjian_yi<kongjian_zong){
+            kongjian_bi=kongjian_yi/kongjian_zong;
+        }else{
+            kongjian_bi=1;
+        }
+
+    //存储空间条
+        if(document.querySelectorAll('.user_kongjianT')[0]){
+            var ouser_kongjianT=document.querySelectorAll('.user_kongjianT')[0];//存储空间文字
+            var ospan1=ouser_kongjianT.querySelectorAll('span')[0];//存储空间文字
+            var ospan2=ouser_kongjianT.querySelectorAll('span')[1];//存储空间文字
+            //ospan1.innerHTML=kongjian_yi;
+            ospan2.innerHTML=kongjian_zong;
+
+
+            if(document.querySelectorAll('.user_kongjianK')[0]){
+                var ouser_kongjianK=document.querySelectorAll('.user_kongjianK')[0];//存储空间外条
+                var ouser_kongjianZ=ouser_kongjianK.querySelectorAll('.user_kongjianZ')[0];//存储空间内条
+
+                ouser_kongjianZ.style.width=kongjian_bi*350+"px";//内条长度
+            }
         }
     }
 
+//头像上传按钮
+    var ouserMRT=document.querySelectorAll('.userMRT')[0];//头像框
+    var ouserMRTts=ouserMRT.querySelectorAll('.userMRTts')[0];//头像框上传按钮
+    var otouxiangupK=document.querySelectorAll('.touxiangupK')[0];//头像框上传框
+
+    var otouxiangupTx=otouxiangupK.querySelectorAll('.touxiangupTx')[0];//头像框上传框关闭按钮
+    var otouxiangupLJ=otouxiangupK.querySelectorAll('.touxiangupLJ')[0];//头像框上传框文件路径
+    var otouxiangupp=otouxiangupK.querySelectorAll('.touxiangupp')[0];//头像框上传框文件input
+    var otouxiang_sele=otouxiangupK.querySelectorAll('.touxiang_sele')[0];//头像框上传框选择按钮
+    var otouxiang_up=otouxiangupK.querySelectorAll('.touxiang_up')[0];//头像框上传框上传按钮
 
 
+    ouserMRTts.onclick=function(){
+        otouxiangupK.style.display="block";
+        document.querySelectorAll('.touxiangupp')[0].value="";
+        otouxiangupp.onchange();
+    }
+    otouxiangupTx.onclick=function(){
+        otouxiangupK.style.display="none";
+    }
+    otouxiang_sele.onclick=function(){
+        otouxiangupp.click();
+    }
+    otouxiangupp.onchange=function(){
+        if(otouxiangupp.value!=""){
+            otouxiangupLJ.innerHTML=otouxiangupp.value;
+        }else{
+            otouxiangupLJ.innerHTML="&nbsp;"
+        }
+        
+    }
+    // otouxiang_up.onclick=function(){
+    //     console.log(otouxiangupp.value);
+    // }
+
+//修改密码、修改手机、修改邮箱
+    var ouserMRMtab=document.querySelectorAll('.userMRMtab')[0];//用户信息
+    var ouser_mo_phone=document.querySelectorAll('.user_mo_phone')[0];//修改手机
+    var ouser_mo_email=document.querySelectorAll('.user_mo_email')[0];//修改邮箱
+    var ouser_mo_passw=document.querySelectorAll('.user_mo_passw')[0];//修改密码
+
+    
+
+    var ouserM=document.querySelectorAll('.userM')[0];
+    var aupdateinfoKd=document.querySelectorAll('.updateinfoK');//所有修改框
+
+    var oupdate_phoneK=document.querySelectorAll('.update_phoneK')[0];//修改手机框
+    var oudinfoRbca=oupdate_phoneK.querySelectorAll('.udinfoRbca')[0];//修改手机框取消按钮
+    var oudinfoRben=oupdate_phoneK.querySelectorAll('.udinfoRben')[0];//修改手机框确认按钮
+
+    var oudPHphone=oupdate_phoneK.querySelectorAll('.udPHphone')[0];//修改手机框手机号
+    var oudPHyzfs=oupdate_phoneK.querySelectorAll('.udPHyzfs')[0];//修改手机框发送验证码按钮
+    var oudPHyzfs2=oupdate_phoneK.querySelectorAll('.udPHyzfs2')[0];//修改手机框发送验证码按2
+
+    var oudPHphone2=oupdate_phoneK.querySelectorAll('.udPHphone2')[0];//修改手机框手机号2
+    var oudPHyzfs3=oupdate_phoneK.querySelectorAll('.udPHyzfs3')[0];//修改手机框发送验证码按钮3
+    var oudPHyzfs4=oupdate_phoneK.querySelectorAll('.udPHyzfs4')[0];//修改手机框发送验证码按钮4
+
+    oudPHyzfs.onclick=function(){
+        phonezhengze(oudPHphone,oudPHyzfs,oudPHyzfs2,60);
+    }
+    oudPHyzfs3.onclick=function(){
+        phonezhengze(oudPHphone2,oudPHyzfs3,oudPHyzfs4,60);
+    }
+
+
+    var oupdate_emailK=document.querySelectorAll('.update_emailK')[0];//修改邮箱框
+    var oudinfoRbca2=oupdate_emailK.querySelectorAll('.udinfoRbca')[0];//修改邮箱框取消按钮
+    var oudinfoRben2=oupdate_emailK.querySelectorAll('.udinfoRben')[0];//修改邮箱框确认按钮
+
+
+
+
+    var oupdate_passwK=document.querySelectorAll('.update_passwK')[0];//修改密码框
+    var oudinfoRbca3=oupdate_passwK.querySelectorAll('.udinfoRbca')[0];//修改密码框取消按钮
+    var oudinfoRben3=oupdate_passwK.querySelectorAll('.udinfoRben')[0];//修改密码框确认按钮
+    var oudPSphone=oupdate_passwK.querySelectorAll('.udPSphone')[0];//修改密码框手机号
+    var oudPSyzfs=oupdate_passwK.querySelectorAll('.udPSyzfs')[0];//修改密码框发送验证码按钮
+    var oudPSyzfs2=oupdate_passwK.querySelectorAll('.udPSyzfs2')[0];//修改密码框发送验证码按钮
+
+
+    oudPSyzfs.onclick=function(){
+        phonezhengze(oudPSphone,oudPSyzfs,oudPSyzfs2,60);
+    }
+
+
+    for(var i=0;i<aupdateinfoKd.length;i++){
+        aupdateinfoKd[i].style.height=ouserM.offsetHeight+"px";
+    }
+
+    function updateQL(){
+        var aupdateQLk=document.querySelectorAll('.updateQLk');//点击后需要清理的框
+        for(var i=0;i<aupdateQLk.length;i++){
+            aupdateQLk[i].value="";
+        }
+    }
+
+    ouser_mo_phone.onclick=function(){
+        oupdate_phoneK.style.display="block";
+        oudinfoRbca.onclick=function(){
+            oupdate_phoneK.style.display="none";
+        }
+        updateQL();
+    }
+    ouser_mo_email.onclick=function(){
+        oupdate_emailK.style.display="block";
+        oudinfoRbca2.onclick=function(){
+            oupdate_emailK.style.display="none";
+        }
+        updateQL();
+    }
+    ouser_mo_passw.onclick=function(){
+        oupdate_passwK.style.display="block";
+        oudinfoRbca3.onclick=function(){
+            oupdate_passwK.style.display="none";
+        }
+        updateQL();
+    }
+}
+// kongjian(40,36);//空间存储调用
+function kongjian(zong,yi){
+
+    var kongjian_zong=zong||20;//存储总空间
+    var kongjian_yi=yi||0;//存储已用空间
+    var kongjian_bi=0;//空间使用比
+    if(kongjian_zong!=0&&kongjian_yi<kongjian_zong){
+        kongjian_bi=kongjian_yi/kongjian_zong;
+    }else{
+        kongjian_bi=1;
+    }
+
+//存储空间条
+    if(document.querySelectorAll('.user_kongjianT')[0]){
+        var ouser_kongjianT=document.querySelectorAll('.user_kongjianT')[0];//存储空间文字
+        var ospan1=ouser_kongjianT.querySelectorAll('span')[0];//存储空间文字
+        var ospan2=ouser_kongjianT.querySelectorAll('span')[1];//存储空间文字
+        //ospan1.innerHTML=kongjian_yi;
+        ospan2.innerHTML=kongjian_zong;
+
+
+        if(document.querySelectorAll('.user_kongjianK')[0]){
+            var ouser_kongjianK=document.querySelectorAll('.user_kongjianK')[0];//存储空间外条
+            var ouser_kongjianZ=ouser_kongjianK.querySelectorAll('.user_kongjianZ')[0];//存储空间内条
+
+            ouser_kongjianZ.style.width=kongjian_bi*350+"px";//内条长度
+        }
+    }
 }
