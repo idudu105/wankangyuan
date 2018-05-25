@@ -202,7 +202,7 @@ public class CommonController {
 			captcha.out(response.getOutputStream());
 			HttpSession session = request.getSession(true);  
 			//存入Session
-			session.setAttribute("_code",captcha.text().toLowerCase());  
+			session.setAttribute(VerifyCodeUtils.V_CODE,captcha.text().toLowerCase());  
 		} catch (Exception e) {
 			LoggerUtils.fmtError(getClass(),e, "获取验证码异常：%s",e.getMessage());
 		}

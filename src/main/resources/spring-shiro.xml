@@ -146,7 +146,6 @@
                 /login = authc
                 /logout = logout
                 /authenticated = authc
-                /admin/** = admin
                 /** = user,sysUser
                 
                 
