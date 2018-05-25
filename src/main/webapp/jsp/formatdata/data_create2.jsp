@@ -32,7 +32,7 @@
                 <a href="project_mine.html">
                     <div class="topT">项目</div>
                 </a>
-                <a href="javascript:;">
+                <a href="/wankangyuan/sourceData/firstIn?type=1">
                     <div class="topT active">格式数据</div>
                 </a>
                 <a href="app_mine.html">
@@ -49,9 +49,9 @@
             </div>
             <div class="top2">
                 <div class="top2C">
-                    <a href="data_mine.html"><div class="top2Cli">我的</div></a>
-                    <a href="javascript:;"><div class="top2Cli top2CliYJ">我创建的</div></a>
-                    <a href="data_public.html"><div class="top2Cli">公共</div></a>
+                    <a href="/wankangyuan/sourceData/firstIn?type=1"><div class="top2Cli">我的</div></a>
+                    <a href="/wankangyuan/sourceData/firstIn?type=2"><div class="top2Cli top2CliYJ">我创建的</div></a>
+                    <a href="/wankangyuan/sourceData/firstIn?type=3"><div class="top2Cli">公共</div></a>
                     <div class="search">
                         <div class="searchC">
                             <img src="img/search.png" alt="" class="searchCi" />

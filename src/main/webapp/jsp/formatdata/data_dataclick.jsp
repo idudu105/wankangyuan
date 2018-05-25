@@ -34,7 +34,7 @@
                 <a href="project_mine.html">
                     <div class="topT">项目</div>
                 </a>
-                <a href="data_mine.html">
+                <a href="/wankangyuan/sourceData/firstIn?type=1">
                     <div class="topT active">格式数据</div>
                 </a>
                 <a href="app_mine.html">

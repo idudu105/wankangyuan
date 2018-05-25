@@ -32,7 +32,7 @@
                 <a href="/wankangyuan/project/selectMyProject">
                 	<div class="topT">项目</div>
                 </a>
-                <a href="/wankangyuan/formatData/firstIn?type=1">
+                <a href="/wankangyuan/sourceData/firstIn?type=1">
                     <div class="topT active">格式数据</div>
                 </a>
                 <a href="/wankangyuan/application/viewMine">
@@ -50,9 +50,9 @@
 
             <div class="top2">
                 <div class="top2C">
-                    <a href="/wankangyuan/formatData/firstIn?type=1"><div class="top2Cli top2CliYJ">我的</div></a>
-                    <a href="/wankangyuan/formatData/firstIn?type=2"><div class="top2Cli">我创建的</div></a>
-                    <a href="/wankangyuan/formatData/firstIn?type=3"><div class="top2Cli">公共</div></a>
+                    <a href="/wankangyuan/sourceData/firstIn?type=1"><div class="top2Cli top2CliYJ">我的</div></a>
+                    <a href="/wankangyuan/sourceData/firstIn?type=2"><div class="top2Cli">我创建的</div></a>
+                    <a href="/wankangyuan/sourceData/firstIn?type=3"><div class="top2Cli">公共</div></a>
                     <div class="search">
                         <div class="searchC">
                             <img src="/wankangyuan/static/img/search.png" alt="" class="searchCi" />
@@ -102,74 +102,36 @@
                     
                 </div>
                 <div class="pro_addul">
-                    <div class="pro_addli">项目1</div>
-                    <div class="pro_addli">项目2</div>
-                    <div class="pro_addli">项目3</div>
-                    <div class="pro_addli">项目4</div>
-                    <div class="pro_addli">项目5</div>
+                	<c:forEach items="${projects}" var="projectTemp">
+						<div class="pro_addli" id="${projectTemp.id }" >${projectTemp.p_name}</div>
+					</c:forEach>
                 </div>
                 <div class="shaixuanZK">
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">姓名</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">年龄</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">性别</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">病史</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">个人信息</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <!-- <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">数据6</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">数据7</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div> -->
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">创建人</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">创建时间</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
+                	<c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
+						<div class="shaixuanZKli">
+	                        <div class="shaixuanZKliT">${sourceFieldTemp.csf_name}</div>
+	                        <div class="shaixuanZKliI active"></div>
+	                    </div>	
+					</c:forEach>	
                 </div>
             </div>
             <div class="PJK">
                 <div class="PJList">
                     <div class="allK">
-                        <div class="allX">
-                            <!-- <img src="/wankangyuan/static/img/greentrue.png" alt="" class="allI" /> -->
-                        </div>
+                        <div class="allX"></div>
                         <div class="allT">全选</div>
                     </div>
-                    <div class="PJListli dataname">姓名</div>
-                    <div class="PJListli dataage">年龄</div>
-                    <div class="PJListli datasex">性别</div>
-                    <div class="PJListli datahistory">病史</div>
-                    <div class="PJListli datainfor">个人信息</div>
-                    <!-- <div class="PJListli data_data6">数据6</div>
-                    <div class="PJListli data_data7">数据7</div> -->
-                    <div class="PJListli datacreater">创建人</div>
-                    <div class="PJListli datatime">创建时间</div>
+                    <c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
+	                	<div class="PJListli">${sourceFieldTemp.csf_name}</div>
+					</c:forEach>
                 </div>
                 <div class="PJListline"></div>
                 <div class="PJul">
                     <div class="PJli">
                         <div class="PJliC">
                             <div class="PJXZ"></div>
+                            
+                            
                             <div class="PJliCli2 dataname">
                                 <a href="project_datain.html">
                                     <span>张三</span>
@@ -179,10 +141,9 @@
                             <div class="PJliCli2 datasex">男</div>
                             <div class="PJliCli2 datahistory">无</div>
                             <div class="PJliCli2 datainfor">个人信息</div>
-                            <!-- <div class="PJliCli2 data_data6">数据6</div>
-                            <div class="PJliCli2 data_data7">数据7</div> -->
                             <div class="PJliCli2 datacreater">赵七</div>
                             <div class="PJliCli2 datatime">2018-4-20</div>
+
                         </div>
                         <div class="PJliline"></div>
                         <div class="PJliB active">
@@ -247,133 +208,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                    <div class="PJli">
-                        <div class="PJliC">
-                            <div class="PJXZ"></div>
-                            <div class="PJliCli2 dataname">
-                                <a href="project_datain.html">
-                                    <span>李四</span>
-                                </a>
-                            </div>
-                            <div class="PJliCli2 dataage">36</div>
-                            <div class="PJliCli2 datasex">男</div>
-                            <div class="PJliCli2 datahistory">无</div>
-                            <div class="PJliCli2 datainfor">个人信息</div>
-                            <!-- <div class="PJliCli2 data_data6">数据6</div>
-                            <div class="PJliCli2 data_data7">数据7</div> -->
-                            <div class="PJliCli2 datacreater">赵七</div>
-                            <div class="PJliCli2 datatime">2018-4-22</div>
-                        </div>
-                        <div class="PJliline"></div>
-                        <div class="PJliB">
-                            <div class="PJliB1">
-                                <div class="PJliB1L">
-                                    <div class="PJliB1Lt">临床数据</div>
-                                    <div class="PJliBLi PJliBLi2"></div>
-                                </div>
-                                <div class="PJliBR">
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">CT</div>
-                                            <div class="PJliBLi PJliBLi2"></div>
-                                        </div>
-                                        <div class="PJliBR">
-                                            <div class="PJliB2">
-                                                <div class="PJliB2L">
-                                                    <div class="PJliB2Lk"></div>
-                                                    <div class="PJliB2Lt">CT1</div>
-                                                </div>
-                                            </div>
-                                            <div class="PJliB2">
-                                                <div class="PJliB2L">
-                                                    <div class="PJliB2Lk"></div>
-                                                    <div class="PJliB2Lt">CT2</div>
-                                                </div>
-                                            </div>
-                                            <div class="PJliB2">
-                                                <div class="PJliB2L">
-                                                    <div class="PJliB2Lk"></div>
-                                                    <div class="PJliB2Lt">CT3</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">XG</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                    <div class="PJli">
-                        <div class="PJliC">
-                            <div class="PJXZ"></div>
-                            <div class="PJliCli2 dataname">
-                                <a href="project_datain.html">
-                                    <span>王五</span>
-                                </a>
-                            </div>
-                            <div class="PJliCli2 dataage">32</div>
-                            <div class="PJliCli2 datasex">男</div>
-                            <div class="PJliCli2 datahistory">无</div>
-                            <div class="PJliCli2 datainfor">个人信息</div>
-                            <!-- <div class="PJliCli2 data_data6">数据6</div>
-                            <div class="PJliCli2 data_data7">数据7</div> -->
-                            <div class="PJliCli2 datacreater">赵七</div>
-                            <div class="PJliCli2 datatime">2018-4-21</div>
-                        </div>
-                        <div class="PJliline"></div>
-                        <div class="PJliB">
-                            <div class="PJliB1">
-                                <div class="PJliB1L">
-                                    <div class="PJliB1Lt">临床数据</div>
-                                    <div class="PJliBLi PJliBLi2"></div>
-                                </div>
-                                <div class="PJliBR">
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">CT</div>
-                                        </div>
-                                    </div>
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">XG</div>
-                                            <div class="PJliBLi PJliBLi2"></div>
-                                        </div>
-                                        <div class="PJliBR">
-                                            <div class="PJliB2">
-                                                <div class="PJliB2L">
-                                                    <div class="PJliB2Lk"></div>
-                                                    <div class="PJliB2Lt">XG1</div>
-                                                </div>
-                                            </div>
-                                            <div class="PJliB2">
-                                                <div class="PJliB2L">
-                                                    <div class="PJliB2Lk"></div>
-                                                    <div class="PJliB2Lt">XG2</div>
-                                                </div>
-                                            </div>
-                                            <div class="PJliB2">
-                                                <div class="PJliB2L">
-                                                    <div class="PJliB2Lk"></div>
-                                                    <div class="PJliB2Lt">XG3</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
                             </div>
                         </div>
                     </div>

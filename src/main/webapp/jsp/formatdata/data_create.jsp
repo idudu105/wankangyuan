@@ -33,7 +33,7 @@
                 <a href="/wankangyuan/project/selectMyProject">
                 	<div class="topT">项目</div>
                 </a>
-                <a href="/wankangyuan/formatData/firstIn?type=1">
+                <a href="/wankangyuan/sourceData/firstIn?type=1">
                     <div class="topT active">格式数据</div>
                 </a>
                 <a href="/wankangyuan/application/viewMine">
@@ -50,9 +50,9 @@
             </div>
             <div class="top2">
                 <div class="top2C">
-                    <a href="data_mine.html"><div class="top2Cli">我的</div></a>
-                    <a href="javascript:;"><div class="top2Cli top2CliYJ">我创建的</div></a>
-                    <a href="data_public.html"><div class="top2Cli">公共</div></a>
+                    <a href="/wankangyuan/sourceData/firstIn?type=1"><div class="top2Cli">我的</div></a>
+                    <a href="/wankangyuan/sourceData/firstIn?type=2"><div class="top2Cli top2CliYJ">我创建的</div></a>
+                    <a href="/wankangyuan/sourceData/firstIn?type=3"><div class="top2Cli">公共</div></a>
                     <div class="search">
                         <div class="searchC">
                             <img src="/wankangyuan/static/img/search.png" alt="" class="searchCi" />
@@ -85,14 +85,6 @@
                             <img src="/wankangyuan/static/img/sanjiao_blue.png" alt="" class="shaixuanBTi" />
                         </div>
                     </div>
-                    <!-- <div class="jiangeline"></div> -->
-                    <!-- <div class="allK">
-                        <div class="allX">
-                            <img src="img/greentrue.png" alt="" class="allI active" />
-                        </div>
-                        <div class="allT">全选</div>
-                    </div> -->
-                    <!-- <div class="pro_menu pro_exit">退出</div> -->
                     <div class="pro_menu pro_addK">
                         <div class="pro_addk">
                             <div class="pro_addT">添加至项目</div>
@@ -104,24 +96,22 @@
                     <div class="pro_menu pro_inport">导入</div>
                     <div class="pro_menu pro_export">导出</div>
                     <div class="pro_menu pro_rem">移除</div>
-                    <div class="pro_menu pro_adddata">+添加源数据</div>
-                    	<select name="" id="source_Select" class="pro_menusel"  >
+                    <div class="pro_menu pro_adddataDis">+添加源数据</div>
+                   	<select name="" id="source_Select" class="pro_menusel"  >
 						<c:forEach items="${sources}" var="source">
 							<option value="${source.cs_id }" >${source.cs_name}</option>
 						</c:forEach>						
 					</select>
                 </div>
                 <div class="pro_addul">
-                    <div class="pro_addli">项目1</div>
-                    <div class="pro_addli">项目2</div>
-                    <div class="pro_addli">项目3</div>
-                    <div class="pro_addli">项目4</div>
-                    <div class="pro_addli">项目5</div>
+                	<c:forEach items="${projects}" var="projectTemp">
+						<div class="pro_addli" id="${projectTemp.id }" >${projectTemp.p_name}</div>
+					</c:forEach>
                 </div>
                 <div class="shaixuanZK">
-					<c:forEach items="${sourceFileds}" var="sourceFiled">
+					<c:forEach items="${sourceFields}" var="sourceFieldTemp">
 						<div class="shaixuanZKli">
-							<div class="shaixuanZKliT">${sourceFiled.csf_name}</div>
+							<div class="shaixuanZKliT">${sourceFieldTemp.csf_name}</div>
 							<div class="shaixuanZKliI active"></div>
 						</div>
 					</c:forEach>
@@ -142,6 +132,8 @@
                     </div>
                     <input type="button"  class="fileaddbtn" onclick="upFiles()" value="提交" />
                 </div>
+                
+                
                 <div class="adddataK">
                     <div class="adddataT">
                         <div class="adddataTt">添加源数据</div>
@@ -176,15 +168,17 @@
                         <input type="button" class="adddataBb" value="提交" />
                     </div>
                 </div>
+                
+                
                 <div class="PJList">
                     <div class="allK">
                         <div class="allX">
                         </div>
                         <div class="allT">全选</div>
                     </div>
-						<c:forEach items="${sourceFileds}" var="sourceFiled">
-							<div class="PJListli">${sourceFiled.csf_name}</div>
-						</c:forEach>	
+					<c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
+	                	<div class="PJListli">${sourceFieldTemp.csf_name}</div>
+					</c:forEach>	
                 </div>
                 <div class="PJListline"></div>
                 <div class="PJul">
