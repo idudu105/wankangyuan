@@ -114,6 +114,11 @@
     layer.msg("${error}");
     </script>
 </c:if>
+<c:if test="${not empty msg}">
+    <script type="text/javascript">
+    layer.msg("${msg}");
+    </script>
+</c:if>
 <script type="text/javascript">
    function random(tmp){  
         tmp.src = '/wankangyuan/open/getGifCode?'  + Math.random();

@@ -14,6 +14,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -28,7 +29,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.liutianjun.pojo.SysConfig;
 import com.liutianjun.pojo.User;
+import com.liutianjun.service.SysConfigService;
 import com.liutianjun.service.UserService;
 import com.liutianjun.utils.VerifyCodeUtils;
 
@@ -50,6 +53,9 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private SysConfigService sysConfigService;
+	
 	/**
 	 * 登录跳转
 	 * @return
@@ -65,6 +71,8 @@ public class UserController {
             error = "用户名/密码错误";
         } else if ("kaptchaValidateFailed".equals(exceptionClassName)) {
         	error = "验证码错误";
+        } else if (LockedAccountException.class.getName().equals(exceptionClassName)) {
+        	error = "账号被锁定";
 		} else if(exceptionClassName != null) {
             error = "其他错误：" + exceptionClassName;
         }
@@ -77,7 +85,12 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value="/register",method=RequestMethod.GET)
-	public String register() {
+	public String register(RedirectAttributes attributes) {
+		SysConfig sysConfig = sysConfigService.selectByPrimaryKey(1);
+		if(0 == sysConfig.getIsRegistrable()) {
+			attributes.addFlashAttribute("msg", "注册关闭!");
+			return "redirect:/login";
+		}
 		return "user/register.jsp";
 	}
 	
@@ -90,7 +103,13 @@ public class UserController {
 	@RequestMapping(value="/register",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> subRegister(String randomCode, String phoneCode, User user) {
+		SysConfig sysConfig = sysConfigService.selectByPrimaryKey(1);
 		resultMap.put("status", 400);
+		//检查注册是否开启
+		if(0 == sysConfig.getIsRegistrable()) {
+			resultMap.put("message", "注册关闭!");
+			return resultMap;
+		}
 		//检查验证码
 		if(!VerifyCodeUtils.verifyCode(randomCode)) {
 			resultMap.put("message", "验证码不正确!");

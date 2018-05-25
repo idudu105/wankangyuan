@@ -135,12 +135,18 @@
         <property name="filterChainDefinitions">
             <value>
                 /static/** = anon <!--设置静态资源文件为游客可访问-->
-                /open/** = anon
                 /register = anon
+                /open/** = anon
                 /forgetPassword = anon
+                /admin/img/** = anon
+                /admin/js/** = anon
+                /admin/css/** = anon
+                /admin/font/** = anon
+                /admin/login = anon
                 /login = authc
                 /logout = logout
                 /authenticated = authc
+                /admin/** = admin
                 /** = user,sysUser
                 
                 

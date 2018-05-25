@@ -1,5 +1,10 @@
 package com.liutianjun.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -69,5 +74,29 @@ public class SysConfigController {
 	public String viewIndex() {
 		return "/admin/index.jsp";
 	}
+	
+	/**
+	 * 管理员登录跳转
+	 * @return
+	 */
+	@RequestMapping(value = "/login")
+    public String showLoginForm(HttpServletRequest req, 
+    		Model model) {
+        String exceptionClassName = (String)req.getAttribute("shiroLoginFailure");
+        String error = null;
+        if(UnknownAccountException.class.getName().equals(exceptionClassName)) {
+            error = "用户名/密码错误";
+        } else if(IncorrectCredentialsException.class.getName().equals(exceptionClassName)) {
+            error = "用户名/密码错误";
+        } else if ("kaptchaValidateFailed".equals(exceptionClassName)) {
+        	error = "验证码错误";
+        } else if (LockedAccountException.class.getName().equals(exceptionClassName)) {
+        	error = "账号被锁定";
+		} else if(exceptionClassName != null) {
+            error = "其他错误：" + exceptionClassName;
+        }
+        model.addAttribute("error", error);
+        return "/admin/login.jsp";
+    }
 	
 }
