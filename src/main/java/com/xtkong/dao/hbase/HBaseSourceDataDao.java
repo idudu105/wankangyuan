@@ -7,13 +7,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.hadoop.hbase.CompareOperator;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.filter.BinaryComparator;
-import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.FilterList.Operator;
@@ -94,7 +94,7 @@ public class HBaseSourceDataDao {
 			Filter filter1 = new PrefixFilter(Bytes.toBytes(uid + "_" + cs_id + "_"));
 			// 单值过滤,获取行数据
 			Filter filter2 = new SingleColumnValueFilter(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-					Bytes.toBytes(ConstantsHBase.QUALIFIER_ADD), CompareOp.EQUAL,
+					Bytes.toBytes(ConstantsHBase.QUALIFIER_ADD),CompareOperator.EQUAL,
 					new BinaryComparator(Bytes.toBytes(ConstantsHBase.VALUE_ADD_FALSE)));
 			// 与
 			FilterList filterList = new FilterList(Operator.MUST_PASS_ALL, filter1, filter2);
@@ -188,7 +188,7 @@ public class HBaseSourceDataDao {
 			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
 			// 单值过滤,获取行数据
 			Filter filter = new SingleColumnValueFilter(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-					Bytes.toBytes(ConstantsHBase.QUALIFIER_PUBLIC), CompareOp.EQUAL,
+					Bytes.toBytes(ConstantsHBase.QUALIFIER_PUBLIC),CompareOperator.EQUAL,
 					new BinaryComparator(Bytes.toBytes(ConstantsHBase.VALUE_PUBLIC_TRUE)));
 			scan.setFilter(filter);
 			ResultScanner resultScanner = table.getScanner(scan);
@@ -242,9 +242,9 @@ public class HBaseSourceDataDao {
 	 * @param sourceDataIds
 	 * @return
 	 */
-	public static boolean deleteSourceDatas(String cs_id, List<String> sourceDataIds) {
+	public static boolean deleteSourceDatas(String cs_id, String sourceDataIds) {
 		HBaseDB db = HBaseDB.getInstance();
-		for (String sourceDataId : sourceDataIds) {
+		for (String sourceDataId : sourceDataIds.split(",")) {
 			if (!db.delete(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, sourceDataId)) {
 				return false;
 			}
@@ -252,9 +252,9 @@ public class HBaseSourceDataDao {
 		return true;
 	}
 
-	public static boolean open(String cs_id, List<String> sourceDataIds) {
+	public static boolean open(String cs_id, String sourceDataIds) {
 		HBaseDB db = HBaseDB.getInstance();
-		for (String sourceDataId : sourceDataIds) {
+		for (String sourceDataId : sourceDataIds.split(",")) {
 			if (!db.put(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, sourceDataId, ConstantsHBase.FAMILY_INFO,
 					ConstantsHBase.QUALIFIER_PUBLIC, ConstantsHBase.VALUE_PUBLIC_TRUE)) {
 				return false;
@@ -263,9 +263,9 @@ public class HBaseSourceDataDao {
 		return true;
 	}
 
-	public static boolean notOpen(String cs_id, List<String> sourceDataIds) {
+	public static boolean notOpen(String cs_id, String sourceDataIds) {
 		HBaseDB db = HBaseDB.getInstance();
-		for (String sourceDataId : sourceDataIds) {
+		for (String sourceDataId : sourceDataIds.split(",")) {
 			if (!db.put(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, sourceDataId, ConstantsHBase.FAMILY_INFO,
 					ConstantsHBase.QUALIFIER_PUBLIC, ConstantsHBase.VALUE_PUBLIC_FALSE)) {
 				return false;
@@ -274,13 +274,13 @@ public class HBaseSourceDataDao {
 		return true;
 	}
 
-	public static boolean addMySource(String cs_id, String uid, List<String> sourceDataIds, List<SourceField> sourceFields) {
+	public static boolean addMySource(String cs_id, String uid, String sourceDataIds, List<SourceField> sourceFields) {
 		try {
 
 			HBaseDB db = HBaseDB.getInstance();
 			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id);
 			List<Get> gets = new ArrayList<Get>();
-			for (String sourceDataId : sourceDataIds) {
+			for (String sourceDataId : sourceDataIds.split(",")) {
 				gets.add(new Get(Bytes.toBytes(sourceDataId)));
 			}
 			// 存放批量操作的结果

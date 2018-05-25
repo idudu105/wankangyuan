@@ -165,7 +165,7 @@ public class FormatDataController {
 	 */
 	@RequestMapping("/deleteFormatDatas")
 	@ResponseBody
-	public Map<String, Object> deleteFormatDatas(String cs_id, String ft_id, List<String> formatNodeIds) {
+	public Map<String, Object> deleteFormatDatas(String cs_id, String ft_id, String formatNodeIds) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (HBaseFormatDataDao.deleteFormatDatas(cs_id, ft_id, formatNodeIds)) {
 			map.put("result", true);

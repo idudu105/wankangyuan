@@ -125,15 +125,16 @@ public class SourceDataController {
 	 *            采集源
 	 * @param uid
 	 *            用户
-	 * @param soufieldDatas
+	 * @param sourceFieldDatas
 	 *            采集源字段id、 数据值
 	 */
 	@RequestMapping("/insertSourceData")
 	@ResponseBody
-	public Map<String, Object> insertSourceData(String cs_id, String uid, HashMap<String, String> soufieldDatas) {
+	public Map<String, Object> insertSourceData(String cs_id, HashMap<String, String> sourceFieldDatas) {
+		String uid="1";
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		if (HBaseSourceDataDao.insertSourceData(cs_id, uid, soufieldDatas)) {
+		if (HBaseSourceDataDao.insertSourceData(cs_id, uid, sourceFieldDatas)) {
 			map.put("result", true);
 			map.put("message", "新增成功");
 		} else {
@@ -240,7 +241,7 @@ public class SourceDataController {
 	 */
 	@RequestMapping("/deleteSourceDatas")
 	@ResponseBody
-	public Map<String, Object> deleteSourceDatas(String cs_id, List<String> sourceDataIds) {
+	public Map<String, Object> deleteSourceDatas(String cs_id, String sourceDataIds) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (HBaseSourceDataDao.deleteSourceDatas(cs_id, sourceDataIds)) {
 			map.put("result", true);
@@ -254,7 +255,7 @@ public class SourceDataController {
 
 	@RequestMapping("/open")
 	@ResponseBody
-	public Map<String, Object> open(String cs_id, List<String> sourceDataIds) {
+	public Map<String, Object> open(String cs_id, String sourceDataIds) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (HBaseSourceDataDao.open(cs_id, sourceDataIds)) {
 			map.put("result", true);
@@ -268,7 +269,7 @@ public class SourceDataController {
 
 	@RequestMapping("/notOpen")
 	@ResponseBody
-	public Map<String, Object> notOpen(String cs_id, List<String> sourceDataIds) {
+	public Map<String, Object> notOpen(String cs_id, String sourceDataIds) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (HBaseSourceDataDao.notOpen(cs_id, sourceDataIds)) {
 			map.put("result", true);
@@ -282,7 +283,7 @@ public class SourceDataController {
 
 	@RequestMapping("/addMySource")
 	@ResponseBody
-	public Map<String, Object> addMySource(String cs_id, List<String> sourceDataIds) {
+	public Map<String, Object> addMySource(String cs_id, String sourceDataIds) {
 		int uid = 1;
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (HBaseSourceDataDao.addMySource(cs_id, String.valueOf(uid), sourceDataIds,

@@ -149,9 +149,9 @@ public class HBaseFormatDataDao {
 	 * @param formatDataIds
 	 * @return
 	 */
-	public static boolean deleteFormatDatas(String cs_id, String ft_id, List<String> formatDataIds) {
+	public static boolean deleteFormatDatas(String cs_id, String ft_id, String formatDataIds) {
 		HBaseDB db = HBaseDB.getInstance();
-		for (String formatDataId : formatDataIds) {
+		for (String formatDataId : formatDataIds.split(",")) {
 			if (!db.delete(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id, formatDataId)) {
 				return false;
 			}
