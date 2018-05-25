@@ -23,21 +23,12 @@ public class HBaseDB {
 	private static final HBaseDB hBaseDBTool = new HBaseDB();
 	private static Connection connection = null;
 	static {
-		System.out.println("--");
 		Configuration configuration = HBaseConfiguration.create();
-		// configuration.set("hbase.master", "60.29.25.133");
-		// zookeeper的主机地址，虚拟机主机名
-		configuration.set("hbase.zookeeper.quorum", "60.29.25.133");
-		// configuration.set("hbase.zookeeper.property.clientPort", "2181");
-		// hbase存储数据的位置，hbase-site.xml中配置
-		configuration.set("hbase:rootdir", "hdfs://0.0.0.0:9000/hbase");
-		// configuration.set("hbase.master.port", "60000");
-		System.out.println("--34");
+		configuration.set("hbase.zookeeper.quorum", "hpc03");
+		configuration.set("hbase.zookeeper.property.clientPort", "52181");
+		configuration.set("hbase.master.info.port", "56010");
 		try {
 			connection = ConnectionFactory.createConnection(configuration);
-			System.out.println("---37");
-			HBaseDB.getInstance().createTable(ConstantsHBase.TABLE_GID, new String[] { ConstantsHBase.FAMILY_GID_GID },
-					1);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

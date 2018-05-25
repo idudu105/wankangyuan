@@ -3,7 +3,6 @@ package com.xtkong.controller.user;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.hadoop.hbase.util.Bytes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,16 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.dzjin.model.ProjectFile;
 import com.xtkong.dao.hbase.HBaseFormatDataDao;
-import com.xtkong.dao.hbase.HBaseFormatNodeDao;
-import com.xtkong.dao.hbase.HBaseSourceDataDao;
 import com.xtkong.model.FormatField;
-import com.xtkong.model.FormatType;
-import com.xtkong.model.Source;
 import com.xtkong.service.FormatFieldService;
 import com.xtkong.service.FormatTypeService;
 import com.xtkong.service.SourceFieldService;
 import com.xtkong.service.SourceService;
-import com.xtkong.util.ConstantsHBase;
 
 @Controller
 @RequestMapping("/formatData")
@@ -45,324 +38,15 @@ public class FormatDataController {
 	@Autowired
 	FormatFieldService formatFieldService;
 
-	/**
-	 * 首次进入 格式数据页面
-	 * 
-	 * @param httpSession
-	 * @param type
-	 */
-	@RequestMapping("/firstIn")
-	public String getSourceDatas(HttpSession httpSession, String type) {
-		int uid = 1;
-		List<Source> sources = sourceService.getSourcesForUser();
-		
-		httpSession.setAttribute("sources", sources);// 采集源列表
-		
-		// 源数据字段
-		List<List<String>> sourceDatas = new ArrayList<>();
-		if (sources != null) {
-			Integer cs_id=sourceService.getSourcesForUserLimit(1).get(0).getCs_id();
-			Source source = sourceService.getSourceByCs_id(cs_id);
-			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
-			
-			httpSession.setAttribute("source", source);// 采集源字段列表
-			
-			// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
-			// sourceDatas =
-			// HBaseSourceDataDao.getSourceDatasByUid(Integer.toString(sources.get(0).getCs_id()),
-			// String.valueOf(uid), sources.get(0).getSourceFields());
-		}
-		// -----------------------
-		List<String> list1 = new ArrayList<>();
-		list1.add("id001");
-		list1.add("李");
-		list1.add("男");
-		list1.add("无");
-		list1.add("个人信息");
-		list1.add("孙");
-		list1.add("2018-4-22");
-		sourceDatas.add(list1);
-		List<String> list2 = new ArrayList<>();
-		list2.add("id002");
-		list2.add("张");
-		list2.add("男");
-		list2.add("无");
-		list2.add("个人信息");
-		list2.add("孙");
-		list2.add("2018-4-22");
-		sourceDatas.add(list2);
-		// ------------------------
-		
-		httpSession.setAttribute("sourceDatas", sourceDatas);//
+	
 
-		return "redirect:/jsp/formatdata/data_mine.jsp";
-	}
 
-	/**
-	 * 添加一条源数据
-	 * 
-	 * @param cs_id
-	 *            采集源
-	 * @param uid
-	 *            用户
-	 * @param soufieldDatas
-	 *            采集源字段、 数据值
-	 */
-	@RequestMapping("/insertSourceData")
-	@ResponseBody
-	public Map<String, Object> insertSourceData(String cs_id, String uid, HashMap<String, String> soufieldDatas) {
-		Map<String, Object> map = new HashMap<String, Object>();
 
-		if (HBaseSourceDataDao.insertSourceData(cs_id, uid, soufieldDatas)) {
-			map.put("result", true);
-			map.put("message", "新增成功");
-		} else {
-			map.put("result", false);
-			map.put("message", "新增失败");
-		}
-		return map;
-	}
 
-	/**
-	 * 更新一条源数据
-	 * 
-	 * @param cs_id
-	 *            采集源
-	 * @param sourceDataId
-	 * @param sourceFieldDatas
-	 *            采集源字段、 数据值
-	 */
-	@RequestMapping("/updateSourceData")
-	@ResponseBody
-	public Map<String, Object> updateSourceData(String cs_id, String sourceDataId,
-			HashMap<String, String> soufieldDatas) {
-		Map<String, Object> map = new HashMap<String, Object>();
 
-		if (HBaseSourceDataDao.updateSourceData(cs_id, sourceDataId, soufieldDatas)) {
-			map.put("result", true);
-			map.put("message", "更新成功");
-		} else {
-			map.put("result", false);
-			map.put("message", "更新失败");
-		}
-		return map;
-	}
 
-	/**
-	 * 
-	 * sources 采集源列表
-	 * 
-	 * source 选中采集源的字段列表
-	 * 
-	 * sourceDatas 源数据字数据，注：每个列表第一个值sourceDataId不显示
-	 * 
-	 * @param httpSession
-	 * @param type
-	 * @param cs_id
-	 * @return
-	 */
-	@RequestMapping("/getSourceDatas")
-	public String getSourceDatas(HttpSession httpSession, String type, Integer cs_id) {
-		int uid = 1;
-		List<Source> sources = sourceService.getSourcesForUser();
-		
-		httpSession.setAttribute("sources", sources);// 采集源列表
-		
-		// 源数据字段
-		List<List<String>> sourceDatas = new ArrayList<>();
-		if (sources != null) {
-			Source source = sourceService.getSourceByCs_id(cs_id);
-			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
-			
-			httpSession.setAttribute("source", source);// 采集源字段列表
-			
-			// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
-			// sourceDatas =
-			// HBaseSourceDataDao.getSourceDatasByUid(Integer.toString(sources.get(0).getCs_id()),
-			// String.valueOf(uid), sources.get(0).getSourceFields());
-		}
-		// -----------------------
-		List<String> list1 = new ArrayList<>();
-		list1.add("id001");
-		list1.add("李");
-		list1.add("男");
-		list1.add("无");
-		list1.add("个人信息");
-		list1.add("孙");
-		list1.add("2018-4-22");
-		sourceDatas.add(list1);
-		List<String> list2 = new ArrayList<>();
-		list2.add("id002");
-		list2.add("张");
-		list2.add("男");
-		list2.add("无");
-		list2.add("个人信息");
-		list2.add("孙");
-		list2.add("2018-4-22");
-		sourceDatas.add(list2);
-		// ------------------------
-		
-		httpSession.setAttribute("sourceDatas", sourceDatas);//
 
-		return "redirect:/jsp/formatdata/data_mine.jsp";
-
-	}
-
-	/**
-	 * 批量删除源数据
-	 * 
-	 * @param cs_id
-	 * @param sourceDataIds
-	 * @return
-	 */
-	@RequestMapping("/deleteSourceDatas")
-	@ResponseBody
-	public Map<String, Object> deleteSourceDatas(String cs_id, List<String> sourceDataIds) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		if (HBaseSourceDataDao.deleteSourceDatas(cs_id, sourceDataIds)) {
-			map.put("result", true);
-			map.put("message", "删除成功");
-		} else {
-			map.put("result", false);
-			map.put("message", "删除失败");
-		}
-		return map;
-	}
-
-	/**
-	 * 新增数据节点
-	 * 
-	 * @param cs_id
-	 * @param sourceDataId
-	 * @param ft_id
-	 * @param nodeName
-	 * @return
-	 */
-	@RequestMapping("/insertFormatNode")
-	@ResponseBody
-	public Map<String, Object> insertFormatNode(String cs_id, String sourceDataId, String ft_id, String nodeName) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		if (HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName)) {
-			map.put("result", true);
-			map.put("message", "新增成功");
-		} else {
-			map.put("result", false);
-			map.put("message", "新增失败");
-		}
-		return map;
-	}
-
-	/**
-	 * 获取节点树 List<FormatType>
-	 * 
-	 * formatType.ft_id： 不显示
-	 * 
-	 * formatType.ft_name：显示
-	 * 
-	 * formatType.List<FormatDataNode>:formatNodeId（节点id）： 不显示,节点名： 显示
-	 * 
-	 * @param cs_id
-	 * @param sourceDataId
-	 * @return
-	 */
-	@RequestMapping("/getformatTypeFolders")
-	@ResponseBody
-	public Map<String, Object> getformatTypeFolders(String cs_id, String sourceDataId) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		HashMap<String, FormatType> formatTypeMap = new HashMap<>();
-		List<FormatType> formatTypes = formatTypeService.getFormatTypes(Integer.valueOf(cs_id));
-		for (FormatType formatType : formatTypes) {
-			formatTypeMap.put(String.valueOf(formatType.getFt_id()), formatType);
-		}
-		// List<FormatType> formatTypeFloders =
-		// HBaseFormatNodeDao.getFormatTypeFolders(cs_id, sourceDataId,
-		// formatTypeMap);
-		// ------------------------------
-		List<FormatType> formatTypeFolders = new ArrayList<>();
-		for (FormatType formatType : formatTypeMap.values()) {
-			if (!formatType.getFt_name().equals("CT")) {
-				formatTypeFolders.add(formatType);
-			}
-		}
-
-		FormatType formatType1 = new FormatType();
-		formatType1.setFt_id(1);
-		formatType1.setFt_name("CT");
-		HashMap<String, String> formatDataNodes1 = new HashMap<>();
-		formatDataNodes1.put("nid1", "CT1");
-		formatDataNodes1.put("nid2", "CT2");
-		formatDataNodes1.put("nid3", "CT3");
-		formatType1.setFormatDataNodes(formatDataNodes1);
-
-		FormatType formatType2 = new FormatType();
-		formatType2.setFt_id(1);
-		formatType2.setFt_name("CT");
-		HashMap<String, String> formatDataNodes2 = new HashMap<>();
-		formatDataNodes2.put("nid4", "CT4");
-		formatDataNodes2.put("nid5", "CT5");
-		formatDataNodes2.put("nid6", "CT6");
-		formatType2.setFormatDataNodes(formatDataNodes2);
-
-		if (sourceDataId.equals("id001")) {
-			formatTypeFolders.add(formatType1);
-		} else {
-			formatTypeFolders.add(formatType2);
-		}
-		// --------------------------
-		if (formatTypeFolders != null) {
-			map.put("result", true);
-			map.put("formatTypeFloders", formatTypeFolders);
-		} else {
-			map.put("result", false);
-			map.put("message", "获取失败");
-		}
-		return map;
-	}
-
-	/**
-	 * 编辑数据节点
-	 * 
-	 * @param cs_id
-	 * @param formatNodeId
-	 * @param ft_id
-	 * @param nodeName
-	 * @return
-	 */
-	@RequestMapping("/updateFormatNode")
-	@ResponseBody
-	public Map<String, Object> updateFormatNode(String cs_id, String formatNodeId, String ft_id, String nodeName) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		if (HBaseFormatNodeDao.updateFormatNode(cs_id, formatNodeId, ft_id, nodeName)) {
-			map.put("result", true);
-			map.put("message", "更新成功");
-		} else {
-			map.put("result", false);
-			map.put("message", "更新失败");
-		}
-		return map;
-	}
-
-	/**
-	 * 删除数据节点
-	 * 
-	 * @param cs_id
-	 * @param formatNodeId
-	 * @return
-	 */
-	@RequestMapping("/deleteFormatNode")
-	@ResponseBody
-	public Map<String, Object> deleteFormatNode(String cs_id, String formatNodeId) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		if (HBaseFormatNodeDao.deleteFormatNode(cs_id, formatNodeId)) {
-			map.put("result", true);
-			map.put("message", "删除成功");
-		} else {
-			map.put("result", false);
-			map.put("message", "删除失败");
-		}
-		return map;
-	}
-
+	// ----------------------添加一条格式数据
 	/**
 	 * 添加一条格式数据
 	 * 
@@ -390,6 +74,8 @@ public class FormatDataController {
 		return map;
 	}
 
+	// ----------------------添加一条格式数据
+	// ----------------------更新一条格式数据
 	/**
 	 * 更新一条格式数据
 	 * 
@@ -416,6 +102,7 @@ public class FormatDataController {
 		return map;
 	}
 
+	// ----------------------更新一条格式数据
 	/**
 	 * 获取格式数据明细 List<List<String>>
 	 * 
@@ -435,31 +122,24 @@ public class FormatDataController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// meta数据
 		List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(ft_id, 1);
-		// List<List<String>> metaDatas =
-		// HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
-		// Integer.toString(ft_id), formatNodeId, meta);
+		 List<List<String>> metaDatas =		 HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
+		 Integer.toString(ft_id), formatNodeId, meta);
 		// data数据
 		List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(ft_id, 0);
-		// List<List<String>> dataDatas =
-		// HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
-		// Integer.toString(ft_id), formatNodeId, data);
+		 List<List<String>> dataDatas =		 HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
+		 Integer.toString(ft_id), formatNodeId, data);
 		// --------------------------
-
-		List<List<String>> metaDatas = new ArrayList<>();
-		List<String> formatData = new ArrayList<>();
-		formatData.add("fd001");// 获取行键formatDataId，不显示
-		for (FormatField formatField : meta) {
-			formatData.add("test" + formatNodeId);
-		}
-		metaDatas.add(formatData);
-
-		List<List<String>> dataDatas = new ArrayList<>();
-		List<String> formatDatad = new ArrayList<>();
-		formatDatad.add("fd001");// 获取行键formatDataId，不显示
-		for (FormatField formatField : data) {
-			formatDatad.add("test" + formatNodeId);
-		}
-		dataDatas.add(formatDatad);
+		/*
+		 * List<List<String>> metaDatas = new ArrayList<>(); List<String>
+		 * formatData = new ArrayList<>(); formatData.add("fd001");//
+		 * 获取行键formatDataId，不显示 for (FormatField formatField : meta) {
+		 * formatData.add("test" + formatNodeId); } metaDatas.add(formatData);
+		 * 
+		 * List<List<String>> dataDatas = new ArrayList<>(); List<String>
+		 * formatDatad = new ArrayList<>(); formatDatad.add("fd001");//
+		 * 获取行键formatDataId，不显示 for (FormatField formatField : data) {
+		 * formatDatad.add("test" + formatNodeId); } dataDatas.add(formatDatad);
+		 */
 		// --------------------------
 		if (metaDatas != null) {
 			map.put("result", true);
@@ -474,6 +154,7 @@ public class FormatDataController {
 		return map;
 	}
 
+	// ----------------------批量删除格式数据
 	/**
 	 * 批量删除格式数据
 	 * 
@@ -496,6 +177,9 @@ public class FormatDataController {
 		return map;
 	}
 
+	// ----------------------批量删除格式数据
+	
+	
 	// ---------------------------------------------------
 	@RequestMapping("/datain")
 	public String datain(HttpSession httpSession, String datainname) {
