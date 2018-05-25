@@ -2,9 +2,9 @@ package com.xtkong.dao.hbase;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
@@ -69,7 +69,7 @@ public class HBaseFormatNodeDao {
 	 * @return formatNodeId、ft_id、节点名
 	 */
 	public static List<FormatType> getFormatTypeFolders(String cs_id, String sourceDataId,
-			HashMap<String, FormatType> formatTypeMap) {
+			Map<String, FormatType> formatTypeMap) {
 		List<FormatType> formatTypeFolders = new ArrayList<FormatType>();
 		try {
 			HBaseDB db = HBaseDB.getInstance();

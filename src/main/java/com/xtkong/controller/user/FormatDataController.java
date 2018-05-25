@@ -128,19 +128,6 @@ public class FormatDataController {
 		List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(ft_id, 0);
 		 List<List<String>> dataDatas =		 HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
 		 Integer.toString(ft_id), formatNodeId, data);
-		// --------------------------
-		/*
-		 * List<List<String>> metaDatas = new ArrayList<>(); List<String>
-		 * formatData = new ArrayList<>(); formatData.add("fd001");//
-		 * 获取行键formatDataId，不显示 for (FormatField formatField : meta) {
-		 * formatData.add("test" + formatNodeId); } metaDatas.add(formatData);
-		 * 
-		 * List<List<String>> dataDatas = new ArrayList<>(); List<String>
-		 * formatDatad = new ArrayList<>(); formatDatad.add("fd001");//
-		 * 获取行键formatDataId，不显示 for (FormatField formatField : data) {
-		 * formatDatad.add("test" + formatNodeId); } dataDatas.add(formatDatad);
-		 */
-		// --------------------------
 		if (metaDatas != null) {
 			map.put("result", true);
 			map.put("meta", meta);

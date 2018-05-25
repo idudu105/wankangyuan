@@ -2,9 +2,9 @@ package com.xtkong.dao.hbase;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.hadoop.hbase.CompareOperator;
@@ -54,7 +54,7 @@ public class HBaseSourceDataDao {
 	 * @param sourceFieldDatas
 	 *            采集源字段、 数据值
 	 */
-	public static boolean insertSourceData(String cs_id, String uid, HashMap<String, String> sourceFieldDatas) {
+	public static boolean insertSourceData(String cs_id, String uid, Map<String, String> sourceFieldDatas) {
 		HBaseDB db = HBaseDB.getInstance();
 		Long count = db.getNewId(ConstantsHBase.TABLE_GID, uid + "_" + cs_id, ConstantsHBase.FAMILY_GID_GID,
 				ConstantsHBase.QUALIFIER_GID_GID_GID);
@@ -224,7 +224,7 @@ public class HBaseSourceDataDao {
 	 *            采集源字段、 数据值
 	 */
 	public static boolean updateSourceData(String cs_id, String sourceDataId,
-			HashMap<String, String> sourceFieldDatas) {
+			Map<String, String> sourceFieldDatas) {
 		HBaseDB db = HBaseDB.getInstance();
 		for (Entry<String, String> sourceFieldData : sourceFieldDatas.entrySet()) {
 			if (!db.put(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, sourceDataId, ConstantsHBase.FAMILY_INFO,

@@ -7,9 +7,9 @@ package com.xtkong.dao.hbase;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.hadoop.hbase.client.Result;
@@ -57,7 +57,7 @@ public class HBaseFormatDataDao {
 	 * @return
 	 */
 	public static boolean insertFormatData(String cs_id, String ft_id, String formatNodeId,
-			HashMap<String, String> formatFieldDatas) {
+			Map<String, String> formatFieldDatas) {
 		HBaseDB db = HBaseDB.getInstance();
 		Long count = db.getNewId(ConstantsHBase.TABLE_GID, formatNodeId, ConstantsHBase.FAMILY_GID_GID,
 				ConstantsHBase.QUALIFIER_GID_GID_GID);
@@ -132,7 +132,7 @@ public class HBaseFormatDataDao {
 	 * @return
 	 */
 	public static boolean updateFormatData(String cs_id, String ft_id, String formatDataId,
-			HashMap<String, String> formatFieldDatas) {
+			Map<String, String> formatFieldDatas) {
 		HBaseDB db = HBaseDB.getInstance();
 		for (Entry<String, String> formatFieldData : formatFieldDatas.entrySet()) {
 			if (!db.put(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id, formatDataId,

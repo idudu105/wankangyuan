@@ -52,17 +52,7 @@ public class SourceDataController {
 		httpSession.setAttribute("sources", sources);// 采集源列表
 
 		// 源数据字段
-		List<List<String>> sourceDatas = new ArrayList<>();
-		// -----------------------List<String> list1 = new ArrayList<>();
-		/*
-		 * List<String> list1 = new ArrayList<>(); list1.add("id001");
-		 * list1.add("李"); list1.add("男"); list1.add("无"); list1.add("个人信息");
-		 * list1.add("孙"); list1.add("2018-4-22"); sourceDatas.add(list1);
-		 * List<String> list2 = new ArrayList<>(); list2.add("id002");
-		 * list2.add("张"); list2.add("男"); list2.add("无"); list2.add("个人信息");
-		 * list2.add("孙"); list2.add("2018-4-22"); sourceDatas.add(list2);
-		 */
-		// ------------------------List<String> list1 = new ArrayList<>();
+		List<List<String>> sourceDatas = new ArrayList<>();		
 		if (sources != null) {
 			Integer cs_id = sourceService.getSourcesForUserLimit(1).get(0).getCs_id();
 			Source source = sourceService.getSourceByCs_id(cs_id);
@@ -195,16 +185,6 @@ public class SourceDataController {
 
 		// 源数据字段
 		List<List<String>> sourceDatas = new ArrayList<>();
-		/*
-		 * // -----------------------List<String> list1 = new ArrayList<>();
-		 * List<String> list1 = new ArrayList<>(); list1.add("id001");
-		 * list1.add("李"); list1.add("男"); list1.add("无"); list1.add("个人信息");
-		 * list1.add("孙"); list1.add("2018-4-22"); sourceDatas.add(list1);
-		 * List<String> list2 = new ArrayList<>(); list2.add("id002");
-		 * list2.add("张"); list2.add("男"); list2.add("无"); list2.add("个人信息");
-		 * list2.add("孙"); list2.add("2018-4-22"); sourceDatas.add(list2);
-		 */
-		// ------------------------List<String> list1 = new ArrayList<>();
 		if (sources != null) {
 			Source source = sourceService.getSourceByCs_id(cs_id);
 			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));

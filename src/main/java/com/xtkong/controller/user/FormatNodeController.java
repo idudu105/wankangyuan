@@ -75,38 +75,6 @@ public class FormatNodeController {
 			formatTypeMap.put(String.valueOf(formatType.getFt_id()), formatType);
 		}
 		 List<FormatType> formatTypeFolders = HBaseFormatNodeDao.getFormatTypeFolders(cs_id, sourceDataId, formatTypeMap);
-		// ------------------------------
-	/*	List<FormatType> formatTypeFolders = new ArrayList<>();
-		for (FormatType formatType : formatTypeMap.values()) {
-			if (!formatType.getFt_name().equals("CT")) {
-				formatTypeFolders.add(formatType);
-			}
-		}
-
-		FormatType formatType1 = new FormatType();
-		formatType1.setFt_id(1);
-		formatType1.setFt_name("CT");
-		HashMap<String, String> formatDataNodes1 = new HashMap<>();
-		formatDataNodes1.put("nid1", "CT1");
-		formatDataNodes1.put("nid2", "CT2");
-		formatDataNodes1.put("nid3", "CT3");
-		formatType1.setFormatDataNodes(formatDataNodes1);
-
-		FormatType formatType2 = new FormatType();
-		formatType2.setFt_id(1);
-		formatType2.setFt_name("CT");
-		HashMap<String, String> formatDataNodes2 = new HashMap<>();
-		formatDataNodes2.put("nid4", "CT4");
-		formatDataNodes2.put("nid5", "CT5");
-		formatDataNodes2.put("nid6", "CT6");
-		formatType2.setFormatDataNodes(formatDataNodes2);
-
-		if (sourceDataId.equals("id001")) {
-			formatTypeFolders.add(formatType1);
-		} else {
-			formatTypeFolders.add(formatType2);
-		}*/
-		// --------------------------
 		if (formatTypeFolders != null) {
 			map.put("result", true);
 			map.put("formatTypeFloders", formatTypeFolders);
