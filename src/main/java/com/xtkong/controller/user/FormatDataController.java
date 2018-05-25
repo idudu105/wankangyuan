@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dzjin.model.ProjectFile;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xtkong.dao.hbase.HBaseFormatDataDao;
 import com.xtkong.model.FormatField;
 import com.xtkong.service.FormatFieldService;
@@ -61,10 +63,9 @@ public class FormatDataController {
 	 */
 	@RequestMapping("/insertFormatData")
 	@ResponseBody
-	public Map<String, Object> insertFormatData(String cs_id, String ft_id, String formatNodeId,
-			HashMap<String, String> formatFieldDatas) {
+	public Map<String, Object> insertFormatData(String cs_id, String ft_id, String formatNodeId,String formatFieldDatas) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (HBaseFormatDataDao.insertFormatData(cs_id, ft_id, formatNodeId, formatFieldDatas)) {
+		if (HBaseFormatDataDao.insertFormatData(cs_id, ft_id, formatNodeId, new Gson().fromJson(formatFieldDatas,new TypeToken<Map<String, String>>(){}.getType()))) {
 			map.put("result", true);
 			map.put("message", "新增成功");
 		} else {
@@ -89,10 +90,9 @@ public class FormatDataController {
 	 */
 	@RequestMapping("/updateFormatData")
 	@ResponseBody
-	public Map<String, Object> updateFormatData(String cs_id, String ft_id, String formatDataId,
-			HashMap<String, String> formatFieldDatas) {
+	public Map<String, Object> updateFormatData(String cs_id, String ft_id, String formatDataId,String formatFieldDatas) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (HBaseFormatDataDao.updateFormatData(cs_id, ft_id, formatDataId, formatFieldDatas)) {
+		if (HBaseFormatDataDao.updateFormatData(cs_id, ft_id, formatDataId, new Gson().fromJson(formatFieldDatas,new TypeToken<Map<String, String>>(){}.getType()))) {
 			map.put("result", true);
 			map.put("message", "更新成功");
 		} else {
