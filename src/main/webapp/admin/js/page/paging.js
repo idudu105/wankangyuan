@@ -1,120 +1,138 @@
-(function($, window, document, undefined) {
-	//定义分页类
-	function Paging(element, options) {
-		this.element = element;
-		//传入形参
-		this.options = {
-			pageNo: options.pageNo||1,
-			totalPage: options.totalPage,
-			totalSize:options.totalSize,
-			callback:options.callback
-		};
-		//根据形参初始化分页html和css代码
-		this.init();
-	}
-	//对Paging的实例对象添加公共的属性和方法
-	Paging.prototype = {
-		constructor: Paging,
-		init: function() {
-			this.creatHtml();
-			this.bindEvent();
-		},
-		creatHtml: function() {
-			var me = this;
-			var content = "";
-			var current = me.options.pageNo;
-			var total = me.options.totalPage;
-			var totalNum = me.options.totalSize;
-			content += "<a id=\"firstPage\">首页</a><a id='prePage'>上一页</a>";
-			//总页数大于6时候
-			if(total > 6) {
-				//当前页数小于5时显示省略号
-				if(current < 3) {
-					for(var i = 1; i < 6; i++) {
-						if(current == i) {
-							content += "<a class='current'>" + i + "</a>";
-						} else {
-							content += "<a>" + i + "</a>";
-						}
-					}
-					content += ". . .";
-					content += "<a>"+total+"</a>";
-				} else {
-					 //判断页码在末尾的时候
-					if(current < total - 3) {
-						for(var i = current - 2; i < current + 3; i++) {
-							if(current == i) {
-								content += "<a class='current'>" + i + "</a>";
-							} else {
-								content += "<a>" + i + "</a>";
-							}
-						}
-						content += ". . .";
-						content += "<a>"+total+"</a>";
-					//页码在中间部分时候	
-					} else {
-						content += "<a>1</a>";
-						content += ". . .";
-						for(var i = total - 4; i < total + 1; i++) {
-							if(current == i) {
-								content += "<a class='current'>" + i + "</a>";
-							} else {
-								content += "<a>" + i + "</a>";
-							}
-						}
-					}
-				}
-				//页面总数小于6的时候
-			} else {
-				for(var i = 1; i < total + 1; i++) {
-					if(current == i) {
-						content += "<a class='current'>" + i + "</a>";
-					} else {
-						content += "<a>" + i + "</a>";
-					}
-				}
-			}
-			content += "<a id='nextPage'>下一页</a>";
-			content += "<a id=\"lastPage\">尾页</a>";
-			content += "<span class='totalPages'> 共<span>"+total+"</span>页 </span>";
-			content += "<span class='totalSize'> 共<span>"+totalNum+"</span>条记录 </span>";
-			me.element.html(content);
-		},
-		//添加页面操作事件
-		bindEvent: function() {
-			var me = this;
-			me.element.on('click', 'a', function() {
-				var num = $(this).html();
-				var id=$(this).attr("id");
-				if(id == "prePage") {
-					if(me.options.pageNo == 1) {
-						me.options.pageNo = 1;
-					} else {
-						me.options.pageNo = +me.options.pageNo - 1;
-					}
-				} else if(id == "nextPage") {
-					if(me.options.pageNo == me.options.totalPage) {
-						me.options.pageNo = me.options.totalPage
-					} else {
-						me.options.pageNo = +me.options.pageNo + 1;
-					}
+(function($, window, document) {
+    // 定义构造函数
+    function Paging(el, options) {
+        this.el = el;
+        this.options = {
+            pageNo: options.initPageNo || 1, // 初始页码
+            totalPages: options.totalPages || 1, //总页数
+            totalCount: options.totalCount || '', // 条目总数
+            slideSpeed: options.slideSpeed || 0, // 缓动速度
+            jump: options.jump || false, // 支持跳转
+            callback: options.callback || function() {} // 回调函数
+        };
+        this.init();
+    }
+    // 给实例对象添加公共属性和方法
+    Paging.prototype = {
+        constructor: Paging,
+        init: function() {
+            this.createDom();
+            this.bindEvents();
+        },
+        createDom: function() {
+            var that = this,
+                ulDom = '',
+                jumpDom = '',
+                content = '',
+                liWidth = 60, // li的宽度
+                totalPages = that.options.totalPages, // 总页数
+                wrapLength = 0;
+            totalPages > 5 ? wrapLength = 5 * liWidth : wrapLength = totalPages * liWidth;
+            for (var i = 1; i <= that.options.totalPages; i++) {
+                i != 1 ? ulDom += '<li class="pageNUM ">' + i + '</li>' : ulDom += '<li class="pageNUM active">' + i + '</li>';
+            }
+            that.options.jump ? jumpDom = '<input type="text" placeholder="1" class="jump-text" id="jumpText"><button type="button" class="jump-button" id="jumpBtn">跳转</button>' : jumpDom = '';
+            content = 
+            	'<button class="pageLR" id="prePage"><img src="../static/img/pageL.png" class="pageLRi" alt="" /></button>' +
+            	//'<div  style="height: 40px; float: left; overflow: hidden;width:' + wrapLength + 'px">' +
+                '<ul id="pageSelect" style="transition:all; display:inline;' + that.options.slideSpeed + 'ms">' +
+                ulDom +
+                '</ul>' +
+                //'</div>' +
+                '<button class="pageLR" id="nextPage"><img src="../static/img/pageR.png" class="pageLRi" alt="" /></button>' ;
+            that.el.html(content);
+        },
+        bindEvents: function() {
+            var that = this,
+                pageSelect = $('#pageSelect'), // ul
+                lis = pageSelect.children(), // li的集合
+                liWidth = lis[0].offsetWidth, // li的宽度
+                totalPages = that.options.totalPages, // 总页数
+                pageIndex = that.options.pageNo, // 当前选择的页码
+                distance = 0, // ul移动距离
+                prePage = $('#prePage'),
+                nextPage = $('#nextPage'),
+                firstPage = $('#firstPage'),
+                lastPage = $('#lastPage'),
+                jumpBtn = $('#jumpBtn'),
+                jumpText = $('#jumpText');
 
-				} else if(id =="firstPage") {
-					me.options.pageNo = 1;
-				} else if(id =="lastPage") {
-					me.options.pageNo = me.options.totalPage;
-				}else{
-					me.options.pageNo = +num;
-				}
-				me.creatHtml();
-				if(me.options.callback) {
-					me.options.callback(me.options.pageNo);
-				}
-			});
-		}
-	};
-	//通过jQuery对象初始化分页对象
-	$.fn.paging = function(options) {
-		return new Paging($(this), options);
-	}
+            prePage.on('click', function() {
+                pageIndex--;
+                if (pageIndex < 1) pageIndex = 1;
+                handles(pageIndex);
+            })
+
+            nextPage.on('click', function() {
+                pageIndex++;
+                if (pageIndex > lis.length) pageIndex = lis.length;
+                handles(pageIndex);
+            })
+
+            firstPage.on('click', function() {
+                pageIndex = 1;
+                handles(pageIndex);
+            })
+
+            lastPage.on('click', function() {
+                pageIndex = totalPages;
+                handles(pageIndex);
+            })
+
+            jumpBtn.on('click', function() {
+                var jumpNum = parseInt(jumpText.val().replace(/\D/g, ''));
+                if (jumpNum && jumpNum >= 1 && jumpNum <= totalPages) {
+                    pageIndex = jumpNum;
+                    handles(pageIndex);
+                    jumpText.val(jumpNum);
+                }
+            })
+
+            lis.on('click', function() {
+                pageIndex = $(this).index() + 1;
+                handles(pageIndex);
+            })
+
+            function handles(pageIndex) {
+                lis.removeClass('active').eq(pageIndex - 1).addClass('active');
+                
+                if(totalPages > 10) {
+                	lis.eq(10-1).nextAll().hide();
+                }
+                
+                if(totalPages > 10 && pageIndex >= 5) {
+                	//lis.eq(pageIndex-1).show();
+                	lis.eq(pageIndex-6).nextUntil(lis.eq(pageIndex+5)).show();
+                	lis.eq(pageIndex-5).prevAll().hide();
+                	
+                }
+                
+                if(totalPages > 10 && pageIndex >= 5 && pageIndex >= totalPages - 5){
+                	lis.eq(totalPages-11).nextAll().show();
+                }
+                
+                if (totalPages <= 5) {
+                    that.options.callback(pageIndex);
+                    return false;
+                }
+                if (pageIndex >= 3 && pageIndex <= totalPages - 2) {
+                	distance = (pageIndex - 3) * liWidth;
+                	
+                }
+                if (pageIndex == 2 || pageIndex == 1) distance = 0;
+                if (pageIndex > totalPages - 2) distance = (totalPages - 5) * liWidth;
+                pageSelect.css('transform', 'translateX(' + (-distance) + 'px)');
+                pageIndex == 1 ? firstPage.attr('disabled', true) : firstPage.attr('disabled', false);
+                pageIndex == 1 ? prePage.attr('disabled', true) : prePage.attr('disabled', false);
+                pageIndex == totalPages ? lastPage.attr('disabled', true) : lastPage.attr('disabled', false);
+                pageIndex == totalPages ? nextPage.attr('disabled', true) : nextPage.attr('disabled', false);
+                that.options.callback(pageIndex);
+            }
+
+            handles(that.options.pageNo); // 初始化页码位置
+        }
+    }
+    $.fn.paging = function(options) {
+        return new Paging($(this), options);
+    }
 })(jQuery, window, document);

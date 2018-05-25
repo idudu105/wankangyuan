@@ -55,6 +55,13 @@
             text-align: left;
         }
     </style>
+    <style type="text/css">
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0;
+    }
+    </style>
 </head>
 
 <body style="cursor: auto;">
@@ -112,13 +119,13 @@
                 <div class="nav-collapse sidebar-nav">
                     <ul class="nav nav-tabs nav-stacked main-menu">
                         <li>
-                            <a href="usermanage.html">
+                            <a href="/wankangyuan/admin/viewUserManager">
                                 <!-- <i class="icon-bar-chart"></i> -->
                                 <span class="hidden-tablet"> 用户管理</span>
                             </a>
                         </li>   
                         <li>
-                            <a href="rolemanage.html">
+                            <a href="/wankangyuan/admin/viewRoleManager">
                                 <!-- <i class="icon-bar-chart"></i> -->
                                 <span class="hidden-tablet"> 角色管理</span>
                             </a>
@@ -188,12 +195,15 @@
                                         <!-- <div class="box_xytabzT">Donor配置</div> -->
                                         <div class="tableedit">
                                             <div class="tableeditz2">
-                                                <input type="text" class="tableeditz2p" placeholder="搜索平台用户" />
-                                                <input type="button" class="tableeditz2b" value="搜索" />
+                                            <form method="get">
+                                                <input name="username" type="text" value="username" class="tableeditz2p" placeholder="搜索平台用户" />
+                                                <input type="submit" class="tableeditz2b" value="搜索" />
+                                            </form>
                                             </div>
-                                            <div class="tableeditz tableeditzadd">+新增</div>
-                                            <div class="tableeditz tableeditzedit">/编辑</div>
-                                            <div class="tableeditz tableeditzdis">-禁用</div>
+                                            <div class="tableeditz tableeditzadd">新增</div>
+                                            <div class="tableeditz tableeditzedit">编辑</div>
+                                            <div class="tableeditz tableeditzdis">禁用</div>
+                                            <div class="tableeditz tableeditzen">启用</div>
                                             <div class="tableeditz tableeditzpsre">密码重置</div>
                                         </div>
                                         <div class="tablebox">
@@ -205,19 +215,20 @@
                                                         </th>
                                                         <th class="biaotouth">编号</th>
                                                         <th class="biaotouth">姓名</th>
-                                                        <th class="biaotouth">年龄</th>
+                                                        <!-- <th class="biaotouth">年龄</th> -->
                                                         <th class="biaotouth">性别</th>
                                                         <th class="biaotouth">电话</th>
                                                         <th class="biaotouth">邮箱</th>
                                                         <th class="biaotouth">角色</th>
                                                         <th class="biaotouth">创建时间</th>
-                                                        <th class="biaotouth">更新时间</th>
+                                                        <th class="biaotouth">上次登录时间</th>
+                                                        <th class="biaotouth">状态</th>
                                                     </tr>
                                                 </div>
                                                 <div class="biaoxiang">
-                                                <c:forEach items="${list }" var="user">
+                                                <c:forEach items="${list }" var="user" varStatus="userList">
                                                     <tr role="row" class="trbx">
-                                                        <th class="biaoxiangth"><input type="checkbox" class="xuanze"></th>
+                                                        <th class="biaoxiangth"><input id="check${userList.count }" type="checkbox" name="ids" class="xuanze" value="${user.id }"></th>
                                                         <th class="biaoxiangth">${user.id }</th>
                                                         <th class="biaoxiangth">${user.username }</th>
                                                         <th class="biaoxiangth">
@@ -227,11 +238,15 @@
                                                         <th class="biaoxiangth">${user.phone }</th>
                                                         <th class="biaoxiangth">${user.email }</th>
                                                         <th class="biaoxiangth">角色</th>
-                                                        <th class="biaoxiangth">${user.createTime }</th>
-                                                        <th class="biaoxiangth">${user.lastLoginTime }</th>
+                                                        <th class="biaoxiangth"><fmt:formatDate type="both" value="${user.createTime }" /></th>
+                                                        <th class="biaoxiangth"><fmt:formatDate type="both" value="${user.lastLoginTime }" /></th>
+                                                        <th class="biaoxiangth">
+                                                            <c:if test="${'0' eq user.status }">禁用</c:if>
+                                                            <c:if test="${'1' eq user.status }">正常</c:if>
+                                                        </th>
                                                     </tr>
                                                 </c:forEach>
-                                                    <tr role="row" class="trbx">
+                                                    <!-- <tr role="row" class="trbx">
                                                         <th class="biaoxiangth"><input type="checkbox" class="xuanze"></th>
                                                         <th class="biaoxiangth">02</th>
                                                         <th class="biaoxiangth">李四</th>
@@ -242,22 +257,12 @@
                                                         <th class="biaoxiangth">创建者</th>
                                                         <th class="biaoxiangth">2018-5-1</th>
                                                         <th class="biaoxiangth">2018-5-12</th>
-                                                    </tr>
+                                                    </tr> -->
                                                 </div>
                                             </table>
                                         </div>
 
-                                        <div class="pageK">
-                                            <div class="pageLR">
-                                                <img src="<%=request.getContextPath()%>/admin/img/pageL.png" class="pageLRi" alt="" />
-                                            </div>
-                                            <div class="pageNUM active">1</div>
-                                            <div class="pageNUM ">2</div>
-                                            <div class="pageNUM">3</div>
-                                            <div class="pageLR">
-                                                <img src="<%=request.getContextPath()%>/admin/img/pageR.png" class="pageLRi" alt="" />
-                                            </div>
-                                        </div>
+                                        <div class="pageK" id="box" ></div>
 
                                     </div>
                                 </div>
@@ -266,87 +271,92 @@
 
                             <!-- 新增用户start -->
                             <div class="user_addboxK">
+                            <form id="insertUserForm" action="/wankangyuan/insertUserInfo" method="post">
                                 <div class="addbiaoxT">
                                     <div class="addbiaoxTt">添加用户</div>
                                     <div class="addbiaoxTx"></div>
                                 </div>
                                 <div class="addbiaoxli">
                                     <div class="addbiaoxlit">用户名：</div>
-                                    <input type="text" class="addbiaoxlik" />
+                                    <input name="username" type="text" class="addbiaoxlik" maxlength="20" required="required" />
                                 </div>
                                 <div class="addbiaoxli">
                                     <div class="addbiaoxlit">性别：</div>
                                     <div class="addbiaoxliR">
-                                        <input type="radio" class="addbiaoxlir" name="shifouxianshi" checked="" value="ture" />男
-                                        <input type="radio" class="addbiaoxlir" name="shifouxianshi" value="false" />女
+                                        <input type="radio" class="addbiaoxlir" name="gender" checked="" value="1" />男
+                                        <input type="radio" class="addbiaoxlir" name="gender" value="0" />女
                                     </div>
                                 </div>
-                                <div class="addbiaoxli">
+                                <!-- <div class="addbiaoxli">
                                     <div class="addbiaoxlit">年龄：</div>
                                     <input type="text" class="addbiaoxlik" />
-                                </div>
+                                </div> -->
                                 <div class="addbiaoxli">
                                     <div class="addbiaoxlit">电话：</div>
-                                    <input type="text" class="addbiaoxlik" />
+                                    <input name="phone" type="number" class="addbiaoxlik" required="required" />
                                 </div>
                                 <div class="addbiaoxli">
                                     <div class="addbiaoxlit">邮箱：</div>
-                                    <input type="text" class="addbiaoxlik" />
+                                    <input name="email" type="email" class="addbiaoxlik" required="required" />
                                 </div>
                                 <div class="addbiaoxli">
-                                    <div class="addbiaoxlit">状态：</div>
-                                    <select name="" id="">
-                                        <option value="">参与人</option>
-                                        <option value="">创建人</option>
-                                        <option value="">主持人</option>
+                                    <div class="addbiaoxlit">角色：</div>
+                                    <select name="roleIds" id="">
+                                        <option value="11">参与人</option>
+                                        <option value="12">创建人</option>
+                                        <option value="13">主持人</option>
                                     </select>
                                 </div>
                                 <div class="addboxB">
-                                    <input type="button" value="提交" class="addboxBb" />
+                                    <input type="submit" value="提交" class="addboxBb" />
                                 </div>
+                            </form>
                             </div>
                             <!-- 新增用户end -->
 
                             <!-- 修改用户start -->
                             <div class="user_editboxK">
+                            <form id="updateUserForm" action="" method="post">
+                                <input id="userId" type="hidden" name="id">
                                 <div class="addbiaoxT">
                                     <div class="addbiaoxTt">更新用户</div>
                                     <div class="addbiaoxTx"></div>
                                 </div>
                                 <div class="addbiaoxli">
                                     <div class="addbiaoxlit">用户名：</div>
-                                    <input type="text" class="addbiaoxlik" />
+                                    <input id="username" name="username" type="text" class="addbiaoxlik" />
                                 </div>
                                 <div class="addbiaoxli">
                                     <div class="addbiaoxlit">性别：</div>
                                     <div class="addbiaoxliR">
-                                        <input type="radio" class="addbiaoxlir" name="shifouxianshi" checked="" value="ture" />男
-                                        <input type="radio" class="addbiaoxlir" name="shifouxianshi" value="false" />女
+                                        <input id="male" type="radio" class="addbiaoxlir" name="gender"  value="1" />男
+                                        <input id="female" type="radio" class="addbiaoxlir" name="gender" value="0" />女
                                     </div>
                                 </div>
-                                <div class="addbiaoxli">
+                                <!-- <div class="addbiaoxli">
                                     <div class="addbiaoxlit">年龄：</div>
                                     <input type="text" class="addbiaoxlik" />
-                                </div>
+                                </div> -->
                                 <div class="addbiaoxli">
                                     <div class="addbiaoxlit">电话：</div>
-                                    <input type="text" class="addbiaoxlik" />
+                                    <input id="phone" name="phone" type="number" class="addbiaoxlik" />
                                 </div>
                                 <div class="addbiaoxli">
                                     <div class="addbiaoxlit">邮箱：</div>
-                                    <input type="text" class="addbiaoxlik" />
+                                    <input id="email" name="email" type="email" class="addbiaoxlik" />
                                 </div>
                                 <div class="addbiaoxli">
                                     <div class="addbiaoxlit">状态：</div>
-                                    <select name="" id="">
-                                        <option value="">参与人</option>
-                                        <option value="">创建人</option>
-                                        <option value="">主持人</option>
+                                    <select name="roleIds" id="">
+                                        <option value="11">参与人</option>
+                                        <option value="12">创建人</option>
+                                        <option value="13">主持人</option>
                                     </select>
                                 </div>
                                 <div class="addboxB">
-                                    <input type="button" value="提交" class="addboxBb" />
+                                    <input type="button" value="提交" class="addboxBb" onclick="updateUserInfo()" />
                                 </div>
+                            </form>
                             </div>
                             <!-- 修改用户end -->
 
@@ -358,11 +368,25 @@
                                 </div>
                                 <div class="delbiaoxM">您确认禁用选中的账户吗?（禁用后该账户无法登入系统！）</div>
                                 <div class="addbiaoxB">
-                                    <input type="button" value="确认" class="addbiaoxBb" />
+                                    <input type="button" value="确认" class="addbiaoxBb" onclick="forbidUser(0)" />
                                     <input type="button" value="取消" class="addbiaoxBb2" />
                                 </div>
                             </div>
                             <!-- 禁用用户end -->
+                            
+                            <!-- 启用用户start -->
+                            <div class="user_enboxK">
+                                <div class="addbiaoxT">
+                                    <div class="addbiaoxTt">通知</div>
+                                    <div class="addbiaoxTx"></div>
+                                </div>
+                                <div class="delbiaoxM">您确认启用选中的账户吗?</div>
+                                <div class="addbiaoxB">
+                                    <input type="button" value="确认" class="addbiaoxBb" onclick="forbidUser(1)" />
+                                    <input type="button" value="取消" class="addbiaoxBb2" />
+                                </div>
+                            </div>
+                            <!-- 启用用户end -->
 
                             <!-- 重置用户密码start -->
                             <div class="user_psreboxK">
@@ -372,7 +396,7 @@
                                 </div>
                                 <div class="delbiaoxM">您确认重置选中的账户的密码吗？</div>
                                 <div class="addbiaoxB">
-                                    <input type="button" value="确认" class="addbiaoxBb" />
+                                    <input type="button" value="确认" class="addbiaoxBb" onclick="resetPassword()" />
                                     <input type="button" value="取消" class="addbiaoxBb2" />
                                 </div>
                             </div>
@@ -470,5 +494,210 @@
 
     <script type="text/javascript" src="<%=request.getContextPath()%>/admin/js/usermanage.js"></script>
     <!-- end: JavaScript-->
+    
+    <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
+    
+    <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/paging.js"></script>
+
+	<c:if test="${not empty msg}">
+	    <script type="text/javascript">
+	    layer.msg("${msg}");
+	    </script>
+	</c:if>
+    <script type="text/javascript">
+    
+    $('.tableeditzedit').click(function(){
+    	var ids = $("input[name='ids']");
+        var checkNum = 0;
+        var id;
+        for (var i = 0; i < ids.length; i++) {
+            if (ids[i].checked) {
+                checkNum++;
+            }
+        }
+        if (checkNum != 1) {
+            layer.msg("请选中一个",function(){});
+        } else {
+           	$.post("/wankangyuan/getUserInfo",{
+           		id:$("input[name='ids']:checked").val()
+           	},function(user){
+           		
+	            $("#userId").val(user.id);
+	            $("#username").val(user.username);
+	            if(0 == user.gender){
+		            $("#female").attr("checked","checked");
+	            }
+	            if(1 == user.gender){
+		            $("#male").attr("checked","checked");
+	            }
+	            $("#phone").val(user.phone);
+	            $("#email").val(user.email);
+	            $("#roleIds option[value='"+user.roleIds+"']").attr("selected","selected");
+               },"json");
+			  $('.user_editboxK').show();
+			  
+        }
+    	
+    });
+    
+    
+    function updateUserInfo() {
+    	
+    	var load = layer.load();
+        $.post("/wankangyuan/updateUserInfo",$('#updateUserForm').serialize() ,function(result){
+            layer.close(load);
+            if(result && result.status!= 200){
+                return layer.msg(result.message,function(){}),!1;
+            }else{
+                layer.msg(result.message, {
+                    anim: 0,
+                    end: function (index) {
+                    	window.location.reload();
+                    }
+                });
+                
+            }
+        },"json");
+    }
+    
+    $('.tableeditzdis').click(function(){
+    	var ids = $("input[name='ids']");
+        var checkNum = 0;
+        var id;
+        for (var i = 0; i < ids.length; i++) {
+            if (ids[i].checked) {
+                checkNum++;
+            }
+        }
+        if (checkNum == 0) {
+        	layer.msg("请至少选中一个",function(){});
+        } else {
+               $('.user_disboxK').show();
+        
+        }
+    });
+    
+    $('.tableeditzen').click(function(){
+    	var ids = $("input[name='ids']");
+        var checkNum = 0;
+        var id;
+        for (var i = 0; i < ids.length; i++) {
+            if (ids[i].checked) {
+                checkNum++;
+            }
+        }
+        if (checkNum == 0) {
+        	layer.msg("请至少选中一个",function(){});
+        } else {
+               $('.user_enboxK').show();
+        
+        }
+    });
+    
+    
+    
+    function forbidUser(cmd) {
+    	
+    	var obj=$("input[name='ids']");  
+        arr = [];
+            for (var i = 0; i < obj.length; i++) {
+                if (obj[i].checked) {
+                    arr.push(obj[i].value);
+                }
+            }
+    	
+    	var load = layer.load();
+        $.ajax({
+            async : true,
+            traditional: true,
+            type : 'POST',
+            data : {
+                ids:arr
+            },
+            url : "/wankangyuan/forbidUser"+cmd,// 请求的action路径
+            error : function(result) {// 请求失败处理函数
+            	layer.close(load);
+            	return layer.msg(result.message,function(){}),!1;
+            },
+            success : function(result) {
+            	layer.close(load);
+            	layer.msg(result.message, {
+                    anim: 0,
+                    end: function (index) {
+                        window.location.reload();
+                    }
+                });
+            }	
+        });
+        
+    }
+    
+    $('.tableeditzpsre').click(function(){
+    	var ids = $("input[name='ids']");
+        var checkNum = 0;
+        var id;
+        for (var i = 0; i < ids.length; i++) {
+            if (ids[i].checked) {
+                checkNum++;
+            }
+        }
+        if (checkNum == 0) {
+        	layer.msg("请至少选中一个",function(){});
+        } else {
+            $('.user_psreboxK').show();
+        }
+    });
+    
+    function resetPassword() {
+        var obj=$("input[name='ids']");  
+        arr = [];
+            for (var i = 0; i < obj.length; i++) {
+                if (obj[i].checked) {
+                    arr.push(obj[i].value);
+                }
+            }
+        
+        var load = layer.load();
+        $.ajax({
+            async : true,
+            traditional: true,
+            type : 'POST',
+            data : {
+                ids:arr
+            },
+            url : "/wankangyuan/resetPassword",// 请求的action路径
+            error : function(result) {// 请求失败处理函数
+                layer.close(load);
+                return layer.msg(result.message,function(){}),!1;
+            },
+            success : function(result) {
+                layer.close(load);
+                layer.msg(result.message, {
+                    anim: 0,
+                    end: function (index) {
+                        window.location.reload();
+                    }
+                });
+            }   
+        });
+        
+    }
+    
+    $('#box').paging({
+        initPageNo: ${page}, // 初始页码
+        totalPages: Math.ceil(${total}/${rows}), //总页数
+        totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
+        slideSpeed: 600, // 缓动速度。单位毫秒
+        jump: true, //是否支持跳转
+        callback: function(page) { // 回调函数
+            console.log(page);
+            if(page!=${page}){
+                window.location.href="/wankangyuan/admin/viewUserManager?page="+page+"&rows=${rows}&username=${username}";
+               
+            }
+        }
+    });
+    
+    </script>
 </body>
 </html>

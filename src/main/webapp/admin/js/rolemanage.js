@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2018-05-22 09:15:35
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-05-22 15:57:53
+* @Last Modified time: 2018-05-24 09:29:57
 */
 
 $(document).ready(function(){
@@ -68,10 +68,15 @@ $(document).ready(function(){
     var ouser_editboxK=document.querySelectorAll('.user_editboxK')[0];//修改框
     var oeditboxTx=ouser_editboxK.querySelectorAll('.addbiaoxTx')[0];//修改框关闭按钮
 
-    var otableeditzdis=document.querySelectorAll('.tableeditzdis')[0];//禁用按钮
-    var ouser_disboxK=document.querySelectorAll('.user_disboxK')[0];//禁用框
-    var odisboxTx=ouser_disboxK.querySelectorAll('.addbiaoxTx')[0];//禁用框关闭按钮
-    var odisboxTx2=ouser_disboxK.querySelectorAll('.addbiaoxBb2')[0];//禁用框关闭按钮2
+    var otableeditzdis=document.querySelectorAll('.tableeditzdis')[0];//删除按钮
+    var ouser_disboxK=document.querySelectorAll('.user_disboxK')[0];//删除框
+    var odisboxTx=ouser_disboxK.querySelectorAll('.addbiaoxTx')[0];//删除框关闭按钮
+    var odisboxTx2=ouser_disboxK.querySelectorAll('.addbiaoxBb2')[0];//删除框关闭按钮2
+
+    // var otableeditzen=document.querySelectorAll('.tableeditzen')[0];//启用按钮
+    // var ouser_enboxK=document.querySelectorAll('.user_enboxK')[0];//启用框
+    // var oenboxTx=ouser_enboxK.querySelectorAll('.addbiaoxTx')[0];//启用框关闭按钮
+    // var oenboxTx2=ouser_enboxK.querySelectorAll('.addbiaoxBb2')[0];//启用框关闭按钮2
 
     // var otableeditzpsre=document.querySelectorAll('.tableeditzpsre')[0];//重置按钮
     // var ouser_psreboxK=document.querySelectorAll('.user_psreboxK')[0];//重置框
@@ -79,6 +84,7 @@ $(document).ready(function(){
     // var opsreboxTx2=ouser_psreboxK.querySelectorAll('.addbiaoxBb2')[0];//重置框关闭按钮2
     
 
+//增加
     otableeditzadd.onclick=function(){
         ouser_addboxK.style.display="block";
         ouser_addboxK.style.left=obox_content.offsetWidth/2-ouser_addboxK.offsetWidth/2+"px";//表居中
@@ -87,16 +93,20 @@ $(document).ready(function(){
         ouser_addboxK.style.display="none";
     }
 
+
+//编辑
     otableeditzedit.onclick=function(){
-        ouser_editboxK.style.display="block";
+        // ouser_editboxK.style.display="block";
         ouser_editboxK.style.left=obox_content.offsetWidth/2-ouser_editboxK.offsetWidth/2+"px";//表居中
     }
     oeditboxTx.onclick=function(){
         ouser_editboxK.style.display="none";
     }
 
+
+//删除
     otableeditzdis.onclick=function(){
-        ouser_disboxK.style.display="block";
+        // ouser_disboxK.style.display="block";
         ouser_disboxK.style.left=obox_content.offsetWidth/2-ouser_disboxK.offsetWidth/2+"px";//表居中
     }
     odisboxTx.onclick=function(){
@@ -105,6 +115,19 @@ $(document).ready(function(){
     odisboxTx2.onclick=function(){
         ouser_disboxK.style.display="none";
     }
+
+
+//启用
+    // otableeditzen.onclick=function(){
+    //     // ouser_enboxK.style.display="block";
+    //     ouser_enboxK.style.left=obox_content.offsetWidth/2-ouser_enboxK.offsetWidth/2+"px";//表居中
+    // }
+    // oenboxTx.onclick=function(){
+    //     ouser_enboxK.style.display="none";
+    // }
+    // oenboxTx2.onclick=function(){
+    //     ouser_enboxK.style.display="none";
+    // }
 
     // otableeditzpsre.onclick=function(){
     //     ouser_psreboxK.style.display="block";

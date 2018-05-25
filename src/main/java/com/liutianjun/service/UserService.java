@@ -47,4 +47,10 @@ public interface UserService {
 
     //根据用户名查找其角色
     Set<String> findRoles(String username);
+    
+    //批量禁用
+	int forbidUserByIds(Integer[] ids, String cmd);
+
+	//批量重置密码
+	int resetPasswordByIds(Integer[] ids);
 }

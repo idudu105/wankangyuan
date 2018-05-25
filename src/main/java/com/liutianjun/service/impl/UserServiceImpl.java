@@ -1,6 +1,7 @@
 package com.liutianjun.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -263,5 +264,42 @@ public class UserServiceImpl implements UserService {
         
         return roleService.findRoles(list.toArray(new Integer[0]));
     }
+
+    /**
+     * 批量禁用用户
+     * <p>Title: forbidUserByIds</p>  
+     * <p>Description: </p>  
+     * @param ids
+     * @param cmd 0-禁用 1-启用
+     * @return
+     */
+	@Override
+	public int forbidUserByIds(Integer[] ids, String cmd) {
+		UserQuery example = new UserQuery();
+        Criteria criteria = example.createCriteria();
+        criteria.andIdIn(Arrays.asList(ids));
+        User user = new User();
+        user.setStatus(Integer.valueOf(cmd));
+		return userDao.updateByExampleSelective(user, example);
+	}
+
+	/**
+	 * 批量重置密码
+	 * <p>Title: resetPasswordByIds</p>  
+	 * <p>Description: </p>  
+	 * @param ids
+	 * @return
+	 */
+	@Override
+	public int resetPasswordByIds(Integer[] ids) {
+		int i = 0;
+		for (Integer id : ids) {
+			User user = userDao.selectByPrimaryKey(id);
+			user.setPassword(user.getPhone());
+			passwordHelper.encryptPassword(user);
+	        i += userDao.updateByPrimaryKey(user);
+		}
+		return i;
+	}
 
 }

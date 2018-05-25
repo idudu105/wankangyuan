@@ -1,6 +1,7 @@
 package com.liutianjun.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Role implements Serializable {
     /**
@@ -9,7 +10,7 @@ public class Role implements Serializable {
     private Integer id;
 
     /**
-     * 角色名
+     * 角色名称
      */
     private String role;
 
@@ -27,6 +28,16 @@ public class Role implements Serializable {
      * 是否可用
      */
     private Integer available;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -70,6 +81,22 @@ public class Role implements Serializable {
         this.available = available;
     }
 
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -81,6 +108,8 @@ public class Role implements Serializable {
         sb.append(", description=").append(description);
         sb.append(", resourceIds=").append(resourceIds);
         sb.append(", available=").append(available);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", updateTime=").append(updateTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

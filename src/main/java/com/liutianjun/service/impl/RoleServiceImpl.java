@@ -1,5 +1,7 @@
 package com.liutianjun.service.impl;
 
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -33,6 +35,7 @@ public class RoleServiceImpl implements RoleService {
     
     @Override
     public int insert(Role record) {
+    	record.setCreateTime(new Date());
         return roleDao.insert(record);
     }
 
@@ -47,6 +50,25 @@ public class RoleServiceImpl implements RoleService {
     public int deleteByPrimaryKey(Integer id) {
         return roleDao.deleteByPrimaryKey(id);
     }
+    
+    /**
+     * 批量删除
+     * <p>Title: deleteByIds</p>  
+     * <p>Description: </p>  
+     * @param ids
+     * @return
+     */
+	@Override
+	public int deleteByIds(Integer[] ids) {
+		if(null == ids || ids.length == 0) {
+			return 0;
+		}
+		RoleQuery example = new RoleQuery();
+		Criteria criteria = example.createCriteria();
+		criteria.andIdIn(Arrays.asList(ids));
+		return roleDao.deleteByExample(example);
+	}
+
 
     /**
      * 根据主键修改角色
@@ -57,6 +79,7 @@ public class RoleServiceImpl implements RoleService {
      */
     @Override
     public int updateByPrimaryKey(Role record) {
+    	record.setUpdateTime(new Date());
         return roleDao.updateByPrimaryKeySelective(record);
     }
 
@@ -163,5 +186,6 @@ public class RoleServiceImpl implements RoleService {
         }
         return roles;
     }
+
 
 }

@@ -1,3 +1,7 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <!DOCTYPE html>
 <!-- saved from url=(0056)http://themifycloud.com/demos/templates/janux/table.html -->
 <html lang="en" class=" js inlinesvg">
@@ -17,14 +21,14 @@
     <!-- end: Mobile Specific -->
 
     <!-- start: CSS -->
-    <link id="bootstrap-style" href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
-    <link id="base-style" href="css/style.css" rel="stylesheet">
-    <link id="base-style-responsive" href="css/style-responsive.css" rel="stylesheet">
+    <link id="bootstrap-style" href="<%=request.getContextPath()%>/admin/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/admin/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link id="base-style" href="<%=request.getContextPath()%>/admin/css/style.css" rel="stylesheet">
+    <link id="base-style-responsive" href="<%=request.getContextPath()%>/admin/css/style-responsive.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
     <!-- end: CSS -->
 
-    <link rel="stylesheet" type="text/css" href="css/jquery.treeview.css" />
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/admin/css/jquery.treeview.css" />
 
 
 
@@ -68,7 +72,7 @@
                     <span class="icon-bar"></span>
                 </a>
                 <!-- <a class="brand" href="index.html"><span>JANUX</span></a> -->
-                <a class="brand" href="usermanage.html"><img src="img/newlogo2.png" height="70" width="218" alt="" /></a>
+                <a class="brand" href="usermanage.html"><img src="<%=request.getContextPath()%>/admin/img/newlogo2.png" height="70" width="218" alt="" /></a>
 
                 <!-- start: Header Menu -->
                 <div class="nav-no-collapse header-nav">
@@ -188,8 +192,10 @@
                                         <!-- <div class="box_xytabzT">Donor配置</div> -->
                                         <div class="tableedit">
                                             <div class="tableeditz2">
-                                                <input type="text" class="tableeditz2p" placeholder="搜索平台角色" />
-                                                <input type="button" class="tableeditz2b" value="搜索" />
+                                            <form method="get">
+                                                <input name="rolename" type="text" value="${rolename }" class="tableeditz2p" placeholder="搜索平台角色" />
+                                                <input type="submit" class="tableeditz2b" value="搜索" />
+                                            </form>
                                             </div>
                                             <div class="tableeditz tableeditzadd">新增</div>
                                             <div class="tableeditz tableeditzedit">编辑</div>
@@ -212,37 +218,23 @@
                                                     </tr>
                                                 </div>
                                                 <div class="biaoxiang">
+                                                <form id="roleForm"></form>
+                                                <c:forEach items="${list }" var="role" varStatus="roleList">
                                                     <tr role="row" class="trbx">
-                                                        <th class="biaoxiangth"><input type="checkbox" class="xuanze"></th>
-                                                        <th class="biaoxiangth">01</th>
-                                                        <th class="biaoxiangth">参与者</th>
-                                                        <th class="biaoxiangth">参与项目</th>
-                                                        <th class="biaoxiangth">2018-5-1</th>
-                                                        <th class="biaoxiangth">2018-5-12</th>
+                                                        <th class="biaoxiangth"><input name="roleIds" type="checkbox" class="xuanze" value="${role.id }"></th>
+                                                        <th class="biaoxiangth">${role.id }</th>
+                                                        <th class="biaoxiangth">${role.role }</th>
+                                                        <th class="biaoxiangth">${role.description }</th>
+                                                        <th class="biaoxiangth"><fmt:formatDate type="both" value="${role.createTime }" /></th>
+                                                        <th class="biaoxiangth"><fmt:formatDate type="both" value="${role.updateTime }" /></th>
                                                     </tr>
-                                                    <tr role="row" class="trbx">
-                                                        <th class="biaoxiangth"><input type="checkbox" class="xuanze"></th>
-                                                        <th class="biaoxiangth">02</th>
-                                                        <th class="biaoxiangth">创建者</th>
-                                                        <th class="biaoxiangth">创建项目</th>
-                                                        <th class="biaoxiangth">2018-5-1</th>
-                                                        <th class="biaoxiangth">2018-5-12</th>
-                                                    </tr>
+                                                </c:forEach>
+                                                </form>
                                                 </div>
                                             </table>
                                         </div>
 
-                                        <div class="pageK">
-                                            <div class="pageLR">
-                                                <img src="img/pageL.png" class="pageLRi" alt="" />
-                                            </div>
-                                            <div class="pageNUM active">1</div>
-                                            <div class="pageNUM ">2</div>
-                                            <div class="pageNUM">3</div>
-                                            <div class="pageLR">
-                                                <img src="img/pageR.png" class="pageLRi" alt="" />
-                                            </div>
-                                        </div>
+                                        <div class="pageK" id="box" ></div>
 
                                     </div>
                                 </div>
@@ -251,115 +243,92 @@
 
                             <!-- 新增角色start -->
                             <div class="user_addboxK">
+                            <form action="/wankangyuan/admin/insertRole" method="post">
                                 <div class="addbiaoxT">
                                     <div class="addbiaoxTt">增加角色</div>
                                     <div class="addbiaoxTx"></div>
                                 </div>  
                                 <div class="addbiaoxli">
                                     <div class="addbiaoxlit">角色名称：</div>
-                                    <input type="text" class="addbiaoxlik" />
+                                    <input name="role" type="text" class="addbiaoxlik" required="required" />
                                 </div>
                                 <div class="addbiaoxli">
                                     <div class="addbiaoxlit">角色描述：</div>
-                                    <input type="text" class="addbiaoxlik" />
+                                    <input name="description" type="text" class="addbiaoxlik" />
                                 </div>
                                 <div class="addbiaoxli">
                                     <div class="addbiaoxlit" style="vertical-align:top;">角色授权：</div>
                                     <div class="treeview">
+                                    
                                         <ul id="roleaddLB" class="filetree">  
-                                            <li><span class="folder">项目管理</span>  
+                                        <c:forEach items="${resourceList }" var="menu">
+                                            <c:if test="${'menu' eq menu.type }">
+                                            <li><span class="folder">${menu.name }</span>  
                                                 <ul>  
+                                                <c:forEach items="${resourceList }" var="button">
+                                                    <c:if test="${menu.id eq button.parentId }">
                                                     <li>
-                                                        <input type="checkbox" />菜单1
-                                                    </li>  
-                                                    <li>
-                                                        <input type="checkbox" />菜单2
-                                                    </li>  
-                                                </ul>  
-                                            </li>  
-                                            <li><span class="folder">格式数据管理</span>  
-                                                <ul>  
-                                                    <li>
-                                                        <input type="checkbox" />菜单1
-                                                    </li>  
-                                                    <li>
-                                                        <input type="checkbox" />菜单2
+                                                        <input type="checkbox" name="ids" value="${button.id }" />${button.name }
                                                     </li>
+                                                    </c:if>
+                                                </c:forEach>
                                                 </ul>  
                                             </li>  
-                                            <li class="closed"><span class="folder">应用管理</span>  
-                                                <ul>  
-                                                    <li>
-                                                        <input type="checkbox" />菜单1
-                                                    </li>  
-                                                    <li>
-                                                        <input type="checkbox" />菜单2
-                                                    </li>
-                                                </ul>  
-                                            </li>  
-                                        </ul>  
+                                            </c:if>
+                                        </c:forEach>
+                                        </ul> 
+                                    
                                     </div>
                                 </div>
                                 <div class="addboxB">
-                                    <input type="button" value="提交" class="addboxBb" />
+                                    <input type="submit" value="提交" class="addboxBb" />
                                 </div>
+                            </form> 
                             </div>
                             <!-- 新增角色end -->
 
                             <!-- 修改角色start -->
                             <div class="user_editboxK">
+                            <form action="/wankangyuan/admin/updateRole" method="post">
+                                <input id="roleId" type="hidden" name="id" >
                                 <div class="addbiaoxT">
                                     <div class="addbiaoxTt">编辑角色</div>
                                     <div class="addbiaoxTx"></div>
                                 </div>  
                                 <div class="addbiaoxli">
                                     <div class="addbiaoxlit">角色名称：</div>
-                                    <input type="text" class="addbiaoxlik" />
+                                    <input id="role" name="role" type="text" class="addbiaoxlik" />
                                 </div>
                                 <div class="addbiaoxli">
                                     <div class="addbiaoxlit">角色描述：</div>
-                                    <input type="text" class="addbiaoxlik" />
+                                    <input id="description" name="description" type="text" class="addbiaoxlik" />
                                 </div>
                                 <div class="addbiaoxli">
                                     <div class="addbiaoxlit" style="vertical-align:top;">角色授权：</div>
                                     <div class="treeview">
-                                        <ul id="roleeditLB" class="filetree">  
-                                            <li><span class="folder">项目管理</span>  
+                                        <ul id="roleeditLB" class="filetree">
+                                        <c:forEach items="${resourceList }" var="menu">
+                                            <c:if test="${'menu' eq menu.type }">
+                                            <li><span class="folder">${menu.name }</span>  
                                                 <ul>  
+                                                <c:forEach items="${resourceList }" var="button">
+                                                    <c:if test="${menu.id eq button.parentId }">
                                                     <li>
-                                                        <input type="checkbox" />菜单1
-                                                    </li>  
-                                                    <li>
-                                                        <input type="checkbox" />菜单2
-                                                    </li>  
-                                                </ul>  
-                                            </li>  
-                                            <li><span class="folder">格式数据管理</span>  
-                                                <ul>  
-                                                    <li>
-                                                        <input type="checkbox" />菜单1
-                                                    </li>  
-                                                    <li>
-                                                        <input type="checkbox" />菜单2
+                                                        <input id="check${button.id }" type="checkbox" name="editIds" value="${button.id }" />${button.name }
                                                     </li>
+                                                    </c:if>
+                                                </c:forEach>
                                                 </ul>  
                                             </li>  
-                                            <li class="closed"><span class="folder">应用管理</span>  
-                                                <ul>  
-                                                    <li>
-                                                        <input type="checkbox" />菜单1
-                                                    </li>  
-                                                    <li>
-                                                        <input type="checkbox" />菜单2
-                                                    </li>
-                                                </ul>  
-                                            </li>  
+                                            </c:if>
+                                        </c:forEach>  
                                         </ul>  
                                     </div>
                                 </div>
                                 <div class="addboxB">
-                                    <input type="button" value="提交" class="addboxBb" />
+                                    <input type="submit" value="提交" class="addboxBb" />
                                 </div>
+                            </form>
                             </div>
                             <!-- 修改角色end -->
 
@@ -371,7 +340,7 @@
                                 </div>
                                 <div class="delbiaoxM">您确认删除选中的角色吗?（删除后将无法恢复，请谨慎操作！）</div>
                                 <div class="addbiaoxB">
-                                    <input type="button" value="确认" class="addbiaoxBb" />
+                                    <input type="button" value="确认" class="addbiaoxBb" onclick="deleteByIds()" />
                                     <input type="button" value="取消" class="addbiaoxBb2" />
                                 </div>
                             </div>
@@ -412,69 +381,79 @@
 
     <!-- start: JavaScript-->
 
-    <script src="js/jquery-1.9.1.min.js"></script>
-    <script src="js/jquery-migrate-1.0.0.min.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery-1.9.1.min.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery-migrate-1.0.0.min.js"></script>
 
-    <script src="js/jquery-ui-1.10.0.custom.min.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery-ui-1.10.0.custom.min.js"></script>
 
-    <script src="js/jquery.ui.touch-punch.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.ui.touch-punch.js"></script>
 
-    <script src="js/modernizr.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/modernizr.js"></script>
 
-    <script src="js/bootstrap.min.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/bootstrap.min.js"></script>
 
-    <script src="js/jquery.cookie.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.cookie.js"></script>
 
-    <script src="js/fullcalendar.min.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/fullcalendar.min.js"></script>
 
-    <script src="js/jquery.dataTables.min.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.dataTables.min.js"></script>
 
-    <script src="js/excanvas.js"></script>
-    <script src="js/jquery.flot.js"></script>
-    <script src="js/jquery.flot.pie.js"></script>
-    <script src="js/jquery.flot.stack.js"></script>
-    <script src="js/jquery.flot.resize.min.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/excanvas.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.flot.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.flot.pie.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.flot.stack.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.flot.resize.min.js"></script>
 
-    <script src="js/jquery.chosen.min.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.chosen.min.js"></script>
 
-    <script src="js/jquery.uniform.min.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.uniform.min.js"></script>
 
-    <script src="js/jquery.cleditor.min.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.cleditor.min.js"></script>
 
-    <script src="js/jquery.noty.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.noty.js"></script>
 
-    <script src="js/jquery.elfinder.min.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.elfinder.min.js"></script>
 
-    <script src="js/jquery.raty.min.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.raty.min.js"></script>
 
-    <script src="js/jquery.iphone.toggle.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.iphone.toggle.js"></script>
 
-    <script src="js/jquery.uploadify-3.1.min.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.uploadify-3.1.min.js"></script>
 
-    <script src="js/jquery.gritter.min.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.gritter.min.js"></script>
 
-    <script src="js/jquery.imagesloaded.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.imagesloaded.js"></script>
 
-    <script src="js/jquery.masonry.min.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.masonry.min.js"></script>
 
-    <script src="js/jquery.knob.modified.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.knob.modified.js"></script>
 
-    <script src="js/jquery.sparkline.min.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/jquery.sparkline.min.js"></script>
 
-    <script src="js/counter.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/counter.js"></script>
 
-    <script src="js/retina.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/retina.js"></script>
 
-    <script src="js/custom.js"></script>
+    <script src="<%=request.getContextPath()%>/admin/js/custom.js"></script>
 
     
 
     <!-- <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script> -->
-    <script type="text/javascript" src="js/jquery.cookie.js"></script>
-    <script type="text/javascript" src="js/jquery.treeview.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/admin/js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/admin/js/jquery.treeview.js"></script>
 
-    <script type="text/javascript" src="js/rolemanage.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/admin/js/rolemanage.js"></script>
     <!-- end: JavaScript-->
+    
+    <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
+    
+    <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/paging.js"></script>
+
+    <c:if test="${not empty msg}">
+        <script type="text/javascript">
+        layer.msg("${msg}");
+        </script>
+    </c:if>
 
     <script type="text/javascript">
         $(document).ready(function() {     
@@ -491,6 +470,109 @@
                 persist: "location"  
             });  
         });
+        
+        
+        //编辑按钮
+        $('.tableeditzedit').click(function(){
+            var ids = $("input[name='roleIds']");
+            var checkNum = 0;
+            for (var i = 0; i < ids.length; i++) {
+                if (ids[i].checked) {
+                    checkNum++;
+                }
+            }
+            if (checkNum != 1) {
+                layer.msg("请选中一个",function(){});
+            } else {
+                $.post("/wankangyuan/admin/getRoleInfo",{
+                	id : $("input[name='roleIds']:checked").val()
+                },function(role){
+                    $("#roleId").val(role.id);
+                    $("#role").val(role.role);
+                    $("#description").val(role.description);
+                    
+                    var arr = role.resourceIds.split(',');
+                    $("input[name='editIds']").attr("checked",false);
+                    for(var i = 0; i < arr.length; i++){
+	                    $("#check"+arr[i]).attr("checked","checked");
+                    }
+                    
+                   },"json");
+                  $('.user_editboxK').show();
+                  
+            }
+            
+        });
+        
+        
+        //删除按钮显示
+        $('.tableeditzdis').click(function(){
+            var ids = $("input[name='roleIds']");
+            var checkNum = 0;
+            for (var i = 0; i < ids.length; i++) {
+                if (ids[i].checked) {
+                    checkNum++;
+                }
+            }
+            if (checkNum == 0) {
+                layer.msg("请至少选中一个",function(){});
+            } else {
+                  $('.user_disboxK').show();
+                  
+            }
+            
+        });
+        
+        //删除
+        function deleteByIds() {
+        	var obj=$("input[name='roleIds']");  
+            arr = [];
+            for (var i = 0; i < obj.length; i++) {
+                if (obj[i].checked) {
+                    arr.push(obj[i].value);
+                }
+            }
+            
+            var load = layer.load();
+            $.ajax({
+                async : true,
+                traditional: true,
+                type : 'POST',
+                data : {
+                    ids:arr
+                },
+                url : "/wankangyuan/admin/deleteByIds",// 请求的action路径
+                error : function(result) {// 请求失败处理函数
+                    layer.close(load);
+                    return layer.msg(result.message,function(){}),!1;
+                },
+                success : function(result) {
+                    layer.close(load);
+                    layer.msg(result.message, {
+                        anim: 0,
+                        end: function (index) {
+                            window.location.reload();
+                        }
+                    });
+                }   
+            });
+        }
+        
+        $('#box').paging({
+            initPageNo: ${page}, // 初始页码
+            totalPages: Math.ceil(${total}/${rows}), //总页数
+            totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
+            slideSpeed: 600, // 缓动速度。单位毫秒
+            jump: true, //是否支持跳转
+            callback: function(page) { // 回调函数
+                console.log(page);
+                if(page!=${page}){
+                    window.location.href="/wankangyuan/admin/viewRoleManager?page="+page+"&rows=${rows}&rolename=${rolename}";
+                   
+                }
+            }
+        });
+        
     </script>
 </body>
 </html>

@@ -35,5 +35,8 @@ public interface RoleService {
     
     //根据角色编号得到角色标识符列表
     Set<String> findRoles(Integer... roleIds);
+
+    //批量删除
+	int deleteByIds(Integer[] ids);
     
 }

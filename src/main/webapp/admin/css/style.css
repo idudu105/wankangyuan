@@ -245,7 +245,9 @@ body {
 a {
 	color: #646464;
 }
-
+td{
+    text-align: center;
+}
 hr {
 	height: 2px;
 	border: none;
@@ -3075,7 +3077,7 @@ ul.messagesList li span.date {
 }
 
 .tableedit{
-    border-left:1px solid #dadada;
+    /*border-left:1px solid #dadada;*/
     overflow:auto;
     margin-bottom:10px;
 }
@@ -3086,11 +3088,47 @@ ul.messagesList li span.date {
     color:#578EBE;
     border:1px solid #dadada;
     text-align: center;
-    border-left:0;
+    /*border-left:0;*/
     float:left;
     cursor:pointer;
     background:#F4F4F4;
+    overflow:auto;
+    margin-right:10px;
 }
+.tableeditz2{
+    float:left;
+    overflow:auto;
+    margin-right:20px;
+    margin-top:1px;
+}
+.tableeditz2p{
+    width:200px;
+    height:30px;
+    border:1px solid #dadada;
+    background:#f4f4f4;
+    color:#ccc;
+    float:left;
+    margin-right:5px;
+}
+.tableeditz2b{
+    float:left;
+    padding:0 20px;
+    height:30px;
+    border:1px solid #dadada;
+    background:#f4f4f4;
+    color:#578EBE;
+    outline:0;
+}
+
+
+
+
+
+
+
+
+
+
 .tablebox{
     overflow:auto;
 }
@@ -3201,7 +3239,7 @@ input[type="text"].addboxlik{
     /*height:230px;*/
     padding:10px;
     position:absolute;
-    top:-150px;
+    top:-60px;
     left:200px;
     z-index: 300;
     background:#fff;
@@ -3266,6 +3304,8 @@ input[type="text"].addboxlik{
 .addbiaoxliR{
     display:inline-block;
     vertical-align: middle;
+    width:220px;
+    text-align: left;
 }
 input[type="radio"].addbiaoxlir{
     margin:2px 0 0 0;
@@ -3374,4 +3414,75 @@ input[type="text"].addbiaoxlik{
     font-size: 16px;
     color: #333;
     margin: 30px 0;
+}
+
+
+.pageK{
+    /*width:200px;*/
+    /*height:100px;*/
+    /*background:red;*/
+    margin:30px auto;
+    text-align: center;
+    /*margin-top:300px;*/
+    /*height:31px;*/
+}
+.pageLR{
+    background:#ffffff;
+    border:1px solid #dddddd;
+    border-radius:2px;
+    width:35px;
+    height:31px;
+    margin:0 57px;
+    display:inline-block;
+    vertical-align: middle;
+    cursor:pointer;
+}
+.pageNUM{
+    margin:0 6px;
+    height:31px;
+    width:31px;
+    background:#ffffff;
+    border:1px solid #dddddd;
+    border-radius:2px;
+    display:inline-block;
+    vertical-align: middle;
+    color:#c9c9c9;
+    font-size:14px;
+    line-height: 31px;
+    cursor:pointer;
+}
+.pageNUM.active{
+    background:#16579b;
+    color:#fff;
+}
+.pageLRi{
+    width:10px;
+    height:18px;
+    margin-left:1px;
+    margin-top:7.5px;
+    background:#fff;
+}
+
+
+
+.user_addboxK,.user_editboxK,.user_disboxK,.user_psreboxK,.user_enboxK{
+    width:600px;
+    position:absolute;
+    padding:10px;
+    top:-60px;
+    /*left:100px;*/
+    z-index: 400;
+    background:#fff;
+    border:1px solid #ccc;
+    text-align: center;
+    overflow:auto;
+    display:none;
+}
+
+.treeview{
+    /*float:left;*/
+    display:inline-block;
+    vertical-align: top;
+    width:220px;
+    text-align: left;
 }

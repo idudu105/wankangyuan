@@ -15,13 +15,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.liutianjun.pojo.User;
 import com.liutianjun.service.UserService;
@@ -88,28 +93,33 @@ public class UserController {
 		resultMap.put("status", 400);
 		//检查验证码
 		if(!VerifyCodeUtils.verifyCode(randomCode)) {
-			resultMap.put("message", "验证码不正确！");
+			resultMap.put("message", "验证码不正确!");
+			return resultMap;
+		}
+		//检查用户名
+		if(null != userService.selectByEmail(user.getUsername())){
+			resultMap.put("message", "用户名已经存在!");
 			return resultMap;
 		}
 		//检查邮箱
 		if(null != userService.selectByEmail(user.getEmail())){
-			resultMap.put("message", "Email已经存在！");
+			resultMap.put("message", "Email已经存在!");
 			return resultMap;
 		}
 		//检查手机号
 		if(null != userService.selectByPhone(user.getPhone())){
-			resultMap.put("message", "手机号已经存在！");
+			resultMap.put("message", "手机号已经存在!");
 			return resultMap;
 		}
 		//检查手机验证码
 		String vPhoneCode = (String) SecurityUtils.getSubject().getSession().getAttribute(VerifyCodeUtils.V_PHONECODE);
 		if(null ==phoneCode || !phoneCode.equals(vPhoneCode)) {
-			resultMap.put("message", "手机验证码错误！");
+			resultMap.put("message", "手机验证码错误!");
 			return resultMap;
 		}
 		
 		userService.insert(user);
-		resultMap.put("message", "注册成功！");
+		resultMap.put("message", "注册成功!");
 		resultMap.put("status", 200);
 		
 		return resultMap;
@@ -134,22 +144,22 @@ public class UserController {
 	 */
 	@RequestMapping(value="/forgetPassword",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> resetPassword(String phone, String phoneCode, String password) {
+	public Map<String,Object> forgetPassword(String phone, String phoneCode, String password) {
 		resultMap.put("status", 400);
 		//检查手机号
 		if(null == userService.selectByPhone(phone)){
-			resultMap.put("message", "手机号不存在！");
+			resultMap.put("message", "手机号不存在!");
 			return resultMap;
 		}
 		//检查手机验证码
 		String vPhoneCode = (String) SecurityUtils.getSubject().getSession().getAttribute(VerifyCodeUtils.V_PHONECODE);
 		if(null ==phoneCode || !phoneCode.equals(vPhoneCode)) {
-			resultMap.put("message", "手机验证码错误！");
+			resultMap.put("message", "手机验证码错误!");
 			return resultMap;
 		}
 		User user = userService.selectByPhone(phone);
 		userService.changePassword(user.getId(), password);
-		resultMap.put("message", "重置密码成功！");
+		resultMap.put("message", "重置密码成功!");
 		resultMap.put("status", 200);
 		
 		return resultMap;
@@ -232,7 +242,29 @@ public class UserController {
 	@RequestMapping(value="/updateUserInfo",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> updateUserInfo(User user) {
+		User oldUser = userService.selectByPrimaryKey(user.getId());
 		resultMap.put("status", 400);
+		//检查用户名
+		if(null != user.getUsername() && null != userService.selectByUsername(user.getUsername())){
+			if(!oldUser.getUsername().equals(user.getUsername())) {
+				resultMap.put("message", "用户名已经存在!");
+				return resultMap;
+			}
+		}
+		//检查邮箱
+		if(null != user.getEmail() && null != userService.selectByEmail(user.getEmail())){
+			if(!oldUser.getEmail().equals(user.getEmail())) {
+				resultMap.put("message", "Email已经存在!");
+				return resultMap;
+			}
+		}
+		//检查手机号
+		if(null != user.getPhone() && null != userService.selectByPhone(user.getPhone())){
+			if(!oldUser.getPhone().equals(user.getPhone())) {
+				resultMap.put("message", "手机号已经存在!");
+				return resultMap;
+			}
+		}
 		if(0 == userService.updateByPrimaryKey(user)) {
 			resultMap.put("message", "修改失败");
 			return resultMap;
@@ -259,7 +291,7 @@ public class UserController {
 		//检查手机验证码
 		String vPhoneCode = (String) SecurityUtils.getSubject().getSession().getAttribute(VerifyCodeUtils.V_PHONECODE);
 		if(null ==phoneCode || !phoneCode.equals(vPhoneCode)) {
-			resultMap.put("message", "手机验证码错误！");
+			resultMap.put("message", "手机验证码错误!");
 			return resultMap;
 		}
 		//销毁验证码
@@ -267,14 +299,14 @@ public class UserController {
 		
 		//检查手机号
 		if(null != userService.selectByPhone(newPhone)){
-			resultMap.put("message", "手机号已存在！");
+			resultMap.put("message", "手机号已存在!");
 			return resultMap;
 		}
 		
 		//检查新手机验证码
 		String vNewPhoneCode = (String) SecurityUtils.getSubject().getSession().getAttribute(VerifyCodeUtils.V_NEWPHONECODE);
 		if(null ==newPhoneCode || !newPhoneCode.equals(vNewPhoneCode)) {
-			resultMap.put("message", "新手机验证码错误！");
+			resultMap.put("message", "新手机验证码错误!");
 			return resultMap;
 		}
 		//销毁新手机验证码
@@ -332,7 +364,7 @@ public class UserController {
 	    //检查手机验证码
   		String vPhoneCode = (String) SecurityUtils.getSubject().getSession().getAttribute(VerifyCodeUtils.V_PHONECODE);
   		if(null ==phoneCode || !phoneCode.equals(vPhoneCode)) {
-  			resultMap.put("message", "手机验证码错误！");
+  			resultMap.put("message", "手机验证码错误!");
   			return resultMap;
   		}
   		//销毁验证码
@@ -342,7 +374,7 @@ public class UserController {
 	    //获取用户
 	    User user = userService.selectByUsername(username);
 	    userService.changePassword(user.getId(), password);
-		resultMap.put("message", "重置密码成功！");
+		resultMap.put("message", "重置密码成功!");
 		resultMap.put("status", 200);
 		
 		return resultMap;
@@ -393,17 +425,128 @@ public class UserController {
 		
 	}
 	
-	@RequestMapping(value="/viewUserManager",method=RequestMethod.GET)
+	/**
+	 * 进入用户管理界面
+	 * @Title: viewUserManager 
+	 * @param page
+	 * @param rows
+	 * @param username
+	 * @param model
+	 * @return 
+	 * String
+	 */
+	@RequestMapping(value="/admin/viewUserManager",method=RequestMethod.GET)
 	public String viewUserManager(@RequestParam(value="page", defaultValue="1")Integer page, 
-            @RequestParam(value="rows", defaultValue="8")Integer rows,
+            @RequestParam(value="rows", defaultValue="10")Integer rows,
             @RequestParam(value="username", required=false)String username,
             Model model) {
 		Map<String, Object> map = userService.findAll(page, rows, username);
 		
 		model.addAttribute("list", map.get("list"));
-		model.addAttribute("total", map.get("list"));
+		model.addAttribute("total", map.get("total"));
+		model.addAttribute("page", page);
+		model.addAttribute("rows", rows);
+		model.addAttribute("username", username);
 		
 		return "admin/usermanage.jsp";
+	}
+	
+	/**
+	 * 管理员注册新用户
+	 * @Title: insertUserInfo 
+	 * @param user
+	 * @param attributes
+	 * @return 
+	 * String
+	 */
+	@RequestMapping(value="/insertUserInfo",method=RequestMethod.POST)
+	public String insertUserInfo(User user,RedirectAttributes attributes) {
+		//检查用户名
+		if(null != userService.selectByEmail(user.getUsername())){
+			attributes.addFlashAttribute("msg", "用户名已经存在!");
+			return "redirect:/viewUserManager";
+		}
+		//检查邮箱
+		if(null != userService.selectByEmail(user.getEmail())){
+			attributes.addFlashAttribute("msg", "Email已经存在!");
+			return "redirect:/viewUserManager";
+		}
+		//检查手机号
+		if(null != userService.selectByPhone(user.getPhone())){
+			attributes.addFlashAttribute("msg", "手机号已经存在!");
+			return "redirect:/viewUserManager";
+		}
+		//设置默认密码为手机号
+		user.setPassword(user.getPhone());
+		
+		if(0 != userService.insert(user)) {
+			attributes.addFlashAttribute("msg", "注册成功!");
+		}else {
+			attributes.addFlashAttribute("msg", "注册失败!");
+		}
+		return "redirect:/admin/viewUserManager";
+	}
+	
+	/**
+	 * 获取用户信息
+	 * @Title: getUserInfo 
+	 * @param id
+	 * @return 
+	 * User
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
+	 */
+	@RequestMapping(value="/getUserInfo",method=RequestMethod.POST,produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getUserInfo(Integer id) throws Exception {
+		ObjectMapper mapper = new ObjectMapper();
+		User user = userService.selectByPrimaryKey(id);
+		String json = mapper.writeValueAsString(user);
+		return json;
+	}
+	
+	/**
+	 * 禁用账户
+	 * @Title: forbidUser 
+	 * @param ids
+	 * @param cmd
+	 * @return 
+	 * Map<String,Object>
+	 */
+	@RequestMapping(value="/forbidUser{cmd}",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> forbidUser(Integer[] ids, @PathVariable String cmd) {
+		resultMap.put("status", 400);
+		resultMap.put("message", "操作失败!");
+		
+		if(null != ids && ids.length == userService.forbidUserByIds(ids,cmd)) {
+			resultMap.put("status", 200);
+			resultMap.put("message", "操作成功!");
+		}
+		
+		return resultMap;
+	}
+	
+	/**
+	 * 管理员重置用户密码
+	 * @Title: resetPassword 
+	 * @param ids
+	 * @return 
+	 * Map<String,Object>
+	 */
+	@RequestMapping(value="/resetPassword",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> resetPassword(Integer[] ids) {
+		resultMap.put("status", 400);
+		resultMap.put("message", "操作失败!");
+		
+		if(null != ids && ids.length == userService.resetPasswordByIds(ids)) {
+			resultMap.put("status", 200);
+			resultMap.put("message", "操作成功,密码重置已为用户手机号!");
+		}
+		
+		return resultMap;
 	}
 	
 }
