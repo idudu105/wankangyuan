@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <title>Document</title>
 </head>
 <link rel="stylesheet" type="text/css" href="/wankangyuan/static/css/project1.css" />
-<script type="text/javascript" src="/wankangyuan/pages/js/project1.js"></script>
+<script type="text/javascript" src="/wankangyuan/jsp/project/js/project1.js"></script>
 <script type="text/javascript">
     window.onload=function(){
         project0();
@@ -51,7 +51,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <a href="project_member.html"><div class="top2Ctr">成员</div></a>
                     <a href="project_append.html"><div class="top2Ctr">应用结果</div></a>
                     <a href="project_app.html"><div class="top2Ctr">应用</div></a>
-                    <a href="/wankangyuan/formatData/project"><div class="top2Ctr">格式数据</div></a>
+                    <a href="/wankangyuan/projectFormatData/selectProjectFormatDataList"><div class="top2Ctr">格式数据</div></a>
                     <a href="javascript:;"><div class="top2Ctr active">文件</div></a>
                     <a href="/wankangyuan/project/getProjectDetail"><div class="top2Ctr">基本信息</div></a>
                 </div>

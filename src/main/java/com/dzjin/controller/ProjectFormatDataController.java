@@ -1,5 +1,7 @@
 package com.dzjin.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -18,7 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 
 @Controller
-@RequestMapping("/projectData")
-public class ProjectDataController {
+@RequestMapping("/projectFormatData")
+public class ProjectFormatDataController {
+	
+	@RequestMapping("/selectProjectFormatDataList")
+	public String selectProjectFormatDataList(HttpSession session){
+
+		return "redirect:/jsp/project/project_data.jsp";
+	}
+	
+	
 
 }

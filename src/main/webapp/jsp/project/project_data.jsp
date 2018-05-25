@@ -53,11 +53,11 @@
 			<div class="top2">
 				<div class="top2C">
 					<div class="top2Ctl active">13例结直肠癌病人的基因表达</div>
-					<a href="project_discuss.html"><div class="top2Ctr">讨论版</div></a> <a
-						href="project_member.html"><div class="top2Ctr">成员</div></a> <a
-						href="project_append.html"><div class="top2Ctr">应用结果</div></a> <a
-						href="project_app.html"><div class="top2Ctr">应用</div></a> <a
-						href="javascript:;"><div class="top2Ctr active">格式数据</div></a> 
+					<a href="project_discuss.html"><div class="top2Ctr">讨论版</div></a> 
+					<a href="project_member.html"><div class="top2Ctr">成员</div></a> 
+					<a href="project_append.html"><div class="top2Ctr">应用结果</div></a> 
+					<a href="project_app.html"><div class="top2Ctr">应用</div></a> 
+					<a href="/wankangyuan/projectFormatData/selectProjectFormatDataList"><div class="top2Ctr active">格式数据</div></a>
                     <a href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId"><div class="top2Ctr">文件</div></a>
                     <a href="/wankangyuan/project/getProjectDetail"><div class="top2Ctr">基本信息</div></a>
 				</div>
