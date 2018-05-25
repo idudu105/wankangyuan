@@ -380,6 +380,14 @@ public class UserController {
 		return resultMap;
 	}
 	
+	/**
+	 * 上传头像
+	 * @Title: updateUserPhone 
+	 * @param imgBase
+	 * @param request
+	 * @return 
+	 * Map<String,Object>
+	 */
 	@RequestMapping(value="/upPic",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> updateUserPhone(String imgBase,HttpServletRequest request) {
@@ -426,8 +434,8 @@ public class UserController {
 	}
 	
 	/**
-	 * 进入用户管理界面
-	 * @Title: viewUserManager 
+	 * 管理员进入用户管理界面
+	 * @Title: viewUserManage 
 	 * @param page
 	 * @param rows
 	 * @param username
@@ -435,8 +443,8 @@ public class UserController {
 	 * @return 
 	 * String
 	 */
-	@RequestMapping(value="/admin/viewUserManager",method=RequestMethod.GET)
-	public String viewUserManager(@RequestParam(value="page", defaultValue="1")Integer page, 
+	@RequestMapping(value="/admin/viewUserManage",method=RequestMethod.GET)
+	public String viewUserManage(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="10")Integer rows,
             @RequestParam(value="username", required=false)String username,
             Model model) {
@@ -459,22 +467,22 @@ public class UserController {
 	 * @return 
 	 * String
 	 */
-	@RequestMapping(value="/insertUserInfo",method=RequestMethod.POST)
+	@RequestMapping(value="/admin/insertUserInfo",method=RequestMethod.POST)
 	public String insertUserInfo(User user,RedirectAttributes attributes) {
 		//检查用户名
 		if(null != userService.selectByEmail(user.getUsername())){
 			attributes.addFlashAttribute("msg", "用户名已经存在!");
-			return "redirect:/viewUserManager";
+			return "redirect:/viewUserManage";
 		}
 		//检查邮箱
 		if(null != userService.selectByEmail(user.getEmail())){
 			attributes.addFlashAttribute("msg", "Email已经存在!");
-			return "redirect:/viewUserManager";
+			return "redirect:/viewUserManage";
 		}
 		//检查手机号
 		if(null != userService.selectByPhone(user.getPhone())){
 			attributes.addFlashAttribute("msg", "手机号已经存在!");
-			return "redirect:/viewUserManager";
+			return "redirect:/viewUserManage";
 		}
 		//设置默认密码为手机号
 		user.setPassword(user.getPhone());
@@ -484,7 +492,7 @@ public class UserController {
 		}else {
 			attributes.addFlashAttribute("msg", "注册失败!");
 		}
-		return "redirect:/admin/viewUserManager";
+		return "redirect:/admin/viewUserManage";
 	}
 	
 	/**
@@ -497,7 +505,7 @@ public class UserController {
 	 * @throws JsonMappingException 
 	 * @throws JsonGenerationException 
 	 */
-	@RequestMapping(value="/getUserInfo",method=RequestMethod.POST,produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/admin/getUserInfo",method=RequestMethod.GET,produces="text/html;charset=UTF-8")
 	@ResponseBody
 	public String getUserInfo(Integer id) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
@@ -507,14 +515,14 @@ public class UserController {
 	}
 	
 	/**
-	 * 禁用账户
+	 * 管理员禁用账户
 	 * @Title: forbidUser 
 	 * @param ids
 	 * @param cmd
 	 * @return 
 	 * Map<String,Object>
 	 */
-	@RequestMapping(value="/forbidUser{cmd}",method=RequestMethod.POST)
+	@RequestMapping(value="admin/forbidUser{cmd}",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> forbidUser(Integer[] ids, @PathVariable String cmd) {
 		resultMap.put("status", 400);
@@ -535,7 +543,7 @@ public class UserController {
 	 * @return 
 	 * Map<String,Object>
 	 */
-	@RequestMapping(value="/resetPassword",method=RequestMethod.POST)
+	@RequestMapping(value="/admin/resetPassword",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> resetPassword(Integer[] ids) {
 		resultMap.put("status", 400);

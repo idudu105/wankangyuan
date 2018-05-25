@@ -1,6 +1,8 @@
 package com.liutianjun.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -39,6 +41,9 @@ public class ResourceServiceImpl implements ResourceService {
      */
     @Override
     public int insert(Resource record) {
+    	record.setType("button");
+    	record.setParentIds(selectByPrimaryKey(record.getParentId()).getParentIds()+record.getParentId()+"/");
+    	record.setCreateTime(new Date());
         return resourceDao.insert(record);
     }
 
@@ -54,6 +59,24 @@ public class ResourceServiceImpl implements ResourceService {
     public int deleteByPrimaryKey(Integer id) {
         return resourceDao.deleteByPrimaryKey(id);
     }
+    
+    /**
+     * 批量删除
+     * <p>Title: deleteByIds</p>  
+     * <p>Description: </p>  
+     * @param ids
+     * @return
+     */
+	@Override
+	public int deleteByIds(Integer[] ids) {
+		ResourceQuery example = new ResourceQuery();
+		Criteria criteria = example.createCriteria();
+		if(null == ids || ids.length == 0) {
+			return 0;
+		}
+		criteria.andIdIn(Arrays.asList(ids));
+		return resourceDao.deleteByExample(example);
+	}
 
     /**
      * 更新资源信息
@@ -65,6 +88,8 @@ public class ResourceServiceImpl implements ResourceService {
      */
     @Override
     public int updateByPrimaryKey(Resource record) {
+    	record.setParentIds(selectByPrimaryKey(record.getParentId()).getParentIds()+record.getParentId()+"/");
+    	record.setUpdateTime(new Date());
         return resourceDao.updateByPrimaryKeySelective(record);
     }
 

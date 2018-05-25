@@ -10,6 +10,8 @@
     <result column="parent_ids" property="parentIds" jdbcType="VARCHAR" />
     <result column="permission" property="permission" jdbcType="VARCHAR" />
     <result column="available" property="available" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -71,7 +73,7 @@
   </sql>
   <sql id="Base_Column_List" >
     <if test="fields == null" >
-      id, name, type, url, parent_id, parent_ids, permission, available
+      id, name, type, url, parent_id, parent_ids, permission, available, create_time, update_time
     </if>
     <if test="fields != null" >
       ${fields}
@@ -96,7 +98,7 @@
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
-    id,name,type,url,parent_id,parent_ids,permission,available
+    id,name,type,url,parent_id,parent_ids,permission,available,create_time,update_time
     from resource
     where id = #{id,jdbcType=INTEGER}
   </select>
@@ -113,10 +115,12 @@
   <insert id="insert" parameterType="com.liutianjun.pojo.Resource" >
     insert into resource (id, name, type, 
       url, parent_id, parent_ids, 
-      permission, available)
+      permission, available, create_time, 
+      update_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
       #{url,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, #{parentIds,jdbcType=VARCHAR}, 
-      #{permission,jdbcType=VARCHAR}, #{available,jdbcType=INTEGER})
+      #{permission,jdbcType=VARCHAR}, #{available,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.liutianjun.pojo.Resource" >
     insert into resource
@@ -145,6 +149,12 @@
       <if test="available != null" >
         available,
       </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -170,6 +180,12 @@
       </if>
       <if test="available != null" >
         #{available,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -206,6 +222,12 @@
       <if test="record.available != null" >
         available = #{record.available,jdbcType=INTEGER},
       </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -220,7 +242,9 @@
       parent_id = #{record.parentId,jdbcType=INTEGER},
       parent_ids = #{record.parentIds,jdbcType=VARCHAR},
       permission = #{record.permission,jdbcType=VARCHAR},
-      available = #{record.available,jdbcType=INTEGER}
+      available = #{record.available,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -249,6 +273,12 @@
       <if test="available != null" >
         available = #{available,jdbcType=INTEGER},
       </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -260,7 +290,9 @@
       parent_id = #{parentId,jdbcType=INTEGER},
       parent_ids = #{parentIds,jdbcType=VARCHAR},
       permission = #{permission,jdbcType=VARCHAR},
-      available = #{available,jdbcType=INTEGER}
+      available = #{available,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

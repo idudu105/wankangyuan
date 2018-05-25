@@ -32,7 +32,7 @@ public class RoleController {
 	
 	/**
 	 * 显示权限管理页面
-	 * @Title: viewRoleManager 
+	 * @Title: viewRoleManage
 	 * @param page
 	 * @param rows
 	 * @param role
@@ -40,8 +40,8 @@ public class RoleController {
 	 * @return 
 	 * String
 	 */
-	@RequestMapping(value="/viewRoleManager",method=RequestMethod.GET)
-	public String viewRoleManager(@RequestParam(value="page", defaultValue="1")Integer page, 
+	@RequestMapping(value="/viewRoleManage",method=RequestMethod.GET)
+	public String viewRoleManage(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="10")Integer rows,
             @RequestParam(value="rolename", required=false)String role,
             Model model) {
@@ -54,7 +54,6 @@ public class RoleController {
 		
 		Map<String, Object> resourceMap = resourceService.findAll();
 		model.addAttribute("resourceList", resourceMap.get("list"));
-		
 		
 		return "admin/rolemanage.jsp";
 	}
@@ -80,7 +79,7 @@ public class RoleController {
 			attributes.addFlashAttribute("msg", "添加失败！");
 		}
 		
-		return "redirect:/admin/viewRoleManager";
+		return "redirect:/admin/viewRoleManage";
 	}
 	
 	/**
@@ -123,7 +122,7 @@ public class RoleController {
 			attributes.addFlashAttribute("msg", "更新失败！");
 		}
 		
-		return "redirect:/admin/viewRoleManager";
+		return "redirect:/admin/viewRoleManage";
 	}
 	
 	/**
@@ -133,9 +132,9 @@ public class RoleController {
 	 * @return 
 	 * Map<String,Object>
 	 */
-	@RequestMapping(value="/deleteByIds",method=RequestMethod.POST)
+	@RequestMapping(value="/deleteRolesByIds",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> deleteByIds(Integer[] ids) {
+	public Map<String,Object> deleteRolesByIds(Integer[] ids) {
 		resultMap.put("status", 400);
 		resultMap.put("message", "操作失败!");
 		

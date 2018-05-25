@@ -36,5 +36,8 @@ public interface ResourceService {
     
     //根据用户权限得到菜单
     List<Resource> findMenus(Set<String> permissions);
+
+    //批量删除
+	int deleteByIds(Integer[] ids);
     
 }

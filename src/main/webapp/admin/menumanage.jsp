@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<%@ taglib prefix="zhangfn" uri="http://github.com/zhangkaitao/tags/zhang-functions" %>
 <!DOCTYPE html>
 <!-- saved from url=(0056)http://themifycloud.com/demos/templates/janux/table.html -->
 <html lang="en" class=" js inlinesvg">
@@ -10,7 +11,7 @@
 
     <!-- start: Meta -->
 
-    <title>角色管理</title>
+    <title>菜单管理</title>
     <meta name="description" content="Bootstrap Metro Dashboard">
     <meta name="author" content="Dennis Ji">
     <meta name="keyword" content="Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
@@ -28,7 +29,6 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
     <!-- end: CSS -->
 
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/admin/css/jquery.treeview.css" />
 
 
 
@@ -172,7 +172,7 @@
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
-                    <a href="/wankangyuan/admin/viewRoleManage">角色管理</a>
+                    <a href="/wankangyuan/admin/viewResourceManage">菜单管理</a>
                 </li>
             </ul>
 
@@ -182,7 +182,7 @@
                     <div class="box-header" data-original-title="">
                         <h2>
                             <i class="halflings-icon white user"></i>
-                            <span class="break"></span>角色
+                            <span class="break"></span>菜单
                         </h2>
                     </div>
                     <div class="box-content">
@@ -193,15 +193,13 @@
                                     <div class="tableedit">
                                         <div class="tableeditz2">
                                         <form method="get">
-                                            <input name="rolename" type="text" value="${rolename }" class="tableeditz2p" placeholder="搜索平台角色" />
+                                            <input name="name" value="${name }" type="text" class="tableeditz2p" placeholder="搜索" />
                                             <input type="submit" class="tableeditz2b" value="搜索" />
                                         </form>
                                         </div>
                                         <div class="tableeditz tableeditzadd">新增</div>
                                         <div class="tableeditz tableeditzedit">编辑</div>
                                         <div class="tableeditz tableeditzdis">删除</div>
-                                        <!-- <div class="tableeditz tableeditzen">启用</div> -->
-                                        <!-- <div class="tableeditz tableeditzpsre">密码重置</div> -->
                                     </div>
                                     <div class="tablebox">
                                         <table class="biaoge table-bordered">
@@ -210,26 +208,33 @@
                                                     <th class="biaotouth">
                                                         <input type="checkbox" class="quanxuan">全选
                                                     </th>
-                                                    <th class="biaotouth">编号</th>
-                                                    <th class="biaotouth">角色名称</th>
-                                                    <th class="biaotouth">描述</th>
+                                                    <th class="biaotouth">菜单编号</th>
+                                                    <th class="biaotouth">菜单名称</th>
+                                                    <th class="biaotouth">菜单URL</th>
+                                                    <th class="biaotouth">状态</th>
+                                                    <th class="biaotouth">上级菜单</th>
                                                     <th class="biaotouth">创建时间</th>
                                                     <th class="biaotouth">更新时间</th>
                                                 </tr>
                                             </div>
                                             <div class="biaoxiang">
-                                            <form id="roleForm"></form>
-                                            <c:forEach items="${list }" var="role" varStatus="roleList">
+                                            <c:forEach items="${list }" var="resource">
                                                 <tr role="row" class="trbx">
-                                                    <th class="biaoxiangth"><input name="roleIds" type="checkbox" class="xuanze" value="${role.id }"></th>
-                                                    <th class="biaoxiangth">${role.id }</th>
-                                                    <th class="biaoxiangth">${role.role }</th>
-                                                    <th class="biaoxiangth">${role.description }</th>
-                                                    <th class="biaoxiangth"><fmt:formatDate type="both" value="${role.createTime }" /></th>
-                                                    <th class="biaoxiangth"><fmt:formatDate type="both" value="${role.updateTime }" /></th>
+                                                    <th class="biaoxiangth"><input name="ids" type="checkbox" class="xuanze" value=${resource.id } ></th>
+                                                    <th class="biaoxiangth">${resource.id }</th>
+                                                    <th class="biaoxiangth">${resource.name }</th>
+                                                    <th class="biaoxiangth">${resource.url }</th>
+                                                    <th class="biaoxiangth">
+                                                        <c:if test="${'0' eq resource.available }">不可用</c:if>
+                                                        <c:if test="${'1' eq resource.available }">可用</c:if>
+                                                    </th>
+                                                    <th class="biaoxiangth">
+                                                    ${zhangfn:resourceName(resource.parentId)}
+                                                    </th>
+                                                    <th class="biaoxiangth"><fmt:formatDate type="both" value="${resource.createTime }" /></th>
+                                                    <th class="biaoxiangth"><fmt:formatDate type="both" value="${resource.updateTime }" /></th>
                                                 </tr>
                                             </c:forEach>
-                                            </form>
                                             </div>
                                         </table>
                                     </div>
@@ -241,110 +246,94 @@
                         </div>
 
 
-                        <!-- 新增角色start -->
+                        <!-- 新增菜单start -->
                         <div class="user_addboxK">
-                        <form action="/wankangyuan/admin/insertRole" method="post">
+                        <form action="insertResource" method="post">
                             <div class="addbiaoxT">
-                                <div class="addbiaoxTt">增加角色</div>
+                                <div class="addbiaoxTt">添加菜单</div>
                                 <div class="addbiaoxTx"></div>
                             </div>  
                             <div class="addbiaoxli">
-                                <div class="addbiaoxlit">角色名称：</div>
-                                <input name="role" type="text" class="addbiaoxlik" required="required" />
+                                <div class="addbiaoxlit">菜单名称：</div>
+                                <input name="name" type="text" class="addbiaoxlik" required="required" />
                             </div>
                             <div class="addbiaoxli">
-                                <div class="addbiaoxlit">角色描述：</div>
-                                <input name="description" type="text" class="addbiaoxlik" />
+                                <div class="addbiaoxlit">菜单URL：</div>
+                                <input name="url" type="text" class="addbiaoxlik" />
                             </div>
                             <div class="addbiaoxli">
-                                <div class="addbiaoxlit" style="vertical-align:top;">角色授权：</div>
-                                <div class="treeview">
-                                
-                                    <ul id="roleaddLB" class="filetree">  
-                                    <c:forEach items="${resourceList }" var="menu">
-                                        <c:if test="${'menu' eq menu.type }">
-                                        <li><span class="folder">${menu.name }</span>  
-                                            <ul>  
-                                            <c:forEach items="${resourceList }" var="button">
-                                                <c:if test="${menu.id eq button.parentId }">
-                                                <li>
-                                                    <input type="checkbox" name="ids" value="${button.id }" />${button.name }
-                                                </li>
-                                                </c:if>
-                                            </c:forEach>
-                                            </ul>  
-                                        </li>  
-                                        </c:if>
-                                    </c:forEach>
-                                    </ul> 
-                                
-                                </div>
-                            </div>
-                            <div class="addboxB">
-                                <input type="submit" value="提交" class="addboxBb" />
-                            </div>
-                        </form> 
-                        </div>
-                        <!-- 新增角色end -->
-
-                        <!-- 修改角色start -->
-                        <div class="user_editboxK">
-                        <form action="/wankangyuan/admin/updateRole" method="post">
-                            <input id="roleId" type="hidden" name="id" >
-                            <div class="addbiaoxT">
-                                <div class="addbiaoxTt">编辑角色</div>
-                                <div class="addbiaoxTx"></div>
-                            </div>  
-                            <div class="addbiaoxli">
-                                <div class="addbiaoxlit">角色名称：</div>
-                                <input id="role" name="role" type="text" class="addbiaoxlik" />
+                                <div class="addbiaoxlit">状态：</div>
+                                <select name="available" id="">
+                                    <option value="0">不可用</option>
+                                    <option value="1">可用</option>
+                                </select>
                             </div>
                             <div class="addbiaoxli">
-                                <div class="addbiaoxlit">角色描述：</div>
-                                <input id="description" name="description" type="text" class="addbiaoxlik" />
-                            </div>
-                            <div class="addbiaoxli">
-                                <div class="addbiaoxlit" style="vertical-align:top;">角色授权：</div>
-                                <div class="treeview">
-                                    <ul id="roleeditLB" class="filetree">
-                                    <c:forEach items="${resourceList }" var="menu">
-                                        <c:if test="${'menu' eq menu.type }">
-                                        <li><span class="folder">${menu.name }</span>  
-                                            <ul>  
-                                            <c:forEach items="${resourceList }" var="button">
-                                                <c:if test="${menu.id eq button.parentId }">
-                                                <li>
-                                                    <input id="check${button.id }" type="checkbox" name="editIds" value="${button.id }" />${button.name }
-                                                </li>
-                                                </c:if>
-                                            </c:forEach>
-                                            </ul>  
-                                        </li>  
-                                        </c:if>
-                                    </c:forEach>  
-                                    </ul>  
-                                </div>
+                                <div class="addbiaoxlit">上级菜单：</div>
+                                <select name="parentId" id="">
+                                    <option value="11">项目管理</option>
+                                    <option value="21">格式数据管理</option>
+                                    <option value="31">应用管理</option>
+                                </select>
                             </div>
                             <div class="addboxB">
                                 <input type="submit" value="提交" class="addboxBb" />
                             </div>
                         </form>
                         </div>
-                        <!-- 修改角色end -->
+                        <!-- 新增角色end -->
 
-                        <!-- 删除角色start -->
+                        <!-- 修改菜单start -->
+                        <div class="user_editboxK">
+                        <form action="updateResource" method="post">
+                            <input id="id" name="id" type="hidden" >
+                            <div class="addbiaoxT">
+                                <div class="addbiaoxTt">编辑菜单</div>
+                                <div class="addbiaoxTx"></div>
+                            </div>  
+                            <div class="addbiaoxli">
+                                <div class="addbiaoxlit">菜单名称：</div>
+                                <input id="name" name="name" type="text" class="addbiaoxlik" />
+                            </div>
+                            <div class="addbiaoxli">
+                                <div class="addbiaoxlit">菜单URL：</div>
+                                <input id="url" name="url" type="text" class="addbiaoxlik" />
+                            </div>
+                            <div class="addbiaoxli">
+                                <div class="addbiaoxlit">状态：</div>
+                                <select id="available" name="available">
+                                    <option value="0">不可用</option>
+                                    <option value="1">可用</option>
+                                </select>
+                            </div>
+                            <div class="addbiaoxli">
+                                <div class="addbiaoxlit">上级菜单：</div>
+                                <select id="parentId" name="parentId" >
+                                    <option value="11">项目管理</option>
+                                    <option value="21">格式数据管理</option>
+                                    <option value="31">应用管理</option>
+                                </select>
+                            </div>
+                            <div class="addboxB">
+                                <input type="submit" value="提交" class="addboxBb" />
+                            </div>
+                        </form>
+                        </div>
+                        <!-- 修改菜单end -->
+
+                        <!-- 删除菜单start -->
                         <div class="user_disboxK">
                             <div class="addbiaoxT">
                                 <div class="addbiaoxTt">通知</div>
                                 <div class="addbiaoxTx"></div>
                             </div>
-                            <div class="delbiaoxM">您确认删除选中的角色吗?（删除后将无法恢复，请谨慎操作！）</div>
+                            <div class="delbiaoxM">您确认删除选中的菜单吗?（删除后的菜单无法恢复，请谨慎操作！）</div>
                             <div class="addbiaoxB">
                                 <input type="button" value="确认" class="addbiaoxBb" onclick="deleteByIds()" />
                                 <input type="button" value="取消" class="addbiaoxBb2" />
                             </div>
                         </div>
-                        <!-- 删除角色end -->
+                        <!-- 删除菜单end -->
 
                     </div>
                 </div>
@@ -440,139 +429,119 @@
 
 <!-- <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script> -->
 <script type="text/javascript" src="<%=request.getContextPath()%>/admin/js/jquery.cookie.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath()%>/admin/js/jquery.treeview.js"></script>
 
-<script type="text/javascript" src="<%=request.getContextPath()%>/admin/js/rolemanage.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/admin/js/menumanage.js"></script>
 <!-- end: JavaScript-->
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/paging.js"></script>
-
 <c:if test="${not empty msg}">
     <script type="text/javascript">
     layer.msg("${msg}");
     </script>
 </c:if>
-
 <script type="text/javascript">
-    $(document).ready(function() {     
-        $("#roleaddLB").treeview({//需要最外层ul的id  
-            collapsed: true,//默认折叠  
-            animated: "medium",//动画效果速度  
-            control:"#sidetreecontrol",  
-            persist: "location"  
-        });  
-        $("#roleeditLB").treeview({//需要最外层ul的id  
-            collapsed: true,//默认折叠  
-            animated: "medium",//动画效果速度  
-            control:"#sidetreecontrol",  
-            persist: "location"  
-        });  
-    });
-    
-    
-    //编辑按钮
-    $('.tableeditzedit').click(function(){
-        var ids = $("input[name='roleIds']");
-        var checkNum = 0;
-        for (var i = 0; i < ids.length; i++) {
-            if (ids[i].checked) {
-                checkNum++;
-            }
+
+$('#box').paging({
+    initPageNo: ${page}, // 初始页码
+    totalPages: Math.ceil(${total}/${rows}), //总页数
+    totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
+    slideSpeed: 600, // 缓动速度。单位毫秒
+    jump: true, //是否支持跳转
+    callback: function(page) { // 回调函数
+        console.log(page);
+        if(page!=${page}){
+            window.location.href="/wankangyuan/admin/viewResourceManage?page="+page+"&rows=${rows}&name=${name}";
+           
         }
-        if (checkNum != 1) {
-            layer.msg("请选中一个",function(){});
-        } else {
-            $.post("/wankangyuan/admin/getRoleInfo",{
-            	id : $("input[name='roleIds']:checked").val()
-            },function(role){
-                $("#roleId").val(role.id);
-                $("#role").val(role.role);
-                $("#description").val(role.description);
-                
-                var arr = role.resourceIds.split(',');
-                $("input[name='editIds']").attr("checked",false);
-                for(var i = 0; i < arr.length; i++){
-                 $("#check"+arr[i]).attr("checked","checked");
-                }
-                
-               },"json");
-              $('.user_editboxK').show();
-              
+    }
+});
+
+//编辑按钮
+$('.tableeditzedit').click(function(){
+    var ids = $("input[name='ids']");
+    var checkNum = 0;
+    for (var i = 0; i < ids.length; i++) {
+        if (ids[i].checked) {
+            checkNum++;
         }
-        
-    });
-    
-    
-    //删除按钮显示
-    $('.tableeditzdis').click(function(){
-        var ids = $("input[name='roleIds']");
-        var checkNum = 0;
-        for (var i = 0; i < ids.length; i++) {
-            if (ids[i].checked) {
-                checkNum++;
-            }
-        }
-        if (checkNum == 0) {
-            layer.msg("请至少选中一个",function(){});
-        } else {
-              $('.user_disboxK').show();
-              
-        }
-        
-    });
-    
-    //删除
-    function deleteByIds() {
-    	var obj=$("input[name='roleIds']");  
-        arr = [];
-        for (var i = 0; i < obj.length; i++) {
-            if (obj[i].checked) {
-                arr.push(obj[i].value);
-            }
-        }
-        
-        var load = layer.load();
-        $.ajax({
-            async : true,
-            traditional: true,
-            type : 'POST',
-            data : {
-                ids:arr
-            },
-            url : "/wankangyuan/admin/deleteRolesByIds",// 请求的action路径
-            error : function(result) {// 请求失败处理函数
-                layer.close(load);
-                return layer.msg(result.message,function(){}),!1;
-            },
-            success : function(result) {
-                layer.close(load);
-                layer.msg(result.message, {
-                    anim: 0,
-                    end: function (index) {
-                        window.location.reload();
-                    }
-                });
-            }   
-        });
+    }
+    if (checkNum != 1) {
+        layer.msg("请选中一个",function(){});
+    } else {
+        $.get("/wankangyuan/admin/getResourceInfo",{
+            id : $("input[name='ids']:checked").val()
+        },function(resource){
+            $("#id").val(resource.id);
+            $("#name").val(resource.name);
+            $("#url").val(resource.url);
+            
+            $("#available option[value='"+resource.available+"']").attr("selected","selected");
+            $("#parentId option[value='"+resource.parentId+"']").attr("selected","selected");
+            
+           },"json");
+          $('.user_editboxK').show();
+          
     }
     
-    $('#box').paging({
-        initPageNo: ${page}, // 初始页码
-        totalPages: Math.ceil(${total}/${rows}), //总页数
-        totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
-        slideSpeed: 600, // 缓动速度。单位毫秒
-        jump: true, //是否支持跳转
-        callback: function(page) { // 回调函数
-            console.log(page);
-            if(page!=${page}){
-                window.location.href="/wankangyuan/admin/viewRoleManage?page="+page+"&rows=${rows}&rolename=${rolename}";
-               
-            }
+});
+
+//删除按钮显示
+$('.tableeditzdis').click(function(){
+    var ids = $("input[name='ids']");
+    var checkNum = 0;
+    for (var i = 0; i < ids.length; i++) {
+        if (ids[i].checked) {
+            checkNum++;
         }
-    });
+    }
+    if (checkNum == 0) {
+        layer.msg("请至少选中一个",function(){});
+    } else {
+          $('.user_disboxK').show();
+          
+    }
     
+});
+
+//删除
+function deleteByIds() {
+    var obj=$("input[name='ids']");  
+    arr = [];
+    for (var i = 0; i < obj.length; i++) {
+        if (obj[i].checked) {
+            arr.push(obj[i].value);
+        }
+    }
+    
+    var load = layer.load();
+    $.ajax({
+        async : true,
+        traditional: true,
+        type : 'POST',
+        data : {
+            ids:arr
+        },
+        url : "/wankangyuan/admin/deleteResourcesByIds",// 请求的action路径
+        error : function(result) {// 请求失败处理函数
+            layer.close(load);
+            return layer.msg(result.message,function(){}),!1;
+        },
+        success : function(result) {
+            layer.close(load);
+            layer.msg(result.message, {
+                anim: 0,
+                end: function (index) {
+                    window.location.reload();
+                }
+            });
+        }   
+    });
+}
+
+
+
 </script>
 </body>
 </html>
