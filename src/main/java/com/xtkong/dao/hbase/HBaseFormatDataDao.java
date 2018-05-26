@@ -104,7 +104,7 @@ public class HBaseFormatDataDao {
 					formatData.add(Bytes.toString(result.getRow()));// 获取行键formatDataId，不显示
 					for (FormatField formatField : formatFields) {
 						formatData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-								Bytes.toBytes(formatField.getFf_id()))));
+								Bytes.toBytes(String.valueOf(formatField.getFf_id())))));
 					}
 					formatDatas.add(formatData);
 				}

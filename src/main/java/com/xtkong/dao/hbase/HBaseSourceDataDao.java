@@ -115,7 +115,7 @@ public class HBaseSourceDataDao {
 					sourceData.add(Bytes.toString(result.getRow()));
 					for (SourceField sourceField : sourceFields) {
 						sourceData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-								Bytes.toBytes(sourceField.getCsf_id()))));
+								Bytes.toBytes(String.valueOf(sourceField.getCsf_id())))));
 					}
 					sourceDatas.add(sourceData);
 				}
@@ -158,7 +158,7 @@ public class HBaseSourceDataDao {
 					sourceData.add(Bytes.toString(result.getRow()));
 					for (SourceField sourceField : sourceFields) {
 						sourceData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-								Bytes.toBytes(sourceField.getCsf_id()))));
+								Bytes.toBytes(String.valueOf(sourceField.getCsf_id())))));
 					}
 					sourceDatas.add(sourceData);
 				}
@@ -201,7 +201,7 @@ public class HBaseSourceDataDao {
 					sourceData.add(Bytes.toString(result.getRow()));
 					for (SourceField sourceField : sourceFields) {
 						sourceData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-								Bytes.toBytes(sourceField.getCsf_id()))));
+								Bytes.toBytes(String.valueOf(sourceField.getCsf_id())))));
 					}
 					sourceDatas.add(sourceData);
 				}
@@ -293,7 +293,7 @@ public class HBaseSourceDataDao {
 					if (!db.put(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, uid + "_" + cs_id + "_" + count,
 							ConstantsHBase.FAMILY_INFO, sourceField.getCsf_id(),
 							Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-									Bytes.toBytes(sourceField.getCsf_id()))))) {
+									Bytes.toBytes(String.valueOf(sourceField.getCsf_id())))))) {
 						return false;
 					}
 				}
