@@ -228,9 +228,14 @@ public class SourceDataController {
 	 * @return
 	 */
 	@RequestMapping("/getSourceDataById")
-	public String getSourceDataById(HttpSession httpSession, String cs_id, String sourceDataId) {
-		List<String> sourceData = HBaseSourceDataDao.getSourceDataById(cs_id, sourceDataId,
-				sourceFieldService.getSourceFields(Integer.valueOf(cs_id)));
+	public String getSourceDataById(HttpSession httpSession, String cs_id, String sourceDataId, String type) {
+
+		Source source = sourceService.getSourceByCs_id(Integer.valueOf(cs_id));
+		source.setSourceFields(sourceFieldService.getSourceFields(Integer.valueOf(cs_id)));
+
+		httpSession.setAttribute("source", source);// 采集源字段列表
+
+		List<String> sourceData = HBaseSourceDataDao.getSourceDataById(cs_id, sourceDataId, source.getSourceFields());
 		httpSession.setAttribute("sourceData", sourceData);
 
 		HashMap<String, FormatType> formatTypeMap = new HashMap<>();
@@ -241,9 +246,11 @@ public class SourceDataController {
 		List<FormatType> formatTypeFolders = HBaseFormatNodeDao.getFormatTypeFolders(cs_id, sourceDataId,
 				formatTypeMap);
 		httpSession.setAttribute("formatTypeFolders", formatTypeFolders);
-
-		return "redirect:/jsp/formatdata/data_datain.jsp";
-
+		if (type.equals("2")) {
+			return "redirect:/jsp/formatdata/data_datain2.jsp";
+		} else {
+			return "redirect:/jsp/formatdata/data_datain.jsp";
+		}
 	}
 
 	/**

@@ -26,7 +26,7 @@ public class FormatType {
 	private List<FormatField> formatFields;//格式字段
 	
 	
-	private HashMap<String, String>formatDataNodes;//数据节点
+	private HashMap<String, String>formatDataNodes=new HashMap<>();//数据节点
 
 	public List<FormatType> getFormatTypeFolders() {
 		return formatTypeFolders;

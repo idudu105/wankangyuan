@@ -4,16 +4,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.xtkong.dao.hbase.HBaseFormatDataDao;
 import com.xtkong.dao.hbase.HBaseFormatNodeDao;
+import com.xtkong.model.FormatField;
 import com.xtkong.model.FormatType;
 import com.xtkong.service.FormatFieldService;
 import com.xtkong.service.FormatTypeService;
 import com.xtkong.service.SourceFieldService;
 import com.xtkong.service.SourceService;
+import com.xtkong.util.ConstantsHBase;
 
 @Controller
 @RequestMapping("/formatNode")
@@ -27,7 +33,6 @@ public class FormatNodeController {
 	FormatTypeService formatTypeService;
 	@Autowired
 	FormatFieldService formatFieldService;
-
 
 	/**
 	 * 新增数据节点
@@ -74,7 +79,8 @@ public class FormatNodeController {
 		for (FormatType formatType : formatTypes) {
 			formatTypeMap.put(String.valueOf(formatType.getFt_id()), formatType);
 		}
-		 List<FormatType> formatTypeFolders = HBaseFormatNodeDao.getFormatTypeFolders(cs_id, sourceDataId, formatTypeMap);
+		List<FormatType> formatTypeFolders = HBaseFormatNodeDao.getFormatTypeFolders(cs_id, sourceDataId,
+				formatTypeMap);
 		if (formatTypeFolders != null) {
 			map.put("result", true);
 			map.put("formatTypeFloders", formatTypeFolders);
@@ -83,6 +89,47 @@ public class FormatNodeController {
 			map.put("message", "获取失败");
 		}
 		return map;
+	}
+
+	/**
+	 * 通过formatNodeId获取一个数据节点
+	 * 
+	 * @param httpSession
+	 * @param cs_id
+	 * @param sourceDataId
+	 * @param ft_id
+	 * @param formatNodeId
+	 * @param type
+	 * @return
+	 */
+	@RequestMapping("/getFormatNodeById")
+	public String getSourceDataById(HttpSession httpSession, String cs_id, String sourceDataId, String ft_id,
+			String formatNodeId, String type) {
+
+		HashMap<String, FormatType> formatTypeMap = new HashMap<>();
+		List<FormatType> formatTypes = formatTypeService.getFormatTypes(Integer.valueOf(cs_id));
+		for (FormatType formatType : formatTypes) {
+			formatTypeMap.put(String.valueOf(formatType.getFt_id()), formatType);
+		}
+		List<FormatType> formatTypeFolders = HBaseFormatNodeDao.getFormatTypeFolders(cs_id, sourceDataId,
+				formatTypeMap);
+		httpSession.setAttribute("formatTypeFolders", formatTypeFolders);
+
+		// meta数据
+		List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
+				ConstantsHBase.IS_meta_true);
+		List<List<String>> metaDatas = HBaseFormatDataDao.getFormatDatas(cs_id, ft_id, formatNodeId, meta);
+		httpSession.setAttribute("metaDatas", metaDatas);
+		// data数据
+		List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
+				ConstantsHBase.IS_meta_false);
+		List<List<String>> dataDatas = HBaseFormatDataDao.getFormatDatas(cs_id, ft_id, formatNodeId, data);
+		httpSession.setAttribute("dataDatas", dataDatas);
+		if (type.equals("2")) {
+			return "redirect:/jsp/formatdata/data_dataclick2.jsp";
+		} else {
+			return "redirect:/jsp/formatdata/data_dataclick.jsp";
+		}
 	}
 
 	// ----------------------编辑数据节点
@@ -109,8 +156,7 @@ public class FormatNodeController {
 		return map;
 	}
 	// ----------------------编辑数据节点
-	
-	
+
 	// ----------------------删除数据节点
 	/**
 	 * 删除数据节点
@@ -134,6 +180,5 @@ public class FormatNodeController {
 	}
 
 	// ----------------------删除数据节点
-
 
 }

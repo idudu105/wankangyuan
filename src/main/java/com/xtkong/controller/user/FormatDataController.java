@@ -26,6 +26,7 @@ import com.xtkong.service.FormatFieldService;
 import com.xtkong.service.FormatTypeService;
 import com.xtkong.service.SourceFieldService;
 import com.xtkong.service.SourceService;
+import com.xtkong.util.ConstantsHBase;
 
 @Controller
 @RequestMapping("/formatData")
@@ -121,11 +122,11 @@ public class FormatDataController {
 	public Map<String, Object> getformatDatas(Integer cs_id, Integer ft_id, String formatNodeId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// meta数据
-		List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(ft_id, 1);
+		List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(ft_id, ConstantsHBase.IS_meta_true);
 		 List<List<String>> metaDatas =		 HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
 		 Integer.toString(ft_id), formatNodeId, meta);
 		// data数据
-		List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(ft_id, 0);
+		List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(ft_id, ConstantsHBase.IS_meta_false);
 		 List<List<String>> dataDatas =		 HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
 		 Integer.toString(ft_id), formatNodeId, data);
 		if (metaDatas != null) {

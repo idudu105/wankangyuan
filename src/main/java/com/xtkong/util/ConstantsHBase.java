@@ -32,6 +32,10 @@ public class ConstantsHBase {
 	public static final int VERSION_SOURCE=1;
 	public static final int VERSION_NODE=1;
 	public static final int VERSION_FORMAT=1;
+	
+	/***/
+	public static final int IS_meta_true=1;//meta类型
+	public static final int IS_meta_false=0;//data类型
 	// 数据参数
 	// 扫描器最大缓冲，一次扫描请求返回数据量
 	public static final int SCAN_CACHING_MAX = 50;
