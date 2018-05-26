@@ -14,7 +14,8 @@
     <title>Document</title>
 </head>
 <link rel="stylesheet" type="text/css" href="/wankangyuan/static/css/project1.css" />
-<script type="text/javascript" src="/wankangyuan/static/js/project1.js"></script>
+<script type="text/javascript" src="/wankangyuan/jsp/formatdata/js/project1.js"></script>
+
 <script type="text/javascript">
     window.onload=function(){
         project0();
@@ -96,8 +97,8 @@
                     <div class="pro_menu pro_inport">导入</div>
                     <div class="pro_menu pro_export">导出</div>
                     <div class="pro_menu pro_rem">移除</div>
-                    <div class="pro_menu pro_adddataDis">+添加源数据</div>
-                   	<select name="" id="source_Select" class="pro_menusel"  >
+                    <div class="pro_menu pro_adddata">+添加源数据</div>
+                   	<select name="" id="source_Select" class="pro_menusel" >
 						<c:forEach items="${sources}" var="source">
 							<option value="${source.cs_id }" >${source.cs_name}</option>
 						</c:forEach>						
@@ -139,30 +140,7 @@
                         <div class="adddataTt">添加源数据</div>
                         <div class="adddataTx"></div>
                     </div>
-                    <div class="adddataM">
-                        <div class="adddataMli">
-                            <div class="adddataMlit">姓名：</div>
-                            <input type="text" class="adddataMliTT adddataMliT" />
-                        </div>
-                        <div class="adddataMli">
-                            <div class="adddataMlit">年龄：</div>
-                            <input type="text" class="adddataMliTT adddataMliT2" />
-                        </div>
-                        <div class="adddataMli">
-                            <div class="adddataMlit">性别：</div>
-                            <select name="" id="" class="adddataMliS">
-                                <option value="">男</option>
-                                <option value="">女</option>
-                            </select>
-                        </div>
-                        <div class="adddataMli">
-                            <div class="adddataMlit">病史：</div>
-                            <input type="text" class="adddataMliTT adddataMliT" />
-                        </div>
-                        <div class="adddataMli">
-                            <div class="adddataMlit">个人信息：</div>
-                            <textarea name="" id=""  class="adddataMliTT adddataMliT3" ></textarea>
-                        </div>
+                    <div class="adddataM" id="adddataM">
                     </div>
                     <div class="adddataB">
                         <input type="button" class="adddataBb" value="提交" />
@@ -196,6 +174,7 @@
 									<c:if test="${status.index!=0}">
 										<div class="PJliCli2">${sourceDataField}</div>
 									</c:if>
+									<div class="PJliCli2">${sourceDataField}</div>
 								</c:forEach>		
 							</div>
 							<div class="PJliline"></div>
