@@ -15,7 +15,9 @@ import com.dzjin.model.Project;
 import com.dzjin.service.ProjectService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.xtkong.dao.hbase.HBaseFormatNodeDao;
 import com.xtkong.dao.hbase.HBaseSourceDataDao;
+import com.xtkong.model.FormatType;
 import com.xtkong.model.Source;
 import com.xtkong.service.FormatFieldService;
 import com.xtkong.service.FormatTypeService;
@@ -52,7 +54,7 @@ public class SourceDataController {
 		httpSession.setAttribute("sources", sources);// 采集源列表
 
 		// 源数据字段
-		List<List<String>> sourceDatas = new ArrayList<>();		
+		List<List<String>> sourceDatas = new ArrayList<>();
 		if (sources != null) {
 			Integer cs_id = sourceService.getSourcesForUserLimit(1).get(0).getCs_id();
 			Source source = sourceService.getSourceByCs_id(cs_id);
@@ -122,11 +124,13 @@ public class SourceDataController {
 	 */
 	@RequestMapping("/insertSourceData")
 	@ResponseBody
-	public Map<String, Object> insertSourceData(String cs_id,String sourceFieldDatas) {
-		String uid="1";
+	public Map<String, Object> insertSourceData(String cs_id, String sourceFieldDatas) {
+		String uid = "1";
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		if (HBaseSourceDataDao.insertSourceData(cs_id, uid, new Gson().fromJson(sourceFieldDatas,new TypeToken<Map<String, String>>(){}.getType()))) {
+		if (HBaseSourceDataDao.insertSourceData(cs_id, uid,
+				new Gson().fromJson(sourceFieldDatas, new TypeToken<Map<String, String>>() {
+				}.getType()))) {
 			map.put("result", true);
 			map.put("message", "新增成功");
 		} else {
@@ -148,10 +152,12 @@ public class SourceDataController {
 	 */
 	@RequestMapping("/updateSourceData")
 	@ResponseBody
-	public Map<String, Object> updateSourceData(String cs_id, String sourceDataId,String soufieldDatas) {
+	public Map<String, Object> updateSourceData(String cs_id, String sourceDataId, String soufieldDatas) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		if (HBaseSourceDataDao.updateSourceData(cs_id, sourceDataId, new Gson().fromJson(soufieldDatas,new TypeToken<Map<String, String>>(){}.getType()))) {
+		if (HBaseSourceDataDao.updateSourceData(cs_id, sourceDataId,
+				new Gson().fromJson(soufieldDatas, new TypeToken<Map<String, String>>() {
+				}.getType()))) {
 			map.put("result", true);
 			map.put("message", "更新成功");
 		} else {
@@ -210,6 +216,33 @@ public class SourceDataController {
 			}
 		}
 		return "redirect:/jsp/formatdata/data_mine.jsp";
+
+	}
+
+	/**
+	 * 通过sourceDataId获取一条源数据
+	 * 
+	 * @param httpSession
+	 * @param cs_id
+	 * @param sourceDataId
+	 * @return
+	 */
+	@RequestMapping("/getSourceDataById")
+	public String getSourceDataById(HttpSession httpSession, String cs_id, String sourceDataId) {
+		List<String> sourceData = HBaseSourceDataDao.getSourceDataById(cs_id, sourceDataId,
+				sourceFieldService.getSourceFields(Integer.valueOf(cs_id)));
+		httpSession.setAttribute("sourceData", sourceData);
+
+		HashMap<String, FormatType> formatTypeMap = new HashMap<>();
+		List<FormatType> formatTypes = formatTypeService.getFormatTypes(Integer.valueOf(cs_id));
+		for (FormatType formatType : formatTypes) {
+			formatTypeMap.put(String.valueOf(formatType.getFt_id()), formatType);
+		}
+		List<FormatType> formatTypeFolders = HBaseFormatNodeDao.getFormatTypeFolders(cs_id, sourceDataId,
+				formatTypeMap);
+		httpSession.setAttribute("formatTypeFolders", formatTypeFolders);
+
+		return "redirect:/jsp/formatdata/data_datain.jsp";
 
 	}
 
@@ -277,7 +310,5 @@ public class SourceDataController {
 		}
 		return map;
 	}
-
-	
 
 }

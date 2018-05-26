@@ -70,6 +70,34 @@ public class HBaseSourceDataDao {
 		}
 		return true;
 	}
+	/**
+	 * 通过sourceDataId获取一条源数据
+	 * @param cs_id
+	 * @param sourceDataId
+	 * @param sourceFields
+	 * @return
+	 */
+	public static List<String> getSourceDataById(String cs_id,String sourceDataId, List<SourceField> sourceFields) {
+		List<String> sourceData = new ArrayList<>();
+		try {
+			HBaseDB db = HBaseDB.getInstance();
+			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id);
+			Get get = new Get(Bytes.toBytes(sourceDataId));
+			Result result = table.get(get);
+			if (!result.isEmpty()) {
+				// 获取行键sourceDataId
+				sourceData.add(Bytes.toString(result.getRow()));
+				for (SourceField sourceField : sourceFields) {
+					sourceData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+							Bytes.toBytes(String.valueOf(sourceField.getCsf_id())))));
+				}				
+			}
+			table.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return sourceData;
+	}
 
 	/**
 	 * 获取用户创建源数据基础信息
