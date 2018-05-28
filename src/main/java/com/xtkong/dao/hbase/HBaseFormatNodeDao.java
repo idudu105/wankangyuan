@@ -37,7 +37,7 @@ public class HBaseFormatNodeDao {
 	}
 
 	/**
-	 * 新增数据节点
+	 * 新增数据节点，创建共用数据
 	 * 
 	 * @param cs_id
 	 * @param sourceDataId
@@ -45,13 +45,16 @@ public class HBaseFormatNodeDao {
 	 * @param nodeName
 	 * @return
 	 */
-	public static boolean insertFormatNode(String cs_id, String sourceDataId,String ft_id, String nodeName) {
+	public static boolean insertFormatNode(String cs_id, String sourceDataId, String ft_id, String nodeName,
+			Map<String, String> formatFieldDatas) {
 		HBaseDB db = HBaseDB.getInstance();
-		Long count = db.getNewId(ConstantsHBase.TABLE_GID, sourceDataId + "_" + ft_id,
-				ConstantsHBase.FAMILY_GID_GID, ConstantsHBase.QUALIFIER_GID_GID_GID);
-		return db.put(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id,
-				sourceDataId + "_" + ft_id + "_" + count, ConstantsHBase.FAMILY_INFO,
+		Long count = db.getNewId(ConstantsHBase.TABLE_GID, sourceDataId + "_" + ft_id, ConstantsHBase.FAMILY_GID_GID,
+				ConstantsHBase.QUALIFIER_GID_GID_GID);
+		String formatNodeId = sourceDataId + "_" + ft_id + "_" + count;
+		boolean b = db.put(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id, formatNodeId, ConstantsHBase.FAMILY_INFO,
 				ConstantsHBase.QUALIFIER_NODE, ft_id + "," + nodeName);
+		HBaseFormatDataDao.updateFormatData(cs_id, ft_id, formatNodeId, formatFieldDatas);
+		return b;
 	}
 
 	/**
@@ -108,7 +111,6 @@ public class HBaseFormatNodeDao {
 		return formatTypeFolders;
 	}
 
-
 	/**
 	 * 编辑数据节点
 	 * 
@@ -118,20 +120,21 @@ public class HBaseFormatNodeDao {
 	 * @param nodeName
 	 * @return
 	 */
-	public static boolean updateFormatNode(String cs_id, String formatNodeId,String ft_id, String nodeName) {
+	public static boolean updateFormatNode(String cs_id, String formatNodeId, String ft_id, String nodeName) {
 		HBaseDB db = HBaseDB.getInstance();
-		return db.put(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id,
-				formatNodeId, ConstantsHBase.FAMILY_INFO,
+		return db.put(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id, formatNodeId, ConstantsHBase.FAMILY_INFO,
 				ConstantsHBase.QUALIFIER_NODE, ft_id + "," + nodeName);
 	}
+
 	/**
 	 * 删除数据节点
+	 * 
 	 * @param cs_id
 	 * @param formatNodeId
 	 * @return
 	 */
 	public static boolean deleteFormatNode(String cs_id, String formatNodeId) {
 		HBaseDB db = HBaseDB.getInstance();
-		return db.delete(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id, formatNodeId) ;
+		return db.delete(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id, formatNodeId);
 	}
 }
