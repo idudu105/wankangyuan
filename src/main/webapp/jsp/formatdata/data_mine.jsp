@@ -64,7 +64,7 @@
             <div class="shaixuan">
                 <div class="shaixuanC">
                     <div class="listZT">
-                        <a href="data_mine2.html">
+                        <a href="#">
                             <div class="listZTli listZT1 active">
                                 <img src="/wankangyuan/static/img/listZT1.png"alt="" class="listZT1i" />
                                 <img src="/wankangyuan/static/img/listZT1.png" alt="" class="listZT1i" />
@@ -118,99 +118,50 @@
             <div class="PJK">
                 <div class="PJList">
                     <div class="allK">
-                        <div class="allX"></div>
+                        <div class="quanxuanK">
+                            <input type="checkbox" class="input_check" name="0" id="check0">
+                            <label for="check0"></label>
+                        </div>
                         <div class="allT">全选</div>
                     </div>
-                    <c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
+					<c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
 	                	<div class="PJListli">${sourceFieldTemp.csf_name}</div>
-					</c:forEach>
+					</c:forEach>	
                 </div>
                 <div class="PJListline"></div>
                 <div class="PJul">
-                    <div class="PJli">
-                        <div class="PJliC">
-                            <div class="PJXZ"></div>
-                            
-                            
-                            <div class="PJliCli2 dataname">
-                                <a href="project_datain.html">
-                                    <span>张三</span>
-                                </a>
-                            </div>
-                            <div class="PJliCli2 dataage">25</div>
-                            <div class="PJliCli2 datasex">男</div>
-                            <div class="PJliCli2 datahistory">无</div>
-                            <div class="PJliCli2 datainfor">个人信息</div>
-                            <div class="PJliCli2 datacreater">赵七</div>
-                            <div class="PJliCli2 datatime">2018-4-20</div>
+                	<c:forEach items="${sourceDatas}" var="sourceData">
+						<div class="PJli">
+							<div class="PJliC">
+								
+								<c:forEach items="${sourceData}" var="sourceDataField" varStatus="status">
+								
+									<c:if test="${status.index==0}">										
+			                            <div class="fuxuanK2">
+			                                <input type="checkbox" class="input_check" name="${sourceDataField}" id="check${sourceDataField}">
+			                                <label for="check${sourceDataField}"></label>
+			                            </div>
+									</c:if>
+								
+									<c:if test="${status.index==1}">										
+										<div class="PJliCli2 dataname">
+			                                <a href="#" onclick="datainHref('${sourceData[0]}')">
+			                                    <span>${sourceDataField}</span>
+			                                </a>
+			                            </div>
+									</c:if>
+									
+									<c:if test="${status.index!=0 && status.index!=1}">
+										<div class="PJliCli2">${sourceDataField}</div>
+									</c:if>
+									
+								</c:forEach>		
+							</div>
+							<div class="PJliline"></div>
 
-                        </div>
-                        <div class="PJliline"></div>
-                        <div class="PJliB active">
-                            <div class="PJliB1">
-                                <div class="PJliB1L">
-                                    <div class="PJliB1Lt">临床数据</div>
-                                    <div class="PJliBLi PJliBLi2"></div>
-                                </div>
-                                <div class="PJliBR">
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">CT</div>
-                                            <div class="PJliBLi PJliBLi2"></div>
-                                        </div>
-                                        <div class="PJliBR">
-                                            <div class="PJliB2">
-                                                <div class="PJliB2L">
-                                                    <div class="PJliB2Lk"></div>
-                                                    <div class="PJliB2Lt">CT1</div>
-                                                </div>
-                                            </div>
-                                            <div class="PJliB2">
-                                                <div class="PJliB2L">
-                                                    <div class="PJliB2Lk"></div>
-                                                    <div class="PJliB2Lt">CT2</div>
-                                                </div>
-                                            </div>
-                                            <div class="PJliB2">
-                                                <div class="PJliB2L">
-                                                    <div class="PJliB2Lk"></div>
-                                                    <div class="PJliB2Lt">CT3</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">XG</div>
-                                            <div class="PJliBLi PJliBLi2"></div>
-                                        </div>
-                                        <div class="PJliBR">
-                                            <div class="PJliB2">
-                                                <div class="PJliB2L">
-                                                    <div class="PJliB2Lk"></div>
-                                                    <div class="PJliB2Lt">XG1</div>
-                                                </div>
-                                            </div>
-                                            <div class="PJliB2">
-                                                <div class="PJliB2L">
-                                                    <div class="PJliB2Lk"></div>
-                                                    <div class="PJliB2Lt">XG2</div>
-                                                </div>
-                                            </div>
-                                            <div class="PJliB2">
-                                                <div class="PJliB2L">
-                                                    <div class="PJliB2Lk"></div>
-                                                    <div class="PJliB2Lt">XG3</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+						</div>
+					</c:forEach>	 
+
                 </div>
 
                 <div class="BTSX">

@@ -123,6 +123,7 @@ public class FormatNodeController {
 		List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
 				ConstantsHBase.IS_meta_true);
 		httpSession.setAttribute("formatNodeId", formatNodeId);
+		httpSession.setAttribute("sourceDataId", sourceDataId);
 		List<List<String>> metaDatas = HBaseFormatDataDao.getFormatDataMetas(cs_id, ft_id, formatNodeId, meta);
 		httpSession.setAttribute("metaDatas", metaDatas);
 		// data数据

@@ -13,8 +13,8 @@
     <meta charset="UTF-8" />
     <title>Document</title>
 </head>
-<link rel="stylesheet" type="text/css" href="css/project1.css" />
-<script type="text/javascript" src="js/project1.js"></script>
+<link rel="stylesheet" type="text/css" href="/wankangyuan/static/css/project1.css" />
+<script type="text/javascript" src="/wankangyuan/jsp/formatdata/js/project1.js"></script>
 <script type="text/javascript">
     window.onload=function(){
         project0();
@@ -31,7 +31,7 @@
     <div class="Box">
         <div class="box">
             <div class="top">
-                <h1><img src="img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
+                <h1><img src="/wankangyuan/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
                 <a href="project_mine.html">
                     <div class="topT">项目</div>
                 </a>
@@ -42,20 +42,24 @@
                     <div class="topT">应用</div>
                 </a>
                 <div class="touxiangK">
-                    <img src="img/touxiang.png" alt="" class="touxiang" />
+                    <img src="/wankangyuan/static/img/touxiang.png" alt="" class="touxiang" />
                 </div>
                 <div class="nicheng">Peter</div>
                 <div class="yanjiuquan">
                     <div class="yanjiuquanT">研究圈</div>
-                    <img src="img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
+                    <img src="/wankangyuan/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
                 </div>
             </div>
             <div class="top2">
                 <div class="top2C">
                     <div class="top2Ctl active">
-                        <a href="javascript:history.go(-1);">
-                            <img src="img/back.png" height="20" width="20" alt="" class="backI" />
-                        </a>张三
+                        <a href="/wankangyuan/sourceData/getSourceDataById?cs_id=${formatTypeFolders[0].cs_id }&sourceDataId=${sourceDataId}&type=2">
+                            <img src="/wankangyuan/static/img/back.png" height="20" width="20" alt="" class="backI" />
+                        </a>${sourceData[1]}
+                        <input id="cs_id" value="${formatTypeFolders[0].cs_id }" style="display:none;"/>
+                        <input id="ft_id" value="${data[0].ft_id }" style="display:none;"/>
+                        <input id="formatNodeId" value="${formatNodeId}" style="display:none;"/>
+                        <input id="sourceDataId" value="${sourceDataId}" style="display:none;"/>
                     </div>
                     <div class="app_expexport">导出</div>
                 </div>
@@ -66,284 +70,85 @@
                         <div class="dataclLb daclLb_add">添加数据节点</div>
                         <div class="dataclLb daclLb_del">删除</div>
                         <div class="dataclLb daclLb_mod">修改</div>
-                        <div class="dataclLb daclLb_addroot">添加根节点</div>
                     </div>
                     <div class="dataeditK">
                         <div class="dataeditT">
                             <div class="dataeditTx"></div>
                         </div>
+                        <input id="type" class="type" value="" style="display:none;"/>
                         <div class="dataeditM">
-                            <div class="dataeditMt">选择格式数据类型</div>
-                            <select name="" id="" class="dataeditTs">
-                                <option value="">CT</option>
-                                <option value="">GT</option>
-                            </select>
-                        </div>
-                        <div class="dataeditM">
-                            <div class="dataeditMt">为格式数据命名</div>
-                            <textarea name="" id="" class="dataeditTta"></textarea>
+                            <div class="dataeditMt">名称</div>
+                            <textarea name="" id="dataNodeTextArea" class="dataeditTta"></textarea>
                         </div>
                         <div class="dataeditB">
-                            <input type="button" class="dataeditb" value="提交" />
+                            <input type="button" class="dataeditb" id="addDataNodeSubmit"value="提交" />
                         </div>
                     </div>
-                    <div class="PJliBK">
-                        <div class="PJliB1">
-                            <div class="PJliB1L">
-                                <div class="fuxuanK4">
-                                    <input type="checkbox" class="input_check" id="check0">
-                                    <label for="check0"></label>
-                                </div>
-                                <div class="PJliB1Lt">临床数据</div>
-                                <div class="PJliBLi PJliBLi2"></div>
-                            </div>
-                            <div class="PJliBR">
-                                <div class="PJliB2">
-                                    <div class="PJliB2L">
-                                        <div class="fuxuanK4">
-                                            <input type="checkbox" class="input_check" id="check1">
-                                            <label for="check1"></label>
-                                        </div>
-                                        <div class="PJliB2Lt">CT</div>
-                                        <div class="PJliBLi PJliBLi2"></div>
-                                    </div>
-                                    <div class="PJliBR">
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check2">
-                                                    <label for="check2"></label>
-                                                </div>
-                                                <div class="PJliB2Lt">CT1</div>
-                                            </div>
-                                        </div>
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check3">
-                                                    <label for="check3"></label>
-                                                </div>
-                                                <div class="PJliB2Lt">CT2</div>
-                                            </div>
-                                        </div>
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check4">
-                                                    <label for="check4"></label>
-                                                </div>
-                                                <div class="PJliB2Lt">CT3</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="PJliB2">
-                                    <div class="PJliB2L">
-                                        <div class="fuxuanK4">
-                                            <input type="checkbox" class="input_check" id="check5">
-                                            <label for="check5"></label>
-                                        </div>
-                                        <div class="PJliB2Lt">XG</div>
-                                        <div class="PJliBLi PJliBLi2"></div>
-                                    </div>
-                                    <div class="PJliBR">
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check6">
-                                                    <label for="check6"></label>
-                                                </div>
-                                                <div class="PJliB2Lt">XG1</div>
-                                            </div>
-                                        </div>
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check7">
-                                                    <label for="check7"></label>
-                                                </div>
-                                                <div class="PJliB2Lt">XG2</div>
-                                            </div>
-                                        </div>
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check8">
-                                                    <label for="check8"></label>
-                                                </div>
-                                                <div class="PJliB2Lt">XG3</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="PJliB1">
-                            <div class="PJliB1L">
-                                <div class="fuxuanK4">
-                                    <input type="checkbox" class="input_check" id="check1_0">
-                                    <label for="check1_0"></label>
-                                </div>
-                                <div class="PJliB1Lt">分子数据</div>
-                                <div class="PJliBLi PJliBLi2"></div>
-                            </div>
-                            <div class="PJliBR">
-                                <div class="PJliB2">
-                                    <div class="PJliB2L">
-                                        <div class="fuxuanK4">
-                                            <input type="checkbox" class="input_check" id="check1_1">
-                                            <label for="check1_1"></label>
-                                        </div>
-                                        <div class="PJliB2Lt">CT</div>
-                                        <div class="PJliBLi PJliBLi2"></div>
-                                    </div>
-                                    <div class="PJliBR">
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check1_2">
-                                                    <label for="check1_2"></label>
-                                                </div>
-                                                <div class="PJliB2Lt">CT1</div>
-                                            </div>
-                                        </div>
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check1_3">
-                                                    <label for="check1_3"></label>
-                                                </div>
-                                                <div class="PJliB2Lt">CT2</div>
-                                            </div>
-                                        </div>
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check1_4">
-                                                    <label for="check1_4"></label>
-                                                </div>
-                                                <div class="PJliB2Lt">CT3</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="PJliB2">
-                                    <div class="PJliB2L">
-                                        <div class="fuxuanK4">
-                                            <input type="checkbox" class="input_check" id="check1_5">
-                                            <label for="check1_5"></label>
-                                        </div>
-                                        <div class="PJliB2Lt">XG</div>
-                                        <div class="PJliBLi PJliBLi2"></div>
-                                    </div>
-                                    <div class="PJliBR">
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check1_6">
-                                                    <label for="check1_6"></label>
-                                                </div>
-                                                <div class="PJliB2Lt">XG1</div>
-                                            </div>
-                                        </div>
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check1_7">
-                                                    <label for="check1_7"></label>
-                                                </div>
-                                                <div class="PJliB2Lt">XG2</div>
-                                            </div>
-                                        </div>
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check1_8">
-                                                    <label for="check1_8"></label>
-                                                </div>
-                                                <div class="PJliB2Lt">XG3</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            		
+            		<div class="PJliBK">
+						<c:forEach items="${formatTypeFolders}" var="formatTypeTemp" varStatus="status">
+							<div class="PJliB1">
+	                            <div class="PJliB1L">
+	                                <div class="fuxuanK4 fuxuanK41">
+	                                    <input type="checkbox" class="input_check" name="${formatTypeTemp.ft_id }" id="check1_${formatTypeTemp.ft_id }">
+	                                    <label for="check1_${formatTypeTemp.ft_id }"></label>
+	                                </div>
+	                                <div class="PJliB1Lt">${formatTypeTemp.ft_name }</div>
+	                                <div class="PJliBLi PJliBLi2"></div>
+	                            </div>
+	                            <div class="PJliBR">
+	                            	<c:forEach items="${formatTypeTemp.formatDataNodes}" var="formatDataNodeTemp" varStatus="status">
+										<div class="PJliB2">
+		                                    <div class="PJliB2L">
+		                                        <div class="fuxuanK4 fuxuanK42">
+		                                            <input type="checkbox" class="input_check" value="${formatTypeTemp.ft_id }" name="${formatDataNodeTemp.key}" id="check1_${formatDataNodeTemp.key}">
+		                                            <label for="check1_${formatDataNodeTemp.key}"></label>
+		                                        </div>
+		                                        <div class="PJliB2Lt" id="${formatDataNodeTemp.key}"
+		                                        	onclick="dataNodeClick('${formatDataNodeTemp.key}','${formatTypeTemp.ft_id }')">${formatDataNodeTemp.value}
+		                                        </div>
+		                                        
+		                                    </div>
+		                                </div>
+									</c:forEach>
+	                            </div>
+	                        </div>
+						</c:forEach>
                     </div>
-                    
                 </div>
+                
+                
                 <div class="prodaclmR">
                     <div class="prodaclmRz">
                         <div class="pdclmRz_ul">
-                            <div class="pdclmRz_li pdclmRz_edit">编辑</div>
-                        </div>
-                        <div class="pdclmRz_ul2">
-                            <div class="pdclmRz_ul2T">
-                                <div class="pdclmRz_ul2Tt">编辑数据</div>
-                                <div class="pdclmRz_ul2Tx"></div>
-                            </div>
-                            <div class="pdclmRz_ul2M">
-                                <div class="pdclmRz_ul2Mz">
-                                    <div class="pdclmRz_ul2Mzt">名称：</div>
-                                    <input type="text" class="pdclmRz_ul2Mzp" />
-                                </div>
-                                <div class="pdclmRz_ul2Mz">
-                                    <div class="pdclmRz_ul2Mzt">内容：</div>
-                                    <textarea name="" id="" class="pdclmRz_ul2Mzta"></textarea>
-                                </div>
-                            </div>
-                            <div class="pdclmRz_ul2B">
-                                <input type="button" class="pdclmRz_ul2b" value="确定" />
-                            </div>
                         </div>
                         <div class="prodaclmRzT">
-                            <div class="quanxuanK fxK1">
-                                <input type="checkbox" class="input_check" id="check3_0">
-                                <label for="check3_0"></label>
-                            </div>
+                            
                             <div class="prodaclmRzTt prodaclmRzTtmz">名称</div>
                             <div class="prodaclmRzTt prodaclmRzTtnr">内容</div>
                         </div>
                         <div class="prodaclmRzB">
-                            <div class="prodaclmRzBz">
-                                <div class="fuxuanK5 fxK1">
-                                    <input type="checkbox" class="input_check" id="check3_1">
-                                    <label for="check3_1"></label>
-                                </div>
-                                <div class="prodaclmRzBzt prodaclmRzTtmz">机器1</div>
-                                <div class="prodaclmRzBzt prodaclmRzTtnr">机器人信息1</div>
-                            </div>
-                            <div class="prodaclmRzBz">
-                                <div class="fuxuanK5 fxK1">
-                                    <input type="checkbox" class="input_check" id="check3_2">
-                                    <label for="check3_2"></label>
-                                </div>
-                                <div class="prodaclmRzBzt prodaclmRzTtmz">采集人1</div>
-                                <div class="prodaclmRzBzt prodaclmRzTtnr">采集人信息1</div>
-                            </div>
-                            <div class="prodaclmRzBz">
-                                <div class="fuxuanK5 fxK1">
-                                    <input type="checkbox" class="input_check" id="check3_3">
-                                    <label for="check3_3"></label>
-                                </div>
-                                <div class="prodaclmRzBzt prodaclmRzTtmz">XX</div>
-                                <div class="prodaclmRzBzt prodaclmRzTtnr"></div>
-                            </div>
-                            <!-- <div class="prodaclmRzBz">
-                                <div class="prodaclmRzTi"></div>
-                                <div class="prodaclmRzBzt prodaclmRzTtmz">XX</div>
-                                <div class="prodaclmRzBzt prodaclmRzTtnr"></div>
-                            </div> -->
+                      		<c:forEach items="${metaDatas}" var="metaDataListTemp">
+	                            <div class="prodaclmRzBz">
+			                        <div class="prodaclmRzBzt prodaclmRzTtmz">${metaDataListTemp[1] }</div>
+			                        <div class="prodaclmRzBzt prodaclmRzTtmz">
+			                        	<input class="meta_input" id="${metaDataListTemp[0] }" value="${metaDataListTemp[2] }"/>
+			                        </div>
+			                        <div class="pdclmRz_li pdclmRz_edit" onclick="meta_input_submit('${metaDataListTemp[0] }')">保存</div>
+			                        
+	                            </div>
+							</c:forEach>
                         </div>
                     </div>
                     <div class="prodaclmRz2">
                         <div class="prodaclmRsxK">
                             <div class="prodaclmRsx">
                                 <div class="prodaclmRsxT">筛选</div>
-                                <img src="img/sanjiao_blue.png" alt="" class="prodaclmRsxI" />
+                                <img src="/wankangyuan/static/img/sanjiao_blue.png" alt="" class="prodaclmRsxI" />
                             </div>
                             <div class="prodaclmRss">
                                 <div class="prodaclmRssC">
-                                    <img src="img/search.png" alt="" class="searchCi" />
+                                    <img src="/wankangyuan/static/img/search.png" alt="" class="searchCi" />
                                     <input type="text" class="searchCt"  placeholder="搜索项目" />
                                 </div>
                             </div>
@@ -374,44 +179,29 @@
                                     <input type="checkbox" class="input_check" id="check4_0">
                                     <label for="check4_0"></label>
                                 </div>
-                                <div class="prodaclmRzTit">全选</div>
-                                <div class="prodaclmRzTt2 prodaclmRzTtsj1">数据1</div>
-                                <div class="prodaclmRzTt2 prodaclmRzTtsj2">数据2</div>
-                                <div class="prodaclmRzTt2 prodaclmRzTtsj3">数据3</div>
+                                <c:forEach items="${data}" var="dataTemp">
+		                            <div class="prodaclmRzTt2">${dataTemp.ff_name }</div>
+								</c:forEach>
                             </div>
                             <div class="prodaclmRzB">
-                                <div class="prodaclmRzBz">
-                                    <div class="fuxuanK5 fxK1">
-                                        <input type="checkbox" class="input_check" id="check4_1">
-                                        <label for="check4_1"></label>
-                                    </div>
-                                    <div class="prodaclmRzBzid">李四</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj1">数据11</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj2">数据22</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj3">数据33</div>
-                                </div>
-                                <div class="prodaclmRzBz">
-                                    <div class="fuxuanK5 fxK1">
-                                        <input type="checkbox" class="input_check" id="check4_2">
-                                        <label for="check4_2"></label>
-                                    </div>
-                                    <div class="prodaclmRzBzid">李四</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj1">数据11</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj2">数据22</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj3">数据33</div>
-                                </div>
-                                <div class="prodaclmRzBz">
-                                    <div class="fuxuanK5 fxK1">
-                                        <input type="checkbox" class="input_check" id="check4_3">
-                                        <label for="check4_3"></label>
-                                    </div>
-                                    <div class="prodaclmRzBzid">李四</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj1">数据11</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj2">数据22</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj3">数据33</div>
-                                </div>
+                                
+                                    <c:forEach items="${dataDatas}" var="dataDataTemp">
+                                    	<div class="prodaclmRzBz">
+		                                    <c:forEach items="${dataDataTemp}" var="dataDataTempTemp" varStatus="status">
+		                                    	<c:if test="${status.index == 0 }">
+		                                    		<div class="fuxuanK5 fxK1 fx4">
+				                                        <input type="checkbox" class="input_check" name="${dataDataTempTemp}" id="check4_${dataDataTempTemp}">
+				                                        <label for="check4_${dataDataTempTemp}"></label>
+				                                    </div>
+		                                    	</c:if>
+		                                    	<c:if test="${status.index != 0 }">
+		                                    		<div class="prodaclmRzTt3 prodaclmRzTtsj3">${dataDataTempTemp}</div>
+		                                    	</c:if>
+											</c:forEach>
+										</div>   
+									</c:forEach>
+                                 
                             </div>
-
                         </div>
                     </div>
                     <div class="clmReditK">
@@ -420,33 +210,15 @@
                             <div class="clmReditTx"></div>
                         </div>
                         <div class="clmReditM">
-                            <div class="clmReditMz">
-                                <div class="clmReditMzt">数据：</div>
-                                <input type="text" class="clmReditMzp" />
-                            </div>
-                            <div class="clmReditMz">
-                                <div class="clmReditMzt">数据1：</div>
-                                <input type="text" class="clmReditMzp" />
-                            </div>
-                            <div class="clmReditMz">
-                                <div class="clmReditMzt">数据2：</div>
-                                <input type="text" class="clmReditMzp2" />
-                            </div>
-                            <div class="clmReditMz">
-                                <div class="clmReditMzt">数据3：</div>
-                                <input type="text" class="clmReditMzp" />
-                            </div>
-                            <div class="clmReditMz">
-                                <div class="clmReditMzt">数据4：</div>
-                                <input type="text" class="clmReditMzp" />
-                            </div>
-                            <div class="clmReditMz">
-                                <div class="clmReditMzt">数据5：</div>
-                                <textarea name="" id="" class="clmReditMzta"></textarea>
-                            </div>
-                            <div class="clmReditB">
-                                <input type="button" class="clmReditb" value="提交" />
-                            </div>
+                        	<c:forEach items="${data}" var="dataTemp">
+			                   	<div class="clmReditMz">
+	                                <div class="clmReditMzt">${dataTemp.ff_name }</div>
+	                                <input type="text" class="clmReditMzp" id="${dataTemp.ff_id }"/>
+	                            </div> 
+							</c:forEach>
+                        </div>
+                        <div>
+                            <input type="button" class="dataeditb" id="addFormatDataSubmit"value="提交" />
                         </div>
                     </div>
                     <div class="clmRinportK">
@@ -481,5 +253,267 @@
             </div>
         </div>
     </div>
+    
+    <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    
+    <script type="text/javascript">
+    
+		//新增节点
+		$("#addDataNodeSubmit").click(function (){
+			var cs_id = $('#cs_id').val();
+			var ft_id = $('#ft_id').val();
+			var nodeName = $("#dataNodeTextArea").val();
+			var sourceDataId = $("#sourceDataId").val();
+			var formatNodeId = $("#formatNodeId").val();
+			var type = $("#type").val();
+			if(type == "edit"){
+	    		var afuxuanK=document.querySelectorAll('.fuxuanK42');
+	    		
+	            var afuxuan=[];
+	            for(var i=0;i<afuxuanK.length;i++){
+	                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+	            }
+	            var formatNodeIds = [];
+	            var ft_ids = [];
+	            for(var i=0;i<afuxuanK.length;i++){
+	            	if(afuxuan[i].checked){
+	            		formatNodeIds.push(afuxuan[i].name);
+	            		ft_ids.push(afuxuan[i].value);
+	            	}
+	            }
+	            $.ajax({
+	    			url:"/wankangyuan/formatNode/updateFormatNode",
+	    			type:"post",
+	    			data:{
+	    				cs_id:cs_id,
+	    				nodeName:nodeName,
+	    				ft_id:ft_ids.join(","),
+	    				sourceDataId:sourceDataId,
+	    				formatNodeId:formatNodeIds.join(",")
+	    			},
+	    			dataType:"json",
+	    			success : function(data){
+	    				if(data.result == true){
+	    					alert(data.message);
+	    					window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+	    	    				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+	    				}else{
+	    					alert(data.message);
+	    				}
+	    			},
+	    			error : function(){
+	    				alert("联网失败");
+	    			}	
+	    		});   
+			}else if(type == "add"){
+	    		var afuxuanK=document.querySelectorAll('.fuxuanK41');
+	            var afuxuan=[];
+	            for(var i=0;i<afuxuanK.length;i++){
+	                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+	            }
+	            var ids = [];
+	            for(var i=0;i<afuxuanK.length;i++){
+	            	if(afuxuan[i].checked){
+	            		ids.push(afuxuan[i].name);
+	            	}
+	            }
+	    		$.ajax({
+	    			url:"/wankangyuan/formatNode/insertFormatNode",
+	    			type:"post",
+	    			data:{
+	    				cs_id:cs_id,
+	    				nodeName:nodeName,
+	    				sourceDataId:sourceDataId,
+	    				ft_id:ids.join(",")
+	    			},
+	    			dataType:"json",
+	    			success : function(data){
+	    				if(data.result == true){
+	    					alert(data.message);
+	    					window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+	    	    				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+	    				}else{
+	    					alert(data.message);
+	    				}
+	    			},
+	    			error : function(){
+	    				alert("联网失败");
+	    			}
+	    		});  
+			}
+		});
+    	
+    	$("#addFormatDataSubmit").click(function (){
+    		var formatDatas = document.querySelectorAll(".clmReditMzp");
+    		var cs_id = $("#cs_id").val();
+    		var ft_id = $("#ft_id").val();
+    		var formatNodeId = $("#formatNodeId").val();
+    		var sourceDataId = $("#sourceDataId").val();
+    		var formatFieldDatas = {};
+    		for(var i = 0 ; i < formatDatas.length ; i++){
+    			formatFieldDatas[formatDatas[i].id] = formatDatas[i].value;
+    		}
+    		$.ajax({
+            	url:"/wankangyuan/formatData/insertFormatData",
+            	type:"post",
+            	data:{
+            		cs_id:cs_id,
+            		ft_id:ft_id,
+            		formatNodeId:formatNodeId,
+            		formatFieldDatas:JSON.stringify(formatFieldDatas)
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			alert(data.message);
+            			//刷新页面
+            			window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+            				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+            		}else{
+            			alert(data.message);
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });
+    		
+    	});
+    	
+    	
+    	$(".clmRsb_remove").click(function (){
+    		var afuxuanK=document.querySelectorAll('.fx4');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var formatNodeIds = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		formatNodeIds.push(afuxuan[i].name);
+            	}
+            }
+            var cs_id = $("#cs_id").val();
+    		var ft_id = $("#ft_id").val();
+    		var formatNodeId = $("#formatNodeId").val();
+    		var sourceDataId = $("#sourceDataId").val();
+
+    		$.ajax({
+            	url:"/wankangyuan/formatData/deleteFormatDatas",
+            	type:"post",
+            	data:{
+            		cs_id:cs_id,
+            		ft_id:ft_id,
+            		formatNodeIds:formatNodeIds.join(",")
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			alert(data.message);
+            			//刷新页面
+            			window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+            				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+            		}else{
+            			alert(data.message);
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });
+    	});
+    	
+    	$(".daclLb_del").click(function (){
+    		
+    		var afuxuanK=document.querySelectorAll('.fuxuanK42');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].name);
+            	}
+            }
+            if(ids == ""){
+            	alert("请勾选待删除的结点！");
+            	return;
+            }else if(ids.length > 1){
+            	alert("最多选择一个结点！")
+            }else{
+            	var cs_id = $("#cs_id").val();
+        		var ft_id = $("#ft_id").val();
+        		var formatNodeId = $("#formatNodeId").val();
+        		var sourceDataId = $("#sourceDataId").val();
+            	$.ajax({
+        			url:"/wankangyuan/formatNode/deleteFormatNode",
+        			type:"post",
+        			data:{
+        				cs_id:cs_id,
+        				formatNodeId:ids.join(",")
+        			},
+        			dataType:"json",
+        			success : function(data){
+        				if(data.result == true){
+        					alert(data.message);
+        					window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+                				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+        				}else{
+        					alert(data.message);
+        				}
+        			},
+        			error : function(){
+        				alert("联网失败");
+        			}
+        		});	
+            }
+    	});
+    	
+    	function dataNodeClick(formatNodeId , ft_id){
+    		var cs_id = $('#cs_id').val();
+    		var sourceDataId = $("#sourceDataId").val();
+    		window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+    				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+    	}
+    	function meta_input_submit(formatDataId){
+    		
+    		var cs_id = $("#cs_id").val();
+    		var ft_id = $("#ft_id").val();
+    		var formatNodeId = $("#formatNodeId").val();
+    		var sourceDataId = $("#sourceDataId").val();
+    		var formatFieldDatas = {};
+    		formatFieldDatas[formatDataId] = $("#"+formatDataId).val();
+    		
+    		$.ajax({
+            	url:"/wankangyuan/formatData/updateFormatData",
+            	type:"post",
+            	data:{
+            		cs_id:cs_id,
+            		ft_id:ft_id,
+            		formatDataId:formatNodeId,
+            		formatFieldDatas:JSON.stringify(formatFieldDatas)
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			alert(data.message);
+            			//刷新页面
+            			window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+            				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+            		}else{
+            			alert(data.message);
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });
+    	}
+
+    	
+    </script>
+    
+    
 </body>
 </html>

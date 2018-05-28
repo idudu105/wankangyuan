@@ -13,8 +13,8 @@
     <meta charset="UTF-8" />
     <title>Document</title>
 </head>
-<link rel="stylesheet" type="text/css" href="css/project1.css" />
-<script type="text/javascript" src="js/project1.js"></script>
+<link rel="stylesheet" type="text/css" href="/wankangyuan/static/css/project1.css" />
+<script type="text/javascript" src="/wankangyuan/jsp/formatdata/js/project1.js"></script>
 <script type="text/javascript">
     window.onload=function(){
         project0();
@@ -22,13 +22,14 @@
         // pro_mine();
         // pro_dataLB();
         pro_data();
+        data_dataclick2();
     }
 </script>
 <body>
     <div class="Box">
         <div class="box">
             <div class="top">
-                <h1><img src="img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
+                <h1><img src="/wankangyuan/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
                 <a href="project_mine.html">
                     <div class="topT">项目</div>
                 </a>
@@ -39,261 +40,85 @@
                     <div class="topT">应用</div>
                 </a>
                 <div class="touxiangK">
-                    <img src="img/touxiang.png" alt="" class="touxiang" />
+                    <img src="/wankangyuan/static/img/touxiang.png" alt="" class="touxiang" />
                 </div>
                 <div class="nicheng">Peter</div>
                 <div class="yanjiuquan">
                     <div class="yanjiuquanT">研究圈</div>
-                    <img src="img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
+                    <img src="/wankangyuan/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
                 </div>
             </div>
             <div class="top2">
                 <div class="top2C">
                     <div class="top2Ctl active">
-                        <a href="javascript:history.go(-1);">
-                            <img src="img/back.png" height="20" width="20" alt="" class="backI" />
-                        </a>张三
+                        <a href="/wankangyuan/sourceData/firstIn?type=2">
+                            <img src="/wankangyuan/static/img/back.png" height="20" width="20" alt="" class="backI" />
+                        </a>${sourceData[1]}
+                        <input id="cs_id" value="${source.cs_id }" style="display:none;"/>
+                        <input id="sourceDataId" value="${sourceData[0]}" style="display:none;"/>
                     </div>
                     <div class="app_expexport">导出</div>
                 </div>
             </div>
             <div class="prodainm">
                 <div class="prodainmL">
+                	<div class="dataclLbk">
+                        <div class="dataclLb daclLb_add">添加数据节点</div>
+                        <div class="dataclLb daclLb_del">删除</div>
+                        <div class="dataclLb daclLb_mod">修改</div>
+                    </div>
+                    <div class="dataeditK">
+                        <div class="dataeditT">
+                            <div class="dataeditTx"></div>
+                        </div>
+                        <input id="type" class="type" value="" style="display:none;"/>
+                        <div class="dataeditM">
+                            <div class="dataeditMt">名称</div>
+                            <textarea name="" id="dataNodeTextArea" class="dataeditTta"></textarea>
+                        </div>
+                        <div class="dataeditB">
+                            <input type="button" class="dataeditb" id="addDataNodeSubmit"value="提交" />
+                        </div>
+                    </div>
                     <div class="PJliBK">
-                        <div class="PJliB1">
-                            <div class="PJliB1L">
-                                <div class="fuxuanK4">
-                                    <input type="checkbox" class="input_check" id="check0">
-                                    <label for="check0"></label>
-                                </div>
-                                <div class="PJliB1Lt">临床数据</div>
-                                <div class="PJliBLi PJliBLi2"></div>
-                            </div>
-                            <div class="PJliBR">
-                                <div class="PJliB2">
-                                    <div class="PJliB2L">
-                                        <div class="fuxuanK4">
-                                            <input type="checkbox" class="input_check" id="check1">
-                                            <label for="check1"></label>
-                                        </div>
-                                        <div class="PJliB2Lt">CT</div>
-                                        <div class="PJliBLi PJliBLi2"></div>
-                                    </div>
-                                    <div class="PJliBR">
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check2">
-                                                    <label for="check2"></label>
-                                                </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">CT1</div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check3">
-                                                    <label for="check3"></label>
-                                                </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">CT2</div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check4">
-                                                    <label for="check4"></label>
-                                                </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">CT3</div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="PJliB2">
-                                    <div class="PJliB2L">
-                                        <div class="fuxuanK4">
-                                            <input type="checkbox" class="input_check" id="check5">
-                                            <label for="check5"></label>
-                                        </div>
-                                        <div class="PJliB2Lt">XG</div>
-                                        <div class="PJliBLi PJliBLi2"></div>
-                                    </div>
-                                    <div class="PJliBR">
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check6">
-                                                    <label for="check6"></label>
-                                                </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">XG1</div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check7">
-                                                    <label for="check7"></label>
-                                                </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">XG2</div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check8">
-                                                    <label for="check8"></label>
-                                                </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">XG3</div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="PJliB1">
-                            <div class="PJliB1L">
-                                <div class="fuxuanK4">
-                                    <input type="checkbox" class="input_check" id="check1_0">
-                                    <label for="check1_0"></label>
-                                </div>
-                                <div class="PJliB1Lt">分子数据</div>
-                                <div class="PJliBLi PJliBLi2"></div>
-                            </div>
-                            <div class="PJliBR">
-                                <div class="PJliB2">
-                                    <div class="PJliB2L">
-                                        <div class="fuxuanK4">
-                                            <input type="checkbox" class="input_check" id="check1_1">
-                                            <label for="check1_1"></label>
-                                        </div>
-                                        <div class="PJliB2Lt">CT</div>
-                                        <div class="PJliBLi PJliBLi2"></div>
-                                    </div>
-                                    <div class="PJliBR">
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check1_2">
-                                                    <label for="check1_2"></label>
-                                                </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">CT1</div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check1_3">
-                                                    <label for="check1_3"></label>
-                                                </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">CT2</div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check1_4">
-                                                    <label for="check1_4"></label>
-                                                </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">CT3</div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="PJliB2">
-                                    <div class="PJliB2L">
-                                        <div class="fuxuanK4">
-                                            <input type="checkbox" class="input_check" id="check1_5">
-                                            <label for="check1_5"></label>
-                                        </div>
-                                        <div class="PJliB2Lt">XG</div>
-                                        <div class="PJliBLi PJliBLi2"></div>
-                                    </div>
-                                    <div class="PJliBR">
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check1_6">
-                                                    <label for="check1_6"></label>
-                                                </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">XG1</div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check1_7">
-                                                    <label for="check1_7"></label>
-                                                </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">XG2</div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK4">
-                                                    <input type="checkbox" class="input_check" id="check1_8">
-                                                    <label for="check1_8"></label>
-                                                </div>
-                                                <a href="data_dataclick2.html">
-                                                    <div class="PJliB2Lt">XG3</div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+						<c:forEach items="${formatTypeFolders}" var="formatTypeTemp" varStatus="status">
+							<div class="PJliB1">
+	                            <div class="PJliB1L">
+	                                <div class="fuxuanK4 fuxuanK41">
+	                                    <input type="checkbox" class="input_check" name="${formatTypeTemp.ft_id }" id="check1_${formatTypeTemp.ft_id }">
+	                                    <label for="check1_${formatTypeTemp.ft_id }"></label>
+	                                </div>
+	                                <div class="PJliB1Lt">${formatTypeTemp.ft_name }</div>
+	                                <div class="PJliBLi PJliBLi2"></div>
+	                            </div>
+	                            <div class="PJliBR">
+	                            	<c:forEach items="${formatTypeTemp.formatDataNodes}" var="formatDataNodeTemp" varStatus="status">
+										<div class="PJliB2">
+		                                    <div class="PJliB2L">
+		                                        <div class="fuxuanK4 fuxuanK42">
+		                                            <input type="checkbox" class="input_check" value="${formatTypeTemp.ft_id }" name="${formatDataNodeTemp.key}" id="check1_${formatDataNodeTemp.key}">
+		                                            <label for="check1_${formatDataNodeTemp.key}"></label>
+		                                        </div>
+		                                        <div class="PJliB2Lt" id="${formatDataNodeTemp.key}"
+		                                        	onclick="dataNodeClick('${formatDataNodeTemp.key}','${formatTypeTemp.ft_id }')">${formatDataNodeTemp.value}
+		                                        </div>
+		                                    </div>
+		                                </div>
+									</c:forEach>
+	                            </div>
+	                        </div>
+						</c:forEach>
                     </div>
                 </div>
                 <div class="prodainmR">
-                    <div class="prodainmRz1">
-                        <div class="prodainmRz1L">姓名：</div>
-                        <div class="prodainmRz1R">张三</div>
-                    </div>
-                    <div class="prodainmRz1">
-                        <div class="prodainmRz1L">年龄：</div>
-                        <div class="prodainmRz1R">25</div>
-                    </div>
-                    <div class="prodainmRz1">
-                        <div class="prodainmRz1L">性别：</div>
-                        <div class="prodainmRz1R">男</div>
-                    </div>
-                    <div class="prodainmRz1">
-                        <div class="prodainmRz1L">病史：</div>
-                        <div class="prodainmRz1R">无</div>
-                    </div>
-                    <div class="prodainmRz2">
-                        <div class="prodainmRz2T">个人信息：</div>
-                        <div class="prodainmRz2B"></div>
-                    </div>
-                    <div class="prodainmRz2">
-                        <div class="prodainmRz2T">个人信息2：</div>
-                        <div class="prodainmRz2B"></div>
-                    </div>
+             		<c:forEach items="${source.sourceFields}" var="sourceFieldTemp" varStatus="status">
+						<div class="prodainmRz1">
+	                        <div class="prodainmRz1L">${sourceFieldTemp.csf_name}</div>
+	                        <div class="prodainmRz1R">${sourceData[status.index+1] }</div>
+                    	</div>
+					</c:forEach>
                 </div>
             </div>
-            
 
             <div class="bottom">
                 <a href="javascript:;">
@@ -309,5 +134,147 @@
             </div>
         </div>
     </div>
+    
+   	<script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    
+    <script type="text/javascript">
+
+    	//新增节点
+    	$("#addDataNodeSubmit").click(function (){
+    		var cs_id = $('#cs_id').val();
+    		var nodeName = $("#dataNodeTextArea").val();
+    		var sourceDataId = $("#sourceDataId").val();
+    		var type = $("#type").val();
+    		if(type == "edit"){
+        		var afuxuanK=document.querySelectorAll('.fuxuanK42');
+        		
+                var afuxuan=[];
+                for(var i=0;i<afuxuanK.length;i++){
+                    afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+                }
+                var formatNodeIds = [];
+                var ft_ids = [];
+                for(var i=0;i<afuxuanK.length;i++){
+                	if(afuxuan[i].checked){
+                		formatNodeIds.push(afuxuan[i].name);
+                		ft_ids.push(afuxuan[i].value);
+                	}
+                }
+                $.ajax({
+        			url:"/wankangyuan/formatNode/updateFormatNode",
+        			type:"post",
+        			data:{
+        				cs_id:cs_id,
+        				nodeName:nodeName,
+        				ft_id:ft_ids.join(","),
+        				sourceDataId:sourceDataId,
+        				formatNodeId:formatNodeIds.join(",")
+        			},
+        			dataType:"json",
+        			success : function(data){
+        				if(data.result == true){
+        					alert(data.message);
+        					window.location.href="/wankangyuan/sourceData/getSourceDataById?cs_id="+cs_id+"&sourceDataId="+sourceDataId+"&type=2";
+        				}else{
+        					alert(data.message);
+        				}
+        			},
+        			error : function(){
+        				alert("联网失败");
+        			}	
+        		});   
+    		}else if(type == "add"){
+        		var afuxuanK=document.querySelectorAll('.fuxuanK41');
+                var afuxuan=[];
+                for(var i=0;i<afuxuanK.length;i++){
+                    afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+                }
+                var ids = [];
+                for(var i=0;i<afuxuanK.length;i++){
+                	if(afuxuan[i].checked){
+                		ids.push(afuxuan[i].name);
+                	}
+                }
+        		$.ajax({
+        			url:"/wankangyuan/formatNode/insertFormatNode",
+        			type:"post",
+        			data:{
+        				cs_id:cs_id,
+        				nodeName:nodeName,
+        				sourceDataId:sourceDataId,
+        				ft_id:ids.join(",")
+        			},
+        			dataType:"json",
+        			success : function(data){
+        				if(data.result == true){
+        					alert(data.message);
+        					window.location.href="/wankangyuan/sourceData/getSourceDataById?cs_id="+cs_id+"&sourceDataId="+sourceDataId+"&type=2";
+        				}else{
+        					alert(data.message);
+        				}
+        			},
+        			error : function(){
+        				alert("联网失败");
+        			}
+        		});  
+    		}
+    	});
+    	
+    	$(".daclLb_del").click(function (){
+    		
+    		var afuxuanK=document.querySelectorAll('.fuxuanK42');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].name);
+            	}
+            }
+            if(ids == ""){
+            	alert("请勾选待删除的结点！");
+            	return;
+            }else if(ids.length > 1){
+            	alert("最多选择一个结点！")
+            }else{
+            	var sourceDataId = $("#sourceDataId").val();
+            	var cs_id = $('#cs_id').val();
+            	$.ajax({
+        			url:"/wankangyuan/formatNode/deleteFormatNode",
+        			type:"post",
+        			data:{
+        				cs_id:cs_id,
+        				formatNodeId:ids.join(",")
+        			},
+        			dataType:"json",
+        			success : function(data){
+        				if(data.result == true){
+        					alert(data.message);
+        					window.location.href="/wankangyuan/sourceData/getSourceDataById?cs_id="+cs_id+"&sourceDataId="+sourceDataId+"&type=2";
+        				}else{
+        					alert(data.message);
+        				}
+        			},
+        			error : function(){
+        				alert("联网失败");
+        			}
+        		});	
+            }
+    	});
+    	
+    	
+    	function dataNodeClick(formatNodeId , ft_id){
+    		var cs_id = $('#cs_id').val();
+    		var sourceDataId = $("#sourceDataId").val();
+    		window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+    				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+    	}
+    </script>
+    
+    
+    
+    
 </body>
 </html>

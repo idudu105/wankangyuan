@@ -65,7 +65,7 @@
             <div class="shaixuan">
                 <div class="shaixuanC">
                     <div class="listZT">
-                        <a href="data_create2.html">
+                        <a href="#">
                             <div class="listZTli listZT1 active">
                                 <img src="/wankangyuan/static/img/listZT1.png"alt="" class="listZT1i" />
                                 <img src="/wankangyuan/static/img/listZT1.png" alt="" class="listZT1i" />
@@ -96,7 +96,7 @@
                     <div class="pro_menu pro_canopen">取消公开</div>
                     <div class="pro_menu pro_inport">导入</div>
                     <div class="pro_menu pro_export">导出</div>
-                    <div class="pro_menu pro_rem">移除</div>
+                    <div class="pro_menu pro_rem" id="deleteSourceDatas">移除</div>
                     <div class="pro_menu pro_adddata">+添加源数据</div>
                    	<select name="" id="source_Select" class="pro_menusel" >
 						<c:forEach items="${sources}" var="source">
@@ -150,7 +150,9 @@
                 
                 <div class="PJList">
                     <div class="allK">
-                        <div class="allX">
+                        <div class="quanxuanK">
+                            <input type="checkbox" class="input_check" name="0" id="check0">
+                            <label for="check0"></label>
                         </div>
                         <div class="allT">全选</div>
                     </div>
@@ -163,86 +165,32 @@
                 	<c:forEach items="${sourceDatas}" var="sourceData">
 						<div class="PJli">
 							<div class="PJliC">
-								<div class="PJXZ"></div>
-								<c:forEach items="${sourceData}" var="sourceDataField" varStatus="status">	
-									<c:if test="${status.index==0}">
-										<div class="PJliCli2 dataname">
-											<a href="/wankangyuan/formatType/selectFormatType?datainname=${sourceDataField}&cs_id=1"> <span>${sourceDataField}</span>
-											</a>
-										</div>
+								
+								<c:forEach items="${sourceData}" var="sourceDataField" varStatus="status">
+								
+									<c:if test="${status.index==0}">										
+			                            <div class="fuxuanK2">
+			                                <input type="checkbox" class="input_check" name="${sourceDataField}" id="check${sourceDataField}">
+			                                <label for="check${sourceDataField}"></label>
+			                            </div>
 									</c:if>
-									<c:if test="${status.index!=0}">
+								
+									<c:if test="${status.index==1}">										
+										<div class="PJliCli2 dataname">
+			                                <a href="#" onclick="datainHref('${sourceData[0]}')">
+			                                    <span>${sourceDataField}</span>
+			                                </a>
+			                            </div>
+									</c:if>
+									
+									<c:if test="${status.index!=0 && status.index!=1}">
 										<div class="PJliCli2">${sourceDataField}</div>
 									</c:if>
-									<div class="PJliCli2">${sourceDataField}</div>
+									
 								</c:forEach>		
 							</div>
 							<div class="PJliline"></div>
-							<div class="PJliB">
-								<div class="PJliB1">
-									<div class="PJliB1L">
-										<div class="PJliB1Lt">临床数据</div>
-										<div class="PJliBLi PJliBLi2"></div>
-									</div>
-									<div class="PJliBR">
-										<div class="PJliB2">
-											<div class="PJliB2L">
-												<div class="PJliB2Lk"></div>
-												<div class="PJliB2Lt">CT</div>
-												<div class="PJliBLi PJliBLi2"></div>
-											</div>
-											<div class="PJliBR">
-												<div class="PJliB2">
-													<div class="PJliB2L">
-														<div class="PJliB2Lk"></div>
-														<div class="PJliB2Lt">CT1</div>
-													</div>
-												</div>
-												<div class="PJliB2">
-													<div class="PJliB2L">
-														<div class="PJliB2Lk"></div>
-														<div class="PJliB2Lt">CT2</div>
-													</div>
-												</div>
-												<div class="PJliB2">
-													<div class="PJliB2L">
-														<div class="PJliB2Lk"></div>
-														<div class="PJliB2Lt">CT3</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="PJliB2">
-											<div class="PJliB2L">
-												<div class="PJliB2Lk"></div>
-												<div class="PJliB2Lt">XG</div>
-												<div class="PJliBLi PJliBLi2"></div>
-											</div>
-											<div class="PJliBR">
-												<div class="PJliB2">
-													<div class="PJliB2L">
-														<div class="PJliB2Lk"></div>
-														<div class="PJliB2Lt">XG1</div>
-													</div>
-												</div>
-												<div class="PJliB2">
-													<div class="PJliB2L">
-														<div class="PJliB2Lk"></div>
-														<div class="PJliB2Lt">XG2</div>
-													</div>
-												</div>
-												<div class="PJliB2">
-													<div class="PJliB2L">
-														<div class="PJliB2Lk"></div>
-														<div class="PJliB2Lt">XG3</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-	
-								</div>
-							</div>
+
 						</div>
 					</c:forEach>	 
 
@@ -324,6 +272,171 @@
 	</form>
     
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    
+    <script type="text/javascript">
+    
+    	$("#deleteSourceDatas").click(function (){
+    		var result = confirm("确认删除选中的数据源数据吗？");
+    		if(result == true){
+    			
+    			var afuxuanK=document.querySelectorAll('.fuxuanK2');
+        		
+                var afuxuan=[];
+                for(var i=0;i<afuxuanK.length;i++){
+                    afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+                }
+                
+                var ids = [];
+                for(var i=0;i<afuxuanK.length;i++){
+                	if(afuxuan[i].checked){
+                		ids.push(afuxuan[i].name);
+                	}
+                }
+                
+                if(ids == ""){
+                	alert("请勾选待删除的选项！");
+                	return;
+                }
+                var cs_id = $("#source_Select").val();
+                                
+                $.ajax({
+                	url:"/wankangyuan/sourceData/deleteSourceDatas",
+                	type:"post",
+                	data:{
+                		sourceDataIds:ids.join(","),
+                		cs_id:cs_id
+                	},
+                	dataType:"json",
+                	success : function(data){
+                		if(data.result == true){
+                			alert(data.message);
+                			window.location.href="/wankangyuan/sourceData/firstIn?type=2";
+                		}else{
+                			alert(data.message);
+                		}
+                	},
+                	error : function(){
+                		alert("联网失败");
+                	}
+                	
+                });
+
+    		}else{
+    			return;
+    		}
+    	});
+    	
+    	function datainHref(sourceDataId){
+    		var cs_id = $("#source_Select").val();
+    		$.ajax({
+    			url:"/wankangyuan/sourceData/getSourceDataById",
+    			type:"post",
+    			data:{
+    				cs_id:cs_id,
+    				sourceDataId:sourceDataId,
+    				type:2
+    			},
+    			success : function(){
+    				window.location.href="/wankangyuan/jsp/formatdata/data_datain2.jsp";
+    			},
+    			error : function(){
+    				alert("联网失败");
+    			}
+    			
+    		});
+    		
+    	}
+    	
+    	$("#source_Select").change(function(){
+    		cs_id = $("#source_Select").val();
+   			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id;
+    	
+    	});
+    	
+    	$(".pro_open").click(function (){
+    		
+    		var afuxuanK=document.querySelectorAll('.fuxuanK2');
+    		
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].name);
+            	}
+            }
+            
+            if(ids == ""){
+            	alert("请勾选待公开的选项！");
+            	return;
+            }
+            var cs_id = $("#source_Select").val();
+            
+    		$.ajax({
+    			url:"/wankangyuan/sourceData/open",
+    			type:"post",
+    			data:{
+    				cs_id:cs_id,
+    				sourceDataIds:ids.join(",")
+    			},
+    			success : function(data){
+    				alert(data.message);
+    			},
+    			error : function(){
+    				alert("联网失败");
+    			}
+    			
+    		});
+            
+    	});
+    	
+    	
+    	$(".pro_canopen").click(function (){
+    		
+    		var afuxuanK=document.querySelectorAll('.fuxuanK2');
+    		
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].name);
+            	}
+            }
+            
+            if(ids == ""){
+            	alert("请勾选待公开的选项！");
+            	return;
+            }
+            var cs_id = $("#source_Select").val();
+            
+    		$.ajax({
+    			url:"/wankangyuan/sourceData/notOpen",
+    			type:"post",
+    			data:{
+    				cs_id:cs_id,
+    				sourceDataIds:ids.join(",")
+    			},
+    			success : function(data){
+    				alert(data.message);
+    			},
+    			error : function(){
+    				alert("联网失败");
+    			}
+    			
+    		});
+            
+    	});
+    	
+    	
+    
+    </script>
 
 </body>
 </html>
