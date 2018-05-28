@@ -78,9 +78,7 @@ public class HBaseFormatDataDao {
 	 * @param ft_id
 	 * @param formatNodeId
 	 * @param formatFields
-	 * @return formatDatas[0]:formatDataId
-	 * 
-	 *         formatDatas[1]:id,名，值
+	 * @return formatDatas[1]:id,名，值
 	 */
 	public static List<List<String>> getFormatDataMetas(String cs_id, String ft_id, String formatNodeId,
 			List<FormatField> formatFields) {
@@ -91,9 +89,6 @@ public class HBaseFormatDataDao {
 			Get get = new Get(Bytes.toBytes(formatNodeId));
 			Result result = table.get(get);
 			if (!result.isEmpty()) {
-				List<String> rowkey = new ArrayList<>();
-				rowkey.add(Bytes.toString(result.getRow()));// 获取行键formatDataId，不显示
-				formatDatas.add(rowkey);
 				for (FormatField formatField : formatFields) {
 					List<String> formatData = new ArrayList<>();
 					formatData.add(String.valueOf(formatField.getFf_id()));
