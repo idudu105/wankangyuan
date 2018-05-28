@@ -80,7 +80,7 @@ public class HBaseFormatDataDao {
 	 * @param formatFields
 	 * @return formatDatas[0]:formatDataId
 	 * 
-	 *         formatDatas[1]:名，值
+	 *         formatDatas[1]:id,名，值
 	 */
 	public static List<List<String>> getFormatDataMetas(String cs_id, String ft_id, String formatNodeId,
 			List<FormatField> formatFields) {
@@ -96,6 +96,7 @@ public class HBaseFormatDataDao {
 				formatDatas.add(rowkey);
 				for (FormatField formatField : formatFields) {
 					List<String> formatData = new ArrayList<>();
+					formatData.add(String.valueOf(formatField.getFf_id()));
 					formatData.add(formatField.getFf_name());
 					formatData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
 							Bytes.toBytes(String.valueOf(formatField.getFf_id())))));
