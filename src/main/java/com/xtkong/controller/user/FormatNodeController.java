@@ -118,11 +118,13 @@ public class FormatNodeController {
 		// meta数据
 		List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
 				ConstantsHBase.IS_meta_true);
+		httpSession.setAttribute("meta", meta);
 		List<List<String>> metaDatas = HBaseFormatDataDao.getFormatDatas(cs_id, ft_id, formatNodeId, meta);
 		httpSession.setAttribute("metaDatas", metaDatas);
 		// data数据
 		List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
 				ConstantsHBase.IS_meta_false);
+		httpSession.setAttribute("data", data);
 		List<List<String>> dataDatas = HBaseFormatDataDao.getFormatDatas(cs_id, ft_id, formatNodeId, data);
 		httpSession.setAttribute("dataDatas", dataDatas);
 		if (type.equals("2")) {
