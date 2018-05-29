@@ -25,18 +25,19 @@
                     <img src="<%=request.getContextPath()%>/admin/img/newlogo2.png" height="70" width="218" alt="" class="topI" />
                 </div>
                 <div class="middle">
+                    <input name="loginType" type="hidden" value="adminLogin">
                     <div class="middlez">
                         <div class="middlezL">用户名：</div>
-                        <input type="text" class="middlezRp1" />
+                        <input name="username" type="text" class="middlezRp1" />
                     </div>
                     <div class="middlez">
                         <div class="middlezL">密码：</div>
-                        <input type="password" class="middlezRp1" />
+                        <input name="password" type="password" class="middlezRp1" />
                     </div>
                     <div class="middlez">
                         <div class="middlezL">验证码：</div>
                         <div class="middlezR">
-                            <input type="text" class="middlezRp2" />
+                            <input name="randomcode" type="text" class="middlezRp2" />
                             <div class="yanzhengK">
                                 <img src="/wankangyuan/open/getGifCode" class="yanzhengI" onclick="random(this)"  title="点击图片刷新验证码，不区分大小写"/>
                                 <div class="yanzhengps">点击图片刷新验证码，不区分大小写</div>
@@ -58,6 +59,11 @@
 <c:if test="${not empty error}">
     <script type="text/javascript">
     layer.msg("${error}");
+    </script>
+</c:if>
+<c:if test="${not empty msg}">
+    <script type="text/javascript">
+    layer.msg("${msg}");
     </script>
 </c:if>
 <script type="text/javascript">

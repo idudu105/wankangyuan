@@ -2,7 +2,6 @@ package com.liutianjun.shiro.realm;
 
 import java.util.Date;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -20,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.liutianjun.pojo.User;
 import com.liutianjun.service.UserService;
+import com.liutianjun.utils.StringUtils;
 
 /**
  * UserRealm
@@ -53,9 +53,12 @@ public class UserRealm extends AuthorizingRealm {
         String userStr = (String)token.getPrincipal();
         
         User user = null;
-        if(StringUtils.isNumeric(userStr)) {
+        
+        if(StringUtils.checkMobileNumber(userStr)) {
         	user = userService.selectByPhone(userStr);
-        }else {
+        }else if (StringUtils.checkEmail(userStr)) {
+        	user = userService.selectByEmail(userStr);
+		}else{
         	user = userService.selectByUsername(userStr);
 		}
 

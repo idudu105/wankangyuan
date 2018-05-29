@@ -1536,9 +1536,9 @@ function forget_ps(){
     var opro_enter=document.querySelectorAll('.pro_enter')[0];//确认
 
 
-    ologinMzRb.onclick=function(){
+    /*ologinMzRb.onclick=function(){
         phonezhengze(ofor_zh,ologinMzRb,ologinMzRb2,60);
-    }
+    }*/
 }
 
 

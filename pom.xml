@@ -216,6 +216,13 @@
 			<artifactId>shiro-spring</artifactId>
 			<version>1.4.0</version>
 		</dependency>
+		
+		<!-- 邮箱相关 -->
+		<dependency>
+		    <groupId>com.sun.mail</groupId>
+		    <artifactId>javax.mail</artifactId>
+		    <version>1.6.1</version>
+		</dependency>
 
 		<!-- 工具包 -->
 		<dependency>

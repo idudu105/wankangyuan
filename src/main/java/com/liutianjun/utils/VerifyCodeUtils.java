@@ -33,6 +33,10 @@ public class VerifyCodeUtils{
     public static final String V_PHONECODE = "validatePhoneCode";
     //新手机验证码
     public static final String V_NEWPHONECODE = "validateNewPhoneCode";
+    //手机验证码Key
+    public static final String V_EMAILCODE = "validateEmailCode";
+    //新手机验证码
+    public static final String V_NEWEMAILCODE = "validateNewEmailCode";
     
     private static Random random = new Random();  
   
@@ -101,16 +105,20 @@ public class VerifyCodeUtils{
     /**
      * 清除验证码
      */
-    public static void clearVerifyCode(){
-    	SecurityUtils.getSubject().getSession().removeAttribute(V_CODE);
+    public static void clearVerifyCode(String vCode){
+    	SecurityUtils.getSubject().getSession().removeAttribute(vCode);
     }
     
     /**
      * 对比验证码   
      */
-    public static boolean verifyCode(String code){
-    	String v = (String)SecurityUtils.getSubject().getSession().getAttribute(V_CODE);
-    	return StringUtils.equals(v, StringUtils.lowerCase(code));
+    public static boolean verifyCode(String code,String vCode){
+    	String v = (String)SecurityUtils.getSubject().getSession().getAttribute(vCode);
+    	boolean isTrue = StringUtils.equals(v, StringUtils.lowerCase(code));
+    	if(isTrue) {
+    		clearVerifyCode(vCode);
+    	}
+    	return isTrue;
     }
     
     /** 

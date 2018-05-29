@@ -33,14 +33,14 @@
                         <div class="loginMz">
                             <!-- <div class="loginMzL">账户名称：</div> -->
                             <div class="loginMzR">
-                                <input id="phone" name="phone" type="text" class="loginMzRp for_zh" placeholder="请输入手机号" />
+                                <input id="email" name="email" type="text" class="loginMzRp for_zh" placeholder="请输入邮箱" />
                             </div>
                         </div>
                         <div class="loginMz">
                             <div class="loginMzR">
-                                <input id="phoneCode" name="phoneCode" type="text" class="loginMzRp3" placeholder="验证码" />
+                                <input id="emailCode" name="emailCode" type="text" class="loginMzRp3" placeholder="验证码" />
                                 <div class="loginMzRbK">
-                                    <input id="sendPhoneCode" type="button" class="loginMzRb" value="发送验证码" />
+                                    <input id="sendEmailCode" type="button" class="loginMzRb" value="发送验证码" />
                                     <div class="loginMzRb2"></div>
                                 </div>
                             </div>
@@ -59,7 +59,7 @@
                     </div>
                     </form>
                     <div class="loginM3">
-                        <div class="loginMt">*手机号不能接受验证码，请联系客服</div>
+                        <div class="loginMt">*邮箱不能接受验证码，请联系客服</div>
                     </div>
                     <div class="loginB">
                         <input type="button" class="loginb pro_enter" value="确认" onclick="resetPassword()" />
@@ -106,11 +106,36 @@
     </script>
 </c:if>
 <script type="text/javascript">
-$("#sendPhoneCode").click(function(){
-    var phone = $("#phone").val();
-  $.get("/wankangyuan/open/getPhoneCode?phone="+phone, function(result){
+$("#sendEmailCode").click(function(){
+	var anniu=document.querySelectorAll('.loginMzRb')[0];//发送验证码
+    var anniu2=document.querySelectorAll('.loginMzRb2')[0];//禁用发送验证码
+    
+    var email = $("#email").val();
+    var emailReg =/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+    if (!emailReg.test(email)) {  
+        return layer.msg('请输入有效的邮箱！',function(){}),!1;
+    }else{
+        anniu.style.display="none";
+        anniu2.style.display="block";
+
+        var time= 60;
+        var YZMjishi=0;
+        anniu2.innerHTML=time+"s后重试";
+    
+        YZMjishi=setInterval(function(){
+            time--;
+            anniu2.innerHTML=time+"s后重试";
+            if(time<=0){
+                clearInterval(YZMjishi);
+                anniu.style.display="block";
+                anniu2.style.display="none";
+            }
+        },1000);
+    }
+	
+  $.get("/wankangyuan/open/getEmailCode?email="+email, function(result){
     if(result != 0){
-        layer.msg("已发送验证码，请注意接收!");
+        layer.msg("已发送验证码，请注意查收!");
     }else{
         layer.msg("验证码发送失败，请联系管理员!");
     }
@@ -118,11 +143,11 @@ $("#sendPhoneCode").click(function(){
 });
 
 function resetPassword(){
-	if($("#phone").val().trim() == ''){
+	if($("#email").val().trim() == ''){
         return layer.msg('请输入手机号',function(){}),!1;
     }
 	
-	if($('#phoneCode').val().length != 6){
+	if($('#emailCode').val().length != 6){
         return layer.msg('手机验证码的长度为6位！',function(){}),!1;
     }
 	

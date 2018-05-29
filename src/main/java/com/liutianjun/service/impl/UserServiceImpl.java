@@ -220,7 +220,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<String> findPermissions(String username) {
         User user = selectByUsername(username);
-        if(user == null) {
+        if(user == null || null == user.getRoleIds()) {
             return Collections.emptySet();
         }
         String roleIdsStr = user.getRoleIds();
@@ -248,7 +248,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<String> findRoles(String username) {
         User user = selectByUsername(username);
-        if(user == null) {
+        if(user == null || null == user.getRoleIds() ) {
             return Collections.emptySet();
         }
         

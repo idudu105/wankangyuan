@@ -18,6 +18,7 @@ import org.springframework.web.util.UrlPathHelper;
 
 import com.liutianjun.service.RoleService;
 import com.liutianjun.utils.LoggerUtils;
+import com.liutianjun.utils.SendEmailCode;
 import com.liutianjun.utils.StringUtils;
 import com.liutianjun.utils.VerifyCodeUtils;
 import com.liutianjun.utils.vcode.Captcha;
@@ -126,10 +127,12 @@ public class CommonController {
 		SecurityUtils.getSubject().getSession().setAttribute(VerifyCodeUtils.V_PHONECODE, verifyPhoneCode);
 		//发送手机验证码
 		//int i = SendViaAspx.sendPhoneCode(phone, verifyPhoneCode);
+		
 		System.out.println(phone+"-----"+verifyPhoneCode);
 		return 1;
 		
 	}
+	
 	
 	/**
 	 * 获取新手机验证码
@@ -150,6 +153,60 @@ public class CommonController {
 		//发送手机验证码
 		//int i = SendViaAspx.sendPhoneCode(phone, verifyPhoneCode);
 		System.out.println(phone+"-----"+verifyPhoneCode);
+		return 1;
+		
+	}
+	
+	/**
+	 * 生成邮箱验证码
+	 * @Title: getVEmailCode 
+	 * @param email
+	 * @return
+	 * @throws Exception 
+	 * Integer
+	 */
+	@RequestMapping(value="getEmailCode",method=RequestMethod.GET)
+	@ResponseBody
+	public Integer getVEmailCode(String email) throws Exception{
+		
+		//生成验证码
+		String verifyCode = VerifyCodeUtils.generateVerifyPhoneCode(6);
+		//存入Shiro会话session
+		SecurityUtils.getSubject().getSession().setAttribute(VerifyCodeUtils.V_EMAILCODE, verifyCode);
+		//发送邮箱验证码
+		SendEmailCode.sendMail("472746759@qq.com", "472746759@qq.com", "rznqiwepcgsibjfb",  
+				email,  
+				"【万康源】",  
+				"【万康源】：您的验证码为："+ verifyCode);
+		
+		System.out.println(email+"-----"+verifyCode);
+		return 1;
+		
+	}
+	
+	/**
+	 * 获取新邮箱验证码
+	 * @Title: getVNewEmailCode 
+	 * @param email
+	 * @return
+	 * @throws Exception 
+	 * Integer
+	 */
+	@RequestMapping(value="getNewEmailCode",method=RequestMethod.GET)
+	@ResponseBody
+	public Integer getVNewEmailCode(String email) throws Exception{
+		
+		//生成验证码
+		String verifyCode = VerifyCodeUtils.generateVerifyPhoneCode(6);
+		//存入Shiro会话session
+		SecurityUtils.getSubject().getSession().setAttribute(VerifyCodeUtils.V_NEWEMAILCODE, verifyCode);
+		//发送手机验证码
+		//发送邮箱验证码
+		SendEmailCode.sendMail("472746759@qq.com", "472746759@qq.com", "rznqiwepcgsibjfb",  
+				email,  
+				"【万康源】",  
+				"【万康源】：您的验证码为："+ verifyCode);
+		System.out.println(email+"-----"+verifyCode);
 		return 1;
 		
 	}

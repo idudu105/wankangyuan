@@ -27,9 +27,10 @@
                     <form action="" method="post">
                     <div class="loginM">
                         <div class="loginMz">
+                            <input name="loginType" type="hidden" value="userLogin">
                             <div class="loginMzL">账户名称：</div>
                             <div class="loginMzR">
-                                <input id="username" class="loginMzRp" type="text" name="username" value="<shiro:principal/>" placeholder="手机号" required="required" >
+                                <input id="username" class="loginMzRp" type="text" name="username" value="<shiro:principal/>" placeholder="用户名/邮箱/手机" required="required" >
                             </div>
                         </div>
                         <div class="loginMz">

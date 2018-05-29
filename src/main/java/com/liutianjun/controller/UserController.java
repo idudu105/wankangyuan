@@ -62,7 +62,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/login")
     public String showLoginForm(HttpServletRequest req, 
-    		Model model) {
+    		Model model,RedirectAttributes attributes) {
         String exceptionClassName = (String)req.getAttribute("shiroLoginFailure");
         String error = null;
         if(UnknownAccountException.class.getName().equals(exceptionClassName)) {
@@ -71,12 +71,21 @@ public class UserController {
             error = "用户名/密码错误";
         } else if ("kaptchaValidateFailed".equals(exceptionClassName)) {
         	error = "验证码错误";
-        } else if (LockedAccountException.class.getName().equals(exceptionClassName)) {
+        } else if ("forbidUserLoginFailed".equals(exceptionClassName)) {
+        	error = "普通用户不能登录后台";
+		} else if (LockedAccountException.class.getName().equals(exceptionClassName)) {
         	error = "账号被锁定";
 		} else if(exceptionClassName != null) {
             error = "其他错误：" + exceptionClassName;
         }
-        model.addAttribute("error", error);
+        
+        String loginType = req.getParameter("loginType");
+        if("adminLogin".equals(loginType)) {
+        	attributes.addFlashAttribute("msg", error);
+        	return "redirect:/admin/login";
+        }else {
+        	 model.addAttribute("error", error);
+		}
         return "user/login.jsp";
     }
 	
@@ -102,7 +111,7 @@ public class UserController {
 	 */
 	@RequestMapping(value="/register",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> subRegister(String randomCode, String phoneCode, User user) {
+	public Map<String,Object> subRegister(String randomCode, String emailCode, User user) {
 		SysConfig sysConfig = sysConfigService.selectByPrimaryKey(1);
 		resultMap.put("status", 400);
 		//检查注册是否开启
@@ -111,7 +120,7 @@ public class UserController {
 			return resultMap;
 		}
 		//检查验证码
-		if(!VerifyCodeUtils.verifyCode(randomCode)) {
+		if(!VerifyCodeUtils.verifyCode(randomCode,VerifyCodeUtils.V_CODE)) {
 			resultMap.put("message", "验证码不正确!");
 			return resultMap;
 		}
@@ -130,10 +139,9 @@ public class UserController {
 			resultMap.put("message", "手机号已经存在!");
 			return resultMap;
 		}
-		//检查手机验证码
-		String vPhoneCode = (String) SecurityUtils.getSubject().getSession().getAttribute(VerifyCodeUtils.V_PHONECODE);
-		if(null ==phoneCode || !phoneCode.equals(vPhoneCode)) {
-			resultMap.put("message", "手机验证码错误!");
+		//检查邮箱验证码
+		if(!VerifyCodeUtils.verifyCode(emailCode, VerifyCodeUtils.V_EMAILCODE)) {
+			resultMap.put("message", "邮箱验证码错误!");
 			return resultMap;
 		}
 		
@@ -163,20 +171,20 @@ public class UserController {
 	 */
 	@RequestMapping(value="/forgetPassword",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> forgetPassword(String phone, String phoneCode, String password) {
+	public Map<String,Object> forgetPassword(String email, String emailCode, String password) {
 		resultMap.put("status", 400);
 		//检查手机号
-		if(null == userService.selectByPhone(phone)){
-			resultMap.put("message", "手机号不存在!");
+		if(null == userService.selectByEmail(email)){
+			resultMap.put("message", "邮箱不存在!");
 			return resultMap;
 		}
 		//检查手机验证码
-		String vPhoneCode = (String) SecurityUtils.getSubject().getSession().getAttribute(VerifyCodeUtils.V_PHONECODE);
-		if(null ==phoneCode || !phoneCode.equals(vPhoneCode)) {
-			resultMap.put("message", "手机验证码错误!");
+		String vPhoneCode = (String) SecurityUtils.getSubject().getSession().getAttribute(VerifyCodeUtils.V_EMAILCODE);
+		if(null ==emailCode || !emailCode.equals(vPhoneCode)) {
+			resultMap.put("message", "邮箱验证码错误!");
 			return resultMap;
 		}
-		User user = userService.selectByPhone(phone);
+		User user = userService.selectByEmail(email);
 		userService.changePassword(user.getId(), password);
 		resultMap.put("message", "重置密码成功!");
 		resultMap.put("status", 200);
