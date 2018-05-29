@@ -47,7 +47,11 @@ public class FormatNodeController {
 	@ResponseBody
 	public Map<String, Object> insertFormatNode(String cs_id, String sourceDataId, String ft_id, String nodeName) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName)) {
+		Map<String, String> formatFieldDatas=new HashMap<String, String>();
+		for (FormatField formatField : formatFieldService.getFormatFieldsForUser(Integer.valueOf(ft_id))) {
+			formatFieldDatas.put(String.valueOf(formatField.getFf_id()), "");
+		}
+		if (HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName,formatFieldDatas)) {
 			map.put("result", true);
 			map.put("message", "新增成功");
 		} else {
@@ -118,11 +122,14 @@ public class FormatNodeController {
 		// meta数据
 		List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
 				ConstantsHBase.IS_meta_true);
-		List<List<String>> metaDatas = HBaseFormatDataDao.getFormatDatas(cs_id, ft_id, formatNodeId, meta);
+		httpSession.setAttribute("formatNodeId", formatNodeId);
+		httpSession.setAttribute("sourceDataId", sourceDataId);
+		List<List<String>> metaDatas = HBaseFormatDataDao.getFormatDataMetas(cs_id, ft_id, formatNodeId, meta);
 		httpSession.setAttribute("metaDatas", metaDatas);
 		// data数据
 		List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
 				ConstantsHBase.IS_meta_false);
+		httpSession.setAttribute("data", data);
 		List<List<String>> dataDatas = HBaseFormatDataDao.getFormatDatas(cs_id, ft_id, formatNodeId, data);
 		httpSession.setAttribute("dataDatas", dataDatas);
 		if (type.equals("2")) {

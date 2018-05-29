@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
@@ -71,6 +72,42 @@ public class HBaseFormatDataDao {
 	}
 
 	/**
+	 * 格式数据明细共用部分
+	 * 
+	 * @param cs_id
+	 * @param ft_id
+	 * @param formatNodeId
+	 * @param formatFields
+	 * @return formatDatas[1]:id,名，值
+	 */
+	public static List<List<String>> getFormatDataMetas(String cs_id, String ft_id, String formatNodeId,
+			List<FormatField> formatFields) {
+		List<List<String>> formatDatas = new ArrayList<>();
+		try {
+			HBaseDB db = HBaseDB.getInstance();
+			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id);
+			Get get = new Get(Bytes.toBytes(formatNodeId));
+			Result result = table.get(get);
+			if (!result.isEmpty()) {
+				for (FormatField formatField : formatFields) {
+					List<String> formatData = new ArrayList<>();
+					formatData.add(String.valueOf(formatField.getFf_id()));
+					formatData.add(formatField.getFf_name());
+					formatData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+							Bytes.toBytes(String.valueOf(formatField.getFf_id())))));
+					formatDatas.add(formatData);
+				}
+			}
+			table.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// TODO Auto-generated method stub
+		return formatDatas;
+	}
+
+	/**
 	 * 格式数据明细
 	 * 
 	 * @param cs_id
@@ -119,7 +156,6 @@ public class HBaseFormatDataDao {
 		return formatDatas;
 	}
 
-
 	/**
 	 * 更新一条格式数据
 	 * 
@@ -142,8 +178,10 @@ public class HBaseFormatDataDao {
 		}
 		return true;
 	}
+
 	/**
 	 * 批量删除格式数据
+	 * 
 	 * @param cs_id
 	 * @param ft_id
 	 * @param formatDataIds

@@ -973,7 +973,8 @@ function data_create(){
         	success : function(data){
         		if(data.result == true){
         			alert(data.message);
-        			location.reload();
+        			//刷新页面
+        			window.location.href="/wankangyuan/sourceData/firstIn?type=2";
         		}else{
         			alert(data.message);
         		}
@@ -1222,19 +1223,66 @@ function data_dataclick2(){
 //添加修改节点框
     var odaclLb_add=document.querySelectorAll('.daclLb_add')[0];//添加按钮
     var odaclLb_mod=document.querySelectorAll('.daclLb_mod')[0];//修改按钮
-    var odaclLb_addroot=document.querySelectorAll('.daclLb_addroot')[0];//添加根按钮
+    //var odaclLb_addroot=document.querySelectorAll('.daclLb_addroot')[0];//添加根按钮
     var odataeditK=document.querySelectorAll('.dataeditK')[0];//框
     var odataeditTx=odataeditK.querySelectorAll('.dataeditTx')[0];//关闭按钮
 
     odaclLb_add.onclick=function(){
-        odataeditK.style.display="block";
+    	
+		var afuxuanK=document.querySelectorAll('.fuxuanK41');
+		
+        var afuxuan=[];
+        for(var i=0;i<afuxuanK.length;i++){
+            afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+        }
+        
+        var ids = [];
+        for(var i=0;i<afuxuanK.length;i++){
+        	if(afuxuan[i].checked){
+        		ids.push(afuxuan[i].name);
+        	}
+        }
+        
+        if(ids == ""){
+        	alert("请勾选待增加结点的格式数据类型！");
+        	return;
+        }else if(ids.length > 1){
+        	alert("最多选择一中格式数据类型！")
+        }else{
+        	document.querySelectorAll('.type')[0].value = "add";
+        	odataeditK.style.display="block";
+        }
+ 
     }
     odaclLb_mod.onclick=function(){
-        odataeditK.style.display="block";
+        
+		var afuxuanK=document.querySelectorAll('.fuxuanK42');
+		
+        var afuxuan=[];
+        for(var i=0;i<afuxuanK.length;i++){
+            afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+        }
+        
+        var ids = [];
+        for(var i=0;i<afuxuanK.length;i++){
+        	if(afuxuan[i].checked){
+        		ids.push(afuxuan[i].name);
+        	}
+        }
+        
+        if(ids == ""){
+        	alert("请勾选待修改名称的结点！");
+        	return;
+        }else if(ids.length > 1){
+        	alert("最多选择一个结点！")
+        }else{
+        	document.querySelectorAll('.type')[0].value = "edit";
+        	odataeditK.style.display="block";
+        }
     }
-    odaclLb_addroot.onclick=function(){
+    /*odaclLb_addroot.onclick=function(){
         odataeditK.style.display="block";
-    }
+    }*/
     odataeditTx.onclick=function(){
         odataeditK.style.display="none";
     }
@@ -1258,7 +1306,7 @@ function data_dataclick2(){
 
     var opdclmRz_ul=document.querySelectorAll('.pdclmRz_ul')[0];//右侧上方按钮列表
     var opdclmRz_save=opdclmRz_ul.querySelectorAll('.pdclmRz_save')[0];//右侧上方保存按钮
-    var opdclmRz_edit=opdclmRz_ul.querySelectorAll('.pdclmRz_edit')[0];//右侧上方编辑按钮
+    //var opdclmRz_edit=opdclmRz_ul.querySelectorAll('.pdclmRz_edit')[0];//右侧上方编辑按钮
 
 
 
@@ -1322,43 +1370,44 @@ function data_dataclick2(){
     //         }
     //     }
     // }
-    
-    
-    opdclmRz_edit.onclick=function(){
-        for(var i=0;i<ainput_check.length;i++){
-            // aprodaclmRzTtnr[i].style.display="none";
-            if(ainput_check[i].checked){
-                var oa=ainput_check[i].parentNode;
-                var ob=oa.parentNode;
-                // var oc=ob.querySelectorAll('.prodaclmRzTtnr')[0];
-                var od=ob.querySelectorAll('.prodaclmRzTtnr2')[0];
-                // oc.style.display="none";
-                console.log(od);
-                od.readOnly=false;
-            }
-        }
-    }
-    opdclmRz_save.onclick=function(){
-        for(var i=0;i<ainput_check.length;i++){
-            // aprodaclmRzTtnr[i].style.display="none";
-            if(ainput_check[i].checked){
-                var oa=ainput_check[i].parentNode;
-                var ob=oa.parentNode;
-                // var oc=ob.querySelectorAll('.prodaclmRzTtnr')[0];
-                var od=ob.querySelectorAll('.prodaclmRzTtnr2')[0];
-
-                // oc.innerHTML=od.value;
-                // oc.style.display="block";
-                od.readOnly=true;
-            }
-        }
-    }
+//    
+//    
+//    opdclmRz_edit.onclick=function(){
+//        for(var i=0;i<ainput_check.length;i++){
+//            // aprodaclmRzTtnr[i].style.display="none";
+//            if(ainput_check[i].checked){
+//                var oa=ainput_check[i].parentNode;
+//                var ob=oa.parentNode;
+//                // var oc=ob.querySelectorAll('.prodaclmRzTtnr')[0];
+//                var od=ob.querySelectorAll('.prodaclmRzTtnr2')[0];
+//                // oc.style.display="none";
+//                console.log(od);
+//                od.readOnly=false;
+//            }
+//        }
+//    }
+//    opdclmRz_save.onclick=function(){
+//        for(var i=0;i<ainput_check.length;i++){
+//            // aprodaclmRzTtnr[i].style.display="none";
+//            if(ainput_check[i].checked){
+//                var oa=ainput_check[i].parentNode;
+//                var ob=oa.parentNode;
+//                // var oc=ob.querySelectorAll('.prodaclmRzTtnr')[0];
+//                var od=ob.querySelectorAll('.prodaclmRzTtnr2')[0];
+//
+//                // oc.innerHTML=od.value;
+//                // oc.style.display="block";
+//                od.readOnly=true;
+//            }
+//        }
+//    }
 }
 
 function data_dataclick(){
+	
     var oprodaclmRz=document.querySelectorAll('.prodaclmRz')[0];
     var oquanxuanK=oprodaclmRz.querySelectorAll('.quanxuanK')[0];
-    var oquanxuan=oquanxuanK.querySelectorAll('.input_check')[0];
+    //var oquanxuan=oquanxuanK.querySelectorAll('.input_check')[0];
     var afuxuanK=oprodaclmRz.querySelectorAll('.fuxuanK5');
 
     var afuxuan=[];
@@ -1372,19 +1421,18 @@ function data_dataclick(){
     console.log(afuxuanK)
     
         
-    oquanxuanK.onchange=function(){
-        if(oquanxuan.checked){
-            for(var i=0;i<afuxuanK.length;i++){
-                afuxuan[i].checked=1;
-            }
-        }else{
-            // console.log(2);
-            for(var i=0;i<afuxuanK.length;i++){
-                afuxuan[i].checked=0;
-            }
-        }
-    }
-    
+//    oquanxuanK.onchange=function(){
+//        if(oquanxuan.checked){
+//            for(var i=0;i<afuxuanK.length;i++){
+//                afuxuan[i].checked=1;
+//            }
+//        }else{
+//            // console.log(2);
+//            for(var i=0;i<afuxuanK.length;i++){
+//                afuxuan[i].checked=0;
+//            }
+//        }
+//    }
 
 
     if(afuxuanK[0]){
@@ -1463,7 +1511,7 @@ function data_dataclick(){
     }
 
 
-//添加修改单个数据
+    //添加修改单个数据
     var oclmRsb_add=document.querySelectorAll('.clmRsb_add')[0];//添加数据按钮
     var oclmRsb_modify=document.querySelectorAll('.clmRsb_modify')[0];//修改数据按钮
     var oclmRsb_inport=document.querySelectorAll('.clmRsb_inport')[0];//导入按钮
@@ -1476,6 +1524,14 @@ function data_dataclick(){
 
 
     oclmRsb_add.onclick=function(){
+    	
+    	//需要设置当前的格式字段列表
+    	
+    	
+    	
+    	
+    	
+    	
         oclmReditK.style.display="block";
     }
     oclmRsb_modify.onclick=function(){
