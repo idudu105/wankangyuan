@@ -84,12 +84,7 @@
                                     <span>账户设置</span>
                                 </li>
                                 <li>
-                                    <a href="javascript:;">
-                                        <i class="halflings-icon user"></i>修改密码
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:;">
+                                    <a href="/wankangyuan/admin/logout">
                                         <i class="halflings-icon off"></i>退出系统
                                     </a>
                                 </li>

@@ -62,11 +62,11 @@
                 <input name="id" type="hidden" value="${user.id }">
                 <div class="updateinfoRc">
                     <div class="updateinfoRcz">
-                        <input type="text" class="updateinfoRct1 udPSphone" disabled="disabled" value="${user.phone }" />
+                        <input type="text" class="updateinfoRct1 udPSphone" disabled="disabled" value="${user.email }" />
                     </div>
                     <div class="updateinfoRcz">
-                        <input id="phoneCode_ps" name="phoneCode" type="text" class="updateinfoRct2 updateQLk" placeholder="请输入验证码" />
-                        <div id="sendPhoneCode1" class="updateinfoRcb udPSyzfs">发送</div>
+                        <input id="emailCode_ps" name="emailCode" type="text" class="updateinfoRct2 updateQLk" placeholder="请输入验证码" />
+                        <div id="sendEmailCode1" class="updateinfoRcb udPSyzfs">发送</div>
                         <div class="updateinfoRcb2 udPSyzfs2"></div>
                     </div>
                     <div class="updateinfoRcz">
@@ -84,23 +84,12 @@
             </div>
             <div class="updateinfoK update_phoneK">
             <form id="phoneForm" method="post">
-                <input name="id" type="hidden" value="${user.id }">
                 <div class="updateinfoRc">
                     <div class="updateinfoRcz">
                         <input id="oldPhone" type="text" class="updateinfoRct1 udPHphone" disabled="disabled" value="${user.phone }" />
                     </div>
                     <div class="updateinfoRcz">
-                        <input id="phoneCode_ph" name="phoneCode" type="text" class="updateinfoRct2 updateQLk" placeholder="请输入验证码" />
-                        <div id="sendPhoneCode" class="updateinfoRcb udPHyzfs">发送</div>
-                        <div class="updateinfoRcb2 udPHyzfs2"></div>
-                    </div>
-                    <div class="updateinfoRcz">
-                        <input id="newPhone" name="newPhone" type="text" class="updateinfoRct1 udPHphone2 updateQLk" placeholder="请输入新手机号"  />
-                    </div>
-                    <div class="updateinfoRcz">
-                        <input id="newPhoneCode" name="newPhoneCode" type="text" class="updateinfoRct2 updateQLk" placeholder="请输入验证码" />
-                        <div id="sendNewPhoneCode" class="updateinfoRcb udPHyzfs3">发送</div>
-                        <div class="updateinfoRcb2 udPHyzfs4"></div>
+                        <input id="newPhone" name="phone" type="text" class="updateinfoRct1 udPHphone2 updateQLk" placeholder="请输入新手机号"  />
                     </div>
                     <div class="updateinfoRB">
                         <div id="phoneClose" class="udinfoRbca">取消</div>
@@ -116,9 +105,23 @@
                     <div class="updateinfoRcz">
                         <input type="text" class="updateinfoRct1 udEMemail" disabled="disabled" value="${user.email }"   />
                     </div>
+                    
                     <div class="updateinfoRcz">
-                        <input name="email" type="text" class="updateinfoRct1 udEMemail" placeholder="请输入新邮箱地址"  />
+                        <input id="emailCode_em" name="emailCode" type="text" class="updateinfoRct2 updateQLk" placeholder="请输入验证码" />
+                        <div id="sendEmailCode" class="updateinfoRcb udPHyzfs">发送</div>
+                        <div class="updateinfoRcb2 udPHyzfs2"></div>
                     </div>
+                    
+                    <div class="updateinfoRcz">
+                        <input id="newEmail" name="email" type="text" class="updateinfoRct1 udEMemail" placeholder="请输入新邮箱地址"  />
+                    </div>
+                    
+                    <div class="updateinfoRcz">
+                        <input id="newEmailCode" name="newEmailCode" type="text" class="updateinfoRct2 updateQLk" placeholder="请输入验证码" />
+                        <div id="sendNewEmailCode" class="updateinfoRcb udPHyzfs3">发送</div>
+                        <div class="updateinfoRcb2 udPHyzfs4"></div>
+                    </div>
+                    
                     <div class="updateinfoRB">
                         <div class="udinfoRbca">取消</div>
                         <div class="udinfoRben" onclick="updateUserEmail()">确定修改</div>
@@ -276,10 +279,30 @@ if(fileUnit == 'MB'){
 if(fileUnit == 'GB'){
     realSize = fileSize;
 }
-kongjian(20,realSize);
-$("#sendPhoneCode,#sendPhoneCode1").click(function(){
-    var phone = ${user.phone};
-  $.get("/wankangyuan/open/getPhoneCode?phone="+phone, function(result){
+kongjian(${sysConfig.size },realSize);
+$("#sendEmailCode,#sendEmailCode1").click(function(){
+	var anniu=document.querySelectorAll('.udPSyzfs')[0];//发送验证码
+    var anniu2=document.querySelectorAll('.udPSyzfs2')[0];//禁用发送验证码
+    
+    var email = "${user.email}";
+    anniu.style.display="none";
+    anniu2.style.display="block";
+
+    var time= 60;
+    var YZMjishi=0;
+    anniu2.innerHTML=time+"s后重试";
+
+    YZMjishi=setInterval(function(){
+        time--;
+        anniu2.innerHTML=time+"s后重试";
+        if(time<=0){
+            clearInterval(YZMjishi);
+            anniu.style.display="block";
+            anniu2.style.display="none";
+        }
+    },1000);
+	
+  $.get("/wankangyuan/open/getEmailCode?email="+email, function(result){
     if(result != 0){
         layer.msg("已发送验证码，请注意接收!");
     }else{
@@ -287,9 +310,9 @@ $("#sendPhoneCode,#sendPhoneCode1").click(function(){
     }
   });
 });
-$("#sendNewPhoneCode").click(function(){
-    var phone = $("#newPhone").val();
-  $.get("/wankangyuan/open/getNewPhoneCode?phone="+phone, function(result){
+$("#sendNewEmailCode").click(function(){
+    var email = $("#newEmail").val();
+  $.get("/wankangyuan/open/getNewEmailCode?email="+email, function(result){
     if(result != 0){
         layer.msg("已发送验证码，请注意接收!");
     }else{
@@ -325,29 +348,34 @@ function updateUserInfo() {
     });
 }
 function updateUserPhone(){
-    
-    if($('#phoneCode_ph').val().length != 6){
-        return layer.msg('手机验证码的长度为6位！',function(){}),!1;
+	
+	var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;  
+    var phone = $('#newPhone').val();  
+    if (!phoneReg.test(phone)) {  
+        return layer.msg('请输入有效的手机号码！',function(){}),!1;
+    }else{
+		var load = layer.load();
+		$.post("/wankangyuan/updateUserPhone",$("#phoneForm").serialize() ,function(result){
+		    layer.close(load);
+		    if(result && result.status!= 200){
+		        return layer.msg(result.message,function(){}),!1;
+		    }else{
+		        layer.msg(result.message, {
+		            anim: 0,
+		            end: function (index) {
+		                window.location.reload();
+		            }
+		        });
+		    }
+		},"json");
     }
-    if($('#newPhoneCode').val().length != 6){
-        return layer.msg('手机验证码的长度为6位！',function(){}),!1;
-    }
-    var load = layer.load();
-    $.post("/wankangyuan/updateUserPhone",$("#phoneForm").serialize() ,function(result){
-        layer.close(load);
-        if(result && result.status!= 200){
-            return layer.msg(result.message,function(){}),!1;
-        }else{
-            layer.msg(result.message, {
-                anim: 0,
-                end: function (index) {
-                    window.location.reload();
-                }
-            });
-        }
-    },"json");
 }
 function updateUserEmail() {
+	if($('#emailCode_em,#newEmailCode').val().length != 6){
+        return layer.msg('验证码的长度为6位！',function(){}),!1;
+    }
+	
+	
     var load = layer.load();
     $.post("/wankangyuan/updateUserEmail",$("#emailForm").serialize() ,function(result){
         layer.close(load);
@@ -372,8 +400,8 @@ function updateUserPassword() {
         return layer.msg('2次密码输出不一样！',function(){}),!1;
     }
     
-    if($('#phoneCode_ps').val().length != 6){
-        return layer.msg('手机验证码的长度为6位！',function(){}),!1;
+    if($('#emailCode_ps').val().length != 6){
+        return layer.msg('验证码的长度为6位！',function(){}),!1;
     }
     var load = layer.load();
     $.post("/wankangyuan/updateUserPassword",$("#passwordForm").serialize() ,function(result){

@@ -1,20 +1,20 @@
 package com.liutianjun.service.impl;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.liutianjun.dao.UserAppRelationDao;
+import com.liutianjun.pojo.Application;
 import com.liutianjun.pojo.UserAppRelation;
 import com.liutianjun.pojo.UserAppRelationQuery;
 import com.liutianjun.pojo.UserAppRelationQuery.Criteria;
+import com.liutianjun.service.ApplicationService;
 import com.liutianjun.service.UserAppRelationService;
 
 /**
@@ -32,6 +32,9 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	@Autowired
 	private UserAppRelationDao userAppRelationDao;
 	
+	@Autowired
+	private ApplicationService applicationService;
+	
 	/**
 	 * 插入新关系表
 	 * <p>Title: insert</p>  
@@ -41,11 +44,21 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	 * @return
 	 */
 	@Override
-	public int insert(Integer id, String username) {
+	public int insert(Integer userId, List<Application> list) {
 		UserAppRelation userAppRelation = new UserAppRelation();
-		userAppRelation.setId(id);
-		userAppRelation.setUsername(username);
-		return userAppRelationDao.insert(userAppRelation);
+		userAppRelation.setUserId(userId);
+		int i = 0;
+		for (Application application : list) {
+			userAppRelation.setAppId(application.getId());
+			userAppRelation.setAppName(application.getAppName());
+			userAppRelation.setAppType(application.getAppType());
+			userAppRelation.setCreateTime(application.getCreateTime());
+			userAppRelation.setCreator(application.getCreator());
+			userAppRelation.setIsAsync(application.getIsAsync());
+			userAppRelation.setKeywords(application.getKeywords());
+			i += userAppRelationDao.insert(userAppRelation);
+		}
+		return i;
 	}
 
 	/**
@@ -68,35 +81,13 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	 * @return
 	 */
 	@Override
-	public int addToMineById(Integer userId, String username, Integer[] ids) {
+	public int addToMineByIds(Integer userId, Integer[] ids) {
 		if(ids != null && ids.length > 0) {
-			//根据用户id查询关系表
-			UserAppRelation userAppRelation = userAppRelationDao.selectByPrimaryKey(userId);
-			
-			if(userAppRelation == null) {
-			    insert(userId, username);
-			    userAppRelation = userAppRelationDao.selectByPrimaryKey(userId);
-			}
-			//获取应用旧ids
-			String appIds = userAppRelation.getAppIds();
-			
-			String[] oldIds =new String[0];
-			
-			if(StringUtils.isNotBlank(appIds)) {
-				//应用旧id转数组
-				oldIds = appIds.split(",");
-			}
-			//合并数组
-			String[] newIds = ArrayUtils.addAll(oldIds, ArrayUtils.toStringArray(ids));
-			
-			//应用id转Set
-			Set<String> idSet = new HashSet<String>(Arrays.asList(newIds));
-			//去掉空格转字符串
-			String idSerStr = idSet.toString().replaceAll(" ", "");
-			String substring = StringUtils.substring(idSerStr, 1, idSerStr.length()-1);
-			userAppRelation.setAppIds(substring);
-			return userAppRelationDao.updateByPrimaryKey(userAppRelation);
-			
+			//删除重复的应用
+			removeFromMineByIds(userId, ids);
+			//查询应用列表
+			List<Application> list = applicationService.findByIds(ids);
+			return insert(userId,list);
 		}
 		return 0;
 	}
@@ -110,32 +101,13 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	 * @return
 	 */
 	@Override
-	public int removeFromMineById(Integer userId, Integer[] ids) {
-		
+	public int removeFromMineByIds(Integer userId, Integer[] ids) {
 		if(ids != null && ids.length > 0) {
-			//根据用户id查询关系表
-			UserAppRelation userAppRelation = userAppRelationDao.selectByPrimaryKey(userId);
-			//获取应用旧ids
-			String appIds = userAppRelation.getAppIds();
-			
-			String[] oldIds =new String[0];
-			
-			if(StringUtils.isNotBlank(appIds)) {
-				//应用旧id转数组
-				oldIds = appIds.split(",");
-			}
-			
-			for (Integer id : ids) {
-				oldIds = ArrayUtils.removeElement(oldIds,String.valueOf(id));
-			}
-			
-			List<String> newIds = Arrays.asList(oldIds);
-			//去掉空格转字符串
-			String idSerStr = newIds.toString().replaceAll(" ", "");
-			String substring = StringUtils.substring(idSerStr, 1, idSerStr.length()-1);
-			userAppRelation.setAppIds(substring);
-			return userAppRelationDao.updateByPrimaryKey(userAppRelation);
-			
+			UserAppRelationQuery example = new UserAppRelationQuery();
+			Criteria criteria = example.createCriteria();
+			criteria.andUserIdEqualTo(userId);
+			criteria.andAppIdIn(Arrays.asList(ids));
+			return userAppRelationDao.deleteByExample(example);
 		}
 		return 0;
 	}
@@ -148,26 +120,25 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	 * @return
 	 */
 	@Override
-	public List<Integer> findMine(String username) {
-		
+	public Map<String,Object> findMine(Integer page, Integer rows, String appName, Integer userId) {
+		Map<String,Object> map = new HashMap<>();
 		//根据用户名查询关系表
 	    UserAppRelationQuery example = new UserAppRelationQuery();
 	    Criteria criteria = example.createCriteria();
-	    criteria.andUsernameEqualTo(username);
-	    List<UserAppRelation> userApplist = userAppRelationDao.selectByExample(example);
-	    UserAppRelation userAppRelation = null;
-	    if(userApplist != null && userApplist.size()>0) {
-	        userAppRelation = userApplist.get(0);
+	    criteria.andUserIdEqualTo(userId);
+	    if(StringUtils.isNotBlank(appName)) {
+	    	criteria.andAppNameEqualTo(appName);
 	    }
-		if(null != userAppRelation && StringUtils.isNotBlank(userAppRelation.getAppIds())) {
-			//获取用户的应用
-			String[] appIdsStr = userAppRelation.getAppIds().replaceAll(" ","").split(",");
-			Integer[] appIds = (Integer[]) ConvertUtils.convert(appIdsStr, Integer.class);
-			//应用Ids转List
-			List<Integer> list =Arrays.asList(appIds);
-			return list;
-		}
-		return null;
+	    int total = userAppRelationDao.countByExample(example);
+	    example.setPageNo(page);
+	    example.setPageSize(rows);
+	    
+	    List<UserAppRelation> list = userAppRelationDao.selectByExample(example);
+	    
+	    map.put("total", total);
+	    map.put("list", list);
+	    
+	    return map;
 	}
 
 }

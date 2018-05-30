@@ -2,6 +2,7 @@ package com.liutianjun.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -98,5 +99,17 @@ public class SysConfigController {
         model.addAttribute("error", error);
         return "/admin/login.jsp";
     }
+	
+	/**
+	 * 管理员登出
+	 * @Title: adminLogout 
+	 * @return 
+	 * String
+	 */
+	@RequestMapping(value = "/logout",method=RequestMethod.GET)
+	public String adminLogout() {
+		SecurityUtils.getSubject().logout();
+		return "redirect:/admin/login";
+	}
 	
 }

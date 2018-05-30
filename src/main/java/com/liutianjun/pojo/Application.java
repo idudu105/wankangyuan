@@ -60,6 +60,11 @@ public class Application implements Serializable {
     private String paraB;
 
     /**
+     * 参数3
+     */
+    private String paraC;
+
+    /**
      * 应用概述
      */
     private String appOverview;
@@ -159,6 +164,14 @@ public class Application implements Serializable {
         this.paraB = paraB == null ? null : paraB.trim();
     }
 
+    public String getParaC() {
+        return paraC;
+    }
+
+    public void setParaC(String paraC) {
+        this.paraC = paraC == null ? null : paraC.trim();
+    }
+
     public String getAppOverview() {
         return appOverview;
     }
@@ -192,6 +205,7 @@ public class Application implements Serializable {
         sb.append(", status=").append(status);
         sb.append(", paraA=").append(paraA);
         sb.append(", paraB=").append(paraB);
+        sb.append(", paraC=").append(paraC);
         sb.append(", appOverview=").append(appOverview);
         sb.append(", dataFormat=").append(dataFormat);
         sb.append(", serialVersionUID=").append(serialVersionUID);

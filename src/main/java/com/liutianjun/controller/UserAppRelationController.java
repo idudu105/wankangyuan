@@ -46,7 +46,7 @@ public class UserAppRelationController {
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 	    User user = userService.selectByUsername(username);
 	    String msg = "操作失败";
-		int i = userAppRelationService.addToMineById(user.getId(), username, ids);
+		int i = userAppRelationService.addToMineByIds(user.getId(), ids);
 		if(i>0) {
 			msg = "添加成功";
 		}
@@ -70,7 +70,7 @@ public class UserAppRelationController {
         User user = userService.selectByUsername(username);
 		
 		String msg = "操作失败";
-		int i = userAppRelationService.removeFromMineById(user.getId(), ids);
+		int i = userAppRelationService.removeFromMineByIds(user.getId(), ids);
 		if(i>0) {
 			msg = "移除成功";
 		}

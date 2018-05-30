@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.dzjin.service.ProjectService;
 import com.liutianjun.pojo.Application;
 import com.liutianjun.pojo.User;
+import com.liutianjun.pojo.UserAppRelation;
 import com.liutianjun.service.ApplicationService;
 import com.liutianjun.service.UserService;
 
@@ -56,6 +58,7 @@ public class ApplicationController {
 	 * @return 
 	 * String
 	 */
+	@RequiresPermissions("application:view")
 	@RequestMapping(value="/viewMine{index}",method=RequestMethod.GET)
 	public String viewMine(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="8")Integer rows, 
@@ -67,16 +70,17 @@ public class ApplicationController {
 	    //获取用户
 	    User user = userService.selectByUsername(username);
 		
-		Map<String, Object> map = applicationService.findMine(page,rows,appName,username);
+		Map<String, Object> map = applicationService.findMine(page,rows,appName,user.getId());
+		
+		//获取应用筛选列表
 		@SuppressWarnings("unchecked")
-		List<Application> list = (List<Application>) map.get("list");
+		List<UserAppRelation> list = (List<UserAppRelation>) map.get("list");
 		Set<String> set =new HashSet<>();
-		for (Application application : list) {
-			set.add(application.getAppType());
+		for (UserAppRelation userAppRelation : list) {
+			set.add(userAppRelation.getAppType());
 		}
 		
 		model.addAttribute("projectList", projectService.selectMyProject(user.getId()));
-		
 		model.addAttribute("typeSet", set);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));
@@ -96,6 +100,7 @@ public class ApplicationController {
 	 * @return 
 	 * String
 	 */
+	@RequiresPermissions("application:view")
 	@RequestMapping(value="/viewCreate{index}",method=RequestMethod.GET)
 	public String viewCreate(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="8")Integer rows, 
@@ -133,6 +138,7 @@ public class ApplicationController {
 	 * @return 
 	 * String
 	 */
+	@RequiresPermissions("application:view")
 	@RequestMapping(value="/viewPublic{index}",method=RequestMethod.GET)
 	public String viewPublic(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="8")Integer rows, 
@@ -165,6 +171,7 @@ public class ApplicationController {
 	 * @return 
 	 * String
 	 */
+	@RequiresPermissions("application:update")
 	@RequestMapping(value="/setStatus{index}",method=RequestMethod.POST)
 	public String setStatus(String cmd,Integer[] ids,
 			@PathVariable String index,
@@ -185,6 +192,7 @@ public class ApplicationController {
 	 * @return 
 	 * String
 	 */
+	@RequiresPermissions("application:create")
 	@RequestMapping(value="/create{index}",method=RequestMethod.POST)
 	public String create(Application record,
 			@PathVariable String index,
@@ -208,9 +216,10 @@ public class ApplicationController {
 	 * @return 
 	 * String
 	 */
+	@RequiresPermissions("application:view")
 	@RequestMapping(value="/explain",method=RequestMethod.GET)
 	public String showExplain(Integer id, Model model) {
-		Application application = applicationService.selectByPrimaryKey(id);
+		Application application = applicationService.findPublicByid(id);
 		if(null == application) {
 			model.addAttribute("msg", "应用未公开，或已被删除");
 		}
@@ -224,6 +233,7 @@ public class ApplicationController {
 	 * @return 
 	 * String
 	 */
+	@RequiresPermissions("application:update")
 	@RequestMapping(value="/updateForm{index}",method=RequestMethod.GET)
 	public String viewUpdateForm(Integer id, Model model, @PathVariable String index) {
 		Application application = applicationService.selectByPrimaryKey(id);
@@ -245,6 +255,7 @@ public class ApplicationController {
 	 * @return 
 	 * String
 	 */
+	@RequiresPermissions("application:update")
 	@RequestMapping(value="/update{index}",method=RequestMethod.POST)
 	public String update(Application record, 
 			RedirectAttributes attributes,
@@ -265,6 +276,7 @@ public class ApplicationController {
 	 * @return 
 	 * String
 	 */
+	@RequiresPermissions("application:delete")
 	@RequestMapping(value="/delete{index}",method=RequestMethod.POST)
 	public String delete(Integer[] ids, 
 			@PathVariable String index,

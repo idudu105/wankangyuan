@@ -1,5 +1,6 @@
 package com.liutianjun.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.liutianjun.pojo.Application;
@@ -40,8 +41,14 @@ public interface ApplicationService {
 	int setStatus(String cmd, Integer[] ids);
 
 	//查找我的应用
-	Map<String, Object> findMine(Integer page, Integer rows, String appName, String username);
+	Map<String, Object> findMine(Integer page, Integer rows, String appName, Integer userId);
 	
 	//查询项目下的应用
 	Map<String, Object> findMineProjectApp(Integer page, Integer rows, Integer ProjectId);
+	
+	//查询数组里的应用
+	List<Application> findByIds(Integer[] ids);
+
+	//查看公开应用
+	Application findPublicByid(Integer id);
 }

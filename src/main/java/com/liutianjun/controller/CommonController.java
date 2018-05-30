@@ -174,7 +174,7 @@ public class CommonController {
 		//存入Shiro会话session
 		SecurityUtils.getSubject().getSession().setAttribute(VerifyCodeUtils.V_EMAILCODE, verifyCode);
 		//发送邮箱验证码
-		SendEmailCode.sendMail("472746759@qq.com", "472746759@qq.com", "rznqiwepcgsibjfb",  
+		SendEmailCode.sendMail("783797599@qq.com", "783797599@qq.com", "xlijytsgwiqabbcb",  
 				email,  
 				"【万康源】",  
 				"【万康源】：您的验证码为："+ verifyCode);
@@ -200,9 +200,8 @@ public class CommonController {
 		String verifyCode = VerifyCodeUtils.generateVerifyPhoneCode(6);
 		//存入Shiro会话session
 		SecurityUtils.getSubject().getSession().setAttribute(VerifyCodeUtils.V_NEWEMAILCODE, verifyCode);
-		//发送手机验证码
 		//发送邮箱验证码
-		SendEmailCode.sendMail("472746759@qq.com", "472746759@qq.com", "rznqiwepcgsibjfb",  
+		SendEmailCode.sendMail("783797599@qq.com", "783797599@qq.com", "xlijytsgwiqabbcb",  
 				email,  
 				"【万康源】",  
 				"【万康源】：您的验证码为："+ verifyCode);

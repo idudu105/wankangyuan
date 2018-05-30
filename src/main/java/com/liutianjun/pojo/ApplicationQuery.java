@@ -887,6 +887,76 @@ public class ApplicationQuery {
             return (Criteria) this;
         }
 
+        public Criteria andParaCIsNull() {
+            addCriterion("para_c is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParaCIsNotNull() {
+            addCriterion("para_c is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParaCEqualTo(String value) {
+            addCriterion("para_c =", value, "paraC");
+            return (Criteria) this;
+        }
+
+        public Criteria andParaCNotEqualTo(String value) {
+            addCriterion("para_c <>", value, "paraC");
+            return (Criteria) this;
+        }
+
+        public Criteria andParaCGreaterThan(String value) {
+            addCriterion("para_c >", value, "paraC");
+            return (Criteria) this;
+        }
+
+        public Criteria andParaCGreaterThanOrEqualTo(String value) {
+            addCriterion("para_c >=", value, "paraC");
+            return (Criteria) this;
+        }
+
+        public Criteria andParaCLessThan(String value) {
+            addCriterion("para_c <", value, "paraC");
+            return (Criteria) this;
+        }
+
+        public Criteria andParaCLessThanOrEqualTo(String value) {
+            addCriterion("para_c <=", value, "paraC");
+            return (Criteria) this;
+        }
+
+        public Criteria andParaCLike(String value) {
+            addCriterion("para_c like", value, "paraC");
+            return (Criteria) this;
+        }
+
+        public Criteria andParaCNotLike(String value) {
+            addCriterion("para_c not like", value, "paraC");
+            return (Criteria) this;
+        }
+
+        public Criteria andParaCIn(List<String> values) {
+            addCriterion("para_c in", values, "paraC");
+            return (Criteria) this;
+        }
+
+        public Criteria andParaCNotIn(List<String> values) {
+            addCriterion("para_c not in", values, "paraC");
+            return (Criteria) this;
+        }
+
+        public Criteria andParaCBetween(String value1, String value2) {
+            addCriterion("para_c between", value1, value2, "paraC");
+            return (Criteria) this;
+        }
+
+        public Criteria andParaCNotBetween(String value1, String value2) {
+            addCriterion("para_c not between", value1, value2, "paraC");
+            return (Criteria) this;
+        }
+
         public Criteria andAppOverviewIsNull() {
             addCriterion("app_overview is null");
             return (Criteria) this;

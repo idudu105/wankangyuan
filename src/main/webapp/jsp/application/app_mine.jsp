@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -178,12 +178,12 @@
                         </div>
                         <div class="allT">全选</div>
                     </div>
-                    <div class="PJListli appname">应用名称</div>
-                    <div class="PJListli appcreater">创建人</div>
-                    <div class="PJListli apptime">创建时间</div>
-                    <div class="PJListli PJyibu">异步/同步</div>
-                    <div class="PJListli PJkeyword">关键字</div>
-                    <div class="PJListli appexplain">应用描述</div>
+                    <div class="PJListli appname" title="appName" >应用名称</div>
+                    <div class="PJListli appcreater" title="creator">创建人</div>
+                    <div class="PJListli apptime" title="createTime" >创建时间</div>
+                    <div class="PJListli PJyibu" title="isAsync" >异步/同步</div>
+                    <div class="PJListli PJkeyword" title="keywords" >关键字</div>
+                    <div class="PJListli appexplain" title="appOverview" >应用描述</div>
                 </div>
                 <div class="PJListline"></div>
                 <div class="PJul">
@@ -192,10 +192,10 @@
                     <div class="PJli">
                         <div class="PJliC">
                             <div class="fuxuanK2">
-                                <input name="ids" type="checkbox" class="input_check" id="check${appList.count }" value="${app.id }">
+                                <input name="ids" type="checkbox" class="input_check" id="check${appList.count }" value="${app.appId }">
                                 <label for="check${appList.count }"></label>
                             </div>
-                            <a href="/wankangyuan/application/explain?id=${app.id }">
+                            <a href="/wankangyuan/application/explain?id=${app.appId }">
                                 <div class="PJliCli appname">${app.appName }</div>
                                 <div class="PJliCli appcreater">${app.creator }</div>
                                 <div class="PJliCli apptime">
@@ -219,10 +219,14 @@
 
                 <div class="BTSX">
                     <div class="BTSXc">
+                        <input type="text" style="display:none;" class="BTSXpd" />
                         <div class="BTSXcli">
                             <div class="BTSXcliT">排序：</div>
-                            <img src="<%=request.getContextPath()%>/static/img/sort_up.png" alt="" class="BTSXcliI" />
-                            <img src="<%=request.getContextPath()%>/static/img/sort_down.png" alt="" class="BTSXcliI" />
+                            <div class="BTSXcliI">↑</div>
+                            <div class="BTSXcliI">↓</div>
+                            <input type="text" class="BTSXcliIpd" style="display:none;" />
+                            <%-- <img src="<%=request.getContextPath()%>/static/img/sort_up.png" alt="" class="BTSXcliI" />
+                            <img src="<%=request.getContextPath()%>/static/img/sort_down.png" alt="" class="BTSXcliI" /> --%>
                         </div>
                         <div class="BTSXcli">
                             <div class="BTSXcliT">过滤：</div>
@@ -232,26 +236,12 @@
                             <div class="BTSXcliT">值筛选：</div>
                         </div>
                         <div class="BTSXcli2">
+                        <c:forEach items="${list }" var="app">
                             <div class="BTSXcli2li">
-                                <div class="BTSXcli2liI"></div>
+                                <input type="checkbox" class="BTSXcli2liC" />
                                 <div class="BTSXcli2liT">项目编号1</div>
                             </div>
-                            <div class="BTSXcli2li">
-                                <div class="BTSXcli2liI"></div>
-                                <div class="BTSXcli2liT">项目编号1</div>
-                            </div>
-                            <div class="BTSXcli2li">
-                                <div class="BTSXcli2liI"></div>
-                                <div class="BTSXcli2liT">项目编号1</div>
-                            </div>
-                            <div class="BTSXcli2li">
-                                <div class="BTSXcli2liI"></div>
-                                <div class="BTSXcli2liT">项目编号1</div>
-                            </div>
-                            <div class="BTSXcli2li">
-                                <div class="BTSXcli2liI"></div>
-                                <div class="BTSXcli2liT">项目编号1</div>
-                            </div>
+                        </c:forEach>
                         </div>
                         <div class="BTSXcli3">
                             <div class="BTSXcli3BT BTSXcli3BTent">筛选</div>

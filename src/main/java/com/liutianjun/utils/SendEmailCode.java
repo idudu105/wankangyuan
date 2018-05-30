@@ -26,11 +26,9 @@ public class SendEmailCode {
 		props.put("mail.smtp.ssl.socketFactory", sf);
 		
 		Session session = Session.getInstance(props);//根据属性新建一个邮件会话  
-		//session.setDebug(true); //有他会打印一些调试信息。  
 		
 		MimeMessage message = new MimeMessage(session);//由邮件会话新建一个消息对象  
 		
-		//message.addRecipients(MimeMessage.RecipientType.CC, InternetAddress.parse("a121bc1@163.com"));
 		
 		message.setFrom(new InternetAddress(fromMail));//设置发件人的地址  
 		message.setRecipient(Message.RecipientType.TO, new InternetAddress(toMail));//设置收件人,并设置其接收类型为TO  
@@ -42,17 +40,10 @@ public class SendEmailCode {
 		message.saveChanges();//存储邮件信息  
 		
 		//发送邮件  
-		//Transport transport = session.getTransport("smtp");  
 		Transport transport = session.getTransport();  
 		transport.connect(user, password);  
 		transport.sendMessage(message, message.getAllRecipients());//发送邮件,其中第二个参数是所有已设好的收件人地址  
 		transport.close();  
 		}  
 		
-		/*public static void main(String[] args) throws Exception {  
-		sendMail("472746759@qq.com", "472746759@qq.com", "rznqiwepcgsibjfb",  
-		"a121bc@163.com",  
-		"Java Mail 通知",  
-		"你好，我试一下邮箱，稍后回复");  
-		} */
 }

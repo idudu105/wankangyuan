@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2018-04-23 15:32:03
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-05-22 14:14:00
+* @Last Modified time: 2018-05-29 16:44:19
 */
 
 
@@ -165,6 +165,8 @@ function project1(){
 //点击表头的排序筛选功能
     var oPJK=document.querySelectorAll('.PJK')[0];//项目框
     var oBTSX=document.querySelectorAll('.BTSX')[0];//项目表头筛选框
+    var oBTSXpd=document.querySelectorAll('.BTSXpd')[0];//项目表头筛选框判断
+
     var oPJList=document.querySelectorAll('.PJList')[0];//项目表头栏
     var aPJListli=oPJList.querySelectorAll('.PJListli');//项目表头
 
@@ -182,8 +184,12 @@ function project1(){
                     BTSXpd=j;
                 }
                 var BTSXleft=aPJListli[j].offsetLeft;
-                oBTSX.name=aPJListli[j].innerHTML;
-                console.log(oBTSX.name);
+                // oBTSX.name=aPJListli[j].innerHTML;
+                if(document.querySelectorAll('.BTSXpd')[0]){
+                    var oBTSXpd=document.querySelectorAll('.BTSXpd')[0];//项目表头筛选框判断
+                    oBTSXpd.value=aPJListli[j].title;
+                    console.log(oBTSXpd.value);
+                }
                 console.log(BTSXleft);
                 if(BTSXleft>1118){
                     BTSXleft=1118;
@@ -192,6 +198,36 @@ function project1(){
             }
         })(i)
     }
+
+    var aBTSXcliI=oBTSX.querySelectorAll('.BTSXcliI');//筛选框排序箭头
+    var oBTSXcliIpd=document.querySelectorAll('.BTSXcliIpd')[0];//筛选框选择判断
+    for(var i=0;i<aBTSXcliI.length;i++){
+        (function(index){
+            aBTSXcliI[index].onclick=function(){
+                for(var j=0;j<aBTSXcliI.length;j++){
+                    aBTSXcliI[j].style.color="#666";
+                }
+                aBTSXcliI[index].style.color="#5ca0e5";
+                oBTSXcliIpd.value=index+1;
+                console.log(oBTSXcliIpd.value);
+            }
+        })(i)
+    }
+
+    var oBTSXcli3BTres=document.querySelectorAll('.BTSXcli3BTres')[0];//重置按钮
+    var aBTSXcli2liC=document.querySelectorAll('.BTSXcli2liC');//复选框
+    var oBTSXcliGLK=document.querySelectorAll('.BTSXcliGLK')[0];//过滤框
+
+    oBTSXcli3BTres.onclick=function(){
+        for(var j=0;j<aBTSXcliI.length;j++){
+            aBTSXcliI[j].style.color="#666";
+        }
+        oBTSXcliGLK.value="";
+        for(var i=0;i<aBTSXcli2liC.length;i++){
+            aBTSXcli2liC[i].checked=false;
+        }
+    }
+
 }
 
 //项目切换
@@ -873,6 +909,8 @@ function app_mine(){
         oapp_typeul.style.display="none";
         // app_typekPD=0;
     }
+
+
 }
 
 function app_public(){
@@ -1610,7 +1648,7 @@ function user_info(){
             var ouser_kongjianT=document.querySelectorAll('.user_kongjianT')[0];//存储空间文字
             var ospan1=ouser_kongjianT.querySelectorAll('span')[0];//存储空间文字
             var ospan2=ouser_kongjianT.querySelectorAll('span')[1];//存储空间文字
-            //ospan1.innerHTML=kongjian_yi;
+            ospan1.innerHTML=kongjian_yi;
             ospan2.innerHTML=kongjian_zong;
 
 
@@ -1681,12 +1719,12 @@ function user_info(){
     var oudPHyzfs3=oupdate_phoneK.querySelectorAll('.udPHyzfs3')[0];//修改手机框发送验证码按钮3
     var oudPHyzfs4=oupdate_phoneK.querySelectorAll('.udPHyzfs4')[0];//修改手机框发送验证码按钮4
 
-    oudPHyzfs.onclick=function(){
+    /*oudPHyzfs.onclick=function(){
         phonezhengze(oudPHphone,oudPHyzfs,oudPHyzfs2,60);
     }
     oudPHyzfs3.onclick=function(){
         phonezhengze(oudPHphone2,oudPHyzfs3,oudPHyzfs4,60);
-    }
+    }*/
 
 
     var oupdate_emailK=document.querySelectorAll('.update_emailK')[0];//修改邮箱框
@@ -1704,9 +1742,9 @@ function user_info(){
     var oudPSyzfs2=oupdate_passwK.querySelectorAll('.udPSyzfs2')[0];//修改密码框发送验证码按钮
 
 
-    oudPSyzfs.onclick=function(){
+    /*oudPSyzfs.onclick=function(){
         phonezhengze(oudPSphone,oudPSyzfs,oudPSyzfs2,60);
-    }
+    }*/
 
 
     for(var i=0;i<aupdateinfoKd.length;i++){
@@ -1746,7 +1784,7 @@ function user_info(){
 function kongjian(zong,yi){
 
     var kongjian_zong=zong||20;//存储总空间
-    var kongjian_yi=yi||0;//存储已用空间
+    var kongjian_yi=yi||5;//存储已用空间
     var kongjian_bi=0;//空间使用比
     if(kongjian_zong!=0&&kongjian_yi<kongjian_zong){
         kongjian_bi=kongjian_yi/kongjian_zong;
@@ -1759,7 +1797,7 @@ function kongjian(zong,yi){
         var ouser_kongjianT=document.querySelectorAll('.user_kongjianT')[0];//存储空间文字
         var ospan1=ouser_kongjianT.querySelectorAll('span')[0];//存储空间文字
         var ospan2=ouser_kongjianT.querySelectorAll('span')[1];//存储空间文字
-        //ospan1.innerHTML=kongjian_yi;
+        ospan1.innerHTML=kongjian_yi;
         ospan2.innerHTML=kongjian_zong;
 
 
@@ -1770,4 +1808,110 @@ function kongjian(zong,yi){
             ouser_kongjianZ.style.width=kongjian_bi*350+"px";//内条长度
         }
     }
+}
+
+
+//系统消息页面
+function system_message(){
+
+//选项卡
+    var ouserMLtabK=document.querySelectorAll('.userMLtabK')[0];//选项卡按钮列表
+    var auserMLtab=ouserMLtabK.querySelectorAll('.sysMRMtab');//选项卡按钮
+
+    var ouserMRMtabK=document.querySelectorAll('.userMRMtabK')[0];//选项卡显示列表
+    var auserMRMtab=ouserMRMtabK.querySelectorAll('.userMRMtab');//选项卡显示
+
+    for(var i=0;i<auserMLtab.length;i++){
+        (function(index){
+            auserMLtab[index].onclick=function(){
+                for(var j=0;j<auserMLtab.length;j++){
+                    auserMLtab[j].className="userMLtab";
+                    auserMRMtab[j].className="userMRMtab";
+                }
+                auserMLtab[index].className="userMLtab active";
+                auserMRMtab[index].className="userMRMtab active";
+            }
+        })(i)
+    }
+
+//消息选项卡
+    var omessageTK1=document.querySelectorAll('.messageTK1')[0];//通知按钮栏
+    var amessageT1z=omessageTK1.querySelectorAll('.messageT1z');//通知按钮
+
+    var omessageM=document.querySelectorAll('.messageM')[0];//通知内容栏
+    var amessageMzK=omessageM.querySelectorAll('.messageMzK');//通知内容
+
+    for(var i=0;i<amessageT1z.length;i++){
+        (function(index){
+            amessageT1z[index].onclick=function(){
+                // console.log(index)
+                for(var j=0;j<amessageT1z.length;j++){
+                    amessageT1z[j].className="messageT1z";
+                    amessageMzK[j].className="messageMzK";
+                }
+                amessageT1z[index].className="messageT1z active";
+                amessageMzK[index].className="messageMzK active";
+            }
+        })(i)
+    }
+
+}
+
+
+//好友管理
+function friend_manage(){
+    var ofriendMMlTT=document.querySelectorAll('.friendMMlTT')[0];//除我的好友外
+    var afriendMMlTTz=ofriendMMlTT.querySelectorAll('.friendMMlTTz');//每个组织结构
+    var afriendMMlTTzBz=document.querySelectorAll('.friendMMlTTzBz');//每个组织结构内的组
+
+    var ofriendMMlTBa=document.querySelectorAll('.friendMMlTBa')[0];//我的好友按钮
+
+    var zuzhi_PD=[];
+    for(var i=0;i<afriendMMlTTz.length;i++){
+        zuzhi_PD.push(0);
+    }
+
+    for(var i=0;i<afriendMMlTTz.length;i++){
+        (function(index){
+            var ofriendMMlTTzT=afriendMMlTTz[index].querySelectorAll('.friendMMlTTzT')[0];
+            ofriendMMlTTzT.onclick=function(){
+                // for(var j=0;j<afriendMMlTTz.length;j++){
+                //     afriendMMlTTz[j].className="friendMMlTTz";
+                // }
+                if(zuzhi_PD[index]==0){
+                    afriendMMlTTz[index].className="friendMMlTTz active";
+                    zuzhi_PD[index]=1;
+                }else{
+                    afriendMMlTTz[index].className="friendMMlTTz";
+                    zuzhi_PD[index]=0;
+                }
+            }
+        })(i)
+    }
+
+    for(var i=0;i<afriendMMlTTzBz.length;i++){
+        (function(index){
+            afriendMMlTTzBz[index].onclick=function(){
+                for(var j=0;j<afriendMMlTTzBz.length;j++){
+                    afriendMMlTTzBz[j].style.color="#666";
+                }
+                ofriendMMlTBa.className="friendMMlTBa";
+                afriendMMlTTzBz[index].style.color="#5ca0e5";
+            }
+        })(i)
+    }
+
+    ofriendMMlTBa.onclick=function(){
+        for(var j=0;j<afriendMMlTTzBz.length;j++){
+            afriendMMlTTzBz[j].style.color="#666";
+        }
+        ofriendMMlTBa.className="friendMMlTBa active";
+    }
+
+
+    var ofriend_addzzs=document.querySelectorAll('.friend_addzzs')[0];//添加组织结构树按钮
+    var ozzjgK=document.querySelectorAll('.zzjgK')[0];//添加组织结构树框
+
+
+
 }

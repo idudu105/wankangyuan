@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -31,6 +32,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.liutianjun.pojo.SysConfig;
 import com.liutianjun.pojo.User;
+import com.liutianjun.service.RoleService;
 import com.liutianjun.service.SysConfigService;
 import com.liutianjun.service.UserService;
 import com.liutianjun.utils.VerifyCodeUtils;
@@ -54,7 +56,11 @@ public class UserController {
 	private UserService userService;
 	
 	@Autowired
+	private RoleService roleService;
+	
+	@Autowired
 	private SysConfigService sysConfigService;
+	
 	
 	/**
 	 * 登录跳转
@@ -75,6 +81,8 @@ public class UserController {
         	error = "普通用户不能登录后台";
 		} else if (LockedAccountException.class.getName().equals(exceptionClassName)) {
         	error = "账号被锁定";
+		} else if (ExcessiveAttemptsException.class.getName().equals(exceptionClassName)) {
+        	error = "登录失败多次，账户被锁定10分钟";
 		} else if(exceptionClassName != null) {
             error = "其他错误：" + exceptionClassName;
         }
@@ -144,7 +152,7 @@ public class UserController {
 			resultMap.put("message", "邮箱验证码错误!");
 			return resultMap;
 		}
-		
+		user.setRoleIds("3");
 		userService.insert(user);
 		resultMap.put("message", "注册成功!");
 		resultMap.put("status", 200);
@@ -207,6 +215,10 @@ public class UserController {
 	    User user = userService.selectByUsername(username);
 	    
 	    model.addAttribute("user", user);
+	    
+	    SysConfig sysConfig = sysConfigService.selectByPrimaryKey(1);
+	    
+		model.addAttribute("sysConfig", sysConfig);
 	    
 	    String contentUrl = request.getSession().getServletContext().getRealPath( "/userFiles/" ).replace("\\", "/")+ username+"/";
 	    
@@ -313,37 +325,19 @@ public class UserController {
 	 */
 	@RequestMapping(value="/updateUserPhone",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> updateUserPhone(String phoneCode, String newPhone, String newPhoneCode) {
+	public Map<String,Object> updateUserPhone(String phone) {
 		resultMap.put("status", 400);
-		//检查手机验证码
-		String vPhoneCode = (String) SecurityUtils.getSubject().getSession().getAttribute(VerifyCodeUtils.V_PHONECODE);
-		if(null ==phoneCode || !phoneCode.equals(vPhoneCode)) {
-			resultMap.put("message", "手机验证码错误!");
-			return resultMap;
-		}
-		//销毁验证码
-		SecurityUtils.getSubject().getSession().removeAttribute(VerifyCodeUtils.V_PHONECODE);
-		
 		//检查手机号
-		if(null != userService.selectByPhone(newPhone)){
+		if(null != userService.selectByPhone(phone)){
 			resultMap.put("message", "手机号已存在!");
 			return resultMap;
 		}
-		
-		//检查新手机验证码
-		String vNewPhoneCode = (String) SecurityUtils.getSubject().getSession().getAttribute(VerifyCodeUtils.V_NEWPHONECODE);
-		if(null ==newPhoneCode || !newPhoneCode.equals(vNewPhoneCode)) {
-			resultMap.put("message", "新手机验证码错误!");
-			return resultMap;
-		}
-		//销毁新手机验证码
-		SecurityUtils.getSubject().getSession().removeAttribute(VerifyCodeUtils.V_NEWPHONECODE);
 		
 		//获取用户名
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 	    //获取用户
 	    User user = userService.selectByUsername(username);
-	    user.setPhone(newPhone);
+	    user.setPhone(phone);
 		
 		if(0 == userService.updateByPrimaryKey(user)) {
 			resultMap.put("message", "修改失败");
@@ -364,8 +358,22 @@ public class UserController {
 	 */
 	@RequestMapping(value="/updateUserEmail",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> updateUserEmail(User user) {
+	public Map<String,Object> updateUserEmail(String emailCode,String email,String newEmailCode) {
 		resultMap.put("status", 400);
+		if(!VerifyCodeUtils.verifyCode(emailCode, VerifyCodeUtils.V_EMAILCODE)) {
+			resultMap.put("message", "邮箱验证码错误!");
+			return resultMap;
+		}
+		
+		if(!VerifyCodeUtils.verifyCode(newEmailCode, VerifyCodeUtils.V_NEWEMAILCODE)) {
+			resultMap.put("message", "邮箱验证码错误!");
+			return resultMap;
+		}
+		//获取用户名
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    //获取用户
+	    User user = userService.selectByUsername(username);
+	    user.setEmail(email);
 		if(0 == userService.updateByPrimaryKey(user)) {
 			resultMap.put("message", "修改失败");
 			return resultMap;
@@ -385,17 +393,14 @@ public class UserController {
 	 */
 	@RequestMapping(value="/updateUserPassword",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> updateUserPassword(String phoneCode,String password) {
+	public Map<String,Object> updateUserPassword(String emailCode,String password) {
 		resultMap.put("status", 400);
 		
-	    //检查手机验证码
-  		String vPhoneCode = (String) SecurityUtils.getSubject().getSession().getAttribute(VerifyCodeUtils.V_PHONECODE);
-  		if(null ==phoneCode || !phoneCode.equals(vPhoneCode)) {
-  			resultMap.put("message", "手机验证码错误!");
+	    //检查邮箱验证码
+  		if(!VerifyCodeUtils.verifyCode(emailCode, VerifyCodeUtils.V_EMAILCODE)) {
+  			resultMap.put("message", "邮箱验证码错误!");
   			return resultMap;
   		}
-  		//销毁验证码
-  		SecurityUtils.getSubject().getSession().removeAttribute(VerifyCodeUtils.V_PHONECODE);
   		//获取用户名
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 	    //获取用户
@@ -476,6 +481,10 @@ public class UserController {
             @RequestParam(value="username", required=false)String username,
             Model model) {
 		Map<String, Object> map = userService.findAll(page, rows, username);
+		
+		Map<String, Object> roleMap = roleService.findAll();
+		
+		model.addAttribute("roleList", roleMap.get("list"));
 		
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));

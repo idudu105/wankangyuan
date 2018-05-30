@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<%@ taglib prefix="zhangfn" uri="http://github.com/zhangkaitao/tags/zhang-functions" %>
 <!DOCTYPE html>
 <!-- saved from url=(0056)http://themifycloud.com/demos/templates/janux/table.html -->
 <html lang="en" class=" js inlinesvg">
@@ -91,12 +92,7 @@
                                 <span>账户设置</span>
                             </li>
                             <li>
-                                <a href="javascript:;">
-                                    <i class="halflings-icon user"></i>修改密码
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:;">
+                                <a href="/wankangyuan/admin/logout">
                                     <i class="halflings-icon off"></i>退出系统
                                 </a>
                             </li>
@@ -237,7 +233,7 @@
                                                     </th>
                                                     <th class="biaoxiangth">${user.phone }</th>
                                                     <th class="biaoxiangth">${user.email }</th>
-                                                    <th class="biaoxiangth">角色</th>
+                                                    <th class="biaoxiangth">${zhangfn:roleName(user.roleIds)}</th>
                                                     <th class="biaoxiangth"><fmt:formatDate type="both" value="${user.createTime }" /></th>
                                                     <th class="biaoxiangth"><fmt:formatDate type="both" value="${user.lastLoginTime }" /></th>
                                                     <th class="biaoxiangth">
@@ -290,9 +286,9 @@
                             <div class="addbiaoxli">
                                 <div class="addbiaoxlit">角色：</div>
                                 <select name="roleIds" id="">
-                                    <option value="11">参与人</option>
-                                    <option value="12">创建人</option>
-                                    <option value="13">主持人</option>
+                                <c:forEach items="${roleList }" var="role">
+                                    <option value="${role.id }">${role.description }</option>
+                                </c:forEach>
                                 </select>
                             </div>
                             <div class="addboxB">
@@ -334,11 +330,11 @@
                                 <input id="email" name="email" type="email" class="addbiaoxlik" />
                             </div>
                             <div class="addbiaoxli">
-                                <div class="addbiaoxlit">状态：</div>
-                                <select name="roleIds" id="">
-                                    <option value="11">参与人</option>
-                                    <option value="12">创建人</option>
-                                    <option value="13">主持人</option>
+                                <div class="addbiaoxlit">角色：</div>
+                                <select name="roleIds" id="roleIds">
+                                    <c:forEach items="${roleList }" var="role">
+	                                    <option value="${role.id }">${role.description }</option>
+	                                </c:forEach>
                                 </select>
                             </div>
                             <div class="addboxB">

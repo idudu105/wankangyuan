@@ -1,6 +1,7 @@
 package com.liutianjun.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class UserAppRelation implements Serializable {
     /**
@@ -11,12 +12,47 @@ public class UserAppRelation implements Serializable {
     /**
      * 用户名
      */
-    private String username;
+    private Integer userId;
 
     /**
-     * 我的应用集合
+     * 我的应用id
      */
-    private String appIds;
+    private Integer appId;
+
+    /**
+     * 应用名称
+     */
+    private String appName;
+
+    /**
+     * 创建人
+     */
+    private String creator;
+
+    /**
+     * 应用类别
+     */
+    private String appType;
+
+    /**
+     * 同步/异步 0-同步 1-异步
+     */
+    private Integer isAsync;
+
+    /**
+     * 关键字
+     */
+    private String keywords;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 应用概述
+     */
+    private String appOverview;
 
     private static final long serialVersionUID = 1L;
 
@@ -28,20 +64,76 @@ public class UserAppRelation implements Serializable {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public String getAppIds() {
-        return appIds;
+    public Integer getAppId() {
+        return appId;
     }
 
-    public void setAppIds(String appIds) {
-        this.appIds = appIds == null ? null : appIds.trim();
+    public void setAppId(Integer appId) {
+        this.appId = appId;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName == null ? null : appName.trim();
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
+    }
+
+    public String getAppType() {
+        return appType;
+    }
+
+    public void setAppType(String appType) {
+        this.appType = appType == null ? null : appType.trim();
+    }
+
+    public Integer getIsAsync() {
+        return isAsync;
+    }
+
+    public void setIsAsync(Integer isAsync) {
+        this.isAsync = isAsync;
+    }
+
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords == null ? null : keywords.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getAppOverview() {
+        return appOverview;
+    }
+
+    public void setAppOverview(String appOverview) {
+        this.appOverview = appOverview == null ? null : appOverview.trim();
     }
 
     @Override
@@ -51,8 +143,15 @@ public class UserAppRelation implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", username=").append(username);
-        sb.append(", appIds=").append(appIds);
+        sb.append(", userId=").append(userId);
+        sb.append(", appId=").append(appId);
+        sb.append(", appName=").append(appName);
+        sb.append(", creator=").append(creator);
+        sb.append(", appType=").append(appType);
+        sb.append(", isAsync=").append(isAsync);
+        sb.append(", keywords=").append(keywords);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", appOverview=").append(appOverview);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

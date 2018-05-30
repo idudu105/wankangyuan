@@ -194,29 +194,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * @return
 	 */
 	@Override
-	public Map<String, Object> findMine(Integer page, Integer rows, String appName, String username) {
-		List<Integer> listId = userAppRelationService.findMine(username);
-		
-		ApplicationQuery example = new ApplicationQuery();
-		Criteria criteria = example.createCriteria();
-		if(StringUtils.isNotBlank(appName)) {
-			criteria.andAppNameEqualTo(appName);
-		}
-		if(listId != null) {
-			criteria.andIdIn(listId);
-		}else {
-			criteria.andIdIsNull();
-		}
-		
-		int total = applicationDao.countByExample(example);
-		example.setOrderByClause("id DESC");
-		example.setPageNo(page);
-		example.setPageSize(rows);
-		List<Application> list = applicationDao.selectByExample(example);
-		Map<String,Object> map = new HashMap<>();
-		map.put("list", list);
-		map.put("total", total);
-		return map;
+	public Map<String, Object> findMine(Integer page, Integer rows, String appName, Integer userId) {
+		return userAppRelationService.findMine(page,rows,appName,userId);
 	}
 
 	/**
@@ -249,6 +228,31 @@ public class ApplicationServiceImpl implements ApplicationService {
 		map.put("list", list);
 		map.put("total", total);
 		return map;
+	}
+
+	/**
+	 * 查询数组里的应用
+	 * <p>Title: findByIds</p>  
+	 * <p>Description: </p>  
+	 * @param ids
+	 * @return
+	 */
+	@Override
+	public List<Application> findByIds(Integer[] ids) {
+		ApplicationQuery example = new ApplicationQuery();
+		Criteria criteria = example.createCriteria();
+		criteria.andIdIn(Arrays.asList(ids));
+		return applicationDao.selectByExample(example);
+	}
+
+	//查看已公开的应用
+	@Override
+	public Application findPublicByid(Integer id) {
+		Application application = applicationDao.selectByPrimaryKey(id);
+		if(null != application && "公开".equals(application.getStatus())) {
+			return application;
+		}
+		return null;
 	}
 
 }

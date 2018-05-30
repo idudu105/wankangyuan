@@ -1,6 +1,9 @@
 package com.liutianjun.service;
 
 import java.util.List;
+import java.util.Map;
+
+import com.liutianjun.pojo.Application;
 
 /**
  * 用户应用关系
@@ -14,17 +17,17 @@ import java.util.List;
 public interface UserAppRelationService {
 
 	//根据用户id和用户名插入关系表
-	int insert(Integer id,String username);
+	int insert(Integer userId,List<Application> list);
 	
 	//根据用户id删除关系表
 	int deleteByPrimaryKey(Integer id);
 	
 	//添加用户的应用
-	int addToMineById(Integer userId,String username, Integer[] ids);
+	int addToMineByIds(Integer userId,Integer[] ids);
 	
 	//删除用户的应用
-	int removeFromMineById(Integer userId,Integer[] ids);
+	int removeFromMineByIds(Integer userId,Integer[] ids);
 	
 	//查找用户的应用集合
-	List<Integer> findMine(String username);
+	Map<String,Object> findMine(Integer page, Integer rows, String appName, Integer userId);
 }
