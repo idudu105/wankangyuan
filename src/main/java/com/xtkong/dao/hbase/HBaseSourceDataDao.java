@@ -70,14 +70,16 @@ public class HBaseSourceDataDao {
 		}
 		return true;
 	}
+
 	/**
 	 * 通过sourceDataId获取一条源数据
+	 * 
 	 * @param cs_id
 	 * @param sourceDataId
 	 * @param sourceFields
 	 * @return
 	 */
-	public static List<String> getSourceDataById(String cs_id,String sourceDataId, List<SourceField> sourceFields) {
+	public static List<String> getSourceDataById(String cs_id, String sourceDataId, List<SourceField> sourceFields) {
 		List<String> sourceData = new ArrayList<>();
 		try {
 			HBaseDB db = HBaseDB.getInstance();
@@ -90,7 +92,7 @@ public class HBaseSourceDataDao {
 				for (SourceField sourceField : sourceFields) {
 					sourceData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
 							Bytes.toBytes(String.valueOf(sourceField.getCsf_id())))));
-				}				
+				}
 			}
 			table.close();
 		} catch (IOException e) {
@@ -98,7 +100,32 @@ public class HBaseSourceDataDao {
 		}
 		return sourceData;
 	}
-
+	public static List<List<String>> getSourceDataByIds(String cs_id, String sourceDataIds, List<SourceField> sourceFields) {
+		List<List<String>> sourceDatas = new ArrayList<>();
+		try {
+			HBaseDB db = HBaseDB.getInstance();
+			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id);
+			List<Get> gets = new ArrayList<Get>();
+			for (String sourceDataId : sourceDataIds.split(",")) {
+					gets.add(new Get(Bytes.toBytes(sourceDataId)));
+			}
+			Result[] results = table.get(gets);
+			for (Result result : results) {
+				List<String> sourceData= new ArrayList<>();
+				// 获取行键sourceDataId
+				sourceData.add(Bytes.toString(result.getRow()));
+				for (SourceField sourceField : sourceFields) {
+					sourceData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+							Bytes.toBytes(String.valueOf(sourceField.getCsf_id())))));
+				}
+				sourceDatas.add(sourceData);
+			}
+			table.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return sourceDatas;
+	}
 	/**
 	 * 获取用户创建源数据基础信息
 	 * 
@@ -122,7 +149,7 @@ public class HBaseSourceDataDao {
 			Filter filter1 = new PrefixFilter(Bytes.toBytes(uid + "_" + cs_id + "_"));
 			// 单值过滤,获取行数据
 			Filter filter2 = new SingleColumnValueFilter(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-					Bytes.toBytes(ConstantsHBase.QUALIFIER_ADD),CompareOperator.EQUAL,
+					Bytes.toBytes(ConstantsHBase.QUALIFIER_ADD), CompareOperator.EQUAL,
 					new BinaryComparator(Bytes.toBytes(ConstantsHBase.VALUE_ADD_FALSE)));
 			// 与
 			FilterList filterList = new FilterList(Operator.MUST_PASS_ALL, filter1, filter2);
@@ -216,7 +243,7 @@ public class HBaseSourceDataDao {
 			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
 			// 单值过滤,获取行数据
 			Filter filter = new SingleColumnValueFilter(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-					Bytes.toBytes(ConstantsHBase.QUALIFIER_PUBLIC),CompareOperator.EQUAL,
+					Bytes.toBytes(ConstantsHBase.QUALIFIER_PUBLIC), CompareOperator.EQUAL,
 					new BinaryComparator(Bytes.toBytes(ConstantsHBase.VALUE_PUBLIC_TRUE)));
 			scan.setFilter(filter);
 			ResultScanner resultScanner = table.getScanner(scan);
@@ -251,8 +278,7 @@ public class HBaseSourceDataDao {
 	 * @param sourceFieldDatas
 	 *            采集源字段、 数据值
 	 */
-	public static boolean updateSourceData(String cs_id, String sourceDataId,
-			Map<String, String> sourceFieldDatas) {
+	public static boolean updateSourceData(String cs_id, String sourceDataId, Map<String, String> sourceFieldDatas) {
 		HBaseDB db = HBaseDB.getInstance();
 		for (Entry<String, String> sourceFieldData : sourceFieldDatas.entrySet()) {
 			if (!db.put(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, sourceDataId, ConstantsHBase.FAMILY_INFO,
@@ -309,7 +335,8 @@ public class HBaseSourceDataDao {
 			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id);
 			List<Get> gets = new ArrayList<Get>();
 			for (String sourceDataId : sourceDataIds.split(",")) {
-				gets.add(new Get(Bytes.toBytes(sourceDataId)));
+				if (!sourceDataId.startsWith(uid + "_" + cs_id + "_"))
+					gets.add(new Get(Bytes.toBytes(sourceDataId)));
 			}
 			// 存放批量操作的结果
 			Result[] results = table.get(gets);

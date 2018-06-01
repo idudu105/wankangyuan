@@ -107,6 +107,36 @@ public class HBaseFormatDataDao {
 		return formatDatas;
 	}
 
+	public static List<List<String>> getFormatDataByIds(String cs_id, String ft_id, String formatDataIds,
+			List<FormatField> formatFields) {
+		List<List<String>> formatDatas = new ArrayList<>();
+		try {
+			HBaseDB db = HBaseDB.getInstance();
+			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id);
+			List<Get> gets = new ArrayList<Get>();
+			for (String formatDataId : formatDataIds.split(",")) {
+				gets.add(new Get(Bytes.toBytes(formatDataId)));
+			}
+			Result[] results = table.get(gets);
+			for (Result result : results) {
+				for (FormatField formatField : formatFields) {
+					List<String> formatData = new ArrayList<>();
+					formatData.add(String.valueOf(formatField.getFf_id()));
+					formatData.add(formatField.getFf_name());
+					formatData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+							Bytes.toBytes(String.valueOf(formatField.getFf_id())))));
+					formatDatas.add(formatData);
+				}
+			}
+			table.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// TODO Auto-generated method stub
+		return formatDatas;
+	}
+
 	/**
 	 * 格式数据明细
 	 * 

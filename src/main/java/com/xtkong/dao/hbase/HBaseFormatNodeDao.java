@@ -57,6 +57,41 @@ public class HBaseFormatNodeDao {
 		return b;
 	}
 
+	public static FormatType getFormatNodes(String cs_id, String sourceDataId, String ft_id) {
+		FormatType formatType = new FormatType();
+		try {
+			HBaseDB db = HBaseDB.getInstance();
+			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id);
+			Scan scan = new Scan();
+			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
+			Filter filter = new PrefixFilter(Bytes.toBytes(sourceDataId + "_" + ft_id + "_"));
+			scan.setFilter(filter);
+			ResultScanner resultScanner = table.getScanner(scan);
+			Iterator<Result> iterator = resultScanner.iterator();
+			while (iterator.hasNext()) {
+				Result result = iterator.next();
+				if (!result.isEmpty()) {
+					// 获取ft_id，节点名
+					String[] node = Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+							Bytes.toBytes(ConstantsHBase.QUALIFIER_NODE))).split(",");
+					try {
+						// 添加行键formatNodeId、不显示，节点名、显示
+						formatType.getFormatDataNodes().put(Bytes.toString(result.getRow()), node[1]);
+					} catch (NumberFormatException e) {
+						continue;
+					}
+				}
+			}
+			resultScanner.close();
+			table.close();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return formatType;
+	}
+
 	/**
 	 * 节点树 List<FormatType>
 	 * 
