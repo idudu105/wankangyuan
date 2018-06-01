@@ -40,7 +40,7 @@
                         <a href="/wankangyuan/userInfo">
                             <div class="userbut">用户信息</div>
                         </a>
-                        <a href="javascript:;">
+                        <a href="/wankangyuan/message/viewMessage">
                             <div class="userbut">系统消息
                                 <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint2" />
                             </div>
@@ -153,7 +153,7 @@
                             <div class="PJK2litopT2">${app.appName }</div>
                             <!-- <div class="PJK2litopI"></div> -->
                             <div class="fuxuanK3">
-                                <input name="ids" type="checkbox" class="input_check" id="check${appList.count }" value="${app.id }">
+                                <input name="ids" type="checkbox" class="input_check" id="check${appList.count }" value="${app.appId }">
                                 <label for="check${appList.count }"></label>
                             </div>
                         </div>
@@ -161,10 +161,10 @@
                             <div class="PJK2licreT1">创建人：</div>
                             <div class="PJK2licreT2">${app.creator }</div>
                         </div>
-                        <div class="PJK2litime">
+                        <%-- <div class="PJK2litime">
                             <div class="PJK2licreT1">状态：</div>
                             <div class="PJK2licreT2">${app.status }</div>
-                        </div>
+                        </div> --%>
                         <div class="PJK2litime">
                             <div class="PJK2litimeT1">
                                <fmt:formatDate type="date" value="${app.createTime }" />
@@ -174,7 +174,7 @@
                             </div>
                         </div>
                         <div class="PJK2lidetail">${app.appOverview }</div>
-                        <div onclick="location='/wankangyuan/application/explain?id=${app.id }'" class="PJK2liex">应用说明</div>
+                        <div onclick="location='/wankangyuan/application/explain?id=${app.appId }'" class="PJK2liex">应用说明</div>
                     </div>
                 </c:forEach>
                 <input id="projectId" name="projectId" type="hidden" disabled="disabled">

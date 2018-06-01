@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2018-04-23 11:25:49
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-05-29 16:13:44
+* @Last Modified time: 2018-05-31 15:48:25
 */
 
 *{
@@ -23,7 +23,9 @@ textarea{
 input{
     outline:0;
 }
-
+.clear{
+    clear:both;
+}
 .quanxuanK,.quanxuanK1{
     position: relative;
     float:left;
@@ -236,7 +238,7 @@ input{
 }
 .top2Cli{
     /*width:78px;*/
-    height:46px;
+    height:45px;
     margin-top:25px;
     margin-right:40px;
     color:#666666;
@@ -254,7 +256,16 @@ input{
     color:#16579b;
     border-bottom:3px solid #16579b;
 }
-
+.top2CrB{
+    float:right;
+    font-size:16px;
+    color:#5ca0e5;
+    font-weight: 700;
+}
+.top2Crb{
+    cursor:pointer;
+    margin-top:25px;
+}
 .top2Ctl{
     margin-top:36px;
     padding-right:65px;
@@ -1621,8 +1632,8 @@ input{
     border-bottom:1px solid #013f73;
 }
 .prof_lbRmULtli{
-    color:#013f73;
-    font-size:14px;
+        color:#013f73;
+        font-size:14px;
     /*vertical-align: middle;
     display:inline-block;*/
     float:left;
@@ -2517,7 +2528,7 @@ input{
     width:779px;
     /*height:500px;*/
     padding-bottom:20px;
-    
+
     display:none;
 }
 .QXGLkT{
@@ -3233,7 +3244,7 @@ input{
     height:63px;
 }
 .eisdeLTln{
-    
+
 }
 .eisdeLTlt{
     margin-top:14px;
@@ -3370,7 +3381,7 @@ input{
     border-bottom:6px solid #f4f4f4;
 }
 .disdeRM{
-    
+
 }
 .disdeRMz{
     margin-top:15px;
@@ -3585,7 +3596,7 @@ input{
     padding:20px 0;
 }
 .adddataMli{
-    
+
     /*height:34px;*/
     /*line-height: 34px;*/
     overflow:auto;
@@ -4498,6 +4509,9 @@ input{
     padding:24px 10px;
     /*overflow:auto;*/
     position:relative;
+    /*text-align: left;*/
+    /*display:flex;*/
+    /*justify-content: space-between;*/
 }
 
 .zzjgK{
@@ -4508,6 +4522,7 @@ input{
     position:absolute;
     top:60px;
     left:160px;
+    display:none;
 }
 .zzjgM{
     margin-bottom:20px;
@@ -4550,14 +4565,260 @@ input{
     float:right;
     cursor:pointer;
 }
+.zzsyK,.zzsy_editK,.zzsy_delK{
+    z-index: 500;
+    background:#fff;
+    box-shadow:0 0 4px 0 rgba(203,198,198,0.50);
+    padding:25px;
+    position:absolute;
+    top:60px;
+    left:260px;
+    display:none;
+}
+.zzsy_editK{
+    left:410px;
+}
+.zzsy_delK{
+    left:460px;
+}
+.zzsyKT{
+    /*text-align: left;*/
+    font-size:20px;
+}
+.zzsyM{
+    padding:10px 0;
+}
+.zzsyMz{
+
+}
+.zzsyMzt{
+    display:inline-block;
+    vertical-align: middle;
+    font-size: 16px;
+}
+.zzsyMzp,.zzsy_editMzp{
+    display:inline-block;
+    vertical-align: middle;
+    padding:5px;
+}
+.zzsyB{
+    margin:10px 0;
+    overflow:auto;
+}
+.zzsyBb{
+    background: #5ca0e5;
+    border-radius: 2px;
+    width: 90px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 16px;
+    color: #ffffff;
+    font-weight: 700;
+    border: none;
+    float: right;
+    cursor: pointer;
+}
+.zzsyBb2{
+    background: #5ca0e5;
+    border-radius: 2px;
+    width: 90px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 16px;
+    color: #ffffff;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+}
+
+
+.chengyuan_addK{
+    z-index: 500;
+    background:#fff;
+    box-shadow:0 0 4px 0 rgba(203,198,198,0.50);
+    padding:25px;
+    position:absolute;
+    top:60px;
+    left:200px;
+    display:none;
+}
+.cyaddKT{
+    font-size: 20px;
+}
+.cyaddKT2{
+    margin:20px 0;
+    display:flex;
+    justify-content: space-around;
+}
+.cyaddKT2p{
+    padding:5px;
+    width:300px;
+    height:26px;
+    /*display:inline-block;
+    vertical-align: middle;*/
+}
+.cyaddKT2b{
+    width:70px;
+    height:40px;
+    /*display:inline-block;
+    vertical-align: middle;*/
+    border:0;
+    outline:0;
+    background: #5ca0e5;
+    color:#fff;
+    cursor:pointer;
+    margin:0 5px;
+    font-size: 18px;
+}
+
+.cyaddKM{
+    /*border:1px solid #666;*/
+    border-top:1px solid #666;
+    border-bottom:1px solid #666;
+    /*padding:10px 0;*/
+    margin:20px 0;
+}
+.cyaddKMtb{
+    
+}
+.biaoxiang{
+    color:#666;
+}
+.cyaddKMtb tr{
+    height:54px;
+}
+.cyaddKMtb .touxiang{
+    width:54px;
+}
+.cyaddKMtb .touxiangi{
+    width:54px;
+    height:54px;
+    padding:0 10px;
+}
+.cyaddKMtb .yonghuming{
+    width:120px;
+    padding:0 10px;
+}
+.cyaddKMtb .youxiang{
+    width:120px;
+    padding:0 10px;
+}
+.cyaddKMtb .caozuo{
+    width:60px;
+    padding:0 10px;
+}
+.cyaddKMtb .caozuochk{
+    width:20px;
+    height:20px;
+}
+.cyaddKB{
+    display:flex;
+    justify-content: space-around;
+}
+
+.cyaddKBt{
+    line-height: 30px;
+}
+.cyaddKBs{
+    width:300px;
+    height:30px;
+}
+.cyaddKBb{
+    width:70px;
+    height:30px;
+    font-size: 18px;
+    border:0;
+    background: #5ca0e5;
+    color: #fff;
+    cursor:pointer;
+}
+
+.qunfaK{
+    z-index: 500;
+    background:#fff;
+    box-shadow:0 0 4px 0 rgba(203,198,198,0.50);
+    padding:20px;
+    position:absolute;
+    top:160px;
+    left:400px;
+    width:650px;
+    height:340px;
+    display:none;
+}
+.qunfaT{
+    padding-bottom:10px;
+    border-bottom:1px solid #dadada;
+    overflow:auto;
+}
+.qunfaTt{
+    float:left;
+    font-size:18px;
+    color:#666666;
+    font-weight: 700;
+}
+.qunfaTi{
+    width:14px;
+    height:14px;
+    margin-top:5px;
+    float:right;
+    cursor:pointer;
+}
+.qunfaM{
+    /*text-align: center;*/
+    margin-top:40px;
+}
+.qunfaMt{
+    font-size:18px;
+    color:#666666;
+    font-weight: 700;
+    display:inline-block;
+    vertical-align: top;
+}
+.qunfaMta{
+    background:#ffffff;
+    border:1px solid #999999;
+    width:470px;
+    height:140px;
+    padding:5px;
+    display:inline-block;
+    vertical-align: top;
+}
+.qunfaB{
+    margin:40px 0;
+    display:flex;
+    justify-content: space-around;
+}
+.qunfaBb{
+    width:80px;
+    height:30px;
+    background: #5ca0e5;
+    border-radius: 2px;
+    color:#fff;
+    cursor:pointer;
+    border:0;
+    font-size: 18px;
+}
+.zuyichuK,.yichuhyK{
+    z-index: 500;
+    background:#fff;
+    box-shadow:0 0 4px 0 rgba(203,198,198,0.50);
+    padding:25px;
+    position:absolute;
+    top:60px;
+    right:0px;
+    display:none;
+}
+
 
 
 
 .friendMTl{
-    /*float:left;*/
-    display:inline-block;
-    vertical-align: middle;
-    width:790px;
+    float:left;
+    /*display:inline-block;*/
+    /*vertical-align: middle;*/
+    width:650px;
     overflow:auto;
     /*width:476px;*/
 }
@@ -4574,10 +4835,10 @@ input{
 }
 
 .friendMTl_r{
-    /*float:right;*/
-    display:inline-block;
-    vertical-align: middle;
-    width:600px;
+    float:right;
+    /*display:inline-block;*/
+    /*vertical-align: middle;*/
+    /*width:600px;*/
 }
 .friendMTl_rb{
     display:inline-block;
@@ -4600,6 +4861,7 @@ input{
 
 .friendMTr{
     float:right;
+    text-align: center;
 }
 .friendMTrb{
     display:inline-block;
@@ -4615,14 +4877,57 @@ input{
     cursor:pointer;
     margin:0 15px;
 }
-.friendMM{
-    overflow:auto;
-    position:relative;
+.friend_qunfa{
+    display:none;
+}
+.friend_yichuzu{
+
+}
+.friend_yichuhy{
+    display:none;
 }
 
-
-
-
+.friendMM{
+    /*overflow:auto;*/
+    position:relative;
+}
+.haoyou_addK{
+    z-index: 500;
+    background:#fff;
+    /*box-shadow:0 0 4px 0 rgba(203,198,198,0.50);*/
+    border:1px solid #666;
+    padding:20px 40px;
+    position:absolute;
+    top:20px;
+    left:436px;
+    display:none;
+}
+.hyaddKT{
+    padding-bottom:10px;
+    border-bottom:1px solid #666;
+    overflow:auto;
+}
+.hyaddKTt{
+    float:left;
+    font-size: 20px;
+    color:#333;
+}
+.hyaddKTi{
+    float:right;
+    width:16px;
+    height:16px;
+    margin-top:5px;
+    cursor:pointer;
+}
+.hyaddKBb{
+    width:70px;
+    height:30px;
+    font-size: 18px;
+    border:0;
+    background: #5ca0e5;
+    color: #fff;
+    cursor:pointer;
+}
 
 
 .friendMMl{
@@ -4674,6 +4979,13 @@ input{
 }
 .friendMMlTTz.active .friendMMlTTzTi{
     background:url(../img/yuan_jian.png) no-repeat;
+}
+
+.friendMMlTTzTi2{
+    width:15px;height:15px;
+    display:inline-block;
+    vertical-align: middle;
+    margin-left:20px;
 }
 
 .friendMMlTTzB{
@@ -4745,17 +5057,28 @@ input{
     float:right;
     overflow:auto;
 }
+.friendMMrz{
+    display:none;
+    position:relative;
+}
+.friendMMrz.active{
+    display:block;
+}
+.friMMrtabK{
+    height:500px;
+    overflow:auto;
+}
 .friMMrtab{
     padding:7px 30px;
     font-size: 0;
     text-align: left;
 }
 .friMMrtab tr{
-    height:40px;
+    height:54px;
     font-size:16px;
     color:#666666;
     font-weight: 700;
-    line-height: 40px;
+    /*line-height: 40px;*/
 }
 
 .friMMrtab tr.biaotou{
@@ -4801,7 +5124,158 @@ input{
 }
 
 
-.touxiangi{
-    width:40px;
-    height:40px;
+.friMMrtab .touxiangi{
+    width:54px;
+    height:54px;
+    border-radius: 50%;
+}
+
+.messagelistM{
+    padding:0px 10px;
+    overflow:auto;
+    height:615px;
+    text-align: center;
+}
+.messMK{
+    margin:0 auto;
+}
+.messMKz{
+    /*height:60px;*/
+    padding:20px 0px;
+    margin:0 10px;
+    text-align: left;
+    border-bottom:1px solid #dadada;
+    position:relative;
+}
+.messMKzi{
+    width:54px;
+    height:54px;
+    display:inline-block;
+    vertical-align: middle;
+    margin-right:25px;
+    border-radius: 50%;
+}
+.messMKzt{
+    display:inline-block;
+    vertical-align: middle;
+}
+.messMKztT,.messMKztB{
+    font-size:18px;
+    color:#666666;
+    font-weight: 700;
+}
+.messMKztT{
+    margin-bottom:12px;
+    overflow:auto;
+}
+.messMKztTid{
+    width:190px;
+    float:left;
+    margin-right: 20px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+.messMKztTtime{
+    width:240px;
+    float:left;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+.messMKztB{
+    width:800px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+.messMKzb{
+    font-size:18px;
+    color:#5ca0e5;
+    font-weight: 700;
+    position:absolute;
+    right:10px;
+    bottom:20px;
+    cursor:pointer;
+}
+
+.messagesendM{
+    padding:30px 20px;
+    overflow:auto;
+    text-align: center;
+}
+.backK{
+    float:left;
+    margin-right:15px;
+}
+.back{
+    width:20px;
+    height:20px;
+}
+.messsendML{
+    float:left;
+    padding-right:20px;
+    border-right:1px solid #e8e8e8;
+    /*height:600px;*/
+    width:900px;
+    padding-bottom:20px;
+}
+.messsendMLT{
+    height:34px;
+    border-bottom:1px solid #dadada;
+    font-size:18px;
+    color:#16579b;
+    font-weight: 700;
+    line-height: 34px;
+}
+.messsendMLM{
+    height:535px;
+    background:#eee;////
+}
+.messsendMLB{
+    height:60px;
+    background:#ccc;////
+}
+
+
+
+
+.messsendMR{
+    float:right;
+}
+.messsendMRT{
+    height:34px;
+    line-height: 34px;
+    border-bottom:1px solid #dadada;
+    text-align: left;
+}
+.messsendMRM{
+    height:560px;
+    overflow-y:auto;
+}
+.messsendMRMz{
+    width:390px;
+    padding:10px 0;
+    border-bottom:1px solid #dadada;
+    height:70px;
+}
+.messsendMRMzi{
+    margin-left:6px;
+    margin-right:25px;
+    display:inline-block;
+    vertical-align: middle;
+}
+.messsendMRMzt{
+    font-size:18px;
+    color:#666666;
+    font-weight: 700;
+    display:inline-block;
+    vertical-align: middle;
+}
+.messsendMRMztT{
+    margin-bottom:20px;
+    overflow:auto;
 }

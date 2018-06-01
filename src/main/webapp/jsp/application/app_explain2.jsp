@@ -41,7 +41,7 @@
                         <a href="/wankangyuan/userInfo">
                             <div class="userbut">用户信息</div>
                         </a>
-                        <a href="javascript:;">
+                        <a href="/wankangyuan/message/viewMessage">
                             <div class="userbut">系统消息
                                 <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint2" />
                             </div>

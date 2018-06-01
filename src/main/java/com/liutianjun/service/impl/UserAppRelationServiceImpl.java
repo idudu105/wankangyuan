@@ -127,7 +127,7 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	    Criteria criteria = example.createCriteria();
 	    criteria.andUserIdEqualTo(userId);
 	    if(StringUtils.isNotBlank(appName)) {
-	    	criteria.andAppNameEqualTo(appName);
+	    	criteria.andAppNameLike("%"+appName+"%");
 	    }
 	    int total = userAppRelationDao.countByExample(example);
 	    example.setPageNo(page);

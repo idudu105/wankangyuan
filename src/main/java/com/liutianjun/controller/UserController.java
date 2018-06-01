@@ -37,6 +37,7 @@ import com.liutianjun.service.SysConfigService;
 import com.liutianjun.service.UserService;
 import com.liutianjun.utils.VerifyCodeUtils;
 
+import net.coobird.thumbnailator.Thumbnails;
 import sun.misc.BASE64Decoder;
 
 /**
@@ -86,7 +87,9 @@ public class UserController {
 		} else if(exceptionClassName != null) {
             error = "其他错误：" + exceptionClassName;
         }
-        
+        if(req.getParameter("forceLogout") != null) {  
+        	error = "您已经被管理员强制退出，请重新登录";  
+        }   
         String loginType = req.getParameter("loginType");
         if("adminLogin".equals(loginType)) {
         	attributes.addFlashAttribute("msg", error);
@@ -424,7 +427,7 @@ public class UserController {
 	@ResponseBody
 	public Map<String,Object> updateUserPhone(String imgBase,HttpServletRequest request) {
 		resultMap.put("status", 400);
-		imgBase = imgBase.replace("data:image/jpeg;base64,", "");
+		imgBase = StringUtils.substringAfter(imgBase,",");
 		
 		//获取用户名
 	    String name = (String)SecurityUtils.getSubject().getPrincipal();
@@ -444,6 +447,10 @@ public class UserController {
 				w2.createNewFile();
 			}
 			ImageIO.write(bi1, imageType, w2);// 不管输出什么格式图片，此处不需改动
+			
+			//压缩图片
+			Thumbnails.of(w2).size(200, 200).toFile(w2);
+			
 			//获取用户
 		    User user = userService.selectByUsername(name);
 		    

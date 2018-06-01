@@ -3,6 +3,9 @@ package com.liutianjun.shiro.taglib;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.util.StringUtils;
 
 import com.liutianjun.pojo.Resource;
@@ -23,6 +26,16 @@ public class Functions {
             return false;
         }
         return str.indexOf(element.toString()) != -1;
+    }
+    
+    public static String principal(Session session) {
+        PrincipalCollection principalCollection =
+                (PrincipalCollection) session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+
+        return (String)principalCollection.getPrimaryPrincipal();
+    }
+    public static boolean isForceLogout(Session session) {
+        return session.getAttribute("session.force.logout") != null;
     }
 
     public static String roleName(Integer roleId) {

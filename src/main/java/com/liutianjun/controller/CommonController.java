@@ -174,13 +174,13 @@ public class CommonController {
 		//存入Shiro会话session
 		SecurityUtils.getSubject().getSession().setAttribute(VerifyCodeUtils.V_EMAILCODE, verifyCode);
 		//发送邮箱验证码
-		SendEmailCode.sendMail("783797599@qq.com", "783797599@qq.com", "xlijytsgwiqabbcb",  
+		Integer i = SendEmailCode.sendMail("783797599@qq.com", "783797599@qq.com", "xlijytsgwiqabbcb",  
 				email,  
 				"【万康源】",  
 				"【万康源】：您的验证码为："+ verifyCode);
 		
 		System.out.println(email+"-----"+verifyCode);
-		return 1;
+		return i;
 		
 	}
 	

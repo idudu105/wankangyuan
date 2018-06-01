@@ -2,9 +2,13 @@
 * @Author: Marte
 * @Date:   2018-04-23 15:32:03
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-05-29 16:44:19
+* @Last Modified time: 2018-05-31 14:19:17
 */
 
+//获取非行间样式
+function getStyle(obj,name){
+    return obj.currentStyle?obj.currentStyle[name]:getComputedStyle(obj,false)[name];
+}
 
 //  项目0
 function project0(){
@@ -14,7 +18,7 @@ function project0(){
 
 // 全选框和复选框的动作
     if(document.querySelectorAll('.quanxuanK')[0]){
-        oquanxuanK=document.querySelectorAll('.quanxuanK')[0];
+        var oquanxuanK=document.querySelectorAll('.quanxuanK')[0];
         var oquanxuan=oquanxuanK.querySelectorAll('.input_check')[0];
 
         var afuxuan=[];
@@ -165,7 +169,7 @@ function project1(){
 //点击表头的排序筛选功能
     var oPJK=document.querySelectorAll('.PJK')[0];//项目框
     var oBTSX=document.querySelectorAll('.BTSX')[0];//项目表头筛选框
-    var oBTSXpd=document.querySelectorAll('.BTSXpd')[0];//项目表头筛选框判断
+    // var oBTSXpd=document.querySelectorAll('.BTSXpd')[0];//项目表头筛选框判断
 
     var oPJList=document.querySelectorAll('.PJList')[0];//项目表头栏
     var aPJListli=oPJList.querySelectorAll('.PJListli');//项目表头
@@ -190,6 +194,8 @@ function project1(){
                     oBTSXpd.value=aPJListli[j].title;
                     console.log(oBTSXpd.value);
                 }
+                
+                
                 console.log(BTSXleft);
                 if(BTSXleft>1118){
                     BTSXleft=1118;
@@ -1574,9 +1580,9 @@ function forget_ps(){
     var opro_enter=document.querySelectorAll('.pro_enter')[0];//确认
 
 
-    /*ologinMzRb.onclick=function(){
-        phonezhengze(ofor_zh,ologinMzRb,ologinMzRb2,60);
-    }*/
+    // ologinMzRb.onclick=function(){
+    //     phonezhengze(ofor_zh,ologinMzRb,ologinMzRb2,60);
+    // }
 }
 
 
@@ -1629,36 +1635,6 @@ function user_info(){
                 auserMRMtab[index].className="userMRMtab active";
             }
         })(i)
-    }
-
-    // kongjian(40,36);//空间存储调用
-    function kongjian(zong,yi){
-
-        var kongjian_zong=zong||20;//存储总空间
-        var kongjian_yi=yi||5;//存储已用空间
-        var kongjian_bi=0;//空间使用比
-        if(kongjian_zong!=0&&kongjian_yi<kongjian_zong){
-            kongjian_bi=kongjian_yi/kongjian_zong;
-        }else{
-            kongjian_bi=1;
-        }
-
-    //存储空间条
-        if(document.querySelectorAll('.user_kongjianT')[0]){
-            var ouser_kongjianT=document.querySelectorAll('.user_kongjianT')[0];//存储空间文字
-            var ospan1=ouser_kongjianT.querySelectorAll('span')[0];//存储空间文字
-            var ospan2=ouser_kongjianT.querySelectorAll('span')[1];//存储空间文字
-            ospan1.innerHTML=kongjian_yi;
-            ospan2.innerHTML=kongjian_zong;
-
-
-            if(document.querySelectorAll('.user_kongjianK')[0]){
-                var ouser_kongjianK=document.querySelectorAll('.user_kongjianK')[0];//存储空间外条
-                var ouser_kongjianZ=ouser_kongjianK.querySelectorAll('.user_kongjianZ')[0];//存储空间内条
-
-                ouser_kongjianZ.style.width=kongjian_bi*350+"px";//内条长度
-            }
-        }
     }
 
 //头像上传按钮
@@ -1719,12 +1695,12 @@ function user_info(){
     var oudPHyzfs3=oupdate_phoneK.querySelectorAll('.udPHyzfs3')[0];//修改手机框发送验证码按钮3
     var oudPHyzfs4=oupdate_phoneK.querySelectorAll('.udPHyzfs4')[0];//修改手机框发送验证码按钮4
 
-    /*oudPHyzfs.onclick=function(){
-        phonezhengze(oudPHphone,oudPHyzfs,oudPHyzfs2,60);
-    }
-    oudPHyzfs3.onclick=function(){
-        phonezhengze(oudPHphone2,oudPHyzfs3,oudPHyzfs4,60);
-    }*/
+    // oudPHyzfs.onclick=function(){
+    //     phonezhengze(oudPHphone,oudPHyzfs,oudPHyzfs2,60);
+    // }
+    // oudPHyzfs3.onclick=function(){
+    //     phonezhengze(oudPHphone2,oudPHyzfs3,oudPHyzfs4,60);
+    // }
 
 
     var oupdate_emailK=document.querySelectorAll('.update_emailK')[0];//修改邮箱框
@@ -1742,9 +1718,9 @@ function user_info(){
     var oudPSyzfs2=oupdate_passwK.querySelectorAll('.udPSyzfs2')[0];//修改密码框发送验证码按钮
 
 
-    /*oudPSyzfs.onclick=function(){
-        phonezhengze(oudPSphone,oudPSyzfs,oudPSyzfs2,60);
-    }*/
+    // oudPSyzfs.onclick=function(){
+    //     phonezhengze(oudPSphone,oudPSyzfs,oudPSyzfs2,60);
+    // }
 
 
     for(var i=0;i<aupdateinfoKd.length;i++){
@@ -1797,7 +1773,7 @@ function kongjian(zong,yi){
         var ouser_kongjianT=document.querySelectorAll('.user_kongjianT')[0];//存储空间文字
         var ospan1=ouser_kongjianT.querySelectorAll('span')[0];//存储空间文字
         var ospan2=ouser_kongjianT.querySelectorAll('span')[1];//存储空间文字
-        ospan1.innerHTML=kongjian_yi;
+        // ospan1.innerHTML=kongjian_yi;
         ospan2.innerHTML=kongjian_zong;
 
 
@@ -1858,7 +1834,7 @@ function system_message(){
 }
 
 
-//好友管理
+//好友管理页面
 function friend_manage(){
     var ofriendMMlTT=document.querySelectorAll('.friendMMlTT')[0];//除我的好友外
     var afriendMMlTTz=ofriendMMlTT.querySelectorAll('.friendMMlTTz');//每个组织结构
@@ -1866,29 +1842,46 @@ function friend_manage(){
 
     var ofriendMMlTBa=document.querySelectorAll('.friendMMlTBa')[0];//我的好友按钮
 
-    var zuzhi_PD=[];
-    for(var i=0;i<afriendMMlTTz.length;i++){
-        zuzhi_PD.push(0);
-    }
+    var ozzsyKpd=document.querySelectorAll('.zzsyKpd')[0];//添加组框内置预存框
+    var ozzsy_editKpd=document.querySelectorAll('.zzsy_editKpd')[0];//修改组框内置预存框
+    var ozzsy_delKpd=document.querySelectorAll('.zzsy_delKpd')[0];//删除组框内置预存框
 
+    var afriendMMrz=document.querySelectorAll('.friendMMrz');//右侧成员框和好友框
+
+    var ofriend_qunfa=document.querySelectorAll('.friend_qunfa')[0];//群发消息按钮
+    var ofriend_yichuzu=document.querySelectorAll('.friend_yichuzu')[0];//从组中移除按钮
+    var ofriend_yichuhy=document.querySelectorAll('.friend_yichuhy')[0];//移除好友按钮
+
+    // var zuzhi_PD=[];
+    // for(var i=0;i<afriendMMlTTz.length;i++){
+    //     zuzhi_PD.push(0);
+    // }
+
+//组织结构点击效果
     for(var i=0;i<afriendMMlTTz.length;i++){
         (function(index){
             var ofriendMMlTTzT=afriendMMlTTz[index].querySelectorAll('.friendMMlTTzT')[0];
             ofriendMMlTTzT.onclick=function(){
-                // for(var j=0;j<afriendMMlTTz.length;j++){
-                //     afriendMMlTTz[j].className="friendMMlTTz";
-                // }
-                if(zuzhi_PD[index]==0){
-                    afriendMMlTTz[index].className="friendMMlTTz active";
-                    zuzhi_PD[index]=1;
-                }else{
-                    afriendMMlTTz[index].className="friendMMlTTz";
-                    zuzhi_PD[index]=0;
+                for(var j=0;j<afriendMMlTTz.length;j++){
+                    afriendMMlTTz[j].className="friendMMlTTz";
+                    // zuzhi_PD[j]=0;
                 }
+                // if(zuzhi_PD[index]==0){
+                    afriendMMlTTz[index].className="friendMMlTTz active";
+                    // zuzhi_PD[index]=1;
+                // }else{
+                    // afriendMMlTTz[index].className="friendMMlTTz";
+                    // zuzhi_PD[index]=0;
+                // }
+                
+                ozzsyKpd.value=afriendMMlTTz[index].getAttribute("name");
+                console.log(ozzsyKpd.value);
+
             }
         })(i)
     }
 
+//组点击效果
     for(var i=0;i<afriendMMlTTzBz.length;i++){
         (function(index){
             afriendMMlTTzBz[index].onclick=function(){
@@ -1897,21 +1890,291 @@ function friend_manage(){
                 }
                 ofriendMMlTBa.className="friendMMlTBa";
                 afriendMMlTTzBz[index].style.color="#5ca0e5";
+
+                //组修改框内置预存框的写入
+                ozzsy_editKpd.value=afriendMMlTTzBz[index].getAttribute("name");
+                // console.log(ozzsy_editKpd.value);
+
+                //组删除框内置预存框的写入
+                ozzsy_delKpd.value=afriendMMlTTzBz[index].getAttribute("name");
+                // console.log(ozzsy_delKpd.value);
+                
+                //右侧框切换
+                afriendMMrz[0].className="friendMMrz active";
+                afriendMMrz[1].className="friendMMrz";
+
+                ofriend_qunfa.style.display="none";
+                ofriend_yichuzu.style.display="inline-block";
+                ofriend_yichuhy.style.display="none";
             }
         })(i)
     }
 
+// 我的好友点击效果
     ofriendMMlTBa.onclick=function(){
         for(var j=0;j<afriendMMlTTzBz.length;j++){
             afriendMMlTTzBz[j].style.color="#666";
         }
         ofriendMMlTBa.className="friendMMlTBa active";
+
+        // 组修改框和组删除框内置预存框清空
+        ozzsy_editKpd.value="";
+        ozzsy_delKpd.value="";
+
+        //右侧框切换
+        afriendMMrz[0].className="friendMMrz";
+        afriendMMrz[1].className="friendMMrz active";
+
+        ofriend_qunfa.style.display="inline-block";
+        ofriend_yichuzu.style.display="none";
+        ofriend_yichuhy.style.display="inline-block";
     }
 
 
-    var ofriend_addzzs=document.querySelectorAll('.friend_addzzs')[0];//添加组织结构树按钮
-    var ozzjgK=document.querySelectorAll('.zzjgK')[0];//添加组织结构树框
+
+    var ofriend_addzzs=document.querySelectorAll('.friend_addzzs')[0];//添加组织结构按钮
+    var ozzjgK=document.querySelectorAll('.zzjgK')[0];//添加组织结构框
+    var azzjgMzp=ozzjgK.querySelectorAll('.zzjgMzp');//输入框
+    var azzjgMzta=ozzjgK.querySelectorAll('.zzjgMzta');//文本域
+
+    var ofriend_addy=document.querySelectorAll('.friend_addy')[0];//添加组按钮
+    var ozzsyK=document.querySelectorAll('.zzsyK')[0];//添加组框
+    var azzsyMzp=ozzsyK.querySelectorAll('.zzsyMzp');//输入框
+
+    var ofriend_edity=document.querySelectorAll('.friend_edity')[0];//修改组按钮
+    var ozzsy_editK=document.querySelectorAll('.zzsy_editK')[0];//修改组框
+    var azzsy_editMzp=ozzsy_editK.querySelectorAll('.zzsy_editMzp');//输入框
+
+    var ofriend_dely=document.querySelectorAll('.friend_dely')[0];//删除组按钮
+    var ozzsy_delK=document.querySelectorAll('.zzsy_delK')[0];//删除组框
+
+    var ofriend_addmem=document.querySelectorAll('.friend_addmem')[0];//添加成员按钮
+    var ochengyuan_addK=document.querySelectorAll('.chengyuan_addK')[0];//添加成员框
+
+    // var ofriend_qunfa=document.querySelectorAll('.friend_qunfa')[0];//群发消息按钮
+    var oqunfaK=document.querySelectorAll('.qunfaK')[0];//群发消息框
+    var oqunfaTi=oqunfaK.querySelectorAll('.qunfaTi')[0];//群发消息框关闭按钮
+    var oqunfaBb_cancel=oqunfaK.querySelectorAll('.qunfaBb_cancel')[0];//群发消息框关闭按钮2
+    var oqunfaMta=oqunfaK.querySelectorAll('.qunfaMta')[0];//群发消息框内文本域
+
+    var ofriend_yichuzu=document.querySelectorAll('.friend_yichuzu')[0];//从组中移除成员按钮
+    var ozuyichuK=document.querySelectorAll('.zuyichuK')[0];//从组中移除成员框
+
+    var ofriend_yichuhy=document.querySelectorAll('.friend_yichuhy')[0];//移除好友按钮
+    var oyichuhyK=document.querySelectorAll('.yichuhyK')[0];//移除好友框
+
+    var ofriendMMlb=document.querySelectorAll('.friendMMlb')[0];//左下添加好友按钮
+    var ohaoyou_addK=document.querySelectorAll('.haoyou_addK')[0];//添加好友框
+    var ohyaddKTi=document.querySelectorAll('.hyaddKTi')[0];//添加好友框关闭按钮
+    var ohyaddKBb_close=document.querySelectorAll('.hyaddKBb_close')[0];//添加好友框关闭按钮2
 
 
+    // var ozzjgKpd=0;//添加组织结构框判断
 
+//添加组织结构
+    ofriend_addzzs.onclick=function(event){
+        allKnone();
+        // if(ozzjgKpd==0){
+            ozzjgK.style.display="block";
+            // ozzjgKpd=1;
+            for(var i=0;i<azzjgMzp.length;i++){
+                azzjgMzp[i].value="";
+            }
+            for(var i=0;i<azzjgMzta.length;i++){
+                azzjgMzta[i].value="";
+            }
+        // }else{
+        //     ozzjgK.style.display="none";
+        //     ozzjgKpd=0;
+        // }
+        event.stopPropagation();
+    }
+    ozzjgK.onclick=function(event){
+        event.stopPropagation();
+    }
+
+//添加组
+    ofriend_addy.onclick=function(){
+        allKnone();
+        ozzsyK.style.display="block";
+        for(var i=0;i<azzsyMzp.length;i++){
+            azzsyMzp[i].value="";
+        }
+        event.stopPropagation();
+    }
+    ozzsyK.onclick=function(event){
+        event.stopPropagation();
+    }
+
+//修改组
+    ofriend_edity.onclick=function(){
+        allKnone();
+        if(ozzsy_editKpd.value){
+            ozzsy_editK.style.display="block";
+            for(var i=0;i<azzsy_editMzp.length;i++){
+                azzsy_editMzp[i].value="";
+            }
+        }
+        
+        event.stopPropagation();
+    }
+    ozzsy_editK.onclick=function(event){
+        event.stopPropagation();
+    }
+
+//删除组
+    ofriend_dely.onclick=function(){
+        allKnone();
+        if(ozzsy_delKpd.value){
+            ozzsy_delK.style.display="block";
+        }
+        
+        event.stopPropagation();
+    }
+    ozzsy_delK.onclick=function(event){
+        event.stopPropagation();
+    }
+
+//添加成员
+    ofriend_addmem.onclick=function(){
+        allKnone();
+        ochengyuan_addK.style.display="block";
+        event.stopPropagation();
+    }
+    ochengyuan_addK.onclick=function(event){
+        event.stopPropagation();
+    }
+
+//从组中移除成员
+    ofriend_yichuzu.onclick=function(){
+        allKnone();
+        ozuyichuK.style.display="block";//此行为点击按钮后，框显示，若要加判断则注释此行
+        
+        event.stopPropagation();
+    }
+    ozuyichuK.onclick=function(event){
+        event.stopPropagation();
+    }
+
+//移除好友
+    ofriend_yichuhy.onclick=function(){
+        allKnone();
+        oyichuhyK.style.display="block";//此行为点击按钮后，框显示，若要加判断则注释此行
+        
+        event.stopPropagation();
+    }
+    oyichuhyK.onclick=function(event){
+        event.stopPropagation();
+    }
+
+//全部添加修改框都隐藏
+    document.onclick=function(){
+        allKnone();
+    }
+    function allKnone(){
+        ozzjgK.style.display="none";
+        ozzsyK.style.display="none";
+        ozzsy_editK.style.display="none";
+        ozzsy_delK.style.display="none";
+        ochengyuan_addK.style.display="none";
+        ozuyichuK.style.display="none";
+        oyichuhyK.style.display="none";
+    }
+
+//群发消息
+    ofriend_qunfa.onclick=function(){
+        oqunfaK.style.display="block";//此行为点击群发按钮后群发框显示，若要加判断，请注释此行
+        oqunfaMta.value="";
+    }
+    oqunfaTi.onclick=function(){
+        oqunfaK.style.display="none";
+    }
+    oqunfaBb_cancel.onclick=function(){
+        oqunfaK.style.display="none";
+    }
+
+//添加好友
+    ofriendMMlb.onclick=function(){
+        // allKnone();
+        ohaoyou_addK.style.display="block";
+        // event.stopPropagation();
+    }
+    ohyaddKTi.onclick=function(){
+        ohaoyou_addK.style.display="none";
+    }
+    ohyaddKBb_close.onclick=function(){
+        ohaoyou_addK.style.display="none";
+    }
+
+//右侧多选
+    for(var i=0;i<afriendMMrz.length;i++){
+        (function(index){
+            var oquanxuanK=afriendMMrz[index].querySelectorAll('.quanxuanK')[0];
+            var oquanxuan=oquanxuanK.querySelectorAll('.input_check')[0];
+
+            var afuxuan=[];
+            var afuxuanK=[];
+
+            if(afriendMMrz[index].querySelectorAll('.fuxuanK2')[0]){
+                afuxuanK=afriendMMrz[index].querySelectorAll('.fuxuanK2');
+                console.log("k2");
+            }else if(afriendMMrz[index].querySelectorAll('.fuxuanK3')[0]){
+                afuxuanK=afriendMMrz[index].querySelectorAll('.fuxuanK3');
+                console.log("k3");
+            }
+
+            if(afuxuanK[0]){
+                for(var i=0;i<afuxuanK.length;i++){
+                    afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+                }
+            }
+            
+
+            oquanxuanK.onchange=function(){
+                if(oquanxuan.checked){
+                    for(var i=0;i<afuxuanK.length;i++){
+                        afuxuan[i].checked=1;
+                    }
+                }else{
+                    console.log(2);
+                    for(var i=0;i<afuxuanK.length;i++){
+                        afuxuan[i].checked=0;
+                    }
+                }
+            }
+
+
+            if(afuxuanK[0]){
+                for(var i=0;i<afuxuanK.length;i++){
+                    (function(index){
+                        afuxuanK[i].onchange=function(){
+                            var fuxuanPD=0;
+                            for(var j=0;j<afuxuanK.length;j++){
+                                if(afuxuan[j].checked){
+                                    fuxuanPD++;
+                                }
+                                console.log(afuxuan[j].checked);
+                            }
+                            console.log(fuxuanPD);
+                            if(fuxuanPD==afuxuanK.length){
+                                oquanxuan.checked=1;
+                            }else if(fuxuanPD!=afuxuanK.length){
+                                oquanxuan.checked=0;
+                            }
+                        }
+                    })(i)
+                }
+            }
+        })(i)
+    }
+}
+
+//消息列表页面
+function message_list(){
+
+}
+
+//消息发送页面
+function message_send(){
+    
 }

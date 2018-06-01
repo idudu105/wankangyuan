@@ -40,7 +40,7 @@
                         <a href="/wankangyuan/userInfo">
                             <div class="userbut">用户信息</div>
                         </a>
-                        <a href="javascript:;">
+                        <a href="/wankangyuan/message/viewMessage">
                             <div class="userbut">系统消息
                                 <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint2" />
                             </div>
@@ -420,14 +420,14 @@ function updateUserPassword() {
 }
 function updateHeadImg() {
     var file = $("#headImg")[0].files[0];
+    if(!/image\/\w+/.test(file.type)) {
+        return layer.msg('请确保文件为图像文件',function(){}),!1;
+    }
+    
     if(file.size >= 1024*1024*2){
         return layer.msg('头像大小超过2M,请更换图片!',function(){}),!1;
     }
     
-    
-    if(!/image\/\w+/.test(file.type)) {
-        return layer.msg('请确保文件为图像文件',function(){}),!1;
-    }
     var reader=new FileReader();
     reader.readAsDataURL(file);
     reader.onload=function(e) {
