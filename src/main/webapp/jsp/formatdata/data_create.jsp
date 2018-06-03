@@ -127,11 +127,10 @@
                     <div class="inportM">
                         <div class="inportMt">请把相关数据按照分类准确输入到EXCEL表格模板中，上传数据后，表格会自动配置相关内容。</div>
 
-                        <a href="javascript:;" class="inportMz inportMd">下载EXCEL模板</a>
+                        <a href="#" class="inportMz inportMd" id="downloadExcelMode">下载EXCEL模板</a>
                         <div class="inportMz inportMu">上传数据</div>
-                        <input type="file" class="inportMf" />
+                        <input type="file" class="inportMf" id="inportMf" onchange="upFile()"/>
                     </div>
-                    <input type="button"  class="fileaddbtn" onclick="upFiles()" value="提交" />
                 </div>
                 
                 
@@ -266,11 +265,8 @@
             </div>
         </div>
     </div>
-    <!-- 文件上传form，但是实际的文件上传是通过ajax实现的 -->
-	<form id="uploadForm" style="display:none;">
-	    <input type="file" name="file" onchange="upFile()" id="uploadFile"/>
-	</form>
-    
+
+
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
     
     <script type="text/javascript">
@@ -434,7 +430,62 @@
             
     	});
     	
+    	$("#downloadExcelMode").click(function (){
+    		var cs_id = $("#source_Select").val();
+    		window.location.href="/wankangyuan/export/sourceDataModel?cs_id="+cs_id;
+    	});
     	
+    	$(".pro_export").click(function (){
+    		var cs_id = $("#source_Select").val();
+    		var afuxuanK=document.querySelectorAll('.fuxuanK2');
+    		
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            
+            var sourceDataIds = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		sourceDataIds.push(afuxuan[i].name);
+            	}
+            }
+            
+            if(sourceDataIds == ""){
+            	alert("请勾选待公开的选项！");
+            	return;
+            }
+            
+            window.location.href="/wankangyuan/export/sourceData?cs_id="+cs_id+"&sourceDataIds="+sourceDataIds;
+            
+            
+    	});
+    	
+    	function upFile(){
+    		var cs_id = $("#source_Select").val();
+    		var file = document.getElementById("inportMf").files[0];
+            var formdata = new FormData();
+            formdata.append('file', file);
+    		$.ajax({
+	            url: '/wankangyuan/import/sourceData?cs_id='+cs_id,
+	            type: 'POST',
+	            data: formdata,
+	            async: false,
+	            cache: false,
+	            contentType: false,
+	            processData: false,
+	            success: function (data) {
+	            	if(data.result == false){
+	            		alert(data.message)
+	            	}else{
+	            		window.location.href="/wankangyuan/sourceData/firstIn?type=2";
+	            	}
+	            },
+	            error: function () {
+	            	alert("联网失败");
+	            }
+	        });
+    	}
     
     </script>
 

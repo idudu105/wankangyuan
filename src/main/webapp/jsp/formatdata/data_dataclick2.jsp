@@ -61,7 +61,8 @@
                         <input id="formatNodeId" value="${formatNodeId}" style="display:none;"/>
                         <input id="sourceDataId" value="${sourceDataId}" style="display:none;"/>
                     </div>
-                    <div class="app_expexport">导出</div>
+                    <div class="app_expexport app_expexport_node">导出结点</div>
+                    <div class="app_expexport app_expexport_type">导出格式类型</div>
                 </div>
             </div>
             <div class="prodainm">
@@ -229,9 +230,9 @@
                         <div class="inportM">
                             <div class="inportMt">请把相关数据按照分类准确输入到EXCEL表格模板中，上传数据后，表格会自动配置相关内容。</div>
 
-                            <a href="javascript:;" class="inportMz inportMd">下载EXCEL模板</a>
+                            <a href="#" class="inportMz inportMd">下载EXCEL模板</a>
                             <div class="inportMz inportMu">上传数据</div>
-                            <input type="file" class="inportMf" />
+                            <input type="file" class="inportMf" id="inportMf" onchange="upFile()"/>
                         </div>
                         <input type="button" class="inportB" value="提交" />
                     </div>
@@ -509,6 +510,106 @@
             		alert("联网失败");
             	}
             });
+    	}
+    	
+    	$(".app_expexport_node").click(function (){
+    		var afuxuanK=document.querySelectorAll('.fuxuanK42');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ft_ids = [];
+            var formatNodeIds = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		formatNodeIds.push(afuxuan[i].name);
+            		ft_ids.push(afuxuan[i].value);
+            	}
+            }
+            if(ft_ids.length > 1 || formatNodeIds.length > 1){
+            	alert("最多选择一个结点！");
+            	return;
+            }
+            if(ft_ids == "" || formatNodeIds == ""){
+         	   alert("请选择待导出数据的结点！");
+         	   return;
+            }
+            var cs_id = $('#cs_id').val();
+    		var ft_id = ft_ids.join(",");
+    		var formatNodeId = formatNodeIds.join(",");
+           	window.location.href="/wankangyuan/export/formatNode?cs_id="+cs_id+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+           	
+    	});
+    	
+    	$(".app_expexport_type").click(function (){
+    		
+    		var afuxuanK=document.querySelectorAll('.fuxuanK41');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ft_ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ft_ids.push(afuxuan[i].name);
+            	}
+            }
+            if(ft_ids.length > 1){
+            	alert("最多选择一种格式数据类型！");
+            	return;
+            }
+           	if(ft_ids == ""){
+        	   alert("请选择待导出数据的格式类型！");
+        	   return;
+           	}
+            var cs_id = $('#cs_id').val();
+    		var sourceDataId = $("#sourceDataId").val();
+    		var ft_id = ft_ids.join(",");
+           	window.location.href="/wankangyuan/export/formatType?cs_id="+cs_id+"&sourceDataId="+sourceDataId+"&ft_id="+ft_id;
+    	
+    	});
+    	
+    	$(".inportMd").click(function (){
+    		var ft_id = $("#ft_id").val();
+    		window.location.href="/wankangyuan/export/formatDataModel?ft_id="+ft_id;
+    	});
+    	
+    	$(".inportMu").click(function (){
+    		$("#inportMf").click();
+    	});
+    	
+    	//String cs_id, String ft_id, String formatNodeId)
+    	
+    	function upFile(){
+    		var cs_id = $("#cs_id").val();
+    		var ft_id = $("#ft_id").val();
+    		var formatNodeId = $("#formatNodeId").val();
+    		var sourceDataId = $("#sourceDataId").val();
+    		var file = document.getElementById("inportMf").files[0];
+            var formdata = new FormData();
+            formdata.append('file', file);
+            
+    		$.ajax({
+	            url: '/wankangyuan/import/formatData?cs_id='+cs_id+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId,
+	            type: 'POST',
+	            data: formdata,
+	            async: false,
+	            cache: false,
+	            contentType: false,
+	            processData: false,
+	            success: function (data) {
+	            	if(data.result == false){
+	            		alert(data.message)
+	            	}else{
+	            		
+	            		window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+	            				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+	            	}
+	            },
+	            error: function () {
+	            	alert("联网失败");
+	            }
+	        });
     	}
 
     	

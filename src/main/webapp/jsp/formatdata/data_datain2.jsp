@@ -57,7 +57,8 @@
                         <input id="cs_id" value="${source.cs_id }" style="display:none;"/>
                         <input id="sourceDataId" value="${sourceData[0]}" style="display:none;"/>
                     </div>
-                    <div class="app_expexport">导出</div>
+                    <div class="app_expexport app_expexport_node">导出结点</div>
+                    <div class="app_expexport app_expexport_type">导出格式类型</div>
                 </div>
             </div>
             <div class="prodainm">
@@ -271,6 +272,63 @@
     		window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
     				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
     	}
+    	
+    	$(".app_expexport_node").click(function (){
+    		var afuxuanK=document.querySelectorAll('.fuxuanK42');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ft_ids = [];
+            var formatNodeIds = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		formatNodeIds.push(afuxuan[i].name);
+            		ft_ids.push(afuxuan[i].value);
+            	}
+            }
+            if(ft_ids.length > 1 || formatNodeIds.length > 1){
+            	alert("最多选择一个结点！");
+            	return;
+            }
+            if(ft_ids == "" || formatNodeIds == ""){
+         	   alert("请选择待导出数据的结点！");
+         	   return;
+            }
+            var cs_id = $('#cs_id').val();
+    		var ft_id = ft_ids.join(",");
+    		var formatNodeId = formatNodeIds.join(",");
+           	window.location.href="/wankangyuan/export/formatNode?cs_id="+cs_id+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+           	
+    	});
+    	
+    	$(".app_expexport_type").click(function (){
+    		
+    		var afuxuanK=document.querySelectorAll('.fuxuanK41');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ft_ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ft_ids.push(afuxuan[i].name);
+            	}
+            }
+            if(ft_ids.length > 1){
+            	alert("最多选择一种格式数据类型！");
+            	return;
+            }
+           	if(ft_ids == ""){
+        	   alert("请选择待导出数据的格式类型！");
+        	   return;
+           	}
+            var cs_id = $('#cs_id').val();
+    		var sourceDataId = $("#sourceDataId").val();
+    		var ft_id = ft_ids.join(",");
+           	window.location.href="/wankangyuan/export/formatType?cs_id="+cs_id+"&sourceDataId="+sourceDataId+"&ft_id="+ft_id;
+    	
+    	});
     </script>
     
     

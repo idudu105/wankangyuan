@@ -152,7 +152,7 @@ public class ExportController {
 	 * @param ft_id
 	 */
 	@RequestMapping("/formatType")
-	public void formatType(HttpServletResponse response, String cs_id, String sourceDataId, String ft_id) {
+	public void formatType(HttpServletResponse response, String cs_id, String sourceDataId, String ft_id) { 
 		response.setContentType("application/vnd.ms-excel");
 		/**
 		 * 以下为生成Excel操作
@@ -186,7 +186,7 @@ public class ExportController {
 			row = sheet.createRow((short) 1);
 			for (int j = 0; j < metaDatas.size(); j++) {
 				cell = row.createCell(j);
-				cell.setCellValue(metaDatas.get(j).get(1));
+				cell.setCellValue(metaDatas.get(j).get(2));
 				cell.setCellStyle(style);
 			}
 
@@ -204,7 +204,7 @@ public class ExportController {
 			List<List<String>> dataDatas = HBaseFormatDataDao.getFormatDatas(cs_id, ft_id, formatNodeId, data);
 			for (int iRow = 0; iRow < dataDatas.size(); iRow++) {
 				row = sheet.createRow((short) iRow + 1);
-				for (int j = 0; j < dataDatas.size(); j++) {
+				for (int j = 0; j < data.size(); j++) {
 					cell = row.createCell(j);
 					cell.setCellValue(dataDatas.get(iRow).get(j + 1));
 					cell.setCellStyle(style);
@@ -261,7 +261,7 @@ public class ExportController {
 		row = sheet.createRow((short) 1);
 		for (int j = 0; j < metaDatas.size(); j++) {
 			cell = row.createCell(j);
-			cell.setCellValue(metaDatas.get(j).get(1));
+			cell.setCellValue(metaDatas.get(j).get(2));
 			cell.setCellStyle(style);
 		}
 
@@ -280,7 +280,7 @@ public class ExportController {
 		List<List<String>> dataDatas = HBaseFormatDataDao.getFormatDatas(cs_id, ft_id, formatNodeId, data);
 		for (int iRow = 0; iRow < dataDatas.size(); iRow++) {
 			row = sheet.createRow((short) iRow + 1);
-			for (int j = 0; j < dataDatas.size(); j++) {
+			for (int j = 0; j < data.size(); j++) {
 				cell = row.createCell(j);
 				cell.setCellValue(dataDatas.get(iRow).get(j + 1));
 				cell.setCellStyle(style);

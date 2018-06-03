@@ -131,6 +131,7 @@ public class FormatNodeController {
 		httpSession.setAttribute("data", data);
 		List<List<String>> dataDatas = HBaseFormatDataDao.getFormatDatas(cs_id, ft_id, formatNodeId, data);
 		httpSession.setAttribute("dataDatas", dataDatas);
+		httpSession.setAttribute("sourceDataId", sourceDataId);
 		if (type.equals("2")) {
 			return "redirect:/jsp/formatdata/data_dataclick2.jsp";
 		} else {
