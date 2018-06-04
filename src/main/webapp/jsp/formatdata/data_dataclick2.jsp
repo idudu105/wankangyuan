@@ -32,16 +32,15 @@
         <div class="box">
             <div class="top">
                 <h1><img src="/wankangyuan/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
-                <a href="project_mine.html">
-                    <div class="topT">项目</div>
+                <a href="/wankangyuan/project/selectMyProject">
+                	<div class="topT">项目</div>
                 </a>
                 <a href="/wankangyuan/sourceData/firstIn?type=1">
                     <div class="topT active">格式数据</div>
                 </a>
-                <a href="app_mine.html">
+                <a href="/wankangyuan/application/viewMine">
                     <div class="topT">应用</div>
-                </a>
-                <div class="touxiangK">
+                </a>                <div class="touxiangK">
                     <img src="/wankangyuan/static/img/touxiang.png" alt="" class="touxiang" />
                 </div>
                 <div class="nicheng">Peter</div>
@@ -141,18 +140,21 @@
 							</c:forEach>
                         </div>
                     </div>
+                    <br>
                     <div class="prodaclmRz2">
                         <div class="prodaclmRsxK">
                             <div class="prodaclmRsx">
                                 <div class="prodaclmRsxT">筛选</div>
                                 <img src="/wankangyuan/static/img/sanjiao_blue.png" alt="" class="prodaclmRsxI" />
                             </div>
-                            <div class="prodaclmRss">
+                            
+                            <div class="prodaclmRss" style="display:none;">
                                 <div class="prodaclmRssC">
                                     <img src="/wankangyuan/static/img/search.png" alt="" class="searchCi" />
                                     <input type="text" class="searchCt"  placeholder="搜索项目" />
                                 </div>
                             </div>
+                            
                             <div class="prodaclmRsB">
                                 <div class="prodaclmRsb clmRsb_inport">导入</div>
                                 <div class="prodaclmRsb clmRsb_remove">移除</div>
@@ -161,18 +163,12 @@
                             </div>
                         </div>
                         <div class="shaixuanZK">
-                            <div class="shaixuanZKli">
-                                <div class="shaixuanZKliT">数据1</div>
-                                <div class="shaixuanZKliI active"></div>
-                            </div>
-                            <div class="shaixuanZKli">
-                                <div class="shaixuanZKliT">数据2</div>
-                                <div class="shaixuanZKliI active"></div>
-                            </div>
-                            <div class="shaixuanZKli">
-                                <div class="shaixuanZKliT">数据3</div>
-                                <div class="shaixuanZKliI active"></div>
-                            </div>
+                        	<c:forEach items="${data}" var="dataTemp">
+	                            <div class="shaixuanZKli">
+	                                <div class="shaixuanZKliT">${dataTemp.ff_name }</div>
+	                                <div class="shaixuanZKliI active"></div>
+	                            </div>
+							</c:forEach>
                         </div>
                         <div class="prodaclmRsjK">
                             <div class="prodaclmRzT">

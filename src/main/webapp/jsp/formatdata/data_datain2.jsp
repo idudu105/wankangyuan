@@ -30,13 +30,13 @@
         <div class="box">
             <div class="top">
                 <h1><img src="/wankangyuan/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
-                <a href="project_mine.html">
-                    <div class="topT">项目</div>
+                <a href="/wankangyuan/project/selectMyProject">
+                	<div class="topT">项目</div>
                 </a>
                 <a href="/wankangyuan/sourceData/firstIn?type=1">
                     <div class="topT active">格式数据</div>
                 </a>
-                <a href="app_mine.html">
+                <a href="/wankangyuan/application/viewMine">
                     <div class="topT">应用</div>
                 </a>
                 <div class="touxiangK">

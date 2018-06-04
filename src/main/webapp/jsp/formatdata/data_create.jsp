@@ -109,14 +109,16 @@
 						<div class="pro_addli" id="${projectTemp.id }" >${projectTemp.p_name}</div>
 					</c:forEach>
                 </div>
+                
                 <div class="shaixuanZK">
-					<c:forEach items="${sourceFields}" var="sourceFieldTemp">
+                	<c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
 						<div class="shaixuanZKli">
-							<div class="shaixuanZKliT">${sourceFieldTemp.csf_name}</div>
-							<div class="shaixuanZKliI active"></div>
-						</div>
-					</c:forEach>
+	                        <div class="shaixuanZKliT">${sourceFieldTemp.csf_name}</div>
+	                        <div class="shaixuanZKliI active"></div>
+	                    </div>	
+					</c:forEach>	
                 </div>
+                
             </div>
             <div class="PJK">
                 <div class="inportK">
@@ -272,54 +274,48 @@
     <script type="text/javascript">
     
     	$("#deleteSourceDatas").click(function (){
-    		var result = confirm("确认删除选中的数据源数据吗？");
-    		if(result == true){
     			
     			var afuxuanK=document.querySelectorAll('.fuxuanK2');
-        		
                 var afuxuan=[];
                 for(var i=0;i<afuxuanK.length;i++){
                     afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
                 }
-                
                 var ids = [];
                 for(var i=0;i<afuxuanK.length;i++){
                 	if(afuxuan[i].checked){
                 		ids.push(afuxuan[i].name);
                 	}
                 }
-                
                 if(ids == ""){
                 	alert("请勾选待删除的选项！");
                 	return;
                 }
-                var cs_id = $("#source_Select").val();
-                                
-                $.ajax({
-                	url:"/wankangyuan/sourceData/deleteSourceDatas",
-                	type:"post",
-                	data:{
-                		sourceDataIds:ids.join(","),
-                		cs_id:cs_id
-                	},
-                	dataType:"json",
-                	success : function(data){
-                		if(data.result == true){
-                			alert(data.message);
-                			window.location.href="/wankangyuan/sourceData/firstIn?type=2";
-                		}else{
-                			alert(data.message);
-                		}
-                	},
-                	error : function(){
-                		alert("联网失败");
-                	}
-                	
-                });
-
-    		}else{
-    			return;
-    		}
+                var result = confirm("确认删除选中的数据源数据吗？");
+        		if(result == true){
+        			var cs_id = $("#source_Select").val();
+                    $.ajax({
+                    	url:"/wankangyuan/sourceData/deleteSourceDatas",
+                    	type:"post",
+                    	data:{
+                    		sourceDataIds:ids.join(","),
+                    		cs_id:cs_id
+                    	},
+                    	dataType:"json",
+                    	success : function(data){
+                    		if(data.result == true){
+                    			alert(data.message);
+                    			window.location.href="/wankangyuan/sourceData/firstIn?type=2";
+                    		}else{
+                    			alert(data.message);
+                    		}
+                    	},
+                    	error : function(){
+                    		alert("联网失败");
+                    	}
+                    });
+        		}else{
+        			return;
+        		}
     	});
     	
     	function datainHref(sourceDataId){
@@ -450,14 +446,11 @@
             		sourceDataIds.push(afuxuan[i].name);
             	}
             }
-            
             if(sourceDataIds == ""){
-            	alert("请勾选待公开的选项！");
+            	alert("请勾选源数据！");
             	return;
             }
-            
             window.location.href="/wankangyuan/export/sourceData?cs_id="+cs_id+"&sourceDataIds="+sourceDataIds;
-            
             
     	});
     	
@@ -486,6 +479,54 @@
 	            }
 	        });
     	}
+    	
+    	//将格式数据添加到项目
+    	$(".pro_addli").click(function (){
+    		
+    		var p_id = this.id;
+    		
+    		var cs_id = $("#source_Select").val();
+    		var afuxuanK=document.querySelectorAll('.fuxuanK2');
+    		
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            
+            var sourceDataIds = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		sourceDataIds.push(afuxuan[i].name);
+            	}
+            }
+            
+            if(sourceDataIds == ""){
+            	alert("请勾选源数据！");
+            	return;
+            }
+            
+            $.ajax({
+            	url:"/wankangyuan/projectData/insert",
+            	type:"post",
+            	data:{
+            		p_id:p_id,
+            		sourceDataIds:sourceDataIds.join(",")
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			alert(data.message);
+            		}else{
+            			alert(data.message);
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            	
+            });
+    		
+    	});
     
     </script>
 

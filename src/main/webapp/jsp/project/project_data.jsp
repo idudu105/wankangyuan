@@ -28,7 +28,7 @@
 		<div class="box">
 			<div class="top">
 				<h1>
-					<img src="img/newlogo2.png" height="70" width="218" alt=""
+					<img src="/wankangyuan/static/img/newlogo2.png" height="70" width="218" alt=""
 						class="logo" />
 				</h1>
 				<a href="project_mine.html">
@@ -41,18 +41,18 @@
                     <div class="topT ">应用</div>
                 </a>
 				<div class="touxiangK">
-					<img src="img/touxiang.png" alt="" class="touxiang" />
+					<img src="/wankangyuan/static/img/touxiang.png" alt="" class="touxiang" />
 				</div>
 				<div class="nicheng">Peter</div>
 				<div class="yanjiuquan">
 					<div class="yanjiuquanT">研究圈</div>
-					<img src="img/redpoint.png" height="11" width="11" alt=""
+					<img src="/wankangyuan/static/img/redpoint.png" height="11" width="11" alt=""
 						class="redpoint" />
 				</div>
 			</div>
 			<div class="top2">
 				<div class="top2C">
-					<div class="top2Ctl active">13例结直肠癌病人的基因表达</div>
+					<div class="top2Ctl active">${project.p_name }</div>
 					<a href="project_discuss.html"><div class="top2Ctr">讨论版</div></a> 
 					<a href="project_member.html"><div class="top2Ctr">成员</div></a> 
 					<a href="project_append.html"><div class="top2Ctr">应用结果</div></a> 
@@ -64,10 +64,11 @@
 			</div>
 			<div class="shaixuan">
 				<div class="shaixuanC">
+					<!-- 
 					<div class="listZT">
 						<div class="listZTli listZT1 active">
-							<img src="img/listZT1.png" alt="" class="listZT1i" /> <img
-								src="img/listZT1.png" alt="" class="listZT1i" />
+							<img src="/wankangyuan/static/img/listZT1.png" alt="" class="listZT1i" />
+							<img src="/wankangyuan/static/img/listZT1.png" alt="" class="listZT1i" />
 						</div>
 						<div class="listZTli listZT2">
 							<div class="listZT2d"></div>
@@ -76,20 +77,15 @@
 						</div>
 					</div>
 					<div class="jiangeline"></div>
+					 -->
+					
 					<div class="shaixuanBT">
 						<div class="shaixuanBTt">筛选</div>
 						<div class="shaixuanBTiK">
 							<img src="img/sanjiao_blue.png" alt="" class="shaixuanBTi" />
 						</div>
 					</div>
-					<!-- <div class="jiangeline"></div> -->
-					<!-- <div class="allK">
-                        <div class="allX">
-                            <img src="img/greentrue.png" alt="" class="allI active" />
-                        </div>
-                        <div class="allT">全选</div>
-                    </div> -->
-					<!-- <div class="pro_menu pro_exit">退出</div> -->
+
 					<div class="pro_menu pro_rem">移除</div>
 					
 					<select name="" id="source_Select" class="pro_menusel" onchange="sourceOnChange(this.value)" >
@@ -98,10 +94,9 @@
 						</c:forEach>						
 					</select>
 					
-					<!-- <div class="pro_menu pro_run">运行</div> -->
 					<div class="search2">
 						<div class="search2C">
-							<img src="img/search.png" alt="" class="search2Ci" /> <input
+							<img src="/wankangyuan/static/img/search.png" alt="" class="search2Ci" /> <input
 								type="text" class="search2Ct" placeholder="搜索数据" />
 						</div>
 					</div>
@@ -123,9 +118,9 @@
 						</div>
 						<div class="allT">全选</div>
 					</div>
-						<c:forEach items="${sourceFileds}" var="sourceFiled">
-							<div class="PJListli">${sourceFiled.csf_name}</div>
-						</c:forEach>					
+					<c:forEach items="${sourceFileds}" var="sourceFiled">
+						<div class="PJListli">${sourceFiled.csf_name}</div>
+					</c:forEach>					
 				</div>
 				<div class="PJListline"></div>
 				<div class="PJul">
@@ -219,8 +214,8 @@
 					<div class="BTSXc">
 						<div class="BTSXcli">
 							<div class="BTSXcliT">排序：</div>
-							<img src="img/sort_up.png" alt="" class="BTSXcliI" /> <img
-								src="img/sort_down.png" alt="" class="BTSXcliI" />
+							<img src="/wankangyuan/static/img/sort_up.png" alt="" class="BTSXcliI" /> <img
+								src="/wankangyuan/static/img/sort_down.png" alt="" class="BTSXcliI" />
 						</div>
 						<div class="BTSXcli">
 							<div class="BTSXcliT">过滤：</div>
@@ -261,13 +256,13 @@
 
 			<div class="pageK">
 				<div class="pageLR">
-					<img src="img/pageL.png" class="pageLRi" alt="" />
+					<img src="/wankangyuan/static/img/pageL.png" class="pageLRi" alt="" />
 				</div>
 				<div class="pageNUM active">1</div>
 				<div class="pageNUM ">2</div>
 				<div class="pageNUM">3</div>
 				<div class="pageLR">
-					<img src="img/pageR.png" class="pageLRi" alt="" />
+					<img src="/wankangyuan/static/img/pageR.png" class="pageLRi" alt="" />
 				</div>
 			</div>
 
@@ -286,11 +281,11 @@
 
 	<script type="text/javascript" src="/wankangyuan/js/jquery.min.js"></script>
 	<script type="text/javascript">
-	function sourceOnChange(cs_id) {
-        console.log("cs_id:"+cs_id)
-        var choose= $("#source_Select").val();
-	console.log("click:"+choose)
-    }
+		function sourceOnChange(cs_id) {
+	        console.log("cs_id:"+cs_id)
+	        var choose= $("#source_Select").val();
+			console.log("click:"+choose)
+	    }
 	</script>
 
 
