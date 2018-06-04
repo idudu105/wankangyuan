@@ -14,7 +14,7 @@
 <title>Document</title>
 </head>
 <link rel="stylesheet" type="text/css" href="/wankangyuan/static/css/project1.css" />
-<script type="text/javascript" src="/wankangyuan/static/js/project1.js"></script>
+<script type="text/javascript" src="/wankangyuan/jsp/project/js/project1.js"></script>
 <script type="text/javascript">
 	window.onload = function() {
 		project0();
@@ -57,7 +57,7 @@
 					<a href="project_member.html"><div class="top2Ctr">成员</div></a> 
 					<a href="project_append.html"><div class="top2Ctr">应用结果</div></a> 
 					<a href="project_app.html"><div class="top2Ctr">应用</div></a> 
-					<a href="/wankangyuan/projectFormatData/selectProjectFormatDataList"><div class="top2Ctr active">格式数据</div></a>
+					<a href="/wankangyuan/projectFormatData/getSourceDatas?p_id=${project.id}"><div class="top2Ctr active">格式数据</div></a>
                     <a href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId"><div class="top2Ctr">文件</div></a>
                     <a href="/wankangyuan/project/getProjectDetail"><div class="top2Ctr">基本信息</div></a>
 				</div>
@@ -81,13 +81,13 @@
 					<div class="shaixuanBT">
 						<div class="shaixuanBTt">筛选</div>
 						<div class="shaixuanBTiK">
-							<img src="img/sanjiao_blue.png" alt="" class="shaixuanBTi" />
+							<img src="/wankangyuan/static/img/sanjiao_blue.png" alt="" class="shaixuanBTi" />
 						</div>
 					</div>
 
 					<div class="pro_menu pro_rem">移除</div>
 					
-					<select name="" id="source_Select" class="pro_menusel" onchange="sourceOnChange(this.value)" >
+					<select id="source_Select" class="pro_menusel">
 						<c:forEach items="${sources}" var="source">
 							<option value="${source.cs_id }" >${source.cs_name}</option>
 						</c:forEach>						
@@ -101,9 +101,9 @@
 					</div>
 				</div>
 				<div class="shaixuanZK">
-					<c:forEach items="${sourceFileds}" var="sourceFiled">
+					<c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
 						<div class="shaixuanZKli">
-							<div class="shaixuanZKliT">${sourceFiled.csf_name}</div>
+							<div class="shaixuanZKliT">${sourceFieldTemp.csf_name}</div>
 							<div class="shaixuanZKliI active"></div>
 						</div>
 					</c:forEach>
@@ -117,8 +117,8 @@
 						</div>
 						<div class="allT">全选</div>
 					</div>
-					<c:forEach items="${sourceFileds}" var="sourceFiled">
-						<div class="PJListli">${sourceFiled.csf_name}</div>
+					<c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
+						<div class="PJListli">${sourceFieldTemp.csf_name}</div>
 					</c:forEach>					
 				</div>
 				<div class="PJListline"></div>
@@ -126,85 +126,32 @@
 					<c:forEach items="${sourceDatas}" var="sourceData">
 						<div class="PJli">
 							<div class="PJliC">
-								<div class="PJXZ"></div>
-								<c:forEach items="${sourceData}" var="sourceDataField" varStatus="status">	
-									<c:if test="${status.index==0}">
-										<div class="PJliCli2 dataname">
-											<a href="/wankangyuan/formatType/selectFormatType?datainname=${sourceDataField}&cs_id=1"> <span>${sourceDataField}</span>
-											</a>
-										</div>
+								
+								<c:forEach items="${sourceData}" var="sourceDataField" varStatus="status">
+								
+									<c:if test="${status.index==0}">										
+			                            <div class="fuxuanK2">
+			                                <input type="checkbox" class="input_check" name="${sourceDataField}" id="check${sourceDataField}">
+			                                <label for="check${sourceDataField}"></label>
+			                            </div>
 									</c:if>
-									<c:if test="${status.index!=0}">
+								
+									<c:if test="${status.index==1}">										
+										<div class="PJliCli2 dataname">
+			                                <a href="#" onclick="datainHref('${sourceData[0]}')">
+			                                    <span>${sourceDataField}</span>
+			                                </a>
+			                            </div>
+									</c:if>
+									
+									<c:if test="${status.index!=0 && status.index!=1}">
 										<div class="PJliCli2">${sourceDataField}</div>
 									</c:if>
+									
 								</c:forEach>		
 							</div>
 							<div class="PJliline"></div>
-							<div class="PJliB">
-								<div class="PJliB1">
-									<div class="PJliB1L">
-										<div class="PJliB1Lt">临床数据</div>
-										<div class="PJliBLi PJliBLi2"></div>
-									</div>
-									<div class="PJliBR">
-										<div class="PJliB2">
-											<div class="PJliB2L">
-												<div class="PJliB2Lk"></div>
-												<div class="PJliB2Lt">CT</div>
-												<div class="PJliBLi PJliBLi2"></div>
-											</div>
-											<div class="PJliBR">
-												<div class="PJliB2">
-													<div class="PJliB2L">
-														<div class="PJliB2Lk"></div>
-														<div class="PJliB2Lt">CT1</div>
-													</div>
-												</div>
-												<div class="PJliB2">
-													<div class="PJliB2L">
-														<div class="PJliB2Lk"></div>
-														<div class="PJliB2Lt">CT2</div>
-													</div>
-												</div>
-												<div class="PJliB2">
-													<div class="PJliB2L">
-														<div class="PJliB2Lk"></div>
-														<div class="PJliB2Lt">CT3</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="PJliB2">
-											<div class="PJliB2L">
-												<div class="PJliB2Lk"></div>
-												<div class="PJliB2Lt">XG</div>
-												<div class="PJliBLi PJliBLi2"></div>
-											</div>
-											<div class="PJliBR">
-												<div class="PJliB2">
-													<div class="PJliB2L">
-														<div class="PJliB2Lk"></div>
-														<div class="PJliB2Lt">XG1</div>
-													</div>
-												</div>
-												<div class="PJliB2">
-													<div class="PJliB2L">
-														<div class="PJliB2Lk"></div>
-														<div class="PJliB2Lt">XG2</div>
-													</div>
-												</div>
-												<div class="PJliB2">
-													<div class="PJliB2L">
-														<div class="PJliB2Lk"></div>
-														<div class="PJliB2Lt">XG3</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-	
-								</div>
-							</div>
+
 						</div>
 					</c:forEach>	 
 				</div>
@@ -278,14 +225,68 @@
 		</div>
 	</div>
 
-	<script type="text/javascript" src="/wankangyuan/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
 	<script type="text/javascript">
-	
-		function sourceOnChange(cs_id) {
-	        console.log("cs_id:"+cs_id)
-	        var choose= $("#source_Select").val();
-			console.log("click:"+choose)
-	    }
+		
+    	//进入到详情页
+    	function datainHref(sourceDataId){
+    		var cs_id = $("#source_Select").val();
+    		window.location.href="/wankangyuan/projectFormatData/getSourceDataById?cs_id="+cs_id+"&sourceDataId="+sourceDataId;
+    	}
+    	
+    	
+    	$("#source_Select").change(function(){
+    		cs_id = $("#source_Select").val();
+    		var p_id = ${project.id};
+   			window.location.href="/wankangyuan/projectFormatData/getSourceDatas?p_id="+p_id+"&cs_id="+cs_id;
+    	
+    	});
+    	
+    	$(".pro_rem").click(function (){
+    		
+			var p_id = ${project.id};
+    		var cs_id = $("#source_Select").val();
+    		var afuxuanK=document.querySelectorAll('.fuxuanK2');
+    		
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            
+            var sourceDataIds = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		sourceDataIds.push(afuxuan[i].name);
+            	}
+            }
+            
+            if(sourceDataIds == ""){
+            	alert("请勾选源数据！");
+            	return;
+            }
+            
+            $.ajax({
+            	url:"/wankangyuan/projectFormatData/remove",
+            	type:"post",
+            	data:{
+            		p_id:p_id,
+            		sourceDataIds:sourceDataIds.join(",")
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			alert(data.message);
+                		var p_id = ${project.id};
+               			window.location.href="/wankangyuan/projectFormatData/getSourceDatas?p_id="+p_id+"&cs_id="+cs_id;
+            		}else{
+            			alert(data.message);
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });
+    	});
 		
 	</script>
 

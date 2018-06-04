@@ -35,7 +35,9 @@
                 <a href="/wankangyuan/sourceData/firstIn?type=1">
                     <div class="topT">格式数据</div>
                 </a>
-                <div class="topT">应用</div>
+                <a href="/wankangyuan/application/viewMine">
+                    <div class="topT ">应用</div>
+                </a>
                 <div class="touxiangK">
                     <img src="/wankangyuan/static/img/touxiang.png" alt="" class="touxiang" />
                 </div>
@@ -48,178 +50,53 @@
             <div class="top2">
                 <div class="top2C">
                     <div class="top2Ctl active">
-                        <a href="javascript:history.go(-1);">
+                        <a href="/wankangyuan/projectFormatData/getSourceDatas?p_id=${project.id}">
                             <img src="/wankangyuan/static/img/back.png" height="20" width="20" alt="" class="backI" />
-                        </a>${datainname}
+                        </a>${sourceData[1]}
+                        <input id="cs_id" value="${source.cs_id }" style="display:none;"/>
+                        <input id="sourceDataId" value="${sourceData[0]}" style="display:none;"/>
                     </div>
                 </div>
             </div>
             <div class="prodainm">
                 <div class="prodainmL">
-                    <div class="PJliB1">
-                        <div class="PJliB1L">
-                            <div class="PJliB1Lt">临床数据</div>
-                            <div class="PJliBLi PJliBLi2"></div>
-                        </div>
-                        <div class="PJliBR">
-	                        <c:forEach items="${formatTypes}" var="formatType">
-	                            <div class="PJliB2">
-	                                <div class="PJliB2L">
-	                                    <div class="PJliB2Lk"></div>
-	                                    <div class="PJliB2Lt">${formatType.ft_name}</div>
-	                                    <div class="PJliBLi PJliBLi2"></div>
+                    <div class="PJliBK">
+						<c:forEach items="${formatTypeFolders}" var="formatTypeTemp" varStatus="status">
+							<div class="PJliB1">
+	                            <div class="PJliB1L">
+	                                <div class="fuxuanK4 fuxuanK41">
+	                                    <input type="checkbox" class="input_check" name="${formatTypeTemp.ft_id }" id="check1_${formatTypeTemp.ft_id }">
+	                                    <label for="check1_${formatTypeTemp.ft_id }"></label>
 	                                </div>
-	                                <div class="PJliBR">
-	                                	<c:forEach items="${formatType.formatTypeFloders}" var="formatTypeFloder" varStatus="status">
-		                                    <div class="PJliB2">
-		                                        <div class="PJliB2L">
-		                                            <div class="PJliB2Lk"></div>
-		   <!---------------------->                                         <a href="project_dataclick.html">
-		                                                <div class="PJliB2Lt">${formatTypeFloders[status.index].ft_name}</div>
-		                                            </a>
+	                                <div class="PJliB1Lt">${formatTypeTemp.ft_name }</div>
+	                                <div class="PJliBLi PJliBLi2"></div>
+	                            </div>
+	                            <div class="PJliBR">
+	                            	<c:forEach items="${formatTypeTemp.formatDataNodes}" var="formatDataNodeTemp" varStatus="status">
+										<div class="PJliB2">
+		                                    <div class="PJliB2L">
+		                                        <div class="fuxuanK4 fuxuanK42">
+		                                            <input type="checkbox" class="input_check" value="${formatTypeTemp.ft_id }" name="${formatDataNodeTemp.key}" id="check1_${formatDataNodeTemp.key}">
+		                                            <label for="check1_${formatDataNodeTemp.key}"></label>
+		                                        </div>
+		                                        <div class="PJliB2Lt" id="${formatDataNodeTemp.key}"
+		                                        	onclick="dataNodeClick('${formatDataNodeTemp.key}','${formatTypeTemp.ft_id }')">${formatDataNodeTemp.value}
 		                                        </div>
 		                                    </div>
-	                                    </c:forEach>
-	                                </div>
+		                                </div>
+									</c:forEach>
 	                            </div>
-	                        </c:forEach>
-                            
-                            <div class="PJliB2">
-                                <div class="PJliB2L">
-                                    <div class="PJliB2Lk"></div>
-                                    <div class="PJliB2Lt">XG</div>
-                                    <div class="PJliBLi PJliBLi2"></div>
-                                </div>
-                                <div class="PJliBR">
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <a href="project_dataclick.html">
-                                                <div class="PJliB2Lt">XG1</div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <a href="project_dataclick.html">
-                                                <div class="PJliB2Lt">XG2</div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <a href="project_dataclick.html">
-                                                <div class="PJliB2Lt">XG3</div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="PJliB1">
-                        <div class="PJliB1L">
-                            <div class="PJliB1Lt">分子数据</div>
-                            <div class="PJliBLi PJliBLi2"></div>
-                        </div>
-                        <div class="PJliBR">
-                            <div class="PJliB2">
-                                <div class="PJliB2L">
-                                    <div class="PJliB2Lk"></div>
-                                    <div class="PJliB2Lt">CT</div>
-                                    <div class="PJliBLi PJliBLi2"></div>
-                                </div>
-                                <div class="PJliBR">
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <a href="project_dataclick.html">
-                                                <div class="PJliB2Lt">CT1</div>
-                                            </a>
-                                            
-                                        </div>
-                                    </div>
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <a href="project_dataclick.html">
-                                                <div class="PJliB2Lt">CT2</div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <a href="project_dataclick.html">
-                                                <div class="PJliB2Lt">CT3</div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="PJliB2">
-                                <div class="PJliB2L">
-                                    <div class="PJliB2Lk"></div>
-                                    <div class="PJliB2Lt">XG</div>
-                                    <div class="PJliBLi PJliBLi2"></div>
-                                </div>
-                                <div class="PJliBR">
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <a href="project_dataclick.html">
-                                                <div class="PJliB2Lt">XG1</div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <a href="project_dataclick.html">
-                                                <div class="PJliB2Lt">XG2</div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <a href="project_dataclick.html">
-                                                <div class="PJliB2Lt">XG3</div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+	                        </div>
+						</c:forEach>
                     </div>
                 </div>
                 <div class="prodainmR">
-                    <div class="prodainmRz1">
-                        <div class="prodainmRz1L">姓名：</div>
-                        <div class="prodainmRz1R">张三</div>
-                    </div>
-                    <div class="prodainmRz1">
-                        <div class="prodainmRz1L">年龄：</div>
-                        <div class="prodainmRz1R">25</div>
-                    </div>
-                    <div class="prodainmRz1">
-                        <div class="prodainmRz1L">性别：</div>
-                        <div class="prodainmRz1R">男</div>
-                    </div>
-                    <div class="prodainmRz1">
-                        <div class="prodainmRz1L">病史：</div>
-                        <div class="prodainmRz1R">无</div>
-                    </div>
-                    <div class="prodainmRz2">
-                        <div class="prodainmRz2T">个人信息：</div>
-                        <div class="prodainmRz2B"></div>
-                    </div>
-                    <div class="prodainmRz2">
-                        <div class="prodainmRz2T">个人信息2：</div>
-                        <div class="prodainmRz2B"></div>
-                    </div>
+             		<c:forEach items="${source.sourceFields}" var="sourceFieldTemp" varStatus="status">
+						<div class="prodainmRz1">
+	                        <div class="prodainmRz1L">${sourceFieldTemp.csf_name}</div>
+	                        <div class="prodainmRz1R">${sourceData[status.index+1] }</div>
+                    	</div>
+					</c:forEach>
                 </div>
             </div>
             
@@ -238,5 +115,17 @@
             </div>
         </div>
     </div>
+    
+    <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+	<script type="text/javascript">
+	
+		function dataNodeClick(formatNodeId , ft_id){
+			var cs_id = $('#cs_id').val();
+			var sourceDataId = $("#sourceDataId").val();
+			window.location.href="/wankangyuan/projectFormatData/getFormatNodeById?cs_id="
+					+cs_id+"&sourceDataId="+sourceDataId+"&type=1&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+		}
+		
+	</script>
 </body>
 </html>

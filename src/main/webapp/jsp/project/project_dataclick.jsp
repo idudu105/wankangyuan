@@ -51,231 +51,116 @@
             <div class="top2">
                 <div class="top2C">
                     <div class="top2Ctl active">
-                        <a href="javascript:history.go(-1);">
+                        <a href="/wankangyuan/projectFormatData/getSourceDataById?cs_id=${formatTypeFolders[0].cs_id}&sourceDataId=${sourceDataId}">
                             <img src="/wankangyuan/static/img/back.png" height="20" width="20" alt="" class="backI" />
-                        </a>张三
+                        </a>${sourceData[1]}
+                        <input id="cs_id" value="${formatTypeFolders[0].cs_id }" style="display:none;"/>
+                        <input id="ft_id" value="${data[0].ft_id }" style="display:none;"/>
+                        <input id="formatNodeId" value="${formatNodeId}" style="display:none;"/>
+                        <input id="sourceDataId" value="${sourceDataId}" style="display:none;"/>
                     </div>
                 </div>
             </div>
             <div class="prodainm">
                 <div class="prodainmL">
-                    <div class="PJliB1">
-                        <div class="PJliB1L">
-                            <div class="PJliB1Lt">临床数据</div>
-                            <div class="PJliBLi PJliBLi2"></div>
-                        </div>
-                        <div class="PJliBR">
-                            <div class="PJliB2">
-                                <div class="PJliB2L">
-                                    <div class="PJliB2Lk"></div>
-                                    <div class="PJliB2Lt">CT</div>
-                                    <div class="PJliBLi PJliBLi2"></div>
-                                </div>
-                                <div class="PJliBR">
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">CT1</div>
-                                        </div>
-                                    </div>
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">CT2</div>
-                                        </div>
-                                    </div>
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">CT3</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="PJliB2">
-                                <div class="PJliB2L">
-                                    <div class="PJliB2Lk"></div>
-                                    <div class="PJliB2Lt">XG</div>
-                                    <div class="PJliBLi PJliBLi2"></div>
-                                </div>
-                                <div class="PJliBR">
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">XG1</div>
-                                        </div>
-                                    </div>
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">XG2</div>
-                                        </div>
-                                    </div>
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">XG3</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="PJliB1">
-                        <div class="PJliB1L">
-                            <div class="PJliB1Lt">分子数据</div>
-                            <div class="PJliBLi PJliBLi2"></div>
-                        </div>
-                        <div class="PJliBR">
-                            <div class="PJliB2">
-                                <div class="PJliB2L">
-                                    <div class="PJliB2Lk"></div>
-                                    <div class="PJliB2Lt">CT</div>
-                                    <div class="PJliBLi PJliBLi2"></div>
-                                </div>
-                                <div class="PJliBR">
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">CT1</div>
-                                        </div>
-                                    </div>
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">CT2</div>
-                                        </div>
-                                    </div>
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">CT3</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="PJliB2">
-                                <div class="PJliB2L">
-                                    <div class="PJliB2Lk"></div>
-                                    <div class="PJliB2Lt">XG</div>
-                                    <div class="PJliBLi PJliBLi2"></div>
-                                </div>
-                                <div class="PJliBR">
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">XG1</div>
-                                        </div>
-                                    </div>
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">XG2</div>
-                                        </div>
-                                    </div>
-                                    <div class="PJliB2">
-                                        <div class="PJliB2L">
-                                            <div class="PJliB2Lk"></div>
-                                            <div class="PJliB2Lt">XG3</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            		<div class="PJliBK">
+						<c:forEach items="${formatTypeFolders}" var="formatTypeTemp" varStatus="status">
+							<div class="PJliB1">
+	                            <div class="PJliB1L">
+	                                <div class="fuxuanK4 fuxuanK41">
+	                                    <input type="checkbox" class="input_check" name="${formatTypeTemp.ft_id }" id="check1_${formatTypeTemp.ft_id }">
+	                                    <label for="check1_${formatTypeTemp.ft_id }"></label>
+	                                </div>
+	                                <div class="PJliB1Lt">${formatTypeTemp.ft_name }</div>
+	                                <div class="PJliBLi PJliBLi2"></div>
+	                            </div>
+	                            <div class="PJliBR">
+	                            	<c:forEach items="${formatTypeTemp.formatDataNodes}" var="formatDataNodeTemp" varStatus="status">
+										<div class="PJliB2">
+		                                    <div class="PJliB2L">
+		                                        <div class="fuxuanK4 fuxuanK42">
+		                                            <input type="checkbox" class="input_check" value="${formatTypeTemp.ft_id }" name="${formatDataNodeTemp.key}" id="check1_${formatDataNodeTemp.key}">
+		                                            <label for="check1_${formatDataNodeTemp.key}"></label>
+		                                        </div>
+		                                        <div class="PJliB2Lt" id="${formatDataNodeTemp.key}"
+		                                        	onclick="dataNodeClick('${formatDataNodeTemp.key}','${formatTypeTemp.ft_id }')">${formatDataNodeTemp.value}
+		                                        </div>
+		                                        
+		                                    </div>
+		                                </div>
+									</c:forEach>
+	                            </div>
+	                        </div>
+						</c:forEach>
                     </div>
                 </div>
+                
+                
                 <div class="prodaclmR">
                     <div class="prodaclmRz">
+                        <div class="pdclmRz_ul">
+                        </div>
                         <div class="prodaclmRzT">
-                            <div class="prodaclmRzTi"></div>
+                            
                             <div class="prodaclmRzTt prodaclmRzTtmz">名称</div>
                             <div class="prodaclmRzTt prodaclmRzTtnr">内容</div>
                         </div>
                         <div class="prodaclmRzB">
-                            <div class="prodaclmRzBz">
-                                <div class="prodaclmRzTi"></div>
-                                <div class="prodaclmRzBzt prodaclmRzTtmz">机器1</div>
-                                <div class="prodaclmRzBzt prodaclmRzTtnr">机器人信息1</div>
-                            </div>
-                            <div class="prodaclmRzBz">
-                                <div class="prodaclmRzTi"></div>
-                                <div class="prodaclmRzBzt prodaclmRzTtmz">采集人1</div>
-                                <div class="prodaclmRzBzt prodaclmRzTtnr">采集人信息1</div>
-                            </div>
-                            <div class="prodaclmRzBz">
-                                <div class="prodaclmRzTi"></div>
-                                <div class="prodaclmRzBzt prodaclmRzTtmz">XX</div>
-                                <div class="prodaclmRzBzt prodaclmRzTtnr"></div>
-                            </div>
-                            <!-- <div class="prodaclmRzBz">
-                                <div class="prodaclmRzTi"></div>
-                                <div class="prodaclmRzBzt prodaclmRzTtmz">XX</div>
-                                <div class="prodaclmRzBzt prodaclmRzTtnr"></div>
-                            </div> -->
+                      		<c:forEach items="${metaDatas}" var="metaDataListTemp">
+	                            <div class="prodaclmRzBz">
+			                        <div class="prodaclmRzBzt prodaclmRzTtmz">${metaDataListTemp[1] }</div>
+			                        <div class="prodaclmRzBzt prodaclmRzTtmz">
+			                        	${metaDataListTemp[2] }
+			                        </div>			                        
+	                            </div>
+							</c:forEach>
                         </div>
                     </div>
+                    <br>
                     <div class="prodaclmRz2">
                         <div class="prodaclmRsxK">
                             <div class="prodaclmRsx">
                                 <div class="prodaclmRsxT">筛选</div>
                                 <img src="/wankangyuan/static/img/sanjiao_blue.png" alt="" class="prodaclmRsxI" />
                             </div>
-                            <div class="prodaclmRss">
-                                <div class="prodaclmRssC">
-                                    <img src="/wankangyuan/static/img/search.png" alt="" class="searchCi" />
-                                    <input type="text" class="searchCt"  placeholder="搜索项目" />
-                                </div>
-                            </div>
                         </div>
                         <div class="shaixuanZK">
-                            <div class="shaixuanZKli">
-                                <div class="shaixuanZKliT">数据1</div>
-                                <div class="shaixuanZKliI active"></div>
-                            </div>
-                            <div class="shaixuanZKli">
-                                <div class="shaixuanZKliT">数据2</div>
-                                <div class="shaixuanZKliI active"></div>
-                            </div>
-                            <div class="shaixuanZKli">
-                                <div class="shaixuanZKliT">数据3</div>
-                                <div class="shaixuanZKliI active"></div>
-                            </div>
+                        	<c:forEach items="${data}" var="dataTemp">
+	                            <div class="shaixuanZKli">
+	                                <div class="shaixuanZKliT">${dataTemp.ff_name }</div>
+	                                <div class="shaixuanZKliI active"></div>
+	                            </div>
+							</c:forEach>
                         </div>
                         <div class="prodaclmRsjK">
                             <div class="prodaclmRzT">
-                                <div class="prodaclmRzTi"></div>
-                                <div class="prodaclmRzTit">全选</div>
-                                <div class="prodaclmRzTt2 prodaclmRzTtsj1">数据1</div>
-                                <div class="prodaclmRzTt2 prodaclmRzTtsj2">数据2</div>
-                                <div class="prodaclmRzTt2 prodaclmRzTtsj3">数据3</div>
+                                <div class="quanxuanK fxK1">
+                                    <input type="checkbox" class="input_check" id="check4_0">
+                                    <label for="check4_0"></label>
+                                </div>
+                                <c:forEach items="${data}" var="dataTemp">
+		                            <div class="prodaclmRzTt2">${dataTemp.ff_name }</div>
+								</c:forEach>
                             </div>
                             <div class="prodaclmRzB">
-                                <div class="prodaclmRzBz">
-                                    <div class="prodaclmRzTi"></div>
-                                    <div class="prodaclmRzBzid">李四</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj1">数据11</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj2">数据22</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj3">数据33</div>
-                                </div>
-                                <div class="prodaclmRzBz">
-                                    <div class="prodaclmRzTi"></div>
-                                    <div class="prodaclmRzBzid">李四</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj1">数据11</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj2">数据22</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj3">数据33</div>
-                                </div>
-                                <div class="prodaclmRzBz">
-                                    <div class="prodaclmRzTi"></div>
-                                    <div class="prodaclmRzBzid">李四</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj1">数据11</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj2">数据22</div>
-                                    <div class="prodaclmRzTt3 prodaclmRzTtsj3">数据33</div>
-                                </div>
+                                    <c:forEach items="${dataDatas}" var="dataDataTemp">
+                                    	<div class="prodaclmRzBz">
+		                                    <c:forEach items="${dataDataTemp}" var="dataDataTempTemp" varStatus="status">
+		                                    	<c:if test="${status.index == 0 }">
+		                                    		<div class="fuxuanK5 fxK1 fx4">
+				                                        <input type="checkbox" class="input_check" name="${dataDataTempTemp}" id="check4_${dataDataTempTemp}">
+				                                        <label for="check4_${dataDataTempTemp}"></label>
+				                                    </div>
+		                                    	</c:if>
+		                                    	<c:if test="${status.index != 0 }">
+		                                    		<div class="prodaclmRzTt3 prodaclmRzTtsj3">${dataDataTempTemp}</div>
+		                                    	</c:if>
+											</c:forEach>
+										</div>   
+									</c:forEach>
                             </div>
-
                         </div>
                     </div>
-                    
                 </div>
             </div>
             
@@ -294,5 +179,19 @@
             </div>
         </div>
     </div>
+    
+    <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    
+    <script type="text/javascript">
+    
+	    function dataNodeClick(formatNodeId , ft_id){
+			var cs_id = $('#cs_id').val();
+			var sourceDataId = $("#sourceDataId").val();
+			window.location.href="/wankangyuan/projectFormatData/getFormatNodeById?cs_id="
+					+cs_id+"&sourceDataId="+sourceDataId+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+		}
+	
+	</script>
+	
 </body>
 </html>

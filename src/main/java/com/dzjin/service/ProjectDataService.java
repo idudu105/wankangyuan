@@ -23,7 +23,12 @@ public class ProjectDataService {
 	public int insert(ProjectDataRelation projectDataRelation){
 		return projectDataDao.insert(projectDataRelation);
 	}
+	
 	public List<String> select(Integer p_id){
 		return projectDataDao.select(p_id);
+	}
+	
+	public int remove(ProjectDataRelation projectDataRelation){
+		return projectDataDao.remove(projectDataRelation);
 	}
 }

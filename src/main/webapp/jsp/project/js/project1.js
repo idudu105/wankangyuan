@@ -314,25 +314,25 @@ function pro_deappendxq(){
 
 }
 
-// 格式数据列表
-function pro_dataLB(){
-
-//格式数据列表点击显示隐藏
-    var oPJul=document.querySelectorAll('.PJul')[0];//数据列表
-    var aPJliC=oPJul.querySelectorAll('.PJliC');//数据列表内数据行
-    var aPJliB=oPJul.querySelectorAll('.PJliB');//数据行隐藏栏
-
-    for(var i=0;i<aPJliC.length;i++){
-        (function(j){
-            aPJliC[j].onclick=function(){
-                for(var k=0;k<aPJliB.length;k++){
-                    aPJliB[k].className="PJliB";
-                }
-                aPJliB[j].className="PJliB active";
-            }
-        })(i)
-    }
-}
+//// 格式数据列表
+//function pro_dataLB(){
+//
+////格式数据列表点击显示隐藏
+//    var oPJul=document.querySelectorAll('.PJul')[0];//数据列表
+//    var aPJliC=oPJul.querySelectorAll('.PJliC');//数据列表内数据行
+//    var aPJliB=oPJul.querySelectorAll('.PJliB');//数据行隐藏栏
+//
+//    for(var i=0;i<aPJliC.length;i++){
+//        (function(j){
+//            aPJliC[j].onclick=function(){
+//                for(var k=0;k<aPJliB.length;k++){
+//                    aPJliB[k].className="PJliB";
+//                }
+//                aPJliB[j].className="PJliB active";
+//            }
+//        })(i)
+//    }
+//}
 
 
 
