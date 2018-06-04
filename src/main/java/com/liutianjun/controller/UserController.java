@@ -454,7 +454,7 @@ public class UserController {
 			//获取用户
 		    User user = userService.selectByUsername(name);
 		    
-		    String urlPic = StringUtils.substringAfter(toImagePath, "wtpwebapps");
+		    String urlPic = StringUtils.substringAfter(toImagePath, "webapps");
 		    
 		    user.setHeadimg(urlPic);
 		    if(0 ==userService.updateByPrimaryKey(user)) {

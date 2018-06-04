@@ -26,13 +26,13 @@
         <div class="box">
             <div class="top">
                 <h1><img src="<%=request.getContextPath()%>/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
-                <a href="project_mine.html">
+                <a href="/wankangyuan/project/selectMyProject">
                     <div class="topT">项目</div>
                 </a>
-                <a href="data_mine.html">
+                <a href="/wankangyuan/sourceData/firstIn?type=1">
                     <div class="topT">格式数据</div>
                 </a>
-                <a href="app_mine.html">
+                <a href="/wankangyuan/application/viewMine">
                     <div class="topT">应用</div>
                 </a>
                 <div class="touxiangK">
@@ -77,27 +77,29 @@
                     
                     <!-- 组织结构添加框 -->
                     <div class="zzjgK">
+                    <form action="/wankangyuan/organization/addNewOrg" method="post">
                         <div class="zzjgM">
                             <div class="zzjgMz">
                                 <div class="zzjgMzt">组织结构名称</div>
-                                <input type="text" class="zzjgMzp" />
+                                <input name="organizationName" type="text" class="zzjgMzp" />
                             </div>
                             <div class="zzjgMz">
                                 <div class="zzjgMzt">真实姓名</div>
-                                <input type="text" class="zzjgMzp" />
+                                <input name="realName" type="text" class="zzjgMzp" />
                             </div>
                             <div class="zzjgMz">
                                 <div class="zzjgMzt">联系电话</div>
-                                <input type="text" class="zzjgMzp" />
+                                <input name="phone" type="text" class="zzjgMzp" />
                             </div>
                             <div class="zzjgMz">
                                 <div class="zzjgMzt">单位简介</div>
-                                <textarea name=""class="zzjgMzta"></textarea>
+                                <textarea name="unitInfo" class="zzjgMzta"></textarea>
                             </div>
                         </div>
                         <div class="zzjgB">
                             <input type="button" class="zzjgBb" value="提交审核" />
                         </div>
+                    </form>
                     </div>
 
                     <!-- 组添加框 -->
@@ -322,75 +324,16 @@
                                         <img src="<%=request.getContextPath()%>/static/img/shenhe1.png" alt="" class="friendMMlTTzTi2" />
                                     </div>
                                     <div class="friendMMlTTzB">
-                                        <div class="friendMMlTTzBz" name="zu1">
+                                    <c:forEach items="${orglist }" var="group">
+                                    <c:if test="${org.id eq group.parentId }"></c:if>
+                                        <div class="friendMMlTTzBz" name="${group.id }">
                                             <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
-                                            <div class="friendMMlTTzBzt">组1_1</div>
+                                            <div class="friendMMlTTzBzt">${group.organizationName }</div>
                                         </div>
-                                        <div class="friendMMlTTzBz" name="zu2">
-                                            <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
-                                            <div class="friendMMlTTzBzt">组1_2</div>
-                                        </div>
-                                        <div class="friendMMlTTzBz" name="zu3">
-                                            <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
-                                            <div class="friendMMlTTzBzt">组1_3</div>
-                                        </div>
-                                        <div class="friendMMlTTzBz" name="zu4">
-                                            <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
-                                            <div class="friendMMlTTzBzt">组1_4</div>
-                                        </div>
+                                    </c:forEach>
                                     </div>
                                 </div>
                                 </c:forEach>
-                                <div class="friendMMlTTz" name="zuzhijiegou2">
-                                    <div class="friendMMlTTzT">
-                                        <span class="fri_name">组织结构2（</span><span>20</span><span>）</span>
-                                        <div class="friendMMlTTzTi"></div>
-                                        <img src="<%=request.getContextPath()%>/static/img/shenhe2.png" alt="" class="friendMMlTTzTi2" />
-                                    </div>
-                                    <div class="friendMMlTTzB">
-                                        <div class="friendMMlTTzBz" name="zu5">
-                                            <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
-                                            <div class="friendMMlTTzBzt">组2_1</div>
-                                        </div>
-                                        <div class="friendMMlTTzBz" name="zu6">
-                                            <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
-                                            <div class="friendMMlTTzBzt">组2_2</div>
-                                        </div>
-                                        <div class="friendMMlTTzBz" name="zu7">
-                                            <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
-                                            <div class="friendMMlTTzBzt">组2_3</div>
-                                        </div>
-                                        <div class="friendMMlTTzBz" name="zu8">
-                                            <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
-                                            <div class="friendMMlTTzBzt">组2_4</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="friendMMlTTz" name="zuzhijiegou3">
-                                    <div class="friendMMlTTzT">
-                                        <span class="fri_name">组织结构3（</span><span>20</span><span>）</span>
-                                        <div class="friendMMlTTzTi"></div>
-                                        <img src="<%=request.getContextPath()%>/static/img/shenhe3.png" alt="" class="friendMMlTTzTi2" />
-                                    </div>
-                                    <div class="friendMMlTTzB">
-                                        <div class="friendMMlTTzBz" name="zu9">
-                                            <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
-                                            <div class="friendMMlTTzBzt">组3_1</div>
-                                        </div>
-                                        <div class="friendMMlTTzBz" name="zu10">
-                                            <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
-                                            <div class="friendMMlTTzBzt">组3_2</div>
-                                        </div>
-                                        <div class="friendMMlTTzBz" name="zu11">
-                                            <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
-                                            <div class="friendMMlTTzBzt">组3_3</div>
-                                        </div>
-                                        <div class="friendMMlTTzBz" name="zu12">
-                                            <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
-                                            <div class="friendMMlTTzBzt">组3_4</div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                             <div class="friendMMlTB">
                                 <a href="javascript:;" class="friendMMlTBa">

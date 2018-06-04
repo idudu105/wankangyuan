@@ -27,7 +27,7 @@
                 <a href="/wankangyuan/project/selectMyProject">
                     <div class="topT">项目</div>
                 </a>
-                <a href="/wankangyuan/admin/formatdata">
+                <a href="/wankangyuan/sourceData/firstIn?type=1">
                     <div class="topT">格式数据</div>
                 </a>
                 <a href="/wankangyuan/application/viewMine">
