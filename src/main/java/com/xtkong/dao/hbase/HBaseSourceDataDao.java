@@ -100,6 +100,13 @@ public class HBaseSourceDataDao {
 		}
 		return sourceData;
 	}
+	public static List<List<String>> getSourceDataByIds(String cs_id, List<String> sourceDataIds, List<SourceField> sourceFields) {
+		String s="";
+		for (String sourceDataId : sourceDataIds) {
+			s=s+sourceDataId+",";
+		}
+		return getSourceDataByIds(cs_id, s, sourceFields);
+	}
 	public static List<List<String>> getSourceDataByIds(String cs_id, String sourceDataIds, List<SourceField> sourceFields) {
 		List<List<String>> sourceDatas = new ArrayList<>();
 		try {
@@ -107,6 +114,7 @@ public class HBaseSourceDataDao {
 			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id);
 			List<Get> gets = new ArrayList<Get>();
 			for (String sourceDataId : sourceDataIds.split(",")) {
+				if(sourceDataId!=null)
 					gets.add(new Get(Bytes.toBytes(sourceDataId)));
 			}
 			Result[] results = table.get(gets);

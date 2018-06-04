@@ -1,6 +1,10 @@
 package com.dzjin.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import com.dzjin.model.ProjectDataRelation;
 
@@ -14,5 +18,7 @@ public interface ProjectDataDao {
 	
 	@Insert("insert ignore into project_data_relation(p_id,source_data_id) values(#{p_id},#{source_data_id})")
 	public int insert(ProjectDataRelation projectDataRelation);
+	@Select("select source_data_id from project_data_relation where p_id=#{p_id}")
+	public List<String> select(@Param("p_id")Integer p_id);
 
 }

@@ -1,5 +1,7 @@
 package com.dzjin.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +23,7 @@ public class ProjectDataService {
 	public int insert(ProjectDataRelation projectDataRelation){
 		return projectDataDao.insert(projectDataRelation);
 	}
-
+	public List<String> select(Integer p_id){
+		return projectDataDao.select(p_id);
+	}
 }
