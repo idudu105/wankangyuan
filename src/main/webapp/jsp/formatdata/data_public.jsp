@@ -55,12 +55,14 @@
                     <a href="/wankangyuan/sourceData/firstIn?type=1"><div class="top2Cli">我的</div></a>
                     <a href="/wankangyuan/sourceData/firstIn?type=2"><div class="top2Cli">我创建的</div></a>
                     <a href="/wankangyuan/sourceData/firstIn?type=3"><div class="top2Cli top2CliYJ">公共</div></a>
+                    <!--
                     <div class="search">
                         <div class="searchC">
                             <img src="/wankangyuan/static/img/search.png" alt="" class="searchCi" />
                             <input type="text" class="searchCt"  placeholder="搜索项目" />
                         </div>
                     </div>
+                    -->
                 </div>
             </div>
             <div class="shaixuan">
@@ -89,7 +91,7 @@
                     </div>
 
                     <div class="pro_menu">添加至我的</div>
-                    <select name="" id="source_Select" class="pro_menusel" >
+                    <select id="source_Select" class="pro_menusel" >
 						<c:forEach items="${sources}" var="source">
 							<option value="${source.cs_id }" >${source.cs_name}</option>
 						</c:forEach>						
@@ -321,7 +323,7 @@
             }
             
             if(ids == ""){
-            	alert("请勾选待删除的选项！");
+            	alert("请勾选源数据！");
             	return;
             }else{
             	var cs_id = $("#source_Select").val();
@@ -334,6 +336,8 @@
         			},
         			success : function(data){
         				alert(data.message);
+        				cs_id = $("#source_Select").val();
+        				window.location.href="/wankangyuan/sourceData/getSourceDatas?type=1&cs_id="+cs_id;
         			},
         			error : function(){
         				alert("联网失败");
@@ -342,6 +346,18 @@
         		});
             }
     	});
+    	
+    	//更换数据源时，更新列表
+	  	$("#source_Select").change(function(){
+    		cs_id = $("#source_Select").val();
+   			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=3&cs_id="+cs_id;
+    	});
+    	
+    	//进入到详情页
+    	function datainHref(sourceDataId){
+    		var cs_id = $("#source_Select").val();
+    		window.location.href="/wankangyuan/sourceData/getSourceDataById?cs_id="+cs_id+"&sourceDataId="+sourceDataId+"&type=3";
+    	}
     	
     </script>
 </body>

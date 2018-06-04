@@ -40,7 +40,8 @@
                 </a>
                 <a href="/wankangyuan/application/viewMine">
                     <div class="topT">应用</div>
-                </a>                <div class="touxiangK">
+                </a>                
+                <div class="touxiangK">
                     <img src="/wankangyuan/static/img/touxiang.png" alt="" class="touxiang" />
                 </div>
                 <div class="nicheng">Peter</div>
@@ -52,7 +53,7 @@
             <div class="top2">
                 <div class="top2C">
                     <div class="top2Ctl active">
-                        <a href="/wankangyuan/sourceData/getSourceDataById?cs_id=${formatTypeFolders[0].cs_id }&sourceDataId=${sourceDataId}&type=2">
+                        <a href="/wankangyuan/sourceData/getSourceDataById?cs_id=${formatTypeFolders[0].cs_id}&sourceDataId=${sourceDataId}&type=2">
                             <img src="/wankangyuan/static/img/back.png" height="20" width="20" alt="" class="backI" />
                         </a>${sourceData[1]}
                         <input id="cs_id" value="${formatTypeFolders[0].cs_id }" style="display:none;"/>

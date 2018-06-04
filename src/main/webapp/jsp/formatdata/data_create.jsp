@@ -54,12 +54,14 @@
                     <a href="/wankangyuan/sourceData/firstIn?type=1"><div class="top2Cli">我的</div></a>
                     <a href="/wankangyuan/sourceData/firstIn?type=2"><div class="top2Cli top2CliYJ">我创建的</div></a>
                     <a href="/wankangyuan/sourceData/firstIn?type=3"><div class="top2Cli">公共</div></a>
+                    <!--
                     <div class="search">
                         <div class="searchC">
                             <img src="/wankangyuan/static/img/search.png" alt="" class="searchCi" />
                             <input type="text" class="searchCt"  placeholder="搜索项目" />
                         </div>
                     </div>
+                    -->
                 </div>
             </div>
             <div class="shaixuan">
@@ -318,25 +320,10 @@
         		}
     	});
     	
+    	//进入到详情页
     	function datainHref(sourceDataId){
     		var cs_id = $("#source_Select").val();
-    		$.ajax({
-    			url:"/wankangyuan/sourceData/getSourceDataById",
-    			type:"post",
-    			data:{
-    				cs_id:cs_id,
-    				sourceDataId:sourceDataId,
-    				type:2
-    			},
-    			success : function(){
-    				window.location.href="/wankangyuan/jsp/formatdata/data_datain2.jsp";
-    			},
-    			error : function(){
-    				alert("联网失败");
-    			}
-    			
-    		});
-    		
+    		window.location.href="/wankangyuan/sourceData/getSourceDataById?cs_id="+cs_id+"&sourceDataId="+sourceDataId+"&type=2";
     	}
     	
     	$("#source_Select").change(function(){

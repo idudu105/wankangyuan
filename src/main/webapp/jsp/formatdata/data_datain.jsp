@@ -29,15 +29,15 @@
         <div class="box">
             <div class="top">
                 <h1><img src="/wankangyuan/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
-                <a href="project_mine.html">
-                    <div class="topT">项目</div>
+                <a href="/wankangyuan/project/selectMyProject">
+                	<div class="topT">项目</div>
                 </a>
                 <a href="/wankangyuan/sourceData/firstIn?type=1">
                     <div class="topT active">格式数据</div>
                 </a>
-                <a href="app_mine.html">
+                <a href="/wankangyuan/application/viewMine">
                     <div class="topT">应用</div>
-                </a>
+                </a> 
                 <div class="touxiangK">
                     <img src="/wankangyuan/static/img/touxiang.png" alt="" class="touxiang" />
                 </div>
@@ -50,46 +50,46 @@
             <div class="top2">
                 <div class="top2C">
                     <div class="top2Ctl active">
-                        <a href="javascript:history.go(-1);">
+                        <a href="/wankangyuan/sourceData/firstIn?type=${type123}">
                             <img src="/wankangyuan/static/img/back.png" height="20" width="20" alt="" class="backI" />
                         </a>${sourceData[1]}
+                        <input id="cs_id" value="${source.cs_id }" style="display:none;"/>
+                        <input id="sourceDataId" value="${sourceData[0]}" style="display:none;"/>
                     </div>
-                    <div class="app_expexport">导出</div>
+                    <div class="app_expexport app_expexport_node">导出结点</div>
+                    <div class="app_expexport app_expexport_type">导出格式类型</div>
                 </div>
             </div>
             <div class="prodainm">
                 <div class="prodainmL">
                     <div class="PJliBK">
-
 						<c:forEach items="${formatTypeFolders}" var="formatTypeTemp" varStatus="status">
 							<div class="PJliB1">
 	                            <div class="PJliB1L">
-	                                <div class="fuxuanK4">
-	                                    <input type="checkbox" class="input_check" id="check1_0">
-	                                    <label for="check1_0"></label>
+	                                <div class="fuxuanK4 fuxuanK41">
+	                                    <input type="checkbox" class="input_check" name="${formatTypeTemp.ft_id }" id="check1_${formatTypeTemp.ft_id }">
+	                                    <label for="check1_${formatTypeTemp.ft_id }"></label>
 	                                </div>
 	                                <div class="PJliB1Lt">${formatTypeTemp.ft_name }</div>
 	                                <div class="PJliBLi PJliBLi2"></div>
 	                            </div>
 	                            <div class="PJliBR">
-	                            	<c:forEach items="${formatTypeTemp.formatTypeFolders}" var="sourceFieldTemp2" varStatus="status">
+	                            	<c:forEach items="${formatTypeTemp.formatDataNodes}" var="formatDataNodeTemp" varStatus="status">
 										<div class="PJliB2">
 		                                    <div class="PJliB2L">
-		                                        <div class="fuxuanK4">
-		                                            <input type="checkbox" class="input_check" id="check1_1">
-		                                            <label for="check1_1"></label>
+		                                        <div class="fuxuanK4 fuxuanK42">
+		                                            <input type="checkbox" class="input_check" value="${formatTypeTemp.ft_id }" name="${formatDataNodeTemp.key}" id="check1_${formatDataNodeTemp.key}">
+		                                            <label for="check1_${formatDataNodeTemp.key}"></label>
 		                                        </div>
-		                                        <div class="PJliB2Lt">${sourceFieldTemp2.floder }</div>
+		                                        <div class="PJliB2Lt" id="${formatDataNodeTemp.key}"
+		                                        	onclick="dataNodeClick('${formatDataNodeTemp.key}','${formatTypeTemp.ft_id }')">${formatDataNodeTemp.value}
+		                                        </div>
 		                                    </div>
 		                                </div>
 									</c:forEach>
-	                            	
-	                                
-
 	                            </div>
 	                        </div>
 						</c:forEach>
-   
                     </div>
                 </div>
                 <div class="prodainmR">
@@ -116,5 +116,74 @@
             </div>
         </div>
     </div>
+    
+    <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    
+    <script type="text/javascript">
+    
+	    function dataNodeClick(formatNodeId , ft_id){
+			var cs_id = $('#cs_id').val();
+			var sourceDataId = $("#sourceDataId").val();
+			window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+					+cs_id+"&sourceDataId="+sourceDataId+"&type=1&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+		}
+		
+		$(".app_expexport_node").click(function (){
+			var afuxuanK=document.querySelectorAll('.fuxuanK42');
+	        var afuxuan=[];
+	        for(var i=0;i<afuxuanK.length;i++){
+	            afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+	        }
+	        var ft_ids = [];
+	        var formatNodeIds = [];
+	        for(var i=0;i<afuxuanK.length;i++){
+	        	if(afuxuan[i].checked){
+	        		formatNodeIds.push(afuxuan[i].name);
+	        		ft_ids.push(afuxuan[i].value);
+	        	}
+	        }
+	        if(ft_ids.length > 1 || formatNodeIds.length > 1){
+	        	alert("最多选择一个结点！");
+	        	return;
+	        }
+	        if(ft_ids == "" || formatNodeIds == ""){
+	     	   alert("请选择待导出数据的结点！");
+	     	   return;
+	        }
+	        var cs_id = $('#cs_id').val();
+			var ft_id = ft_ids.join(",");
+			var formatNodeId = formatNodeIds.join(",");
+	       	window.location.href="/wankangyuan/export/formatNode?cs_id="+cs_id+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+	       	
+		});
+		
+		$(".app_expexport_type").click(function (){
+			
+			var afuxuanK=document.querySelectorAll('.fuxuanK41');
+	        var afuxuan=[];
+	        for(var i=0;i<afuxuanK.length;i++){
+	            afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+	        }
+	        var ft_ids = [];
+	        for(var i=0;i<afuxuanK.length;i++){
+	        	if(afuxuan[i].checked){
+	        		ft_ids.push(afuxuan[i].name);
+	        	}
+	        }
+	        if(ft_ids.length > 1){
+	        	alert("最多选择一种格式数据类型！");
+	        	return;
+	        }
+	       	if(ft_ids == ""){
+	    	   alert("请选择待导出数据的格式类型！");
+	    	   return;
+	       	}
+	        var cs_id = $('#cs_id').val();
+			var sourceDataId = $("#sourceDataId").val();
+			var ft_id = ft_ids.join(",");
+	       	window.location.href="/wankangyuan/export/formatType?cs_id="+cs_id+"&sourceDataId="+sourceDataId+"&ft_id="+ft_id;
+		
+		});
+    </script>
 </body>
 </html>

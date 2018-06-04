@@ -51,7 +51,7 @@
             <div class="top2">
                 <div class="top2C">
                     <div class="top2Ctl active">
-                        <a href="/wankangyuan/sourceData/firstIn?type=2">
+                        <a href="/wankangyuan/sourceData/firstIn?type=${type123}">
                             <img src="/wankangyuan/static/img/back.png" height="20" width="20" alt="" class="backI" />
                         </a>${sourceData[1]}
                         <input id="cs_id" value="${source.cs_id }" style="display:none;"/>
