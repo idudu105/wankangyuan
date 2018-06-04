@@ -246,6 +246,7 @@ public class SourceDataController {
 		List<FormatType> formatTypeFolders = HBaseFormatNodeDao.getFormatTypeFolders(cs_id, sourceDataId,
 				formatTypeMap);
 		httpSession.setAttribute("formatTypeFolders", formatTypeFolders);
+		httpSession.setAttribute("type123", type);
 		if (type.equals("2")) {
 			return "redirect:/jsp/formatdata/data_datain2.jsp";
 		} else {
