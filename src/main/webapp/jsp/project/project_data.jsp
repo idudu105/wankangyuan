@@ -31,13 +31,13 @@
 					<img src="/wankangyuan/static/img/newlogo2.png" height="70" width="218" alt=""
 						class="logo" />
 				</h1>
-				<a href="project_mine.html">
-					<div class="topT active">项目</div>
-				</a>
-				<a href="/wankangyuan/sourceData/firstIn?type=1">
+				<a href="/wankangyuan/project/selectMyProject?user_id=1">
+                	<div class="topT active">项目</div>
+                </a>
+                <a href="/wankangyuan/sourceData/firstIn?type=1">
                     <div class="topT">格式数据</div>
                 </a>
-				<a href="/wankangyuan/application/viewMine">
+                <a href="/wankangyuan/application/viewMine">
                     <div class="topT ">应用</div>
                 </a>
 				<div class="touxiangK">
@@ -52,7 +52,7 @@
 			</div>
 			<div class="top2">
 				<div class="top2C">
-					<div class="top2Ctl active">${project.p_name }</div>
+					<div class="top2Ctl active">${project.p_name}</div>
 					<a href="project_discuss.html"><div class="top2Ctr">讨论版</div></a> 
 					<a href="project_member.html"><div class="top2Ctr">成员</div></a> 
 					<a href="project_append.html"><div class="top2Ctr">应用结果</div></a> 
@@ -64,7 +64,7 @@
 			</div>
 			<div class="shaixuan">
 				<div class="shaixuanC">
-					<!-- 
+					
 					<div class="listZT">
 						<div class="listZTli listZT1 active">
 							<img src="/wankangyuan/static/img/listZT1.png" alt="" class="listZT1i" />
@@ -77,7 +77,6 @@
 						</div>
 					</div>
 					<div class="jiangeline"></div>
-					 -->
 					
 					<div class="shaixuanBT">
 						<div class="shaixuanBTt">筛选</div>
@@ -281,11 +280,13 @@
 
 	<script type="text/javascript" src="/wankangyuan/js/jquery.min.js"></script>
 	<script type="text/javascript">
+	
 		function sourceOnChange(cs_id) {
 	        console.log("cs_id:"+cs_id)
 	        var choose= $("#source_Select").val();
 			console.log("click:"+choose)
 	    }
+		
 	</script>
 
 
