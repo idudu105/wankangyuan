@@ -101,11 +101,31 @@ public class HBaseSourceDataDao {
 		return sourceData;
 	}
 	public static List<List<String>> getSourceDataByIds(String cs_id, List<String> sourceDataIds, List<SourceField> sourceFields) {
-		String s="";
-		for (String sourceDataId : sourceDataIds) {
-			s=s+sourceDataId+",";
+		List<List<String>> sourceDatas = new ArrayList<>();
+		try {
+			HBaseDB db = HBaseDB.getInstance();
+			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id);
+			List<Get> gets = new ArrayList<Get>();
+			for (String sourceDataId :sourceDataIds) {
+				if(sourceDataId!=null)
+					gets.add(new Get(Bytes.toBytes(sourceDataId)));
+			}
+			Result[] results = table.get(gets);
+			for (Result result : results) {
+				List<String> sourceData= new ArrayList<>();
+				// 获取行键sourceDataId
+				sourceData.add(Bytes.toString(result.getRow()));
+				for (SourceField sourceField : sourceFields) {
+					sourceData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+							Bytes.toBytes(String.valueOf(sourceField.getCsf_id())))));
+				}
+				sourceDatas.add(sourceData);
+			}
+			table.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		return getSourceDataByIds(cs_id, s, sourceFields);
+		return sourceDatas;
 	}
 	public static List<List<String>> getSourceDataByIds(String cs_id, String sourceDataIds, List<SourceField> sourceFields) {
 		List<List<String>> sourceDatas = new ArrayList<>();
