@@ -52,7 +52,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="search">
                         <div class="searchC">
                             <img src="/wankangyuan/static/img/search.png" alt="" class="searchCi" />
-                            <input type="text" class="searchCt"  placeholder="搜索项目" />
+                            <input type="text" class="searchCt"  placeholder="搜索项目" value="${projectSearchWord}"/>
                         </div>
                     </div>
                 </div>
@@ -60,13 +60,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <div class="shaixuan">
                 <div class="shaixuanC">
                     <div class="listZT">
-                        <a href="javascript:;">
-                            <div class="listZTli listZT1">
-                                <img src="/wankangyuan/static/img/listZT1.png"alt="" class="listZT1i" />
-                                <img src="/wankangyuan/static/img/listZT1.png" alt="" class="listZT1i" />
-                            </div>
-                        </a>
-                        <a href="project_create.jsp">
+                        
+                        <a href="<%=request.getContextPath()%>/jsp/project/project_create.jsp">
                             <div class="listZTli listZT2 active">
                                 <div class="listZT2d"></div>
                                 <div class="listZT2d"></div>
@@ -75,13 +70,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </a>
                     </div>
                     <div class="jiangeline"></div>
-                    <div class="shaixuanBT">
-                        <div class="shaixuanBTt">筛选</div>
-                        <div class="shaixuanBTiK">
-                            <img src="/wankangyuan/static/img/sanjiao_blue.png" alt="" class="shaixuanBTi" />
-                        </div>
-                    </div>
-                    <div class="jiangeline"></div>
+                   
                     <div class="allK">
                          <div class="quanxuanK">
                             <input type="checkbox" class="input_check" id="check0">
@@ -122,15 +111,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </c:forEach>
             </div>
 
-            <div class="pageK">
-                <div class="pageLR">
-                    <img src="/wankangyuan/static/img/pageL.png" class="pageLRi" alt="" />
-                </div>
-                <div class="pageNUM active">1</div>
-                <div class="pageLR">
-                    <img src="/wankangyuan/static/img/pageR.png" class="pageLRi" alt="" />
-                </div>
-            </div>
+            <div class="pageK" id="box"></div>
 
             <div class="bottom">
                 <a href="javascript:;">
@@ -174,6 +155,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </div>
     
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
     <script type="text/javascript">
     	
     	
@@ -209,10 +191,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	dataType:"json",
             	success : function(data){
             		if(data.result == true){
-            			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1";
+            			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1&type=2";
             		}else{
             			alert(data.message);
-            			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1";
+            			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1&type=2";
             		}
             	},
             	error : function(){
@@ -227,7 +209,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	//点击添加到我的项目之中
     	function deleteProjects(){
     		
-    		var afuxuanK=document.querySelectorAll('.fuxuanK2');
+    		var afuxuanK=document.querySelectorAll('.fuxuanK3');
     		
             var afuxuan=[];
             for(var i=0;i<afuxuanK.length;i++){
@@ -256,10 +238,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	dataType:"json",
             	success : function(data){
             		if(data.result == true){
-            			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1";
+            			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1&type=2";
             		}else{
             			alert(data.message);
-            			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1";
+            			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1&type=2";
             		}
             	},
             	error : function(){
@@ -270,6 +252,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             
     		
     	}
+    	
+    	$('#box').paging({
+            initPageNo: ${page}, // 初始页码
+            totalPages: Math.ceil(${total}/${rows}), //总页数
+            totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
+            slideSpeed: 600, // 缓动速度。单位毫秒
+            jump: true, //是否支持跳转
+            callback: function(page) { // 回调函数
+                console.log(page);
+            	var user_id=${user.id};
+                if(page!=${page}){
+                	var searchWord = $(".searchCt").val();
+                    window.location.href="/wankangyuan/project/selectCreatedProject?creator="+user_id+"&page="+page+"&strip=${rows}&type=2&searchWord="+searchWord;
+                }
+            }
+        });
+    	
+    	$(".searchCt").bind("keypress" , function(event){
+    		if(event.keyCode == 13){
+    			var user_id=${user.id};
+    			window.location.href="/wankangyuan/project/selectCreatedProject?creator="
+    					+user_id+"&type=2&searchWord="+this.value;
+    			
+    		}
+    	});
     
     
     

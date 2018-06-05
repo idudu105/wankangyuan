@@ -54,7 +54,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="search">
                         <div class="searchC">
                             <img src="/wankangyuan/static/img/search.png" alt="" class="searchCi" />
-                            <input type="text" class="searchCt"  placeholder="搜索项目" />
+                            <input type="text" class="searchCt"  placeholder="搜索项目" value="${projectSearchWord}"/>
                         </div>
                     </div>
                 </div>
@@ -62,19 +62,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <div class="shaixuan">
                 <div class="shaixuanC">
                     <div class="listZT">
-                        <a href="../pages/project_create2.jsp">
+                        <a href="<%=request.getContextPath()%>/jsp/project/project_create2.jsp">
                             <div class="listZTli listZT1 active">
                                 <img src="/wankangyuan/static/img/listZT1.png"alt="" class="listZT1i" />
                                 <img src="/wankangyuan/static/img/listZT1.png" alt="" class="listZT1i" />
                             </div>
                         </a>
-                        <a href="javascript:;">
-                            <div class="listZTli listZT2">
-                                <div class="listZT2d"></div>
-                                <div class="listZT2d"></div>
-                                <div class="listZT2d"></div>
-                            </div>
-                        </a>
+                        
                     </div>
                     <div class="jiangeline"></div>
                     <div class="shaixuanBT">
@@ -137,6 +131,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                     <div class="PJeditli">
                         <div class="PJeditliC">
+                            <div class="PJeditlit">项目编号：</div>
+                            <input type="text" class="PJeditlik" id="p_number_edit"/>
+                        </div>
+                    </div>
+                    <div class="PJeditli">
+                        <div class="PJeditliC">
                             <div class="PJeditlit">关键字：</div>
                             <input type="text" class="PJeditlik" id="key_words_edit"/>
                         </div>
@@ -185,7 +185,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                                </c:if>
 
 	                            </a>
-	                            <div class="PJliCli PJedit"><a onclick="edit('${project.id}','${project.p_name}','${project.is_asy}','${project.key_words}')">编辑</a></div>
+	                            <div class="PJliCli PJedit"><a onclick="edit('${project.id}','${project.p_name}','${project.p_number}','${project.is_asy}','${project.key_words}')">编辑</a></div>
 	                        </div>
 	                        <div class="PJliline"></div>
 	                    </div>
@@ -286,10 +286,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script type="text/javascript">
     	
     	//编辑前准备
-    	function edit(id , p_name , is_asy , key_words){
+    	function edit(id , p_name , p_number , is_asy , key_words){
     		
     		$("#id_edit").val(id);
     		$("#p_name_edit").val(p_name);
+    		$("#p_number_edit").val(p_number);
     		$("#key_words_edit").val(key_words);
     		
     	}
@@ -299,6 +300,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		
     		var id = $("#id_edit").val();
     		var p_name = $("#p_name_edit").val();
+    		var p_number = $("#p_number_edit").val();
     		var key_words = $("#key_words_edit").val();
     		
     		//进行ajax请求
@@ -309,6 +311,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			data:{
     				id:id,
     				p_name:p_name,
+    				p_number:p_number,
     				key_words:key_words
     			},
     			success : function(data){
@@ -430,10 +433,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 console.log(page);
             	var user_id=${user.id};
                 if(page!=${page}){
-                    window.location.href="/wankangyuan/project/selectCreatedProject?creator="+user_id+"&page="+page+"&strip=${rows}";
+                	var searchWord = $(".searchCt").val();
+                    window.location.href="/wankangyuan/project/selectCreatedProject?creator="+user_id+"&page="+page+"&strip=${rows}&searchWord="+searchWord;
                 }
             }
         });
+    	
+    	$(".searchCt").bind("keypress" , function(event){
+    		if(event.keyCode == 13){
+    			var user_id=${user.id};
+    			window.location.href="/wankangyuan/project/selectCreatedProject?creator="
+    					+user_id+"&searchWord="+this.value;
+    			
+    		}
+    	});
     
     
     

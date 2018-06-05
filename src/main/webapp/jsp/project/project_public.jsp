@@ -52,7 +52,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="search">
                         <div class="searchC">
                             <img src="/wankangyuan/static/img/search.png" alt="" class="searchCi" />
-                            <input type="text" class="searchCt"  placeholder="搜索项目" />
+                            <input type="text" class="searchCt"  placeholder="搜索项目" value="${projectSearchWord}"/>
                         </div>
                     </div>
                 </div>
@@ -60,17 +60,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <div class="shaixuan">
                 <div class="shaixuanC">
                     <div class="listZT">
-                        <a href="../pages/project_public2.jsp">
+                        <a href="<%=request.getContextPath()%>/jsp/project/project_public2.jsp">
                             <div class="listZTli listZT1 active">
                                 <img src="/wankangyuan/static/img/listZT1.png"alt="" class="listZT1i" />
                                 <img src="/wankangyuan/static/img/listZT1.png" alt="" class="listZT1i" />
-                            </div>
-                        </a>
-                        <a href="javascript:;">
-                            <div class="listZTli listZT2">
-                                <div class="listZT2d"></div>
-                                <div class="listZT2d"></div>
-                                <div class="listZT2d"></div>
                             </div>
                         </a>
                     </div>
@@ -276,10 +269,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             callback: function(page) { // 回调函数
                 console.log(page);
                 if(page!=${page}){
-                    window.location.href="/wankangyuan/project/selectPublicProject?page="+page+"&strip=${rows}";
+                	var searchWord = $(".searchCt").val();
+                    window.location.href="/wankangyuan/project/selectPublicProject?page="+page+"&strip=${rows}&searchWord="+searchWord;
                 }
             }
         });
+    	
+            $(".searchCt").bind("keypress" , function(event){
+        		if(event.keyCode == 13){
+        			var user_id=${user.id};
+        			window.location.href="/wankangyuan/project/selectPublicProject?searchWord="+this.value;
+        			
+        		}
+        	});
     
     
     </script>

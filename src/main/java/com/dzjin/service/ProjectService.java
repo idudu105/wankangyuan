@@ -61,9 +61,9 @@ public class ProjectService {
 	 * 选取公共项目
 	 * @return	公共项目列表
 	 */
-	public Map<String, Object> selectPublicProject(Integer page , Integer strip){
+	public Map<String, Object> selectPublicProject(Integer page , Integer strip  , String searchWord){
 		PageHelper.startPage(page, strip);
-		List<Project> projects = projectDao.selectPublicProject();
+		List<Project> projects = projectDao.selectPublicProject(searchWord);
 		PageInfo<Project> pageInfo = new PageInfo<Project>(projects);
 		Map<String, Object> result = new HashMap<String , Object>();
 		result.put("total", pageInfo.getTotal());
@@ -75,9 +75,9 @@ public class ProjectService {
 	 * 选取我创建的项目
 	 * @return	我创建的项目列表
 	 */
-	public Map<String, Object> selectCreatedProject(Integer creator ,  Integer page , Integer strip){
+	public Map<String, Object> selectCreatedProject(Integer creator ,  Integer page , Integer strip , String searchWord){
 		PageHelper.startPage(page, strip);
-		List<Project> projects = projectDao.selectCreatedProject(creator);
+		List<Project> projects = projectDao.selectCreatedProject(creator , searchWord);
 		PageInfo<Project> pageInfo = new PageInfo<Project>(projects);
 		Map<String, Object> result = new HashMap<String , Object>();
 		result.put("total", pageInfo.getTotal());
@@ -89,9 +89,9 @@ public class ProjectService {
 	 * 选取我加入的项目
 	 * @return	我加入的项目列表
 	 */
-	public Map<String, Object> selectMyProject(Integer user_id , Integer page , Integer strip){
+	public Map<String, Object> selectMyProject(Integer user_id , Integer page , Integer strip , String searchWord){
 		PageHelper.startPage(page, strip);
-		List<Project> projects = projectDao.selectMyProject(user_id);
+		List<Project> projects = projectDao.selectMyProject1(user_id , searchWord);
 		PageInfo<Project> pageInfo = new PageInfo<Project>(projects);
 		Map<String, Object> result = new HashMap<String , Object>();
 		result.put("total", pageInfo.getTotal());

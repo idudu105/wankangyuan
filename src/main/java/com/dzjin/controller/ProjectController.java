@@ -3,11 +3,11 @@ package com.dzjin.controller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dzjin.model.Project;
 import com.dzjin.service.ProjectService;
-import com.liutianjun.pojo.User;
 
 @Controller
 @RequestMapping(value = "/project")
@@ -108,56 +107,118 @@ public class ProjectController {
 		return map;
 	}
 	
-	
+	/**
+	 * 查询公开的项目
+	 * @param httpSession
+	 * @param page
+	 * @param strip
+	 * @param searchWord 查询过滤条件
+	 * @return
+	 */
 	@RequestMapping("/selectPublicProject")
-	public String selectPublicProject(HttpSession httpSession ,  Integer page , Integer strip){		
+	public String selectPublicProject(HttpSession httpSession ,  Integer page , Integer strip, String searchWord , Integer type){		
 		if(page == null){
 			page = 1;
 		}
 		if(strip == null){
-			strip = 10;
+			strip = 12;
+		}
+		if(searchWord == null){
+			searchWord = new String("");
+			httpSession.setAttribute("projectSearchWord", null);
+		}else{
+			//更新关键字
+			httpSession.setAttribute("projectSearchWord", searchWord);
 		}
 		Map<String, Object> map = new HashMap<String , Object>();
-		map = projectService.selectPublicProject(page, strip);
+		map = projectService.selectPublicProject(page, strip , searchWord);
 		httpSession.setAttribute("projects", map.get("list"));
 		httpSession.setAttribute("total", map.get("total"));
 		httpSession.setAttribute("page", page);
 		httpSession.setAttribute("rows", strip);
-		return "redirect:/jsp/project/project_public.jsp";
+		if(type == null || type == 1){
+			return "redirect:/jsp/project/project_public.jsp";
+		}else{
+			return "redirect:/jsp/project/project_public2.jsp";
+		}
+		
 	}
 	
+	/**
+	 * 查询我创建的项目
+	 * @param httpSession
+	 * @param creator
+	 * @param page
+	 * @param strip
+	 * @param searchWord 查询条件
+	 * @return
+	 */
 	@RequestMapping("/selectCreatedProject")
-	public String selectCreatedProject(HttpSession httpSession , Integer creator , Integer page , Integer strip){
+	public String selectCreatedProject(HttpSession httpSession , Integer creator , 
+			Integer page , Integer strip , String searchWord , Integer type){
 		if(page == null){
 			page = 1;
 		}
 		if(strip == null){
-			strip = 10;
+			strip = 12;
+		}
+		if(searchWord == null){
+			searchWord = new String("");
+			httpSession.setAttribute("projectSearchWord", null);
+		}else{
+			//更新关键字
+			httpSession.setAttribute("projectSearchWord", searchWord);
 		}
 		Map<String, Object> map = new HashMap<String , Object>();
-		map = projectService.selectCreatedProject(creator , page , strip);
+		map = projectService.selectCreatedProject(creator , page , strip ,searchWord);
 		httpSession.setAttribute("projects", map.get("list"));
 		httpSession.setAttribute("total", map.get("total"));
 		httpSession.setAttribute("page", page);
 		httpSession.setAttribute("rows", strip);
-		return "redirect:/jsp/project/project_create.jsp";
+		if(type == null || type == 1){
+			return "redirect:/jsp/project/project_create.jsp";
+		}else{
+			return "redirect:/jsp/project/project_create2.jsp";
+		}
+		
 	}
 	
+	/**
+	 * 查询我的项目
+	 * @param httpSession
+	 * @param user_id
+	 * @param page
+	 * @param strip
+	 * @param searchWord 查询条件
+	 * @return
+	 */
 	@RequestMapping("/selectMyProject")
-	public String selectMyProject(HttpSession httpSession , Integer user_id , Integer page , Integer strip){
+	public String selectMyProject(HttpSession httpSession , Integer user_id , Integer page , Integer strip, String searchWord , Integer type){
 		if(page == null){
 			page = 1;
 		}
 		if(strip == null){
-			strip = 10;
+			strip = 12;
+		}
+		if(searchWord == null){
+			searchWord = new String("");
+			httpSession.setAttribute("projectSearchWord", null);
+		}else{
+			//更新关键字
+			httpSession.setAttribute("projectSearchWord", searchWord);
 		}
 		Map<String, Object> map = new HashMap<String , Object>();
-		map = projectService.selectMyProject(user_id, page, strip);
+		map = projectService.selectMyProject(user_id, page, strip , searchWord);
 		httpSession.setAttribute("projects", map.get("list"));
 		httpSession.setAttribute("total", map.get("total"));
 		httpSession.setAttribute("page", page);
 		httpSession.setAttribute("rows", strip);
-		return "redirect:/jsp/project/project_mine.jsp";
+		if(type == null || type == 1){
+			return "redirect:/jsp/project/project_mine.jsp";
+		}else{
+			return "redirect:/jsp/project/project_mine2.jsp";
+		}
+		
 	}
 	
 	@RequestMapping("/addPublicProjectToMine")

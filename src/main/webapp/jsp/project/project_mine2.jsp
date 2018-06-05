@@ -25,7 +25,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div class="Box">
         <div class="box">
             <div class="top">
-                <h1><img src="/wankangyuan/static/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
+                <h1><img src="/wankangyuan/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
                 <a href="/wankangyuan/project/selectMyProject?user_id=1">
                 	<div class="topT active">项目</div>
                 </a>
@@ -36,12 +36,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="topT ">应用</div>
                 </a>
                 <div class="touxiangK">
-                    <img src="/wankangyuan/static/touxiang.png" alt="" class="touxiang" />
+                    <img src="/wankangyuan/static/img/touxiang.png" alt="" class="touxiang" />
                 </div>
                 <div class="nicheng">Peter</div>
                 <div class="yanjiuquan">
                     <div class="yanjiuquanT">研究圈</div>
-                    <img src="/wankangyuan/static/redpoint.png" height="11" width="11" alt="" class="redpoint" />
+                    <img src="/wankangyuan/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
                 </div>
             </div>
             <div class="top2">
@@ -51,8 +51,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <a href="/wankangyuan/project/selectPublicProject"><div class="top2Cli">公共</div></a>
                     <div class="search">
                         <div class="searchC">
-                            <img src="/wankangyuan/static/search.png" alt="" class="searchCi" />
-                            <input type="text" class="searchCt"  placeholder="搜索项目" />
+                            <img src="/wankangyuan/static/img/search.png" alt="" class="searchCi" />
+                            <input type="text" class="searchCt"  placeholder="搜索项目" value="${projectSearchWord}"/>
                         </div>
                     </div>
                 </div>
@@ -60,12 +60,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <div class="shaixuan">
                 <div class="shaixuanC">
                     <div class="listZT">
-                        <a href="javascript:;">
-                            <div class="listZTli listZT1">
-                                <img src="/wankangyuan/static/listZT1.png"alt="" class="listZT1i" />
-                                <img src="/wankangyuan/static/listZT1.png" alt="" class="listZT1i" />
-                            </div>
-                        </a>
                         <a href="project_mine.jsp">
                             <div class="listZTli listZT2 active">
                                 <div class="listZT2d"></div>
@@ -73,13 +67,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 <div class="listZT2d"></div>
                             </div>
                         </a>
-                    </div>
-                    <div class="jiangeline"></div>
-                    <div class="shaixuanBT">
-                        <div class="shaixuanBTt">筛选</div>
-                        <div class="shaixuanBTiK">
-                            <img src="/wankangyuan/static/img/sanjiao_blue.png" alt="" class="shaixuanBTi" />
-                        </div>
                     </div>
                     <div class="jiangeline"></div>
                     <div class="allK">
@@ -112,21 +99,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                    <div class="PJK2litime">
 	                        <div class="PJK2litimeT1">${project.create_datetime }</div>
 	                    </div>
-	                    <div class="PJK2lidetail">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet</div>
+						<div class="PJK2lidetail">${project.introduction }</div>
 	                </div>    
 	                	
                 </c:forEach>
             </div>
 
-            <div class="pageK">
-                <div class="pageLR">
-                    <img src="/wankangyuan/static/img/pageL.png" class="pageLRi" alt="" />
-                </div>
-                <div class="pageNUM active">1</div>
-                <div class="pageLR">
-                    <img src="/wankangyuan/static/img/pageR.png" class="pageLRi" alt="" />
-                </div>
-            </div>
+            <div class="pageK" id="box"></div>
 
             <div class="bottom">
                 <a href="javascript:;">
@@ -144,31 +123,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </div>
     
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
     <script type="text/javascript">
    
     	//点击添加到我的项目之中
     	function exit(){
-    		
     		var afuxuanK=document.querySelectorAll('.fuxuanK3');
-    		
             var afuxuan=[];
             for(var i=0;i<afuxuanK.length;i++){
                 afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
             }
-            
             var ids = [];
             for(var i=0;i<afuxuanK.length;i++){
             	if(afuxuan[i].checked){
             		ids.push(afuxuan[i].value);
             	}
             }
-            
-            
             if(ids == ""){
             	alert("请勾选项目！");
             	return;
             }
-            
             //网络请求添加公共项目到我的项目中
             $.ajax({
             	url:"/wankangyuan/project/exit",
@@ -179,20 +153,42 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	dataType:"json",
             	success : function(data){
             		if(data.result == true){
-            			window.location.href="/wankangyuan/project/selectMyProject?user_id=1";
+            			window.location.href="/wankangyuan/project/selectMyProject?type=2&user_id=1";
             		}else{
             			alert(data.message);
-            			window.location.href="/wankangyuan/project/selectMyProject?user_id=1";
+            			window.location.href="/wankangyuan/project/selectMyProject?type=2&user_id=1";
             		}
             	},
             	error : function(){
             		alert("联网失败");
             	}
-            	
-            });
-            
-    		
+            });	
     	}
+    	
+    	$('#box').paging({
+            initPageNo: ${page}, // 初始页码
+            totalPages: Math.ceil(${total}/${rows}), //总页数
+            totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
+            slideSpeed: 600, // 缓动速度。单位毫秒
+            jump: true, //是否支持跳转
+            callback: function(page) { // 回调函数
+                console.log(page);
+            	var user_id=${user.id};
+                if(page!=${page}){
+                	var searchWord = $(".searchCt").val();
+                    window.location.href="/wankangyuan/project/selectMyProject?user_id="+user_id+"&page="+page+"&strip=${rows}&type=2&searchWord="+searchWord;
+                }
+            }
+        });
+    	
+    	$(".searchCt").bind("keypress" , function(event){
+    		if(event.keyCode == 13){
+    			var user_id=${user.id};
+    			window.location.href="/wankangyuan/project/selectMyProject?user_id="
+    					+user_id+"&type=2&searchWord="+this.value;
+    			
+    		}
+    	});
     
     </script>
 </body>
