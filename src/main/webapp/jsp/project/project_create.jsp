@@ -238,15 +238,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
             </div>
 
-            <div class="pageK">
-                <div class="pageLR">
-                    <img src="/wankangyuan/static/img/pageL.png" class="pageLRi" alt="" />
-                </div>
-                <div class="pageNUM active">1</div>
-                <div class="pageLR">
-                    <img src="/wankangyuan/static/img/pageR.png" class="pageLRi" alt="" />
-                </div>
-            </div>
+            <div class="pageK" id="box"></div>
 
             <div class="bottom">
                 <a href="javascript:;">
@@ -290,6 +282,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </div>
     
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
     <script type="text/javascript">
     	
     	//编辑前准备
@@ -426,6 +419,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             
     		
     	}
+    	
+    	$('#box').paging({
+            initPageNo: ${page}, // 初始页码
+            totalPages: Math.ceil(${total}/${rows}), //总页数
+            totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
+            slideSpeed: 600, // 缓动速度。单位毫秒
+            jump: true, //是否支持跳转
+            callback: function(page) { // 回调函数
+                console.log(page);
+            	var user_id=${user.id};
+                if(page!=${page}){
+                    window.location.href="/wankangyuan/project/selectCreatedProject?creator="+user_id+"&page="+page+"&strip=${rows}";
+                }
+            }
+        });
     
     
     

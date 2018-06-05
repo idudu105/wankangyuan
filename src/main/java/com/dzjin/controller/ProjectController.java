@@ -110,20 +110,36 @@ public class ProjectController {
 	
 	
 	@RequestMapping("/selectPublicProject")
-	public String selectPublicProject(HttpSession httpSession){		
-		
-		List<Project> projects = projectService.selectPublicProject();
-		httpSession.setAttribute("projects", projects);	
-		
+	public String selectPublicProject(HttpSession httpSession ,  Integer page , Integer strip){		
+		if(page == null){
+			page = 1;
+		}
+		if(strip == null){
+			strip = 10;
+		}
+		Map<String, Object> map = new HashMap<String , Object>();
+		map = projectService.selectPublicProject(page, strip);
+		httpSession.setAttribute("projects", map.get("list"));
+		httpSession.setAttribute("total", map.get("total"));
+		httpSession.setAttribute("page", page);
+		httpSession.setAttribute("rows", strip);
 		return "redirect:/jsp/project/project_public.jsp";
 	}
 	
 	@RequestMapping("/selectCreatedProject")
 	public String selectCreatedProject(HttpSession httpSession , Integer creator , Integer page , Integer strip){
-		
-		List<Project> projects = projectService.selectCreatedProject(creator);
-		httpSession.setAttribute("projects", projects);
-		
+		if(page == null){
+			page = 1;
+		}
+		if(strip == null){
+			strip = 10;
+		}
+		Map<String, Object> map = new HashMap<String , Object>();
+		map = projectService.selectCreatedProject(creator , page , strip);
+		httpSession.setAttribute("projects", map.get("list"));
+		httpSession.setAttribute("total", map.get("total"));
+		httpSession.setAttribute("page", page);
+		httpSession.setAttribute("rows", strip);
 		return "redirect:/jsp/project/project_create.jsp";
 	}
 	
@@ -135,7 +151,6 @@ public class ProjectController {
 		if(strip == null){
 			strip = 10;
 		}
-		
 		Map<String, Object> map = new HashMap<String , Object>();
 		map = projectService.selectMyProject(user_id, page, strip);
 		httpSession.setAttribute("projects", map.get("list"));
