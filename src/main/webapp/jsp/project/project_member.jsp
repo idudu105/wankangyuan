@@ -1,3 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,7 +52,7 @@
                     <a href="project_discuss.html"><div class="top2Ctr">讨论版</div></a>
                     <a href="project_member.html"><div class="top2Ctr active">成员</div></a>
                     <a href="project_append.html"><div class="top2Ctr">应用结果</div></a>
-                    <a href="project_app.html"><div class="top2Ctr">应用</div></a>
+                    <a href="/wankangyuan/projectApp/selectProjectApp?p_id=${project.id}"><div class="top2Ctr">应用</div></a>
                     <a href="/wankangyuan/projectFormatData/selectProjectFormatDataList"><div class="top2Ctr">格式数据</div></a>
                     <a href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId"><div class="top2Ctr">文件</div></a>
                     <a href="/wankangyuan/project/getProjectDetail"><div class="top2Ctr">基本信息</div></a>

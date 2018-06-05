@@ -46,7 +46,7 @@ public interface ProjectDao {
 	 * 选取我加入的项目
 	 * @return	我加入的项目列表
 	 */
-	@Select("select * from project , project_user "
+	@Select("select project.* from project , project_user "
 			+ "where project.id=project_user.project_id "
 			+ "and project_user.user_id=#{user_id} "
 			+ "order by project.id desc")

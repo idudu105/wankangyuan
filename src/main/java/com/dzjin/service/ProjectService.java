@@ -2,7 +2,9 @@ package com.dzjin.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.dzjin.dao.ProjectDao;
 import com.dzjin.model.Project;
 import com.dzjin.model.ProjectUser;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 @Service
 public class ProjectService {
@@ -57,24 +61,47 @@ public class ProjectService {
 	 * 选取公共项目
 	 * @return	公共项目列表
 	 */
-	public List<Project> selectPublicProject(){
-		return projectDao.selectPublicProject();
+	public Map<String, Object> selectPublicProject(Integer page , Integer strip){
+		PageHelper.startPage(page, strip);
+		List<Project> projects = projectDao.selectPublicProject();
+		PageInfo<Project> pageInfo = new PageInfo<Project>(projects);
+		Map<String, Object> result = new HashMap<String , Object>();
+		result.put("total", pageInfo.getTotal());
+		result.put("list", projects);
+		return result;
 	}
 	
 	/**
 	 * 选取我创建的项目
 	 * @return	我创建的项目列表
 	 */
-	public List<Project> selectCreatedProject(Integer creator){
-		return projectDao.selectCreatedProject(creator);
+	public Map<String, Object> selectCreatedProject(Integer creator ,  Integer page , Integer strip){
+		PageHelper.startPage(page, strip);
+		List<Project> projects = projectDao.selectCreatedProject(creator);
+		PageInfo<Project> pageInfo = new PageInfo<Project>(projects);
+		Map<String, Object> result = new HashMap<String , Object>();
+		result.put("total", pageInfo.getTotal());
+		result.put("list", projects);
+		return result;
 	}
 	
 	/**
 	 * 选取我加入的项目
 	 * @return	我加入的项目列表
 	 */
+	public Map<String, Object> selectMyProject(Integer user_id , Integer page , Integer strip){
+		PageHelper.startPage(page, strip);
+		List<Project> projects = projectDao.selectMyProject(user_id);
+		PageInfo<Project> pageInfo = new PageInfo<Project>(projects);
+		Map<String, Object> result = new HashMap<String , Object>();
+		result.put("total", pageInfo.getTotal());
+		result.put("list", projects);
+		return result;
+	}
+	
 	public List<Project> selectMyProject(Integer user_id){
 		return projectDao.selectMyProject(user_id);
+
 	}
 	
 	public boolean addPublicProjectToMine(String idStrings , Integer user_id){

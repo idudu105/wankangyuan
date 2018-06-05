@@ -1,3 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,22 +19,22 @@
     window.onload=function(){
         project0();
         project1();
-        pro_mine();
+        // pro_mine();
     }
 </script>
 <body>
     <div class="Box">
         <div class="box">
             <div class="top">
-                <h1><img src="/wankangyuan/static/wankangyuan/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
-                <a href="/wankangyuan/project/selectMyProject">
+                <h1><img src="/wankangyuan/static/img/newlogo2.png" height="70" width="218" alt="" class="logo" /></h1>
+                <a href="/wankangyuan/project/selectMyProject?user_id=1">
                     <div class="topT active">项目</div>
                 </a>
                 <a href="/wankangyuan/sourceData/firstIn?type=1">
                     <div class="topT">格式数据</div>
                 </a>
                 <a href="/wankangyuan/application/viewMine">
-                    <div class="topT">应用</div>
+                    <div class="topT ">应用</div>
                 </a>
                 <div class="touxiangK">
                     <img src="/wankangyuan/static/img/touxiang.png" alt="" class="touxiang" />
@@ -41,18 +50,17 @@
                     <div class="top2Ctl active">13例结直肠癌病人的基因表达</div>
                     <a href="project_discuss.html"><div class="top2Ctr">讨论版</div></a>
                     <a href="project_member.html"><div class="top2Ctr">成员</div></a>
-                    <a href="project_append.html"><div class="top2Ctr">应用结果</div></a>
-                    <a href="javascript:;"><div class="top2Ctr active">应用</div></a>
-                    <a href="/wankangyuan/projectFormatData/getSourceDatas?p_id=${project.id}"><div class="top2Ctr">格式数据</div></a>
+                    <a href="javascript:;"><div class="top2Ctr active">应用结果</div></a>
+                    <a href="/wankangyuan/projectApp/selectProjectApp?p_id=${project.id}"><div class="top2Ctr">应用</div></a>
+                    <a href="/wankangyuan/projectFormatData/selectProjectFormatDataList"><div class="top2Ctr">格式数据</div></a>
                     <a href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId"><div class="top2Ctr">文件</div></a>
                     <a href="/wankangyuan/project/getProjectDetail"><div class="top2Ctr">基本信息</div></a>
-                    
                 </div>
             </div>
             <div class="shaixuan">
                 <div class="shaixuanC">
                     <div class="listZT">
-                        <a href="project_app2.html">
+                        <a href="project_append2.html">
                             <div class="listZTli listZT1 active">
                                 <img src="/wankangyuan/static/img/listZT1.png"alt="" class="listZT1i" />
                                 <img src="/wankangyuan/static/img/listZT1.png" alt="" class="listZT1i" />
@@ -65,8 +73,6 @@
                                 <div class="listZT2d"></div>
                             </div>
                         </a>
-                        
-                        
                     </div>
                     <div class="jiangeline"></div>
                     <div class="shaixuanBT">
@@ -84,17 +90,30 @@
                     </div> -->
                     <!-- <div class="pro_menu pro_exit">退出</div> -->
                     <div class="pro_menu pro_rem">移除</div>
-                    <div class="pro_menu pro_run">运行</div>
+                    <div class="pro_menu pro_canfabu">取消发布</div>
+                    <div class="pro_menu pro_fabu">发布</div>
+                    <a href="project_appendre.html">
+                        <div class="pro_menu pro_rerun">重新运行</div>
+                    </a>
+                    
                     <div class="search2">
                         <div class="search2C">
                             <img src="/wankangyuan/static/img/search.png" alt="" class="search2Ci" />
-                            <input type="text" class="search2Ct"  placeholder="搜索应用" />
+                            <input type="text" class="search2Ct"  placeholder="搜索应用结果" />
                         </div>
                     </div>
                 </div>
                 <div class="shaixuanZK">
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliT">应用结果名称</div>
+                        <div class="shaixuanZKliI active"></div>
+                    </div>
+                    <div class="shaixuanZKli">
                         <div class="shaixuanZKliT">应用名称</div>
+                        <div class="shaixuanZKliI active"></div>
+                    </div>
+                    <div class="shaixuanZKli">
+                        <div class="shaixuanZKliT">应用结果描述</div>
                         <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
@@ -106,11 +125,15 @@
                         <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">异步/同步</div>
+                        <div class="shaixuanZKliT">进度</div>
                         <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">关键字</div>
+                        <div class="shaixuanZKliT">发布状态</div>
+                        <div class="shaixuanZKliI active"></div>
+                    </div>
+                    <div class="shaixuanZKli">
+                        <div class="shaixuanZKliT">异步/即时</div>
                         <div class="shaixuanZKliI active"></div>
                     </div>
                 </div>
@@ -123,47 +146,67 @@
                         </div>
                         <div class="allT">全选</div>
                     </div>
+                    <div class="PJListli appendname">应用结果名称</div>
                     <div class="PJListli appname">应用名称</div>
+                    <div class="PJListli appendex">应用结果描述</div>
                     <div class="PJListli appcreater">创建人</div>
                     <div class="PJListli apptime">创建时间</div>
-                    <div class="PJListli PJyibu">异步/同步</div>
-                    <div class="PJListli PJkeyword">关键字</div>
+                    <div class="PJListli appjindu">进度</div>
+                    <div class="PJListli appfabuZT">发布状态</div>
+                    <div class="PJListli appYBorJS">异步/即时</div>
+
                 </div>
                 <div class="PJListline"></div>
                 <div class="PJul">
-                    
                     <div class="PJli">
                         <div class="PJliC">
                             <div class="PJXZ"></div>
-                            <div class="PJliCli appname">基因表达研究</div>
-                            <div class="PJliCli appcreater">创建者1</div>
-                            <div class="PJliCli apptime">2017-1-1</div>
-                            <div class="PJliCli PJyibu">异步</div>
-                            <div class="PJliCli PJkeyword">应用</div>
+                            <a href="project_appendxq.html">
+                                <div class="PJliCli appendname">13例结直肠癌病人的基因表达模式研究</div>
+                                <div class="PJliCli appname">基因表达研究</div>
+                                <div class="PJliCli appendex">病例对照研究是以现在确诊的患有某特定疾病</div>
+                                <div class="PJliCli appcreater">Peter</div>
+                                <div class="PJliCli apptime">2018-4-25</div>
+                                <div class="PJliCli appjindu">完成</div>
+                                <div class="PJliCli appfabuZT">已发布</div>
+                                <div class="PJliCli appYBorJS">即时</div>
+                            </a>
+                            
+                            
                         </div>
                         <div class="PJliline"></div>
                     </div>
-                    
                     <div class="PJli">
                         <div class="PJliC">
                             <div class="PJXZ"></div>
-                            <div class="PJliCli appname">基因表达研究</div>
-                            <div class="PJliCli appcreater">创建者1</div>
-                            <div class="PJliCli apptime">2017-1-1</div>
-                            <div class="PJliCli PJyibu">同步</div>
-                            <div class="PJliCli PJkeyword">应用</div>
+                            <a href="project_appendxq.html">
+                                <div class="PJliCli appendname">13例结直肠癌病人的基因表达模式研究</div>
+                                <div class="PJliCli appname">基因表达研究</div>
+                                <div class="PJliCli appendex">病例对照研究是以现在确诊的患有某特定疾病</div>
+                                <div class="PJliCli appcreater">Peter</div>
+                                <div class="PJliCli apptime">2018-4-25</div>
+                                <div class="PJliCli appjindu">完成</div>
+                                <div class="PJliCli appfabuZT">已发布</div>
+                                <div class="PJliCli appYBorJS">即时</div>
+                            </a>
+                            
                         </div>
                         <div class="PJliline"></div>
                     </div>
-                    
                     <div class="PJli">
                         <div class="PJliC">
                             <div class="PJXZ"></div>
-                            <div class="PJliCli appname">基因表达研究</div>
-                            <div class="PJliCli appcreater">创建者1</div>
-                            <div class="PJliCli apptime">2017-1-1</div>
-                            <div class="PJliCli PJyibu">异步</div>
-                            <div class="PJliCli PJkeyword">应用</div>
+                            <a href="project_appendxq.html">
+                                <div class="PJliCli appendname">13例结直肠癌病人的基因表达模式研究</div>
+                                <div class="PJliCli appname">基因表达研究</div>
+                                <div class="PJliCli appendex">病例对照研究是以现在确诊的患有某特定疾病</div>
+                                <div class="PJliCli appcreater">Peter</div>
+                                <div class="PJliCli apptime">2018-4-25</div>
+                                <div class="PJliCli appjindu">完成</div>
+                                <div class="PJliCli appfabuZT">已发布</div>
+                                <div class="PJliCli appYBorJS">即时</div>
+                            </a>
+                            
                         </div>
                         <div class="PJliline"></div>
                     </div>

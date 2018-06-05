@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dzjin.model.Project;
 import com.dzjin.service.ProjectService;
+import com.liutianjun.pojo.User;
 
 @Controller
 @RequestMapping(value = "/project")
@@ -118,7 +119,7 @@ public class ProjectController {
 	}
 	
 	@RequestMapping("/selectCreatedProject")
-	public String selectCreatedProject(HttpSession httpSession , Integer creator){
+	public String selectCreatedProject(HttpSession httpSession , Integer creator , Integer page , Integer strip){
 		
 		List<Project> projects = projectService.selectCreatedProject(creator);
 		httpSession.setAttribute("projects", projects);
@@ -127,11 +128,20 @@ public class ProjectController {
 	}
 	
 	@RequestMapping("/selectMyProject")
-	public String selectMyProject(HttpSession httpSession , Integer user_id){
+	public String selectMyProject(HttpSession httpSession , Integer user_id , Integer page , Integer strip){
+		if(page == null){
+			page = 1;
+		}
+		if(strip == null){
+			strip = 10;
+		}
 		
-		List<Project> projects = projectService.selectMyProject(user_id);
-		httpSession.setAttribute("projects", projects);
-		
+		Map<String, Object> map = new HashMap<String , Object>();
+		map = projectService.selectMyProject(user_id, page, strip);
+		httpSession.setAttribute("projects", map.get("list"));
+		httpSession.setAttribute("total", map.get("total"));
+		httpSession.setAttribute("page", page);
+		httpSession.setAttribute("rows", strip);
 		return "redirect:/jsp/project/project_mine.jsp";
 	}
 	
