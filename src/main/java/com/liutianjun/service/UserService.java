@@ -1,5 +1,6 @@
 package com.liutianjun.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -53,4 +54,16 @@ public interface UserService {
 
 	//批量重置密码
 	int resetPasswordByIds(Integer[] ids);
+	
+	//修改用户组织结构
+	int updateUserOrg(Integer organizationId,Integer[] ids);
+	
+	//根据分组获取用户
+    List<User> findAll(Integer organizationId);
+    
+    //根据用户名获取用户
+    List<User> findOrgAll(Integer isOrg, String username);
+
+    //批量移除成员组ID
+	int removeOrgByIds(Integer[] ids);
 }

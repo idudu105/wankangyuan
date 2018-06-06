@@ -33,4 +33,7 @@ public interface OrganizationService {
 	//处理添加组织结构请求
 	int dealAddOrgRequest(Integer id, Integer cmd);
 	
+	//根据id获取组织
+	Organization selectByPrimaryKey(Integer id);
+	
 }

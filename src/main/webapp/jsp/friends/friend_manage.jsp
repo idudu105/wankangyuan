@@ -37,19 +37,19 @@
                 </a>
                 <div class="touxiangK">
                     <a href="user_info.html">
-                        <img src="<%=request.getContextPath()%>/static/img/touxiang.png" alt="" class="touxiang" />
+                        <img src="${user.headimg }" alt="" class="touxiang" />
                     </a>
                     <div class="userbutK">
-                        <a href="user_info.html">
+                        <a href="/wankangyuan/userInfo">
                             <div class="userbut">用户信息</div>
                         </a>
-                        <a href="system_message.html">
+                        <a href="/wankangyuan/message/viewMessage">
                             <div class="userbut">系统消息
                                 <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint2" />
                             </div>
                         </a>
                         <div class="userbutline"></div>
-                        <a href="javascript:;">
+                        <a href="/wankangyuan/logout">
                             <div class="userbut">退出登录</div>
                         </a>
                     </div>
@@ -77,7 +77,7 @@
                     
                     <!-- 组织结构添加框 -->
                     <div class="zzjgK">
-                    <form action="/wankangyuan/organization/addNewOrg" method="post">
+                    <form id="addNewOrgForm">
                         <div class="zzjgM">
                             <div class="zzjgMz">
                                 <div class="zzjgMzt">组织结构名称</div>
@@ -97,57 +97,68 @@
                             </div>
                         </div>
                         <div class="zzjgB">
-                            <input type="button" class="zzjgBb" value="提交审核" />
+                            <input type="button" class="zzjgBb" onclick="addNewOrg()" value="提交审核" />
                         </div>
                     </form>
                     </div>
 
                     <!-- 组添加框 -->
+                    <form id="addNewGroupForm">
                     <div class="zzsyK">
                         <div class="zzsyKT">添加组到组织结构</div>
-                        <input type="text" class="zzsyKpd" style="display:none;" />
+                        <input id="formParentId" name="parentId" type="text" class="zzsyKpd" style="display:none;" />
                         <div class="zzsyM">
                             <div class="zzsyMz">
                                 <div class="zzsyMzt">组名称：</div>
-                                <input type="text" class="zzsyMzp" />
+                                <input name="organizationName" type="text" class="zzsyMzp" />
                             </div>
                         </div>
                         <div class="zzsyB">
-                            <input type="button" class="zzsyBb" value="确定" />
+                            <input type="button" class="zzsyBb" onclick="addNewGroup()" value="确定" />
                         </div>
                     </div>
+                    </form>
                     
                     <!-- 组修改框 -->
+                    <form id="updateGroupForm">
                     <div class="zzsy_editK">
                         <div class="zzsyKT">修改组名称</div>
-                        <input type="text" class="zzsy_editKpd" style="display:none;" />
+                        <input name="id" type="text" class="zzsy_editKpd" style="display:none;"/>
                         <div class="zzsyM">
                             <div class="zzsyMz">
                                 <div class="zzsyMzt">组名称：</div>
-                                <input type="text" class="zzsy_editMzp" />
+                                <input id="updateGroupName" name="organizationName" type="text" class="zzsy_editMzp" />
                             </div>
                         </div>
                         <div class="zzsyB">
-                            <input type="button" class="zzsyBb" value="确定" />
+                            <input type="button" class="zzsyBb" onclick="updateGroup()" value="确定" />
                         </div>
                     </div>
+                    </form>
 
                     <!-- 组删除框 -->
+                    <form id="deleteGroupForm">
                     <div class="zzsy_delK">
                         <div class="zzsyKT">确定删除选中组吗？（删除后不可恢复！）</div>
-                        <input type="text" class="zzsy_delKpd" style="display:none;" />
+                        <input name="id" type="text" class="zzsy_delKpd" style="display:none;" />
                         <div class="zzsyB">
-                            <input type="button" class="zzsyBb2" value="确定" />
+                            <input type="button" class="zzsyBb2" value="确定" onclick="deleteGroup()" />
                         </div>
                     </div>
+                    </form>
 
                     <!-- 添加成员框 -->
+                    
                     <div class="chengyuan_addK">
                         <div class="cyaddKT">添加成员</div>
+                        <form id="getUserByNameForm">
                         <div class="cyaddKT2">
-                            <input type="text" class="cyaddKT2p" placeholder="输入要搜索的用户名" />
-                            <input type="button" class="cyaddKT2b" value="搜索" />
+                            <input name="isOrg" type="hidden" value="0">
+                            <input name="username" type="text" class="cyaddKT2p" placeholder="输入要搜索的用户名" />
+                            <input type="button" class="cyaddKT2b" value="搜索" data-bind="click:showMembers" />
                         </div>
+                        </form>
+                        <form id="updateUserOrgForm">
                         <div class="cyaddKM">
                             <table class="cyaddKMtb">
                                 <tr class="biaotou">
@@ -156,44 +167,31 @@
                                     <th class="youxiang">邮箱</th>
                                     <th class="caozuo">操作</th>
                                 </tr>
-                                <tr class="biaoxiang">
-                                    <th class="touxiang"><img src="<%=request.getContextPath()%>/static/img/touxiang_1.png" alt="" class="touxiangi" /></th>
-                                    <th class="yonghuming">用户名1</th>
-                                    <th class="youxiang">133675888@163.com</th>
+                                <tbody data-bind="foreach: members">
+                                <tr class="biaoxiang" >
+                                    <th class="touxiang"><img data-bind="attr:{src: headimg}"  alt="" class="touxiangi" /></th>
+                                    <th class="yonghuming" data-bind="text: username"></th>
+                                    <th class="youxiang" data-bind="text: email"></th>
                                     <th class="caozuo">
-                                        <input type="checkbox" class="caozuochk" />
+                                        <input name="ids" type="checkbox" class="caozuochk" data-bind="value: id" />
                                     </th>
                                 </tr>
-                                <tr class="biaoxiang">
-                                    <th class="touxiang"><img src="<%=request.getContextPath()%>/static/img/touxiang_2.png" alt="" class="touxiangi" /></th>
-                                    <th class="yonghuming">用户名2</th>
-                                    <th class="youxiang">133675888@163.com</th>
-                                    <th class="caozuo">
-                                        <input type="checkbox" class="caozuochk" />
-                                    </th>
-                                </tr>
-                                <tr class="biaoxiang">
-                                    <th class="touxiang"><img src="<%=request.getContextPath()%>/static/img/touxiang_3.png" alt="" class="touxiangi" /></th>
-                                    <th class="yonghuming">用户名3</th>
-                                    <th class="youxiang">133675888@163.com</th>
-                                    <th class="caozuo">
-                                        <input type="checkbox" class="caozuochk" />
-                                    </th>
-                                </tr>
+                                </tbody>
                             </table>
                         </div>
 
                         <div class="cyaddKB">
                             <div class="cyaddKBt">添加到</div>
-                            <select name="" id="" class="cyaddKBs">
-                                <option value="" style="display:none;">请选择</option>
-                                <option value="">组1_1</option>
-                                <option value="">组2_1</option>
-                                <option value="">组3_1</option>
-                                <option value="">组4_1</option>
+                            <select name="organizationId" id="" class="cyaddKBs">
+                            <c:forEach items="${orgList }" var="org">
+                            <c:if test="${0 ne org.parentId}">
+                                <option value="${org.id }">${org.organizationName }</option>
+                            </c:if>
+                            </c:forEach>
                             </select>
-                            <input type="button" class="cyaddKBb" value="添加" />
+                            <input type="button" class="cyaddKBb" value="添加" onclick="updateUserOrg()" />
                         </div>
+	                    </form>
                     </div>
                         
                     <!-- 群发消息框 -->
@@ -215,9 +213,9 @@
                     <!-- 从组中移除框 -->
                     <div class="zuyichuK">
                         <div class="zzsyKT">确定从组中移除选中成员吗？</div>
-                        <input type="text" class="zzsy_delKpd" style="display:none;" />
+                        <input type="text" class="zzsy_delKpd" style="display:none" />
                         <div class="zzsyB">
-                            <input type="button" class="zzsyBb2" value="确定" />
+                            <input type="button" class="zzsyBb2" value="确定" data-bind="click: removeOrgers" />
                         </div>
                     </div>
 
@@ -226,7 +224,7 @@
                         <div class="zzsyKT">确定移除选中的好友吗？</div>
                         <input type="text" class="zzsy_delKpd" style="display:none;" />
                         <div class="zzsyB">
-                            <input type="button" class="zzsyBb2" value="确定" />
+                            <input type="button" class="zzsyBb2" value="确定" data-bind="click:removeMyFriends" />
                         </div>
                     </div>
 
@@ -252,7 +250,7 @@
                         <div class="search_2">
                             <div class="searchC">
                                 <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="searchCi" />
-                                <input type="text" class="searchCt"  placeholder="搜索" />
+                                <input id="myFriendSearch" name="friendName" type="text" class="searchCt"  placeholder="搜索" data-bind="event: { keyup: searchMyFriends}" />
                             </div>
                         </div>
                         <div class="friendMTrb friend_qunfa">群发消息</div>
@@ -270,10 +268,14 @@
                             <img src="<%=request.getContextPath()%>/static/img/close.png" alt="" class="hyaddKTi" />
                         </div>
                         <div class="cyaddKT2">
-                            <input type="text" class="cyaddKT2p" placeholder="输入要搜索的用户名" />
-                            <input type="button" class="cyaddKT2b" value="搜索" />
+                        <form id="orgMemberForm">
+                            <input type="hidden" name="isOrg" value="-1">
+                            <input name="username" type="text" class="cyaddKT2p" placeholder="输入要搜索的用户名" />
+                            <input type="button" class="cyaddKT2b" value="搜索" data-bind="click:showOrgMember" />
+                        </form>
                         </div>
                         <div class="cyaddKM">
+                        <form id="addFriendsForm">
                             <table class="cyaddKMtb">
                                 <tr class="biaotou">
                                     <th class="touxiang">头像</th>
@@ -281,34 +283,21 @@
                                     <th class="youxiang">邮箱</th>
                                     <th class="caozuo">操作</th>
                                 </tr>
+                                <tbody data-bind="foreach:orgMember">
                                 <tr class="biaoxiang">
-                                    <th class="touxiang"><img src="<%=request.getContextPath()%>/static/img/touxiang_1.png" alt="" class="touxiangi" /></th>
-                                    <th class="yonghuming">用户名1</th>
-                                    <th class="youxiang">133675888@163.com</th>
+                                    <th class="touxiang"><img data-bind="attr:{src: headimg}" alt="" class="touxiangi" /></th>
+                                    <th class="yonghuming" data-bind="text:username"></th>
+                                    <th class="youxiang" data-bind="text:email"></th>
                                     <th class="caozuo">
-                                        <input type="checkbox" class="caozuochk" />
+                                        <input name="ids" data-bind="value:id" type="checkbox" class="caozuochk" />
                                     </th>
                                 </tr>
-                                <tr class="biaoxiang">
-                                    <th class="touxiang"><img src="<%=request.getContextPath()%>/static/img/touxiang_2.png" alt="" class="touxiangi" /></th>
-                                    <th class="yonghuming">用户名2</th>
-                                    <th class="youxiang">133675888@163.com</th>
-                                    <th class="caozuo">
-                                        <input type="checkbox" class="caozuochk" />
-                                    </th>
-                                </tr>
-                                <tr class="biaoxiang">
-                                    <th class="touxiang"><img src="<%=request.getContextPath()%>/static/img/touxiang_3.png" alt="" class="touxiangi" /></th>
-                                    <th class="yonghuming">用户名3</th>
-                                    <th class="youxiang">133675888@163.com</th>
-                                    <th class="caozuo">
-                                        <input type="checkbox" class="caozuochk" />
-                                    </th>
-                                </tr>
+                                </tbody>
                             </table>
+                        </form>
                         </div>
                         <div class="cyaddKB">
-                            <input type="button" class="cyaddKBb" value="添加" />
+                            <input type="button" class="cyaddKBb" data-bind="click:sendAllFriendRequest" value="添加" />
                             <input type="button" class="cyaddKBb hyaddKBb_close" value="关闭" />
                         </div>
                     </div>
@@ -316,28 +305,31 @@
                     <div class="friendMMl">
                         <div class="friendMMlT"><!-- 除添加好友外 -->
                             <div class="friendMMlTT"><!-- 除我的好友外 -->
-                                <c:forEach items="${orgList }" var="org">
-                                <div class="friendMMlTTz active" name="${org.id }"><!-- 每个组织结构 -->
+                                <c:forEach items="${orgList }" var="org" varStatus="status">
+                                <c:if test="${org.parentId eq 0 }">
+                                <div class="friendMMlTTz <c:if test='${status.count eq 1}'>active</c:if>" name="${org.id }"><!-- 每个组织结构 -->
                                     <div class="friendMMlTTzT">
                                         <span class="fri_name">${org.organizationName }（</span><span>20</span><span>）</span>
                                         <div class="friendMMlTTzTi"></div>
                                         <img src="<%=request.getContextPath()%>/static/img/shenhe1.png" alt="" class="friendMMlTTzTi2" />
                                     </div>
                                     <div class="friendMMlTTzB">
-                                    <c:forEach items="${orglist }" var="group">
-                                    <c:if test="${org.id eq group.parentId }"></c:if>
+                                    <c:forEach items="${orgList }" var="group">
+                                    <c:if test="${org.id eq group.parentId }">
                                         <div class="friendMMlTTzBz" name="${group.id }">
                                             <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
-                                            <div class="friendMMlTTzBzt">${group.organizationName }</div>
+                                            <div class="friendMMlTTzBzt" data-bind="click:function(data, event){showOrgers(${group.id}) }">${group.organizationName }</div>
                                         </div>
+                                    </c:if>    
                                     </c:forEach>
                                     </div>
                                 </div>
+                                </c:if>
                                 </c:forEach>
                             </div>
                             <div class="friendMMlTB">
                                 <a href="javascript:;" class="friendMMlTBa">
-                                    <span>我的好友（</span><span>20</span><span>）</span>
+                                    <span data-bind="click:getMyFriends">我的好友（</span><span>20</span><span>）</span>
                                 </a>
                             </div>
                         </div>
@@ -348,6 +340,7 @@
                     <div class="friendMMr">
                         <div class="friendMMrz active">
                             <div class="friMMrtabK">
+                            <form id="orgersForm">
                                 <table class="friMMrtab">
                                     <tr class="biaotou">
                                         <th class="xuanze">
@@ -362,142 +355,35 @@
                                         <th class="juese">角色</th>
                                         <th class="caozuo">操作</th>
                                     </tr>
+                                    
+                                    <tbody id="ko_friend" data-bind="foreach: orgers">
                                     <tr class="">
                                         <td class="xuanze">
                                             <div class="fuxuanK2">
-                                                <input type="checkbox" class="input_check" id="check1_1">
-                                                <label for="check1_1"></label>
+                                                <input name="orgerIds" type="checkbox" class="input_check" data-bind="value: id,attr:{id:'check1_'+($index()+1)}">
+                                                <label data-bind="attr:{for:'check1_'+($index()+1)}"></label>
                                             </div>
                                         </td>
                                         <td class="touxiangk">
-                                            <img src="<%=request.getContextPath()%>/static/img/touxiang_6.png" alt="" class="touxiangi" />
+                                            <img data-bind="attr:{src:headimg}" alt="" class="touxiangi" />
                                         </td>
-                                        <td class="yonghuming"><span>用户1</span></td>
-                                        <td class="youxiang"><span>133675888@163.com</span></td>
-                                        <td class="juese"><span>管理员</span></td>
-                                        <td class="caozuo bukecaozuo"><span>已添加</span></td>
+                                        <td class="yonghuming"><span data-bind="text: username"></span></td>
+                                        <td class="youxiang"><span data-bind="text: email"></span></td>
+                                        <td class="juese"><span data-bind="text: roleIds"></span></td>
+                                        <td>
+                                            <span data-bind="if:password"><span class="caozuo bukecaozuo" data-bind="text:password"></span></span>
+                                            <span class="caozuo kecaozuo" data-bind="ifnot:password,click: $root.sendFriendRequest">加好友</span>
+                                        </td>
+                                        
                                     </tr>
-                                    <tr class="">
-                                        <td class="xuanze">
-                                            <div class="fuxuanK2">
-                                                <input type="checkbox" class="input_check" id="check1_2">
-                                                <label for="check1_2"></label>
-                                            </div>
-                                        </td>
-                                        <td class="touxiangk">
-                                            <img src="<%=request.getContextPath()%>/static/img/touxiang_2.png" alt="" class="touxiangi" />
-                                        </td>
-                                        <td class="yonghuming"><span>用户2</span></td>
-                                        <td class="youxiang"><span>133675888@163.com</span></td>
-                                        <td class="juese"><span>无</span></td>
-                                        <td class="caozuo bukecaozuo"><span>已添加</span></td>
-                                    </tr>
-                                    <tr class="">
-                                        <td class="xuanze">
-                                            <div class="fuxuanK2">
-                                                <input type="checkbox" class="input_check" id="check1_3">
-                                                <label for="check1_3"></label>
-                                            </div>
-                                        </td>
-                                        <td class="touxiangk">
-                                            <img src="<%=request.getContextPath()%>/static/img/touxiang_3.png" alt="" class="touxiangi" />
-                                        </td>
-                                        <td class="yonghuming"><span>用户3</span></td>
-                                        <td class="youxiang"><span>133675888@163.com</span></td>
-                                        <td class="juese"><span>无</span></td>
-                                        <td class="caozuo kecaozuo"><span>加好友</span></td>
-                                    </tr>
-                                    <tr class="">
-                                        <td class="xuanze">
-                                            <div class="fuxuanK2">
-                                                <input type="checkbox" class="input_check" id="check1_4">
-                                                <label for="check1_4"></label>
-                                            </div>
-                                        </td>
-                                        <td class="touxiangk">
-                                            <img src="<%=request.getContextPath()%>/static/img/touxiang_4.png" alt="" class="touxiangi" />
-                                        </td>
-                                        <td class="yonghuming"><span>用户4</span></td>
-                                        <td class="youxiang"><span>133675888@163.com</span></td>
-                                        <td class="juese"><span>无</span></td>
-                                        <td class="caozuo kecaozuo"><span>加好友</span></td>
-                                    </tr>
-                                    <tr class="">
-                                        <td class="xuanze">
-                                            <div class="fuxuanK2">
-                                                <input type="checkbox" class="input_check" id="check1_5">
-                                                <label for="check1_5"></label>
-                                            </div>
-                                        </td>
-                                        <td class="touxiangk">
-                                            <img src="<%=request.getContextPath()%>/static/img/touxiang_5.png" alt="" class="touxiangi" />
-                                        </td>
-                                        <td class="yonghuming"><span>用户5</span></td>
-                                        <td class="youxiang"><span>133675888@163.com</span></td>
-                                        <td class="juese"><span>无</span></td>
-                                        <td class="caozuo kecaozuo"><span>加好友</span></td>
-                                    </tr>
-                                    <tr class="">
-                                        <td class="xuanze">
-                                            <div class="fuxuanK2">
-                                                <input type="checkbox" class="input_check" id="check1_6">
-                                                <label for="check1_6"></label>
-                                            </div>
-                                        </td>
-                                        <td class="touxiangk">
-                                            <img src="<%=request.getContextPath()%>/static/img/touxiang_6.png" alt="" class="touxiangi" />
-                                        </td>
-                                        <td class="yonghuming"><span>用户6</span></td>
-                                        <td class="youxiang"><span>133675888@163.com</span></td>
-                                        <td class="juese"><span>无</span></td>
-                                        <td class="caozuo kecaozuo"><span>加好友</span></td>
-                                    </tr>
-                                    <tr class="">
-                                        <td class="xuanze">
-                                            <div class="fuxuanK2">
-                                                <input type="checkbox" class="input_check" id="check1_7">
-                                                <label for="check1_7"></label>
-                                            </div>
-                                        </td>
-                                        <td class="touxiangk">
-                                            <img src="<%=request.getContextPath()%>/static/img/touxiang_7.png" alt="" class="touxiangi" />
-                                        </td>
-                                        <td class="yonghuming"><span>用户7</span></td>
-                                        <td class="youxiang"><span>133675888@163.com</span></td>
-                                        <td class="juese"><span>无</span></td>
-                                        <td class="caozuo kecaozuo"><span>加好友</span></td>
-                                    </tr>
-                                    <tr class="">
-                                        <td class="xuanze">
-                                            <div class="fuxuanK2">
-                                                <input type="checkbox" class="input_check" id="check1_8">
-                                                <label for="check1_8"></label>
-                                            </div>
-                                        </td>
-                                        <td class="touxiangk">
-                                            <img src="<%=request.getContextPath()%>/static/img/touxiang_4.png" alt="" class="touxiangi" />
-                                        </td>
-                                        <td class="yonghuming"><span>用户8</span></td>
-                                        <td class="youxiang"><span>133675888@163.com</span></td>
-                                        <td class="juese"><span>无</span></td>
-                                        <td class="caozuo kecaozuo"><span>加好友</span></td>
-                                    </tr>
+                                    </tbody>
                                 </table>
-                            </div>
-                            <div class="pageK">
-                                <div class="pageLR">
-                                    <img src="<%=request.getContextPath()%>/static/img/pageL.png" class="pageLRi" alt="" />
-                                </div>
-                                <div class="pageNUM active">1</div>
-                                <div class="pageNUM ">2</div>
-                                <div class="pageNUM">3</div>
-                                <div class="pageLR">
-                                    <img src="<%=request.getContextPath()%>/static/img/pageR.png" class="pageLRi" alt="" />
-                                </div>
+                            </form>
                             </div>
                         </div>
                         <div class="friendMMrz">
                             <div class="friMMrtabK">
+                            <form id="myFriendsForm">
                                 <table class="friMMrtab">
                                     <tr class="biaotou">
                                         <th class="xuanze">
@@ -512,48 +398,25 @@
                                         <th class="juese">角色</th>
                                         <th class="caozuo">操作</th>
                                     </tr>
-                                    <tr class="">
+                                    <tbody data-bind="foreach:friends">
+                                    <tr class="" >
                                         <td class="xuanze">
                                             <div class="fuxuanK2">
-                                                <input type="checkbox" class="input_check" id="check2_1">
-                                                <label for="check2_1"></label>
+                                                <input name="ids" type="checkbox" class="input_check" data-bind="value: friendId,attr:{id:'check2_'+($index()+1)}">
+                                                <label data-bind="attr:{for:'check2_'+($index()+1)}"></label>
                                             </div>
                                         </td>
                                         <td class="touxiangk">
-                                            <img src="<%=request.getContextPath()%>/static/img/touxiang_6.png" alt="" class="touxiangi" />
+                                            <img data-bind="attr:{src:friendHeadimg}" alt="" class="touxiangi" />
                                         </td>
-                                        <td class="yonghuming"><span>用户1</span></td>
-                                        <td class="youxiang"><span>133675888@163.com</span></td>
-                                        <td class="juese"><span>管理员</span></td>
+                                        <td class="yonghuming"><span data-bind="text: friendName"></span></td>
+                                        <td class="youxiang"><span data-bind="text: friendEmail"></span></td>
+                                        <td class="juese"><span data-bind="text: friendRolename"></span></td>
                                         <td class="caozuo faxiaoxi"><span>发消息</span></td>
                                     </tr>
-                                    <tr class="">
-                                        <td class="xuanze">
-                                            <div class="fuxuanK2">
-                                                <input type="checkbox" class="input_check" id="check2_2">
-                                                <label for="check2_2"></label>
-                                            </div>
-                                        </td>
-                                        <td class="touxiangk">
-                                            <img src="<%=request.getContextPath()%>/static/img/touxiang_2.png" alt="" class="touxiangi" />
-                                        </td>
-                                        <td class="yonghuming"><span>用户2</span></td>
-                                        <td class="youxiang"><span>133675888@163.com</span></td>
-                                        <td class="juese"><span>无</span></td>
-                                        <td class="caozuo faxiaoxi"><span>发消息</span></td>
-                                    </tr>
+                                    </tbody>
                                 </table>
-                            </div>
-                            <div class="pageK">
-                                <div class="pageLR">
-                                    <img src="<%=request.getContextPath()%>/static/img/pageL.png" class="pageLRi" alt="" />
-                                </div>
-                                <div class="pageNUM active">1</div>
-                                <div class="pageNUM ">2</div>
-                                <div class="pageNUM">3</div>
-                                <div class="pageLR">
-                                    <img src="<%=request.getContextPath()%>/static/img/pageR.png" class="pageLRi" alt="" />
-                                </div>
+                            </form>
                             </div>
                         </div>
                     </div>
@@ -575,5 +438,313 @@
             </div>
         </div>
     </div>
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
+
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/knockout-3.4.2.js"></script>
+
+<script type="text/javascript">
+//从组里移除
+$(".friend_yichuzu").click(function() {
+	var ids = $("input[name='orgerIds']");
+    var checkNum = 0;
+    for (var i = 0; i < ids.length; i++) {
+        if (ids[i].checked) {
+            checkNum++;
+        }
+    }
+    if (checkNum == 0) {
+        layer.msg("请至少选中一个");
+    } else {
+    	$(".zuyichuK").show();
+    }
+});
+//从好友移除
+$(".friend_yichuhy").click(function() {
+	var ids = $("input[name='ids']");
+    var checkNum = 0;
+    for (var i = 0; i < ids.length; i++) {
+        if (ids[i].checked) {
+            checkNum++;
+        }
+    }
+    if (checkNum == 0) {
+        layer.msg("请至少选中一个");
+    } else {
+    	$(".yichuhyK").show();
+    }
+});
+
+function addNewOrg() {
+	var load = layer.load();
+    $.post("/wankangyuan/organization/addNewOrg",$('#addNewOrgForm').serialize() ,function(result){
+        layer.close(load);
+        if(result && result.status!= 200){
+            return layer.msg(result.message,function(){}),!1;
+        }else{
+            layer.msg(result.message, {
+                anim: 0,
+                end: function (index) {
+                    window.location.reload();
+                }
+            });
+            
+        }
+    },"json");
+}
+function addNewGroup() {
+	if(null == $('#formParentId').val() || '' == $('#formParentId').val()) {
+		return layer.msg("请选择组织结构!",function(){}),!1;
+	}
+	var load = layer.load();
+    $.post("/wankangyuan/organization/addNewGroup",$('#addNewGroupForm').serialize() ,function(result){
+        layer.close(load);
+        if(result && result.status!= 200){
+            return layer.msg(result.message,function(){}),!1;
+        }else{
+            layer.msg(result.message, {
+                anim: 0,
+                end: function (index) {
+                    window.location.reload();
+                }
+            });
+            
+        }
+    },"json");
+}
+
+
+function updateGroup() {
+	var load = layer.load();
+    $.post("/wankangyuan/organization/updateGroup",$('#updateGroupForm').serialize() ,function(result){
+        layer.close(load);
+        if(result && result.status!= 200){
+            return layer.msg(result.message,function(){}),!1;
+        }else{
+            layer.msg(result.message, {
+                anim: 0,
+                end: function (index) {
+                    window.location.reload();
+                }
+            });
+            
+        }
+    },"json");
+}
+
+function deleteGroup() {
+	var load = layer.load();
+    $.post("/wankangyuan/organization/deleteGroup",$('#deleteGroupForm').serialize() ,function(result){
+        layer.close(load);
+        if(result && result.status!= 200){
+            return layer.msg(result.message,function(){}),!1;
+        }else{
+            layer.msg(result.message, {
+                anim: 0,
+                end: function (index) {
+                    window.location.reload();
+                }
+            });
+            
+        }
+    },"json");
+}
+
+function updateUserOrg() {
+	var load = layer.load();
+    $.post("/wankangyuan/user/updateUserOrg",$('#updateUserOrgForm').serialize() ,function(result){
+        layer.close(load);
+        if(result && result.status!= 200){
+            return layer.msg(result.message,function(){}),!1;
+        }else{
+            layer.msg(result.message, {
+                anim: 0,
+                end: function (index) {
+                    window.location.reload();
+                }
+            });
+            
+        }
+    },"json");
+}
+
+	
+//定义ViewModel
+function ViewModel() {
+    var self = this;
+    //当前组织ID
+    var centOrgId;
+    
+    var centUser = '${user.username}';
+    
+    //组内成员
+    self.orgers = ko.observableArray(); //添加动态监视数组对象
+    //显示组能成员
+    self.showOrgers = function(id){
+    	centOrgId=id;
+    	self.orgers.removeAll();
+    	$.get("/wankangyuan/user/getUserByOrg",{organizationId:id},function(data){
+            //alert(data);
+            var list = JSON.parse(data);
+            for (var i in list){
+                
+            	//转换角色名
+                for(var j in roles) {
+                	if(list[i].roleIds == roles[j].id){
+                		list[i].roleIds = roles[j].description;
+                	}
+                }
+            	//根据好友列表判断状态
+            	list[i].password = null;
+            	for(var k in myfriends) {
+                    if(list[i].id == myfriends[k].friendId){
+                        list[i].password = "已添加";
+                    }
+                    
+                    if(list[i].username == centUser) {
+                    	list[i].password = "当前用户";
+                    }
+                }
+            	
+            	self.orgers.push(list[i]);
+            	
+            }
+            friendmanage_quanxuan();
+        });
+    	
+    	
+    }
+    //移除组内成员
+    self.removeOrgers = function() {
+    	var load = layer.load();
+        $.post("/wankangyuan/user/removeOrgByIds",$('#orgersForm').serialize() ,function(result){
+            layer.close(load);
+            if(result && result.status!= 200){
+                return layer.msg(result.message,function(){}),!1;
+            }else{
+                layer.msg(result.message, {
+                    anim: 0,
+                    end: function (index) {
+                    	self.showOrgers(centOrgId);
+                    }
+                });
+                
+            }
+            $('.zuyichuK').hide();
+        },"json");
+    }
+    //成员列表
+    self.members = ko.observableArray(); 
+    self.showMembers = function() {
+    	self.members.removeAll();
+        $.get("/wankangyuan/user/getOrgUserByName",$('#getUserByNameForm').serialize(),function(data){
+            var list = JSON.parse(data);
+            for (var i in list){
+                self.members.push(list[i]);
+                
+            }
+        });
+    }
+    //组内成员列表
+    self.orgMember = ko.observableArray(); 
+    self.showOrgMember = function() {
+    	self.orgMember.removeAll();
+        $.get("/wankangyuan/user/getOrgUserByName",$('#orgMemberForm').serialize(),function(data){
+            var list = JSON.parse(data);
+            for (var i in list){
+            	self.orgMember.push(list[i]);
+            }
+            
+        });
+    }
+    //初始化组能成员
+    self.showOrgMember();
+    
+    //发送好友申请
+    self.sendFriendRequest = function(user) {
+    	var load = layer.load();
+        $.post("/wankangyuan/message/sendFriendRequest",{userId:user.id} ,function(result){
+            layer.close(load);
+            if(result && result.status!= 200){
+                return layer.msg(result.message,function(){}),!1;
+            }else{
+                layer.msg(result.message, {
+                    anim: 0,
+                    end: function (index) {
+                        self.showOrgers(centOrgId);
+                    }
+                });
+            }
+        },"json");
+    }
+    
+    //批量发送好友申请
+    self.sendAllFriendRequest = function(user) {
+    	var load = layer.load();
+        $.post("/wankangyuan/message/sendAllFriendRequest",$('#addFriendsForm').serialize() ,function(result){
+            layer.close(load);
+            if(result && result.status!= 200){
+                return layer.msg(result.message,function(){}),!1;
+            }else{
+                layer.msg(result.message, {
+                    anim: 0,
+                });
+            }
+        },"json");
+    }
+    
+    //-----------------------------------------------------
+    
+    //角色列表
+    var roles;
+    self.getRoles = function() {
+        $.get("/wankangyuan/role/getRoleList",{},function(data){
+            roles = JSON.parse(data);
+        });
+    }
+    //初始化角色信息
+    self.getRoles();
+    
+    //-----------------------------------------------------
+    
+    //我的好友列表
+    self.friends = ko.observableArray();
+    var myfriends;
+    self.getMyFriends = function() {
+    	self.friends.removeAll();
+    	$.get("/wankangyuan/friends/getMyFriends",{friendName:$("#myFriendSearch").val()},function(data){
+    		myfriends = JSON.parse(data);
+    		for (var i in myfriends){
+                self.friends.push(myfriends[i]);
+                
+            }
+	    	friendmanage_quanxuan();
+        });
+    }
+    self.getMyFriends();
+    
+    self.removeMyFriends = function() {
+    	$.post("/wankangyuan/friends/removeFriends",$('#myFriendsForm').serialize() ,function(result){
+            layer.close(load);
+            if(result && result.status!= 200){
+                return layer.msg(result.message,function(){}),!1;
+            }else{
+                layer.msg(result.message, {
+                    anim: 0,
+                });
+            }
+        },"json");
+    }
+    
+    self.searchMyFriends = function(data, event) {
+    	if(event.keyCode == "13") {  
+    		self.getMyFriends();
+        }  
+    }
+    //-----------------------------------------------------
+}
+var vm = new ViewModel();
+ko.applyBindings(vm);
+
+</script>
 </body>
 </html>

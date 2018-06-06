@@ -96,7 +96,9 @@ public class OrganizationServiceImpl implements OrganizationService {
 	public List<Organization> findOrgList(Integer parentId) {
 		OrganizationQuery example = new OrganizationQuery();
 		Criteria criteria = example.createCriteria();
-		criteria.andParentIdEqualTo(parentId);
+		if(parentId != -1) {
+			criteria.andParentIdEqualTo(parentId);
+		}
 		criteria.andStatusEqualTo(1);
 		return organizationDao.selectByExample(example);
 	}
@@ -125,6 +127,18 @@ public class OrganizationServiceImpl implements OrganizationService {
 			return organizationDao.deleteByPrimaryKey(id);
 		}
 		return 0;
+	}
+
+	/**
+	 * 根据id获取组
+	 * <p>Title: selectByPrimaryKey</p>  
+	 * <p>Description: </p>  
+	 * @param id
+	 * @return
+	 */
+	@Override
+	public Organization selectByPrimaryKey(Integer id) {
+		return organizationDao.selectByPrimaryKey(id);
 	}
 	
 	

@@ -20,7 +20,6 @@ import com.liutianjun.service.ResourceService;
 import com.liutianjun.service.RoleService;
 
 @Controller
-@RequestMapping("/admin")
 public class RoleController {
 
 	protected Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -40,7 +39,7 @@ public class RoleController {
 	 * @return 
 	 * String
 	 */
-	@RequestMapping(value="/viewRoleManage",method=RequestMethod.GET)
+	@RequestMapping(value="/admin/viewRoleManage",method=RequestMethod.GET)
 	public String viewRoleManage(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="10")Integer rows,
             @RequestParam(value="rolename", required=false)String role,
@@ -67,7 +66,7 @@ public class RoleController {
 	 * @return 
 	 * String
 	 */
-	@RequestMapping(value="/insertRole",method=RequestMethod.POST)
+	@RequestMapping(value="/admin/insertRole",method=RequestMethod.POST)
 	public String insertRole(Integer[] ids, Role role, RedirectAttributes attributes) {
 		String idsStr = Arrays.toString(ids);
 		String idSerStr = idsStr.replaceAll(" ", "");
@@ -90,13 +89,31 @@ public class RoleController {
 	 * String
 	 * @throws Exception 
 	 */
-	@RequestMapping(value="/getRoleInfo",method=RequestMethod.POST,produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/role/getRoleInfo",method=RequestMethod.GET,produces="text/html;charset=UTF-8")
 	@ResponseBody
 	public String getRoleInfo(String id) throws Exception {
 		Role role = roleService.selectByPrimaryKey(Integer.valueOf(id));
 		ObjectMapper mapper = new ObjectMapper();
 		
 		String roleJson = mapper.writeValueAsString(role);
+		
+		return roleJson;
+	}
+	
+	/**
+	 * 获取角色列表
+	 * @Title: getRoleList 
+	 * @return
+	 * @throws Exception 
+	 * String
+	 */
+	@RequestMapping(value="/role/getRoleList",method=RequestMethod.GET,produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getRoleList() throws Exception {
+		Map<String, Object> map = roleService.findAll();
+		ObjectMapper mapper = new ObjectMapper();
+		
+		String roleJson = mapper.writeValueAsString(map.get("list"));
 		
 		return roleJson;
 	}
@@ -110,7 +127,7 @@ public class RoleController {
 	 * @return 
 	 * String
 	 */
-	@RequestMapping(value="/updateRole",method=RequestMethod.POST)
+	@RequestMapping(value="/admin/updateRole",method=RequestMethod.POST)
 	public String updateRole(Integer[] editIds, Role role, RedirectAttributes attributes) {
 		String idsStr = Arrays.toString(editIds);
 		String idSerStr = idsStr.replaceAll(" ", "");
@@ -132,7 +149,7 @@ public class RoleController {
 	 * @return 
 	 * Map<String,Object>
 	 */
-	@RequestMapping(value="/deleteRolesByIds",method=RequestMethod.POST)
+	@RequestMapping(value="/admin/deleteRolesByIds",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> deleteRolesByIds(Integer[] ids) {
 		resultMap.put("status", 400);

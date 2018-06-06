@@ -1,11 +1,12 @@
 package com.liutianjun.controller;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -223,7 +224,7 @@ public class UserController {
 	    
 		model.addAttribute("sysConfig", sysConfig);
 	    
-	    String contentUrl = request.getSession().getServletContext().getRealPath( "/userFiles/" ).replace("\\", "/")+ username+"/";
+	    String contentUrl = request.getSession().getServletContext().getRealPath( "/userFiles/" ).replace("\\", "/")+ user.getId()+"/";
 	    
 	    File file = new File(contentUrl);
 	    
@@ -430,9 +431,10 @@ public class UserController {
 		imgBase = StringUtils.substringAfter(imgBase,",");
 		
 		//获取用户名
-	    String name = (String)SecurityUtils.getSubject().getPrincipal();
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    User user = userService.selectByUsername(username);
 	    String upPicUrl = request.getSession().getServletContext().getRealPath( "/userFiles/" ).replace("\\", "/");
-		String toImagePath = upPicUrl + name+"/"+ name + ".jpg";
+		String toImagePath = upPicUrl + user.getId()+"/"+ "headImg.jpg";
 		String imageType = "jpg";
 		try {
 			BASE64Decoder decoder = new sun.misc.BASE64Decoder();
@@ -451,9 +453,6 @@ public class UserController {
 			//压缩图片
 			Thumbnails.of(w2).size(200, 200).toFile(w2);
 			
-			//获取用户
-		    User user = userService.selectByUsername(name);
-		    
 		    String urlPic = StringUtils.substringAfter(toImagePath, "webapps");
 		    
 		    user.setHeadimg(urlPic);
@@ -599,5 +598,97 @@ public class UserController {
 		
 		return resultMap;
 	}
+	
+	/**
+	 * 批量添加用户到组
+	 * @Title: updateUserOrg 
+	 * @param organizationId
+	 * @param ids
+	 * @return 
+	 * Map<String,Object>
+	 */
+	@RequestMapping(value="/user/updateUserOrg",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> updateUserOrg(Integer organizationId,Integer[] ids) {
+		resultMap.put("status", 400);
+		resultMap.put("message", "添加失败!");
+		
+		if(null != ids && ids.length == userService.updateUserOrg(organizationId, ids)) {
+			resultMap.put("status", 200);
+			resultMap.put("message", "添加成功!");
+		}
+		
+		return resultMap;
+	}
+	
+	/**
+	 * 根据组ID获取组内成员
+	 * @Title: getUserByOrg 
+	 * @param organizationId
+	 * @return 
+	 * String
+	 */
+	@RequestMapping(value="/user/getUserByOrg",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getUserByOrg(Integer organizationId) {
+		
+		try {
+			List<User> orgUserList = userService.findAll(organizationId);
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonOrgUserList = objectMapper.writeValueAsString(orgUserList);
+			
+			return jsonOrgUserList;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * 根据用户名获取列表
+	 * @Title: getUserByName 
+	 * @param username
+	 * @return 
+	 * String
+	 */
+	@RequestMapping(value="/user/getOrgUserByName",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getOrgUserByName(Integer isOrg,String username) {
+		
+		try {
+			List<User> orgUserList = userService.findOrgAll(isOrg,username);
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonOrgUserList = objectMapper.writeValueAsString(orgUserList);
+			
+			return jsonOrgUserList;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * 批量移除成员组ID
+	 * @Title: removeOrgByIds 
+	 * @param ids
+	 * @return 
+	 * Map<String,Object>
+	 */
+	@RequestMapping(value="/user/removeOrgByIds",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> removeOrgByIds(Integer[] orgerIds) {
+		resultMap.put("status", 400);
+		resultMap.put("message", "移除失败!");
+		
+		if(null != orgerIds && orgerIds.length == userService.removeOrgByIds(orgerIds)) {
+			resultMap.put("status", 200);
+			resultMap.put("message", "移除成功!");
+		}
+		
+		return resultMap;
+	}
+	
 	
 }

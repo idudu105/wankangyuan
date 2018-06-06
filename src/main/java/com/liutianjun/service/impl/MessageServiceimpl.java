@@ -12,6 +12,7 @@ import com.liutianjun.pojo.Message;
 import com.liutianjun.pojo.MessageQuery;
 import com.liutianjun.pojo.MessageQuery.Criteria;
 import com.liutianjun.pojo.User;
+import com.liutianjun.service.FriendsService;
 import com.liutianjun.service.MessageService;
 
 /**
@@ -31,6 +32,9 @@ public class MessageServiceimpl implements MessageService {
 	
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private FriendsService friendsService;
 	
 	/**
 	 * 发送系统消息
@@ -133,6 +137,7 @@ public class MessageServiceimpl implements MessageService {
 	 */
 	@Override
 	public int dealFriendRequest(Integer id, Integer cmd) {
+		int i = 0;
 		Message message = messageDao.selectByPrimaryKey(id);
 		message.setStatus(1);
 		if(0 == cmd) {
@@ -140,9 +145,14 @@ public class MessageServiceimpl implements MessageService {
 		}
 		if(1 == cmd) {
 			message.setResult("已通过");
+			
+			//通过后，双向添加好友
+			i += friendsService.insert(message.getUserId(), message.getObjId());
+			i += friendsService.insert(message.getObjId(), message.getUserId());
 		}
 		message.setUpdateTime(new Date());
-		return messageDao.updateByPrimaryKey(message);
+		i += messageDao.updateByPrimaryKey(message);
+		return i;
 	}
 
 	/**

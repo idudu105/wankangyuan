@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2018-04-23 11:25:49
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-05-31 15:48:25
+* @Last Modified time: 2018-06-04 14:54:31
 */
 
 *{
@@ -314,6 +314,10 @@ input{
     vertical-align: middle;
     margin-right:20px;
     /*margin-top:28px;*/
+    display:none;
+}
+.search_2.active{
+    display:inline-block;
 }
 .searchC{
     height:20px;
@@ -2005,7 +2009,7 @@ input{
     overflow: hidden;
 }
 .prodaclmRzB{
-    height:100%;
+    height:160px;
     overflow:auto;
 }
 .prodaclmRzBz{
@@ -4494,6 +4498,14 @@ input{
     margin-left:40px;
     cursor:pointer;
 }
+.messageMzbt{
+    font-size:16px;
+    color:#ccc;
+    font-weight: 700;
+    float:right;
+    margin-left:40px;
+}
+
 .messageMzK{
     display:none;
 }
@@ -4696,6 +4708,7 @@ input{
     width:54px;
     height:54px;
     padding:0 10px;
+    border-radius: 50%;
 }
 .cyaddKMtb .yonghuming{
     width:120px;
@@ -5065,7 +5078,7 @@ input{
     display:block;
 }
 .friMMrtabK{
-    height:500px;
+    /*height:500px;*/
     overflow:auto;
 }
 .friMMrtab{
@@ -5115,6 +5128,9 @@ input{
     font-weight: 700;
 }
 .friMMrtab .caozuo.kecaozuo span,.friMMrtab .caozuo.faxiaoxi span{
+    cursor:pointer;
+}
+.friMMrtab span.caozuo.kecaozuo ,.friMMrtab span.caozuo.faxiaoxi {
     cursor:pointer;
 }
 .friMMrtab .caozuo.bukecaozuo{
@@ -5233,15 +5249,116 @@ input{
 }
 .messsendMLM{
     height:535px;
-    background:#eee;////
+    overflow:auto;
+    /*background:#eee;////*/
 }
-.messsendMLB{
+
+.sendtime{
+    margin:10px 0;
+    text-align: center;
+    font-size:18px;
+    color:#666666;
+    font-weight: 700;
+}
+.messhis{
+
+}
+.messhis .mess_ik{
+    float:left;
+    margin-right:20px;
+    font-size: 0;
+}
+.messhis .mess_i{
+    width:60px;
     height:60px;
-    background:#ccc;////
+}
+.messhis .mess_t{
+    max-width: 500px;
+    float:left;
+    background:#ececec;
+    border-radius:5px;
+    padding:5px 20px;
+    font-size:16px;
+    color:#666666;
+    font-weight: 700;
+    margin-top:15px;
+    text-align: left;
+}
+.messmine{
+
+}
+.messmine .mess_ik{
+    float:right;
+    margin-left:20px;
+    font-size: 0;
+}
+.messmine .mess_i{
+    width:60px;
+    height:60px;
+}
+.messmine .mess_t{
+    max-width: 500px;
+    float:right;
+    background:#16579b;
+    /*border:1px solid #16579b;*/
+    border-radius:5px;
+    padding:5px 20px;
+    font-size:18px;
+    color:#ffffff;
+    /*color:#16579b;*/
+    font-weight: 700;
+    margin-top:15px;
+    text-align: left;
+}
+.messmine .mess_t img{
+    font-size: 0;
+    background:#fff;
+    vertical-align: middle;
+    margin:0 3px;
 }
 
-
-
+.messsendMLB{
+    /*height:60px;*/
+    padding:10px 0;
+    /*background:#ccc;////*/
+}
+.mesendMLB_jia,.mesendMLB_bq,.mesendMLB_kuang,.mesendMLB_send{
+    display:inline-block;
+    vertical-align: middle;
+}
+.mesendMLB_jia{
+    margin-left:15px;
+    width:30px;
+    height:30px;
+    cursor:pointer;
+}
+.mesendMLB_bq{
+    width:30px;
+    height:30px;
+    margin-left:25px;
+    cursor:pointer;
+}
+.mesendMLB_kuang{
+    margin-left:34px;
+    width:640px;
+    height:50px;
+    border:1px solid #999999;
+    padding:5px;
+    font-size: 16px;
+    /*overflow:hidden;*/
+}
+.mesendMLB_send{
+    width:60px;
+    height:30px;
+    margin-left:20px;
+    background:#5ca0e5;
+    border-radius:2px;
+    font-size:18px;
+    color:#ffffff;
+    font-weight: 700;
+    cursor:pointer;
+    border:0;
+}
 
 .messsendMR{
     float:right;
@@ -5253,7 +5370,7 @@ input{
     text-align: left;
 }
 .messsendMRM{
-    height:560px;
+    height:600px;
     overflow-y:auto;
 }
 .messsendMRMz{
@@ -5262,11 +5379,16 @@ input{
     border-bottom:1px solid #dadada;
     height:70px;
 }
-.messsendMRMzi{
+.messsendMRMzik{
     margin-left:6px;
     margin-right:25px;
     display:inline-block;
     vertical-align: middle;
+}
+.messsendMRMzi{
+    width:54px;
+    height:54px;
+    border-radius: 50%;
 }
 .messsendMRMzt{
     font-size:18px;
@@ -5278,4 +5400,33 @@ input{
 .messsendMRMztT{
     margin-bottom:20px;
     overflow:auto;
+    text-align: left;
+}
+.messsendMRMztTl{
+    float:left;
+    width:100px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+.messsendMRMztTr{
+    float:right;
+    width:170px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+.messsendMRMztB{
+    width:300px;
+    text-align: left;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    cursor:pointer;
+}
+.messsendMRMztB:hover{
+    color:#5ca0e5;
 }

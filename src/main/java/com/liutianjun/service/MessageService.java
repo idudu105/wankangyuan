@@ -35,4 +35,5 @@ public interface MessageService {
 	
 	//根据类型显示通知列表
 	List<Message> findMessageByType(Integer userId, Integer type);
+
 }

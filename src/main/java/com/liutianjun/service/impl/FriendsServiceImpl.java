@@ -47,14 +47,15 @@ public class FriendsServiceImpl implements FriendsService {
 	 * @return
 	 */
 	@Override
-	public int insert(Integer userId, Integer friendsId) {
+	public int insert(Integer userId, Integer friendId) {
 		
 		Friends friends = new Friends();
 		friends.setUserId(userId);
-		friends.setFriendId(friendsId);
+		friends.setFriendId(friendId);
+		
 		friends.setCreateTime(new Date());
 		
-		copyUserToFriends(friendsId, friends);
+		copyUserToFriends(friendId, friends);
 		
 		return friendsDao.insert(friends);
 	}
@@ -74,6 +75,13 @@ public class FriendsServiceImpl implements FriendsService {
 			Criteria criteria = example.createCriteria();
 			criteria.andUserIdEqualTo(userId);
 			criteria.andFriendIdIn(Arrays.asList(friendsIds));
+			//双向删除
+			FriendsQuery example2 = new FriendsQuery();
+			Criteria criteria2 = example.createCriteria();
+			criteria2.andUserIdIn(Arrays.asList(friendsIds));
+			criteria2.andFriendIdEqualTo(userId);
+			friendsDao.deleteByExample(example2);
+			
 			return friendsDao.deleteByExample(example);
 		}
 		return 0;
@@ -87,10 +95,13 @@ public class FriendsServiceImpl implements FriendsService {
 	 * @return
 	 */
 	@Override
-	public List<Friends> findAllMyFriends(Integer userId) {
+	public List<Friends> findAllMyFriends(Integer userId,String friendName) {
 		FriendsQuery example = new FriendsQuery();
 		Criteria criteria = example.createCriteria();
 		criteria.andUserIdEqualTo(userId);
+		if(null != friendName) {
+			criteria.andFriendNameLike("%"+friendName+"%");
+		}
 		return friendsDao.selectByExample(example);
 	}
 
@@ -103,7 +114,7 @@ public class FriendsServiceImpl implements FriendsService {
 	 */
 	@Override
 	public int updateFriendsInfo(Integer userId) {
-		List<Friends> list = findAllMyFriends(userId);
+		List<Friends> list = findAllMyFriends(userId, null);
 		if(null != list && list.size() > 0) {
 			for (Friends friends : list) {
 				copyUserToFriends(friends.getFriendId(), friends);

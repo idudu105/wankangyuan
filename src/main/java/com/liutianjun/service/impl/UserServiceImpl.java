@@ -10,13 +10,16 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.liutianjun.dao.UserDao;
+import com.liutianjun.pojo.Friends;
 import com.liutianjun.pojo.User;
 import com.liutianjun.pojo.UserQuery;
 import com.liutianjun.pojo.UserQuery.Criteria;
+import com.liutianjun.service.FriendsService;
 import com.liutianjun.service.PasswordHelper;
 import com.liutianjun.service.RoleService;
 import com.liutianjun.service.UserService;
@@ -38,6 +41,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordHelper passwordHelper;
     
+    @Autowired
+    private FriendsService friendsService;
+    
     /**
      * 注册新用户
      * <p>Title: insert</p>  
@@ -53,6 +59,7 @@ public class UserServiceImpl implements UserService {
         record.setCreateTime(new Date());
         //状态设为有效
         record.setStatus(1);
+        record.setOrganizationId(0);
         return userDao.insert(record);
     }
 
@@ -300,6 +307,101 @@ public class UserServiceImpl implements UserService {
 	        i += userDao.updateByPrimaryKey(user);
 		}
 		return i;
+	}
+
+	/**
+	 * 批量修改用户组织
+	 * <p>Title: updateUserOrg</p>  
+	 * <p>Description: </p>  
+	 * @param organizationId
+	 * @param ids
+	 * @return
+	 */
+	@Override
+	public int updateUserOrg(Integer organizationId, Integer[] ids) {
+		if(null != ids && ids.length > 0) {
+			UserQuery example = new UserQuery();
+			Criteria criteria = example.createCriteria();
+			criteria.andIdIn(Arrays.asList(ids));
+			
+			User user = new User();
+			user.setOrganizationId(organizationId);
+			
+			int i = userDao.updateByExampleSelective(user, example);
+			return i;
+		}
+        
+		return 0;
+	}
+
+	/**
+	 * 根据分组获取数量
+	 * <p>Title: findAll</p>  
+	 * <p>Description: </p>  
+	 * @param organizationId
+	 * @return
+	 */
+	@Override
+	public List<User> findAll(Integer organizationId) {
+		UserQuery example = new UserQuery();
+		Criteria criteria = example.createCriteria();
+		criteria.andOrganizationIdEqualTo(organizationId);
+		return userDao.selectByExample(example);
+	}
+
+	/**
+	 * 批量移除成员组ID
+	 * <p>Title: removeOrgByIds</p>  
+	 * <p>Description: </p>  
+	 * @param ids
+	 * @return
+	 */
+	@Override
+	public int removeOrgByIds(Integer[] ids) {
+		UserQuery example = new UserQuery();
+		Criteria criteria = example.createCriteria();
+		criteria.andIdIn(Arrays.asList(ids));
+		User user = new User();
+		user.setOrganizationId(0);
+		
+		return userDao.updateByExampleSelective(user, example);
+	}
+
+	/**
+	 * 根据用户名获取列表
+	 * <p>Title: findAll</p>  
+	 * <p>Description: </p>  
+	 * @param username
+	 * @return
+	 */
+	@Override
+	public List<User> findOrgAll(Integer isOrg, String username) {
+		UserQuery example = new UserQuery();
+		Criteria criteria = example.createCriteria();
+		criteria.andUsernameLike("%"+username+"%");
+		if(-1 == isOrg) {
+			criteria.andOrganizationIdNotEqualTo(0);
+			//获取用户名
+		    String name = (String)SecurityUtils.getSubject().getPrincipal();
+		    //获取用户
+		    User user = selectByUsername(name);
+		    //获取好友id列表
+		    List<Integer> friendIdList = new ArrayList<>();
+		    List<Friends> friendsList = friendsService.findAllMyFriends(user.getId(),username);
+		    for (Friends friends : friendsList) {
+		    	friendIdList.add(friends.getFriendId());
+			}
+		    //排除自己ID
+		    friendIdList.add(user.getId());
+		    
+		    //排除好友ID
+		    criteria.andIdNotIn(friendIdList);
+			
+		}else {
+			criteria.andOrganizationIdEqualTo(isOrg);
+		}
+		
+		return userDao.selectByExample(example);
 	}
 
 }

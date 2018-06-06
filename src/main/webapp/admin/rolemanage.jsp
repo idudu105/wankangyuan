@@ -479,7 +479,7 @@
         if (checkNum != 1) {
             layer.msg("请选中一个",function(){});
         } else {
-            $.post("/wankangyuan/admin/getRoleInfo",{
+            $.get("/wankangyuan/admin/getRoleInfo",{
             	id : $("input[name='roleIds']:checked").val()
             },function(role){
                 $("#roleId").val(role.id);
