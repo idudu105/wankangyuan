@@ -38,13 +38,23 @@ public class ProjectAppService {
 	 * @param strip
 	 * @return
 	 */
-	public Map<String, Object> selectProjectApp(Integer project_id , Integer page , Integer strip){
+	public Map<String, Object> selectProjectApp(Integer project_id , Integer page , Integer strip , String keyWord){
 		Map<String, Object> result = new HashMap<>();
 		PageHelper.startPage(page, strip);
-		List<Application> applications = projectAppDao.selectProjectApp(project_id);
+		List<Application> applications = projectAppDao.selectProjectApp(project_id , keyWord);
 		PageInfo<Application> pageInfo = new PageInfo<Application>(applications);
 		result.put("list", applications);
 		result.put("total", pageInfo.getTotal());
 		return result;
+	}
+	
+	/**
+	 * 解除项目-应用绑定关系
+	 * @param project_id
+	 * @param app_id
+	 * @return
+	 */
+	public int deleteProjectAppRelation(Integer project_id ,  Integer app_id){
+		return projectAppDao.deleteProjectAppRelation(project_id, app_id);
 	}
 }

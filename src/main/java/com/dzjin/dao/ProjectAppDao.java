@@ -2,6 +2,7 @@ package com.dzjin.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -39,7 +40,7 @@ public interface ProjectAppDao {
     <result column="app_overview" property="appOverview" jdbcType="VARCHAR" />
     <result column="data_format" property="dataFormat" jdbcType="VARCHAR" />*/
 	
-	@Select("select * from application where id in (select app_id from project_app_relation where project_id=#{project_id})")
+	@Select("select * from application where app_name like '%${keyWord}%' and id in (select app_id from project_app_relation where project_id=#{project_id})")
 	@Results({
 		@Result(property = "appName" , column = "app_name"),
 		@Result(property = "appType" , column = "app_type"),
@@ -51,6 +52,9 @@ public interface ProjectAppDao {
 		@Result(property = "appOverview" , column = "app_overview"),
 		@Result(property = "dataFormat" , column = "data_format")
 	})
-	public List<Application> selectProjectApp(@Param("project_id")Integer project_id);
+	public List<Application> selectProjectApp(@Param("project_id")Integer project_id , @Param("keyWord")String keyWord);
+	
+	@Delete("delete from project_app_relation where project_id=#{project_id} and app_id=#{app_id}")
+	public int deleteProjectAppRelation(@Param("project_id")Integer project_id , @Param("app_id") Integer app_id);
 
 }

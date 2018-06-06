@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -136,6 +135,7 @@ public class ProjectController {
 		httpSession.setAttribute("total", map.get("total"));
 		httpSession.setAttribute("page", page);
 		httpSession.setAttribute("rows", strip);
+		
 		if(type == null || type == 1){
 			return "redirect:/jsp/project/project_public.jsp";
 		}else{
@@ -206,6 +206,9 @@ public class ProjectController {
 		}else{
 			//更新关键字
 			httpSession.setAttribute("projectSearchWord", searchWord);
+		}
+		if(user_id == null){
+			user_id = 1;
 		}
 		Map<String, Object> map = new HashMap<String , Object>();
 		map = projectService.selectMyProject(user_id, page, strip , searchWord);

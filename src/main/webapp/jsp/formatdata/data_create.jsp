@@ -493,7 +493,7 @@
             }
             
             $.ajax({
-            	url:"/wankangyuan/projectData/insert",
+            	url:"/wankangyuan/projectFormatData/insert",
             	type:"post",
             	data:{
             		p_id:p_id,
