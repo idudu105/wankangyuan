@@ -11,9 +11,11 @@ import com.liutianjun.dao.UserDao;
 import com.liutianjun.pojo.Message;
 import com.liutianjun.pojo.MessageQuery;
 import com.liutianjun.pojo.MessageQuery.Criteria;
+import com.liutianjun.pojo.Organization;
 import com.liutianjun.pojo.User;
 import com.liutianjun.service.FriendsService;
 import com.liutianjun.service.MessageService;
+import com.liutianjun.service.OrganizationService;
 
 /**
  * 消息服务
@@ -36,6 +38,9 @@ public class MessageServiceimpl implements MessageService {
 	@Autowired
 	private FriendsService friendsService;
 	
+	@Autowired
+	private OrganizationService organizationService;
+	
 	/**
 	 * 发送系统消息
 	 * <p>Title: sendSysMessage</p>  
@@ -50,6 +55,27 @@ public class MessageServiceimpl implements MessageService {
 		message.setCreateTime(new Date());
 		message.setUserId(userId);
 		message.setContent(content);
+		message.setType(0);
+		return messageDao.insert(message);
+	}
+	
+	/**
+	 * 发送组织新增申请
+	 * <p>Title: sendAddNewOrgRequest</p>  
+	 * <p>Description: </p>  
+	 * @param userId
+	 * @param record
+	 * @return
+	 */
+	@Override
+	public int sendAddNewOrgRequest(Integer userId, Organization record) {
+		Message message = new Message();
+		message.setCreateTime(new Date());
+		message.setUserId(userId);
+		message.setObjId(record.getId());
+		message.setStatus(0);
+		message.setContent("新组织申请创建：组织结构名称:"+record.getOrganizationName()+" 真实姓名:"+record.getRealName()+
+				" 联系电话:"+record.getPhone()+" 单位简介:"+record.getUnitInfo());
 		message.setType(0);
 		return messageDao.insert(message);
 	}
@@ -175,6 +201,38 @@ public class MessageServiceimpl implements MessageService {
 		example.setOrderByClause("create_time desc");
 		
 		return messageDao.selectByExample(example);
+	}
+
+	/**
+	 * 处理新增组织请求
+	 * <p>Title: dealAddNewOrgRequest</p>  
+	 * <p>Description: </p>  
+	 * @param id
+	 * @param cmd
+	 * @return
+	 */
+	@Override
+	public int dealAddNewOrgRequest(Integer id, Integer cmd) {
+		int i = 0;
+		Message message = messageDao.selectByPrimaryKey(id);
+		
+		if(0 == cmd) {
+			message.setResult("已拒绝");
+			//拒绝后删除组织记录
+			i += organizationService.deleteGroupById(id);
+			
+		}
+		if(1 == cmd) {
+			message.setResult("已通过");
+			//通过后，修改组织状态
+			Organization organization = organizationService.selectByPrimaryKey(message.getObjId());
+			organization.setStatus(1);
+			i += organizationService.undateGroup(organization);
+		}
+		message.setStatus(1);
+		message.setUpdateTime(new Date());
+		i += messageDao.updateByPrimaryKey(message);
+		return i;
 	}
 
 }

@@ -36,7 +36,7 @@
                     <div class="topT">应用</div>
                 </a>
                 <div class="touxiangK">
-                    <a href="user_info.html">
+                    <a href="/wankangyuan/userInfo">
                         <img src="${user.headimg }" alt="" class="touxiang" />
                     </a>
                     <div class="userbutK">
@@ -54,8 +54,8 @@
                         </a>
                     </div>
                 </div>
-                <div class="nicheng">Peter</div>
-                <a href="friend_manage.html">
+                <div class="nicheng">${user.username }</div>
+                <a href="/wankangyuan/friends/viewFriendsManage">
                     <div class="yanjiuquan active">
                         <div class="yanjiuquanT">研究圈</div>
                         <!-- <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" /> -->
@@ -64,8 +64,8 @@
             </div>
             <div class="top2">
                 <div class="top2C">
-                    <a href="friend_manage.html"><div class="top2Cli top2CliYJ">好友管理</div></a>
-                    <a href="message_list.html">
+                    <a href="/wankangyuan/friends/viewFriendsManage"><div class="top2Cli top2CliYJ">好友管理</div></a>
+                    <a href="/wankangyuan/friendMessage/viewFriendMessage">
                         <div class="top2Cli">好友消息
                             <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint3" />
                         </div>
@@ -249,7 +249,7 @@
                     <div class="friendMTr">
                         <div class="search_2">
                             <div class="searchC">
-                                <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="searchCi" />
+                                <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="searchCi" data-bind="click:getMyFriends" />
                                 <input id="myFriendSearch" name="friendName" type="text" class="searchCt"  placeholder="搜索" data-bind="event: { keyup: searchMyFriends}" />
                             </div>
                         </div>
@@ -309,7 +309,7 @@
                                 <c:if test="${org.parentId eq 0 }">
                                 <div class="friendMMlTTz <c:if test='${status.count eq 1}'>active</c:if>" name="${org.id }"><!-- 每个组织结构 -->
                                     <div class="friendMMlTTzT">
-                                        <span class="fri_name">${org.organizationName }（</span><span>20</span><span>）</span>
+                                        <span class="fri_name">${org.organizationName }</span>
                                         <div class="friendMMlTTzTi"></div>
                                         <img src="<%=request.getContextPath()%>/static/img/shenhe1.png" alt="" class="friendMMlTTzTi2" />
                                     </div>
@@ -329,7 +329,7 @@
                             </div>
                             <div class="friendMMlTB">
                                 <a href="javascript:;" class="friendMMlTBa">
-                                    <span data-bind="click:getMyFriends">我的好友（</span><span>20</span><span>）</span>
+                                    <span data-bind="click:getMyFriends">我的好友（</span><span data-bind="text:friends().length"></span><span>）</span>
                                 </a>
                             </div>
                         </div>
@@ -412,7 +412,7 @@
                                         <td class="yonghuming"><span data-bind="text: friendName"></span></td>
                                         <td class="youxiang"><span data-bind="text: friendEmail"></span></td>
                                         <td class="juese"><span data-bind="text: friendRolename"></span></td>
-                                        <td class="caozuo faxiaoxi"><span>发消息</span></td>
+                                        <td class="caozuo faxiaoxi"><span data-bind="click:$root.sendMessage">发消息</span></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -740,6 +740,11 @@ function ViewModel() {
     		self.getMyFriends();
         }  
     }
+    
+    self.sendMessage = function(friend) {
+    	window.location.href="/wankangyuan/friendMessage/viewSendMessage?objId="+ friend.friendId;
+    }
+    
     //-----------------------------------------------------
 }
 var vm = new ViewModel();

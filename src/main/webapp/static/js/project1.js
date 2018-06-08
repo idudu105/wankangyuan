@@ -2258,10 +2258,11 @@ function message_send(){
     
 
     //发送按钮点击事件，绑定消息上传的话，注释此块
-    omesendMLB_send.onclick=function(){
+    /*omesendMLB_send.onclick=function(){
         messagesend(1,"img/touxiang_1.png",omesendMLB_kuang.value);
         omesendMLB_kuang.value="";
-    }
+        omesssendMLM.scrollTop = omesssendMLM.scrollHeight; 
+    }*/
 
 }
 
@@ -2306,6 +2307,8 @@ function messagesend(role,tx_url,xiaoxi){
     oxiaoxikuang.appendChild(oclear);
 
     omesssendMLM.appendChild(oxiaoxikuang);
+    
+    omesssendMLM.scrollTop = omesssendMLM.scrollHeight; 
 }
 
 function timesend(time){
@@ -2333,7 +2336,7 @@ function replace_em(str){
 // console.log(str);
     str = str.replace(/\n/g,'<br/>');
 // console.log(str);
-    str = str.replace(/\[em_([0-9]*)\]/g,'<img src="arclist/$1.gif" border="0" />');
+    str = str.replace(/\[em_([0-9]*)\]/g,'<img src="../static/arclist/$1.gif" border="0" />');
 // console.log(str);
     return str;
 

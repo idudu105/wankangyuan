@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.liutianjun.pojo.Message;
 import com.liutianjun.pojo.User;
-import com.liutianjun.service.FriendsService;
 import com.liutianjun.service.MessageService;
 import com.liutianjun.service.UserService;
 
@@ -37,9 +36,6 @@ public class MessageController {
 	
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private FriendsService friendsService;
 	
 	/**
 	 * 系统通知界面
@@ -99,7 +95,28 @@ public class MessageController {
 			resultMap.put("status", 200);
 		}
 		if(1 == i) {
-			resultMap.put("message", "已拒绝!");
+			resultMap.put("message", "拒绝成功!");
+			resultMap.put("status", 200);
+		}
+		return resultMap;
+	}
+	
+	/**
+	 * 处理增加新组织请求
+	 * @Title: dealAddNewOrgRequest 
+	 * @param id
+	 * @param cmd
+	 * @return 
+	 * Map<String,Object>
+	 */
+	@RequestMapping(value="/dealAddNewOrgRequest",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> dealAddNewOrgRequest(Integer id, Integer cmd) {
+		resultMap.put("status", 400);
+		resultMap.put("message", "操作失败!");
+		int i = messageService.dealAddNewOrgRequest(id, cmd);
+		if(2 == i) {
+			resultMap.put("message", "操作成功成功!");
 			resultMap.put("status", 200);
 		}
 		return resultMap;

@@ -3,6 +3,7 @@ package com.liutianjun.service;
 import java.util.List;
 
 import com.liutianjun.pojo.Message;
+import com.liutianjun.pojo.Organization;
 
 /**
  * 通知管理
@@ -17,6 +18,9 @@ public interface MessageService {
 
 	//发送系统通知
 	int sendSysMessage(Integer userId,String content);
+	
+	//发送添加组织申请
+	int sendAddNewOrgRequest(Integer userId,Organization record);
 	
 	//发送好友申请
 	int sendFriendRequest(Integer userId, Integer objId);
@@ -35,5 +39,8 @@ public interface MessageService {
 	
 	//根据类型显示通知列表
 	List<Message> findMessageByType(Integer userId, Integer type);
+
+	//处理新增组织请求
+	int dealAddNewOrgRequest(Integer id, Integer cmd);
 
 }

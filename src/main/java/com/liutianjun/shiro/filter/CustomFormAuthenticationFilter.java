@@ -57,7 +57,7 @@ public class CustomFormAuthenticationFilter extends FormAuthenticationFilter {
 		WebUtils.getAndClearSavedRequest(request);
 		//根据前后台登录页判断成功跳转页
 		if("userLogin".equals(loginType)) {
-			WebUtils.redirectToSavedRequest(request, response, "/index.jsp");
+			WebUtils.redirectToSavedRequest(request, response, "/project/selectMyProject");
 		}else {
 			WebUtils.redirectToSavedRequest(request, response, "/admin/viewIndex");
 		}

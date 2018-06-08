@@ -54,10 +54,12 @@
                     </div>
                 </div>
                 <div class="nicheng"><shiro:principal/></div>
+                <a href="/wankangyuan/friends/viewFriendsManage">
                 <div class="yanjiuquan">
                     <div class="yanjiuquanT">研究圈</div>
                     <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
                 </div>
+                </a>
             </div>
             <div class="top2">
                 <div class="top2C">

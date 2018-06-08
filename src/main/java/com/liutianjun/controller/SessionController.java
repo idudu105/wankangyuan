@@ -2,7 +2,6 @@ package com.liutianjun.controller;
 
 import java.util.Collection;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;

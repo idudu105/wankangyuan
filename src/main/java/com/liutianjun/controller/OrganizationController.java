@@ -1,10 +1,8 @@
 package com.liutianjun.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.liutianjun.pojo.Organization;
+import com.liutianjun.service.MessageService;
 import com.liutianjun.service.OrganizationService;
 
 /**
@@ -32,6 +31,9 @@ public class OrganizationController {
 	@Autowired
 	private OrganizationService organizationService;
 	
+	@Autowired
+	private MessageService messageService;
+	
 	/**
 	 * 添加新组织结构
 	 * @Title: addNewOrg 
@@ -43,8 +45,8 @@ public class OrganizationController {
 	@ResponseBody
 	public Map<String,Object> addNewOrg(Organization record) {
 		resultMap.put("status", 400);
-		resultMap.put("message", "添加失败!");
-		if(0 != organizationService.addNewOrg(record)) {
+		resultMap.put("message", "操作失败!");
+		if(1 == organizationService.addNewOrg(record) && 1 == messageService.sendAddNewOrgRequest(1, record)) {
 			resultMap.put("status", 200);
 			resultMap.put("message", "已提交申请，请等待审核!");
 		}

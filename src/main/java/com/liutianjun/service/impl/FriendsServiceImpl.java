@@ -115,14 +115,15 @@ public class FriendsServiceImpl implements FriendsService {
 	@Override
 	public int updateFriendsInfo(Integer userId) {
 		List<Friends> list = findAllMyFriends(userId, null);
+		int i = 0;
 		if(null != list && list.size() > 0) {
 			for (Friends friends : list) {
 				copyUserToFriends(friends.getFriendId(), friends);
 				friends.setUpdateTime(new Date());
-				return friendsDao.updateByPrimaryKey(friends);
+				i += friendsDao.updateByPrimaryKey(friends);
 			}
 		}
-		return 0;
+		return i;
 	}
 	
 	/**

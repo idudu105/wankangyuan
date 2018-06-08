@@ -52,10 +52,12 @@
                     </div>
                 </div>
                 <div class="nicheng">${user.username }</div>
+                <a href="/wankangyuan/friends/viewFriendsManage">
                 <div class="yanjiuquan">
                     <div class="yanjiuquanT">研究圈</div>
                     <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
                 </div>
+                </a>
             </div>
             <div class="updateinfoK update_passwK">
             <form id="passwordForm" method="post">

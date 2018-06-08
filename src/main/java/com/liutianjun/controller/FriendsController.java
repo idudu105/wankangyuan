@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.liutianjun.pojo.Friends;
@@ -47,6 +46,12 @@ public class FriendsController {
 	public String viewFriendsManage(Model model) {
 		List<Organization> orgList = organizationService.findOrgList(-1);
 		model.addAttribute("orgList", orgList);
+		//获取用户名
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    //获取用户
+	    User user = userService.selectByUsername(username);
+		//更新好友信息
+	    friendsService.updateFriendsInfo(user.getId());
 		return "jsp/friends/friend_manage.jsp";
 	}
 	

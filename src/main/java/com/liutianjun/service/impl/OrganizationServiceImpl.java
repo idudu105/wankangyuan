@@ -10,6 +10,7 @@ import com.liutianjun.dao.OrganizationDao;
 import com.liutianjun.pojo.Organization;
 import com.liutianjun.pojo.OrganizationQuery;
 import com.liutianjun.pojo.OrganizationQuery.Criteria;
+import com.liutianjun.service.MessageService;
 import com.liutianjun.service.OrganizationService;
 
 /**

@@ -54,10 +54,12 @@
                     </div>
                 </div>
                 <div class="nicheng">${user.username }</div>
+                <a href="/wankangyuan/friends/viewFriendsManage">
                 <div class="yanjiuquan">
                     <div class="yanjiuquanT">研究圈</div>
                     <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
                 </div>
+                </a>
             </div>
             
             <div class="userM">
@@ -119,6 +121,17 @@
                                                     <div class="messageMzb messageMzdel" onclick="deleteMessageById(${message.id})">删除</div>
                                                 </c:if>
                                                 <c:choose>
+                                                    <c:when test="${message.type eq 0 }">
+                                                        <c:choose>
+                                                        <c:when test="${0 eq message.status}">
+                                                            <div class="messageMzb messageMzagree" onclick="dealAddNewOrgRequest(${message.id},1)">通过</div>
+                                                            <div class="messageMzb messageMzrefuse" onclick="dealAddNewOrgRquest(${message.id},0)">拒绝</div>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <div class="messageMzbt">${message.result }</div>
+                                                        </c:otherwise>
+                                                        </c:choose>
+                                                    </c:when>
                                                     <c:when test="${message.type eq 1 }">
                                                         <c:choose>
 			                                            <c:when test="${0 eq message.status}">
@@ -272,6 +285,24 @@ function deleteMessageById(id) {
 function dealFriendRequest(id,cmd) {
 	var load = layer.load();
     $.post("/wankangyuan/message/dealFriendRequest",{id:id,cmd:cmd},function(result){
+        layer.close(load);
+        if(result && result.status!= 200){
+            return layer.msg(result.message,function(){}),!1;
+        }else{
+            layer.msg(result.message, {
+                anim: 0,
+                end: function (index) {
+                    $("div[name="+id+"]").remove();
+                }
+            });
+        }
+    },"json");
+}
+
+//处理添加新组织请求
+function dealAddNewOrgRequest(id,cmd) {
+	var load = layer.load();
+    $.post("/wankangyuan/message/dealAddNewOrgRequest",{id:id,cmd:cmd},function(result){
         layer.close(load);
         if(result && result.status!= 200){
             return layer.msg(result.message,function(){}),!1;
