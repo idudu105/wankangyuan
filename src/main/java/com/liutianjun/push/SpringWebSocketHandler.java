@@ -65,7 +65,7 @@ public class SpringWebSocketHandler extends TextWebSocketHandler {
     	ChatMessage chatMessage = objectMapper.readValue(jsonStr, ChatMessage.class);
     	
     	sendMessageToUser(chatMessage.getObjname(), message);
-        super.handleTextMessage(session, message);
+        //super.handleTextMessage(session, message);
     }
 
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
