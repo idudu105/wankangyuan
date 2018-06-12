@@ -45,7 +45,9 @@
                         </a>
                         <a href="/wankangyuan/message/viewMessage">
                             <div class="userbut">系统消息
+                            <c:if test="${systemMSG }">
                                 <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint2" />
+                            </c:if>
                             </div>
                         </a>
                         <div class="userbutline"></div>
@@ -58,7 +60,9 @@
                 <a href="/wankangyuan/friends/viewFriendsManage">
                     <div class="yanjiuquan active">
                         <div class="yanjiuquanT">研究圈</div>
-                        <!-- <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" /> -->
+                        <c:if test="${friendMSG}">
+                            <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
+                        </c:if>
                     </div>
                 </a>
             </div>
@@ -67,7 +71,9 @@
                     <a href="/wankangyuan/friends/viewFriendsManage"><div class="top2Cli top2CliYJ">好友管理</div></a>
                     <a href="/wankangyuan/friendMessage/viewFriendMessage">
                         <div class="top2Cli">好友消息
+                        <c:if test="${friendMSG}">
                             <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint3" />
+                        </c:if>
                         </div>
                     </a>
                 </div>
@@ -202,11 +208,11 @@
                         </div>
                         <div class="qunfaM">
                             <div class="qunfaMt">内容：</div>
-                            <textarea name="" id="" class="qunfaMta" maxlength="600"></textarea>
+                            <textarea name="content" class="qunfaMta" maxlength="600"></textarea>
                         </div>
                         <div class="qunfaB">
                             <input type="button" class="qunfaBb qunfaBb_cancel" value="取消" />
-                            <input type="button" class="qunfaBb qunfaBb_send" value="发送" />
+                            <input type="button" class="qunfaBb qunfaBb_send" value="发送" onclick="sendMassFriendMessage()" />
                         </div>
                     </div>
 
@@ -460,7 +466,7 @@ $(".friend_yichuzu").click(function() {
 });
 //从好友移除
 $(".friend_yichuhy").click(function() {
-	var ids = $("input[name='ids']");
+	var ids = $(".fuxuanK2 input[name='ids']");
     var checkNum = 0;
     for (var i = 0; i < ids.length; i++) {
         if (ids[i].checked) {
@@ -473,6 +479,43 @@ $(".friend_yichuhy").click(function() {
     	$(".yichuhyK").show();
     }
 });
+
+//群发消息
+$('.friend_qunfa').click(function(){
+	var ids = $(".fuxuanK2 input[name='ids']");
+    var checkNum = 0;
+    for (var i = 0; i < ids.length; i++) {
+        if (ids[i].checked) {
+            checkNum++;
+        }
+    }
+    if (checkNum == 0) {
+        layer.msg("请至少选中一个");
+    } else {
+    	$(".qunfaMta").val("");
+        $(".qunfaK").show();
+    }
+});
+
+function sendMassFriendMessage() {
+	var content = $(".qunfaMta").val();
+	var load = layer.load();
+    $.post("/wankangyuan/friendMessage/sendMassFriendMessage/"+content,$('#myFriendsForm').serialize() ,function(result){
+        layer.close(load);
+        if(result && result.status!= 200){
+            return layer.msg(result.message,function(){}),!1;
+        }else{
+            layer.msg(result.message, {
+                anim: 0,
+                end: function (index) {
+                	$(".qunfaMta").val("");
+                    $(".qunfaK").hide();
+                }
+            });
+            
+        }
+    },"json");
+}
 
 function addNewOrg() {
 	var load = layer.load();
@@ -600,9 +643,9 @@ function ViewModel() {
                         list[i].password = "已添加";
                     }
                     
-                    if(list[i].username == centUser) {
-                    	list[i].password = "当前用户";
-                    }
+                }
+                if(list[i].username == centUser) {
+                	list[i].password = "当前用户";
                 }
             	
             	self.orgers.push(list[i]);
@@ -722,7 +765,9 @@ function ViewModel() {
     }
     self.getMyFriends();
     
+    //移除好友
     self.removeMyFriends = function() {
+    	var load = layer.load();
     	$.post("/wankangyuan/friends/removeFriends",$('#myFriendsForm').serialize() ,function(result){
             layer.close(load);
             if(result && result.status!= 200){
@@ -730,6 +775,10 @@ function ViewModel() {
             }else{
                 layer.msg(result.message, {
                     anim: 0,
+                    end:function() {
+                    	$(".yichuhyK").hide();
+                    	self.getMyFriends();	
+                    }
                 });
             }
         },"json");

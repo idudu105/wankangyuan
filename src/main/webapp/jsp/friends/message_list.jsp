@@ -45,7 +45,9 @@
                         </a>
                         <a href="/wankangyuan/message/viewMessage">
                             <div class="userbut">系统消息
+                            <c:if test="${systemMSG }">
                                 <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint2" />
+                            </c:if>
                             </div>
                         </a>
                         <div class="userbutline"></div>
@@ -58,7 +60,9 @@
                 <a href="/wankangyuan/friends/viewFriendsManage">
                     <div class="yanjiuquan active">
                         <div class="yanjiuquanT">研究圈</div>
-                        <!-- <img src="img/redpoint.png" height="11" width="11" alt="" class="redpoint" /> -->
+                        <c:if test="${friendMSG}">
+                            <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
+                        </c:if>
                     </div>
                 </a>
             </div>
@@ -66,7 +70,11 @@
                 <div class="top2C">
                     <a href="/wankangyuan/friends/viewFriendsManage"><div class="top2Cli">好友管理</div></a>
                     <a href="/wankangyuan/friendMessage/viewFriendMessage">
-                        <div class="top2Cli top2CliYJ">好友消息</div>
+                        <div class="top2Cli top2CliYJ">好友消息
+                        <c:if test="${friendMSG}">
+                            <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint3" />
+                        </c:if>
+                        </div>
                     </a>
                     <div class="top2CrB">
                         <div class="top2Crb">清空所有消息</div>

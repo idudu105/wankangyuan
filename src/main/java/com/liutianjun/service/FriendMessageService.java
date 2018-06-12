@@ -9,6 +9,9 @@ public interface FriendMessageService {
 	//发送新的消息
 	int sendFriendMessage(String username, String objname, String content);
 	
+	//群发消息
+	int sendMassFriendMessage(String username, Integer[] ids, String content);
+	
 	//获取好友的留言
 	List<FriendMessage> getFriendRecentMessageList(Integer receiverId,Integer senderId);
 	

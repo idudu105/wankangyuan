@@ -77,7 +77,7 @@ public class FriendsServiceImpl implements FriendsService {
 			criteria.andFriendIdIn(Arrays.asList(friendsIds));
 			//双向删除
 			FriendsQuery example2 = new FriendsQuery();
-			Criteria criteria2 = example.createCriteria();
+			Criteria criteria2 = example2.createCriteria();
 			criteria2.andUserIdIn(Arrays.asList(friendsIds));
 			criteria2.andFriendIdEqualTo(userId);
 			friendsDao.deleteByExample(example2);

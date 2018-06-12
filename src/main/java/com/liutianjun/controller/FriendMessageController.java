@@ -1,12 +1,15 @@
 package com.liutianjun.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.shiro.SecurityUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,6 +34,8 @@ import com.liutianjun.service.UserService;
 @Controller
 @RequestMapping("/friendMessage")
 public class FriendMessageController {
+	
+	protected Map<String, Object> resultMap = new HashMap<String, Object>();
 
 	@Autowired
 	private FriendMessageService friendMessageService;
@@ -112,8 +117,8 @@ public class FriendMessageController {
 			}
 		}
 		if(isFriend) {
-			List<FriendMessage> list = friendMessageService.findAllRecentMessageList(user.getId());
-			model.addAttribute("list", list);
+			/*List<FriendMessage> list = friendMessageService.findAllRecentMessageList(user.getId());
+			model.addAttribute("list", list);*/
 			User obj = userService.selectByPrimaryKey(objId);
 			model.addAttribute("obj", obj);
 			return "jsp/friends/message_send.jsp";
@@ -122,6 +127,79 @@ public class FriendMessageController {
 		return "redirect:/friendMessage/viewFriendMessage";
 	}
 	
+	/**
+	 * 获取所有好友消息
+	 * @Title: getAllMyMessage 
+	 * @param id
+	 * @return 
+	 * String
+	 */
+	@RequestMapping(value="/getAllMyMessage",method=RequestMethod.GET,produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getAllMyMessage (Integer id) {
+		List<FriendMessage> list;
+		ObjectMapper objectMapper;
+		try {
+			list = friendMessageService.findAllRecentMessageList(id);
+			objectMapper = new ObjectMapper();
+			String jsonStr = objectMapper.writeValueAsString(list);
+			return jsonStr;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
+	/**
+	 * 群发消息
+	 * @Title: sendMassFriendMessage 
+	 * @param ids
+	 * @param content
+	 * @return 
+	 * Map<String,Object>
+	 */
+	@RequestMapping(value="/sendMassFriendMessage/{content}",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> sendMassFriendMessage(Integer[] ids, @PathVariable String content) {
+		resultMap.put("status", 400);
+		resultMap.put("message", "发送失败!");
+		if(null != ids && ids.length > 0) {
+			//获取用户名
+		    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    	if(ids.length == friendMessageService.sendMassFriendMessage(username,ids, content)) {
+	    		resultMap.put("status", 200);
+				resultMap.put("message", "发送成功，共发送"+ids.length+"条!");
+	    	}
+	    }
+		
+		return resultMap;
+		
+	}
+	
+	/**
+	 * 发送好友信息留言
+	 * @Title: sendFriendMessage 
+	 * @param username
+	 * @param Objname
+	 * @param content
+	 * @return 
+	 * Map<String,Object>
+	 */
+	@RequestMapping(value="/sendFriendMessage/{content}",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> sendFriendMessage(String username, String objname, @PathVariable String content) {
+		resultMap.put("status", 400);
+		resultMap.put("message", "发送失败!");
+		if(null != content && content.trim() != "") {
+			if(1 == friendMessageService.sendFriendMessage(username,objname, content)) {
+				resultMap.put("status", 200);
+				resultMap.put("message", "发送成功!");
+			}
+		}
+		return resultMap;
+		
+	}
 	
 	
 }

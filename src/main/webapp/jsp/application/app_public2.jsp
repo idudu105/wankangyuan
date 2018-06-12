@@ -44,7 +44,9 @@
                         </a>
                         <a href="/wankangyuan/message/viewMessage">
                             <div class="userbut">系统消息
+                            <c:if test="${systemMSG }">
                                 <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint2" />
+                            </c:if>
                             </div>
                         </a>
                         <div class="userbutline"></div>
@@ -57,7 +59,9 @@
                 <a href="/wankangyuan/friends/viewFriendsManage">
                 <div class="yanjiuquan">
                     <div class="yanjiuquanT">研究圈</div>
-                    <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
+                    <c:if test="${friendMSG}">
+                        <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
+                    </c:if>
                 </div>
                 </a>
             </div>

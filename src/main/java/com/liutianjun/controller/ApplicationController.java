@@ -61,7 +61,7 @@ public class ApplicationController {
 	@RequiresPermissions("application:view")
 	@RequestMapping(value="/viewMine{index}",method=RequestMethod.GET)
 	public String viewMine(@RequestParam(value="page", defaultValue="1")Integer page, 
-            @RequestParam(value="rows", defaultValue="8")Integer rows, 
+            @RequestParam(value="rows", defaultValue="12")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
             @PathVariable String index,
             Model model) {
@@ -103,7 +103,7 @@ public class ApplicationController {
 	@RequiresPermissions("application:view")
 	@RequestMapping(value="/viewCreate{index}",method=RequestMethod.GET)
 	public String viewCreate(@RequestParam(value="page", defaultValue="1")Integer page, 
-            @RequestParam(value="rows", defaultValue="8")Integer rows, 
+            @RequestParam(value="rows", defaultValue="12")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
             @PathVariable String index,
             Model model) {
@@ -141,7 +141,7 @@ public class ApplicationController {
 	@RequiresPermissions("application:view")
 	@RequestMapping(value="/viewPublic{index}",method=RequestMethod.GET)
 	public String viewPublic(@RequestParam(value="page", defaultValue="1")Integer page, 
-            @RequestParam(value="rows", defaultValue="8")Integer rows, 
+            @RequestParam(value="rows", defaultValue="12")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
             @PathVariable String index,
             Model model) {

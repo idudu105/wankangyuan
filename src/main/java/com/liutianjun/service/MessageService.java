@@ -42,5 +42,8 @@ public interface MessageService {
 
 	//处理新增组织请求
 	int dealAddNewOrgRequest(Integer id, Integer cmd);
+	
+	//查找未处理的消息
+	int findUnDealMessage(Integer userId);
 
 }

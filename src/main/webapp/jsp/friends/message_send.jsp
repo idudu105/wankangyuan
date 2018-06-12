@@ -49,7 +49,9 @@
                         </a>
                         <a href="/wankangyuan/message/viewMessage">
                             <div class="userbut">系统消息
+                            <c:if test="${systemMSG }">
                                 <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint2" />
+                            </c:if>
                             </div>
                         </a>
                         <div class="userbutline"></div>
@@ -62,14 +64,14 @@
                 <a href="/wankangyuan/friends/viewFriendsManage">
                     <div class="yanjiuquan active">
                         <div class="yanjiuquanT">研究圈</div>
-                        <!-- <img src="img/redpoint.png" height="11" width="11" alt="" class="redpoint" /> -->
+                        <%-- <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" /> --%>
                     </div>
                 </a>
             </div>
             <div class="top2">
                 <div class="top2C">
                     <a href="/wankangyuan/friends/viewFriendsManage"><div class="top2Cli">好友管理</div></a>
-                    <a href="message_list.html">
+                    <a href="/wankangyuan/friendMessage/viewFriendMessage">
                         <div class="top2Cli top2CliYJ">好友消息</div>
                     </a>
                     <!-- <div class="top2CrB">
@@ -89,31 +91,7 @@
                     <div class="messsendMLT">
                         <span>${obj.username }</span>与你的对话
                     </div>
-                    <div class="messsendMLM">
-
-                        <!-- 时间 -->
-                        <!-- <div class="sendtime">
-                            <span>2018-4-16 18：00</span>
-                        </div> -->
-
-                        <!-- 其他人消息 -->
-                        <!-- <div class="messhis">
-                            <div class="mess_ik">
-                                <img src="img/touxiang_2.png" alt="" class="mess_i" />
-                            </div>
-                            <div class="mess_t">干嘛呢，帮我上传一组数据干嘛呢，帮我上传一组数据干嘛呢，帮我上传一组数据干嘛呢，帮我上传一组数据干嘛呢，帮我上传一组数据干嘛呢，帮我上传一组数据干嘛呢，帮我上传一组数据</div>
-                            <div class="clear"></div>
-                        </div> -->
-
-                        <!-- 自己消息 -->
-                        <!-- <div class="messmine">
-                            <div class="mess_ik">
-                                <img src="img/touxiang_1.png" alt="" class="mess_i" />
-                            </div>
-                            <div class="mess_t">干嘛呢，帮我上传一组数据</div>
-                            <div class="clear"></div>
-                        </div> -->
-                    </div>
+                    <div class="messsendMLM"></div>
 
                     <!-- 输入发送栏 -->
                     <div class="messsendMLB">
@@ -127,23 +105,21 @@
                 <!-- 右侧消息栏 -->
                 <div class="messsendMR">
                     <div class="messsendMRT">私信列表</div>
-                    <div class="messsendMRM">
-                    <c:forEach items="${list }" var="friendMessage">
+                    <div class="messsendMRM" data-bind="foreach: friendMessage">
                         <div class="messsendMRMz">
                             <div class="messsendMRMzik">
-                                <img src="${friendMessage.senderHeadimg }" alt="" class="messsendMRMzi" />
+                                <img alt="" class="messsendMRMzi" data-bind="attr:{src:senderHeadimg}" />
                             </div>
                             <div class="messsendMRMzt">
                                 <div class="messsendMRMztT">
-                                    <div class="messsendMRMztTl">${friendMessage.senderName }</div>
+                                    <div class="messsendMRMztTl" data-bind="text:senderName"></div>
                                     <div class="messsendMRMztTr">
-                                        <span><fmt:formatDate type="both" value="${friendMessage.sendTime}" /></span>
+                                        <span data-bind="text:sendTime"></span>
                                     </div>
                                 </div>
-                                <div class="messsendMRMztB">${friendMessage.content }</div>
+                                <div class="messsendMRMztB" data-bind="text:content,click:$root.sendFriendMessage"></div>
                             </div>
                         </div>
-                    </c:forEach>
                     </div>
                 </div>
 
@@ -174,6 +150,8 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/sockjs.js"></script>
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/knockout-3.4.2.js"></script>
+
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/moment.min.js"></script>
 
 <script type="text/javascript">
 
@@ -206,7 +184,19 @@ websocket.onmessage = function (event) {
     	timesend(msgObj.content);
     	return ;
     }
-    messagesend(2,msgObj.headimg,msgObj.content);
+    if(msgObj.username == '${obj.username}'){
+	    messagesend(2,msgObj.headimg,msgObj.content);
+    }else {
+        $.post("/wankangyuan/friendMessage/sendFriendMessage/"+msgObj.content,{username:msgObj.username,objname:msgObj.objname},function(result){
+            if(result && result.status!= 200){
+                return layer.msg("接收消息失败",function(){}),!1;
+            }else{
+            	vm.showFriendMessage();
+            	//timesend("对方正在与其他人聊天，本消息已转为消息提醒");
+                
+            }
+        },"json");
+    }
 }
 
 //连接关闭的回调方法
@@ -235,14 +225,17 @@ $(document).ready(function(){
     $.get("/wankangyuan/friendMessage/getRecentMessage",{senderId:${obj.id}},function(data){
     	if(null != data && "" != data){
 	        var list = JSON.parse(data);
+	        var standTime = moment(list[0].sendTime).add(5,"seconds");
+            timesend(moment(list[0].sendTime).format('YYYY-MM-DD HH:mm:ss'));
 	        for (var i in list){
-	            messagesend(2,list[i].senderHeadimg,list[i].content)
-			    var d = new Date(list[i].sendTime);  
-			    var dformat = [ d.getFullYear(), d.getMonth() + 1, d.getDate() ].join('-')   
-			            + ' ' + [ d.getHours(), d.getMinutes(), d.getSeconds() ].join(':');  
-	            timesend(dformat);
+	        	if(standTime - moment(list[i].sendTime) < 0){
+	        		timesend(moment(list[i].sendTime).format('YYYY-MM-DD HH:mm:ss'));
+	        		standTime = moment(list[i].sendTime).add(10,"m");
+	        	}
+	            messagesend(2,list[i].senderHeadimg,list[i].content);
 	        }
     	}
+    	vm.showFriendMessage();
     });
 })
     
@@ -258,6 +251,29 @@ function sendMessage(){
 	$("#saytext").val("");
 }
 
+//定义ViewModel
+function ViewModel() {
+    var self = this;
+    self.friendMessage = ko.observableArray();
+    self.showFriendMessage = function() {
+    	$.get("/wankangyuan/friendMessage/getAllMyMessage",{id:${user.id}},function(data){
+    		var list = JSON.parse(data);
+    		self.friendMessage.removeAll();
+            for (var i in list){
+            	list[i].sendTime = moment(list[i].sendTime).format('YYYY-MM-DD HH:mm:ss')
+            	self.friendMessage.push(list[i]);
+            }
+    	});
+    }
+    //self.showFriendMessage();
+    
+    self.sendFriendMessage = function(message) {
+    	window.location.href="/wankangyuan/friendMessage/viewSendMessage?objId=" + message.senderId;
+    }
+    
+}
+var vm = new ViewModel();
+ko.applyBindings(vm);
 
 </script>
 </html>

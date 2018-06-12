@@ -1,6 +1,5 @@
 package com.liutianjun.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,10 +10,8 @@ import com.liutianjun.dao.FriendMessageDao;
 import com.liutianjun.pojo.FriendMessage;
 import com.liutianjun.pojo.FriendMessageQuery;
 import com.liutianjun.pojo.FriendMessageQuery.Criteria;
-import com.liutianjun.pojo.Friends;
 import com.liutianjun.pojo.User;
 import com.liutianjun.service.FriendMessageService;
-import com.liutianjun.service.FriendsService;
 import com.liutianjun.service.UserService;
 
 /**
@@ -34,9 +31,6 @@ public class FriendMessageServiceImpl implements FriendMessageService {
 	
 	@Autowired
 	private FriendMessageDao friendMessageDao;
-	
-	@Autowired
-	private FriendsService  friendsService;
 	
 	/**
 	 * 发送好友消息
@@ -62,6 +56,24 @@ public class FriendMessageServiceImpl implements FriendMessageService {
 		friendMessage.setSendTime(new Date());
 		return friendMessageDao.insert(friendMessage);
 	}
+	
+	/**
+	 * 群发好友消息
+	 * <p>Title: sendMassFriendMessage</p>  
+	 * <p>Description: </p>  
+	 * @param username
+	 * @param ids
+	 * @param content
+	 * @return
+	 */
+	@Override
+	public int sendMassFriendMessage(String username, Integer[] ids, String content) {
+		int i = 0;
+		for (Integer id : ids) {
+			i += sendFriendMessage(username, userService.selectByPrimaryKey(id).getUsername(), content);
+		}
+		return i;
+	}
 
 
 	/**
@@ -78,6 +90,7 @@ public class FriendMessageServiceImpl implements FriendMessageService {
 		Criteria criteria = example.createCriteria();
 		criteria.andReceiverIdEqualTo(receiverId);
 		criteria.andSenderIdEqualTo(senderId);
+		example.setOrderByClause("send_time ASC");
 		List<FriendMessage> list = friendMessageDao.selectByExample(example);
 		return list;
 	}
@@ -91,22 +104,11 @@ public class FriendMessageServiceImpl implements FriendMessageService {
 	 */
 	@Override
 	public List<FriendMessage> findAllRecentMessageList(Integer receiverId) {
-		List<Friends> allMyFriends = friendsService.findAllMyFriends(receiverId, null);
-		List<FriendMessage> list = new ArrayList<>();
-		FriendMessage friendMessage = null;
-		for (Friends friends : allMyFriends) {
-			if(null != friends && null != friends.getFriendId()) {
-				List<FriendMessage> friendRecentMessageList = getFriendRecentMessageList(receiverId, friends.getFriendId());
-				if(friendRecentMessageList != null && friendRecentMessageList.size()>0) {
-					friendMessage = friendRecentMessageList.get(friendRecentMessageList.size()-1);
-					if(null != friendMessage) {
-						list.add(friendMessage);
-					}
-				}
-			}
-		}
-		
-		return list;
+		FriendMessageQuery example = new FriendMessageQuery();
+		Criteria criteria = example.createCriteria();
+		criteria.andReceiverIdEqualTo(receiverId);
+		example.setOrderByClause("send_time DESC");
+		return friendMessageDao.selectByExample(example);
 	}
 
 	/**

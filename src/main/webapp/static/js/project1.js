@@ -2089,10 +2089,10 @@ function friend_manage(){
     }
 
 //群发消息
-    ofriend_qunfa.onclick=function(){
+    /*ofriend_qunfa.onclick=function(){
         oqunfaK.style.display="block";//此行为点击群发按钮后群发框显示，若要加判断，请注释此行
         oqunfaMta.value="";
-    }
+    }*/
     oqunfaTi.onclick=function(){
         oqunfaK.style.display="none";
     }

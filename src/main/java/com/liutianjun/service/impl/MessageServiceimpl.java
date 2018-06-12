@@ -202,6 +202,22 @@ public class MessageServiceimpl implements MessageService {
 		
 		return messageDao.selectByExample(example);
 	}
+	
+	/**
+	 * 统计未处理的消息
+	 * <p>Title: findUnDealMessage</p>  
+	 * <p>Description: </p>  
+	 * @param userId
+	 * @return
+	 */
+	@Override
+	public int findUnDealMessage(Integer userId) {
+		MessageQuery example = new MessageQuery();
+		Criteria criteria = example.createCriteria();
+		criteria.andUserIdEqualTo(userId);
+		criteria.andStatusEqualTo(0);
+		return messageDao.countByExample(example);
+	}
 
 	/**
 	 * 处理新增组织请求
