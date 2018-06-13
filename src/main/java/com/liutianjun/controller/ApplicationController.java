@@ -1,10 +1,8 @@
 package com.liutianjun.controller;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -21,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.dzjin.service.ProjectService;
 import com.liutianjun.pojo.Application;
 import com.liutianjun.pojo.User;
-import com.liutianjun.pojo.UserAppRelation;
 import com.liutianjun.service.ApplicationService;
 import com.liutianjun.service.UserService;
 
@@ -63,6 +60,7 @@ public class ApplicationController {
 	public String viewMine(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="12")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
+            @RequestParam(value="appType",required=false)String appType,
             @PathVariable String index,
             Model model) {
 	    //获取用户名
@@ -70,18 +68,13 @@ public class ApplicationController {
 	    //获取用户
 	    User user = userService.selectByUsername(username);
 		
-		Map<String, Object> map = applicationService.findMine(page,rows,appName,user.getId());
+		Map<String, Object> map = applicationService.findMine(page,rows,appName,appType,user.getId());
 		
 		//获取应用筛选列表
-		@SuppressWarnings("unchecked")
-		List<UserAppRelation> list = (List<UserAppRelation>) map.get("list");
-		Set<String> set =new HashSet<>();
-		for (UserAppRelation userAppRelation : list) {
-			set.add(userAppRelation.getAppType());
-		}
+		List<String> typeList = applicationService.findTypeList();
 		
 		model.addAttribute("projectList", projectService.selectMyProject(user.getId()));
-		model.addAttribute("typeSet", set);
+		model.addAttribute("typeList", typeList);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));
 		model.addAttribute("page", page);
@@ -105,21 +98,17 @@ public class ApplicationController {
 	public String viewCreate(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="12")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
+            @RequestParam(value="appType",required=false)String appType,
             @PathVariable String index,
             Model model) {
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 	    User user = userService.selectByUsername(username);
-		Map<String, Object> map = applicationService.findAll(page,rows,appName,username);
-		@SuppressWarnings("unchecked")
-		List<Application> list = (List<Application>) map.get("list");
-		Set<String> set =new HashSet<>();
-		for (Application application : list) {
-			set.add(application.getAppType());
-		}
+		Map<String, Object> map = applicationService.findAll(page,rows,appName,appType,username);
+		
+		List<String> typeList = applicationService.findTypeList();
 		
 		model.addAttribute("projectList", projectService.selectMyProject(user.getId()));
-		
-		model.addAttribute("typeSet", set);
+		model.addAttribute("typeList", typeList);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));
 		model.addAttribute("page", page);
@@ -143,17 +132,13 @@ public class ApplicationController {
 	public String viewPublic(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="12")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
+            @RequestParam(value="appType",required=false)String appType,
             @PathVariable String index,
             Model model) {
-		Map<String, Object> map = applicationService.findAllPublic(page,rows,appName);
-		@SuppressWarnings("unchecked")
-		List<Application> list = (List<Application>) map.get("list");
-		Set<String> set =new HashSet<>();
-		for (Application application : list) {
-			set.add(application.getAppType());
-		}
+		Map<String, Object> map = applicationService.findAllPublic(page,rows,appName,appType);
+		List<String> typeList = applicationService.findTypeList();
 		
-		model.addAttribute("typeSet", set);
+		model.addAttribute("typeList", typeList);
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("total", map.get("total"));
 		

@@ -89,7 +89,7 @@ public class RoleController {
 	 * String
 	 * @throws Exception 
 	 */
-	@RequestMapping(value="/role/getRoleInfo",method=RequestMethod.GET,produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/admin/getRoleInfo",method=RequestMethod.GET,produces="text/html;charset=UTF-8")
 	@ResponseBody
 	public String getRoleInfo(String id) throws Exception {
 		Role role = roleService.selectByPrimaryKey(Integer.valueOf(id));

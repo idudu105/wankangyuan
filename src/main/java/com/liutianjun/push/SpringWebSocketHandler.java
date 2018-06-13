@@ -2,8 +2,8 @@ package com.liutianjun.push;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -24,7 +24,8 @@ public class SpringWebSocketHandler extends TextWebSocketHandler {
     private static final Map<String, WebSocketSession> userMap;
     private static Logger logger = Logger.getLogger(SpringWebSocketHandler.class);
     static {
-    	userMap = new HashMap<String,WebSocketSession>();
+    	//userMap = new HashMap<String,WebSocketSession>();
+    	userMap = new ConcurrentHashMap<String,WebSocketSession>();
     }
     
     public SpringWebSocketHandler() {

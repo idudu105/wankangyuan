@@ -73,7 +73,7 @@ public class SysConfigController {
 	 */
 	@RequestMapping(value="/viewIndex",method=RequestMethod.GET)
 	public String viewIndex() {
-		return "/admin/index.jsp";
+		return "admin/index.jsp";
 	}
 	
 	/**

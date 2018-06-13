@@ -1,7 +1,5 @@
 package com.liutianjun.shiro.realm;
 
-import java.util.Date;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -66,12 +64,8 @@ public class UserRealm extends AuthorizingRealm {
             throw new UnknownAccountException();//没找到帐号
         } else if(0 == user.getStatus()) {
             throw new LockedAccountException(); //帐号锁定
-        } else {
-			//更新登录时间
-        	user.setLastLoginTime(new Date());
-        	userService.updateByPrimaryKey(user);
-		}
-
+        }
+        
         //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
         		user.getUsername(), //用户名

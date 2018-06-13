@@ -171,7 +171,7 @@
                     </div>
                 </div>
                 <div class="app_typeul">
-	                <c:forEach items="${typeSet }" var="appType" varStatus="appList">
+	                <c:forEach items="${typeList }" var="appType" varStatus="appList">
 		                <c:if test="${appType ne null }">
 		                    <div class="app_typeli" onclick="filtrateAppType('${appType }')">${appType }</div>
 		                </c:if>

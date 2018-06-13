@@ -201,5 +201,26 @@ public class FriendMessageController {
 		
 	}
 	
+	/**
+	 * 清空所有好友消息
+	 * @Title: clearAllMessage 
+	 * @return 
+	 * Map<String,Object>
+	 */
+	@RequestMapping(value="/clearAllMessage",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> clearAllMessage() {
+		resultMap.put("status", 400);
+		resultMap.put("message", "清空失败!");
+		//获取用户名
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    User user = userService.selectByUsername(username);
+	    int i = friendMessageService.cleanAllMyMessages(user.getId());
+		if(0 < i) {
+			resultMap.put("status", 200);
+			resultMap.put("message", "清空成功，共计清空"+i+"条消息!");
+		}
+		return resultMap;
+	}
 	
 }

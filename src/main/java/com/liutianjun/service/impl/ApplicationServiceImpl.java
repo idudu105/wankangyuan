@@ -1,5 +1,6 @@
 package com.liutianjun.service.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -118,11 +119,14 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * @return
 	 */
 	@Override
-	public Map<String,Object> findAllPublic(Integer page, Integer rows, String appName) {
+	public Map<String,Object> findAllPublic(Integer page, Integer rows, String appName, String appType) {
 		ApplicationQuery example = new ApplicationQuery();
 		Criteria criteria = example.createCriteria();
 		if(StringUtils.isNotBlank(appName)) {
 			criteria.andAppNameLike("%"+appName+"%");
+		}
+		if(StringUtils.isNotBlank(appType)) {
+			criteria.andAppTypeEqualTo(appType);
 		}
 		criteria.andStatusEqualTo("公开");
 		int total = applicationDao.countByExample(example);
@@ -147,11 +151,14 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * @return
 	 */
 	@Override
-	public Map<String, Object> findAll(Integer page, Integer rows, String appName, String creator) {
+	public Map<String, Object> findAll(Integer page, Integer rows, String appName, String appType, String creator) {
 		ApplicationQuery example = new ApplicationQuery();
 		Criteria criteria = example.createCriteria();
 		if(StringUtils.isNotBlank(appName)) {
 			criteria.andAppNameLike("%"+appName+"%");
+		}
+		if(StringUtils.isNotBlank(appType)) {
+			criteria.andAppTypeEqualTo(appType);
 		}
 		criteria.andCreatorEqualTo(creator);
 		int total = applicationDao.countByExample(example);
@@ -194,8 +201,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * @return
 	 */
 	@Override
-	public Map<String, Object> findMine(Integer page, Integer rows, String appName, Integer userId) {
-		return userAppRelationService.findMine(page,rows,appName,userId);
+	public Map<String, Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId) {
+		return userAppRelationService.findMine(page,rows,appName,appType,userId);
 	}
 
 	/**
@@ -245,7 +252,13 @@ public class ApplicationServiceImpl implements ApplicationService {
 		return applicationDao.selectByExample(example);
 	}
 
-	//查看已公开的应用
+	/**
+	 * 查看已公开的应用
+	 * <p>Title: findPublicByid</p>  
+	 * <p>Description: </p>  
+	 * @param id
+	 * @return
+	 */
 	@Override
 	public Application findPublicByid(Integer id) {
 		Application application = applicationDao.selectByPrimaryKey(id);
@@ -253,6 +266,29 @@ public class ApplicationServiceImpl implements ApplicationService {
 			return application;
 		}
 		return null;
+	}
+
+	/**
+	 * 查找类别列表
+	 * <p>Title: findTypeList</p>  
+	 * <p>Description: </p>  
+	 * @return
+	 */
+	@Override
+	public List<String> findTypeList() {
+		ApplicationQuery example = new ApplicationQuery();
+		example.setFields("app_type");
+		example.setDistinct(true);
+		List<Application> list = applicationDao.selectByExample(example);
+		List<String> typeList = new ArrayList<>();
+		if(null !=list && list.size() > 0) {
+			for (Application application : list) {
+				if(null != application && null != application.getAppType()) {
+					typeList.add(application.getAppType());
+				}
+			}
+		}
+		return typeList;
 	}
 
 }

@@ -233,7 +233,7 @@ public class CommonController {
 	        out.flush();
 	       //存入Shiro会话session  
 	        System.out.println( captcha.text().toLowerCase());
-	        SecurityUtils.getSubject().getSession().setAttribute(VerifyCodeUtils.V_CODE, captcha.text().toLowerCase());
+	        request.getSession().setAttribute(VerifyCodeUtils.V_CODE, captcha.text().toLowerCase());
 		} catch (Exception e) {
 			LoggerUtils.fmtError(getClass(),e, "获取验证码异常：%s",e.getMessage());
 		}

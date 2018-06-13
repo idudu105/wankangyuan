@@ -29,5 +29,5 @@ public interface UserAppRelationService {
 	int removeFromMineByIds(Integer userId,Integer[] ids);
 	
 	//查找用户的应用集合
-	Map<String,Object> findMine(Integer page, Integer rows, String appName, Integer userId);
+	Map<String,Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId);
 }

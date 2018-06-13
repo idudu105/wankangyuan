@@ -77,7 +77,7 @@
                         </div>
                     </a>
                     <div class="top2CrB">
-                        <div class="top2Crb">清空所有消息</div>
+                        <div class="top2Crb" onclick="clearAllMessage()" >清空所有消息</div>
                     </div>
                 </div>
             </div>
@@ -125,5 +125,32 @@
     layer.msg("${msg}");
     </script>
 </c:if>
+<script type="text/javascript">
+function clearAllMessage() {
+	layer.confirm('清空后不能撤销，请确认是否清空?',{
+        btn: ['确认','取消'], //按钮
+        icon: 2
+      }, function(){
+          var load = layer.load();
+            $.post("/wankangyuan/friendMessage/clearAllMessage",{},function(result){
+                layer.close(load);
+                if(result && result.status!= 200){
+                    return layer.msg(result.message,function(){}),!1;
+                }else{
+                    layer.msg(result.message, {
+                        anim: 0,
+                        end: function (index) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            },"json");
+        
+      }, function(){
+          return;
+      });
+}
+</script>
+
 </body>
 </html>

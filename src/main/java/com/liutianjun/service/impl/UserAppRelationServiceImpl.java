@@ -120,7 +120,7 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	 * @return
 	 */
 	@Override
-	public Map<String,Object> findMine(Integer page, Integer rows, String appName, Integer userId) {
+	public Map<String,Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId) {
 		Map<String,Object> map = new HashMap<>();
 		//根据用户名查询关系表
 	    UserAppRelationQuery example = new UserAppRelationQuery();
@@ -128,6 +128,9 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	    criteria.andUserIdEqualTo(userId);
 	    if(StringUtils.isNotBlank(appName)) {
 	    	criteria.andAppNameLike("%"+appName+"%");
+	    }
+	    if(StringUtils.isNotBlank(appType)) {
+	    	criteria.andAppTypeEqualTo(appType);
 	    }
 	    int total = userAppRelationDao.countByExample(example);
 	    example.setPageNo(page);
