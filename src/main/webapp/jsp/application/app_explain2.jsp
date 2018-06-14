@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -81,94 +81,66 @@
             <form id="appSub" action="/wankangyuan/application/update${index }" method="post">
                 <div class="appexpML">
                     <div class="appexpMLz">
-                        <div class="appexpMLzt1">应用编号：</div>
-                        <div class="appexpMLzt2">${application.id }</div>
-                        <input name="id" type="hidden" class="appexpMLzt2" value="${application.id }">
+                        <div class="appexpMLzt_1">应用编号：</div>
+                        <input disabled="disabled" class="appexpMLzp_1" value="${application.id }">
+                        <input name="id" type="hidden" class="appexpMLzp_1" value="${application.id }">
                     </div>
                     <div class="appexpMLz">
-                        <div class="appexpMLzt1">应用名称：</div>
-                        <!-- <div class="appexpMLzt2">张三</div> -->
-                        <input name="appName" type="text" class="appexpMLzp1" value="${application.appName }" />
+                        <div class="appexpMLzt_1">应用名称：</div>
+                        <input name="appName" type="text" class="appexpMLzp_1" value="${application.appName }" />
                     </div>
                     <div class="appexpMLz">
-                        <div class="appexpMLzt1">创建人：</div>
-                        <div class="appexpMLzt2">${application.creator }</div>
+                        <div class="appexpMLzt_1">应用类别：</div>
+                        <input name="appType" type="text" class="appexpMLzp_1" value="${application.appType }" />
                     </div>
                     <div class="appexpMLz">
-                        <div class="appexpMLzt1">应用类别：</div>
-                        <!-- <div class="appexpMLzt2">测序</div> -->
-                        <select name="appType" id="" class="appexpMLzs1">
-                            <option value="测序" <c:if test="${'测序' eq application.appType }">selected="selected"</c:if>>测序</option>
-                            <option value="排查" <c:if test="${'排查' eq application.appType }">selected="selected"</c:if>>排查</option>
-                        </select>
-                        
+                        <div class="appexpMLzt_1">关键字：</div>
+                        <input name="keywords" type="text" class="appexpMLzp_1" value="${application.keywords }" />
                     </div>
                     <div class="appexpMLz">
-                        <div class="appexpMLzt1">关键字：</div>
-                        <!-- <div class="appexpMLzt2">DNA</div> -->
-                        <!-- <div class="appexpMLzt2">RNA</div> -->
-                        <input name="keywords" type="hidden" value="" >
-                        <div class="appexpGJZK">
-                            <div class="appexpGJZKC">
-                            
-                                <!-- <div class="appexpGJZ">
-                                    <div class="appexpGJZt">DNA</div>
-                                    <div class="appexpGJZx"></div>
-                                </div>
-                                <div class="appexpGJZ">
-                                    <div class="appexpGJZt">RNA</div>
-                                    <div class="appexpGJZx"></div>
-                                </div> -->
-                            <c:forEach items="${keywords }" var="keyword">
-                                <div class="appexpGJZ">
-                                    <div class="appexpGJZt">${keyword }</div>
-                                    <div class="appexpGJZx"></div>
-                                </div>
-                            </c:forEach>
-                                
-                            </div>
-                            <div class="appexpGJZadk">
-                                <input type="text" class="appexpGJZadp" />
-                                <div class="appexpGJZadb">添加</div>
-                            </div>
-                        </div>
-                        
+                        <div class="appexpMLzt_1">版本：</div>
+                        <input name="versions" type="text" class="appexpMLzp_1" value="${application.versions }" />
                     </div>
                     <div class="appexpMLz">
-                        <div class="appexpMLzt1">版本：</div>
-                        <!-- <div class="appexpMLzt2">VER1.00</div> -->
-                        <input type="text" name="versions" class="appexpMLzp1" value="${application.versions }" />
-                    </div>
-                    <div class="appexpMLz">
-                        <div class="appexpMLzt1">创建时间：</div>
-                            <fmt:formatDate type="date" value="${application.createTime }" />
-                        <div class="appexpMLzt2">
-                        
+                        <div class="appexpMLzt_1">是否存储系统：</div>
+                        <div class="appexpMLzrk_1">
+                            <input type="radio" class="appexpMLzr_1" name="isSaveSystem" value="1" <c:if test="${1 eq application.isSaveSystem }">checked="checked"</c:if> />是
+                            <input type="radio" class="appexpMLzr_1" name="isSaveSystem" value="0" <c:if test="${0 eq application.isSaveSystem }">checked="checked"</c:if> />否
                         </div>
                     </div>
                     <div class="appexpMLz">
-                        <div class="appexpMLzt1">状态：</div>
-                        <!-- <div class="appexpMLzt2">隐藏</div> -->
-                        <select name="status" class="appexpMLzs1">
-                            <option value="私有" <c:if test="${'私有' eq application.status }">selected="selected"</c:if>>私有</option>
-                            <option value="公开" <c:if test="${'公开' eq application.status }">selected="selected"</c:if>>公开</option>
-                        </select>
+                        <div class="appexpMLzt_1">是否异步应用：</div>
+                        <div class="appexpMLzrk_1">
+                            <input type="radio" class="appexpMLzr_1" name="isAsync" value="1" <c:if test="${1 eq application.isAsync }">checked="checked"</c:if> />是
+                            <input type="radio" class="appexpMLzr_1" name="isAsync" value="0" <c:if test="${0 eq application.isAsync }">checked="checked"</c:if> />否
+                        </div>
                     </div>
                     <div class="appexpMLz">
-                        <div class="appexpMLzt1">参数1：</div>
-                        <div class="appexpMLzt2">${application.paraA }</div>
-                    </div><div class="appexpMLz">
-                        <div class="appexpMLzt1">参数2：</div>
-                        <div class="appexpMLzt2">${application.paraB }</div>
+                        <div class="appexpMLzt_1">是否显示：</div>
+                        <div class="appexpMLzrk_1">
+                            <input type="radio" class="appexpMLzr_1" name="isDisplay" value="1" <c:if test="${1 eq application.isDisplay }">checked="checked"</c:if> />是
+                            <input type="radio" class="appexpMLzr_1" name="isDisplay" value="0" <c:if test="${0 eq application.isDisplay }">checked="checked"</c:if> />否
+                        </div>
                     </div>
                     <div class="appexpMLz">
-                        <div class="appexpMLzt1">应用概述：</div>
-                        <!-- <div class="appexpMLzt3">张三</div> -->
-                        <textarea name="appOverview" class="appexpMLzta1" >${application.appOverview }</textarea>
+                        <div class="appexpMLzt_1">参数地址：</div>
+                        <textarea name="paraAddress" class="appexpMLzta_1">${application.paraAddress }</textarea>
                     </div>
                     <div class="appexpMLz">
-                        <div class="appexpMLzt1">格式数据：</div>
-                        <textarea name="dataFormat" class="appexpMLzta1">${application.dataFormat }</textarea>
+                        <div class="appexpMLzt_1">结果地址：</div>
+                        <textarea name="resultAddress" class="appexpMLzta_1">${application.resultAddress }</textarea>
+                    </div>
+                    <div class="appexpMLz">
+                        <div class="appexpMLzt_1">应用简介：</div>
+                        <textarea name="appIntro" class="appexpMLzta_1">${application.appIntro }</textarea>
+                    </div>
+                    <div class="appexpMLz">
+                        <div class="appexpMLzt_1">文件结果：</div>
+                        <textarea name="fileResult" class="appexpMLzta_1">${application.fileResult }</textarea>
+                    </div>
+                    <div class="appexpMLz">
+                        <div class="appexpMLzt_1">文件结果地址：</div>
+                        <textarea name="fileResultAddress" class="appexpMLzta_1">${application.fileResultAddress }</textarea>
                     </div>
                 </div>
                 <div class="appexpMR"></div>
@@ -200,13 +172,6 @@
 </c:if>
 <script type="text/javascript">
 function to_update(){
-	var maxIndex = $('.appexpGJZt').length - 1;
-    var result = '';
-    $('.appexpGJZt').text(function(index, content){
-        result += (index === maxIndex) ? content : content + ','; 
-    });
-    $("input[name='keywords']").val(result);
-    //alert(result);
     $("#appSub").submit();
 }
 

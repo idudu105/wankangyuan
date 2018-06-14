@@ -238,7 +238,10 @@
                                 
                                 <div class="PJliCli appopen">
                                 <c:if test="${app.creator eq user.username }">我创建的</c:if>
-                                <c:if test="${app.creator ne user.username }">${app.status }</c:if>
+                                <c:if test="${app.creator ne user.username }">
+                                    <c:if test="${1 eq app.isDisplay }">公开</c:if>
+                                    <c:if test="${0 eq app.isDisplay }">私有</c:if>
+                                </c:if>
                                 </div>
                                 
                                 <div class="PJliCli PJyibu">
@@ -247,7 +250,7 @@
                                 
                                 </div>
                                 <div class="PJliCli PJkeyword">${app.keywords }</div>
-                                <div class="PJliCli appexplain">${app.appOverview }</div>
+                                <div class="PJliCli appexplain">${app.appIntro }</div>
                             </a>
                         </div>
                         <div class="PJliline"></div>

@@ -239,21 +239,24 @@
                                 <div class="PJliCli apptime">
                                     <fmt:formatDate type="date" value="${app.createTime }" />
                                 </div>
-                                <div class="PJliCli appopen">${app.status }</div>
+                                <div class="PJliCli appopen">
+                                <c:if test="${1 eq app.isDisplay }">公开</c:if>
+                                <c:if test="${0 eq app.isDisplay }">私有</c:if>
+                                </div>
                                 <div class="PJliCli PJyibu">
                                 <c:if test="${app.isAsync eq 0}">同步</c:if>
                                 <c:if test="${app.isAsync eq 1}">异步</c:if>
                                 
                                 </div>
                                 <div class="PJliCli PJkeyword">${app.keywords }</div>
-                                <div class="PJliCli appexplain">${app.appOverview }</div>
+                                <div class="PJliCli appexplain">${app.appIntro }</div>
                             </a>
                         </div>
                         <div class="PJliline"></div>
                     </div>
                 </c:forEach>
-                <input id="pub_but" type="submit" name="cmd" value="公开" style="display:none">
-                <input id="pri_but" type="submit" name="cmd" value="私有" style="display:none">
+                <input id="pub_but" type="submit" name="cmd" value="1" style="display:none">
+                <input id="pri_but" type="submit" name="cmd" value="0" style="display:none">
                 <input id="projectId" name="projectId" type="hidden" disabled="disabled">
                 </form>
                 </div>

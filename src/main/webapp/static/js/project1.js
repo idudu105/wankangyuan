@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2018-04-23 15:32:03
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-06-06 11:40:28
+* @Last Modified time: 2018-06-14 13:58:51
 */
 
 //获取非行间样式
@@ -1118,49 +1118,50 @@ function pro_appendre(){
 //应用说明2
 function app_exp2(){
 //关键字
-    var oappexpGJZK=document.querySelectorAll('.appexpGJZK')[0];//关键字框
-    var oappexpGJZadp=oappexpGJZK.querySelectorAll('.appexpGJZadp')[0];//关键字增加框
-    var oappexpGJZadb=oappexpGJZK.querySelectorAll('.appexpGJZadb')[0];//关键字增加按钮
-    var oappexpGJZKC=oappexpGJZK.querySelectorAll('.appexpGJZKC')[0];//关键字包含框
+    if(document.querySelectorAll('.appexpGJZK')[0]){
+        var oappexpGJZK=document.querySelectorAll('.appexpGJZK')[0];//关键字框
+        var oappexpGJZadp=oappexpGJZK.querySelectorAll('.appexpGJZadp')[0];//关键字增加框
+        var oappexpGJZadb=oappexpGJZK.querySelectorAll('.appexpGJZadb')[0];//关键字增加按钮
+        var oappexpGJZKC=oappexpGJZK.querySelectorAll('.appexpGJZKC')[0];//关键字包含框
 
 
-    add_deleteX();
-    function add_deleteX(){
-        var aappexpGJZ=oappexpGJZKC.querySelectorAll('.appexpGJZ');
-        for(var i=0;i<aappexpGJZ.length;i++){
-            (function(index){
-                var oappexpGJZx=aappexpGJZ[index].querySelectorAll('.appexpGJZx')[0];
-                oappexpGJZx.onclick=function(){
-                    oappexpGJZKC.removeChild(oappexpGJZKC.children[index]);
-                    add_deleteX();
-                }
-            })(i)
+        add_deleteX();
+        function add_deleteX(){
+            var aappexpGJZ=oappexpGJZKC.querySelectorAll('.appexpGJZ');
+            for(var i=0;i<aappexpGJZ.length;i++){
+                (function(index){
+                    var oappexpGJZx=aappexpGJZ[index].querySelectorAll('.appexpGJZx')[0];
+                    oappexpGJZx.onclick=function(){
+                        oappexpGJZKC.removeChild(oappexpGJZKC.children[index]);
+                        add_deleteX();
+                    }
+                })(i)
+            }
+        }
+        
+        oappexpGJZadb.onclick=function(){
+            if(oappexpGJZadp.value!=" "&&oappexpGJZadp.value!=""){
+                var oappexpGJZ=document.createElement("div");
+                oappexpGJZ.className="appexpGJZ";
+
+                var oappexpGJZt=document.createElement("div");
+                oappexpGJZt.className="appexpGJZt";
+                oappexpGJZt.innerHTML=oappexpGJZadp.value;
+                // console.log(oappexpGJZadp.value);
+
+                var oappexpGJZx=document.createElement("div");
+                oappexpGJZx.className="appexpGJZx";
+
+                oappexpGJZ.appendChild(oappexpGJZt);
+                oappexpGJZ.appendChild(oappexpGJZx);
+                oappexpGJZKC.appendChild(oappexpGJZ);
+
+                oappexpGJZadp.value="";
+
+                add_deleteX();
+            }
         }
     }
-    
-    oappexpGJZadb.onclick=function(){
-        if(oappexpGJZadp.value!=" "&&oappexpGJZadp.value!=""){
-            var oappexpGJZ=document.createElement("div");
-            oappexpGJZ.className="appexpGJZ";
-
-            var oappexpGJZt=document.createElement("div");
-            oappexpGJZt.className="appexpGJZt";
-            oappexpGJZt.innerHTML=oappexpGJZadp.value;
-            // console.log(oappexpGJZadp.value);
-
-            var oappexpGJZx=document.createElement("div");
-            oappexpGJZx.className="appexpGJZx";
-
-            oappexpGJZ.appendChild(oappexpGJZt);
-            oappexpGJZ.appendChild(oappexpGJZx);
-            oappexpGJZKC.appendChild(oappexpGJZ);
-
-            oappexpGJZadp.value="";
-
-            add_deleteX();
-        }
-    }
-
 
 }
 
@@ -2054,8 +2055,8 @@ function friend_manage(){
 
 //从组中移除成员
     ofriend_yichuzu.onclick=function(){
-        //allKnone();
-        //ozuyichuK.style.display="block";//此行为点击按钮后，框显示，若要加判断则注释此行
+        allKnone();
+        ozuyichuK.style.display="block";//此行为点击按钮后，框显示，若要加判断则注释此行
         
         event.stopPropagation();
     }
@@ -2065,8 +2066,8 @@ function friend_manage(){
 
 //移除好友
     ofriend_yichuhy.onclick=function(){
-        //allKnone();
-        //oyichuhyK.style.display="block";//此行为点击按钮后，框显示，若要加判断则注释此行
+        allKnone();
+        oyichuhyK.style.display="block";//此行为点击按钮后，框显示，若要加判断则注释此行
         
         event.stopPropagation();
     }
@@ -2089,10 +2090,10 @@ function friend_manage(){
     }
 
 //群发消息
-    /*ofriend_qunfa.onclick=function(){
+    ofriend_qunfa.onclick=function(){
         oqunfaK.style.display="block";//此行为点击群发按钮后群发框显示，若要加判断，请注释此行
         oqunfaMta.value="";
-    }*/
+    }
     oqunfaTi.onclick=function(){
         oqunfaK.style.display="none";
     }
@@ -2258,11 +2259,10 @@ function message_send(){
     
 
     //发送按钮点击事件，绑定消息上传的话，注释此块
-    /*omesendMLB_send.onclick=function(){
-        messagesend(1,"img/touxiang_1.png",omesendMLB_kuang.value);
-        omesendMLB_kuang.value="";
-        omesssendMLM.scrollTop = omesssendMLM.scrollHeight; 
-    }*/
+    // omesendMLB_send.onclick=function(){
+    //     messagesend(1,"img/touxiang_1.png",omesendMLB_kuang.value);
+    //     omesendMLB_kuang.value="";
+    // }
 
 }
 
@@ -2307,8 +2307,9 @@ function messagesend(role,tx_url,xiaoxi){
     oxiaoxikuang.appendChild(oclear);
 
     omesssendMLM.appendChild(oxiaoxikuang);
-    
-    omesssendMLM.scrollTop = omesssendMLM.scrollHeight; 
+
+
+    omesssendMLM.scrollTop = omesssendMLM.scrollHeight;
 }
 
 function timesend(time){
@@ -2336,7 +2337,7 @@ function replace_em(str){
 // console.log(str);
     str = str.replace(/\n/g,'<br/>');
 // console.log(str);
-    str = str.replace(/\[em_([0-9]*)\]/g,'<img src="../static/arclist/$1.gif" border="0" />');
+    str = str.replace(/\[em_([0-9]*)\]/g,'<img src="arclist/$1.gif" border="0" />');
 // console.log(str);
     return str;
 

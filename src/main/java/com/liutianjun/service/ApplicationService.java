@@ -38,7 +38,7 @@ public interface ApplicationService {
 	Map<String, Object> findAll(Integer page, Integer rows, String appName, String appType, String creator);
 
 	//设置应用状态
-	int setStatus(String cmd, Integer[] ids);
+	int setStatus(Integer cmd, Integer[] ids);
 
 	//查找我的应用
 	Map<String, Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId);

@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2018-04-23 11:25:49
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-06-04 14:54:31
+* @Last Modified time: 2018-06-14 15:02:50
 */
 
 *{
@@ -310,7 +310,6 @@ input{
     width:316px;
     height:28px;
     /*float:right;*/
-    display:inline-block;
     vertical-align: middle;
     margin-right:20px;
     /*margin-top:28px;*/
@@ -3699,7 +3698,7 @@ input{
     width:500px;
 }
 .appexpMLz{
-    margin-bottom:20px;
+    margin-bottom:10px;
     /*font-family:PingFangSC-Medium;*/
     font-weight: 700;
     font-size:16px;
@@ -3771,6 +3770,54 @@ input{
     border:0;
     outline:0;
 }
+.appexpMLzt_1{
+    color:#044A93;
+    display:inline-block;
+    vertical-align: middle;
+    min-width:70px;
+}
+.appexpMLzt_2{
+    display:inline-block;
+    vertical-align: middle;
+    margin-left:10px;
+    font-size: 16px;
+}
+.appexpMLzt_3{
+    width: 370px;
+    display:block;
+    font-size: 16px;
+    margin-top:10px;
+}
+.appexpMLzp_1{
+    width:150px;
+    height:30px;
+    display:inline-block;
+    vertical-align: middle;
+    padding:0 10px;
+    border-radius: 5px;
+    border:1px solid #dcdcdc;
+}
+.appexpMLzta_1{
+    width:350px;
+    height:60px;
+    padding:5px 10px;
+    border-radius: 5px;
+    border:1px solid #dcdcdc;
+    margin-top:10px;
+    display:block;
+}
+.appexpMLzrk_1{
+    display:inline-block;
+    vertical-align: middle;
+}
+.appexpMLzr_1{
+    margin-left:20px;
+    margin-right:5px;
+    display:inline-block;
+    vertical-align: middle;
+}
+
+
 .appexpGJZK{
     float:left;
     width:350px;

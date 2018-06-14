@@ -25,11 +25,6 @@ public class Application implements Serializable {
     private String appType;
 
     /**
-     * 同步/异步 0-同步 1-异步
-     */
-    private Integer isAsync;
-
-    /**
      * 关键字
      */
     private String keywords;
@@ -40,39 +35,59 @@ public class Application implements Serializable {
     private String versions;
 
     /**
+     * 是否存储系统 0-否 1-是
+     */
+    private Integer isSaveSystem;
+
+    /**
+     * 同步/异步 0-同步 1-异步
+     */
+    private Integer isAsync;
+
+    /**
+     * 是否显示
+     */
+    private Integer isDisplay;
+
+    /**
+     * 参数地址
+     */
+    private String paraAddress;
+
+    /**
+     * 结果地址
+     */
+    private String resultAddress;
+
+    /**
+     * 应用简介
+     */
+    private String appIntro;
+
+    /**
+     * 文件结果
+     */
+    private String fileResult;
+
+    /**
+     * 文件结果地址
+     */
+    private String fileResultAddress;
+
+    /**
+     * 应用详细描述
+     */
+    private String description;
+
+    /**
      * 创建时间
      */
     private Date createTime;
 
     /**
-     * 状态
+     * 修改时间
      */
-    private String status;
-
-    /**
-     * 参数1
-     */
-    private String paraA;
-
-    /**
-     * 参数2
-     */
-    private String paraB;
-
-    /**
-     * 参数3
-     */
-    private String paraC;
-
-    /**
-     * 应用概述
-     */
-    private String appOverview;
-
-    /**
-     * 数据格式
-     */
-    private String dataFormat;
+    private Date updateTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -108,14 +123,6 @@ public class Application implements Serializable {
         this.appType = appType == null ? null : appType.trim();
     }
 
-    public Integer getIsAsync() {
-        return isAsync;
-    }
-
-    public void setIsAsync(Integer isAsync) {
-        this.isAsync = isAsync;
-    }
-
     public String getKeywords() {
         return keywords;
     }
@@ -132,6 +139,78 @@ public class Application implements Serializable {
         this.versions = versions == null ? null : versions.trim();
     }
 
+    public Integer getIsSaveSystem() {
+        return isSaveSystem;
+    }
+
+    public void setIsSaveSystem(Integer isSaveSystem) {
+        this.isSaveSystem = isSaveSystem;
+    }
+
+    public Integer getIsAsync() {
+        return isAsync;
+    }
+
+    public void setIsAsync(Integer isAsync) {
+        this.isAsync = isAsync;
+    }
+
+    public Integer getIsDisplay() {
+        return isDisplay;
+    }
+
+    public void setIsDisplay(Integer isDisplay) {
+        this.isDisplay = isDisplay;
+    }
+
+    public String getParaAddress() {
+        return paraAddress;
+    }
+
+    public void setParaAddress(String paraAddress) {
+        this.paraAddress = paraAddress == null ? null : paraAddress.trim();
+    }
+
+    public String getResultAddress() {
+        return resultAddress;
+    }
+
+    public void setResultAddress(String resultAddress) {
+        this.resultAddress = resultAddress == null ? null : resultAddress.trim();
+    }
+
+    public String getAppIntro() {
+        return appIntro;
+    }
+
+    public void setAppIntro(String appIntro) {
+        this.appIntro = appIntro == null ? null : appIntro.trim();
+    }
+
+    public String getFileResult() {
+        return fileResult;
+    }
+
+    public void setFileResult(String fileResult) {
+        this.fileResult = fileResult == null ? null : fileResult.trim();
+    }
+
+    public String getFileResultAddress() {
+        return fileResultAddress;
+    }
+
+    public void setFileResultAddress(String fileResultAddress) {
+        this.fileResultAddress = fileResultAddress == null ? null : fileResultAddress.trim();
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description == null ? null : description.trim();
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -140,52 +219,12 @@ public class Application implements Serializable {
         this.createTime = createTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
-    }
-
-    public String getParaA() {
-        return paraA;
-    }
-
-    public void setParaA(String paraA) {
-        this.paraA = paraA == null ? null : paraA.trim();
-    }
-
-    public String getParaB() {
-        return paraB;
-    }
-
-    public void setParaB(String paraB) {
-        this.paraB = paraB == null ? null : paraB.trim();
-    }
-
-    public String getParaC() {
-        return paraC;
-    }
-
-    public void setParaC(String paraC) {
-        this.paraC = paraC == null ? null : paraC.trim();
-    }
-
-    public String getAppOverview() {
-        return appOverview;
-    }
-
-    public void setAppOverview(String appOverview) {
-        this.appOverview = appOverview == null ? null : appOverview.trim();
-    }
-
-    public String getDataFormat() {
-        return dataFormat;
-    }
-
-    public void setDataFormat(String dataFormat) {
-        this.dataFormat = dataFormat == null ? null : dataFormat.trim();
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     @Override
@@ -198,16 +237,19 @@ public class Application implements Serializable {
         sb.append(", appName=").append(appName);
         sb.append(", creator=").append(creator);
         sb.append(", appType=").append(appType);
-        sb.append(", isAsync=").append(isAsync);
         sb.append(", keywords=").append(keywords);
         sb.append(", versions=").append(versions);
+        sb.append(", isSaveSystem=").append(isSaveSystem);
+        sb.append(", isAsync=").append(isAsync);
+        sb.append(", isDisplay=").append(isDisplay);
+        sb.append(", paraAddress=").append(paraAddress);
+        sb.append(", resultAddress=").append(resultAddress);
+        sb.append(", appIntro=").append(appIntro);
+        sb.append(", fileResult=").append(fileResult);
+        sb.append(", fileResultAddress=").append(fileResultAddress);
+        sb.append(", description=").append(description);
         sb.append(", createTime=").append(createTime);
-        sb.append(", status=").append(status);
-        sb.append(", paraA=").append(paraA);
-        sb.append(", paraB=").append(paraB);
-        sb.append(", paraC=").append(paraC);
-        sb.append(", appOverview=").append(appOverview);
-        sb.append(", dataFormat=").append(dataFormat);
+        sb.append(", updateTime=").append(updateTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

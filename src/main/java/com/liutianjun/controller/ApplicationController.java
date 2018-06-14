@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,10 +157,10 @@ public class ApplicationController {
 	 */
 	@RequiresPermissions("application:update")
 	@RequestMapping(value="/setStatus{index}",method=RequestMethod.POST)
-	public String setStatus(String cmd,Integer[] ids,
+	public String setStatus(Integer cmd,Integer[] ids,
 			@PathVariable String index,
 			RedirectAttributes attributes) {
-		int i = applicationService.setStatus(cmd,ids);
+		int i = applicationService.setStatus(cmd, ids);
 		String msg = "操作失败";
 		if(i > 0) {
 			msg = "操作成功";
@@ -184,8 +183,6 @@ public class ApplicationController {
 			RedirectAttributes attributes) {
 		String username = (String)SecurityUtils.getSubject().getPrincipal();
 		record.setCreator(username);
-		record.setCreateTime(new Date());
-		record.setStatus("私有");
 		int i = applicationService.insert(record);
 		String msg = "创建失败";
 		if(i>0) {
@@ -222,12 +219,6 @@ public class ApplicationController {
 	@RequestMapping(value="/updateForm{index}",method=RequestMethod.GET)
 	public String viewUpdateForm(Integer id, Model model, @PathVariable String index) {
 		Application application = applicationService.selectByPrimaryKey(id);
-		String strkewwords = application.getKeywords();
-		if(StringUtils.isNotBlank(strkewwords)) {
-			String[] keywords = strkewwords.split(",");
-			model.addAttribute("keywords", keywords);
-		}
-		
 		model.addAttribute("application", application);
 		
 		model.addAttribute("index", index);
@@ -246,8 +237,7 @@ public class ApplicationController {
 			RedirectAttributes attributes,
 			@PathVariable String index) {
 		String msg = "操作失败";
-		int i = applicationService.updateByPrimaryKey(record);
-		if(i>0) {
+		if(0 < applicationService.updateByPrimaryKey(record)) {
 			msg = "更新成功";
 		}
 		attributes.addFlashAttribute("msg", msg);

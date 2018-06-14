@@ -2,6 +2,7 @@ package com.liutianjun.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 */
 	@Override
 	public int insert(Application record) {
+		record.setCreateTime(new Date());
+		record.setIsDisplay(0);
 		return applicationDao.insert(record);
 	}
 
@@ -63,7 +66,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 		ApplicationQuery example = new ApplicationQuery();
 		Criteria criteria = example.createCriteria();
 		criteria.andIdIn(Arrays.asList(ids));
-		
 		return applicationDao.deleteByExample(example);
 	}
 
@@ -76,6 +78,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 */
 	@Override
 	public int updateByPrimaryKey(Application record) {
+		record.setUpdateTime(new Date());
 		return applicationDao.updateByPrimaryKeySelective(record);
 	}
 
@@ -128,7 +131,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 		if(StringUtils.isNotBlank(appType)) {
 			criteria.andAppTypeEqualTo(appType);
 		}
-		criteria.andStatusEqualTo("公开");
+		criteria.andIsDisplayEqualTo(1);
 		int total = applicationDao.countByExample(example);
 		example.setOrderByClause("id DESC");
 		example.setPageNo(page);
@@ -180,9 +183,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * @param id
 	 */
 	@Override
-	public int setStatus(String cmd, Integer[] ids) {
+	public int setStatus(Integer cmd, Integer[] ids) {
 		Application record = new Application();
-		record.setStatus(cmd);
+		record.setIsDisplay(cmd);
 		ApplicationQuery example = new ApplicationQuery();
 		Criteria criteria = example.createCriteria();
 		criteria.andIdIn(Arrays.asList(ids));
@@ -262,7 +265,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	@Override
 	public Application findPublicByid(Integer id) {
 		Application application = applicationDao.selectByPrimaryKey(id);
-		if(null != application && "公开".equals(application.getStatus())) {
+		if(null != application && 1 == application.getIsDisplay()) {
 			return application;
 		}
 		return null;
