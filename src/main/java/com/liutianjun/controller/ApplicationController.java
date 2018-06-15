@@ -1,6 +1,6 @@
 package com.liutianjun.controller;
 
-import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dzjin.service.ProjectService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liutianjun.pojo.Application;
 import com.liutianjun.pojo.User;
 import com.liutianjun.service.ApplicationService;
@@ -67,20 +69,71 @@ public class ApplicationController {
 	    //获取用户
 	    User user = userService.selectByUsername(username);
 		
-		Map<String, Object> map = applicationService.findMine(page,rows,appName,appType,user.getId());
+		//Map<String, Object> map = applicationService.findMine(page,rows,appName,appType,user.getId());
 		
 		//获取应用筛选列表
 		List<String> typeList = applicationService.findTypeList();
 		
 		model.addAttribute("projectList", projectService.selectMyProject(user.getId()));
 		model.addAttribute("typeList", typeList);
-		model.addAttribute("list", map.get("list"));
-		model.addAttribute("total", map.get("total"));
-		model.addAttribute("page", page);
-        model.addAttribute("rows", rows);
-        model.addAttribute("appName", appName);
+		//model.addAttribute("list", map.get("list"));
+		//model.addAttribute("total", map.get("total"));
+		//model.addAttribute("page", page);
+        //model.addAttribute("rows", rows);
+        //model.addAttribute("appName", appName);
 		return "jsp/application/app_mine"+index+".jsp";
 	}
+	
+	/**
+	 * 获取我的应用列表
+	 * @Title: getMine 
+	 * @param page
+	 * @param rows
+	 * @param appName
+	 * @param appType
+	 * @return
+	 * @throws Exception 
+	 * String
+	 */
+	@RequestMapping(value="/getMine",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getMine(@RequestParam(value="page", defaultValue="1")Integer page, 
+            @RequestParam(value="rows", defaultValue="12")Integer rows, 
+            @RequestParam(value="appName",required=false)String appName,
+            @RequestParam(value="appType",required=false)String appType,
+            @RequestParam(value="orderName",defaultValue="ID")String orderName,
+            @RequestParam(value="orderDir",defaultValue="DESC")String orderDir,
+            @RequestParam(value="field",required=false)String field,
+            @RequestParam(value="content",required=false)String content) throws Exception {
+		
+		//获取用户名
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    //获取用户
+	    User user = userService.selectByUsername(username);
+		Map<String, Object> map = applicationService.findMine(page,rows,appName,appType,user.getId(),orderName +" "+ orderDir,field,content);
+		map.put("page", page);
+		map.put("rows", rows);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setDateFormat(new SimpleDateFormat("YYYY-MM-dd"));
+		return mapper.writeValueAsString(map);
+	}
+	
+	/**
+	 * 获取应用类别列表
+	 * @Title: getAppTypeList 
+	 * @return
+	 * @throws Exception 
+	 * String
+	 */
+	@RequestMapping(value="/getAppTypeList",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getAppTypeList() throws Exception {
+		//获取应用筛选列表
+		List<String> typeList = applicationService.findTypeList();
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(typeList);
+	}
+	
 	
 	/**
 	 * 我创建的应用

@@ -189,11 +189,11 @@ function project1(){
                 }
                 var BTSXleft=aPJListli[j].offsetLeft;
                 // oBTSX.name=aPJListli[j].innerHTML;
-                if(document.querySelectorAll('.BTSXpd')[0]){
+                /*if(document.querySelectorAll('.BTSXpd')[0]){
                     var oBTSXpd=document.querySelectorAll('.BTSXpd')[0];//项目表头筛选框判断
                     oBTSXpd.value=aPJListli[j].title;
                     console.log(oBTSXpd.value);
-                }
+                }*/
                 
                 
                 console.log(BTSXleft);
@@ -214,8 +214,8 @@ function project1(){
                     aBTSXcliI[j].style.color="#666";
                 }
                 aBTSXcliI[index].style.color="#5ca0e5";
-                oBTSXcliIpd.value=index+1;
-                console.log(oBTSXcliIpd.value);
+//                oBTSXcliIpd.value=index+1;
+//                console.log(oBTSXcliIpd.value);
             }
         })(i)
     }

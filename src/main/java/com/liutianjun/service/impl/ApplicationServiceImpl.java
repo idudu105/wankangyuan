@@ -204,8 +204,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * @return
 	 */
 	@Override
-	public Map<String, Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId) {
-		return userAppRelationService.findMine(page,rows,appName,appType,userId);
+	public Map<String, Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId,String orderByClause,String field, String content) {
+		return userAppRelationService.findMine(page,rows,appName,appType,userId,orderByClause,field,content);
 	}
 
 	/**

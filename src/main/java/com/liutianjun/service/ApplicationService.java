@@ -41,7 +41,7 @@ public interface ApplicationService {
 	int setStatus(Integer cmd, Integer[] ids);
 
 	//查找我的应用
-	Map<String, Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId);
+	Map<String, Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId, String orderByClause, String field, String content);
 	
 	//查询项目下的应用
 	Map<String, Object> findMineProjectApp(Integer page, Integer rows, Integer ProjectId);

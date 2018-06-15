@@ -1,14 +1,21 @@
 package com.liutianjun.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
+
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liutianjun.pojo.User;
+import com.liutianjun.pojo.UserAppRelation;
 import com.liutianjun.service.UserAppRelationService;
 import com.liutianjun.service.UserService;
 
@@ -76,5 +83,23 @@ public class UserAppRelationController {
 		}
 		attributes.addFlashAttribute("msg", msg);
 		return "redirect:/application/viewMine"+index;
+	}
+	
+	/**
+	 * 获取应用类别列表
+	 * @Title: getAppTypeList 
+	 * @return
+	 * @throws Exception 
+	 * String
+	 */
+	@RequestMapping(value="/getMyAppFieldList",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getMyAppFiledList(String field,String content) throws Exception {
+		//获取应用筛选列表
+		List<UserAppRelation> typeList = userAppRelationService.findFileList(field,content);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setSerializationInclusion(Include.NON_EMPTY);
+		mapper.setDateFormat(new SimpleDateFormat("YYYY-MM-dd"));
+		return mapper.writeValueAsString(typeList);
 	}
 }

@@ -21,9 +21,9 @@ public class IndexController {
         return "/login";
     }
 
-    @RequestMapping("/welcome")
+    @RequestMapping("/umeditor")
     public String welcome() {
-        return "welcome";
+        return "static/umeditor/index.jsp";
     }
 
 

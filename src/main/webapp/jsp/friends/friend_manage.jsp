@@ -191,7 +191,11 @@
                             <select name="organizationId" id="" class="cyaddKBs">
                             <c:forEach items="${orgList }" var="org">
                             <c:if test="${0 ne org.parentId}">
-                                <option value="${org.id }">${org.organizationName }</option>
+                                <option value="${org.id }">
+                                    <c:forEach items="${orgList }" var="par">
+                                        <c:if test="${par.id eq org.parentId }">${par.organizationName } - ${org.organizationName }</c:if>
+                                    </c:forEach>
+                                </option>
                             </c:if>
                             </c:forEach>
                             </select>

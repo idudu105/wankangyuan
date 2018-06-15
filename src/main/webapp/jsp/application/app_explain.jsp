@@ -10,7 +10,12 @@
 </head>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/static/css/project1.css" />
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/project1.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/jquery.min.js"></script>
+<link href="<%=request.getContextPath()%>/static/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/umeditor/third-party/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%=request.getContextPath()%>/static/umeditor/umeditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%=request.getContextPath()%>/static/umeditor/umeditor.min.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/umeditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
 <script type="text/javascript">
     window.onload=function(){
         project0();
@@ -150,7 +155,19 @@
                         <div class="appexpMLzt3">${application.fileResultAddress }</div>
                     </div>
                 </div>
-                <div class="appexpMR"></div>
+                <div class="appexpMR" style="text-align:left;">
+                <input id="description" name="description" type="hidden">
+                    <!--style给定宽度可以影响编辑器的最终宽度-->
+                    <script type="text/plain" id="myEditor" style="width:820px;height:700px;">
+                        ${application.description}
+                    </script>
+                    
+                    <script type="text/javascript">
+                        //实例化编辑器
+                        var um = UM.getEditor('myEditor');
+                        um.setDisabled('fullscreen');
+                    </script>
+                </div>
             </div>
             
 

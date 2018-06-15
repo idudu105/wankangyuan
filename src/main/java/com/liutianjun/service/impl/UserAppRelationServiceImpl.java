@@ -56,6 +56,7 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 			userAppRelation.setCreator(application.getCreator());
 			userAppRelation.setIsAsync(application.getIsAsync());
 			userAppRelation.setKeywords(application.getKeywords());
+			userAppRelation.setAppOverview(application.getAppIntro());
 			i += userAppRelationDao.insert(userAppRelation);
 		}
 		return i;
@@ -120,7 +121,7 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	 * @return
 	 */
 	@Override
-	public Map<String,Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId) {
+	public Map<String,Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId, String orderByClause,String field, String content) {
 		Map<String,Object> map = new HashMap<>();
 		//根据用户名查询关系表
 	    UserAppRelationQuery example = new UserAppRelationQuery();
@@ -132,16 +133,70 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	    if(StringUtils.isNotBlank(appType)) {
 	    	criteria.andAppTypeEqualTo(appType);
 	    }
+	    if(null != field && null != appName) {
+	    	if(field.equals("appName")) {
+	    		criteria.andAppNameLike("%"+content+"%");
+	    	}else if (field.equals("creator")) {
+	    		criteria.andCreatorLike("%"+content+"%");
+	    	}else if (field.equals("isAsync")) {
+	    		if("异步".equals(content)) {
+	    			criteria.andIsAsyncEqualTo(1);
+	    		}
+	    		if("同步".equals(content)) {
+	    			criteria.andIsAsyncEqualTo(0);
+	    		}
+	    	}else if (field.equals("keywords")) {
+	    		criteria.andKeywordsLike("%"+content+"%");
+	    	}else if (field.equals("appOverview")) {
+	    		criteria.andAppOverviewLike("%"+content+"%");
+	    	}
+	    }
+	    
 	    int total = userAppRelationDao.countByExample(example);
+	    example.setOrderByClause(orderByClause);
 	    example.setPageNo(page);
 	    example.setPageSize(rows);
-	    
 	    List<UserAppRelation> list = userAppRelationDao.selectByExample(example);
 	    
 	    map.put("total", total);
 	    map.put("list", list);
 	    
 	    return map;
+	}
+
+	/**
+	 * 查找我的应用字段列表
+	 * <p>Title: findFileList</p>  
+	 * <p>Description: </p>  
+	 * @param filed
+	 * @return
+	 */
+	@Override
+	public List<UserAppRelation> findFileList(String field, String content) {
+		UserAppRelationQuery example = new UserAppRelationQuery();
+		Criteria criteria = example.createCriteria();
+		if(field.equals("app_name")) {
+			criteria.andAppNameLike("%"+content+"%");
+		}else if (field.equals("creator")) {
+			criteria.andCreatorLike("%"+content+"%");
+		}else if (field.equals("is_async")) {
+			if("异步".equals(content)) {
+				criteria.andIsAsyncEqualTo(1);
+			}
+			if("同步".equals(content)) {
+				criteria.andIsAsyncEqualTo(0);
+			}
+		}else if (field.equals("keywords")) {
+			criteria.andKeywordsLike("%"+content+"%");
+		}else if (field.equals("app_overview")) {
+			criteria.andAppOverviewLike("%"+content+"%");
+		}
+		
+	    example.setFields(field);
+	    example.setDistinct(true);
+	    example.setPageNo(1);
+	    example.setPageSize(10);
+		return userAppRelationDao.selectByExample(example);
 	}
 
 }

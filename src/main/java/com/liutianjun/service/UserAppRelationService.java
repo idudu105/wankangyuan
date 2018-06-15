@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.liutianjun.pojo.Application;
+import com.liutianjun.pojo.UserAppRelation;
 
 /**
  * 用户应用关系
@@ -29,5 +30,8 @@ public interface UserAppRelationService {
 	int removeFromMineByIds(Integer userId,Integer[] ids);
 	
 	//查找用户的应用集合
-	Map<String,Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId);
+	Map<String,Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId,String orderByClause, String field, String content);
+
+	//查找字段列表
+	List<UserAppRelation> findFileList(String field, String content);
 }

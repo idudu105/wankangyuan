@@ -1079,7 +1079,7 @@ input{
 .BTSXcliGLK{
     border:1px solid #dcdcdc;
     border-radius:4px;
-    width:208px;
+    /* width:208px; */
     height:20px;
     outline:none;
     text-indent: 0.5em;
