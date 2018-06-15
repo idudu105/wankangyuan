@@ -1093,16 +1093,11 @@ function pro_appendre(){
     var oproreb2=oproreK.querySelectorAll('.proreb2')[0];//格式数据框关闭按钮2
     var oproreb1=oproreK.querySelectorAll('.proreb1')[0];//格式数据框提交按钮
 
-
-    console.log(aproappendrep);
-    for(var i=0;i<aproappendrep.length;i++){
-        (function(index){
-            aproappendrep[index].onclick=function(){
-                console.log(index);
-                oproreK.style.display="block";
-            }
-        })(i)
+    var proappendreRT = document.querySelectorAll('.proappendreRT');//选择格式数据对话框
+    proappendreRT[0].onclick=function(){
+    	oproreK.style.display="block";
     }
+    
     oinportTx.onclick=function(){
         oproreK.style.display="none";
     }
