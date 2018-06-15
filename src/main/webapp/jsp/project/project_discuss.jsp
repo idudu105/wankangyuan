@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -14,7 +15,7 @@
     <title>Document</title>
 </head>
 <link rel="stylesheet" type="text/css" href="/wankangyuan/static/css/project1.css" />
-<script type="text/javascript" src="/wankangyuan/static/js/project1.js"></script>
+<script type="text/javascript" src="/wankangyuan/jsp/project/js/project1.js"></script>
 <script type="text/javascript">
     window.onload=function(){
         project0();
@@ -38,22 +39,44 @@
                     <div class="topT ">应用</div>
                 </a>
                 <div class="touxiangK">
-                    <img src="/wankangyuan/static/img/touxiang.png" alt="" class="touxiang" />
+                    <a href="/wankangyuan/userInfo">
+                        <img src="${user.headimg }" alt="" class="touxiang" />
+                    </a>
+                    <div class="userbutK">
+                        <a href="/wankangyuan/userInfo">
+                            <div class="userbut">用户信息</div>
+                        </a>
+                        <a href="/wankangyuan/message/viewMessage">
+                            <div class="userbut">系统消息
+                            <c:if test="${systemMSG }">
+                                <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint2" />
+                            </c:if>
+                            </div>
+                        </a>
+                        <div class="userbutline"></div>
+                        <a href="/wankangyuan/logout">
+                            <div class="userbut">退出登录</div>
+                        </a>
+                    </div>
                 </div>
-                <div class="nicheng">Peter</div>
+                <div class="nicheng"><shiro:principal/></div>
+                <a href="/wankangyuan/friends/viewFriendsManage">
                 <div class="yanjiuquan">
                     <div class="yanjiuquanT">研究圈</div>
-                    <img src="/wankangyuan/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
+                    <c:if test="${friendMSG}">
+                        <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
+                    </c:if>
                 </div>
+                </a>
             </div>
             <div class="top2">
                 <div class="top2C">
-                    <div class="top2Ctl active">13例结直肠癌病人的基因表达</div>
-                    <a href="javascript:;"><div class="top2Ctr active">讨论版</div></a>
-                    <a href="project_member.html"><div class="top2Ctr">成员</div></a>
-                    <a href="project_append.html"><div class="top2Ctr">应用结果</div></a>
+                    <div class="top2Ctl active">${project.p_name}</div>
+                    <a href="/wankangyuan/projectTopic/selectProjectTopic"><div class="top2Ctr active">讨论版</div></a>
+                    <a href="/wankangyuan/projectMember/selectProjectMember"><div class="top2Ctr">成员</div></a>
+                    <a href="/wankangyuan/projectAppEnd/selectProjectAppEnd"><div class="top2Ctr">应用结果</div></a>
                     <a href="/wankangyuan/projectApp/selectProjectApp?p_id=${project.id}"><div class="top2Ctr">应用</div></a>
-                    <a href="/wankangyuan/projectFormatData/selectProjectFormatDataList"><div class="top2Ctr">格式数据</div></a>
+                    <a href="/wankangyuan/projectFormatData/getSourceDatas?p_id=${project.id}"><div class="top2Ctr">格式数据</div></a>
                     <a href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId"><div class="top2Ctr">文件</div></a>
                     <a href="/wankangyuan/project/getProjectDetail"><div class="top2Ctr">基本信息</div></a>
                 </div>
@@ -94,73 +117,32 @@
                     <div class="themeTt themelatime">最后发表时间</div>
                 </div>
                 <div class="themeM">
-                    <div class="themeMz">
-                        <a href="project_disdetail.html">
-                            <div class="themeMzt1 themeall">Fusce vehicula dolor arcu, sit amet blandit dolor mollis nec. Donec viverra eleifend lacus, vitae ullamcorper metus. Sed sollicitudin ipsum quis nunc sollicitudin ultrices. Donec euismod scelerisque ligula. Maecenas eu varius risus, eu aliquet arcu. Curabitur fermentum suscipit est, tinciduntCurabitur fermentum suscipit est, tincidunt</div>
-                        </a>
-                        <div class="themeMzt2 themeaut">
-                            <div class="themeauthor">Peter</div>
-                            <div class="themetime">2018-4-13 18：00</div>
-                        </div>
-                        <div class="themeMzt2 themerep">
-                            <span class="themehf">58</span>
-                            /
-                            <span class="themeck">200</span>
-                        </div>
-                        <div class="themeMzt2 themelatime">4-13 18：00</div>
-                    </div>
-                    <div class="themeMz">
-                        <a href="project_disdetail.html">
-                            <div class="themeMzt1 themeall">Fusce vehicula dolor arcu, sit amet blandit dolor mollis nec. Donec viverra eleifend lacus, vitae ullamcorper metus. Sed sollicitudin ipsum quis nunc sollicitudin ultrices. Donec euismod scelerisque ligula. Maecenas eu varius risus, eu aliquet arcu. Curabitur fermentum suscipit est, tinciduntCurabitur fermentum suscipit est, tincidunt</div>
-                        </a>
-                        <div class="themeMzt2 themeaut">
-                            <div class="themeauthor">Peter</div>
-                            <div class="themetime">2018-4-13 18：00</div>
-                        </div>
-                        <div class="themeMzt2 themerep">
-                            <span class="themehf">58</span>
-                            /
-                            <span class="themeck">200</span>
-                        </div>
-                        <div class="themeMzt2 themelatime">4-13 18：00</div>
-                    </div>
-                    <div class="themeMz">
-                        <a href="project_disdetail.html">
-                            <div class="themeMzt1 themeall">Fusce vehicula dolor arcu, sit amet blandit dolor mollis nec. Donec viverra eleifend lacus, vitae ullamcorper metus. Sed sollicitudin ipsum quis nunc sollicitudin ultrices. Donec euismod scelerisque ligula. Maecenas eu varius risus, eu aliquet arcu. Curabitur fermentum suscipit est, tinciduntCurabitur fermentum suscipit est, tincidunt</div>
-                        </a>
-                        <div class="themeMzt2 themeaut">
-                            <div class="themeauthor">Peter</div>
-                            <div class="themetime">2018-4-13 18：00</div>
-                        </div>
-                        <div class="themeMzt2 themerep">
-                            <span class="themehf">58</span>
-                            /
-                            <span class="themeck">200</span>
-                        </div>
-                        <div class="themeMzt2 themelatime">4-13 18：00</div>
-                    </div>
-                    <div class="themeMz">
-                        <a href="project_disdetail.html">
-                            <div class="themeMzt1 themeall">Fusce vehicula dolor arcu, sit amet blandit dolor mollis nec. Donec viverra eleifend lacus, vitae ullamcorper metus. Sed sollicitudin ipsum quis nunc sollicitudin ultrices. Donec euismod scelerisque ligula. Maecenas eu varius risus, eu aliquet arcu. Curabitur fermentum suscipit est, tinciduntCurabitur fermentum suscipit est, tincidunt</div>
-                        </a>
-                        <div class="themeMzt2 themeaut">
-                            <div class="themeauthor">Peter</div>
-                            <div class="themetime">2018-4-13 18：00</div>
-                        </div>
-                        <div class="themeMzt2 themerep">
-                            <span class="themehf">58</span>
-                            /
-                            <span class="themeck">200</span>
-                        </div>
-                        <div class="themeMzt2 themelatime">4-13 18：00</div>
-                    </div>
+                
+                	<c:forEach items="${projectTopics}" var="projectTopicTemp">
+                		<div class="themeMz">
+	                        <a href="/wankangyuan/projectTopic/selectProjectTopicFollow?project_topic_id=${projectTopicTemp.id}">
+	                            <div class="themeMzt1 themeall">${projectTopicTemp.content}</div>
+	                        </a>
+	                        <div class="themeMzt2 themeaut">
+	                            <div class="themeauthor">${projectTopicTemp.username}</div>
+	                            <div class="themetime">${projectTopicTemp.create_datetime}</div>
+	                        </div>
+	                        <div class="themeMzt2 themerep">
+	                            <span class="themehf">${projectTopicTemp.follow_up_num}</span>
+	                            /
+	                            <span class="themeck">${projectTopicTemp.look_num}</span>
+	                        </div>
+	                        <div class="themeMzt2 themelatime">${projectTopicTemp.last_datetime}</div>
+	                    </div>
+                	</c:forEach>
+
                 </div>
                 <div class="themeadd">
                     <div class="themeaddX"></div>
                     <div class="themeaddT">创建主题</div>
                     <div class="themeaddM">
                         <div class="themeaddMt">内容：</div>
-                        <textarea name="" id="" class="themeaddMk" maxlength="600"></textarea>
+                        <textarea name="content" id="content" class="themeaddMk" maxlength="600"></textarea>
                         <div class="themeaddMt2">600字以内</div>
                     </div>
                     <div class="themeaddB">
@@ -170,17 +152,7 @@
                 </div>
             </div>
 
-            <div class="pageK">
-                <div class="pageLR">
-                    <img src="/wankangyuan/static/img/pageL.png" class="pageLRi" alt="" />
-                </div>
-                <div class="pageNUM active">1</div>
-                <div class="pageNUM ">2</div>
-                <div class="pageNUM">3</div>
-                <div class="pageLR">
-                    <img src="/wankangyuan/static/img/pageR.png" class="pageLRi" alt="" />
-                </div>
-            </div>
+            <div class="pageK" id="box"></div>
 
             <div class="bottom">
                 <a href="javascript:;">
@@ -196,5 +168,57 @@
             </div>
         </div>
     </div>
+    
+    <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
+    <script type="text/javascript">
+    
+	    $('#box').paging({
+	        initPageNo: ${page}, // 初始页码
+	        totalPages: Math.ceil(${total}/${rows}), //总页数
+	        totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
+	        slideSpeed: 600, // 缓动速度。单位毫秒
+	        jump: true, //是否支持跳转
+	        callback: function(page) { // 回调函数
+	            if(page!=${page}){
+	                window.location.href="/wankangyuan/projectTopic/selectProjectTopic?page="+page+"&strip=${rows}";
+	            }
+	        }
+	    });
+    	
+	    $(".themeaddBs").click(function (){
+	    	
+	    	var content = $("#content").val();
+	    	var project_id = ${project.id};
+	    	if(content == ""){
+	    		alert("内容不能为空！");
+	    		return;
+	    	}
+	    	
+	    	$.ajax({
+	    		url:"/wankangyuan/projectTopic/insertProjectTopic",
+	    		type:"post",
+	    		data:{
+	    			content:content,
+	    			project_id:project_id
+	    		},
+	    		dataType:"json",
+	    		success : function(data){
+	    			if(data.result == true){
+	    				alert("主题创建成功");
+	    				window.location.href="/wankangyuan/projectTopic/selectProjectTopic";
+	    			}else{
+	    				alert(data.message);
+	    			}
+	    		},
+	    		error : function(){
+	    			alert("联网失败");
+	    		}
+	    		
+	    	});
+	    });
+    	
+    
+    </script>
 </body>
 </html>

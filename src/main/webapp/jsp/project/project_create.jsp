@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -37,13 +38,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="topT ">应用</div>
                 </a>
                 <div class="touxiangK">
-                    <img src="/wankangyuan/static/img/touxiang.png" alt="" class="touxiang" />
+                    <a href="/wankangyuan/userInfo">
+                        <img src="${user.headimg }" alt="" class="touxiang" />
+                    </a>
+                    <div class="userbutK">
+                        <a href="/wankangyuan/userInfo">
+                            <div class="userbut">用户信息</div>
+                        </a>
+                        <a href="/wankangyuan/message/viewMessage">
+                            <div class="userbut">系统消息
+                            <c:if test="${systemMSG }">
+                                <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint2" />
+                            </c:if>
+                            </div>
+                        </a>
+                        <div class="userbutline"></div>
+                        <a href="/wankangyuan/logout">
+                            <div class="userbut">退出登录</div>
+                        </a>
+                    </div>
                 </div>
-                <div class="nicheng">Peter</div>
+                <div class="nicheng"><shiro:principal/></div>
+                <a href="/wankangyuan/friends/viewFriendsManage">
                 <div class="yanjiuquan">
                     <div class="yanjiuquanT">研究圈</div>
-                    <img src="/wankangyuan/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
+                    <c:if test="${friendMSG}">
+                        <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
+                    </c:if>
                 </div>
+                </a>
             </div>
             <div class="top2">
                 <div class="top2C">

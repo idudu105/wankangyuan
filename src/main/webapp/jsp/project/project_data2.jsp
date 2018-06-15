@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
@@ -36,19 +37,41 @@
                     <div class="topT">应用</div>
                 </a>
                 <div class="touxiangK">
-                    <img src="img/touxiang.png" alt="" class="touxiang" />
+                    <a href="/wankangyuan/userInfo">
+                        <img src="${user.headimg }" alt="" class="touxiang" />
+                    </a>
+                    <div class="userbutK">
+                        <a href="/wankangyuan/userInfo">
+                            <div class="userbut">用户信息</div>
+                        </a>
+                        <a href="/wankangyuan/message/viewMessage">
+                            <div class="userbut">系统消息
+                            <c:if test="${systemMSG }">
+                                <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint2" />
+                            </c:if>
+                            </div>
+                        </a>
+                        <div class="userbutline"></div>
+                        <a href="/wankangyuan/logout">
+                            <div class="userbut">退出登录</div>
+                        </a>
+                    </div>
                 </div>
-                <div class="nicheng">Peter</div>
+                <div class="nicheng"><shiro:principal/></div>
+                <a href="/wankangyuan/friends/viewFriendsManage">
                 <div class="yanjiuquan">
                     <div class="yanjiuquanT">研究圈</div>
-                    <img src="img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
+                    <c:if test="${friendMSG}">
+                        <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint" />
+                    </c:if>
                 </div>
+                </a>
             </div>
             <div class="top2">
                 <div class="top2C">
                     <div class="top2Ctl active">13例结直肠癌病人的基因表达</div>
-                    <a href="project_discuss.html"><div class="top2Ctr">讨论版</div></a>
-                    <a href="project_member.html"><div class="top2Ctr">成员</div></a>
+                    <a href="/wankangyuan/projectTopic/selectProjectTopic"><div class="top2Ctr">讨论版</div></a>
+                    <a href="/wankangyuan/projectMember/selectProjectMember"><div class="top2Ctr">成员</div></a>
                     <a href="project_append.html"><div class="top2Ctr">应用结果</div></a>
                     <a href="project_app.html"><div class="top2Ctr">应用</div></a>
                     <a href="/wankangyuan/projectFormatData/getSourceDatas?p_id=${project.id}"><div class="top2Ctr active">格式数据</div></a>
