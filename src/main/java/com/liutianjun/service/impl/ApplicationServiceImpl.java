@@ -17,7 +17,6 @@ import com.liutianjun.pojo.ApplicationQuery;
 import com.liutianjun.pojo.ApplicationQuery.Criteria;
 import com.liutianjun.service.ApplicationService;
 import com.liutianjun.service.ProjectAppRelationService;
-import com.liutianjun.service.UserAppRelationService;
 
 /**
  * 应用服务实现
@@ -33,9 +32,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 	@Autowired
 	private ApplicationDao applicationDao;
-	
-	@Autowired
-	private UserAppRelationService userAppRelationService;
 	
 	@Autowired
 	private ProjectAppRelationService projectAppRelationService;
@@ -142,10 +138,60 @@ public class ApplicationServiceImpl implements ApplicationService {
 		map.put("total", total);
 		return map;
 	}
+	
+	/**
+	 * 查找公共的应用
+	 */
+	@Override
+	public Map<String, Object> findPublic(Integer page, Integer rows, String appName, String appType,
+			String orderByClause, String field, String[] option) {
+		ApplicationQuery example = new ApplicationQuery();
+		Criteria criteria = example.createCriteria();
+		if(StringUtils.isNotBlank(appName)) {
+			criteria.andAppNameLike("%"+appName+"%");
+		}
+		if(StringUtils.isNotBlank(appType)) {
+			criteria.andAppTypeEqualTo(appType);
+		}
+		criteria.andIsDisplayEqualTo(1);
+		if(null != field && null != option && option.length > 0) {
+	    	if(field.equals("appName")) {
+	    		criteria.andAppNameIn(Arrays.asList(option));
+	    	}else if (field.equals("creator")) {
+	    		criteria.andCreatorIn(Arrays.asList(option));
+	    	}else if (field.equals("isAsync")) {
+	    		List<String> optionList = Arrays.asList(option);
+	    		if(optionList.size() == 1) {
+	    			if("同步".equals(optionList.get(0))) {
+	    				criteria.andIsAsyncEqualTo(0);
+	    			}
+	    			if("异步".equals(optionList.get(0))) {
+	    				criteria.andIsAsyncEqualTo(1);
+	    			}
+	    		}
+	    	}else if (field.equals("keywords")) {
+	    		criteria.andKeywordsIn(Arrays.asList(option));
+	    	}else if (field.equals("appIntro")) {
+	    		criteria.andAppIntroIn(Arrays.asList(option));
+	    	}
+	    }
+		
+		int total = applicationDao.countByExample(example);
+		example.setOrderByClause(orderByClause);
+		example.setPageNo(page);
+		example.setPageSize(rows);
+		List<Application> list = applicationDao.selectByExample(example);
+		Map<String,Object> map = new HashMap<>();
+		map.put("page", page);
+		map.put("rows", rows);
+		map.put("list", list);
+		map.put("total", total);
+		return map;
+	}
 
 	/**
 	 * 查找自己创建的应用
-	 * <p>Title: findAll</p>  
+	 * <p>Title: findCreate</p>  
 	 * <p>Description: </p>  
 	 * @param page
 	 * @param rows
@@ -154,7 +200,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * @return
 	 */
 	@Override
-	public Map<String, Object> findAll(Integer page, Integer rows, String appName, String appType, String creator) {
+	public Map<String, Object> findCreate(Integer page, Integer rows, String appName, String appType, String creator,
+			String orderByClause, String field, String[] option) {
 		ApplicationQuery example = new ApplicationQuery();
 		Criteria criteria = example.createCriteria();
 		if(StringUtils.isNotBlank(appName)) {
@@ -164,16 +211,42 @@ public class ApplicationServiceImpl implements ApplicationService {
 			criteria.andAppTypeEqualTo(appType);
 		}
 		criteria.andCreatorEqualTo(creator);
+		
+		if(null != field && null != option && option.length > 0) {
+	    	if(field.equals("appName")) {
+	    		criteria.andAppNameIn(Arrays.asList(option));
+	    	}else if (field.equals("creator")) {
+	    		criteria.andCreatorIn(Arrays.asList(option));
+	    	}else if (field.equals("isAsync")) {
+	    		List<String> optionList = Arrays.asList(option);
+	    		if(optionList.size() == 1) {
+	    			if("同步".equals(optionList.get(0))) {
+	    				criteria.andIsAsyncEqualTo(0);
+	    			}
+	    			if("异步".equals(optionList.get(0))) {
+	    				criteria.andIsAsyncEqualTo(1);
+	    			}
+	    		}
+	    	}else if (field.equals("keywords")) {
+	    		criteria.andKeywordsIn(Arrays.asList(option));
+	    	}else if (field.equals("appIntro")) {
+	    		criteria.andAppIntroIn(Arrays.asList(option));
+	    	}
+	    }
+		
 		int total = applicationDao.countByExample(example);
-		example.setOrderByClause("id DESC");
+		example.setOrderByClause(orderByClause);
 		example.setPageNo(page);
 		example.setPageSize(rows);
 		List<Application> list = applicationDao.selectByExample(example);
 		Map<String,Object> map = new HashMap<>();
+		map.put("page", page);
+		map.put("rows", rows);
 		map.put("list", list);
 		map.put("total", total);
 		return map;
 	}
+
 
 	/**
 	 * 设置应用状态
@@ -191,21 +264,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 		criteria.andIdIn(Arrays.asList(ids));
 		return applicationDao.updateByExampleSelective(record, example);
 		
-	}
-
-	/**
-	 * 查找我的应用
-	 * <p>Title: findMine</p>  
-	 * <p>Description: </p>  
-	 * @param page
-	 * @param rows
-	 * @param appName
-	 * @param user
-	 * @return
-	 */
-	@Override
-	public Map<String, Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId,String orderByClause,String field, String content) {
-		return userAppRelationService.findMine(page,rows,appName,appType,userId,orderByClause,field,content);
 	}
 
 	/**
@@ -292,6 +350,116 @@ public class ApplicationServiceImpl implements ApplicationService {
 			}
 		}
 		return typeList;
+	}
+	
+	/**
+	 * 查询我创建的应用类别列表
+	 */
+	@Override
+	public List<String> findAppTypeList(String username) {
+		ApplicationQuery example = new ApplicationQuery();
+		Criteria criteria = example.createCriteria();
+		criteria.andCreatorEqualTo(username);
+		example.setFields("app_type");
+		example.setDistinct(true);
+		List<Application> list = applicationDao.selectByExample(example);
+		List<String> typeList = new ArrayList<>();
+		if(null !=list && list.size() > 0) {
+			for (Application application : list) {
+				if(null != application && null != application.getAppType()) {
+					typeList.add(application.getAppType());
+				}
+			}
+		}
+		return typeList;
+	}
+	
+	/**
+	 * 查询公共的的应用类别列表
+	 */
+	@Override
+	public List<String> findPublicAppTypeList() {
+		ApplicationQuery example = new ApplicationQuery();
+		Criteria criteria = example.createCriteria();
+		criteria.andIsDisplayEqualTo(1);
+		example.setFields("app_type");
+		example.setDistinct(true);
+		List<Application> list = applicationDao.selectByExample(example);
+		List<String> typeList = new ArrayList<>();
+		if(null !=list && list.size() > 0) {
+			for (Application application : list) {
+				if(null != application && null != application.getAppType()) {
+					typeList.add(application.getAppType());
+				}
+			}
+		}
+		return typeList;
+	}
+
+	/**
+	 * 查询我创建的字段列表
+	 */
+	@Override
+	public List<Application> findFieldList(String field, String content, String username) {
+		ApplicationQuery example = new ApplicationQuery();
+		Criteria criteria = example.createCriteria();
+		criteria.andCreatorEqualTo(username);
+		if(field.equals("app_name")) {
+			criteria.andAppNameLike("%"+content+"%");
+		}else if (field.equals("creator")) {
+			criteria.andCreatorLike("%"+content+"%");
+		}else if (field.equals("is_async")) {
+			if("异步".equals(content)) {
+				criteria.andIsAsyncEqualTo(1);
+			}
+			if("同步".equals(content)) {
+				criteria.andIsAsyncEqualTo(0);
+			}
+		}else if (field.equals("keywords")) {
+			criteria.andKeywordsLike("%"+content+"%");
+		}else if (field.equals("app_intro")) {
+			criteria.andAppIntroLike("%"+content+"%");
+		}
+		
+	    example.setFields(field);
+	    example.setDistinct(true);
+	    example.setPageNo(1);
+	    example.setPageSize(10);
+		
+		return applicationDao.selectByExample(example);
+	}
+	
+	/**
+	 * 创建公共的字段列表
+	 */
+	@Override
+	public List<Application> findPublicFieldList(String field, String content) {
+		ApplicationQuery example = new ApplicationQuery();
+		Criteria criteria = example.createCriteria();
+		criteria.andIsDisplayEqualTo(1);
+		if(field.equals("app_name")) {
+			criteria.andAppNameLike("%"+content+"%");
+		}else if (field.equals("creator")) {
+			criteria.andCreatorLike("%"+content+"%");
+		}else if (field.equals("is_async")) {
+			if("异步".equals(content)) {
+				criteria.andIsAsyncEqualTo(1);
+			}
+			if("同步".equals(content)) {
+				criteria.andIsAsyncEqualTo(0);
+			}
+		}else if (field.equals("keywords")) {
+			criteria.andKeywordsLike("%"+content+"%");
+		}else if (field.equals("app_intro")) {
+			criteria.andAppIntroLike("%"+content+"%");
+		}
+		
+	    example.setFields(field);
+	    example.setDistinct(true);
+	    example.setPageNo(1);
+	    example.setPageSize(10);
+		
+		return applicationDao.selectByExample(example);
 	}
 
 }

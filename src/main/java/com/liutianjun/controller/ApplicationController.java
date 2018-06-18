@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dzjin.service.ProjectService;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liutianjun.pojo.Application;
 import com.liutianjun.pojo.User;
@@ -58,64 +59,13 @@ public class ApplicationController {
 	 */
 	@RequiresPermissions("application:view")
 	@RequestMapping(value="/viewMine{index}",method=RequestMethod.GET)
-	public String viewMine(@RequestParam(value="page", defaultValue="1")Integer page, 
-            @RequestParam(value="rows", defaultValue="12")Integer rows, 
-            @RequestParam(value="appName",required=false)String appName,
-            @RequestParam(value="appType",required=false)String appType,
-            @PathVariable String index,
-            Model model) {
+	public String viewMine(@PathVariable String index,Model model) {
 	    //获取用户名
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 	    //获取用户
 	    User user = userService.selectByUsername(username);
-		
-		//Map<String, Object> map = applicationService.findMine(page,rows,appName,appType,user.getId());
-		
-		//获取应用筛选列表
-		List<String> typeList = applicationService.findTypeList();
-		
 		model.addAttribute("projectList", projectService.selectMyProject(user.getId()));
-		model.addAttribute("typeList", typeList);
-		//model.addAttribute("list", map.get("list"));
-		//model.addAttribute("total", map.get("total"));
-		//model.addAttribute("page", page);
-        //model.addAttribute("rows", rows);
-        //model.addAttribute("appName", appName);
 		return "jsp/application/app_mine"+index+".jsp";
-	}
-	
-	/**
-	 * 获取我的应用列表
-	 * @Title: getMine 
-	 * @param page
-	 * @param rows
-	 * @param appName
-	 * @param appType
-	 * @return
-	 * @throws Exception 
-	 * String
-	 */
-	@RequestMapping(value="/getMine",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
-	@ResponseBody
-	public String getMine(@RequestParam(value="page", defaultValue="1")Integer page, 
-            @RequestParam(value="rows", defaultValue="12")Integer rows, 
-            @RequestParam(value="appName",required=false)String appName,
-            @RequestParam(value="appType",required=false)String appType,
-            @RequestParam(value="orderName",defaultValue="ID")String orderName,
-            @RequestParam(value="orderDir",defaultValue="DESC")String orderDir,
-            @RequestParam(value="field",required=false)String field,
-            @RequestParam(value="content",required=false)String content) throws Exception {
-		
-		//获取用户名
-	    String username = (String)SecurityUtils.getSubject().getPrincipal();
-	    //获取用户
-	    User user = userService.selectByUsername(username);
-		Map<String, Object> map = applicationService.findMine(page,rows,appName,appType,user.getId(),orderName +" "+ orderDir,field,content);
-		map.put("page", page);
-		map.put("rows", rows);
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.setDateFormat(new SimpleDateFormat("YYYY-MM-dd"));
-		return mapper.writeValueAsString(map);
 	}
 	
 	/**
@@ -134,7 +84,6 @@ public class ApplicationController {
 		return mapper.writeValueAsString(typeList);
 	}
 	
-	
 	/**
 	 * 我创建的应用
 	 * @Title: viewCreate 
@@ -147,26 +96,85 @@ public class ApplicationController {
 	 */
 	@RequiresPermissions("application:view")
 	@RequestMapping(value="/viewCreate{index}",method=RequestMethod.GET)
-	public String viewCreate(@RequestParam(value="page", defaultValue="1")Integer page, 
+	public String viewCreate(@PathVariable String index,Model model) {
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    User user = userService.selectByUsername(username);
+		model.addAttribute("projectList", projectService.selectMyProject(user.getId()));
+		return "jsp/application/app_create"+index+".jsp";
+	}
+	
+	/**
+	 * 获取我创建的应用列表
+	 * <p>Title: getCreate</p>  
+	 * <p>Description: </p>  
+	 * @param page
+	 * @param rows
+	 * @param appName
+	 * @param appType
+	 * @param orderName
+	 * @param orderDir
+	 * @param field
+	 * @param option
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/getCreate",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getCreate(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="12")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
             @RequestParam(value="appType",required=false)String appType,
-            @PathVariable String index,
-            Model model) {
+            @RequestParam(value="orderName",defaultValue="ID")String orderName,
+            @RequestParam(value="orderDir",defaultValue="DESC")String orderDir,
+            @RequestParam(value="field",required=false)String field,
+            @RequestParam(value="option",required=false)String[] option) throws Exception {
+		
+		//获取用户名
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
-	    User user = userService.selectByUsername(username);
-		Map<String, Object> map = applicationService.findAll(page,rows,appName,appType,username);
-		
-		List<String> typeList = applicationService.findTypeList();
-		
-		model.addAttribute("projectList", projectService.selectMyProject(user.getId()));
-		model.addAttribute("typeList", typeList);
-		model.addAttribute("list", map.get("list"));
-		model.addAttribute("total", map.get("total"));
-		model.addAttribute("page", page);
-        model.addAttribute("rows", rows);
-        model.addAttribute("appName", appName);
-		return "jsp/application/app_create"+index+".jsp";
+		Map<String, Object> map = applicationService.findCreate(page,rows,appName,appType,username,orderName +" "+ orderDir,field,option);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setDateFormat(new SimpleDateFormat("YYYY-MM-dd"));
+		return mapper.writeValueAsString(map);
+	}
+	
+	/**
+	 * 
+	 * <p>Title: getAppFiledList</p>  
+	 * <p>Description: </p>  
+	 * @param field
+	 * @param content
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/getMyAppFieldList",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getMyAppFiledList(String field,String content) throws Exception {
+		String username = (String)SecurityUtils.getSubject().getPrincipal();
+		//获取应用筛选列表
+		List<Application> typeList = applicationService.findFieldList(field,content,username);
+		typeList.remove(null);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setSerializationInclusion(Include.NON_EMPTY);
+		mapper.setDateFormat(new SimpleDateFormat("YYYY-MM-dd"));
+		return mapper.writeValueAsString(typeList);
+	}
+	
+	/**
+	 * 查找我的应用类别应用
+	 * <p>Title: getMyAppTypeList</p>  
+	 * <p>Description: </p>  
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/getMyAppTypeList",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getMyAppTypeList() throws Exception {
+		//获取用户名
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+		//获取应用筛选列表
+		List<String> typeList = applicationService.findAppTypeList(username);
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(typeList);
 	}
 	
 	/**
@@ -181,23 +189,77 @@ public class ApplicationController {
 	 */
 	@RequiresPermissions("application:view")
 	@RequestMapping(value="/viewPublic{index}",method=RequestMethod.GET)
-	public String viewPublic(@RequestParam(value="page", defaultValue="1")Integer page, 
+	public String viewPublic(@PathVariable String index,Model model) {
+		return "jsp/application/app_public"+index+".jsp";
+	}
+	
+	/**
+	 * 查询公共的应用列表
+	 * <p>Title: getPublic</p>  
+	 * <p>Description: </p>  
+	 * @param page
+	 * @param rows
+	 * @param appName
+	 * @param appType
+	 * @param orderName
+	 * @param orderDir
+	 * @param field
+	 * @param option
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/getPublic",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getPublic(@RequestParam(value="page", defaultValue="1")Integer page, 
             @RequestParam(value="rows", defaultValue="12")Integer rows, 
             @RequestParam(value="appName",required=false)String appName,
             @RequestParam(value="appType",required=false)String appType,
-            @PathVariable String index,
-            Model model) {
-		Map<String, Object> map = applicationService.findAllPublic(page,rows,appName,appType);
-		List<String> typeList = applicationService.findTypeList();
+            @RequestParam(value="orderName",defaultValue="ID")String orderName,
+            @RequestParam(value="orderDir",defaultValue="DESC")String orderDir,
+            @RequestParam(value="field",required=false)String field,
+            @RequestParam(value="option",required=false)String[] option) throws Exception {
 		
-		model.addAttribute("typeList", typeList);
-		model.addAttribute("list", map.get("list"));
-		model.addAttribute("total", map.get("total"));
-		
-		model.addAttribute("page", page);
-		model.addAttribute("rows", rows);
-		model.addAttribute("appName", appName);
-		return "jsp/application/app_public"+index+".jsp";
+		Map<String, Object> map = applicationService.findPublic(page,rows,appName,appType,orderName +" "+ orderDir,field,option);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setDateFormat(new SimpleDateFormat("YYYY-MM-dd"));
+		return mapper.writeValueAsString(map);
+	}
+	
+	/**
+	 * 查询公共的字段列表
+	 * <p>Title: getPublicAppFiledList</p>  
+	 * <p>Description: </p>  
+	 * @param field
+	 * @param content
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/getPublicAppFieldList",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getPublicAppFiledList(String field,String content) throws Exception {
+		//获取应用筛选列表
+		List<Application> typeList = applicationService.findPublicFieldList(field,content);
+		typeList.remove(null);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setSerializationInclusion(Include.NON_EMPTY);
+		mapper.setDateFormat(new SimpleDateFormat("YYYY-MM-dd"));
+		return mapper.writeValueAsString(typeList);
+	}
+	
+	/**
+	 * 查询公共的类型列表
+	 * <p>Title: getPublicAppTypeList</p>  
+	 * <p>Description: </p>  
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/getPublicAppTypeList",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getPublicAppTypeList() throws Exception {
+		//获取应用筛选列表
+		List<String> typeList = applicationService.findPublicAppTypeList();
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(typeList);
 	}
 	
 	/**

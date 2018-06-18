@@ -35,13 +35,15 @@ public interface ApplicationService {
 	Map<String,Object> findAllPublic(Integer page, Integer rows, String appName, String appType);
 	
 	//查找自己创建的应用
-	Map<String, Object> findAll(Integer page, Integer rows, String appName, String appType, String creator);
+	Map<String, Object> findCreate(Integer page, Integer rows, String appName, String appType, String creator,
+			String orderByClause, String field, String[] option);
+	
+	//查找公共的应用
+	Map<String, Object> findPublic(Integer page, Integer rows, String appName, String appType, String orderByClause,
+			String field, String[] option);
 
 	//设置应用状态
 	int setStatus(Integer cmd, Integer[] ids);
-
-	//查找我的应用
-	Map<String, Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId, String orderByClause, String field, String content);
 	
 	//查询项目下的应用
 	Map<String, Object> findMineProjectApp(Integer page, Integer rows, Integer ProjectId);
@@ -54,4 +56,19 @@ public interface ApplicationService {
 	
 	//查找类别列表
 	List<String> findTypeList();
+
+	//查找应用字段列表
+	List<Application> findFieldList(String field, String content, String username);
+	
+	//查询公共的字段列表
+	List<Application> findPublicFieldList(String field, String content);
+
+	//查询我创建的应用类别列表
+	List<String> findAppTypeList(String username);
+
+	//查询公共的的应用类别列表
+	List<String> findPublicAppTypeList();
+
+
+
 }

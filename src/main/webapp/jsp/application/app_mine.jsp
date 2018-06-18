@@ -71,8 +71,7 @@
                     <div class="search">
                         <div class="searchC">
                             <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="searchCi" data-bind="click:searchAppList" />
-                            <input name="appName" type="text" class="searchCt" data-bind="value:appName,event: { keyup: judgeSearchAppList}"  placeholder="搜索应用" />
-                            <input name="appType" type="hidden">
+                            <input name="appName" type="text" class="searchCt" data-bind="event: { keyup: judgeSearchAppList}"  placeholder="搜索应用" />
                         </div>
                     </div>
                 </div>
@@ -103,15 +102,6 @@
                             <img src="<%=request.getContextPath()%>/static/img/sanjiao_blue.png" alt="" class="shaixuanBTi" />
                         </div>
                     </div>
-                    <!-- <div class="jiangeline"></div>
-                    <div class="allK">
-                        <div class="quanxuanK">
-                            <input type="checkbox" class="input_check" id="check0">
-                            <label for="check0"></label>
-                        </div>
-                        <div class="allT">全选</div>
-                    </div> -->
-                    <!-- <div class="pro_menu pro_exit">退出</div> -->
                     <div class="pro_menu app_typeK">
                         <div class="app_typek">
                             <div class="app_typeT">应用类别</div>
@@ -126,13 +116,6 @@
                     </div>
 
                     <div class="pro_menu pro_rem" onclick="removeFromMine()">移除</div>
-                    <!-- <div class="pro_menu pro_run">运行</div> -->
-                    <!-- <div class="search2">
-                        <div class="search2C">
-                            <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="search2Ci" />
-                            <input type="text" class="search2Ct"  placeholder="搜索应用" />
-                        </div>
-                    </div> -->
                 </div>
                 <div class="shaixuanZK">
                     <div class="shaixuanZKli">
@@ -188,31 +171,6 @@
                 <div class="PJListline"></div>
                 <div class="PJul">
                 <form id="appList" method="post">
-                <%-- <c:forEach items="${list }" var="app" varStatus="appList">
-                    <div class="PJli">
-                        <div class="PJliC">
-                            <div class="fuxuanK2">
-                                <input name="ids" type="checkbox" class="input_check" id="check${appList.count }" value="${app.appId }">
-                                <label for="check${appList.count }"></label>
-                            </div>
-                            <a href="/wankangyuan/application/explain?id=${app.appId }">
-                                <div class="PJliCli appname">${app.appName }</div>
-                                <div class="PJliCli appcreater">${app.creator }</div>
-                                <div class="PJliCli apptime">
-                                    <fmt:formatDate type="date" value="${app.createTime }" />
-                                </div>
-                                <div class="PJliCli PJyibu">
-                                <c:if test="${app.isAsync eq 0}">同步</c:if>
-                                <c:if test="${app.isAsync eq 1}">异步</c:if>
-                                
-                                </div>
-                                <div class="PJliCli PJkeyword">${app.keywords }</div>
-                                <div class="PJliCli appexplain">${app.appOverview }</div>
-                            </a>
-                        </div>
-                        <div class="PJliline"></div>
-                    </div>
-                </c:forEach> --%>
                 <div data-bind="foreach:appList">
                 <div class="PJli" >
                     <div class="PJliC">
@@ -248,9 +206,6 @@
                             <div class="BTSXcliT">排序：</div>
                             <div class="BTSXcliI" data-bind="click:function(){orderAppList(' ASC')}">↑</div>
                             <div class="BTSXcliI" data-bind="click:function(){orderAppList(' DESC')}">↓</div>
-                            <!-- <input type="text" class="BTSXcliIpd" /> -->
-                            <%-- <img src="<%=request.getContextPath()%>/static/img/sort_up.png" alt="" class="BTSXcliI" />
-                            <img src="<%=request.getContextPath()%>/static/img/sort_down.png" alt="" class="BTSXcliI" /> --%>
                         </div>
                         <div class="BTSXcli">
                             <div class="BTSXcliT">过滤：</div>
@@ -262,12 +217,12 @@
                         </div>
                         <div class="BTSXcli2" data-bind="foreach:{data:fieldList,as:'field'}">
                             <div class="BTSXcli2li">
-                                <input name="field" type="checkbox" class="BTSXcli2liC" data-bind="value:eval('field.'+$('.BTSXpd').val())" />
+                                <input name="option" type="checkbox" class="BTSXcli2liC" data-bind="value:eval('field.'+$('.BTSXpd').val())" />
                                 <div class="BTSXcli2liT" data-bind="text:eval('field.'+$('.BTSXpd').val())"></div>
                             </div>
                         </div>
                         <div class="BTSXcli3">
-                            <div class="BTSXcli3BT BTSXcli3BTent" data-bind="click:" >筛选</div>
+                            <div class="BTSXcli3BT BTSXcli3BTent" data-bind="click:filterSearchAppList" >筛选</div>
                             <div class="BTSXcli3BT BTSXcli3BTres" data-bind="click:$root.fieldList.removeAll();" >重置</div>
                         </div>
                     </div>
@@ -305,11 +260,6 @@
 </c:if>
 
 <script type="text/javascript">
-/* function filtrateAppType(appType){
-    $("input[name='appType']").val(appType);
-    $("#filterFrom").submit();
-} */
-
 
 function addToProjrct(projectId){
 	var ids = $("input[name='ids']");
@@ -366,19 +316,18 @@ function removeFromMine(){
 //定义ViewModel
 function ViewModel() {
 	var self = this;
-	var page,rows,total,appType,orderName,orderDir,field;
-	self.appName = ko.observable();
-	self.appName = "";
+	var page,rows,total,appName,appType,orderName,orderDir,field,option;
 	self.appList = ko.observableArray();
 	self.showAppList = function() {
-		$.getJSON("/wankangyuan/application/getMine",{
+        
+		$.getJSON("/wankangyuan/userAppRelation/getMine",{
 			page:page,
 			appName:self.appName,
 			appType:self.appType,
 			orderName:self.orderName,
 			orderDir:self.orderDir,
-			field:$(".BTSXpd").attr("name"),
-			content:$(".BTSXcliGLK").val()
+			field:$(".BTSXpd").val(),
+			option:self.option
 			},function(data){
 			page = data.page;
 			rows = data.rows;
@@ -387,7 +336,6 @@ function ViewModel() {
 			for (var i in data.list){
                 self.appList.push(data.list[i]);
             }
-			//alert(appList);
 			project0();
 		    project1();
 			app_mine();
@@ -400,7 +348,6 @@ function ViewModel() {
 			    callback: function(page_) { // 回调函数
 			        console.log(page_);
 			        if(page_!=page){
-			            //window.location.href="/wankangyuan/application/viewMine?page="+page+"&rows=${rows}&appName=${appName}&appType=${appType}";
 			           page = page_;
 			           self.showAppList();
 			        }
@@ -414,6 +361,7 @@ function ViewModel() {
 	//点击搜索
 	self.searchAppList = function() {
 		page = 1;
+		self.appName = $("input[name='appName']").val();
 		self.showAppList();
 	}
 	//回车搜索
@@ -422,6 +370,18 @@ function ViewModel() {
         	self.searchAppList();
         }  
     }
+	//筛选搜索
+	self.filterSearchAppList = function() {
+		arr = [];
+		$("input[name='option']:checked").each(function(i){  
+			arr[i]=$(this).val(); 
+		});  
+        self.option = arr.join(",");
+        self.appName = "";
+        page = 1;
+        self.showAppList();
+	}
+	//排序搜索
 	self.orderAppList = function(order) {
 		self.orderName = $(".BTSXpd").attr("order");
 		self.orderDir = order;
@@ -433,6 +393,14 @@ function ViewModel() {
 		self.fieldList.removeAll();
 		$.getJSON("/wankangyuan/userAppRelation/getMyAppFieldList",{field:$(".BTSXpd").attr("order"),content:$(".BTSXcliGLK").val()},function(data){
             for (var i in data){
+            	if($(".BTSXpd").attr("order") == "is_async"){
+					if(data[i].isAsync == '0') {
+						data[i].isAsync = "同步"
+					}
+					if(data[i].isAsync == '1') {
+						data[i].isAsync = "异步"
+					}
+				}
                 self.fieldList.push(data[i]);
             }
         });
@@ -442,7 +410,6 @@ function ViewModel() {
 	    $(".BTSXpd").val($(this).attr("name"));
 	    $(".BTSXpd").attr("order",$(this).attr("order"));
 	});
-	//self.searchField();
 	
 	/* -------------------------------------------- */
 	//应用类型列表
@@ -452,7 +419,7 @@ function ViewModel() {
         self.searchAppList();
     }
 	self.getAppTypeList = function() {
-		$.getJSON("/wankangyuan/application/getAppTypeList",function(data){
+		$.getJSON("/wankangyuan/userAppRelation/getMyAppTypeList",function(data){
             self.appTypeList.removeAll();
             for (var i in data){
                 self.appTypeList.push(data[i]);
@@ -460,15 +427,9 @@ function ViewModel() {
 		});
 	}
 	self.getAppTypeList();
-	
-	
-    
-	
 }
 var vm = new ViewModel();
 ko.applyBindings(vm);
-
-
 
 </script>
 </body>

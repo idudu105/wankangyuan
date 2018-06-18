@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -70,11 +70,8 @@
                     <a href="/wankangyuan/application/viewPublic2"><div class="top2Cli">公共</div></a>
                     <div class="search">
                         <div class="searchC">
-                            <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="searchCi" />
-                            <form id="filterFrom" method="get">
-                                <input name="appName" type="text" class="searchCt" value="${appName }"  placeholder="搜索应用" />
-                                <input name="appType" type="hidden">
-                            </form>
+                            <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="searchCi" data-bind="click:searchAppList" />
+                            <input name="appName" type="text" class="searchCt" data-bind="event: { keyup: judgeSearchAppList}"  placeholder="搜索应用" />
                         </div>
                     </div>
                 </div>
@@ -95,13 +92,11 @@
                                 <div class="listZT2d"></div>
                             </div>
                         </a>
-                        
-                        
                     </div>
                     <div class="jiangeline"></div>
                     <div class="shaixuanBT">
                         <div class="shaixuanBTt">筛选</div>
-                        <div class="shaixuanBTiK" style="margin-top: 7px">
+                        <div class="shaixuanBTiK" >
                             <img src="<%=request.getContextPath()%>/static/img/sanjiao_blue.png" alt="" class="shaixuanBTi" />
                         </div>
                     </div>
@@ -113,7 +108,6 @@
                         </div>
                         <div class="allT">全选</div>
                     </div>
-                    <!-- <div class="pro_menu pro_exit">退出</div> -->
                     <div class="pro_menu app_typeK">
                         <div class="app_typek">
                             <div class="app_typeT">应用类别</div>
@@ -128,20 +122,9 @@
                     </div>
 
                     <div class="pro_menu pro_rem" onclick="removeFromMine()">移除</div>
-                    <!-- <div class="pro_menu pro_run">运行</div> -->
-                    <!-- <div class="search2">
-                        <div class="search2C">
-                            <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="search2Ci" />
-                            <input type="text" class="search2Ct"  placeholder="搜索应用" />
-                        </div>
-                    </div> -->
                 </div>
-                <div class="app_typeul">
-                    <c:forEach items="${typeList }" var="appType" varStatus="appList">
-                        <c:if test="${appType ne null }">
-                            <div class="app_typeli" onclick="filtrateAppType('${appType }')">${appType }</div>
-                        </c:if>
-                    </c:forEach>
+                <div class="app_typeul" data-bind="foreach:{data:appTypeList, as:'appType'}">
+                	<div class="app_typeli" data-bind="text:appType,click:$root.filtrateAppType"></div>
                 </div>
                 <div class="pro_addul">
                     <div class="pro_addli">项目1</div>
@@ -153,36 +136,26 @@
             </div>
             <div class="PJK2">                 
                 <form id="appList" method="post">
-                <c:forEach items="${list }" var="app" varStatus="appList">
+                <div data-bind="foreach:appList">
                     <div class="PJK2li">
                         <div class="PJK2litop">
-                            <div class="PJK2litopT2">${app.appName }</div>
-                            <!-- <div class="PJK2litopI"></div> -->
+                            <div class="PJK2litopT2" data-bind="text:appName" ></div>
                             <div class="fuxuanK3">
-                                <input name="ids" type="checkbox" class="input_check" id="check${appList.count }" value="${app.appId }">
-                                <label for="check${appList.count }"></label>
+                                <input name="ids" type="checkbox" class="input_check" data-bind="value: appId,attr:{id:'check'+($index()+1)}">
+                            	<label data-bind="attr:{for:'check'+($index()+1)}"></label>
                             </div>
                         </div>
                         <div class="PJK2licre">
                             <div class="PJK2licreT1">创建人：</div>
-                            <div class="PJK2licreT2">${app.creator }</div>
+                            <div class="PJK2licreT2" data-bind="text:creator" ></div>
                         </div>
-                        <%-- <div class="PJK2litime">
-                            <div class="PJK2licreT1">状态：</div>
-                            <div class="PJK2licreT2">${app.status }</div>
-                        </div> --%>
                         <div class="PJK2litime">
-                            <div class="PJK2litimeT1">
-                               <fmt:formatDate type="date" value="${app.createTime }" />
-                            </div>
-                            <div class="PJK2litimeT2">
-                               <fmt:formatDate type="time" value="${app.createTime }" />
-                            </div>
+                            <div class="PJK2litimeT1" data-bind="text:createTime" ></div>
                         </div>
-                        <div class="PJK2lidetail">${app.appOverview }</div>
-                        <div onclick="location='/wankangyuan/application/explain?id=${app.appId }'" class="PJK2liex">应用说明</div>
+                        <div class="PJK2lidetail" data-bind="text:appOverview"></div>
+                        <a data-bind="attr:{href:'/wankangyuan/application/explain?id='+appId}" class="PJK2liex">应用说明</a>
                     </div>
-                </c:forEach>
+                </div>
                 <input id="projectId" name="projectId" type="hidden" disabled="disabled">
                 </form>
             </div>
@@ -209,6 +182,8 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/paging.js"></script>
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
+
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/knockout-3.4.2.js"></script>
 <c:if test="${not empty msg}">
     <script type="text/javascript">
     layer.msg("${msg}");
@@ -216,10 +191,6 @@
 </c:if>
 
 <script type="text/javascript">
-function filtrateAppType(appType){
-    $("input[name='appType']").val(appType);
-    $("#filterFrom").submit();
-}
 
 function addToProjrct(projectId){
     var ids = $("input[name='ids']");
@@ -271,21 +242,77 @@ function removeFromMine(){
     }
 }
 
-    $('#box').paging({
-        initPageNo: ${page}, // 初始页码
-        totalPages: Math.ceil(${total}/${rows}), //总页数
-        totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
-        slideSpeed: 600, // 缓动速度。单位毫秒
-        jump: true, //是否支持跳转
-        callback: function(page) { // 回调函数
-            console.log(page);
-            if(page!=${page}){
-                window.location.href="/wankangyuan/application/viewMine2?page="+page+"&rows=${rows}&appName=${appName}&appType=${appType}";
-               
+function ViewModel() {
+	var self = this;
+	var page,rows,total,appName,appType;
+	self.appList = ko.observableArray();
+	self.showAppList = function() {
+        
+		$.getJSON("/wankangyuan/userAppRelation/getMine",{
+			page:page,
+			appName:self.appName,
+			appType:self.appType
+			},function(data){
+			page = data.page;
+			rows = data.rows;
+			total = data.total;
+			self.appList.removeAll();
+			for (var i in data.list){
+                self.appList.push(data.list[i]);
             }
-        }
-    });
-
+			project0();
+		    project2();
+		    app_mine();
+			$('#box').paging({
+			    initPageNo: page, // 初始页码
+			    totalPages: Math.ceil(total/rows), //总页数
+			    totalCount: '合计&nbsp;' + self.total + '&nbsp;条数据', // 条目总数
+			    slideSpeed: 600, // 缓动速度。单位毫秒
+			    jump: true, //是否支持跳转
+			    callback: function(page_) { // 回调函数
+			        console.log(page_);
+			        if(page_!=page){
+			           page = page_;
+			           self.showAppList();
+			        }
+			    }
+			});
+		});
+	}
+	//初始化列表
+	self.showAppList();
+	//点击搜索
+	self.searchAppList = function() {
+		page = 1;
+		self.option = "";
+		self.appName = $("input[name='appName']").val();
+		self.showAppList();
+	}
+	//回车搜索
+	self.judgeSearchAppList = function(data, event) {
+        if(event.keyCode == "13") {  
+        	self.searchAppList();
+        }  
+    }
+	//应用类型列表
+	self.appTypeList = ko.observableArray();
+	self.filtrateAppType = function(appType) {
+        self.appType = appType;
+        self.searchAppList();
+    }
+	self.getAppTypeList = function() {
+		$.getJSON("/wankangyuan/userAppRelation/getMyAppTypeList",function(data){
+            self.appTypeList.removeAll();
+            for (var i in data){
+                self.appTypeList.push(data[i]);
+            }
+		});
+	}
+	self.getAppTypeList();
+	
+}
+var vm = new ViewModel();
+ko.applyBindings(vm);
 
 </script>
 </body>

@@ -2,6 +2,7 @@ package com.liutianjun.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -86,6 +88,58 @@ public class UserAppRelationController {
 	}
 	
 	/**
+	 * 获取我的应用列表
+	 * @Title: getMine 
+	 * @param page
+	 * @param rows
+	 * @param appName
+	 * @param appType
+	 * @return
+	 * @throws Exception 
+	 * String
+	 */
+	@RequestMapping(value="/getMine",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getMine(@RequestParam(value="page", defaultValue="1")Integer page, 
+            @RequestParam(value="rows", defaultValue="12")Integer rows, 
+            @RequestParam(value="appName",required=false)String appName,
+            @RequestParam(value="appType",required=false)String appType,
+            @RequestParam(value="orderName",defaultValue="ID")String orderName,
+            @RequestParam(value="orderDir",defaultValue="DESC")String orderDir,
+            @RequestParam(value="field",required=false)String field,
+            @RequestParam(value="option",required=false)String[] option) throws Exception {
+		
+		//获取用户名
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    //获取用户
+	    User user = userService.selectByUsername(username);
+		Map<String, Object> map = userAppRelationService.findMine(page,rows,appName,appType,user.getId(),orderName +" "+ orderDir,field,option);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setDateFormat(new SimpleDateFormat("YYYY-MM-dd"));
+		return mapper.writeValueAsString(map);
+	}
+	
+	/**
+	 * 获取应用类别列表
+	 * @Title: getAppTypeList 
+	 * @return
+	 * @throws Exception 
+	 * String
+	 */
+	@RequestMapping(value="/getMyAppTypeList",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getMyAppTypeList() throws Exception {
+		//获取用户名
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    //获取用户
+	    User user = userService.selectByUsername(username);
+		//获取应用筛选列表
+		List<String> typeList = userAppRelationService.findMyTypeList(user.getId());
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(typeList);
+	}
+	
+	/**
 	 * 获取应用类别列表
 	 * @Title: getAppTypeList 
 	 * @return
@@ -95,8 +149,11 @@ public class UserAppRelationController {
 	@RequestMapping(value="/getMyAppFieldList",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
 	@ResponseBody
 	public String getMyAppFiledList(String field,String content) throws Exception {
+		String username = (String)SecurityUtils.getSubject().getPrincipal();
+        User user = userService.selectByUsername(username);
 		//获取应用筛选列表
-		List<UserAppRelation> typeList = userAppRelationService.findFileList(field,content);
+		List<UserAppRelation> typeList = userAppRelationService.findFileList(field,content,user.getId());
+		typeList.remove(null);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_EMPTY);
 		mapper.setDateFormat(new SimpleDateFormat("YYYY-MM-dd"));

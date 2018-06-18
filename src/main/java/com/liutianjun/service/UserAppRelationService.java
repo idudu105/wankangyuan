@@ -30,8 +30,11 @@ public interface UserAppRelationService {
 	int removeFromMineByIds(Integer userId,Integer[] ids);
 	
 	//查找用户的应用集合
-	Map<String,Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId,String orderByClause, String field, String content);
+	Map<String,Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId,String orderByClause, String field, String[] option);
 
 	//查找字段列表
-	List<UserAppRelation> findFileList(String field, String content);
+	List<UserAppRelation> findFileList(String field, String content, Integer userId);
+
+	//查询我的应用类别列表
+	List<String> findMyTypeList(Integer userId);
 }

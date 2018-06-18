@@ -1,5 +1,6 @@
 package com.liutianjun.service.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -121,7 +122,7 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	 * @return
 	 */
 	@Override
-	public Map<String,Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId, String orderByClause,String field, String content) {
+	public Map<String,Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId, String orderByClause,String field, String[] option) {
 		Map<String,Object> map = new HashMap<>();
 		//根据用户名查询关系表
 	    UserAppRelationQuery example = new UserAppRelationQuery();
@@ -133,22 +134,25 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	    if(StringUtils.isNotBlank(appType)) {
 	    	criteria.andAppTypeEqualTo(appType);
 	    }
-	    if(null != field && null != appName) {
+	    if(null != field && null != option && option.length > 0) {
 	    	if(field.equals("appName")) {
-	    		criteria.andAppNameLike("%"+content+"%");
+	    		criteria.andAppNameIn(Arrays.asList(option));
 	    	}else if (field.equals("creator")) {
-	    		criteria.andCreatorLike("%"+content+"%");
+	    		criteria.andCreatorIn(Arrays.asList(option));
 	    	}else if (field.equals("isAsync")) {
-	    		if("异步".equals(content)) {
-	    			criteria.andIsAsyncEqualTo(1);
-	    		}
-	    		if("同步".equals(content)) {
-	    			criteria.andIsAsyncEqualTo(0);
+	    		List<String> optionList = Arrays.asList(option);
+	    		if(optionList.size() == 1) {
+	    			if("同步".equals(optionList.get(0))) {
+	    				criteria.andIsAsyncEqualTo(0);
+	    			} 
+	    			if("异步".equals(optionList.get(0))) {
+	    				criteria.andIsAsyncEqualTo(1);
+	    			}
 	    		}
 	    	}else if (field.equals("keywords")) {
-	    		criteria.andKeywordsLike("%"+content+"%");
+	    		criteria.andKeywordsIn(Arrays.asList(option));
 	    	}else if (field.equals("appOverview")) {
-	    		criteria.andAppOverviewLike("%"+content+"%");
+	    		criteria.andAppOverviewIn(Arrays.asList(option));
 	    	}
 	    }
 	    
@@ -157,7 +161,8 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	    example.setPageNo(page);
 	    example.setPageSize(rows);
 	    List<UserAppRelation> list = userAppRelationDao.selectByExample(example);
-	    
+		map.put("page", page);
+		map.put("rows", rows);
 	    map.put("total", total);
 	    map.put("list", list);
 	    
@@ -172,9 +177,10 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	 * @return
 	 */
 	@Override
-	public List<UserAppRelation> findFileList(String field, String content) {
+	public List<UserAppRelation> findFileList(String field, String content, Integer userId) {
 		UserAppRelationQuery example = new UserAppRelationQuery();
 		Criteria criteria = example.createCriteria();
+		criteria.andUserIdEqualTo(userId);
 		if(field.equals("app_name")) {
 			criteria.andAppNameLike("%"+content+"%");
 		}else if (field.equals("creator")) {
@@ -197,6 +203,26 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	    example.setPageNo(1);
 	    example.setPageSize(10);
 		return userAppRelationDao.selectByExample(example);
+	}
+
+	/**
+	 * 查询我的应用类别列表
+	 */
+	@Override
+	public List<String> findMyTypeList(Integer userId) {
+		UserAppRelationQuery example = new UserAppRelationQuery();
+		example.setFields("app_type");
+		example.setDistinct(true);
+		List<UserAppRelation> list = userAppRelationDao.selectByExample(example);
+		List<String> typeList = new ArrayList<>();
+		if(null !=list && list.size() > 0) {
+			for (UserAppRelation userAppRelation : list) {
+				if(null != userAppRelation && null != userAppRelation.getAppType()) {
+					typeList.add(userAppRelation.getAppType());
+				}
+			}
+		}
+		return typeList;
 	}
 
 }
