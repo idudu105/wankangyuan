@@ -70,7 +70,7 @@
             </div>
             <div class="top2">
                 <div class="top2C">
-                    <div class="top2Ctl active">13例结直肠癌病人的基因表达</div>
+                    <div class="top2Ctl active">${project.p_name}</div>
                     <a href="/wankangyuan/projectTopic/selectProjectTopic"><div class="top2Ctr">讨论版</div></a>
                     <a href="/wankangyuan/projectMember/selectProjectMember"><div class="top2Ctr">成员</div></a>
                     <a href="/wankangyuan/projectAppEnd/selectProjectAppEnd"><div class="top2Ctr">应用结果</div></a>

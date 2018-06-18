@@ -5,6 +5,57 @@
 * @Last Modified time: 2018-05-16 10:36:25
 */
 
+//项目应用结果重新运行——单独页面
+function pro_appendre2(){
+    
+    var oproreK=document.querySelectorAll('.proreK2')[0];//格式数据框
+    var oproreb1=oproreK.querySelectorAll('.proreb1')[0];//格式数据框提交按钮
+
+// 重新选择格式数据框格式数据显示
+    var oproreM=document.querySelectorAll('.proreM')[0];
+    var aproreMzc=oproreM.querySelectorAll('.proreMzc');
+    var aPJliB=oproreM.querySelectorAll('.PJliB');
+
+    for(var i=0;i<aproreMzc.length;i++){
+        (function(index){
+            aproreMzc[index].onclick=function(){
+                console.log(index)
+                for(var j=0;j<aPJliB.length;j++){
+                    aPJliB[j].className="PJliB";
+                }
+                aPJliB[index].className="PJliB active";
+            }
+        })(i)
+    }
+
+
+//选择格式数据
+    var aproreMli=oproreM.querySelectorAll('.proreMli');
+    var proreMliPD=[];
+    // console.log(aproreMli);
+
+    for(var i=0;i<aproreMli.length;i++){
+        proreMliPD[i]=0;
+        // console.log(proreMliPD);
+        (function(index){
+            aproreMli[index].onclick=function(){
+                if(proreMliPD[index]==0){
+                    // aproreMli.className="proreMli active";
+                    aproreMli[index].style.color="#5ca0e5";
+                    proreMliPD[index]=1;
+                }else{
+                    // aproreMli.className="proreMli";
+                    aproreMli[index].style.color="#666";
+                    proreMliPD[index]=0;
+                }
+            }
+        })(i)
+    }
+
+
+}
+
+
 
 //  项目0
 function project0(){

@@ -1,10 +1,9 @@
 package com.dzjin.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +15,8 @@ import com.dzjin.model.Project;
 import com.dzjin.service.ProjectAppService;
 import com.dzjin.service.ProjectDataService;
 import com.liutianjun.pojo.Application;
+import com.liutianjun.pojo.User;
 import com.liutianjun.service.ApplicationService;
-import com.xtkong.dao.hbase.HBaseSourceDataDao;
-import com.xtkong.model.Source;
 import com.xtkong.service.SourceFieldService;
 import com.xtkong.service.SourceService;
 
@@ -106,6 +104,7 @@ public class ProjectAppController {
 	 * @param app_id
 	 * @return
 	 */
+	/*
 	@RequestMapping("/projectAppRun")
 	public String projectAppRun(HttpSession httpSession , Integer app_id , Integer cs_id){
 		
@@ -133,6 +132,51 @@ public class ProjectAppController {
 		Application application = applicationService.findPublicByid(app_id);
 		httpSession.setAttribute("application", application);
 		return "redirect:/jsp/project/project_apprun.jsp";
+	}*/
+	
+	/**
+	 * 运行项目，解析运行地址，并对相关的字段进行替换，然后弹出到指定的页面
+	 * @param request
+	 * @param session
+	 * @param app_id
+	 * @return
+	 */
+	@RequestMapping("/projectAppRun")
+	@ResponseBody
+	public Map<String, Object> projectAppRun(HttpServletRequest request , HttpSession session , Integer app_id){
+		
+		//请求样例
+		/*http://localhost:8021/bd-visualapps/apps/heatmap/param.html
+		 * ?project.id={project.id}
+		 * &userid={userid}
+		 * &username={username}
+		 * &app.id={app.id}*/
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		User user = (User) request.getAttribute("user");
+		Project project = (Project)session.getAttribute("project");
+		Application application = applicationService.selectByPrimaryKey(app_id);
+		String paraAddress = application.getParaAddress();
+		//需要对地址进行解析
+		if(paraAddress != null && !paraAddress.equals("") && paraAddress.indexOf('?') != -1){
+			String head = paraAddress.split("[?]")[0];
+			String newParaAddress = 
+					head
+					+"?project.id="+project.getId()
+					+"&userid="+user.getId()
+					+"&username="+user.getUsername()
+					+"&app.id="+app_id;
+
+			map.put("result", true);
+			map.put("message", newParaAddress);
+			
+		}else{
+			map.put("result", false);
+		}
+		
+		return map;
 	}
+	
 
 }

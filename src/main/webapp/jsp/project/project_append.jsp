@@ -70,7 +70,7 @@
             </div>
             <div class="top2">
                 <div class="top2C">
-                    <div class="top2Ctl active">13例结直肠癌病人的基因表达</div>
+                    <div class="top2Ctl active">${project.p_name}</div>
                     <a href="/wankangyuan/projectTopic/selectProjectTopic"><div class="top2Ctr">讨论版</div></a>
                     <a href="/wankangyuan/projectMember/selectProjectMember"><div class="top2Ctr">成员</div></a>
                     <a href="/wankangyuan/projectAppEnd/selectProjectAppEnd"><div class="top2Ctr active">应用结果</div></a>
@@ -104,31 +104,21 @@
                             <img src="/wankangyuan/static/img/sanjiao_blue.png" alt="" class="shaixuanBTi" />
                         </div>
                     </div>
-                    <!-- <div class="jiangeline"></div> -->
-                    <!-- <div class="allK">
-                        <div class="allX">
-                            <img src="/wankangyuan/static/img/greentrue.png" alt="" class="allI active" />
-                        </div>
-                        <div class="allT">全选</div>
-                    </div> -->
-                    <!-- <div class="pro_menu pro_exit">退出</div> -->
                     <div class="pro_menu pro_rem">移除</div>
                     <div class="pro_menu pro_canfabu">取消发布</div>
                     <div class="pro_menu pro_fabu">发布</div>
-                    <a href="project_appendre.html">
-                        <div class="pro_menu pro_rerun">重新运行</div>
-                    </a>
+                    <div class="pro_menu pro_rerun">重新运行</div>
                     
                     <div class="search2">
                         <div class="search2C">
                             <img src="/wankangyuan/static/img/search.png" alt="" class="search2Ci" />
-                            <input type="text" class="search2Ct"  placeholder="搜索应用结果" />
+                            <input type="text" class="search2Ct"  placeholder="搜索应用结果" value="${projectAppTaskSearchWord }"/>
                         </div>
                     </div>
                 </div>
                 <div class="shaixuanZK">
                     <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">应用结果名称</div>
+                        <div class="shaixuanZKliT">结果名称</div>
                         <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
@@ -136,15 +126,19 @@
                         <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">应用结果描述</div>
+                        <div class="shaixuanZKliT">创建者</div>
                         <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">创建人</div>
+                        <div class="shaixuanZKliT">运行时间</div>
                         <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">创建时间</div>
+                        <div class="shaixuanZKliT">运行使用参数</div>
+                        <div class="shaixuanZKliI active"></div>
+                    </div>
+                    <div class="shaixuanZKli">
+                        <div class="shaixuanZKliT">运行结果描述</div>
                         <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
@@ -159,80 +153,64 @@
                         <div class="shaixuanZKliT">异步/即时</div>
                         <div class="shaixuanZKliI active"></div>
                     </div>
+                    <div class="shaixuanZKli">
+                        <div class="shaixuanZKliT">结果文件</div>
+                        <div class="shaixuanZKliI active"></div>
+                    </div>
                 </div>
             </div>
             <div class="PJK">
                 <div class="PJList">
                     <div class="allK">
-                        <div class="allX">
-                            <!-- <img src="/wankangyuan/static/img/greentrue.png" alt="" class="allI" /> -->
+                        <div class="quanxuanK">
+                            <input type="checkbox" class="input_check" id="check0">
+                            <label for="check0"></label>
                         </div>
                         <div class="allT">全选</div>
                     </div>
-                    <div class="PJListli appendname">应用结果名称</div>
+                    <div class="PJListli appendname">结果名称</div>
                     <div class="PJListli appname">应用名称</div>
-                    <div class="PJListli appendex">应用结果描述</div>
                     <div class="PJListli appcreater">创建人</div>
                     <div class="PJListli apptime">创建时间</div>
+                    <div class="PJListli apptime">运行使用参数</div>
+                    <div class="PJListli apptime">运行结果描述</div>
                     <div class="PJListli appjindu">进度</div>
                     <div class="PJListli appfabuZT">发布状态</div>
                     <div class="PJListli appYBorJS">异步/即时</div>
+                    <div class="PJListli ">结果文件</div>
 
                 </div>
                 <div class="PJListline"></div>
                 <div class="PJul">
-                    <div class="PJli">
-                        <div class="PJliC">
-                            <div class="PJXZ"></div>
-                            <a href="project_appendxq.html">
-                                <div class="PJliCli appendname">13例结直肠癌病人的基因表达模式研究</div>
-                                <div class="PJliCli appname">基因表达研究</div>
-                                <div class="PJliCli appendex">病例对照研究是以现在确诊的患有某特定疾病</div>
-                                <div class="PJliCli appcreater">Peter</div>
-                                <div class="PJliCli apptime">2018-4-25</div>
-                                <div class="PJliCli appjindu">完成</div>
-                                <div class="PJliCli appfabuZT">已发布</div>
-                                <div class="PJliCli appYBorJS">即时</div>
-                            </a>
-                            
-                            
-                        </div>
-                        <div class="PJliline"></div>
-                    </div>
-                    <div class="PJli">
-                        <div class="PJliC">
-                            <div class="PJXZ"></div>
-                            <a href="project_appendxq.html">
-                                <div class="PJliCli appendname">13例结直肠癌病人的基因表达模式研究</div>
-                                <div class="PJliCli appname">基因表达研究</div>
-                                <div class="PJliCli appendex">病例对照研究是以现在确诊的患有某特定疾病</div>
-                                <div class="PJliCli appcreater">Peter</div>
-                                <div class="PJliCli apptime">2018-4-25</div>
-                                <div class="PJliCli appjindu">完成</div>
-                                <div class="PJliCli appfabuZT">已发布</div>
-                                <div class="PJliCli appYBorJS">即时</div>
-                            </a>
-                            
-                        </div>
-                        <div class="PJliline"></div>
-                    </div>
-                    <div class="PJli">
-                        <div class="PJliC">
-                            <div class="PJXZ"></div>
-                            <a href="project_appendxq.html">
-                                <div class="PJliCli appendname">13例结直肠癌病人的基因表达模式研究</div>
-                                <div class="PJliCli appname">基因表达研究</div>
-                                <div class="PJliCli appendex">病例对照研究是以现在确诊的患有某特定疾病</div>
-                                <div class="PJliCli appcreater">Peter</div>
-                                <div class="PJliCli apptime">2018-4-25</div>
-                                <div class="PJliCli appjindu">完成</div>
-                                <div class="PJliCli appfabuZT">已发布</div>
-                                <div class="PJliCli appYBorJS">即时</div>
-                            </a>
-                            
-                        </div>
-                        <div class="PJliline"></div>
-                    </div>
+                	
+                	<c:forEach items="${projectAppTasks }" var="projectAppTaskTemp">
+                		<div class="PJli">
+	                        <div class="PJliC">
+	                            <div class="fuxuanK2">
+	                                <input name="ids" type="checkbox" class="input_check" id="check${projectAppTaskTemp.id }" value="${projectAppTaskTemp.id }">
+	                                <label for="check${projectAppTaskTemp.id }"></label>
+	                            </div>
+	                            <a href="#">
+	                                <div class="PJliCli appendname" onclick="taskEndLocation(${projectAppTaskTemp.id})">${projectAppTaskTemp.taskName }</div>
+	                                <div class="PJliCli appname">${projectAppTaskTemp.app_name }</div>
+	                                <div class="PJliCli appcreater">${projectAppTaskTemp.username }</div>
+	                                <div class="PJliCli apptime">${projectAppTaskTemp.create_datetime }</div>
+	                                <div class="PJliCli apptime param" onclick="showParam(${projectAppTaskTemp.id})">查看</div>
+	                                <div class="PJliCli apptime">${projectAppTaskTemp.taskDescription }</div>
+	                                <div class="PJliCli appjindu">完成</div>
+	                                <c:if test="${projectAppTaskTemp.isRelease == 0 }">
+	                                	<div class="PJliCli appfabuZT">未发布</div>
+	                                </c:if>
+	                                <c:if test="${projectAppTaskTemp.isRelease == 1 }">
+	                                	<div class="PJliCli appfabuZT">已发布</div>
+	                                </c:if>
+	                                <div class="PJliCli appYBorJS">即时</div>
+	                                <div class="PJliCli " onclick="showResultFile(${projectAppTaskTemp.id})">查看</div>
+	                            </a> 
+	                        </div>
+	                        <div class="PJliline"></div>
+	                    </div>
+                	</c:forEach>
                 </div>
 
                 <div class="BTSX">
@@ -279,17 +257,7 @@
                 </div>
             </div>
 
-            <div class="pageK">
-                <div class="pageLR">
-                    <img src="/wankangyuan/static/img/pageL.png" class="pageLRi" alt="" />
-                </div>
-                <div class="pageNUM active">1</div>
-                <div class="pageNUM ">2</div>
-                <div class="pageNUM">3</div>
-                <div class="pageLR">
-                    <img src="/wankangyuan/static/img/pageR.png" class="pageLRi" alt="" />
-                </div>
-            </div>
+            <div class="pageK" id="box"></div>
 
             <div class="bottom">
                 <a href="javascript:;">
@@ -305,5 +273,255 @@
             </div>
         </div>
     </div>
+    
+    <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
+    <script type="text/javascript">
+    
+	    $('#box').paging({
+	        initPageNo: ${page}, // 初始页码
+	        totalPages: Math.ceil(${total}/${rows}), //总页数
+	        totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
+	        slideSpeed: 600, // 缓动速度。单位毫秒
+	        jump: true, //是否支持跳转
+	        callback: function(page) { // 回调函数
+	            console.log(page);
+	            if(page!=${page}){
+	            	var searchWord = $(".search2Ct").val();
+	                window.location.href="/wankangyuan/projectAppEnd/selectProjectAppEnd?type=1&page="+page+"&strip=12&searchWord="+searchWord;
+	            }
+	        }
+	    });
+	    
+	    $(".search2Ct").bind("keypress" , function (event){
+	    	if(event.keyCode == 13){
+	    		var searchWord = this.value;
+	    		window.location.href="/wankangyuan/projectAppEnd/selectProjectAppEnd?type=1&page=1&strip=12&searchWord="+searchWord;
+	    	}
+	    });
+	    
+	    $(".pro_rerun").click(function (){
+	    	var afuxuanK=document.querySelectorAll('.fuxuanK2');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].value);
+            	}
+            }
+            if(ids == ""){
+            	alert("请勾选应用！");
+            	return;
+            }
+            if(ids.length >1){
+            	alert("一次最多运行一个应用！");
+            	return;
+            }
+            var task_id = ids.join(",");
+            var operType = 'update';
+            
+            $.ajax({
+            	url:"/wankangyuan/projectAppEnd/projectAppReRun",
+            	type:"post",
+            	data:{
+            		task_id:task_id,
+            		operType:operType
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			window.open(data.message
+                        		,'_blank'
+                        		,'width=1200,height=600,menubar=no,toolbar=no,status=no,scrollbars=yes')
+            		}else{
+            			alert("应用运行地址解失败！");
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });  
+	    });
+	    //查看运行参数
+	    function showParam(task_id){
+	    	var operType = 'query';
+	    	$.ajax({
+            	url:"/wankangyuan/projectAppEnd/projectAppReRun",
+            	type:"post",
+            	data:{
+            		task_id:task_id,
+            		operType:operType
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			window.open(data.message
+                        		,'_blank'
+                        		,'width=1200,height=600,menubar=no,toolbar=no,status=no,scrollbars=yes')
+            		}else{
+            			alert("应用运行地址解失败！");
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });
+	    }
+	    //打开应用结果地址
+	    function taskEndLocation(task_id){
+	    	$.ajax({
+            	url:"/wankangyuan/projectAppEnd/projectAppTaskResultEnd",
+            	type:"post",
+            	data:{
+            		task_id:task_id,
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			window.open(data.message
+                        		,'_blank'
+                        		,'width=1200,height=600,menubar=no,toolbar=no,status=no,scrollbars=yes')
+            		}else{
+            			alert("应用运行地址解失败！");
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });
+	    }
+	    //查看运行结果文件
+	    function showResultFile(task_id){
+	    	$.ajax({
+            	url:"/wankangyuan/projectAppEnd/projectAppTaskResultFile",
+            	type:"post",
+            	data:{
+            		task_id:task_id,
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			window.open(data.message
+                        		,'_blank'
+                        		,'width=1200,height=600,menubar=no,toolbar=no,status=no,scrollbars=yes')
+            		}else{
+            			alert("应用运行地址解失败！");
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });
+	    }
+	    
+	    $(".pro_fabu").click(function (){
+	    	var afuxuanK=document.querySelectorAll('.fuxuanK2');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].value);
+            	}
+            }
+            if(ids == ""){
+            	alert("请勾选应用！");
+            	return;
+            }
+            var taskIds = ids.join(",");
+            $.ajax({
+            	url:"/wankangyuan/projectAppEnd/projectAppTaskRelease",
+            	type:"post",
+            	data:{
+            		taskIds:taskIds
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		alert(data.message);
+            		var searchWord = $(".search2Ct").val();
+            		window.location.href="/wankangyuan/projectAppEnd/selectProjectAppEnd?type=1&page=1&strip=12&searchWord="+searchWord;
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });
+	    });
+	    
+	    $(".pro_canfabu").click(function (){
+	    	var afuxuanK=document.querySelectorAll('.fuxuanK2');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].value);
+            	}
+            }
+            if(ids == ""){
+            	alert("请勾选应用！");
+            	return;
+            }
+            var taskIds = ids.join(",");
+            $.ajax({
+            	url:"/wankangyuan/projectAppEnd/projectAppTaskUnRelease",
+            	type:"post",
+            	data:{
+            		taskIds:taskIds
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		alert(data.message);
+            		var searchWord = $(".search2Ct").val();
+            		window.location.href="/wankangyuan/projectAppEnd/selectProjectAppEnd?type=1&page=1&strip=12&searchWord="+searchWord;
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });
+	    });
+	    
+	    $(".pro_rem").click(function (){
+	    	var afuxuanK=document.querySelectorAll('.fuxuanK2');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].value);
+            	}
+            }
+            if(ids == ""){
+            	alert("请勾选应用！");
+            	return;
+            }
+            var taskIds = ids.join(",");
+            $.ajax({
+            	url:"/wankangyuan/projectAppEnd/projectAppTaskDelete",
+            	type:"post",
+            	data:{
+            		taskIds:taskIds
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		alert(data.message);
+            		var searchWord = $(".search2Ct").val();
+            		window.location.href="/wankangyuan/projectAppEnd/selectProjectAppEnd?type=1&page=1&strip=12&searchWord="+searchWord;
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });
+	    });
+    
+    </script>
 </body>
 </html>

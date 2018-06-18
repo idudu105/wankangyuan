@@ -171,13 +171,13 @@
                             <div class="PJliCli apptime">
                                 <fmt:formatDate type="date" value="${app.createTime }" />
                             </div>
-                            <div class="PJliCli appopen">${app.status }</div>
+                            <div class="PJliCli appopen">${app.isDisplay }</div>
                             <div class="PJliCli PJyibu">${app.isAsync}
 	                            <c:if test="${app.isAsync eq 0}">同步</c:if>
 	                            <c:if test="${app.isAsync eq 1}">异步</c:if>
                             </div>
                             <div class="PJliCli PJkeyword">${app.keywords }</div>
-                            <div class="PJliCli appexplain">${app.appOverview }</div>
+                            <div class="PJliCli appexplain">${app.appIntro }</div>
                             
                         </div>
                         <div class="PJliline"></div>
@@ -334,12 +334,28 @@
             }
             var app_id = ids.join(",");
             
-            window.open('http://localhost:8098/wankangyuan/jsp/project/project_apprun.jsp'
-            		,'_blank'
-            		,'width=1200,height=600,menubar=no,toolbar=no,status=no,scrollbars=yes') 
-            
-            //window.location.href="/wankangyuan/projectApp/projectAppRun?app_id="+app_id;
+            $.ajax({
+            	url:"/wankangyuan/projectApp/projectAppRun",
+            	type:"post",
+            	data:{
+            		app_id:app_id
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			window.open(data.message
+                        		,'_blank'
+                        		,'width=1200,height=600,menubar=no,toolbar=no,status=no,scrollbars=yes')
+            		}else{
+            			alert("应用运行地址解失败！");
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });    
 		});
+		
     </script>
 </body>
 </html>

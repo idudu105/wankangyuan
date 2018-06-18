@@ -89,7 +89,7 @@
                                 <img src="/wankangyuan/static/img/listZT1.png" alt="" class="listZT1i" />
                             </div>
                         </a>
-                        <a href="project_append.jsp">
+                        <a href="/wankangyuan/jsp/project/project_append.jsp">
                             <div class="listZTli listZT2 active">
                                 <div class="listZT2d"></div>
                                 <div class="listZT2d"></div>
@@ -106,10 +106,12 @@
                     </div>
                     <div class="jiangeline"></div>
                     <div class="allK">
-                        <div class="allX"></div>
+                        <div class="quanxuanK">
+                            <input type="checkbox" class="input_check" id="check0">
+                            <label for="check0"></label>
+                        </div>
                         <div class="allT">全选</div>
                     </div>
-                    <!-- <div class="pro_menu pro_exit">退出</div> -->
                     <div class="pro_menu pro_rem">移除</div>
                     <div class="pro_menu pro_canfabu">取消发布</div>
                     <div class="pro_menu pro_fabu">发布</div>
@@ -119,134 +121,37 @@
                     <div class="search2">
                         <div class="search2C">
                             <img src="/wankangyuan/static/img/search.png" alt="" class="search2Ci" />
-                            <input type="text" class="search2Ct"  placeholder="搜索应用" />
+                            <input type="text" class="search2Ct"  placeholder="搜索应用结果" value="${projectAppTaskSearchWord }"/>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="PJK2">
-                <div class="PJK2li">
-                    <div class="PJK2litop">
-                        <a href="project_appendxq.html">
-                            <div class="PJK2litopT2">13例结直肠癌病人的基因表达模式研究</div>
-                        </a>
-                        
-                        <div class="PJK2litopI"></div>
-                    </div>
-                    <div class="PJK2licre">
-                        <div class="PJK2licreT1">创建人：</div>
-                        <div class="PJK2licreT2">Peter</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">2018-8-20</div>
-                        <div class="PJK2litimeT2">12：00</div>
-                    </div>
-                    <div class="PJK2lidetail">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet</div>
-                    <div class="PJK2liex">应用结果描述</div>
-                </div>
-                <div class="PJK2li">
-                    <div class="PJK2litop">
-                        <a href="project_appendxq.html">
-                            <div class="PJK2litopT2">13例结直肠癌病人的基因表达模式研究</div>
-                        </a>
-                        <div class="PJK2litopI"></div>
-                    </div>
-                    <div class="PJK2licre">
-                        <div class="PJK2licreT1">创建人：</div>
-                        <div class="PJK2licreT2">Peter</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">2018-8-20</div>
-                        <div class="PJK2litimeT2">12：00</div>
-                    </div>
-                    <div class="PJK2lidetail">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet</div>
-                    <div class="PJK2liex">应用结果描述</div>
-                </div>
-                <div class="PJK2li">
-                    <div class="PJK2litop">
-                        <a href="project_appendxq.html">
-                            <div class="PJK2litopT2">13例结直肠癌病人的基因表达模式研究</div>
-                        </a>
-                        <div class="PJK2litopI"></div>
-                    </div>
-                    <div class="PJK2licre">
-                        <div class="PJK2licreT1">创建人：</div>
-                        <div class="PJK2licreT2">Peter</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">2018-8-20</div>
-                        <div class="PJK2litimeT2">12：00</div>
-                    </div>
-                    <div class="PJK2lidetail">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet</div>
-                    <div class="PJK2liex">应用结果描述</div>
-                </div>
-                <div class="PJK2li">
-                    <div class="PJK2litop">
-                        <a href="project_appendxq.html">
-                            <div class="PJK2litopT2">13例结直肠癌病人的基因表达模式研究</div>
-                        </a>
-                        <div class="PJK2litopI"></div>
-                    </div>
-                    <div class="PJK2licre">
-                        <div class="PJK2licreT1">创建人：</div>
-                        <div class="PJK2licreT2">Peter</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">2018-8-20</div>
-                        <div class="PJK2litimeT2">12：00</div>
-                    </div>
-                    <div class="PJK2lidetail">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet</div>
-                    <div class="PJK2liex">应用结果描述</div>
-                </div>
-                <div class="PJK2li">
-                    <div class="PJK2litop">
-                        <a href="project_appendxq.html">
-                            <div class="PJK2litopT2">13例结直肠癌病人的基因表达模式研究</div>
-                        </a>
-                        <div class="PJK2litopI"></div>
-                    </div>
-                    <div class="PJK2licre">
-                        <div class="PJK2licreT1">创建人：</div>
-                        <div class="PJK2licreT2">Peter</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">2018-8-20</div>
-                        <div class="PJK2litimeT2">12：00</div>
-                    </div>
-                    <div class="PJK2lidetail">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet</div>
-                    <div class="PJK2liex">应用结果描述</div>
-                </div>
-                <div class="PJK2li">
-                    <div class="PJK2litop">
-                        <a href="project_appendxq.html">
-                            <div class="PJK2litopT2">13例结直肠癌病人的基因表达模式研究</div>
-                        </a>
-                        <div class="PJK2litopI"></div>
-                    </div>
-                    <div class="PJK2licre">
-                        <div class="PJK2licreT1">创建人：</div>
-                        <div class="PJK2licreT2">Peter</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">2018-8-20</div>
-                        <div class="PJK2litimeT2">12：00</div>
-                    </div>
-                    <div class="PJK2lidetail">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet</div>
-                    <div class="PJK2liex">应用结果描述</div>
-                </div>
+            	<c:forEach items="${projectAppTasks }" var="projectAppTaskTemp">
+            		<div class="PJK2li">
+	                    <div class="PJK2litop">
+	                        <a href="#">
+	                            <div class="PJK2litopT2" onclick="taskEndLocation(${projectAppTaskTemp.id})">${projectAppTaskTemp.taskName }</div>
+	                        </a>
+	                        <div class="fuxuanK2">
+                                <input name="ids" type="checkbox" class="input_check" id="check${projectAppTaskTemp.id }" value="${projectAppTaskTemp.id }">
+                                <label for="check${projectAppTaskTemp.id }"></label>
+                            </div>
+	                    </div>
+	                    <div class="PJK2licre">
+	                        <div class="PJK2licreT1">创建人：</div>
+	                        <div class="PJK2licreT2">${projectAppTaskTemp.username }</div>
+	                    </div>
+	                    <div class="PJK2litime">
+	                        <div class="PJK2litimeT1">${projectAppTaskTemp.create_datetime }</div>
+	                    </div>
+	                    <div class="PJK2lidetail">${projectAppTaskTemp.taskDescription }</div>
+	                    <div class="PJK2liex">应用结果描述</div>
+	                </div>
+            	</c:forEach>
             </div>
 
-            <div class="pageK">
-                <div class="pageLR">
-                    <img src="/wankangyuan/static/img/pageL.png" class="pageLRi" alt="" />
-                </div>
-                <div class="pageNUM active">1</div>
-                <div class="pageNUM ">2</div>
-                <div class="pageNUM">3</div>
-                <div class="pageLR">
-                    <img src="/wankangyuan/static/img/pageR.png" class="pageLRi" alt="" />
-                </div>
-            </div>
+            <div class="pageK" id="box"></div>
 
             <div class="bottom">
                 <a href="javascript:;">
@@ -262,5 +167,160 @@
             </div>
         </div>
     </div>
+    
+    <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
+    <script type="text/javascript">
+	    $('#box').paging({
+	        initPageNo: ${page}, // 初始页码
+	        totalPages: Math.ceil(${total}/${rows}), //总页数
+	        totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
+	        slideSpeed: 600, // 缓动速度。单位毫秒
+	        jump: true, //是否支持跳转
+	        callback: function(page) { // 回调函数
+	            console.log(page);
+	            if(page!=${page}){
+	            	var searchWord = $(".search2Ct").val();
+	                window.location.href="/wankangyuan/projectAppEnd/selectProjectAppEnd?type=2&page="+page+"&strip=12&searchWord="+searchWord;
+	            }
+	        }
+	    });
+	    
+      	//打开应用结果地址
+	    function taskEndLocation(task_id){
+	    	$.ajax({
+            	url:"/wankangyuan/projectAppEnd/projectAppTaskResultEnd",
+            	type:"post",
+            	data:{
+            		task_id:task_id,
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			window.open(data.message
+                        		,'_blank'
+                        		,'width=1200,height=600,menubar=no,toolbar=no,status=no,scrollbars=yes')
+            		}else{
+            			alert("应用运行地址解失败！");
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });
+	    }
+	    
+	    $(".search2Ct").bind("keypress" , function (event){
+	    	if(event.keyCode == 13){
+	    		var searchWord = this.value;
+	    		window.location.href="/wankangyuan/projectAppEnd/selectProjectAppEnd?type=2&page=1&strip=12&searchWord="+searchWord;
+	    	}
+	    });
+	    
+	    $(".pro_fabu").click(function (){
+	    	var afuxuanK=document.querySelectorAll('.fuxuanK2');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].value);
+            	}
+            }
+            if(ids == ""){
+            	alert("请勾选应用！");
+            	return;
+            }
+            var taskIds = ids.join(",");
+            $.ajax({
+            	url:"/wankangyuan/projectAppEnd/projectAppTaskRelease",
+            	type:"post",
+            	data:{
+            		taskIds:taskIds
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		alert(data.message);
+            		var searchWord = $(".search2Ct").val();
+            		window.location.href="/wankangyuan/projectAppEnd/selectProjectAppEnd?type=1&page=1&strip=12&searchWord="+searchWord;
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });
+	    });
+	    
+	    $(".pro_canfabu").click(function (){
+	    	var afuxuanK=document.querySelectorAll('.fuxuanK2');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].value);
+            	}
+            }
+            if(ids == ""){
+            	alert("请勾选应用！");
+            	return;
+            }
+            var taskIds = ids.join(",");
+            $.ajax({
+            	url:"/wankangyuan/projectAppEnd/projectAppTaskUnRelease",
+            	type:"post",
+            	data:{
+            		taskIds:taskIds
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		alert(data.message);
+            		var searchWord = $(".search2Ct").val();
+            		window.location.href="/wankangyuan/projectAppEnd/selectProjectAppEnd?type=1&page=1&strip=12&searchWord="+searchWord;
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });
+	    });
+	    
+	    $(".pro_rem").click(function (){
+	    	var afuxuanK=document.querySelectorAll('.fuxuanK2');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].value);
+            	}
+            }
+            if(ids == ""){
+            	alert("请勾选应用！");
+            	return;
+            }
+            var taskIds = ids.join(",");
+            $.ajax({
+            	url:"/wankangyuan/projectAppEnd/projectAppTaskDelete",
+            	type:"post",
+            	data:{
+            		taskIds:taskIds
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		alert(data.message);
+            		var searchWord = $(".search2Ct").val();
+            		window.location.href="/wankangyuan/projectAppEnd/selectProjectAppEnd?type=1&page=1&strip=12&searchWord="+searchWord;
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });
+	    });
+    </script>
 </body>
 </html>
