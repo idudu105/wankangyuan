@@ -4,6 +4,7 @@ import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -569,6 +570,10 @@ public class UserController {
 	public Map<String,Object> forbidUser(Integer[] ids, @PathVariable String cmd) {
 		resultMap.put("status", 400);
 		resultMap.put("message", "操作失败!");
+		if(null != ids && Arrays.asList(ids).contains(1) ) {
+			resultMap.put("message", "管理员账号不能禁用!");
+			return resultMap;
+		}
 		
 		if(null != ids && ids.length == userService.forbidUserByIds(ids,cmd)) {
 			resultMap.put("status", 200);
@@ -647,7 +652,8 @@ public class UserController {
 	
 	/**
 	 * 根据用户名获取列表
-	 * @Title: getUserByName 
+	 * @Title: getOrgUserByName 
+	 * @param isOrg
 	 * @param username
 	 * @return 
 	 * String
@@ -668,6 +674,30 @@ public class UserController {
 		}
 		return null;
 	}
+	
+	/**
+	 * 查找所有组内成员
+	 * @Title: getOrgAllByName 
+	 * @param username
+	 * @return 
+	 * String
+	 */
+	@RequestMapping(value="/user/getOrgAllByName",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getOrgAllByName(String username) {
+		try {
+			List<User> orgUserList = userService.findOrgAll(username);
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonOrgUserList = objectMapper.writeValueAsString(orgUserList);
+			
+			return jsonOrgUserList;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
 	
 	/**
 	 * 批量移除成员组ID

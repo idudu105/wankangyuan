@@ -392,7 +392,7 @@ function ViewModel() {
 	self.searchField = function() {
 		self.fieldList.removeAll();
 		$.getJSON("/wankangyuan/userAppRelation/getMyAppFieldList",{field:$(".BTSXpd").attr("order"),content:$(".BTSXcliGLK").val()},function(data){
-            for (var i in data){
+            for (var i=0;i<data.length;i++){
             	if($(".BTSXpd").attr("order") == "is_async"){
 					if(data[i].isAsync == '0') {
 						data[i].isAsync = "同步"
@@ -401,6 +401,13 @@ function ViewModel() {
 						data[i].isAsync = "异步"
 					}
 				}
+            	if($(".BTSXpd").attr("order") == "create_time"){
+                    for(var j =parseInt(i)+1; j<data.length; j++){
+                    if(data[i].createTime == data[j].createTime){
+                        j = ++i;
+                    }
+                  }
+                }
                 self.fieldList.push(data[i]);
             }
         });

@@ -47,11 +47,8 @@ public class ApplicationController {
 	private UserService userService;
 	
 	/**
-	 * 我的应用
+	 * 进入我的应用页面
 	 * @Title: viewMine 
-	 * @param page
-	 * @param rows
-	 * @param appName
 	 * @param index
 	 * @param model
 	 * @return 
@@ -87,9 +84,7 @@ public class ApplicationController {
 	/**
 	 * 我创建的应用
 	 * @Title: viewCreate 
-	 * @param page
-	 * @param rows
-	 * @param appName
+	 * @param index
 	 * @param model
 	 * @return 
 	 * String
@@ -105,8 +100,7 @@ public class ApplicationController {
 	
 	/**
 	 * 获取我创建的应用列表
-	 * <p>Title: getCreate</p>  
-	 * <p>Description: </p>  
+	 * @Title: getCreate 
 	 * @param page
 	 * @param rows
 	 * @param appName
@@ -116,7 +110,8 @@ public class ApplicationController {
 	 * @param field
 	 * @param option
 	 * @return
-	 * @throws Exception
+	 * @throws Exception 
+	 * String
 	 */
 	@RequestMapping(value="/getCreate",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
 	@ResponseBody
@@ -133,12 +128,12 @@ public class ApplicationController {
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 		Map<String, Object> map = applicationService.findCreate(page,rows,appName,appType,username,orderName +" "+ orderDir,field,option);
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.setDateFormat(new SimpleDateFormat("YYYY-MM-dd"));
+		mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
 		return mapper.writeValueAsString(map);
 	}
 	
 	/**
-	 * 
+	 * 获取我的应用的字段列表
 	 * <p>Title: getAppFiledList</p>  
 	 * <p>Description: </p>  
 	 * @param field
@@ -155,12 +150,12 @@ public class ApplicationController {
 		typeList.remove(null);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_EMPTY);
-		mapper.setDateFormat(new SimpleDateFormat("YYYY-MM-dd"));
+		mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
 		return mapper.writeValueAsString(typeList);
 	}
 	
 	/**
-	 * 查找我的应用类别应用
+	 * 获取我的应用类别列表
 	 * <p>Title: getMyAppTypeList</p>  
 	 * <p>Description: </p>  
 	 * @return
@@ -180,9 +175,7 @@ public class ApplicationController {
 	/**
 	 * 公共的应用
 	 * @Title: viewPublic 
-	 * @param page
-	 * @param rows
-	 * @param appName
+	 * @param index
 	 * @param model
 	 * @return 
 	 * String
@@ -221,7 +214,7 @@ public class ApplicationController {
 		
 		Map<String, Object> map = applicationService.findPublic(page,rows,appName,appType,orderName +" "+ orderDir,field,option);
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.setDateFormat(new SimpleDateFormat("YYYY-MM-dd"));
+		mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
 		return mapper.writeValueAsString(map);
 	}
 	
@@ -242,7 +235,7 @@ public class ApplicationController {
 		typeList.remove(null);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_EMPTY);
-		mapper.setDateFormat(new SimpleDateFormat("YYYY-MM-dd"));
+		mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
 		return mapper.writeValueAsString(typeList);
 	}
 	
@@ -309,7 +302,9 @@ public class ApplicationController {
 	
 	/**
 	 * 应用说明界面
-	 * @Title: showUpdateForm 
+	 * @Title: showExplain 
+	 * @param id
+	 * @param model
 	 * @return 
 	 * String
 	 */
@@ -326,7 +321,10 @@ public class ApplicationController {
 	
 	/**
 	 * 应用编辑界面
-	 * @Title: showUpdateForm 
+	 * @Title: viewUpdateForm 
+	 * @param id
+	 * @param model
+	 * @param index
 	 * @return 
 	 * String
 	 */
@@ -343,6 +341,9 @@ public class ApplicationController {
 	/**
 	 * 编辑应用信息
 	 * @Title: update 
+	 * @param record
+	 * @param attributes
+	 * @param index
 	 * @return 
 	 * String
 	 */
@@ -362,7 +363,9 @@ public class ApplicationController {
 	/**
 	 * 删除应用
 	 * @Title: delete 
-	 * @param id
+	 * @param ids
+	 * @param index
+	 * @param attributes
 	 * @return 
 	 * String
 	 */

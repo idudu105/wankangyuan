@@ -403,5 +403,20 @@ public class UserServiceImpl implements UserService {
 		
 		return userDao.selectByExample(example);
 	}
+	
+	/**
+	 * 获取所有组内成员
+	 * <p>Title: findOrgAll</p>  
+	 * <p>Description: </p>  
+	 * @param username
+	 * @return
+	 */
+	@Override
+	public List<User> findOrgAll(String username) {
+		UserQuery example = new UserQuery();
+		Criteria criteria = example.createCriteria();
+		criteria.andUsernameLike("%"+username+"%");
+		return userDao.selectByExample(example);
+	}
 
 }

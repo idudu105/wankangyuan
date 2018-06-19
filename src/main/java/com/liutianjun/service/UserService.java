@@ -63,6 +63,9 @@ public interface UserService {
     
     //根据用户名获取用户
     List<User> findOrgAll(Integer isOrg, String username);
+    
+    //获取所有组内成员
+    List<User> findOrgAll(String username);
 
     //批量移除成员组ID
 	int removeOrgByIds(Integer[] ids);

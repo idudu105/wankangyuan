@@ -1854,6 +1854,7 @@ function friend_manage(){
     var ofriend_yichuhy=document.querySelectorAll('.friend_yichuhy')[0];//移除好友按钮
 
     var osearch_2=document.querySelectorAll('.search_2')[0];//上方按钮栏搜索栏
+    var osearch_3=document.querySelectorAll('.search_3')[0];//上方按钮栏搜索栏
 
     // var zuzhi_PD=[];
     // for(var i=0;i<afriendMMlTTz.length;i++){
@@ -1911,6 +1912,7 @@ function friend_manage(){
                 ofriend_yichuhy.style.display="none";
 
                 osearch_2.className="search_2";
+                osearch_3.className="search_3 active";
             }
         })(i)
     }
@@ -1936,6 +1938,7 @@ function friend_manage(){
 
         //搜索栏的显示
         osearch_2.className="search_2 active";
+        osearch_3.className="search_3";
     }
 
 

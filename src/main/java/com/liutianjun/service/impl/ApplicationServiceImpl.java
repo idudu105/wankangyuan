@@ -1,5 +1,7 @@
 package com.liutianjun.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -141,6 +143,16 @@ public class ApplicationServiceImpl implements ApplicationService {
 	
 	/**
 	 * 查找公共的应用
+	 * <p>Title: findPublic</p>  
+	 * <p>Description: </p>  
+	 * @param page
+	 * @param rows
+	 * @param appName
+	 * @param appType
+	 * @param orderByClause
+	 * @param field
+	 * @param option
+	 * @return
 	 */
 	@Override
 	public Map<String, Object> findPublic(Integer page, Integer rows, String appName, String appType,
@@ -231,6 +243,19 @@ public class ApplicationServiceImpl implements ApplicationService {
 	    		criteria.andKeywordsIn(Arrays.asList(option));
 	    	}else if (field.equals("appIntro")) {
 	    		criteria.andAppIntroIn(Arrays.asList(option));
+	    	}else if (field.equals("createTime")) {
+	    		if(option.length == 2) {
+	    			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    			Date date1;
+	    			Date date2;
+	    			try {
+	    				date1 = simpleDateFormat.parse(option[0].toString());
+	    				date2 = simpleDateFormat.parse(option[1].toString());
+	    				criteria.andCreateTimeBetween(date1, date2);
+	    			} catch (ParseException e) {
+	    				e.printStackTrace();
+	    			}
+	    		}
 	    	}
 	    }
 		
@@ -354,6 +379,10 @@ public class ApplicationServiceImpl implements ApplicationService {
 	
 	/**
 	 * 查询我创建的应用类别列表
+	 * <p>Title: findAppTypeList</p>  
+	 * <p>Description: </p>  
+	 * @param username
+	 * @return
 	 */
 	@Override
 	public List<String> findAppTypeList(String username) {
@@ -376,6 +405,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 	
 	/**
 	 * 查询公共的的应用类别列表
+	 * <p>Title: findPublicAppTypeList</p>  
+	 * <p>Description: </p>  
+	 * @return
 	 */
 	@Override
 	public List<String> findPublicAppTypeList() {
@@ -398,6 +430,12 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 	/**
 	 * 查询我创建的字段列表
+	 * <p>Title: findFieldList</p>  
+	 * <p>Description: </p>  
+	 * @param field
+	 * @param content
+	 * @param username
+	 * @return
 	 */
 	@Override
 	public List<Application> findFieldList(String field, String content, String username) {
@@ -431,6 +469,11 @@ public class ApplicationServiceImpl implements ApplicationService {
 	
 	/**
 	 * 创建公共的字段列表
+	 * <p>Title: findPublicFieldList</p>  
+	 * <p>Description: </p>  
+	 * @param field
+	 * @param content
+	 * @return
 	 */
 	@Override
 	public List<Application> findPublicFieldList(String field, String content) {

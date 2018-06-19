@@ -263,6 +263,12 @@
                                 <input id="myFriendSearch" name="friendName" type="text" class="searchCt"  placeholder="搜索" data-bind="event: { keyup: searchMyFriends}" />
                             </div>
                         </div>
+                        <div class="search_3 active">
+                            <div class="searchC">
+                                <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="searchCi" data-bind="click:getOrgers" />
+                                <input id="orgMemberSearch" type="text" class="searchCt"  placeholder="组内成员" data-bind="event: { keyup: searchOrgers}" />
+                            </div>
+                        </div>
                         <div class="friendMTrb friend_qunfa">群发消息</div>
                         <div class="friendMTrb friend_yichuzu">从组中移除</div>
                         <div class="friendMTrb friend_yichuhy">移除好友</div>
@@ -625,7 +631,7 @@ function ViewModel() {
     
     //组内成员
     self.orgers = ko.observableArray(); //添加动态监视数组对象
-    //显示组能成员
+    //显示组内成员
     self.showOrgers = function(id){
     	centOrgId=id;
     	self.orgers.removeAll();
@@ -657,9 +663,41 @@ function ViewModel() {
             }
             friendmanage_quanxuan();
         });
-    	
-    	
     }
+    
+    self.getOrgers = function() {
+    	self.orgers.removeAll();
+    	$.get("/wankangyuan/user/getOrgAllByName",{username:$("#orgMemberSearch").val()},function(data){
+    		var list = JSON.parse(data);
+            for (var i in list){
+                //转换角色名
+                for(var j in roles) {
+                    if(list[i].roleIds == roles[j].id){
+                        list[i].roleIds = roles[j].description;
+                    }
+                }
+                //根据好友列表判断状态
+                list[i].password = null;
+                for(var k in myfriends) {
+                    if(list[i].id == myfriends[k].friendId){
+                        list[i].password = "已添加";
+                    }
+                }
+                if(list[i].username == centUser) {
+                    list[i].password = "当前用户";
+                }
+                self.orgers.push(list[i]);
+            }
+            friendmanage_quanxuan();
+    	});
+    }
+    
+    self.searchOrgers = function(data, event) {
+        if(event.keyCode == "13") {  
+            self.getOrgers();
+        }  
+    }
+    
     //移除组内成员
     self.removeOrgers = function() {
     	var load = layer.load();
@@ -704,7 +742,7 @@ function ViewModel() {
         });
     }
     //初始化组能成员
-    self.showOrgMember();
+    //self.showOrgMember();
     
     //发送好友申请
     self.sendFriendRequest = function(user) {
