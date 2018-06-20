@@ -35,7 +35,7 @@ public interface FormatFieldDao {
 	public List<FormatField> getFormatFieldsForUser(@Param("ft_id") Integer ft_id);
 
 	@Select("select * from format_field where ft_id=#{ft_id} and is_view=1 and is_meta=#{is_meta} order by ff_id ")
-	public List<FormatField> getFormatFieldsIs_meta(@Param("ft_id") Integer ft_id,@Param("is_meta") Integer is_meta);
+	public List<FormatField> getFormatFieldsIs_meta(@Param("ft_id") Integer ft_id, @Param("is_meta") Integer is_meta);
 
 	@Select("select * from format_field where ff_id=#{ff_id} ")
 	public FormatField getFormatField(@Param("ff_id") Integer ff_id);
@@ -43,6 +43,10 @@ public interface FormatFieldDao {
 	@Select("select ft_id from format_field where ff_id=#{ff_id} ")
 	public Integer getFormatField_ft_id(@Param("ff_id") Integer ff_id);
 
+	@Select("select ff_id from format_field where ft_id=#{ft_id}  and ff_name=#{ff_name}")
+	public Integer getFormatField_ff_id(@Param("ft_id") Integer ft_id, @Param("ff_name") String ff_name);
+
 	@Delete("delete from format_field where ff_id=#{ff_id}")
 	public int deleteFormatField(@Param("ff_id") Integer ff_id);
+
 }

@@ -120,7 +120,7 @@ public class ExportController {
 		}
 		// 写入各条记录，每条记录对应Excel中的一行
 
-		List<List<String>> sourceDatas = HBaseSourceDataDao.getSourceDataByIds(cs_id, sourceDataIds,
+		List<List<String>> sourceDatas = HBaseSourceDataDao.getSourceDatasByIds(cs_id, sourceDataIds,
 				source.getSourceFields());
 		for (int iRow = 0; iRow < sourceDatas.size(); iRow++) {
 			row = sheet.createRow((short) iRow + 1);

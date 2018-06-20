@@ -10,8 +10,13 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.filter.BinaryComparator;
+import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
 import org.apache.hadoop.hbase.filter.Filter;
+import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.PrefixFilter;
+import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
+import org.apache.hadoop.hbase.filter.FilterList.Operator;
 import org.apache.hadoop.hbase.util.Bytes;
 import com.xtkong.model.FormatType;
 import com.xtkong.util.ConstantsHBase;
@@ -46,17 +51,47 @@ public class HBaseFormatNodeDao {
 	 * @return
 	 */
 	public static boolean insertFormatNode(String cs_id, String sourceDataId, String ft_id, String nodeName,
-			Map<String, String> formatFieldDatas) {
+			Map<String, String> mateFieldDatas) {
 		HBaseDB db = HBaseDB.getInstance();
 		Long count = db.getNewId(ConstantsHBase.TABLE_GID, sourceDataId + "_" + ft_id, ConstantsHBase.FAMILY_GID_GID,
 				ConstantsHBase.QUALIFIER_GID_GID_GID);
 		String formatNodeId = sourceDataId + "_" + ft_id + "_" + count;
-		boolean b = db.put(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id, formatNodeId, ConstantsHBase.FAMILY_INFO,
+		boolean b = db.putCell(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id, formatNodeId, ConstantsHBase.FAMILY_INFO,
 				ConstantsHBase.QUALIFIER_NODE, ft_id + "," + nodeName);
-		HBaseFormatDataDao.updateFormatData(cs_id, ft_id, formatNodeId, formatFieldDatas);
+		HBaseFormatDataDao.updateFormatData(cs_id, ft_id, formatNodeId + "_", mateFieldDatas);
 		return b;
 	}
+	public static String getFormatNodeId(String cs_id, String sourceDataId, String ft_id,String nodeName) {
+		String formatNodeId=null;
+		try {
+			HBaseDB db = HBaseDB.getInstance();
+			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id);
+			Scan scan = new Scan();
+			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
+			Filter filter1 = new PrefixFilter(Bytes.toBytes(sourceDataId + "_" + ft_id + "_"));
+			Filter filter2 = new SingleColumnValueFilter(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+					Bytes.toBytes(ConstantsHBase.QUALIFIER_NODE), CompareOp.EQUAL,
+					new BinaryComparator(Bytes.toBytes(ft_id + "," + nodeName)));
+			// 与
+			FilterList filterList = new FilterList(Operator.MUST_PASS_ALL, filter1, filter2);
+			scan.setFilter(filterList);
+			ResultScanner resultScanner = table.getScanner(scan);
+			Iterator<Result> iterator = resultScanner.iterator();
+			if (iterator.hasNext()) {
+				Result result = iterator.next();
+				if (!result.isEmpty()) {
+					formatNodeId=Bytes.toString(result.getRow());
+				}
+			}
+			resultScanner.close();
+			table.close();
 
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return formatNodeId;
+	}
 	public static FormatType getFormatNodes(String cs_id, String sourceDataId, String ft_id) {
 		FormatType formatType = new FormatType();
 		try {
@@ -157,7 +192,7 @@ public class HBaseFormatNodeDao {
 	 */
 	public static boolean updateFormatNode(String cs_id, String formatNodeId, String ft_id, String nodeName) {
 		HBaseDB db = HBaseDB.getInstance();
-		return db.put(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id, formatNodeId, ConstantsHBase.FAMILY_INFO,
+		return db.putCell(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id, formatNodeId, ConstantsHBase.FAMILY_INFO,
 				ConstantsHBase.QUALIFIER_NODE, ft_id + "," + nodeName);
 	}
 
@@ -171,5 +206,9 @@ public class HBaseFormatNodeDao {
 	public static boolean deleteFormatNode(String cs_id, String formatNodeId) {
 		HBaseDB db = HBaseDB.getInstance();
 		return db.delete(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id, formatNodeId);
+	}
+
+	public static void deleteFormatNodeTable(String cs_id) {
+		HBaseDB.getInstance().deleteTable(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id);	
 	}
 }

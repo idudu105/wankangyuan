@@ -47,11 +47,11 @@ public class FormatNodeController {
 	@ResponseBody
 	public Map<String, Object> insertFormatNode(String cs_id, String sourceDataId, String ft_id, String nodeName) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		Map<String, String> formatFieldDatas=new HashMap<String, String>();
+		Map<String, String> formatFieldDatas = new HashMap<String, String>();
 		for (FormatField formatField : formatFieldService.getFormatFieldsForUser(Integer.valueOf(ft_id))) {
 			formatFieldDatas.put(String.valueOf(formatField.getFf_id()), "");
 		}
-		if (HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName,formatFieldDatas)) {
+		if (HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName, formatFieldDatas)) {
 			map.put("result", true);
 			map.put("message", "新增成功");
 		} else {
@@ -139,7 +139,6 @@ public class FormatNodeController {
 		}
 	}
 
-	// ----------------------编辑数据节点
 	/**
 	 * 编辑数据节点
 	 * 
@@ -162,9 +161,7 @@ public class FormatNodeController {
 		}
 		return map;
 	}
-	// ----------------------编辑数据节点
 
-	// ----------------------删除数据节点
 	/**
 	 * 删除数据节点
 	 * 
@@ -185,7 +182,5 @@ public class FormatNodeController {
 		}
 		return map;
 	}
-
-	// ----------------------删除数据节点
 
 }

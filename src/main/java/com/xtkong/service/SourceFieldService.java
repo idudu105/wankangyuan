@@ -2,6 +2,8 @@ package com.xtkong.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,10 @@ public class SourceFieldService {
 	 */
 	public List<SourceField> getSourceFields(int cs_id) {
 		return sourceFieldDao.getSourceFields(cs_id);
+	}
+	
+	public Integer getSourceFieldId(int cs_id,String csf_name){
+		return sourceFieldDao.getSourceFieldId(cs_id, csf_name);
 	}
 
 	public int deleteSourceField(Integer cs_id) {

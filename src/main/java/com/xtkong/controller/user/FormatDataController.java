@@ -31,7 +31,6 @@ public class FormatDataController {
 	@Autowired
 	FormatFieldService formatFieldService;
 
-	// ----------------------添加一条格式数据
 	/**
 	 * 添加一条格式数据
 	 * 
@@ -46,9 +45,12 @@ public class FormatDataController {
 	 */
 	@RequestMapping("/insertFormatData")
 	@ResponseBody
-	public Map<String, Object> insertFormatData(String cs_id, String ft_id, String formatNodeId,String formatFieldDatas) {
+	public Map<String, Object> insertFormatData(String cs_id, String ft_id, String formatNodeId,
+			String formatFieldDatas) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (HBaseFormatDataDao.insertFormatData(cs_id, ft_id, formatNodeId, new Gson().fromJson(formatFieldDatas,new TypeToken<Map<String, String>>(){}.getType()))) {
+		if (HBaseFormatDataDao.insertFormatData(cs_id, ft_id, formatNodeId,
+				new Gson().fromJson(formatFieldDatas, new TypeToken<Map<String, String>>() {
+				}.getType()))) {
 			map.put("result", true);
 			map.put("message", "新增成功");
 		} else {
@@ -58,8 +60,6 @@ public class FormatDataController {
 		return map;
 	}
 
-	// ----------------------添加一条格式数据
-	// ----------------------更新一条格式数据
 	/**
 	 * 更新一条格式数据
 	 * 
@@ -73,9 +73,12 @@ public class FormatDataController {
 	 */
 	@RequestMapping("/updateFormatData")
 	@ResponseBody
-	public Map<String, Object> updateFormatData(String cs_id, String ft_id, String formatDataId,String formatFieldDatas) {
+	public Map<String, Object> updateFormatData(String cs_id, String ft_id, String formatDataId,
+			String formatFieldDatas) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (HBaseFormatDataDao.updateFormatData(cs_id, ft_id, formatDataId, new Gson().fromJson(formatFieldDatas,new TypeToken<Map<String, String>>(){}.getType()))) {
+		if (HBaseFormatDataDao.updateFormatData(cs_id, ft_id, formatDataId,
+				new Gson().fromJson(formatFieldDatas, new TypeToken<Map<String, String>>() {
+				}.getType()))) {
 			map.put("result", true);
 			map.put("message", "更新成功");
 		} else {
@@ -85,7 +88,6 @@ public class FormatDataController {
 		return map;
 	}
 
-	// ----------------------更新一条格式数据
 	/**
 	 * 获取格式数据明细 List<List<String>>
 	 * 
@@ -101,16 +103,17 @@ public class FormatDataController {
 	 */
 	@RequestMapping("/getformatDatas")
 	@ResponseBody
-	public Map<String, Object> getformatDatas(Integer cs_id, Integer ft_id, String formatNodeId) {
+	public Map<String, Object> getformatDatas(Integer cs_id, Integer ft_id, String formatNodeId, Integer page,
+			Integer strip) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// meta数据
 		List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(ft_id, ConstantsHBase.IS_meta_true);
-		 List<List<String>> metaDatas =		 HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
-		 Integer.toString(ft_id), formatNodeId, meta);
+		List<List<String>> metaDatas = HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
+				Integer.toString(ft_id), formatNodeId, meta);
 		// data数据
 		List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(ft_id, ConstantsHBase.IS_meta_false);
-		 List<List<String>> dataDatas =		 HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
-		 Integer.toString(ft_id), formatNodeId, data);
+		List<List<String>> dataDatas = HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
+				Integer.toString(ft_id), formatNodeId, data,  page,  strip);
 		if (metaDatas != null) {
 			map.put("result", true);
 			map.put("meta", meta);
@@ -123,8 +126,7 @@ public class FormatDataController {
 		}
 		return map;
 	}
-
-	// ----------------------批量删除格式数据
+	
 	/**
 	 * 批量删除格式数据
 	 * 
@@ -147,9 +149,4 @@ public class FormatDataController {
 		return map;
 	}
 
-	// ----------------------批量删除格式数据
-	
-	
-	
-	
 }

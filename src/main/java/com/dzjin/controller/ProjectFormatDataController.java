@@ -72,7 +72,7 @@ public class ProjectFormatDataController {
 
 		return map;
 	}
-	
+
 	@RequestMapping("/remove")
 	@ResponseBody
 	public Map<String, Object> remove(HttpSession session, Integer p_id, String sourceDataIds) {
@@ -121,10 +121,11 @@ public class ProjectFormatDataController {
 			httpSession.setAttribute("source", source);// 采集源字段列表
 
 			List<String> sourceDataIds = projectDataService.select(p_id);
-
-			// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
-			sourceDatas = HBaseSourceDataDao.getSourceDataByIds(Integer.toString(cs_id), sourceDataIds,
-					source.getSourceFields());
+			if (!sourceDataIds.isEmpty()) {
+				// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
+				sourceDatas = HBaseSourceDataDao.getSourceDatasByIds(Integer.toString(cs_id), sourceDataIds,
+						source.getSourceFields());
+			}
 			httpSession.setAttribute("sourceDatas", sourceDatas);//
 
 		}
@@ -156,7 +157,7 @@ public class ProjectFormatDataController {
 	}
 
 	@RequestMapping("/getFormatNodeById")
-	public String getSourceDataById(HttpSession httpSession, String cs_id, String sourceDataId, String ft_id,
+	public String getFormatNodeById(HttpSession httpSession, String cs_id, String sourceDataId, String ft_id,
 			String formatNodeId) {
 
 		HashMap<String, FormatType> formatTypeMap = new HashMap<>();

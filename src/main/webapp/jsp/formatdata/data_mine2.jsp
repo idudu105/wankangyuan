@@ -235,18 +235,9 @@
                     
                 </div>
             </div>
-
-            <div class="pageK">
-                <div class="pageLR">
-                    <img src="img/pageL.png" class="pageLRi" alt="" />
-                </div>
-                <div class="pageNUM active">1</div>
-                <div class="pageNUM ">2</div>
-                <div class="pageNUM">3</div>
-                <div class="pageLR">
-                    <img src="img/pageR.png" class="pageLRi" alt="" />
-                </div>
-            </div>
+		
+		
+			<div class="pageK" id="box"></div>
 
             <div class="bottom">
                 <a href="javascript:;">
@@ -262,5 +253,102 @@
             </div>
         </div>
     </div>
+    
+    
+	<script type="text/javascript"
+		src="/wankangyuan/static/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
+	<script type="text/javascript">
+    
+	  	//将格式数据添加到项目
+		$(".pro_addli").click(function (){
+			
+			var p_id = this.id;
+			var cs_id = $("#source_Select").val();
+			var afuxuanK=document.querySelectorAll('.fuxuanK2');
+	        var afuxuan=[];
+	        for(var i=0;i<afuxuanK.length;i++){
+	            afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+	        }
+	        var sourceDataIds = [];
+	        for(var i=0;i<afuxuanK.length;i++){
+	        	if(afuxuan[i].checked){
+	        		sourceDataIds.push(afuxuan[i].name);
+	        	}
+	        }
+	        if(sourceDataIds == ""){
+	        	alert("请勾选源数据！");
+	        	return;
+	        }
+	        $.ajax({
+	        	url:"/wankangyuan/projectFormatData/insert",
+	        	type:"post",
+	        	data:{
+	        		p_id:p_id,
+	        		sourceDataIds:sourceDataIds.join(",")
+	        	},
+	        	dataType:"json",
+	        	success : function(data){
+	        		if(data.result == true){
+	        			alert(data.message);
+	        		}else{
+	        			alert(data.message);
+	        		}
+	        	},
+	        	error : function(){
+	        		alert("联网失败");
+	        	}
+	        });
+		});
+	  	
+	  	//导出源数据
+		$(".pro_export").click(function (){
+    		var cs_id = $("#source_Select").val();
+    		var afuxuanK=document.querySelectorAll('.fuxuanK2');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var sourceDataIds = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		sourceDataIds.push(afuxuan[i].name);
+            	}
+            }
+            if(sourceDataIds == ""){
+            	alert("请勾选源数据！");
+            	return;
+            }
+            window.location.href="/wankangyuan/export/sourceData?cs_id="+cs_id+"&sourceDataIds="+sourceDataIds;    
+    	});
+	  	
+	  	//更换数据源时，更新列表
+	  	$("#source_Select").change(function(){
+    		cs_id = $("#source_Select").val();
+   			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=1&cs_id="+cs_id;
+    	
+    	});
+	  	
+    	//进入到详情页
+    	function datainHref(sourceDataId){
+    		var cs_id = $("#source_Select").val();
+    		window.location.href="/wankangyuan/sourceData/getSourceDataById?cs_id="+cs_id+"&sourceDataId="+sourceDataId+"&type=1";
+    	}
+    	$('#box').paging({
+            initPageNo: ${page}, // 初始页码
+            totalPages: Math.ceil(${total}/${rows}), //总页数
+            totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
+            slideSpeed: 600, // 缓动速度。单位毫秒
+            jump: true, //是否支持跳转
+            callback: function(page) { // 回调函数
+                console.log(page);
+            	var user_id=${user.id};
+        		var cs_id = $("#source_Select").val();
+                if(page!=${page}){
+                    window.location.href="/wankangyuan/sourceData/getSourceDatas?type=1&cs_id="+cs_id+"&user_id="+user_id+"&page="+page+"&strip=${rows}";
+                }
+            }
+        });  
+    </script>
 </body>
 </html>

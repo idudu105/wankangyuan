@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +21,12 @@ import com.xtkong.dao.hbase.HBaseFormatNodeDao;
 import com.xtkong.dao.hbase.HBaseSourceDataDao;
 import com.xtkong.model.FormatType;
 import com.xtkong.model.Source;
+import com.xtkong.model.SourceField;
 import com.xtkong.service.FormatFieldService;
 import com.xtkong.service.FormatTypeService;
 import com.xtkong.service.SourceFieldService;
 import com.xtkong.service.SourceService;
+import com.xtkong.util.ConstantsHBase;
 
 @Controller
 @RequestMapping("/sourceData")
@@ -45,47 +49,17 @@ public class SourceDataController {
 	 * @param httpSession
 	 * @param type
 	 *            "1":我的 "2":我创建的 "3":公共
+	 * @param user_id
 	 */
 	@RequestMapping("/firstIn")
-	public String getSourceDatas(HttpSession httpSession, String type) {
-		int uid = 1;
-		List<Project> projects;
-		List<Source> sources = sourceService.getSourcesForUser();
-		httpSession.setAttribute("sources", sources);// 采集源列表
-
-		// 源数据字段
-		List<List<String>> sourceDatas = new ArrayList<>();
-		if (sources != null) {
-			Integer cs_id = sourceService.getSourcesForUserLimit(1).get(0).getCs_id();
-			Source source = sourceService.getSourceByCs_id(cs_id);
-			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
-
-			httpSession.setAttribute("source", source);// 采集源字段列表
-
-			// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
-			switch (type) {
-			case "1":
-				projects = projectService.selectMyProject(uid);
-				httpSession.setAttribute("projects", projects);// 项目列表
-				sourceDatas = HBaseSourceDataDao.getSourceDatasByUid(Integer.toString(cs_id), String.valueOf(uid),
-						source.getSourceFields());
-				httpSession.setAttribute("sourceDatas", sourceDatas);//
-				return "redirect:/jsp/formatdata/data_mine.jsp";
-			case "2":
-				projects = projectService.selectMyProject(uid);
-				httpSession.setAttribute("projects", projects);// 项目列表
-				sourceDatas = HBaseSourceDataDao.getSourceDatasCreated(Integer.toString(cs_id), String.valueOf(uid),
-						source.getSourceFields());
-				httpSession.setAttribute("sourceDatas", sourceDatas);//
-				return "redirect:/jsp/formatdata/data_create.jsp";
-			case "3":
-				sourceDatas = HBaseSourceDataDao.getSourceDatasPublic(Integer.toString(cs_id),
-						source.getSourceFields());
-				httpSession.setAttribute("sourceDatas", sourceDatas);//
-				return "redirect:/jsp/formatdata/data_public.jsp";
-			}
+	public String getSourceDatas(HttpSession httpSession, Integer user_id, String type, Integer currPage, Integer page,
+			Integer strip, String startRowStr) {
+		if (user_id == null) {
+			user_id = 1;
 		}
-		return "redirect:/jsp/formatdata/data_mine.jsp";
+		Integer cs_id = sourceService.getSourcesForUserLimit(1).get(0).getCs_id();
+
+		return getSourceDatas(httpSession, user_id, type, cs_id, currPage, page, strip, startRowStr);
 	}
 
 	/**
@@ -140,7 +114,6 @@ public class SourceDataController {
 		return map;
 	}
 
-	// -------------------------------------------------更新一条源数据
 	/**
 	 * 更新一条源数据
 	 * 
@@ -167,9 +140,7 @@ public class SourceDataController {
 		return map;
 	}
 
-	// -------------------------------------------更新一条源数据
 	/**
-	 * 
 	 * sources 采集源列表
 	 * 
 	 * source 选中采集源的字段列表
@@ -180,11 +151,25 @@ public class SourceDataController {
 	 * @param type
 	 *            "1":我的 "2":我创建的 "3":公开
 	 * @param cs_id
+	 * @param page
+	 * @param strip
 	 * @return
 	 */
 	@RequestMapping("/getSourceDatas")
-	public String getSourceDatas(HttpSession httpSession, String type, Integer cs_id) {
-		int uid = 1;
+	public String getSourceDatas(HttpSession httpSession, Integer user_id, String type, Integer cs_id, Integer currPage,
+			Integer page, Integer strip, String startRowStr) {
+		if (user_id == null) {
+			user_id = 1;
+		}
+		if (currPage == null) {
+			currPage = 0;
+		}if (page == null) {
+			page = 1;
+		}
+		if (strip == null) {
+			strip = 12;
+		}
+		List<Project> projects;
 		List<Source> sources = sourceService.getSourcesForUser();
 
 		httpSession.setAttribute("sources", sources);// 采集源列表
@@ -199,24 +184,61 @@ public class SourceDataController {
 			// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
 			switch (type) {
 			case "1":
-				sourceDatas = HBaseSourceDataDao.getSourceDatasByUid(Integer.toString(cs_id), String.valueOf(uid),
-						source.getSourceFields());
-				httpSession.setAttribute("sourceDatas", sourceDatas);//
-				return "redirect:/jsp/formatdata/data_mine.jsp";
-			case "2":
-				sourceDatas = HBaseSourceDataDao.getSourceDatasCreated(Integer.toString(cs_id), String.valueOf(uid),
-						source.getSourceFields());
-				httpSession.setAttribute("sourceDatas", sourceDatas);//
-				return "redirect:/jsp/formatdata/data_create.jsp";
-			case "3":
-				sourceDatas = HBaseSourceDataDao.getSourceDatasPublic(Integer.toString(cs_id),
-						source.getSourceFields());
-				httpSession.setAttribute("sourceDatas", sourceDatas);//
-				return "redirect:/jsp/formatdata/data_public.jsp";
-			}
-		}
-		return "redirect:/jsp/formatdata/data_mine.jsp";
+				// sourceDatas =
+				// HBaseSourceDataDao.getSourceDatasByUid(Integer.toString(cs_id),
+				// String.valueOf(user_id),
+				// source.getSourceFields(), currPage, page, strip,
+				// startRowStr);
 
+				sourceDatas = name(page,strip, source.getSourceFields());
+				httpSession.setAttribute("sourceDatas", sourceDatas);//
+				break;
+			case "2":
+				sourceDatas = HBaseSourceDataDao.getSourceDatasCreated(Integer.toString(cs_id), String.valueOf(user_id),
+						source.getSourceFields(), page, strip);
+				httpSession.setAttribute("sourceDatas", sourceDatas);//
+				break;
+			case "3":
+				sourceDatas = HBaseSourceDataDao.getSourceDatasPublic(Integer.toString(cs_id), source.getSourceFields(),
+						page, strip);
+				httpSession.setAttribute("sourceDatas", sourceDatas);//
+				break;
+			}
+			httpSession.setAttribute("total", 20);
+			httpSession.setAttribute("page", page);
+			httpSession.setAttribute("rows", strip);
+		}
+		switch (type) {
+		case "1":
+			projects = projectService.selectMyProject(user_id);
+			httpSession.setAttribute("projects", projects);// 项目列表
+			return "redirect:/jsp/formatdata/data_mine.jsp";
+		case "2":
+			projects = projectService.selectMyProject(user_id);
+			httpSession.setAttribute("projects", projects);// 项目列表
+			return "redirect:/jsp/formatdata/data_create.jsp";
+		default:
+			return "redirect:/jsp/formatdata/data_public.jsp";
+		}
+
+	}
+
+	public List<List<String>> name(Integer page, Integer strip, List<SourceField> sourceFields) {
+		List<List<String>> sourceDatas = new ArrayList<List<String>>();
+		if (strip == null) {
+			strip = 12;
+		}
+		for (int i = 0; i < strip; i++) {
+
+			List<String> sourceData = new ArrayList<>();
+			// 获取行键sourceDataId
+			sourceData.add(i + "0"+page);
+			for (SourceField sourceField : sourceFields) {
+				sourceData.add(page+"--"+i+"--"+String.valueOf(sourceField.getCsf_id()));
+			}
+			sourceDatas.add(sourceData);
+		}
+		return sourceDatas;
 	}
 
 	/**

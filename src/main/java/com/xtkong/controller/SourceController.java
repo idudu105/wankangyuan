@@ -85,6 +85,8 @@ public class SourceController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			if (1 == sourceService.deleteSource(cs_id)) {
+				HBaseSourceDataDao.deleteSourceDataTable(String.valueOf(cs_id));
+				HBaseFormatNodeDao.deleteFormatNodeTable(String.valueOf(cs_id));
 				map.put("result", true);
 				map.put("message", "删除成功");
 			} else {

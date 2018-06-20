@@ -117,8 +117,10 @@ public class FormatTypeController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String[] ft_idStrs = ft_ids.split(",");
 		int i = 0;
+		Integer cs_id=formatTypeService.getFormatType_cs_id(Integer.valueOf(ft_idStrs[0]));
 		for (String ft_id : ft_idStrs) {
 			if (1 == formatTypeService.deleteFormatType(Integer.valueOf(ft_id))) {
+				HBaseFormatDataDao.deleteFormatDataTable(String.valueOf(cs_id), String.valueOf(ft_id));
 				i++;
 			}
 		}

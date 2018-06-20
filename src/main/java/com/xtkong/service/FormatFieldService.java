@@ -51,4 +51,8 @@ public class FormatFieldService {
 	public Integer getFormatField_ft_id(Integer ff_id) {
 		return formatFieldDao.getFormatField_ft_id(ff_id);
 	}
+
+	public Integer getFormatField_ff_id(Integer ft_id, String ff_name) {
+		return formatFieldDao.getFormatField_ff_id(ft_id,ff_name);
+	}
 }

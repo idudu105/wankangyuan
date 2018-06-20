@@ -18,17 +18,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-client -->
 		<dependency>
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-client</artifactId>
-			<version>2.0.0</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>jdk.tools</artifactId>
-					<groupId>jdk.tools</groupId>
-				</exclusion>
-			</exclusions>
+			<version>1.4.0</version>
 		</dependency>
+
 
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
@@ -42,19 +38,38 @@
 			</exclusions>
 		</dependency>
 
+	<!-- https://mvnrepository.com/artifact/org.apache.phoenix/phoenix-core -->
+		<dependency>
+			<groupId>org.apache.phoenix</groupId>
+			<artifactId>phoenix-core</artifactId>
+			<version>5.0.0-alpha-HBase-2.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-hdfs</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase-client</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	
+
+
 		<!-- https://mvnrepository.com/artifact/com.thetransactioncompany/cors-filter -->
 		<dependency>
 			<groupId>com.thetransactioncompany</groupId>
 			<artifactId>cors-filter</artifactId>
 			<version>2.5</version>
 		</dependency>
-		
-        <!-- Excel相关https://mvnrepository.com/artifact/org.apache.poi/poi -->
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>3.17</version>
-        </dependency>
+
+		<!-- Excel相关https://mvnrepository.com/artifact/org.apache.poi/poi -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.17</version>
+		</dependency>
 
 		<!-- Spring 相关包 -->
 		<dependency>
@@ -108,18 +123,18 @@
 			<artifactId>spring-context-support</artifactId>
 			<version>4.3.0.RELEASE</version>
 		</dependency>
-		
+
 		<!-- 使用spring websocket依赖的jar包 -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-websocket</artifactId>
-            <version>4.3.0.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-messaging</artifactId>
-            <version>4.3.0.RELEASE</version>
-        </dependency>   
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+			<version>4.3.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-messaging</artifactId>
+			<version>4.3.0.RELEASE</version>
+		</dependency>
 
 
 		<!-- jackson 相关包 -->
@@ -234,14 +249,14 @@
 			<artifactId>shiro-spring</artifactId>
 			<version>1.4.0</version>
 		</dependency>
-		
+
 		<!-- 邮箱相关 -->
 		<dependency>
-		    <groupId>com.sun.mail</groupId>
-		    <artifactId>javax.mail</artifactId>
-		    <version>1.6.1</version>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.6.1</version>
 		</dependency>
-		
+
 		<!-- 工具包 -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -262,17 +277,17 @@
 		</dependency>
 		<!-- 压缩图片插件thumbnailator -->
 		<dependency>
-		   <groupId>net.coobird</groupId>
-		   <artifactId>thumbnailator</artifactId>
-		   <version>0.4.8</version>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.8</version>
 		</dependency>
 
-        <dependency>
-	        <groupId>org.apache.tomcat.embed</groupId>
-	        <artifactId>tomcat-embed-websocket</artifactId>
-	        <version>8.0.23</version>
-	        <scope>provided</scope>
-	    </dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-websocket</artifactId>
+			<version>8.0.23</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -39,8 +39,11 @@ public class ImportController {
 
 	@RequestMapping(value = "/sourceData")
 	@ResponseBody
-	public Map<String, Object> sourceData(@RequestParam(value = "file", required = false) MultipartFile file, String cs_id) {
-		String uid="1";
+
+	public Map<String, Object> sourceData(@RequestParam(value = "file", required = false) MultipartFile file,
+			String cs_id) {
+
+		String uid = "1";
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			if (file == null || file.getInputStream() == null) {
@@ -58,20 +61,20 @@ public class ImportController {
 			HSSFSheet sheetAt = hssfWorkbook.getSheetAt(0);
 			HSSFCell cell = null;
 			HSSFRow row = null;
-			List<SourceField> sourceFields= sourceFieldService.getSourceFields(Integer.valueOf(cs_id));
-			for (int i = sheetAt.getFirstRowNum()+1; i < sheetAt.getPhysicalNumberOfRows(); i++) {
+			List<SourceField> sourceFields = sourceFieldService.getSourceFields(Integer.valueOf(cs_id));
+			for (int i = sheetAt.getFirstRowNum() + 1; i < sheetAt.getPhysicalNumberOfRows(); i++) {
 				row = sheetAt.getRow(i);
 				if (row == null) {
 					continue;
 				}
-				Map<String, String> sourceFieldDatas=new HashMap<>();
+				Map<String, String> sourceFieldDatas = new HashMap<>();
 				for (int j = row.getFirstCellNum(); j < row.getLastCellNum(); j++) {
 					cell = row.getCell(j);
 					sourceFieldDatas.put(String.valueOf(sourceFields.get(j).getCsf_id()), cell.toString());
-				}				
+				}
 				HBaseSourceDataDao.insertSourceData(cs_id, uid, sourceFieldDatas);
 			}
-			hssfWorkbook.close();			
+			hssfWorkbook.close();
 		} catch (IOException e1) {
 			map.put("result", false);
 			map.put("message", "文件上传失败");
@@ -80,9 +83,11 @@ public class ImportController {
 
 		return map;
 	}
+
 	@RequestMapping(value = "/formatData")
 	@ResponseBody
-	public Map<String, Object> formatData(@RequestParam(value = "file", required = false) MultipartFile file, String cs_id, String ft_id, String formatNodeId) {
+	public Map<String, Object> formatData(@RequestParam(value = "file", required = false) MultipartFile file,
+			String cs_id, String ft_id, String formatNodeId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			if (file == null || file.getInputStream() == null) {
@@ -100,20 +105,21 @@ public class ImportController {
 			HSSFSheet sheetAt = hssfWorkbook.getSheetAt(0);
 			HSSFCell cell = null;
 			HSSFRow row = null;
-			List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id), ConstantsHBase.IS_meta_false);
-			for (int i = sheetAt.getFirstRowNum()+1; i < sheetAt.getPhysicalNumberOfRows(); i++) {
+			List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
+					ConstantsHBase.IS_meta_false);
+			for (int i = sheetAt.getFirstRowNum() + 1; i < sheetAt.getPhysicalNumberOfRows(); i++) {
 				row = sheetAt.getRow(i);
 				if (row == null) {
 					continue;
 				}
-				Map<String, String> formatFieldDatas=new HashMap<>();
+				Map<String, String> formatFieldDatas = new HashMap<>();
 				for (int j = row.getFirstCellNum(); j < row.getLastCellNum(); j++) {
 					cell = row.getCell(j);
 					formatFieldDatas.put(String.valueOf(data.get(j).getFf_id()), cell.toString());
-				}				
+				}
 				HBaseFormatDataDao.insertFormatData(cs_id, ft_id, formatNodeId, formatFieldDatas);
 			}
-			hssfWorkbook.close();			
+			hssfWorkbook.close();
 		} catch (IOException e1) {
 			map.put("result", false);
 			map.put("message", "文件上传失败");

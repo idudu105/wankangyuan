@@ -4,6 +4,13 @@
 package com.xtkong.util;
 
 public class ConstantsHBase {
+	
+	public static final String HBASE_ZOOKEEPER_QUORUM="hpc03";
+	public static final String HBASE_ZOOKEEPER_PROPERTY_CLIENTPORT="52181";
+	public static final String HBASE_MASTER_INFO_PORT="56010";
+	public static final String PhoenixDriver="org.apache.phoenix.jdbc.PhoenixDriver";
+	
+	
 	/** 表名前缀 */
 	public static final String TABLE_PREFIX_SOURCE_ = "source_";// 采集源
 	public static final String TABLE_PREFIX_NODE_ = "node_";// 节点

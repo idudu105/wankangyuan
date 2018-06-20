@@ -13,12 +13,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.hadoop.hbase.client.Get;
+import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.filter.Filter;
+import org.apache.hadoop.hbase.filter.FilterList;
+import org.apache.hadoop.hbase.filter.PageFilter;
 import org.apache.hadoop.hbase.filter.PrefixFilter;
+import org.apache.hadoop.hbase.filter.FilterList.Operator;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import com.xtkong.model.FormatField;
@@ -62,13 +66,43 @@ public class HBaseFormatDataDao {
 		HBaseDB db = HBaseDB.getInstance();
 		Long count = db.getNewId(ConstantsHBase.TABLE_GID, formatNodeId, ConstantsHBase.FAMILY_GID_GID,
 				ConstantsHBase.QUALIFIER_GID_GID_GID);
+		String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+		String rowKey = formatNodeId + "_" + count;
+		Put put = new Put(Bytes.toBytes(rowKey));
+
 		for (Entry<String, String> formatFieldData : formatFieldDatas.entrySet()) {
-			if (!db.put(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id, formatNodeId + "_" + count,
-					ConstantsHBase.FAMILY_INFO, formatFieldData.getKey(), formatFieldData.getValue())) {
-				return false;
-			}
+			put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(formatFieldData.getKey()),
+					Bytes.toBytes(formatFieldData.getValue()));
 		}
-		return true;
+		return db.putRow(tableName, put);
+		// for (Entry<String, String> formatFieldData :
+		// formatFieldDatas.entrySet()) {
+		// if (!db.putCell(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" +
+		// ft_id, formatNodeId + "_" + count,
+		// ConstantsHBase.FAMILY_INFO, formatFieldData.getKey(),
+		// formatFieldData.getValue())) {
+		// return false;
+		// }
+		// }
+		// return true;
+	}
+
+	/**
+	 * 列值过滤行键
+	 * 
+	 * @param uid
+	 * @param cs_id
+	 * @param formatFieldDatas
+	 * @return
+	 */
+	public static String getFormatDataId(String cs_id, String ft_id, String formatNodeId,
+			Map<String, String> formatFieldDatas) {
+		String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+		String prefixFilter = formatNodeId + "_";
+		String formatDataId = null;
+		HBaseDB db = HBaseDB.getInstance();
+		formatDataId = db.getRowkey(tableName, prefixFilter, formatFieldDatas);
+		return formatDataId;
 	}
 
 	/**
@@ -86,7 +120,7 @@ public class HBaseFormatDataDao {
 		try {
 			HBaseDB db = HBaseDB.getInstance();
 			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id);
-			Get get = new Get(Bytes.toBytes(formatNodeId));
+			Get get = new Get(Bytes.toBytes(formatNodeId + "_"));
 			Result result = table.get(get);
 			if (!result.isEmpty()) {
 				for (FormatField formatField : formatFields) {
@@ -138,6 +172,7 @@ public class HBaseFormatDataDao {
 	}
 
 	/**
+	 * 
 	 * 格式数据明细
 	 * 
 	 * @param cs_id
@@ -148,8 +183,62 @@ public class HBaseFormatDataDao {
 	 *            节点id
 	 * @param formatFields
 	 *            格式字段
+	 * @param page
+	 * @param strip
 	 * @return 格式数据明细数据，注：每个列表第一个值formatDataId不显示
 	 */
+	public static List<List<String>> getFormatDatas(String cs_id, String ft_id, String formatNodeId,
+			List<FormatField> formatFields, Integer page, Integer strip) {
+		if (page == null) {
+			page = 1;
+		}
+		if (strip == null) {
+			strip = 1;
+		}
+		List<List<String>> formatDatas = new ArrayList<>();
+		try {
+			String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+			HBaseDB db = HBaseDB.getInstance();
+			Table table = db.getTable(tableName);
+			Scan scan = new Scan();
+			// 列簇约束结果集
+			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
+			// 前缀formatNodeId+"_"过滤
+			Filter filter1 = new PrefixFilter(Bytes.toBytes(formatNodeId + "_"));
+			Filter filter2 = new PageFilter(strip);
+			FilterList filterList = new FilterList(Operator.MUST_PASS_ALL, filter1, filter2);
+			scan.setFilter(filterList);
+			byte[] startRow = null;
+			byte[] POSTFIX = new byte[] { 0x00 };
+			startRow = HBaseDB.getStartRow(tableName, scan, startRow, page - 1, strip);
+			if (startRow != null) {
+				// 非第一页
+				startRow = Bytes.add(startRow, POSTFIX);
+				scan.withStartRow(startRow);
+			}
+			ResultScanner resultScanner = table.getScanner(scan);
+			Iterator<Result> iterator = resultScanner.iterator();
+			while (iterator.hasNext()) {
+				Result result = iterator.next();
+				if (!result.isEmpty()) {
+					List<String> formatData = new ArrayList<>();
+					formatData.add(Bytes.toString(result.getRow()));// 获取行键formatDataId，不显示
+					for (FormatField formatField : formatFields) {
+						formatData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+								Bytes.toBytes(String.valueOf(formatField.getFf_id())))));
+					}
+					formatDatas.add(formatData);
+				}
+			}
+			resultScanner.close();
+			table.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// TODO Auto-generated method stub
+		return formatDatas;
+	}
 	public static List<List<String>> getFormatDatas(String cs_id, String ft_id, String formatNodeId,
 			List<FormatField> formatFields) {
 		List<List<String>> formatDatas = new ArrayList<>();
@@ -200,13 +289,24 @@ public class HBaseFormatDataDao {
 	public static boolean updateFormatData(String cs_id, String ft_id, String formatDataId,
 			Map<String, String> formatFieldDatas) {
 		HBaseDB db = HBaseDB.getInstance();
+		String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+		Put put = new Put(Bytes.toBytes(formatDataId));
+
 		for (Entry<String, String> formatFieldData : formatFieldDatas.entrySet()) {
-			if (!db.put(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id, formatDataId,
-					ConstantsHBase.FAMILY_INFO, formatFieldData.getKey(), formatFieldData.getValue())) {
-				return false;
-			}
+			put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(formatFieldData.getKey()),
+					Bytes.toBytes(formatFieldData.getValue()));
 		}
-		return true;
+		return db.putRow(tableName, put);
+		// for (Entry<String, String> formatFieldData :
+		// formatFieldDatas.entrySet()) {
+		// if (!db.putCell(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" +
+		// ft_id, formatDataId,
+		// ConstantsHBase.FAMILY_INFO, formatFieldData.getKey(),
+		// formatFieldData.getValue())) {
+		// return false;
+		// }
+		// }
+		// return true;
 	}
 
 	/**
@@ -226,4 +326,11 @@ public class HBaseFormatDataDao {
 		}
 		return true;
 	}
+
+	public static void deleteFormatDataTable(String cs_id, String ft_id) {
+		HBaseDB.getInstance().deleteTable(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id);
+		;
+
+	}
+
 }
