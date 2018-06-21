@@ -19,6 +19,7 @@ import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -706,6 +707,7 @@ public class UserController {
 	 * @return 
 	 * Map<String,Object>
 	 */
+	@RequiresPermissions("organization:delete")
 	@RequestMapping(value="/user/removeOrgByIds",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> removeOrgByIds(Integer[] orgerIds) {

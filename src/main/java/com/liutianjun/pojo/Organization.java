@@ -25,6 +25,11 @@ public class Organization implements Serializable {
     private String realName;
 
     /**
+     * 创建者
+     */
+    private String creator;
+
+    /**
      * 联系电话
      */
     private String phone;
@@ -83,6 +88,14 @@ public class Organization implements Serializable {
         this.realName = realName == null ? null : realName.trim();
     }
 
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -133,6 +146,7 @@ public class Organization implements Serializable {
         sb.append(", organizationName=").append(organizationName);
         sb.append(", parentId=").append(parentId);
         sb.append(", realName=").append(realName);
+        sb.append(", creator=").append(creator);
         sb.append(", phone=").append(phone);
         sb.append(", unitInfo=").append(unitInfo);
         sb.append(", createTime=").append(createTime);

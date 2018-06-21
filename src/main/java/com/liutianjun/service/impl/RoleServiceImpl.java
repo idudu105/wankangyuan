@@ -48,6 +48,9 @@ public class RoleServiceImpl implements RoleService {
      */
     @Override
     public int deleteByPrimaryKey(Integer id) {
+    	if(id == 1) {
+			return 0;
+		}
         return roleDao.deleteByPrimaryKey(id);
     }
     
@@ -61,6 +64,9 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public int deleteByIds(Integer[] ids) {
 		if(null == ids || ids.length == 0) {
+			return 0;
+		}
+		if(Arrays.asList(ids).contains(1)) {
 			return 0;
 		}
 		RoleQuery example = new RoleQuery();

@@ -72,6 +72,9 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public int deleteByPrimaryKey(Integer id) {
+    	if(id == 1) {
+			return 0;
+		}
         return userDao.deleteByPrimaryKey(id);
     }
 

@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2018-04-23 09:36:29
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-05-17 15:15:52
+* @Last Modified time: 2018-06-21 14:20:45
 */
 
 *{
@@ -273,6 +273,44 @@ textarea{
     top:112px;
     left:230px;
 }
+.unauthorized{
+    width:960px;
+    height:500px;
+    position:absolute;
+    background:#fff;
+    top:112px;
+    left:230px;
+}
+.unauthorizedC{
+    display:table;
+    margin:0 auto;
+    width:100%;
+    height:100%;
+}
+.unauthorizedCC{
+    text-align:center;
+    padding:0 30px;
+    /* 设置content里面内容垂直居中 */
+    display:table-cell;
+    vertical-align:middle;
+}
+.errorT1{
+    font-size: 26px;
+    margin:20px 0;
+}
+.errorT2{
+    font-size: 16px;
+    display:inline-block;
+}
+.errorA{
+    font-size: 16px;
+    color:red;
+    display:inline-block;
+}
+
+.loginB{
+	padding:10px 0;
+}
 .loginBB1{
     position:absolute;
     right:11px;
@@ -326,10 +364,11 @@ textarea{
     float:left;
 }
 .loginMzt{
+	width:200px;
     font-size:14px;
     color:#999999;
     font-weight: 700;
-    line-height: 40px;
+    line-height: 20px;
     float:left;
     margin-left:20px;
 }

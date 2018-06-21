@@ -163,6 +163,10 @@ public class RoleController {
 	public Map<String,Object> deleteRolesByIds(Integer[] ids) {
 		resultMap.put("status", 400);
 		resultMap.put("message", "操作失败!");
+		if(Arrays.asList(ids).contains(1)) {
+			resultMap.put("message", "管理员角色不能删除!");
+			return resultMap;
+		}
 		
 		if(0 < roleService.deleteByIds(ids)) {
 			resultMap.put("status", 200);

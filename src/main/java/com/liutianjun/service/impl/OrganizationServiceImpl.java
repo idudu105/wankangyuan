@@ -3,6 +3,7 @@ package com.liutianjun.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,10 +53,13 @@ public class OrganizationServiceImpl implements OrganizationService {
 	 */
 	@Override
 	public int addNewGroup(Integer parentId, String organizationName) {
+		//获取用户名
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 		Organization organization = new Organization();
 		organization.setCreateTime(new Date());
 		organization.setParentId(parentId);
 		organization.setOrganizationName(organizationName);
+		organization.setCreator(username);
 		organization.setStatus(1);
 		return organizationDao.insert(organization);
 	}

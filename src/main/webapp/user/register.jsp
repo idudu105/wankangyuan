@@ -36,7 +36,7 @@
                             <div class="loginMzR">
                                 <input id="username" name="username" type="text" class="loginMzRp" placeholder="" />
                             </div>
-                            <div class="loginMzt">*不少于2个字符</div>
+                            <div class="loginMzt">*账户名称由汉字、英文字母、 数字和下划线组成，3-20位！</div>
                         </div>
                         <div class="loginMz">
                             <div class="loginMzL">密码：</div>
@@ -175,8 +175,8 @@ $("#sendPhoneCode").click(function(){
 
 function register(){
 	
-	if($("#username").val().length < 2){
-		return layer.msg('账户名称不少于2个字符！',function(){}),!1;
+	if(!$("#username").val().match(/^[\u4E00-\u9FA5a-zA-Z0-9_]{3,20}$/)){
+		return layer.msg('账户名称不规范！',function(){}),!1;
 	}
 	
 	if($("#password").val().length < 8){
@@ -184,7 +184,7 @@ function register(){
 	}
 	
 	if($("#phone").val().trim() == ''){
-		return layer.msg('请输入手机号',function(){}),!1;
+		return layer.msg('请输入手机号!',function(){}),!1;
 	}
 	
 	if($("#password").val() != $("#re_password").val()){

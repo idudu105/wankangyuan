@@ -271,6 +271,7 @@
                                     <option value="11">项目管理</option>
                                     <option value="21">格式数据管理</option>
                                     <option value="31">应用管理</option>
+                                    <option value="41">组织管理</option>
                                 </select>
                             </div>
                             <div class="addboxB">
@@ -309,6 +310,7 @@
                                     <option value="11">项目管理</option>
                                     <option value="21">格式数据管理</option>
                                     <option value="31">应用管理</option>
+                                    <option value="41">组织管理</option>
                                 </select>
                             </div>
                             <div class="addboxB">

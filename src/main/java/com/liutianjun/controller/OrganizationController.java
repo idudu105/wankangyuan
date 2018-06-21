@@ -3,6 +3,8 @@ package com.liutianjun.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,11 +43,15 @@ public class OrganizationController {
 	 * @return 
 	 * Map<String,Object>
 	 */
+	@RequiresPermissions("organization:create")
 	@RequestMapping(value="/addNewOrg",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> addNewOrg(Organization record) {
 		resultMap.put("status", 400);
 		resultMap.put("message", "操作失败!");
+		//获取用户名
+	    String username = (String)SecurityUtils.getSubject().getPrincipal();
+	    record.setCreator(username);
 		if(1 == organizationService.addNewOrg(record) && 1 == messageService.sendAddNewOrgRequest(1, record)) {
 			resultMap.put("status", 200);
 			resultMap.put("message", "已提交申请，请等待审核!");
@@ -62,11 +68,18 @@ public class OrganizationController {
 	 * @return 
 	 * Map<String,Object>
 	 */
+	@RequiresPermissions("organization:create")
 	@RequestMapping(value="/addNewGroup",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> addNewGroup(Integer parentId, String organizationName) {
 		resultMap.put("status", 400);
 		resultMap.put("message", "添加失败!");
+		Organization organization = organizationService.selectByPrimaryKey(parentId);
+		String username = (String)SecurityUtils.getSubject().getPrincipal();
+		if(!username.equals(organization.getCreator())){
+			resultMap.put("message", "您不是组织结构创建者，不能添加组!");
+			return resultMap;
+		}
 		if(null != parentId && 0 != organizationService.addNewGroup(parentId, organizationName)) {
 			resultMap.put("status", 200);
 			resultMap.put("message", "添加成功!");
@@ -82,6 +95,7 @@ public class OrganizationController {
 	 * @return 
 	 * String
 	 */
+	@RequiresPermissions("organization:view")
 	@RequestMapping(value="/getGroupName",method=RequestMethod.GET)
 	@ResponseBody
 	public String getGroupName(Integer id) {
@@ -97,11 +111,18 @@ public class OrganizationController {
 	 * @return 
 	 * Map<String,Object>
 	 */
+	@RequiresPermissions("organization:update")
 	@RequestMapping(value="/updateGroup",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> updateGroup(Organization record) {
 		resultMap.put("status", 400);
 		resultMap.put("message", "更新失败!");
+		String username = (String)SecurityUtils.getSubject().getPrincipal();
+		Organization organization = organizationService.selectByPrimaryKey(record.getId());
+		if(!username.equals(organization.getCreator())){
+			resultMap.put("message", "您不是组织结构创建者，不能修改组!");
+			return resultMap;
+		}
 		if(0 != organizationService.undateGroup(record)) {
 			resultMap.put("status", 200);
 			resultMap.put("message", "更新成功!");
@@ -116,11 +137,18 @@ public class OrganizationController {
 	 * @return 
 	 * Map<String,Object>
 	 */
+	@RequiresPermissions("organization:delete")
 	@RequestMapping(value="/deleteGroup",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> deleteGroup(Integer id) {
 		resultMap.put("status", 400);
 		resultMap.put("message", "更新失败!");
+		Organization organization = organizationService.selectByPrimaryKey(id);
+		String username = (String)SecurityUtils.getSubject().getPrincipal();
+		if(!username.equals(organization.getCreator())){
+			resultMap.put("message", "您不是组织结构创建者，不能删除组!");
+			return resultMap;
+		}
 		if(0 != organizationService.deleteGroupById(id)) {
 			resultMap.put("status", 200);
 			resultMap.put("message", "更新成功!");
