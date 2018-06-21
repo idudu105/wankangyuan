@@ -26,7 +26,7 @@ public interface MessageService {
 	int sendFriendRequest(Integer userId, Integer objId);
 	
 	//发送话题回复
-	int sendTopicReply(Integer userId, Integer objId);
+	int sendTopicReply(Integer userId,String objName, Integer objId);
 	
 	//根据类型清空所有通知
 	int clearAllMessageByType(Integer userId, Integer type);

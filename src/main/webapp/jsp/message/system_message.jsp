@@ -129,7 +129,7 @@
                                                         <c:choose>
                                                         <c:when test="${0 eq message.status}">
                                                             <div class="messageMzb messageMzagree" onclick="dealAddNewOrgRequest(${message.id},1)">通过</div>
-                                                            <div class="messageMzb messageMzrefuse" onclick="dealAddNewOrgRquest(${message.id},0)">拒绝</div>
+                                                            <div class="messageMzb messageMzrefuse" onclick="dealAddNewOrgRequest(${message.id},0)">拒绝</div>
                                                         </c:when>
                                                         <c:otherwise>
                                                             <div class="messageMzbt">${message.result }</div>
@@ -148,7 +148,7 @@
 			                                            </c:choose>
                                                     </c:when>
                                                     <c:when test="${message.type eq 2 }">
-                                                        <div class="messageMzb messageMzsee">查看</div>
+                                                        <div class="messageMzb messageMzsee" onclick="location='/wankangyuan/projectTopic/selectProjectTopicFollow?project_topic_id=${message.objId }'">查看</div>
                                                     </c:when>
                                                 </c:choose> 
                                             </div>
@@ -175,7 +175,22 @@
                                                 </div>
                                             </div>
                                             <div class="messageMzbk">
+                                            <c:if test="${0 ne message.status }">
                                                 <div class="messageMzb messageMzdel" onclick="deleteMessageById(${message.id})" >删除</div>
+                                            </c:if>
+                                            <c:choose>
+                                            <c:when test="${message.type eq 0 }">
+                                                <c:choose>
+                                                <c:when test="${0 eq message.status}">
+                                                    <div class="messageMzb messageMzagree" onclick="dealAddNewOrgRequest(${message.id},1)">通过</div>
+                                                    <div class="messageMzb messageMzrefuse" onclick="dealAddNewOrgRequest(${message.id},0)">拒绝</div>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <div class="messageMzbt">${message.result }</div>
+                                                </c:otherwise>
+                                                </c:choose>
+                                            </c:when>
+                                            </c:choose>
                                             </div>
                                         </div>
                                     </c:if>

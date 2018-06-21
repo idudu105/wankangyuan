@@ -162,39 +162,6 @@
                     </form>
                 </div>               
                 <form id="appList" action="/wankangyuan/application/setStatus2" method="post">
-                <%-- <c:forEach items="${list }" var="app" varStatus="appList">
-                    <div class="PJK2li">
-                        <div class="PJK2litop">
-                            <div class="PJK2litopT2">${app.appName }</div>
-                            <!-- <div class="PJK2litopI"></div> -->
-                            <div class="fuxuanK3">
-                                <input name="ids" type="checkbox" class="input_check" id="check${appList.count }" value="${app.id }">
-                                <label for="check${appList.count }"></label>
-                            </div>
-                        </div>
-                        <div class="PJK2licre">
-                            <div class="PJK2licreT1">创建人：</div>
-                            <div class="PJK2licreT2">${app.creator }</div>
-                        </div>
-                        <div class="PJK2litime">
-                            <div class="PJK2licreT1">状态：</div>
-                            <div class="PJK2licreT2">
-                                <c:if test="${1 eq app.isDisplay }">公开</c:if>
-                                <c:if test="${0 eq app.isDisplay }">私有</c:if>
-                            </div>
-                        </div>
-                        <div class="PJK2litime">
-                            <div class="PJK2litimeT1">
-                               <fmt:formatDate type="date" value="${app.createTime }" />
-                            </div>
-                            <div class="PJK2litimeT2">
-                               <fmt:formatDate type="time" value="${app.createTime }" />
-                            </div>
-                        </div>
-                        <div class="PJK2lidetail">${app.appIntro }</div>
-                        <div onclick="location='/wankangyuan/application/updateForm2?id=${app.id }'" class="PJK2liex">应用说明</div>
-                    </div>
-                </c:forEach> --%>
                 <div data-bind="foreach:appList">
                     <div class="PJK2li">
                         <div class="PJK2litop">

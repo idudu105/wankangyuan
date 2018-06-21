@@ -23,6 +23,14 @@ public class ProjectAppRelationController {
 	@Autowired
 	private ProjectAppRelationService projectAppRelationService;
 	
+	/**
+	 * 添加应用到项目
+	 * @Title: addToProject 
+	 * @param projectId
+	 * @param ids
+	 * @return 
+	 * String
+	 */
 	@RequestMapping(value="/addToProject",method=RequestMethod.POST)
 	public String addToProject(Integer projectId,Integer[] ids) {
 		projectAppRelationService.insert(projectId, ids);

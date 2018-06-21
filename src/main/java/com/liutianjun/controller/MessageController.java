@@ -18,7 +18,7 @@ import com.liutianjun.service.MessageService;
 import com.liutianjun.service.UserService;
 
 /**
- * 系统通知Controller
+ * 系统通知管理
  * @Title: MessageController.java  
  * @Package com.liutianjun.controller  
  * @Description: TODO
@@ -116,7 +116,7 @@ public class MessageController {
 		resultMap.put("message", "操作失败!");
 		int i = messageService.dealAddNewOrgRequest(id, cmd);
 		if(2 == i) {
-			resultMap.put("message", "操作成功成功!");
+			resultMap.put("message", "操作成功!");
 			resultMap.put("status", 200);
 		}
 		return resultMap;

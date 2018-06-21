@@ -17,7 +17,7 @@ import com.liutianjun.pojo.Resource;
 import com.liutianjun.service.ResourceService;
 
 /**
- * 资源Controller
+ * 资源管理
  * @Title: ResourceController.java  
  * @Package com.liutianjun.controller  
  * @Description: TODO

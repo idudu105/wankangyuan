@@ -19,6 +19,15 @@ import com.liutianjun.pojo.Role;
 import com.liutianjun.service.ResourceService;
 import com.liutianjun.service.RoleService;
 
+/**
+ * 角色管理
+ * @Title: RoleController.java  
+ * @Package com.liutianjun.controller  
+ * @Description: TODO
+ * @author LiuTianJun  
+ * @date 2018年6月20日  
+ * @version V1.0
+ */
 @Controller
 public class RoleController {
 
@@ -143,7 +152,7 @@ public class RoleController {
 	}
 	
 	/**
-	 * 批量删除
+	 * 批量删除角色
 	 * @Title: deleteByIds 
 	 * @param ids
 	 * @return 

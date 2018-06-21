@@ -288,8 +288,19 @@
 } */
 
 function addToMine(){
-    $("#appList").attr('action',"/wankangyuan/userAppRelation/addToMine");
-    $("#appList").submit();
+	var ids = $("input[name='ids']");
+    var checkNum = 0;
+    for (var i = 0; i < ids.length; i++) {
+        if (ids[i].checked) {
+            checkNum++;
+        }
+    }
+    if (checkNum == 0) {
+        return layer.msg("请至少选中一个",function(){}),!1;
+    } else {
+	    $("#appList").attr('action',"/wankangyuan/userAppRelation/addToMine");
+	    $("#appList").submit();
+    }
 }
 
 //定义ViewModel

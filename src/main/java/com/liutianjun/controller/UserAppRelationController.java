@@ -94,6 +94,10 @@ public class UserAppRelationController {
 	 * @param rows
 	 * @param appName
 	 * @param appType
+	 * @param orderName
+	 * @param orderDir
+	 * @param field
+	 * @param option
 	 * @return
 	 * @throws Exception 
 	 * String

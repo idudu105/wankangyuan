@@ -20,6 +20,15 @@ import com.liutianjun.service.FriendsService;
 import com.liutianjun.service.OrganizationService;
 import com.liutianjun.service.UserService;
 
+/**
+ * 好友管理
+ * @Title: FriendsController.java  
+ * @Package com.liutianjun.controller  
+ * @Description: TODO
+ * @author LiuTianJun  
+ * @date 2018年6月20日  
+ * @version V1.0
+ */
 @Controller
 @RequestMapping("/friends")
 public class FriendsController {

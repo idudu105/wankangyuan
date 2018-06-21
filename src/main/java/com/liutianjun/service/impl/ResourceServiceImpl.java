@@ -160,7 +160,7 @@ public class ResourceServiceImpl implements ResourceService {
         Set<String> permissions = new HashSet<>();
         for (Integer resourceId : resourceIds) {
             Resource resource = selectByPrimaryKey(resourceId);
-            if(resource != null && !StringUtils.isEmpty(resource.getPermission())) {
+            if(resource != null && !StringUtils.isEmpty(resource.getPermission()) && resource.getAvailable() == 1) {
                 permissions.add(resource.getPermission());
             }
         }

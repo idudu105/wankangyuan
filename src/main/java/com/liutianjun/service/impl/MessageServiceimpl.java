@@ -110,14 +110,14 @@ public class MessageServiceimpl implements MessageService {
 	 * @return
 	 */
 	@Override
-	public int sendTopicReply(Integer userId, Integer objId) {
-		User obj = userDao.selectByPrimaryKey(objId);
+	public int sendTopicReply(Integer userId,String objName, Integer objId) {
 		Message message = new Message();
 		message.setCreateTime(new Date());
 		message.setUserId(userId);
 		message.setObjId(objId);
 		message.setType(2);
-		message.setContent(obj.getUsername()+"回复了您的话题，请查看。");
+		message.setObjName(objName);
+		message.setContent(objName +"回复了您的话题，请查看。");
 		return messageDao.insert(message);
 	}
 
@@ -235,7 +235,7 @@ public class MessageServiceimpl implements MessageService {
 		if(0 == cmd) {
 			message.setResult("已拒绝");
 			//拒绝后删除组织记录
-			i += organizationService.deleteGroupById(id);
+			i += organizationService.deleteGroupById(message.getObjId());
 			
 		}
 		if(1 == cmd) {

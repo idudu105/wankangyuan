@@ -17,7 +17,7 @@ import com.liutianjun.pojo.SysConfig;
 import com.liutianjun.service.SysConfigService;
 
 /**
- * 系统配置Controller
+ * 系统配置管理
  * @Title: SysConfigController.java  
  * @Package com.liutianjun.controller  
  * @Description: TODO

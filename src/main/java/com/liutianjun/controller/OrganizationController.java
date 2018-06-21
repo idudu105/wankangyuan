@@ -14,7 +14,7 @@ import com.liutianjun.service.MessageService;
 import com.liutianjun.service.OrganizationService;
 
 /**
- * 组织结构Controller
+ * 组织结构管理
  * @Title: OrganizationController.java  
  * @Package com.liutianjun.controller  
  * @Description: TODO

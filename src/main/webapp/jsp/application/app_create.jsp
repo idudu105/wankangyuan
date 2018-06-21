@@ -181,7 +181,7 @@
                         <div class="adddataM">
                             <div class="adddataMli">
                                 <div class="adddataMlit">应用名称：</div>
-                                <input name="appName" type="text" class="adddataMliTT adddataMliT" />
+                                <input name="appName" type="text" class="adddataMliTT adddataMliT" required="required" />
                             </div>
                             <div class="adddataMli">
                                 <div class="adddataMlit">应用描述：</div>
