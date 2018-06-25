@@ -15,22 +15,22 @@ public class ConstantsHBase {
 	public static String PhoenixJDBC = "jdbc:phoenix:hpc03:52181";
 
 	/** 表名前缀 */
-	public static final String TABLE_PREFIX_SOURCE_ = "source_";// 采集源
-	public static final String TABLE_PREFIX_NODE_ = "node_";// 节点
-	public static final String TABLE_PREFIX_FORMAT_ = "format_";// 格式类型
+	public static final String TABLE_PREFIX_SOURCE_ = "SOURCE_";// 采集源
+	public static final String TABLE_PREFIX_NODE_ = "NODE_";// 节点
+	public static final String TABLE_PREFIX_FORMAT_ = "FORMAT_";// 格式类型
 	/** 表名称 */
-	public static final String TABLE_GID = "gid";// 计数
+	public static final String TABLE_GID = "GID";// 计数
 	/** 各表列簇名 FAMILY_表名_列簇名 */
-	public static final String FAMILY_GID_GID = "gid";
-	public static final String FAMILY_INFO = "info";
+	public static final String FAMILY_GID_GID = "GID";
+	public static final String FAMILY_INFO = "INFO";
 	/** 各表列名 */
-	public static final String QUALIFIER_GID_GID_GID = "gid";
-	public static final String QUALIFIER_NODE = "node";
+	public static final String QUALIFIER_GID_GID_GID = "GID";
+	public static final String QUALIFIER_NODE = "NODE";
 
-	public static final String QUALIFIER_ADD = "add";// 添加
-	public static final String QUALIFIER_PUBLIC = "public";// 公共，1公共，0不公开（默认）
+	public static final String QUALIFIER_ADD = "ADD";// 添加
+	public static final String QUALIFIER_PUBLIC = "PUBLIC";// 公共，1公共，0不公开（默认）
 
-	public static final String QUALIFIER_PROJECT = "porject";// 项目
+	public static final String QUALIFIER_PROJECT = "PROJECT";// 项目
 	/** 值 */
 
 	public static final String VALUE_ADD_TRUE = "1";// 1添加数据
