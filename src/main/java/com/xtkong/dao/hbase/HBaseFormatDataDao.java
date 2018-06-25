@@ -75,16 +75,6 @@ public class HBaseFormatDataDao {
 					Bytes.toBytes(formatFieldData.getValue()));
 		}
 		return db.putRow(tableName, put);
-		// for (Entry<String, String> formatFieldData :
-		// formatFieldDatas.entrySet()) {
-		// if (!db.putCell(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" +
-		// ft_id, formatNodeId + "_" + count,
-		// ConstantsHBase.FAMILY_INFO, formatFieldData.getKey(),
-		// formatFieldData.getValue())) {
-		// return false;
-		// }
-		// }
-		// return true;
 	}
 
 	/**
@@ -101,7 +91,10 @@ public class HBaseFormatDataDao {
 		String prefixFilter = formatNodeId + "_";
 		String formatDataId = null;
 		HBaseDB db = HBaseDB.getInstance();
-		formatDataId = db.getRowkey(tableName, prefixFilter, formatFieldDatas);
+		List<String> rowkeys = db.getRowkeys(tableName, prefixFilter, formatFieldDatas);
+		if (!rowkeys.isEmpty()) {
+			formatDataId=rowkeys.get(0);
+		}
 		return formatDataId;
 	}
 
@@ -297,16 +290,6 @@ public class HBaseFormatDataDao {
 					Bytes.toBytes(formatFieldData.getValue()));
 		}
 		return db.putRow(tableName, put);
-		// for (Entry<String, String> formatFieldData :
-		// formatFieldDatas.entrySet()) {
-		// if (!db.putCell(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" +
-		// ft_id, formatDataId,
-		// ConstantsHBase.FAMILY_INFO, formatFieldData.getKey(),
-		// formatFieldData.getValue())) {
-		// return false;
-		// }
-		// }
-		// return true;
 	}
 
 	/**

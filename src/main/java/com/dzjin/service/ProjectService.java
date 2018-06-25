@@ -160,6 +160,11 @@ public class ProjectService {
 		}
 		return result;
 	}
+
+	public Integer getProjectId(String projectName) {
+		// TODO Auto-generated method stub
+		return projectDao.getProjectId(projectName);
+	}
 	
 
 }
