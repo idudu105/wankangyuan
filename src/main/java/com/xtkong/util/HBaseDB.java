@@ -4,7 +4,9 @@
 package com.xtkong.util;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.apache.hadoop.conf.Configuration;
@@ -30,6 +32,8 @@ import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
 import org.apache.hadoop.hbase.filter.FilterList.Operator;
 import org.apache.hadoop.hbase.util.Bytes;
 
+import com.xtkong.model.SourceField;
+
 public class HBaseDB {
 	// 避免多线程导致生成多个实例
 	private static final HBaseDB hBaseDBTool = new HBaseDB();
@@ -41,6 +45,8 @@ public class HBaseDB {
 		configuration.set("hbase.master.info.port", ConstantsHBase.HBASE_MASTER_INFO_PORT);
 		try {
 			connection = ConnectionFactory.createConnection(configuration);
+			HBaseDB.getInstance().createTable(ConstantsHBase.TABLE_GID, new String[] { ConstantsHBase.FAMILY_GID_GID },
+					1);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -70,24 +76,17 @@ public class HBaseDB {
 			if (admin.tableExists(tableNameObject)) {
 				System.out.println("表：" + tableName + "已存在");
 			} else {
-//				TableDescriptor tableDesc = TableDescriptorBuilder.newBuilder(tableNameObject)
-//						.setColumnFamily(ColumnFamilyDescriptorBuilder
-//								.newBuilder(Bytes.toBytes(columnFamilies[columnFamilies.length - 1])).build())
-//						.build();
-//				admin.createTable(tableDesc);
-				 HTableDescriptor tableDescriptor = new
-				 HTableDescriptor(tableNameObject);
-				 for (String columnFamily : columnFamilies) {
-				 // 添加列簇
-				 tableDescriptor.addFamily(new
-				 HColumnDescriptor(columnFamily).setMaxVersions(version));
-				 }
-				 admin.createTable(tableDescriptor);
+				HTableDescriptor tableDescriptor = new HTableDescriptor(tableNameObject);
+				for (String columnFamily : columnFamilies) {
+					// 添加列簇
+					tableDescriptor.addFamily(new HColumnDescriptor(columnFamily).setMaxVersions(version));
+				}
+				admin.createTable(tableDescriptor);
 				System.out.println("创建表：" + tableName);
 			}
 			admin.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 
@@ -213,10 +212,10 @@ public class HBaseDB {
 	 * @param prefixFilter
 	 *            行键前缀
 	 * @param columnValueFilters
-	 *            列值s
+	 *            列、值
 	 * @return
 	 */
-	public String getRowkey(String tableName, String prefixFilter, Map<String, String> columnValueFilters) {
+	public List<String> getRowkeys(String tableName, String prefixFilter, Map<String, String> columnValueFilters) {
 		Scan scan = new Scan();
 		scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
 		// 前缀uid+"_"+source+"_"过滤
@@ -239,17 +238,17 @@ public class HBaseDB {
 	 * @param scan
 	 * @return
 	 */
-	public String getRowkey(String tableName, Scan scan) {
-		String rowkey = null;
+	public List<String> getRowkey(String tableName, Scan scan) {
+		List<String> rowkey = new ArrayList<>();
 		try {
 			Table table = getTable(tableName);
 			ResultScanner resultScanner = table.getScanner(scan);
 			Iterator<Result> iterator = resultScanner.iterator();
-			if (iterator.hasNext()) {
+			while (iterator.hasNext()) {
 				Result result = iterator.next();
 				if (!result.isEmpty()) {
 					// 获取行键
-					rowkey = Bytes.toString(result.getRow());
+					rowkey.add(Bytes.toString(result.getRow()));
 				}
 			}
 			resultScanner.close();
@@ -259,6 +258,42 @@ public class HBaseDB {
 		}
 
 		return rowkey;
+	}
+
+	/**
+	 * 根据扫描条件Scan，获取行键及列值
+	 * 
+	 * @param tableName 表名
+	 * @param scan 扫描条件
+	 * @param quelifiers 列名
+	 * @return 行键、列值、列值、列值
+	 */
+	public static List<List<String>> getQuelifierValues(String tableName, Scan scan, List<String> quelifiers) {
+		List<List<String>> quelifierValues = new ArrayList<List<String>>();
+		try {
+			HBaseDB db = HBaseDB.getInstance();
+			Table table = db.getTable(tableName);
+			ResultScanner resultScanner = table.getScanner(scan);
+			Iterator<Result> iterator = resultScanner.iterator();
+			while (iterator.hasNext()) {
+				Result result = iterator.next();
+				if (!result.isEmpty()) {
+					List<String> quelifierValue = new ArrayList<>();
+					// 获取行键
+					quelifierValue.add(Bytes.toString(result.getRow()));
+					for (String quelifier : quelifiers) {
+						quelifierValue.add(Bytes.toString(
+								result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(quelifier))));
+					}
+					quelifierValues.add(quelifierValue);
+				}
+			}
+			resultScanner.close();
+			table.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return quelifierValues;
 	}
 
 	/**
@@ -273,9 +308,6 @@ public class HBaseDB {
 			Table table = getTable(tableName.toString());
 			// 设置行键
 			Delete delete = new Delete(Bytes.toBytes(rowKey.toString()));
-			// delete.addFamily(Bytes.toBytes(family.toString()));
-			// delete.addColumn(Bytes.toBytes(family.toString()),
-			// Bytes.toBytes(quelifier.toString()));
 			table.delete(delete);
 			System.out.println("tableName:" + tableName + ",rowKey:" + rowKey);
 			table.close();
@@ -319,39 +351,5 @@ public class HBaseDB {
 		}
 		return startRow;
 	}
-
-	/**
-	 * 新增列簇
-	 * 
-	 * @param tableName
-	 *            表名称
-	 * @param columnFamilies
-	 *            列簇，可能有多个
-	 * @param version
-	 *            列表存储的版本数量
-	 */
-	/*
-	 * public void addColumnFamilys(String tableName, String[] columnFamilies,
-	 * int version) { try { Admin admin = connection.getAdmin(); TableName
-	 * tableNameObject = TableName.valueOf(tableName); if
-	 * (admin.tableExists(tableNameObject)) { System.out.println("表：" +
-	 * tableName + "已存在"); admin.disableTable(tableNameObject); //
-	 * admin.getAlterStatus(tableNameObject); // HTableDescriptor
-	 * tableDescriptor // =admin.getTableDescriptor(tableNameObject); for
-	 * (String columnFamily : columnFamilies) { // 添加列簇
-	 * admin.addColumn(tableNameObject, new
-	 * HColumnDescriptor(columnFamily).setMaxVersions(version)); //
-	 * tableDescriptor.addFamily(new //
-	 * HColumnDescriptor(columnFamily).setMaxVersions(version)); } //
-	 * admin.modifyTable(tableNameObject, tableDescriptor);
-	 * admin.enableTableAsync(tableNameObject); System.out.println("表：" +
-	 * tableName + "添加列簇");
-	 * 
-	 * admin.disableTable(tableNameObject); admin.deleteTable(tableNameObject);
-	 * System.out.println("删除表：" + tableName);
-	 * 
-	 * admin.close(); } else { createTable(tableName, columnFamilies, version);
-	 * } } catch (Exception e) { e.printStackTrace(); } }
-	 */
 
 }

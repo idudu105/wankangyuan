@@ -1,4 +1,4 @@
-package com.xtkong.controller;
+package com.xtkong.controller.admin;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,6 +37,9 @@ public class FormatTypeController {
 	@RequestMapping("/insertFormatType")
 	@ResponseBody
 	public Map<String, Object> insertFormatType(FormatType formatType, Integer uid) {
+		if (uid == null) {
+			uid=1;
+		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -88,6 +91,9 @@ public class FormatTypeController {
 	@RequestMapping("/updateFormatType")
 	@ResponseBody
 	public Map<String, Object> updateFormatType(FormatType formatType, Integer uid) {
+		if (uid == null) {
+			uid=1;
+		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		formatType.setUpdate_datetime(simpleDateFormat.format(new Date()));

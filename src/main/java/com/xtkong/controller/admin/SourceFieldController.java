@@ -1,4 +1,4 @@
-package com.xtkong.controller;
+package com.xtkong.controller.admin;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,6 +25,9 @@ public class SourceFieldController {
 	@RequestMapping("/insertSourceField")
 	@ResponseBody
 	public Map<String, Object> insertSourceField(SourceField sourceField, Integer uid) {
+		if (uid == null) {
+			uid=1;
+		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -56,6 +59,9 @@ public class SourceFieldController {
 	@RequestMapping("/updateSourceField")
 	@ResponseBody
 	public Map<String, Object> updateSourceField(SourceField sourceField, Integer uid) {
+		if (uid == null) {
+			uid=1;
+		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

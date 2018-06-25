@@ -71,22 +71,6 @@ public class HBaseSourceDataDao {
 					Bytes.toBytes(sourceFieldData.getValue()));
 		}
 		return db.putRow(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, put);
-		// db.putCell(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, uid + "_" +
-		// cs_id + "_" + count, ConstantsHBase.FAMILY_INFO,
-		// ConstantsHBase.QUALIFIER_ADD, ConstantsHBase.VALUE_ADD_FALSE);
-		// db.putCell(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, uid + "_" +
-		// cs_id + "_" + count, ConstantsHBase.FAMILY_INFO,
-		// ConstantsHBase.QUALIFIER_PUBLIC, ConstantsHBase.VALUE_PUBLIC_FALSE);
-		// for (Entry<String, String> sourceFieldData :
-		// sourceFieldDatas.entrySet()) {
-		// if (!db.putCell(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, uid +
-		// "_" + cs_id + "_" + count,
-		// ConstantsHBase.FAMILY_INFO, sourceFieldData.getKey(),
-		// sourceFieldData.getValue())) {
-		// return false;
-		// }
-		// }
-		// return true;
 	}
 
 	public static List<List<String>> getSourceDatas(String tableName, Scan scan, List<SourceField> sourceFields) {
@@ -128,40 +112,31 @@ public class HBaseSourceDataDao {
 	 *            大小
 	 * @return
 	 */
-	/*public static List<List<String>> getSourceDatasByUid(String cs_id, String uid, List<SourceField> sourceFields,
-			Integer page, Integer strip) {
-		if (page == null) {
-			page = 1;
-		}
-		if (strip == null) {
-			strip = 10;
-		}
-		String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
-		Scan scan = new Scan();
-		// 列簇约束结果集
-		scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
-		// 前缀uid+"_"+source+"_"过滤
-		Filter filter1 = new PrefixFilter(Bytes.toBytes(uid + "_" + cs_id + "_"));
-		Filter filter2 = new PageFilter(strip);
-		FilterList filterList = new FilterList(Operator.MUST_PASS_ALL, filter1, filter2);
-		scan.setFilter(filterList);
-
-		byte[] startRow = null;
-		byte[] POSTFIX = new byte[] { 0x00 };
-		startRow = HBaseDB.getStartRow(tableName, scan, startRow, page - 1, strip);
-		if (startRow != null) {
-			// 非第一页
-			startRow = Bytes.add(startRow, POSTFIX);
-			scan.withStartRow(startRow);
-		}
-		return getSourceDatas(tableName, scan, sourceFields);
-	}
-*/
+	/*
+	 * public static List<List<String>> getSourceDatasByUid(String cs_id, String
+	 * uid, List<SourceField> sourceFields, Integer page, Integer strip) { if
+	 * (page == null) { page = 1; } if (strip == null) { strip = 10; } String
+	 * tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id; Scan scan = new
+	 * Scan(); // 列簇约束结果集
+	 * scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO)); //
+	 * 前缀uid+"_"+source+"_"过滤 Filter filter1 = new
+	 * PrefixFilter(Bytes.toBytes(uid + "_" + cs_id + "_")); Filter filter2 =
+	 * new PageFilter(strip); FilterList filterList = new
+	 * FilterList(Operator.MUST_PASS_ALL, filter1, filter2);
+	 * scan.setFilter(filterList);
+	 * 
+	 * byte[] startRow = null; byte[] POSTFIX = new byte[] { 0x00 }; startRow =
+	 * HBaseDB.getStartRow(tableName, scan, startRow, page - 1, strip); if
+	 * (startRow != null) { // 非第一页 startRow = Bytes.add(startRow, POSTFIX);
+	 * scan.withStartRow(startRow); } return getSourceDatas(tableName, scan,
+	 * sourceFields); }
+	 */
 	public static List<List<String>> getSourceDatasByUid(String cs_id, String uid, List<SourceField> sourceFields,
 			Integer currPage, Integer nextPage, Integer strip, String startRowStr) {
 		if (currPage == null) {
 			currPage = 0;
-		}if (nextPage == null) {
+		}
+		if (nextPage == null) {
 			nextPage = 1;
 		}
 		if (strip == null) {
@@ -181,7 +156,7 @@ public class HBaseSourceDataDao {
 		try {
 			startRow = Bytes.toBytes(startRowStr);
 		} catch (Exception e) {
-			startRow=null;
+			startRow = null;
 		}
 		byte[] POSTFIX = new byte[] { 0x00 };
 		if (nextPage - currPage != 1) {
@@ -298,42 +273,30 @@ public class HBaseSourceDataDao {
 		return getSourceDatasByIds(cs_id, sourceDataIdList, sourceFields);
 	}
 
-	/*public static List<List<String>> getSourceDatasPublic(String cs_id, List<SourceField> sourceFields) {
-		List<List<String>> sourceDatas = new ArrayList<List<String>>();
-		try {
-			HBaseDB db = HBaseDB.getInstance();
-			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id);
-			Scan scan = new Scan();
-			// 列簇约束结果集
-			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
-			// 单值过滤,获取行数据
-			Filter filter = new SingleColumnValueFilter(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-					Bytes.toBytes(ConstantsHBase.QUALIFIER_PUBLIC), CompareOperator.EQUAL,
-					new BinaryComparator(Bytes.toBytes(ConstantsHBase.VALUE_PUBLIC_TRUE)));
-			scan.setFilter(filter);
-			ResultScanner resultScanner = table.getScanner(scan);
-			Iterator<Result> iterator = resultScanner.iterator();
-			while (iterator.hasNext()) {
-				Result result = iterator.next();
-				if (!result.isEmpty()) {
-					List<String> sourceData = new ArrayList<>();
-					// 获取行键sourceDataId
-					sourceData.add(Bytes.toString(result.getRow()));
-					for (SourceField sourceField : sourceFields) {
-						sourceData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-								Bytes.toBytes(String.valueOf(sourceField.getCsf_id())))));
-					}
-					sourceDatas.add(sourceData);
-				}
-			}
-			resultScanner.close();
-			table.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return sourceDatas;
-	}
-*/
+	/*
+	 * public static List<List<String>> getSourceDatasPublic(String cs_id,
+	 * List<SourceField> sourceFields) { List<List<String>> sourceDatas = new
+	 * ArrayList<List<String>>(); try { HBaseDB db = HBaseDB.getInstance();
+	 * Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id);
+	 * Scan scan = new Scan(); // 列簇约束结果集
+	 * scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO)); // 单值过滤,获取行数据
+	 * Filter filter = new
+	 * SingleColumnValueFilter(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+	 * Bytes.toBytes(ConstantsHBase.QUALIFIER_PUBLIC), CompareOperator.EQUAL,
+	 * new BinaryComparator(Bytes.toBytes(ConstantsHBase.VALUE_PUBLIC_TRUE)));
+	 * scan.setFilter(filter); ResultScanner resultScanner =
+	 * table.getScanner(scan); Iterator<Result> iterator =
+	 * resultScanner.iterator(); while (iterator.hasNext()) { Result result =
+	 * iterator.next(); if (!result.isEmpty()) { List<String> sourceData = new
+	 * ArrayList<>(); // 获取行键sourceDataId
+	 * sourceData.add(Bytes.toString(result.getRow())); for (SourceField
+	 * sourceField : sourceFields) {
+	 * sourceData.add(Bytes.toString(result.getValue(Bytes.toBytes(
+	 * ConstantsHBase.FAMILY_INFO),
+	 * Bytes.toBytes(String.valueOf(sourceField.getCsf_id()))))); }
+	 * sourceDatas.add(sourceData); } } resultScanner.close(); table.close(); }
+	 * catch (IOException e) { e.printStackTrace(); } return sourceDatas; }
+	 */
 	/**
 	 * 更新一条源数据
 	 * 
@@ -351,15 +314,6 @@ public class HBaseSourceDataDao {
 					Bytes.toBytes(sourceFieldData.getValue()));
 		}
 		return db.putRow(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, put);
-		// for (Entry<String, String> sourceFieldData :
-		// sourceFieldDatas.entrySet()) {
-		// if (!db.putCell(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id,
-		// sourceDataId, ConstantsHBase.FAMILY_INFO,
-		// sourceFieldData.getKey(), sourceFieldData.getValue())) {
-		// return false;
-		// }
-		// }
-		// return true;
 	}
 
 	/**
@@ -428,15 +382,6 @@ public class HBaseSourceDataDao {
 				if (!db.putRow(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, put)) {
 					return false;
 				}
-				// for (SourceField sourceField : sourceFields) {
-				// if (!db.putCell(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id,
-				// uid + "_" + cs_id + "_" + count,
-				// ConstantsHBase.FAMILY_INFO, sourceField.getCsf_id(),
-				// Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-				// Bytes.toBytes(String.valueOf(sourceField.getCsf_id())))))) {
-				// return false;
-				// }
-				// }
 			}
 			table.close();
 			return true;
@@ -492,53 +437,7 @@ public class HBaseSourceDataDao {
 		scan.setFilter(filterList);
 		return getSourceDataId(tableName, scan);
 	}
-/*
-	*//**
-	 * 列值过滤行键
-	 * 
-	 * @param uid
-	 * @param cs_id
-	 * @param qualifier
-	 * @param value
-	 * @return
-	 *//*
-	public static String getSourceDataId(String cs_id, String uid, String qualifier, String value) {
-		String sourceDataId = null;
 
-		try {
-			HBaseDB db = HBaseDB.getInstance();
-			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id);
-			Scan scan = new Scan();
-			// 列簇约束结果集
-			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
-			// 前缀uid+"_"+source+"_"过滤
-			Filter filter1 = new PrefixFilter(Bytes.toBytes(uid + "_" + cs_id + "_"));
-			// 单值过滤,获取行数据
-			Filter filter2 = new SingleColumnValueFilter(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-					Bytes.toBytes(qualifier), CompareOperator.EQUAL, new BinaryComparator(Bytes.toBytes(value)));
-			// 与
-			FilterList filterList = new FilterList(Operator.MUST_PASS_ALL, filter1, filter2);
-			scan.setFilter(filterList);
-
-			ResultScanner resultScanner = table.getScanner(scan);
-			Iterator<Result> iterator = resultScanner.iterator();
-
-			while (iterator.hasNext()) {
-				Result result = iterator.next();
-				if (!result.isEmpty()) {
-					// 获取行键sourceDataId
-					sourceDataId = Bytes.toString(result.getRow());
-				}
-			}
-			resultScanner.close();
-			table.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return sourceDataId;
-	}
-*/
 	// ---------------------------------
 	public static List<List<String>> getSourceDatasByIds(String cs_id, List<String> sourceDataIds,
 			List<SourceField> sourceFields) {
@@ -569,107 +468,7 @@ public class HBaseSourceDataDao {
 		return sourceDatas;
 	}
 
-	/**
-	 * 获取用户的添加源数据基础信息
-	 * 
-	 * @param cs_id
-	 * @param uid
-	 * @param sourceFields
-	 * @return
-	 */
-	/*public static List<List<String>> getSourceDatasByUid(String cs_id, String uid, List<SourceField> sourceFields) {
-		List<List<String>> sourceDatas = new ArrayList<List<String>>();
-		try {
-			HBaseDB db = HBaseDB.getInstance();
-			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id);
-			Scan scan = new Scan();
-			// 列簇约束结果集
-			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
-
-			// 前缀uid+"_"+source+"_"过滤
-			Filter filter = new PrefixFilter(Bytes.toBytes(uid + "_" + cs_id + "_"));
-			scan.setFilter(filter);
-			ResultScanner resultScanner = table.getScanner(scan);
-			Iterator<Result> iterator = resultScanner.iterator();
-			while (iterator.hasNext()) {
-				Result result = iterator.next();
-				if (!result.isEmpty()) {
-					List<String> sourceData = new ArrayList<>();
-					// 获取行键sourceDataId
-					sourceData.add(Bytes.toString(result.getRow()));
-					for (SourceField sourceField : sourceFields) {
-						sourceData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-								Bytes.toBytes(String.valueOf(sourceField.getCsf_id())))));
-					}
-					sourceDatas.add(sourceData);
-				}
-			}
-			resultScanner.close();
-			table.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return sourceDatas;
-	}
-*/
-	/**
-	 * 获取用户创建源数据基础信息
-	 * 
-	 * @param cs_id
-	 *            采集源 id
-	 * @param uid
-	 *            用户 id
-	 * @param sourceFields
-	 *            源数据字数据，注：每个列表第一个值sourceDataId不显示
-	 * @return
-	 */
-/*	public static List<List<String>> getSourceDatasCreated(String cs_id, String uid, List<SourceField> sourceFields) {
-		List<List<String>> sourceDatas = new ArrayList<List<String>>();
-		try {
-			HBaseDB db = HBaseDB.getInstance();
-			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id);
-			Scan scan = new Scan();
-			// 列簇约束结果集
-			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
-			// 前缀uid+"_"+source+"_"过滤
-			Filter filter1 = new PrefixFilter(Bytes.toBytes(uid + "_" + cs_id + "_"));
-			// 单值过滤,获取行数据
-			Filter filter2 = new SingleColumnValueFilter(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-					Bytes.toBytes(ConstantsHBase.QUALIFIER_ADD), CompareOperator.EQUAL,
-					new BinaryComparator(Bytes.toBytes(ConstantsHBase.VALUE_ADD_FALSE)));
-			// 与
-			FilterList filterList = new FilterList(Operator.MUST_PASS_ALL, filter1, filter2);
-			scan.setFilter(filterList);
-
-			ResultScanner resultScanner = table.getScanner(scan);
-			Iterator<Result> iterator = resultScanner.iterator();
-			while (iterator.hasNext()) {
-				Result result = iterator.next();
-				if (!result.isEmpty()) {
-					List<String> sourceData = new ArrayList<>();
-					// for (Entry<String, String> source_field :
-					// sourceFields.entrySet()) {
-					// sourceData.put(source_field.getValue(),Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_SOURCE_INFO),
-					// Bytes.toBytes(source_field.getKey()))));
-					// }
-					// 获取行键sourceDataId
-					sourceData.add(Bytes.toString(result.getRow()));
-					for (SourceField sourceField : sourceFields) {
-						sourceData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-								Bytes.toBytes(String.valueOf(sourceField.getCsf_id())))));
-					}
-					sourceDatas.add(sourceData);
-				}
-			}
-			resultScanner.close();
-			table.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return sourceDatas;
-	}
-*/
 	public static void deleteSourceDataTable(String cs_id) {
-		HBaseDB.getInstance().deleteTable(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id);		
+		HBaseDB.getInstance().deleteTable(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id);
 	}
 }

@@ -7,8 +7,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.util.Bytes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +24,6 @@ import com.xtkong.service.FormatFieldService;
 import com.xtkong.service.FormatTypeService;
 import com.xtkong.service.SourceFieldService;
 import com.xtkong.service.SourceService;
-import com.xtkong.util.ConstantsHBase;
 
 @Controller
 @RequestMapping("/sourceData")
@@ -163,7 +160,8 @@ public class SourceDataController {
 		}
 		if (currPage == null) {
 			currPage = 0;
-		}if (page == null) {
+		}
+		if (page == null) {
 			page = 1;
 		}
 		if (strip == null) {
@@ -184,13 +182,8 @@ public class SourceDataController {
 			// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
 			switch (type) {
 			case "1":
-				// sourceDatas =
-				// HBaseSourceDataDao.getSourceDatasByUid(Integer.toString(cs_id),
-				// String.valueOf(user_id),
-				// source.getSourceFields(), currPage, page, strip,
-				// startRowStr);
-
-				sourceDatas = name(page,strip, source.getSourceFields());
+				sourceDatas = HBaseSourceDataDao.getSourceDatasByUid(Integer.toString(cs_id), String.valueOf(user_id),
+						source.getSourceFields(), currPage, page, strip, startRowStr);
 				httpSession.setAttribute("sourceDatas", sourceDatas);//
 				break;
 			case "2":
@@ -223,23 +216,7 @@ public class SourceDataController {
 
 	}
 
-	public List<List<String>> name(Integer page, Integer strip, List<SourceField> sourceFields) {
-		List<List<String>> sourceDatas = new ArrayList<List<String>>();
-		if (strip == null) {
-			strip = 12;
-		}
-		for (int i = 0; i < strip; i++) {
-
-			List<String> sourceData = new ArrayList<>();
-			// 获取行键sourceDataId
-			sourceData.add(i + "0"+page);
-			for (SourceField sourceField : sourceFields) {
-				sourceData.add(page+"--"+i+"--"+String.valueOf(sourceField.getCsf_id()));
-			}
-			sourceDatas.add(sourceData);
-		}
-		return sourceDatas;
-	}
+	
 
 	/**
 	 * 通过sourceDataId获取一条源数据

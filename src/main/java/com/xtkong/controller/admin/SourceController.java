@@ -1,4 +1,4 @@
-package com.xtkong.controller;
+package com.xtkong.controller.admin;
 
 import java.util.HashMap;
 import java.util.Map;
