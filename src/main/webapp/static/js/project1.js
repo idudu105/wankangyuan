@@ -2340,7 +2340,7 @@ function replace_em(str){
 // console.log(str);
     str = str.replace(/\n/g,'<br/>');
 // console.log(str);
-    str = str.replace(/\[em_([0-9]*)\]/g,'<img src="arclist/$1.gif" border="0" />');
+    str = str.replace(/\[em_([0-9]*)\]/g,'<img src="../static/arclist/$1.gif" border="0" />');
 // console.log(str);
     return str;
 
