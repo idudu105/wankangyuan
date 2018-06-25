@@ -24,6 +24,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.xtkong.dao.hbase.HBaseFormatDataDao;
+import com.xtkong.dao.hbase.HBaseFormatNodeDao;
+import com.xtkong.dao.hbase.HBaseSourceDataDao;
 import com.xtkong.util.ConstantsHBase;
 import com.xtkong.util.HBaseDB;
 
@@ -346,11 +348,11 @@ public class HbaseTest {
 	}
 	@Test
 	public void test() {
-		Integer cs_id=1;
-//	HBaseSourceDataDao.createSourceDataTable(String.valueOf(cs_id));
-//	HBaseFormatNodeDao.createFormatNodeTable(String.valueOf(cs_id));
-	HBaseFormatDataDao.createFormatDataTable(String.valueOf(cs_id), String.valueOf(2));
-	HBaseFormatDataDao.createFormatDataTable(String.valueOf(cs_id), String.valueOf(3));
+		Integer cs_id=38;
+	HBaseSourceDataDao.createSourceDataTable(String.valueOf(cs_id));
+	HBaseFormatNodeDao.createFormatNodeTable(String.valueOf(cs_id));
+//	HBaseFormatDataDao.createFormatDataTable(String.valueOf(cs_id), String.valueOf(2));
+//	HBaseFormatDataDao.createFormatDataTable(String.valueOf(cs_id), String.valueOf(32));
 	}
 	// 添加/修改数据
 	@Test
