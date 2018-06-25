@@ -65,7 +65,7 @@ public class ProjectAppController {
 			httpSession.setAttribute("projectAppSearchWord", null);
 		}else{
 			//更新关键字
-			httpSession.setAttribute("projectSearchWord", searchWord);
+			httpSession.setAttribute("projectAppSearchWord", searchWord);
 		}
 		Map<String, Object> map = projectAppService.selectProjectApp(p_id, page, strip , searchWord);
 		httpSession.setAttribute("projectApplications", map.get("list"));

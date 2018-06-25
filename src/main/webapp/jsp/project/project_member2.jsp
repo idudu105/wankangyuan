@@ -14,14 +14,14 @@
     <meta charset="UTF-8" />
     <title>Document</title>
 </head>
-<link rel="stylesheet" type="text/css" href="/wankangyuan/static/css/project1.css" />
-<script type="text/javascript" src="/wankangyuan/static/js/project1.js"></script>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/static/css/project1.css" />
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/jsp/project/js/project1.js"></script>
 <script type="text/javascript">
     window.onload=function(){
-        project0();
-        project2();
-        // pro_mine();
+    	project0();
         pro_member();
+        friend_manage();
     }
 </script>
 <body>
@@ -71,7 +71,7 @@
             </div>
             <div class="top2">
                 <div class="top2C">
-                    <div class="top2Ctl active">13例结直肠癌病人的基因表达</div>
+                    <div class="top2Ctl active">${project.p_name}</div>
                     <a href="/wankangyuan/projectTopic/selectProjectTopic"><div class="top2Ctr">讨论版</div></a>
                     <a href="/wankangyuan/projectMember/selectProjectMember"><div class="top2Ctr active">成员</div></a>
                     <a href="/wankangyuan/projectAppEnd/selectProjectAppEnd"><div class="top2Ctr">应用结果</div></a>
@@ -98,37 +98,22 @@
                             </div>
                         </a>
                     </div>
-                    <div class="jiangeline"></div>
-                    <div class="shaixuanBT">
-                        <div class="shaixuanBTt">筛选</div>
-                        <div class="shaixuanBTiK">
-                            <img src="/wankangyuan/static/img/sanjiao_blue.png" alt="" class="shaixuanBTi" />
-                        </div>
-                    </div>
+                    
                     <div class="jiangeline"></div>
                     <div class="allK">
-                        <div class="allX"></div>
-                        <div class="allT">全选</div>
-                    </div>
-                    <!-- <div class="jiangeline"></div> -->
-                    <!-- <div class="allK">
-                        <div class="allX">
-                            <img src="/wankangyuan/static/img/greentrue.png" alt="" class="allI active" />
+                        <div class="quanxuanK">
+                            <input type="checkbox" class="input_check" id="check0">
+                            <label for="check0"></label>
                         </div>
                         <div class="allT">全选</div>
-                    </div> -->
-                    <!-- <div class="pro_menu pro_exit">退出</div> -->
-                    <!-- <div class="pro_menu pro_rem">移除</div>
-                    <div class="pro_menu pro_canfabu">取消发布</div>
-                    <div class="pro_menu pro_fabu">发布</div>
-                    <div class="pro_menu pro_rerun">重新运行</div> -->
+                    </div>
                     <div class="pro_menu pro_mandel">删除成员</div>
                     <div class="pro_menu pro_manGL">权限管理</div>
                     <div class="pro_menu pro_manadd">添加成员</div>
                     <div class="search2">
                         <div class="search2C">
                             <img src="/wankangyuan/static/img/search.png" alt="" class="search2Ci" />
-                            <input type="text" class="search2Ct"  placeholder="搜索成员" />
+                            <input type="text" class="search2Ct"  placeholder="搜索成员" value="${searchWord}"/>
                         </div>
                     </div>
                 </div>
@@ -159,351 +144,356 @@
                     </div>
                 </div>
             </div>
+                
             <div class="memaddK">
-                <input type="button" class="memaddB" value="提交" />
-                <div class="memaddKx"></div>
-                <div class="memaddT">
-                    <div class="memaddTl">组织树</div>
-                    <div class="memaddTr">
-                        <img src="/wankangyuan/static/img/search.png" alt="" class="memaddTri" />
-                        <input type="text" class="memaddTrt" placeholder="搜索成员"/>
-                    </div>
-                </div>
-                <div class="memaddM">
-                    <div class="mimaddMl">
-                        <div class="mimaddMlz1">
-                            <div class="mimaddMlz1Z">
-                                <div class="mimaddMlz1ZT">
-                                    <div class="mimaddMlz1ZTt">
-                                        <span>组织结构1</span>
-                                        <span>（</span><span>20</span><span>）</span>
-                                    </div>
-                                    <div class="mimaddMlz1ZTi"></div>
+            <div class="memaddKx"></div>
+            <div class="memaddM">
+                <div class="friendMMl">
+                    <div class="friendMMlT">
+                        <div class="friendMMlTT">
+                            <c:forEach items="${orgList }" var="org" varStatus="status">
+                            <c:if test="${org.parentId eq 0 }">
+                            <div class="friendMMlTTz <c:if test='${status.count eq 1}'>active</c:if>" name="${org.id }"><!-- 每个组织结构 -->
+                                <div class="friendMMlTTzT">
+                                    <span class="fri_name">${org.organizationName }</span>
+                                    <div class="friendMMlTTzTi"></div>
+                                    <img src="<%=request.getContextPath()%>/static/img/shenhe1.png" alt="" class="friendMMlTTzTi2" />
                                 </div>
-                                <div class="mimaddMlz1ZB">
-                                    <div class="mimaddMlz1ZBz">
-                                        <img src="/wankangyuan/static/img/folder.png" alt="" class="mimaddMlz1ZBzi" />
-                                        <div class="mimaddMlz1ZBzt">一</div>
+                                <div class="friendMMlTTzB">
+                                <c:forEach items="${orgList }" var="group">
+                                <c:if test="${org.id eq group.parentId }">
+                                    <div class="friendMMlTTzBz" name="${group.id }">
+                                        <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
+                                        <div class="friendMMlTTzBzt" data-bind="click:function(data, event){showOrgers(${group.id}) }">${group.organizationName }</div>
                                     </div>
-                                    <div class="mimaddMlz1ZBz">
-                                        <img src="/wankangyuan/static/img/folder.png" alt="" class="mimaddMlz1ZBzi" />
-                                        <div class="mimaddMlz1ZBzt">二</div>
-                                    </div>
-                                    <div class="mimaddMlz1ZBz">
-                                        <img src="/wankangyuan/static/img/folder.png" alt="" class="mimaddMlz1ZBzi" />
-                                        <div class="mimaddMlz1ZBzt">三</div>
-                                    </div>
-                                    <div class="mimaddMlz1ZBz">
-                                        <img src="/wankangyuan/static/img/folder.png" alt="" class="mimaddMlz1ZBzi" />
-                                        <div class="mimaddMlz1ZBzt">四</div>
-                                    </div>
+                                </c:if>    
+                                </c:forEach>
                                 </div>
                             </div>
-                            <div class="mimaddMlz1Z">
-                                <div class="mimaddMlz1ZT">
-                                    <div class="mimaddMlz1ZTt">
-                                        <span>组织结构2</span>
-                                        <span>（</span><span>20</span><span>）</span>
-                                    </div>
-                                    <div class="mimaddMlz1ZTi"></div>
-                                </div>
-                                <div class="mimaddMlz1ZB">
-                                    <div class="mimaddMlz1ZBz">
-                                        <img src="/wankangyuan/static/img/folder.png" alt="" class="mimaddMlz1ZBzi" />
-                                        <div class="mimaddMlz1ZBzt">一</div>
-                                    </div>
-                                    <div class="mimaddMlz1ZBz">
-                                        <img src="/wankangyuan/static/img/folder.png" alt="" class="mimaddMlz1ZBzi" />
-                                        <div class="mimaddMlz1ZBzt">二</div>
-                                    </div>
-                                    <div class="mimaddMlz1ZBz">
-                                        <img src="/wankangyuan/static/img/folder.png" alt="" class="mimaddMlz1ZBzi" />
-                                        <div class="mimaddMlz1ZBzt">三</div>
-                                    </div>
-                                    <div class="mimaddMlz1ZBz">
-                                        <img src="/wankangyuan/static/img/folder.png" alt="" class="mimaddMlz1ZBzi" />
-                                        <div class="mimaddMlz1ZBzt">四</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mimaddMlz1Z">
-                                <div class="mimaddMlz1ZT">
-                                    <div class="mimaddMlz1ZTt">
-                                        <span>组织结构3</span>
-                                        <span>（</span><span>20</span><span>）</span>
-                                    </div>
-                                    <div class="mimaddMlz1ZTi"></div>
-                                </div>
-                                <div class="mimaddMlz1ZB">
-                                    <div class="mimaddMlz1ZBz">
-                                        <img src="/wankangyuan/static/img/folder.png" alt="" class="mimaddMlz1ZBzi" />
-                                        <div class="mimaddMlz1ZBzt">一</div>
-                                    </div>
-                                    <div class="mimaddMlz1ZBz">
-                                        <img src="/wankangyuan/static/img/folder.png" alt="" class="mimaddMlz1ZBzi" />
-                                        <div class="mimaddMlz1ZBzt">二</div>
-                                    </div>
-                                    <div class="mimaddMlz1ZBz">
-                                        <img src="/wankangyuan/static/img/folder.png" alt="" class="mimaddMlz1ZBzi" />
-                                        <div class="mimaddMlz1ZBzt">三</div>
-                                    </div>
-                                    <div class="mimaddMlz1ZBz">
-                                        <img src="/wankangyuan/static/img/folder.png" alt="" class="mimaddMlz1ZBzi" />
-                                        <div class="mimaddMlz1ZBzt">四</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mimaddMlz2">
-                            <div class="mimaddMlz2z">
-                                <span>我的好友</span>
-                                <span>（</span><span>20</span><span>）</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mimaddMr">
-                        <div class="mimaddMrT">
-                            <div class="miadMrTzallK">
-                                <div class="miadMrTzallX"></div>
-                                <div class="miadMrTzallT">全选</div>
-                            </div>
-                            <div class="miadMrTz miadMrThead">头像</div>
-                            <div class="miadMrTz miadMrTid">用户名</div>
-                            <div class="miadMrTz miadMrTmail">邮箱</div>
-                            <div class="miadMrTz miadMrTrole">角色</div>
-                        </div>
-                        <div class="mimaddMrM">
-                            <div class="mimaddMrMz">
-                                <div class="miadMrMzXZ">
-                                    <div class="miadMrMzXZx"></div>
-                                </div>
-                                <div class="miadMrMhead">
-                                    <img src="/wankangyuan/static/img/touxiang1.png" alt="" class="miadMrTheadi" />
-                                </div>
-                                <div class="miadMrMz miadMrTid">TXT1</div>
-                                <div class="miadMrMz miadMrTmail">133675888@163.com</div>
-                                <div class="miadMrMz miadMrTrole">管理员</div>
-                            </div>
-                            <div class="mimaddMrMz">
-                                <div class="miadMrMzXZ">
-                                    <div class="miadMrMzXZx"></div>
-                                </div>
-                                <div class="miadMrMhead">
-                                    <img src="/wankangyuan/static/img/touxiang2.png" alt="" class="miadMrTheadi" />
-                                </div>
-                                <div class="miadMrMz miadMrTid">TXT2</div>
-                                <div class="miadMrMz miadMrTmail">133675888@163.com</div>
-                                <div class="miadMrMz miadMrTrole">无</div>
-                            </div>
-                            <div class="mimaddMrMz">
-                                <div class="miadMrMzXZ">
-                                    <div class="miadMrMzXZx"></div>
-                                </div>
-                                <div class="miadMrMhead">
-                                    <img src="/wankangyuan/static/img/touxiang3.png" alt="" class="miadMrTheadi" />
-                                </div>
-                                <div class="miadMrMz miadMrTid">TXT3</div>
-                                <div class="miadMrMz miadMrTmail">133675888@163.com</div>
-                                <div class="miadMrMz miadMrTrole">无</div>
-                            </div>
-                            <div class="mimaddMrMz">
-                                <div class="miadMrMzXZ">
-                                    <div class="miadMrMzXZx"></div>
-                                </div>
-                                <div class="miadMrMhead">
-                                    <img src="/wankangyuan/static/img/touxiang4.png" alt="" class="miadMrTheadi" />
-                                </div>
-                                <div class="miadMrMz miadMrTid">TXT4</div>
-                                <div class="miadMrMz miadMrTmail">133675888@163.com</div>
-                                <div class="miadMrMz miadMrTrole">无</div>
-                            </div>
+                            </c:if>
+                            </c:forEach>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="PJK2">
-                <div class="QXGLk">
-                    <div class="QXGLkT">
-                        <div class="QXGLkTl">权限管理</div>
-                        <div class="QXGLkTr"></div>
-                    </div>
-                    <div class="QXGLkM">
-                        <div class="QXGLkMl">
-                            <div class="QXGLkMlt">创建角色</div>
-                            <div class="QXGLkMlm">
-                                <div class="QXGLkMlz active">
-                                    <div class="QXGLkMlzt">主持人</div>
-                                    <div class="QXGLkMlzi"></div>
-                                </div>
-                                <div class="QXGLkMlz">
-                                    <div class="QXGLkMlzt">创建人</div>
-                                    <div class="QXGLkMlzi"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="QXGLkMr">
-                            <div class="QXGLkMrz">
-                                <div class="QXGLkMrzT">文件</div>
-                                <div class="QXGLkMrzM">
-                                    <div class="QXGLkMrzMz">
-                                        <div class="QXGLkMrzMzi"></div>
-                                        <div class="QXGLkMrzMzt">添加</div>
-                                    </div>
-                                    <div class="QXGLkMrzMz">
-                                        <div class="QXGLkMrzMzi"></div>
-                                        <div class="QXGLkMrzMzt">修改</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="QXGLkMrz">
-                                <div class="QXGLkMrzT">格式数据</div>
-                                <div class="QXGLkMrzM">
-                                    <div class="QXGLkMrzMz">
-                                        <div class="QXGLkMrzMzi"></div>
-                                        <div class="QXGLkMrzMzt">发布</div>
-                                    </div>
-                                    <div class="QXGLkMrzMz">
-                                        <div class="QXGLkMrzMzi"></div>
-                                        <div class="QXGLkMrzMzt">修改</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="QXGLkMrz">
-                                <div class="QXGLkMrzT">应用</div>
-                                <div class="QXGLkMrzM">
-                                    <div class="QXGLkMrzMz">
-                                        <div class="QXGLkMrzMzi"></div>
-                                        <div class="QXGLkMrzMzt">发布</div>
-                                    </div>
-                                    <div class="QXGLkMrzMz">
-                                        <div class="QXGLkMrzMzi"></div>
-                                        <div class="QXGLkMrzMzt">修改</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="QXGLkMrz">
-                                <div class="QXGLkMrzT">应用结果</div>
-                                <div class="QXGLkMrzM">
-                                    <div class="QXGLkMrzMz">
-                                        <div class="QXGLkMrzMzi"></div>
-                                        <div class="QXGLkMrzMzt">发布</div>
-                                    </div>
-                                    <div class="QXGLkMrzMz">
-                                        <div class="QXGLkMrzMzi"></div>
-                                        <div class="QXGLkMrzMzt">修改</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <input type="button" class="QXGLkB" value="提交" />
+                
+                <div class="mimaddMr">
+                	<table class="friMMrtab">
+                 	<tr class="biaotou">
+                            <th class="xuanze">
+                                选择
+                            </th>
+                            <th class="touxiangk">头像</th>
+                            <th class="yonghuming">用户名</th>
+                            <th class="youxiang">邮箱</th>
+                        </tr>
+                     <tbody id="ko_friend" data-bind="foreach: orgers">
+                      <tr class="">
+                          <td class="xuanze">
+                              <div class="fuxuanK2 fuxuanK40">
+                                  <input name="orgerIds" type="checkbox" class="input_check" data-bind="value: id,attr:{id:'check1_'+($index()+1)}">
+                                  <label data-bind="attr:{for:'check1_'+($index()+1)}"></label>
+                              </div>
+                          </td>
+                          <td class="touxiangk">
+                              <img data-bind="attr:{src:headimg}" alt="" class="touxiangi" />
+                          </td>
+                          <td class="yonghuming"><span data-bind="text: username"></span></td>
+                          <td class="youxiang"><span data-bind="text: email"></span></td>
+                      </tr>
+                 	</tbody>
+                	</table>
+                	<input type="button" class="QXGLkB QXGLkB_chengyuan" value="添加" />
+                    
                 </div>
-                <div class="PJK2li">
-                    <div class="PJK2litop">
-                        <div class="PJK2litopT">张三</div>
-                        <div class="PJK2litopI"></div>
-                    </div>
-                    <div class="PJK2licre">
-                        <div class="PJK2licreT1">角色：</div>
-                        <div class="PJK2licreT2">创建人</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">2017-4-10</div>
-                        <div class="PJK2litimeT2">12：00</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">联系人：</div>
-                        <div class="PJK2litimeT2">李四</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">上传文件：</div>
-                        <div class="PJK2litimeT2">11</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">发表/回复话题：</div>
-                        <div class="PJK2litimeT2">241</div>
-                    </div>
-
-                </div>
-                <div class="PJK2li">
-                    <div class="PJK2litop">
-                        <div class="PJK2litopT">李四</div>
-                        <div class="PJK2litopI"></div>
-                    </div>
-                    <div class="PJK2licre">
-                        <div class="PJK2licreT1">角色：</div>
-                        <div class="PJK2licreT2">参与人</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">2017-8-21</div>
-                        <div class="PJK2litimeT2">12：00</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">联系人：</div>
-                        <div class="PJK2litimeT2">王五</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">上传文件：</div>
-                        <div class="PJK2litimeT2">3</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">发表/回复话题：</div>
-                        <div class="PJK2litimeT2">35</div>
-                    </div>
-                </div>
-                <div class="PJK2li">
-                    <div class="PJK2litop">
-                        <div class="PJK2litopT">王五</div>
-                        <div class="PJK2litopI"></div>
-                    </div>
-                    <div class="PJK2licre">
-                        <div class="PJK2licreT1">角色：</div>
-                        <div class="PJK2licreT2">主持人</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">2018-4-10</div>
-                        <div class="PJK2litimeT2">12：00</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">联系人：</div>
-                        <div class="PJK2litimeT2">李四</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">上传文件：</div>
-                        <div class="PJK2litimeT2">5</div>
-                    </div>
-                    <div class="PJK2litime">
-                        <div class="PJK2litimeT1">发表/回复话题：</div>
-                        <div class="PJK2litimeT2">10</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pageK">
-                <div class="pageLR">
-                    <img src="/wankangyuan/static/img/pageL.png" class="pageLRi" alt="" />
-                </div>
-                <div class="pageNUM active">1</div>
-                <div class="pageNUM ">2</div>
-                <div class="pageNUM">3</div>
-                <div class="pageLR">
-                    <img src="/wankangyuan/static/img/pageR.png" class="pageLRi" alt="" />
-                </div>
-            </div>
-
-            <div class="bottom">
-                <a href="javascript:;">
-                    <div class="bot_guanwang">公司官网</div>
-                </a>
-                <a href="javascript:;">
-                    <div class="bot_guanyu">关于</div>
-                </a>
-                <a href="javascript:;">
-                    <div class="bot_jianyi">反馈建议</div>
-                </a>
-                <div class="botT">Copyright @2018天津万康源科技有限公司</div>
             </div>
         </div>
+            
+        <div class="PJK2">
+            <div class="QXGLk">
+                <div class="QXGLkT">
+                    <div class="QXGLkTl">权限管理</div>
+                    <div class="QXGLkTr"></div>
+                </div>
+                <div class="QXGLkM">
+                    
+                    <div class="QXGLkMr">
+                        
+                        <div class="QXGLkMrz">
+                        	<c:forEach items="${projectRoles}" var="projectRole" varStatus="status">
+                        		<div class="QXGLkMrzM">
+                                 <div class="QXGLkMrzMz">
+                                     <div class="fuxuanK2 fuxuanK30">
+                                     	<c:if test="${status.index == 0 }">
+                                     		<input name="idssss" type="checkbox" checked class="input_check" id="check${projectRole.id }" value="${projectRole.id }">
+                                     	</c:if>
+                                     	<c:if test="${status.index != 0 }">
+                                     		<input name="idssss" type="checkbox" class="input_check" id="check${projectRole.id }" value="${projectRole.id }">
+                                     	</c:if>
+                                <label for="check${projectRole.id }"></label>
+                            </div>
+                                     <div class="QXGLkMrzMzt">${projectRole.role_name }</div>
+                                 </div>
+                             </div>
+                        	</c:forEach>
+                        </div>
+                       
+                    </div>
+                </div>
+                <input type="button" class="QXGLkB QXGLkB_quanxian" value="提交" />
+            </div>
+            
+            <c:forEach items="${projectMembers}" var="projectMemberTemp">
+                 
+                 <div class="PJK2li">
+                 
+                  <div class="PJK2litop">
+                      <div class="PJK2litopT">${projectMemberTemp.username}</div>
+                      <div class="fuxuanK2 fuxuanK20">
+                          <input name="${projectMemberTemp.role_id }" type="checkbox" class="input_check" id="check${projectMemberTemp.id }" value="${projectMemberTemp.id }">
+                          <label for="check${projectMemberTemp.id }"></label>
+                      </div>
+                  </div>
+                  
+                  <div class="PJK2licre">
+                      <div class="PJK2licreT1">角色：</div>
+                      <div class="PJK2licreT2">${projectMemberTemp.role_name}</div>
+                  </div>
+                  <div class="PJK2litime">
+                      <div class="PJK2litimeT1">${projectMemberTemp.bind_date_time}</div>
+                  </div>
+                  <div class="PJK2litime">
+                      <div class="PJK2litimeT1">联系人：</div>
+                      <div class="PJK2litimeT2">${projectMemberTemp.linkman_username}</div>
+                  </div>
+                  <div class="PJK2litime">
+                      <div class="PJK2litimeT1">上传文件：</div>
+                      <div class="PJK2litimeT2">${projectMemberTemp.file_num }</div>
+                  </div>
+                  <div class="PJK2litime">
+                      <div class="PJK2litimeT1">发表/回复话题：</div>
+                      <div class="PJK2litimeT2">${projectMemberTemp.topic_num }/${projectMemberTemp.topic_follow_num }</div>
+                  </div>
+              </div>
+              
+            </c:forEach>
+        </div>
+
+        <div class="pageK" id="box"></div>
+
+        <div class="bottom">
+            <a href="javascript:;">
+                <div class="bot_guanwang">公司官网</div>
+            </a>
+            <a href="javascript:;">
+                <div class="bot_guanyu">关于</div>
+            </a>
+            <a href="javascript:;">
+                <div class="bot_jianyi">反馈建议</div>
+            </a>
+            <div class="botT">Copyright @2018天津万康源科技有限公司</div>
+        </div>
     </div>
+    </div>
+    
+    <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
+    <script type="text/javascript" src="/wankangyuan/static/js/layer/layer.js"></script>
+	<script type="text/javascript" src="/wankangyuan/static/js/knockout-3.4.2.js"></script>
+	
+    <script type="text/javascript">
+    
+	    $('.QXGLkMrz').find('input[name=idssss]').bind('click', function(){  
+	        $('.QXGLkMrz').find('input[name=idssss]').not(this).attr("checked", false);  
+	    }); 
+	    
+	    $('#box').paging({
+	        initPageNo: ${page}, // 初始页码 
+	        totalPages: Math.ceil(${total}/${rows}), //总页数
+	        totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
+	        slideSpeed: 600, // 缓动速度。单位毫秒
+	        jump: true, //是否支持跳转
+	        callback: function(page) { // 回调函数
+	            console.log(page);
+	            if(page!=${page}){
+	            	var searchWord = $(".search2Ct").val();
+	                window.location.href="/wankangyuan/projectMember/selectProjectMember?type=2&page="+page+"&strip=${rows}";
+	            }
+	        }
+	    });
+		
+      	//定义ViewModel
+        function ViewModel() {
+      		
+            var self = this;
+            //当前组织ID
+            var centOrgId;
+            var centUser = '${user.username}';
+            //组内成员
+            self.orgers = ko.observableArray(); //添加动态监视数组对象
+            //显示组内成员
+            self.showOrgers = function(id){
+            	centOrgId=id;
+            	self.orgers.removeAll();
+            	$.get("/wankangyuan/projectMember/getUserByOrg",{organizationId:id},function(data){
+                    var list = JSON.parse(data);
+                    for (var i in list){
+                    	self.orgers.push(list[i]);
+                    }
+                });
+            }
+        }
+        var vm = new ViewModel();
+        ko.applyBindings(vm);
+        
+        
+        //添加人员到项目中
+        $(".QXGLkB_chengyuan").click(function (){
+        	var afuxuanK=document.querySelectorAll('.fuxuanK40');
+        	var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].value);
+            	}
+            }
+            if(ids == ""){
+            	alert("请勾选用户！");
+            	return;
+            }
+
+            $.ajax({
+            	url:"/wankangyuan/projectMember/insertProjectMembers",
+            	type:"post",
+            	data:{
+            		ids:ids.join(",")
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			alert(data.message);
+            			var searchWord = $(".search2Ct").val();
+            			window.location.href="/wankangyuan/projectMember/selectProjectMember?type=2&searchWord="+searchWord;
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });
+
+        });
+        
+        //批量删除成员
+        $(".pro_mandel").click(function (){
+        	var afuxuanK=document.querySelectorAll('.fuxuanK20');
+        	var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].value);
+            	}
+            }
+            if(ids == ""){
+            	alert("请勾选项目成员！");
+            	return;
+            }
+            
+            $.ajax({
+            	url:"/wankangyuan/projectMember/deleteProjectMembers",
+            	type:"post",
+            	data:{
+            		ids:ids.join(",")
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			alert(data.message);
+            			var searchWord = $(".search2Ct").val();
+            			window.location.href="/wankangyuan/projectMember/selectProjectMember?type=2&searchWord="+searchWord;
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });
+        });
+        
+        //权限赋予提交按钮
+        $(".QXGLkB_quanxian").click(function (){
+        	//获取准备赋予权限的项目成员
+        	var afuxuanK=document.querySelectorAll('.fuxuanK20');
+        	var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].value);
+            	}
+            }
+            if(ids == ""){
+            	alert("请勾选用户！");
+            	return;
+            }
+            if(ids.length > 1){
+            	alert("一次最多只能修改一位用户的权限！");
+            	return;
+            }
+            var project_user_id = ids.join(",");
+            
+        	//获取准备赋予的权限ID
+            var afuxuanK=document.querySelectorAll('.fuxuanK30');
+        	var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var role_ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		role_ids.push(afuxuan[i].value);
+            	}
+            }
+            var role_id = role_ids.join(",");
+        	
+        	$.ajax({
+        		url:"/wankangyuan/projectMember/updateProjectUserRole",
+        		type:"post",
+        		data:{
+        			id:project_user_id,
+        			role_id:role_id
+        		},
+        		dataType:"json",
+        		success : function(data){
+        			if(data.result == true){
+        				alert(data.message);
+        				var searchWord = $(".search2Ct").val();
+            			window.location.href="/wankangyuan/projectMember/selectProjectMember?type=2&searchWord="+searchWord;
+        			}else{
+        				alert(data.message);
+        			}
+        		},
+        		error : function(){
+        			alert("联网失败");
+        		}
+        	});        	
+        });
+        
+        //搜索项目
+        $(".search2Ct").bind("keypress" , function(event){
+        	if(event.keyCode == 13){
+        		var searchWord = this.value;
+            	window.location.href="/wankangyuan/projectMember/selectProjectMember?type=2&searchWord="+searchWord;
+        	}
+        });
+
+	</script>
+    
+    
 </body>
 </html>
