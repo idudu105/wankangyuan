@@ -78,5 +78,8 @@ public interface ProjectDao {
 	
 	@Delete("delete from project_user where project_id=#{project_id} and user_id=#{user_id}")
 	public int deleteProjectUser(ProjectUser projectUser);
+	
+	@Select("select id from project where p_name=#{p_name}")
+	public Integer getProjectId(@Param("p_name") String p_name);
 
 }
