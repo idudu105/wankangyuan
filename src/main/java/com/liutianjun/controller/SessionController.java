@@ -2,6 +2,7 @@ package com.liutianjun.controller;
 
 import java.util.Collection;
 
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-//@RequiresPermissions("session:*")  
+@RequiresRoles("admin")
 @Controller  
 @RequestMapping("/sessions")  
 public class SessionController {  
@@ -19,7 +20,7 @@ public class SessionController {
     private SessionDAO sessionDAO;  
     @RequestMapping()  
     public String list(Model model) {  
-        Collection<Session> sessions =  sessionDAO.getActiveSessions();  
+        Collection<Session> sessions =  sessionDAO.getActiveSessions();
         model.addAttribute("sessions", sessions);  
         model.addAttribute("sessionCount", sessions.size());  
         return "jsp/sessions/list.jsp";  

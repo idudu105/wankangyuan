@@ -25,7 +25,7 @@
             <div class="xiangmu">
                 <div class="loginK">
                     <div class="loginT">登录</div>
-                    <form action="" method="post">
+                    <form action="/wankangyuan/login" method="post">
                     <div class="loginM">
                         <div class="loginMz">
                             <input name="loginType" type="hidden" value="userLogin">
@@ -111,6 +111,18 @@
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
 
+<shiro:authenticated>
+    <script type="text/javascript">
+    layer.msg("您已经登录");
+    layer.confirm('您已经登录，请问是否重新登录？', {
+    	  btn: ['重新登录','跳回项目页'] //按钮
+    	}, function(){
+    	    window.location.href='/wankangyuan/logout';
+    	}, function(){
+    		window.location.href='/wankangyuan/project/selectMyProject';
+    	});
+    </script>
+</shiro:authenticated>
 <c:if test="${not empty error}">
     <script type="text/javascript">
     layer.msg("${error}");
