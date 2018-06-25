@@ -744,11 +744,125 @@ function pro_file(){
 
 }
 
+//好友管理页面
+function friend_manage(){
+	
+    var ofriendMMlTT=document.querySelectorAll('.friendMMlTT')[0];//除我的好友外
+    var afriendMMlTTz=ofriendMMlTT.querySelectorAll('.friendMMlTTz');//每个组织结构
+    var afriendMMlTTzBz=document.querySelectorAll('.friendMMlTTzBz');//每个组织结构内的组
+
+    var ozzsyKpd=document.querySelectorAll('.zzsyKpd')[0];//添加组框内置预存框
+    var ozzsy_editKpd=document.querySelectorAll('.zzsy_editKpd')[0];//修改组框内置预存框
+    var ozzsy_delKpd=document.querySelectorAll('.zzsy_delKpd')[0];//删除组框内置预存框
+
+    var afriendMMrz=document.querySelectorAll('.friendMMrz');//右侧成员框和好友框
+
+    var osearch_2=document.querySelectorAll('.search_2')[0];//上方按钮栏搜索栏
+
+    //组织结构点击效果
+    for(var i=0;i<afriendMMlTTz.length;i++){
+        (function(index){
+            var ofriendMMlTTzT=afriendMMlTTz[index].querySelectorAll('.friendMMlTTzT')[0];
+            ofriendMMlTTzT.onclick=function(){
+                for(var j=0;j<afriendMMlTTz.length;j++){
+                    afriendMMlTTz[j].className="friendMMlTTz";
+                }
+                afriendMMlTTz[index].className="friendMMlTTz active";
+
+                ozzsyKpd.value=afriendMMlTTz[index].getAttribute("name");
+                console.log(ozzsyKpd.value);
+
+            }
+        })(i)
+    }
+
+//组点击效果
+    for(var i=0;i<afriendMMlTTzBz.length;i++){
+        (function(index){
+            afriendMMlTTzBz[index].onclick=function(){
+                for(var j=0;j<afriendMMlTTzBz.length;j++){
+                    afriendMMlTTzBz[j].style.color="#666";
+                }
+                afriendMMlTTzBz[index].style.color="#5ca0e5";
+               
+            }
+        })(i)
+    }
+    
+}
+
+function friendmanage_quanxuan(){
+//右侧多选
+    var afriendMMrz=document.querySelectorAll('.friendMMrz');//右侧成员框和好友框
+    for(var i=0;i<afriendMMrz.length;i++){
+        (function(index){
+            var oquanxuanK=afriendMMrz[index].querySelectorAll('.quanxuanK')[0];
+            var oquanxuan=oquanxuanK.querySelectorAll('.input_check')[0];
+
+            var afuxuan=[];
+            var afuxuanK=[];
+
+            if(afriendMMrz[index].querySelectorAll('.fuxuanK2')[0]){
+                afuxuanK=afriendMMrz[index].querySelectorAll('.fuxuanK2');
+                console.log("k2");
+            }else if(afriendMMrz[index].querySelectorAll('.fuxuanK3')[0]){
+                afuxuanK=afriendMMrz[index].querySelectorAll('.fuxuanK3');
+                console.log("k3");
+            }else{
+                console.log("无");
+            }
+
+            if(afuxuanK[0]){
+                for(var i=0;i<afuxuanK.length;i++){
+                    afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+                }
+            }
+            
+
+            oquanxuanK.onchange=function(){
+                if(oquanxuan.checked){
+                    for(var i=0;i<afuxuanK.length;i++){
+                        afuxuan[i].checked=1;
+                    }
+                }else{
+                    console.log(2);
+                    for(var i=0;i<afuxuanK.length;i++){
+                        afuxuan[i].checked=0;
+                    }
+                }
+            }
+
+
+            if(afuxuanK[0]){
+                for(var i=0;i<afuxuanK.length;i++){
+                    (function(index){
+                        afuxuanK[i].onchange=function(){
+                            var fuxuanPD=0;
+                            for(var j=0;j<afuxuanK.length;j++){
+                                if(afuxuan[j].checked){
+                                    fuxuanPD++;
+                                }
+                                console.log(afuxuan[j].checked);
+                            }
+                            console.log(fuxuanPD);
+                            if(fuxuanPD==afuxuanK.length){
+                                oquanxuan.checked=1;
+                            }else if(fuxuanPD!=afuxuanK.length){
+                                oquanxuan.checked=0;
+                            }
+                        }
+                    })(i)
+                }
+            }
+        })(i)
+    }
+}
+
 //成员
 function pro_member(){
 
-//权限管理框的显示隐藏以及位置
-    
+	//权限管理框的显示隐藏以及位置
+	
     var opro_manGL=document.querySelectorAll('.pro_manGL')[0]//权限管理按钮
     var oQXGLk=document.querySelectorAll('.QXGLk')[0];//权限管理框
     var oQXGLkTr=document.querySelectorAll('.QXGLkTr')[0]//权限管理框关闭按钮
@@ -762,6 +876,32 @@ function pro_member(){
             oQXGLk.style.display='none';
             QXGLkpd=0;
         }else{
+        	//判断是不是选中了成员
+        	
+        	var afuxuanK=document.querySelectorAll('.fuxuanK20');
+        	var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ids = [];
+            var role_ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].value);
+            		role_ids.push(afuxuan[i].name);
+            	}
+            }
+            if(ids == ""){
+            	alert("请勾选用户！");
+            	return;
+            }
+            if(ids.length > 1){
+            	alert("一次最多只能修改一位用户的权限！");
+            	return;
+            }
+            
+            $('.QXGLkMrz').find('input[name=idssss]').attr("checked", false);  
+                                	
             oQXGLk.style.display="block";
             QXGLkpd=1;
             oQXGLk.style.left=document.body.clientWidth/2-oQXGLk.offsetWidth/2+'px';
@@ -772,7 +912,7 @@ function pro_member(){
         QXGLkpd=0;
     }
 
-// 添加成员框的显示隐藏
+    // 添加成员框的显示隐藏
 
     var opro_manadd=document.querySelectorAll('.pro_manadd')[0];//添加成员按钮
     var omemaddK=document.querySelectorAll('.memaddK')[0];//添加成员框
@@ -794,39 +934,6 @@ function pro_member(){
         memaddKpd=0;
     }
 
-//组织结构树的显示隐藏
-
-    var omimaddMlz1=document.querySelectorAll('.mimaddMlz1')[0];//组织结构树上半
-    var amimaddMlz1ZTi=omimaddMlz1.querySelectorAll('.mimaddMlz1ZTi');//组织树圆圈符号
-    var amimaddMlz1ZB=omimaddMlz1.querySelectorAll('.mimaddMlz1ZB');//组织树可隐藏模块
-
-    var memaddPD=[];
-    for(var i=0;i<amimaddMlz1ZTi.length;i++){
-        memaddPD[i]=0;
-    }
-    console.log(memaddPD);
-
-    for(var i=0;i<amimaddMlz1ZTi.length;i++){
-        (function(index){
-            amimaddMlz1ZTi[index].onclick=function(){
-                if(memaddPD[index]==0){
-                    for(var j=0;j<amimaddMlz1ZTi.length;j++){
-                        amimaddMlz1ZTi[j].className="mimaddMlz1ZTi";
-                        memaddPD[j]=0;
-                        amimaddMlz1ZB[j].className="mimaddMlz1ZB";
-                    }
-                    amimaddMlz1ZTi[index].className="mimaddMlz1ZTi active";
-                    amimaddMlz1ZB[index].className="mimaddMlz1ZB active";
-                    memaddPD[index]=1;
-                }else{
-                    amimaddMlz1ZTi[index].className="mimaddMlz1ZTi";
-                    memaddPD[index]=0;
-                    amimaddMlz1ZB[index].className="mimaddMlz1ZB";
-                }
-                
-            }
-        })(i)
-    }
 
 }
 
