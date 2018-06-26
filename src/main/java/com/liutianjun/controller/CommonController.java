@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,12 @@ import com.liutianjun.utils.vcode.SpecCaptcha;
 public class CommonController {
 	@Resource
 	RoleService roleService;
+	@Value("${email.fromMail}")  
+    private String fromMail;  
+	@Value("${email.user}")  
+	private String fromUser;  
+	@Value("${email.password}")  
+	private String fromPassword;  
 	/*@RequestMapping("refreshDB")
 	@ResponseBody
 	public Map<String,Object> refreshDB(){
@@ -174,7 +181,7 @@ public class CommonController {
 		//存入Shiro会话session
 		SecurityUtils.getSubject().getSession().setAttribute(VerifyCodeUtils.V_EMAILCODE, verifyCode);
 		//发送邮箱验证码
-		Integer i = SendEmailCode.sendMail("783797599@qq.com", "783797599@qq.com", "xlijytsgwiqabbcb",  
+		Integer i = SendEmailCode.sendMail(fromMail, fromUser, fromPassword,
 				email,  
 				"【万康源】",  
 				"【万康源】：您的验证码为："+ verifyCode);
@@ -201,7 +208,7 @@ public class CommonController {
 		//存入Shiro会话session
 		SecurityUtils.getSubject().getSession().setAttribute(VerifyCodeUtils.V_NEWEMAILCODE, verifyCode);
 		//发送邮箱验证码
-		SendEmailCode.sendMail("783797599@qq.com", "783797599@qq.com", "xlijytsgwiqabbcb",  
+		SendEmailCode.sendMail(fromMail, fromUser, fromPassword,
 				email,  
 				"【万康源】",  
 				"【万康源】：您的验证码为："+ verifyCode);
