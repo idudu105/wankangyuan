@@ -146,6 +146,12 @@
                             <span class="hidden-tablet"> 项目管理</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="/wankangyuan/projectRole/selectProjectRole">
+                            <!-- <i class="icon-bar-chart"></i> -->
+                            <span class="hidden-tablet"> 项目内角色管理</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
