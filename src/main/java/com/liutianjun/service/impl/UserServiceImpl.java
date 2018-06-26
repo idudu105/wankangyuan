@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -60,6 +61,10 @@ public class UserServiceImpl implements UserService {
         //状态设为有效
         record.setStatus(1);
         record.setOrganizationId(0);
+        
+        Random random = new Random();
+        int flag = random.nextInt(7)+1;
+        record.setHeadimg("/wankangyuan/static/img/touxiang_"+flag+".png");
         return userDao.insert(record);
     }
 
