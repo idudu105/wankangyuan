@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import com.dzjin.model.ProjectFile;
 import com.dzjin.model.ProjectFloder;
 import com.dzjin.service.ProjectFileService;
 import com.dzjin.service.ProjectFloderService;
+import com.liutianjun.pojo.User;
 
 /**
  * 
@@ -50,16 +52,13 @@ public class ProjectFloderFileController {
 	 * @return
 	 */
 	@RequestMapping("/selectProjectFloderByProjectId")
-	public String selectProjectFloderByProjectId(HttpSession session){
+	public String selectProjectFloderByProjectId(HttpSession session , HttpServletRequest request){
 		
 		Project project = (Project)session.getAttribute("project");
+		User user = (User) request.getAttribute("user");
 		session.setAttribute("projectFloders", projectFloderService.selectProjectFloderByProjectId(project.getId()));
-		/*
-		 * 需要查询出此项目下我的文件数量
-		 */
-		session.setAttribute("myFileNum", 56);
-		
-		return "redirect:/jsp/project/project_file.jsp";
+		session.setAttribute("myFileNum", projectFloderService.countProjectUserFile(project.getId(), user.getId()));
+		return "/jsp/project/project_file.jsp";
 	}
 	
 	/**
@@ -177,7 +176,8 @@ public class ProjectFloderFileController {
 	 */
 	@RequestMapping("/upload")
 	@ResponseBody
-	public Map<String, Object> upload(@RequestParam(value = "file", required = false) MultipartFile file){
+	public Map<String, Object> upload(@RequestParam(value = "file", required = false) MultipartFile file , 
+			HttpServletRequest request){
 		//返回结果
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -212,14 +212,12 @@ public class ProjectFloderFileController {
 		}
         //向数据库中插入一条记录
         ProjectFile projectFile = new ProjectFile();
-        //这个ID 应该从session中获取
-        projectFile.setCreator_id(1);
+        User user = (User)request.getAttribute("user");
+        projectFile.setCreator_id(user.getId());
         projectFile.setFile_location(fileName);
         projectFile.setFile_name(originalFilename);
         projectFile.setFile_size(String.valueOf(file.getSize()/1024));
         projectFile.setFile_type(type);
-        //这个ID应该是每次传过来的数据
-        projectFile.setFloder_id(1);
         projectFile.setCreate_datetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         
         if(1 == projectFileService.insertPorjectFile(projectFile)){

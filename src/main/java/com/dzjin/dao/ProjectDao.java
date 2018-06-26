@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -15,6 +16,7 @@ public interface ProjectDao {
 	
 	@Insert("insert into project(p_name , p_number , creator , create_datetime , is_asy , key_words) "
 			+ "values(#{p_name},#{p_number},#{creator},#{create_datetime},#{is_asy},#{key_words})")
+	@Options(useGeneratedKeys = true , keyColumn="id" , keyProperty="id")
 	public int insertProject(Project project);
 	
 	@Select("select * from project where id=#{id}")
@@ -81,5 +83,22 @@ public interface ProjectDao {
 	
 	@Select("select id from project where p_name=#{p_name}")
 	public Integer getProjectId(@Param("p_name") String p_name);
+	
+	
+	@Select("select count(project_file.id) from project_floder,project_file where "
+			+ "project_floder.p_id=#{id} and "
+			+ "project_floder.id=project_file.floder_id")
+	public int countProjectFile(@Param("id")Integer id);
+	
+	@Select("select count(*) from project_app_relation where project_id=#{id}")
+	public int countProjectApp(@Param("id")Integer id);
+	
+	@Select("select count(*) from project_app_task where project_id=#{id}")
+	public int countProjectAppTask(@Param("id")Integer id);
+	
+	@Select("select count(*) from project_user where project_id=#{id}")
+	public int countProjectUser(@Param("id")Integer id);
+	
+	
 
 }

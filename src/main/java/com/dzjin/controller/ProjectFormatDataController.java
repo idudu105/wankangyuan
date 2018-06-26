@@ -129,7 +129,7 @@ public class ProjectFormatDataController {
 			httpSession.setAttribute("sourceDatas", sourceDatas);//
 
 		}
-		return "redirect:/jsp/project/project_data.jsp";
+		return "/jsp/project/project_data.jsp";
 	}
 
 	@RequestMapping("/getSourceDataById")
@@ -152,7 +152,7 @@ public class ProjectFormatDataController {
 				formatTypeMap);
 		httpSession.setAttribute("formatTypeFolders", formatTypeFolders);
 
-		return "redirect:/jsp/project/project_datain.jsp";
+		return "/jsp/project/project_datain.jsp";
 
 	}
 
@@ -182,6 +182,6 @@ public class ProjectFormatDataController {
 		List<List<String>> dataDatas = HBaseFormatDataDao.getFormatDatas(cs_id, ft_id, formatNodeId, data);
 		httpSession.setAttribute("dataDatas", dataDatas);
 		httpSession.setAttribute("sourceDataId", sourceDataId);
-		return "redirect:/jsp/project/project_dataclick.jsp";
+		return "/jsp/project/project_dataclick.jsp";
 	}
 }

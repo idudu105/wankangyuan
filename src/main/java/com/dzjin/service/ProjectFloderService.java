@@ -3,6 +3,7 @@ package com.dzjin.service;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,6 @@ public class ProjectFloderService {
 			ProjectFloder projectFloder = (ProjectFloder) pIterator.next();
 			projectFloder.setProjectFloders(getProjectFloders(projectFloder));
 		}
-		
 		return projectFloders;
 	}
 	
@@ -52,6 +52,10 @@ public class ProjectFloderService {
 	
 	public int updateProjectFloder(ProjectFloder projectFloder){
 		return projectFloderDao.updateProjectFloder(projectFloder);
+	}
+	
+	public int countProjectUserFile(Integer project_id , Integer user_id){
+		return projectFloderDao.countProjectUserFile(project_id, user_id);
 	}
 	
 	

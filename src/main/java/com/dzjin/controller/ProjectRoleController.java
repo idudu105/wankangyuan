@@ -40,6 +40,13 @@ public class ProjectRoleController {
 	@Autowired
 	ProjectRoleService projectRoleService;
 	
+	/**
+	 * 查询项目角色
+	 * @param httpSession
+	 * @param page
+	 * @param stirp
+	 * @return
+	 */
 	@RequestMapping("/selectProjectRole")
 	public String selectProjectRole(HttpSession httpSession  , Integer page , Integer stirp){
 		if(page == null){
@@ -70,8 +77,25 @@ public class ProjectRoleController {
 	@ResponseBody
 	public Map<String, Object> addProjectRole(HttpServletRequest request , HttpSession session , 
 			String role_name , String auth_ids){
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
 		Map<String, Object> map = new HashMap<String , Object>();
+		switch (role_name) {
+			case "创建者":
+				map.put("result", false);
+				map.put("message", "创建者角色为系统配置角色，不能新增！");
+				return map;
+			case "项目成员":
+				map.put("result", false);
+				map.put("message", "项目成员角色为系统配置角色，不能新增！");		
+				return map;
+			case "访问者":
+				map.put("result", false);
+				map.put("message", "访问者角色为系统配置角色，不能新增！");
+				return map;
+			default:
+				break;
+		}
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		ProjectRole projectRole = new ProjectRole();
 		projectRole.setRole_name(role_name);
 		projectRole.setCreate_datetime(simpleDateFormat.format(new Date()));
@@ -98,7 +122,6 @@ public class ProjectRoleController {
 				map.put("result", true);
 				map.put("message", "角色新增成功！");
 			}
-			
 		}else{
 			map.put("result", false);
 			map.put("message", "增加角色失败！");
@@ -118,15 +141,19 @@ public class ProjectRoleController {
 		String[] p_role_ids = ids.split(",");
 		int num = 0;
 		for(int i=0;i<p_role_ids.length;i++){
-			if(projectRoleService.deleteProjectRole(Integer.valueOf(p_role_ids[i])) == 1){
-				num++;
-				//删除权限所包含的权限列表
-				projectRoleService.deleteProjectRoleAuthorityByRoleId(Integer.valueOf(p_role_ids[i]));
+			//系统默认创建者、项目成员以及访问者角色不能删除
+			if(!p_role_ids[i].equals("1") && !p_role_ids[i].equals("2") && !p_role_ids[i].equals("3")){
+				//删除允许删除的角色
+				if(projectRoleService.deleteProjectRole(Integer.valueOf(p_role_ids[i])) == 1){
+					num++;
+					//删除权限所包含的权限列表
+					projectRoleService.deleteProjectRoleAuthorityByRoleId(Integer.valueOf(p_role_ids[i]));
+				}
 			}
 		}
 		Map<String, Object> map = new HashMap<>();
 		map.put("result", true);
-		map.put("message", num+"条角色成功删除，"+(p_role_ids.length-num)+"条记录删除失败！");
+		map.put("message", num+"位角色成功删除，"+(p_role_ids.length-num)+"位角色删除失败！");
 		return map;
 	}
 	

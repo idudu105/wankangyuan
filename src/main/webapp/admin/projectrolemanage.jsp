@@ -212,7 +212,12 @@
                                             <form id="roleForm"></form>
                                             <c:forEach items="${projectRoles}" var="projectRole">
                                                 <tr role="row" class="trbx">
-                                                    <th class="biaoxiangth"><input name="roleIds" type="checkbox" class="xuanze" value="${projectRole.id }"></th>
+                                                	<c:if test="${projectRole.id==1}">
+                                                		<th class="biaoxiangth">系统保留，不可操作</th>
+                                                	</c:if>
+                                                	<c:if test="${projectRole.id!=1}">
+                                                		<th class="biaoxiangth"><input name="roleIds" type="checkbox" class="xuanze" value="${projectRole.id }"></th>
+                                                	</c:if>
                                                     <th class="biaoxiangth">${projectRole.id }</th>
                                                     <th class="biaoxiangth">${projectRole.role_name }</th>
                                                     <th class="biaoxiangth">${projectRole.create_datetime }</th>

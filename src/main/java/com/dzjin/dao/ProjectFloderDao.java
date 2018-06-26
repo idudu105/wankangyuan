@@ -29,5 +29,11 @@ public interface ProjectFloderDao {
 	
 	@Update("update project_floder set floder_name=#{floder_name} where id=#{id}")
 	public int updateProjectFloder(ProjectFloder projectFloder);
+	
+	@Select("select count(project_file.id) from project_floder , project_file where "
+			+ "project_floder.p_id=#{project_id} "
+			+ "and project_floder.id=project_file.floder_id "
+			+ "and project_file.creator_id=#{user_id}")
+	public int countProjectUserFile(@Param("project_id")Integer project_id , @Param("user_id")Integer user_id);
 
 }

@@ -48,8 +48,6 @@ public class ProjectMemberController {
 	@Autowired
 	ProjectRoleService projectRoleService;
 	
-	
-	
 	@RequestMapping("/selectProjectMember")
 	public String selectProjectMember(HttpSession httpSession , Integer page , Integer strip , String searchWord , String type){
 		
@@ -122,11 +120,12 @@ public class ProjectMemberController {
 	 */
 	@RequestMapping("/insertProjectMember")
 	@ResponseBody
-	public Map<String, Object> insertProjectMember(HttpSession session , ProjectUser projectMember){
+	public Map<String, Object> insertProjectMember(HttpSession session , ProjectUser projectUser){
 		Map<String, Object> map = new HashMap<>();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		projectMember.setBind_date_time(simpleDateFormat.format(new Date()));
-		if(projectUserService.insertProjectUser(projectMember) == 1){
+		projectUser.setBind_date_time(simpleDateFormat.format(new Date()));
+		projectUser.setRole_id(1);//设置项目成员角色
+		if(projectUserService.insertProjectUser(projectUser) == 1){
 			map.put("result", true);
 			map.put("message", "增加项目成员成功！");
 		}else{
@@ -149,16 +148,15 @@ public class ProjectMemberController {
 		User user = (User)request.getAttribute("user");
 		Project project = (Project)session.getAttribute("project");
 		String[]idString = ids.split(",");
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		int num = 0;
 		ProjectUser projectMember = null;
 		for(int i = 0 ;i<idString.length;i++){
 			projectMember = new ProjectUser();
-			projectMember.setBind_date_time(simpleDateFormat.format(new Date()));
-			projectMember.setLinkman_id(user.getId());
 			projectMember.setProject_id(project.getId());
-			projectMember.setRole_id(18);
 			projectMember.setUser_id(Integer.valueOf(idString[i]));
+			projectMember.setLinkman_id(user.getId());	
+			projectMember.setBind_date_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			projectMember.setRole_id(1);//设置项目成员角色	
 			if(projectUserService.insertProjectUser(projectMember) == 1){
 				num++;
 			}

@@ -208,7 +208,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                     <div class="prof_lbRm">
                         <div class="prof_lbRmT">
-                            <input type="button" class="prof_lbRmTl prof_lbRmTbt prof_lbRmTse" value="筛选" />
+                            <!-- <input type="button" class="prof_lbRmTl prof_lbRmTbt prof_lbRmTse" value="筛选" /> -->
                             <input type="button" class="prof_lbRmTr prof_lbRmTbt prof_lbRmTdo " value="下载" />
                             <input type="button" class="prof_lbRmTr prof_lbRmTbt prof_lbRmTde " value="删除" onclick="deleteFiles()"/>
                         </div>
@@ -338,7 +338,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  	//提交一组文件
 	  	function upFiles(){	  		
 	  		var files = ids.join(",");
-	  		
 	  		//进行ajax请求
 	  		$.ajax({
 	  			url:"/wankangyuan/projectFloderFile/upFiles",
@@ -381,7 +380,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             
             
             if(ids == ""){
-            	alert("请勾选项目！");
+            	alert("请勾选文件！");
             	return;
             }
             

@@ -73,9 +73,9 @@ public class ProjectAppController {
 		httpSession.setAttribute("rows", strip);
 		httpSession.setAttribute("total", map.get("total"));
 		if(type == null || type == 1){
-			return "redirect:/jsp/project/project_app.jsp";
+			return "/jsp/project/project_app.jsp";
 		}else{
-			return "redirect:/jsp/project/project_app2.jsp";
+			return "/jsp/project/project_app2.jsp";
 		}
 		
 	}
