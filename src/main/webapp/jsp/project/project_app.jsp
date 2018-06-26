@@ -83,7 +83,7 @@
             <div class="shaixuan">
                 <div class="shaixuanC">
                     <div class="listZT">
-                        <a href="project_app2.jsp">
+                        <a href="/wankangyuan/jsp/project/project_app2.jsp">
                             <div class="listZTli listZT1 active">
                                 <img src="/wankangyuan/static/img/listZT1.png"alt="" class="listZT1i" />
                                 <img src="/wankangyuan/static/img/listZT1.png" alt="" class="listZT1i" />

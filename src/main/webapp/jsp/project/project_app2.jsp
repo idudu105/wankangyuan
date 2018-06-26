@@ -83,7 +83,7 @@
             <div class="shaixuan">
                 <div class="shaixuanC">
                     <div class="listZT">
-                        <a href="project_app.jsp">
+                        <a href="/wankangyuan/jsp/project/project_app.jsp">
                             <div class="listZTli listZT2 active">
                                 <div class="listZT2d"></div>
                                 <div class="listZT2d"></div>
@@ -128,7 +128,7 @@
 	                    <div class="PJK2litime">
 	                    	<div class="PJK2litimeT1"><fmt:formatDate type="date" value="${app.createTime }" /></div>
 	                    </div>
-	                    <div class="PJK2lidetail">${app.appOverview }</div>
+	                    <div class="PJK2lidetail">${app.appIntro }</div>
 	                    <div class="PJK2liex">应用说明</div>
 	                </div>
                 </c:forEach>

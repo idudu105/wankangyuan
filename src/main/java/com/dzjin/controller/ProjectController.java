@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dzjin.model.Project;
+import com.dzjin.model.ProjectUser;
+import com.dzjin.service.ProjectRoleService;
 import com.dzjin.service.ProjectService;
+import com.dzjin.service.ProjectUserService;
+import com.liutianjun.pojo.User;
 
 @Controller
 @RequestMapping(value = "/project")
@@ -21,21 +26,34 @@ public class ProjectController {
 	
 	@Autowired
 	ProjectService projectService;
+	@Autowired
+	ProjectRoleService projectRoleService;
+	@Autowired
+	ProjectUserService projectUserService;
 	
 	/**
-	 * 插入记录
+	 * 新建项目
 	 * @param project
 	 * @return
 	 */
 	@RequestMapping("/insertProject")
-	public String insertProject(Project project){
+	public String insertProject(Project project , HttpServletRequest request){
 		//设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		project.setCreate_datetime(simpleDateFormat.format(new Date()));
-		project.setCreator("1");
-		projectService.insertProject(project);
-
-		return "redirect:/project/selectCreatedProject?creator=1";
+		User user = (User)request.getAttribute("user");
+		project.setCreator(String.valueOf(user.getId()));
+		if(projectService.insertProject(project) == 1){
+			//设置当前用户在新建项目内的创建者角色
+			ProjectUser projectUser = new ProjectUser();
+			projectUser.setProject_id(project.getId());
+			projectUser.setUser_id(user.getId());
+			projectUser.setLinkman_id(user.getId());
+			projectUser.setRole_id(1);
+			projectUser.setBind_date_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			projectUserService.insertProjectUser(projectUser);
+		}
+		return "/project/selectCreatedProject";
 	}
 	
 	/**
@@ -54,29 +72,28 @@ public class ProjectController {
 		}else{
 			project = projectService.getProjectDetail(id);
 		}
+
+		project.setFileNum(projectService.countProjectFile(project.getId()));
+		project.setAppNum(projectService.countProjectApp(project.getId()));
+		project.setAppResultNum(projectService.countProjectAppTask(project.getId()));
+		project.setMemberNum(projectService.countProjectUser(project.getId()));
+		
 		httpSession.setAttribute("project", project);
 		
 		/*
-		 * 注意，此处还需要将项目的文件数量，应用数量，应用结果数量以及成员数量放到session中
-		 * 
-		 * 项目文件数量
-		 * 
-		 * 项目应用数量
-		 * 
-		 * 项目应用结果数量
-		 * 
-		 * 项目成员数量
-		 * 
+		 * 此处需要根据项目ID和当前成员的ID查询当前用户在当前项目内的角色，然后放到Session中，供页面上进行显示。
 		 */
-		project.setFileNum(100);
-		project.setAppNum(100);
-		project.setAppResultNum(100);
-		project.setMemberNum(100);
 
-		return "redirect:/jsp/project/project_detail.jsp";
+		return "/jsp/project/project_detail.jsp";
 		
 	}
 	
+	/**
+	 * 刚更新项目简介
+	 * @param httpSession
+	 * @param introduction
+	 * @return
+	 */
 	@RequestMapping("/updatePorjectIntroduction")
 	@ResponseBody
 	public Map<String, Object> updatePorjectIntroduction(HttpSession httpSession , String introduction){
@@ -92,7 +109,11 @@ public class ProjectController {
 		return map;
 	}
 	
-	
+	/**
+	 * 编辑项目基本信息
+	 * @param project
+	 * @return
+	 */
 	@RequestMapping("/editProject")
 	@ResponseBody
 	public Map<String, Object> editProject(Project project){
@@ -137,9 +158,9 @@ public class ProjectController {
 		httpSession.setAttribute("rows", strip);
 		
 		if(type == null || type == 1){
-			return "redirect:/jsp/project/project_public.jsp";
+			return "/jsp/project/project_public.jsp";
 		}else{
-			return "redirect:/jsp/project/project_public2.jsp";
+			return "/jsp/project/project_public2.jsp";
 		}
 		
 	}
@@ -154,7 +175,7 @@ public class ProjectController {
 	 * @return
 	 */
 	@RequestMapping("/selectCreatedProject")
-	public String selectCreatedProject(HttpSession httpSession , Integer creator , 
+	public String selectCreatedProject(HttpSession httpSession , HttpServletRequest request ,
 			Integer page , Integer strip , String searchWord , Integer type){
 		if(page == null){
 			page = 1;
@@ -170,15 +191,16 @@ public class ProjectController {
 			httpSession.setAttribute("projectSearchWord", searchWord);
 		}
 		Map<String, Object> map = new HashMap<String , Object>();
-		map = projectService.selectCreatedProject(creator , page , strip ,searchWord);
+		User user = (User)request.getAttribute("user");
+		map = projectService.selectCreatedProject(user.getId() , page , strip ,searchWord);
 		httpSession.setAttribute("projects", map.get("list"));
 		httpSession.setAttribute("total", map.get("total"));
 		httpSession.setAttribute("page", page);
 		httpSession.setAttribute("rows", strip);
 		if(type == null || type == 1){
-			return "redirect:/jsp/project/project_create.jsp";
+			return "/jsp/project/project_create.jsp";
 		}else{
-			return "redirect:/jsp/project/project_create2.jsp";
+			return "/jsp/project/project_create2.jsp";
 		}
 		
 	}
@@ -193,7 +215,8 @@ public class ProjectController {
 	 * @return
 	 */
 	@RequestMapping("/selectMyProject")
-	public String selectMyProject(HttpSession httpSession , Integer user_id , Integer page , Integer strip, String searchWord , Integer type){
+	public String selectMyProject(HttpSession httpSession , HttpServletRequest request , 
+			Integer page , Integer strip, String searchWord , Integer type){
 		if(page == null){
 			page = 1;
 		}
@@ -207,28 +230,35 @@ public class ProjectController {
 			//更新关键字
 			httpSession.setAttribute("projectSearchWord", searchWord);
 		}
-		if(user_id == null){
-			user_id = 1;
-		}
+		User user = (User)request.getAttribute("user");
 		Map<String, Object> map = new HashMap<String , Object>();
-		map = projectService.selectMyProject(user_id, page, strip , searchWord);
+		map = projectService.selectMyProject(user.getId(), page, strip , searchWord);
 		httpSession.setAttribute("projects", map.get("list"));
 		httpSession.setAttribute("total", map.get("total"));
 		httpSession.setAttribute("page", page);
 		httpSession.setAttribute("rows", strip);
 		if(type == null || type == 1){
-			return "redirect:/jsp/project/project_mine.jsp";
+			return "/jsp/project/project_mine.jsp";
 		}else{
-			return "redirect:/jsp/project/project_mine2.jsp";
+			return "/jsp/project/project_mine2.jsp";
 		}
 		
 	}
 	
+	/**
+	 * 将公共项目添加到我的项目
+	 * @param session
+	 * @param request
+	 * @param ids
+	 * @return
+	 */
 	@RequestMapping("/addPublicProjectToMine")
 	@ResponseBody
-	public Map<String, Object> addPublicProjectToMine(HttpSession session , String ids){
+	public Map<String, Object> addPublicProjectToMine(HttpSession session , HttpServletRequest request , 
+			String ids){
+		User user = (User)request.getAttribute("user");
 		Map<String, Object> map = new HashMap<>();
-		if(projectService.addPublicProjectToMine(ids, 1)){
+		if(projectService.addPublicProjectToMine(ids, user.getId())){
 			map.put("result", true);
 		}else{
 			map.put("result", false);
@@ -281,9 +311,10 @@ public class ProjectController {
 	 */
 	@RequestMapping("/exit")
 	@ResponseBody
-	public Map<String, Object> exit(String ids){
+	public Map<String, Object> exit(String ids , HttpServletRequest request){
 		Map<String, Object> map = new HashMap<>();
-		if(projectService.exits(ids, 1)){
+		User user = (User)request.getAttribute("user");
+		if(projectService.exits(ids, user.getId())){
 			map.put("result", true);
 		}else{
 			map.put("result", false);

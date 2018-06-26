@@ -20,6 +20,8 @@ public class ProjectService {
 	
 	@Autowired
 	ProjectDao projectDao;
+	@Autowired
+	ProjectUserService projectUserService;
 	
 	/**
 	 * 插入项目
@@ -104,8 +106,13 @@ public class ProjectService {
 
 	}
 	
+	/**
+	 * 将公共的项目添加到我的项目中
+	 * @param idStrings
+	 * @param user_id
+	 * @return
+	 */
 	public boolean addPublicProjectToMine(String idStrings , Integer user_id){
-		
 		String[] ids = idStrings.split(",");
 		boolean result = true;
 		for(int i = 0 ; i< ids.length ; i++){
@@ -113,11 +120,14 @@ public class ProjectService {
 			ProjectUser projectUser = new ProjectUser();
 			projectUser.setProject_id(Integer.valueOf(ids[i]));
 			projectUser.setUser_id(user_id);
+			
 			//判断项目用户是否已经绑定关系
 			if(null == projectDao.getProjectUserByPidAndUid(projectUser)){
-				//未绑定关系，设置绑定时间，进行绑定操作
+				//未绑定关系，添加用户为项目成员
+				projectUser.setLinkman_id(user_id);
+				projectUser.setRole_id(2);//项目成员角色
 				projectUser.setBind_date_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-				if(1 != projectDao.addPublicProjectToMine(projectUser)){
+				if(projectUserService.insertProjectUser(projectUser) != 1){
 					result = false;
 				}
 			}
@@ -162,9 +172,23 @@ public class ProjectService {
 	}
 
 	public Integer getProjectId(String projectName) {
-		// TODO Auto-generated method stub
 		return projectDao.getProjectId(projectName);
 	}
 	
+	public int countProjectFile(Integer id){
+		return projectDao.countProjectFile(id);
+	}
+	
+	public int countProjectApp(Integer id){
+		return projectDao.countProjectApp(id);
+	}
+	
+	public int countProjectAppTask(Integer id){
+		return projectDao.countProjectAppTask(id);
+	}
+	
+	public int countProjectUser(Integer id){
+		return projectDao.countProjectUser(id);
+	}
 
 }
