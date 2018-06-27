@@ -16,9 +16,11 @@ public class Project {
 	private String p_name;	//项目名称
 	private String p_number;	//项目编号
 	private String creator;	//项目创建人ID
+	private String creatorName;
 	private String create_datetime; //项目创建时间
 	private short is_open;	//项目是否公开 0不公开；1公开
 	private short is_asy;	//同步异步0同步；1异步
+	private short is_show;	//是否显示在欢迎页
 	private String key_words;	//项目关键字
 	private String introduction;	//项目简介
 	
@@ -27,6 +29,19 @@ public class Project {
 	private Integer appResultNum;
 	private Integer memberNum;
 	
+	
+	public String getCreatorName() {
+		return creatorName;
+	}
+	public void setCreatorName(String creatorName) {
+		this.creatorName = creatorName;
+	}
+	public short getIs_show() {
+		return is_show;
+	}
+	public void setIs_show(short is_show) {
+		this.is_show = is_show;
+	}
 	public int getId() {
 		return id;
 	}

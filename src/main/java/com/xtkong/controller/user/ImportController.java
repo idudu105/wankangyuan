@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.liutianjun.pojo.User;
 import com.xtkong.dao.hbase.HBaseFormatDataDao;
 import com.xtkong.dao.hbase.HBaseSourceDataDao;
 import com.xtkong.model.FormatField;
@@ -41,9 +45,9 @@ public class ImportController {
 	@ResponseBody
 
 	public Map<String, Object> sourceData(@RequestParam(value = "file", required = false) MultipartFile file,
-			String cs_id) {
+			String cs_id , HttpServletRequest request) {
 
-		String uid = "1";
+		User user = (User)request.getAttribute("user");
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			if (file == null || file.getInputStream() == null) {
@@ -72,7 +76,7 @@ public class ImportController {
 					cell = row.getCell(j);
 					sourceFieldDatas.put(String.valueOf(sourceFields.get(j).getCsf_id()), cell.toString());
 				}
-				HBaseSourceDataDao.insertSourceData(cs_id, uid, sourceFieldDatas);
+				HBaseSourceDataDao.insertSourceData(cs_id, String.valueOf(user.getId()), sourceFieldDatas);
 			}
 			hssfWorkbook.close();
 		} catch (IOException e1) {

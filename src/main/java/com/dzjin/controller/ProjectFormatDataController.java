@@ -110,9 +110,7 @@ public class ProjectFormatDataController {
 
 		httpSession.setAttribute("sources", sources);// 采集源列表
 
-		// 源数据字段
-		List<List<String>> sourceDatas = new ArrayList<>();
-		if (sources != null) {
+		if (!sources.isEmpty()) {
 			if (cs_id == null) {
 				cs_id = sourceService.getSourcesForUserLimit(1).get(0).getCs_id();
 			}
@@ -121,6 +119,8 @@ public class ProjectFormatDataController {
 			httpSession.setAttribute("source", source);// 采集源字段列表
 
 			List<String> sourceDataIds = projectDataService.select(p_id);
+			// 源数据字段
+			List<List<String>> sourceDatas = new ArrayList<>();
 			if (!sourceDataIds.isEmpty()) {
 				// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
 				sourceDatas = HBaseSourceDataDao.getSourceDatasByIds(Integer.toString(cs_id), sourceDataIds,

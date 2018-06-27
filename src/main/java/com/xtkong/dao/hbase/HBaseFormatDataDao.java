@@ -67,7 +67,7 @@ public class HBaseFormatDataDao {
 		Long count = db.getNewId(ConstantsHBase.TABLE_GID, formatNodeId, ConstantsHBase.FAMILY_GID_GID,
 				ConstantsHBase.QUALIFIER_GID_GID_GID);
 		String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
-		String rowKey = formatNodeId + "_" + count;
+		String rowKey = formatNodeId  + count;
 		Put put = new Put(Bytes.toBytes(rowKey));
 
 		for (Entry<String, String> formatFieldData : formatFieldDatas.entrySet()) {
@@ -88,7 +88,7 @@ public class HBaseFormatDataDao {
 	public static String getFormatDataId(String cs_id, String ft_id, String formatNodeId,
 			Map<String, String> formatFieldDatas) {
 		String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
-		String prefixFilter = formatNodeId + "_";
+		String prefixFilter = formatNodeId ;
 		String formatDataId = null;
 		HBaseDB db = HBaseDB.getInstance();
 		List<String> rowkeys = db.getRowkeys(tableName, prefixFilter, formatFieldDatas);
@@ -113,7 +113,7 @@ public class HBaseFormatDataDao {
 		try {
 			HBaseDB db = HBaseDB.getInstance();
 			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id);
-			Get get = new Get(Bytes.toBytes(formatNodeId + "_"));
+			Get get = new Get(Bytes.toBytes(formatNodeId));
 			Result result = table.get(get);
 			if (!result.isEmpty()) {
 				for (FormatField formatField : formatFields) {
@@ -196,8 +196,8 @@ public class HBaseFormatDataDao {
 			Scan scan = new Scan();
 			// 列簇约束结果集
 			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
-			// 前缀formatNodeId+"_"过滤
-			Filter filter1 = new PrefixFilter(Bytes.toBytes(formatNodeId + "_"));
+			// 前缀formatNodeId_过滤
+			Filter filter1 = new PrefixFilter(Bytes.toBytes(formatNodeId));
 			Filter filter2 = new PageFilter(strip);
 			FilterList filterList = new FilterList(Operator.MUST_PASS_ALL, filter1, filter2);
 			scan.setFilter(filterList);
@@ -241,8 +241,8 @@ public class HBaseFormatDataDao {
 			Scan scan = new Scan();
 			// 列簇约束结果集
 			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
-			// 前缀formatNodeId+"_"过滤
-			Filter filter = new PrefixFilter(Bytes.toBytes(formatNodeId + "_"));
+			// 前缀formatNodeId_过滤
+			Filter filter = new PrefixFilter(Bytes.toBytes(formatNodeId));
 			scan.setFilter(filter);
 			ResultScanner resultScanner = table.getScanner(scan);
 			Iterator<Result> iterator = resultScanner.iterator();

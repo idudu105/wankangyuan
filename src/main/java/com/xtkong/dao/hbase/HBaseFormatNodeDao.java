@@ -55,10 +55,10 @@ public class HBaseFormatNodeDao {
 		HBaseDB db = HBaseDB.getInstance();
 		Long count = db.getNewId(ConstantsHBase.TABLE_GID, sourceDataId + "_" + ft_id, ConstantsHBase.FAMILY_GID_GID,
 				ConstantsHBase.QUALIFIER_GID_GID_GID);
-		String formatNodeId = sourceDataId + "_" + ft_id + "_" + count;
+		String formatNodeId = sourceDataId + "_" + ft_id + "_" + count + "_";
 		boolean b = db.putCell(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id, formatNodeId, ConstantsHBase.FAMILY_INFO,
 				ConstantsHBase.QUALIFIER_NODE, ft_id + "," + nodeName);
-		HBaseFormatDataDao.updateFormatData(cs_id, ft_id, formatNodeId + "_", mateFieldDatas);
+		HBaseFormatDataDao.updateFormatData(cs_id, ft_id, formatNodeId , mateFieldDatas);
 		return b;
 	}
 	public static String getFormatNodeId(String cs_id, String sourceDataId, String ft_id,String nodeName) {
