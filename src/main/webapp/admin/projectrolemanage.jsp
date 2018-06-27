@@ -79,7 +79,7 @@
                 <ul class="nav pull-right">
                     <!-- start: User Dropdown -->
                     <li class="dropdown">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="http://themifycloud.com/demos/templates/janux/table.html#">
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" href=" ">
                             <i class="halflings-icon white user"></i>用户名
                             <span class="caret"></span>
                         </a>
@@ -95,9 +95,9 @@
                         </ul>
                     </li>
                     <!-- end: User Dropdown -->
-                </ul>
-            </div>
-            <!-- end: Header Menu -->
+                   </ul>
+               </div>
+               <!-- end: Header Menu -->
         </div>
     </div>
 </div>
@@ -256,7 +256,7 @@
 	                                        <li><span class="folder">${menu.authority_name }</span>  
 	                                            <ul>  
 	                                            <c:forEach items="${projectAuthorities }" var="button">
-	                                                <c:if test="${menu.authority_number == button.parent_id }">
+	                                                <c:if test="${menu.id == button.parent_id }">
 	                                                <li>
 	                                                    <input type="checkbox" name="ids" value="${button.id }" />${button.authority_name }
 	                                                </li>
@@ -295,7 +295,7 @@
                                         <li><span class="folder">${menu.authority_name }</span>  
                                             <ul>  
                                             <c:forEach items="${projectAuthorities }" var="button">
-                                                <c:if test="${menu.authority_number == button.parent_id }">
+                                                <c:if test="${menu.id == button.parent_id }">
                                                 <li>
                                                     <input id="check${button.id }" type="checkbox" name="editIds" value="${button.id }" />${button.authority_name }
                                                 </li>

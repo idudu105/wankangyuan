@@ -70,14 +70,36 @@
             </div>
             <div class="top2">
                 <div class="top2C">
-                    <div class="top2Ctl active">${project.p_name}</div>
-                    <a href="/wankangyuan/projectTopic/selectProjectTopic"><div class="top2Ctr">讨论版</div></a>
-                    <a href="/wankangyuan/projectMember/selectProjectMember"><div class="top2Ctr">成员</div></a>
-                    <a href="/wankangyuan/projectAppEnd/selectProjectAppEnd"><div class="top2Ctr active">应用结果</div></a>
-                    <a href="/wankangyuan/projectApp/selectProjectApp?p_id=${project.id}"><div class="top2Ctr">应用</div></a>
-                    <a href="/wankangyuan/projectFormatData/getSourceDatas?p_id=${project.id}"><div class="top2Ctr">格式数据</div></a>
-                    <a href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId"><div class="top2Ctr">文件</div></a>
-                    <a href="/wankangyuan/project/getProjectDetail"><div class="top2Ctr">基本信息</div></a>
+                    <div class="top2Ctl active">${project.p_name }</div>
+                    <c:if test="${authoritys['74'] == true }">
+                    	  <a href="/wankangyuan/projectTopic/selectProjectTopic"><div class="top2Ctr">讨论版</div></a>
+                    </c:if>
+                   
+                    <c:if test="${authoritys['63'] == true }">
+                    	 <a href="/wankangyuan/projectMember/selectProjectMember"><div class="top2Ctr">成员</div></a>
+                    </c:if>
+                    
+					<c:if test="${authoritys['57'] == true }">
+                    	 <a href="/wankangyuan/projectAppEnd/selectProjectAppEnd"><div class="top2Ctr active">应用结果</div></a>
+                    </c:if>
+                   
+                    <c:if test="${authoritys['42'] == true }">
+                    	<a href="/wankangyuan/projectApp/selectProjectApp?p_id=${project.id}"><div class="top2Ctr">应用</div></a>
+                    </c:if>
+                    
+                    <c:if test="${authoritys['31'] == true }">
+                    	<a href="/wankangyuan/projectFormatData/getSourceDatas?p_id=${project.id}"><div class="top2Ctr">格式数据</div></a>
+                    </c:if>
+                    
+                    <c:if test="${authoritys['27'] == true }">
+                    	<a href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId"><div class="top2Ctr">文件</div></a>
+                    </c:if>
+                    
+                    <c:if test="${authoritys['11'] == true }">
+                    	<a href="/wankangyuan/project/getProjectDetail"><div class="top2Ctr ">基本信息</div></a>
+                    </c:if>
+                    
+                    
                 </div>
             </div>
             <div class="shaixuan">
@@ -104,10 +126,19 @@
                             <img src="/wankangyuan/static/img/sanjiao_blue.png" alt="" class="shaixuanBTi" />
                         </div>
                     </div>
-                    <div class="pro_menu pro_rem">移除</div>
-                    <div class="pro_menu pro_canfabu">取消发布</div>
-                    <div class="pro_menu pro_fabu">发布</div>
-                    <div class="pro_menu pro_rerun">重新运行</div>
+                    
+                    <c:if test="${authoritys['53'] == true }">
+                    	<div class="pro_menu pro_rem">移除</div>
+                    </c:if>
+                    <c:if test="${authoritys['52'] == true }">
+                    	<div class="pro_menu pro_canfabu">取消发布</div>
+                    </c:if>
+                    <c:if test="${authoritys['51'] == true }">
+                    	<div class="pro_menu pro_fabu">发布</div>
+                    </c:if>
+                    <c:if test="${authoritys['50'] == true }">
+                    	<div class="pro_menu pro_rerun">重新运行</div>
+                    </c:if>
                     
                     <div class="search2">
                         <div class="search2C">
@@ -191,11 +222,22 @@
 	                                <label for="check${projectAppTaskTemp.id }"></label>
 	                            </div>
 	                            <a href="#">
-	                                <div class="PJliCli appendname" onclick="taskEndLocation(${projectAppTaskTemp.id})">${projectAppTaskTemp.taskName }</div>
+	                            	<c:if test="${authoritys['54'] == true }">
+				                    	<div class="PJliCli appendname" onclick="taskEndLocation(${projectAppTaskTemp.id})">${projectAppTaskTemp.taskName }</div>
+				                    </c:if>
+				                    <c:if test="${authoritys['54'] != true }">
+				                    	<div class="PJliCli appendname">${projectAppTaskTemp.taskName }（无打开权限）</div>
+				                    </c:if> 
 	                                <div class="PJliCli appname">${projectAppTaskTemp.app_name }</div>
 	                                <div class="PJliCli appcreater">${projectAppTaskTemp.username }</div>
 	                                <div class="PJliCli apptime">${projectAppTaskTemp.create_datetime }</div>
-	                                <div class="PJliCli apptime param" onclick="showParam(${projectAppTaskTemp.id})">查看</div>
+	                                <c:if test="${authoritys['55'] == true }">
+				                    	<div class="PJliCli apptime param" onclick="showParam(${projectAppTaskTemp.id})">查看</div>
+				                    </c:if>
+				                    <c:if test="${authoritys['55'] != true }">
+				                    	<div class="PJliCli apptime param">（无查看权限）</div>
+				                    </c:if> 
+	                                
 	                                <div class="PJliCli apptime">${projectAppTaskTemp.taskDescription }</div>
 	                                <div class="PJliCli appjindu">完成</div>
 	                                <c:if test="${projectAppTaskTemp.isRelease == 0 }">
@@ -205,7 +247,13 @@
 	                                	<div class="PJliCli appfabuZT">已发布</div>
 	                                </c:if>
 	                                <div class="PJliCli appYBorJS">即时</div>
-	                                <div class="PJliCli " onclick="showResultFile(${projectAppTaskTemp.id})">查看</div>
+	                                <c:if test="${authoritys['56'] == true }">
+				                    	<div class="PJliCli " onclick="showResultFile(${projectAppTaskTemp.id})">查看</div>
+				                    </c:if>
+				                    <c:if test="${authoritys['56'] != true }">
+				                    	<div class="PJliCli " >（无查看权限）</div>
+				                    </c:if> 
+	                                
 	                            </a> 
 	                        </div>
 	                        <div class="PJliline"></div>

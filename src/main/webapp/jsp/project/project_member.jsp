@@ -73,13 +73,35 @@
             <div class="top2">
                 <div class="top2C">
                     <div class="top2Ctl active">${project.p_name }</div>
-                    <a href="/wankangyuan/projectTopic/selectProjectTopic"><div class="top2Ctr">讨论版</div></a>
-                    <a href="/wankangyuan/projectMember/selectProjectMember"><div class="top2Ctr active">成员</div></a>
-                    <a href="/wankangyuan/projectAppEnd/selectProjectAppEnd"><div class="top2Ctr">应用结果</div></a>
-                    <a href="/wankangyuan/projectApp/selectProjectApp?p_id=${project.id}"><div class="top2Ctr">应用</div></a>
-                    <a href="/wankangyuan/projectFormatData/getSourceDatas?p_id=${project.id}"><div class="top2Ctr">格式数据</div></a>
-                    <a href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId"><div class="top2Ctr">文件</div></a>
-                    <a href="/wankangyuan/project/getProjectDetail"><div class="top2Ctr">基本信息</div></a>
+                    <c:if test="${authoritys['74'] == true }">
+                    	  <a href="/wankangyuan/projectTopic/selectProjectTopic"><div class="top2Ctr">讨论版</div></a>
+                    </c:if>
+                   
+                    <c:if test="${authoritys['63'] == true }">
+                    	 <a href="/wankangyuan/projectMember/selectProjectMember"><div class="top2Ctr active">成员</div></a>
+                    </c:if>
+                    
+					<c:if test="${authoritys['57'] == true }">
+                    	 <a href="/wankangyuan/projectAppEnd/selectProjectAppEnd"><div class="top2Ctr">应用结果</div></a>
+                    </c:if>
+                   
+                    <c:if test="${authoritys['42'] == true }">
+                    	<a href="/wankangyuan/projectApp/selectProjectApp?p_id=${project.id}"><div class="top2Ctr">应用</div></a>
+                    </c:if>
+                    
+                    <c:if test="${authoritys['31'] == true }">
+                    	<a href="/wankangyuan/projectFormatData/getSourceDatas?p_id=${project.id}"><div class="top2Ctr">格式数据</div></a>
+                    </c:if>
+                    
+                    <c:if test="${authoritys['27'] == true }">
+                    	<a href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId"><div class="top2Ctr">文件</div></a>
+                    </c:if>
+                    
+                    <c:if test="${authoritys['11'] == true }">
+                    	<a href="/wankangyuan/project/getProjectDetail"><div class="top2Ctr ">基本信息</div></a>
+                    </c:if>
+                    
+                    
                 </div>
             </div>
             <div class="shaixuan">
@@ -106,9 +128,17 @@
                             <img src="/wankangyuan/static/img/sanjiao_blue.png" alt="" class="shaixuanBTi" />
                         </div>
                     </div>
-                    <div class="pro_menu pro_mandel">删除成员</div>
-                    <div class="pro_menu pro_manGL">权限管理</div>
-                    <div class="pro_menu pro_manadd">添加成员</div>
+                    
+                    <c:if test="${authoritys['62'] == true }">
+                    	<div class="pro_menu pro_mandel">删除成员</div>
+                    </c:if>
+                    <c:if test="${authoritys['61'] == true }">
+                    	<div class="pro_menu pro_manGL">权限管理</div>
+                    </c:if>
+                    <c:if test="${authoritys['60'] == true }">
+                    	<div class="pro_menu pro_manadd">添加成员</div>
+                    </c:if>
+                    
                     <div class="search2">
                         <div class="search2C">
                             <img src="/wankangyuan/static/img/search.png" alt="" class="search2Ci" />
