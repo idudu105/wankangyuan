@@ -41,10 +41,12 @@ public class ProjectTopicService {
 		return projectTopicDao.getProjectTopicById(id);
 	}
 	
-	public Map<String, Object> selectProjectTopic(Integer page , Integer strip , Integer project_id){
+	public Map<String, Object> selectProjectTopic(Integer page , Integer strip , Integer project_id , 
+			String timeRadio , String followRadio , String lookRadio){
 		Map<String, Object> map = new HashMap<String , Object>();
 		PageHelper.startPage(page, strip);
-		List<ProjectTopic> projectTopics = projectTopicDao.selectProjectTopic(project_id);
+		List<ProjectTopic> projectTopics = projectTopicDao.selectProjectTopic(
+				project_id , timeRadio , followRadio , lookRadio);
 		PageInfo<ProjectTopic> pageInfo = new PageInfo<>(projectTopics);
 		map.put("list", projectTopics);
 		map.put("total", pageInfo.getTotal());

@@ -124,10 +124,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">异步/同步</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
                         <div class="shaixuanZKliT">关键字</div>
                         <div class="shaixuanZKliI active"></div>
                     </div>

@@ -117,11 +117,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">异步/同步</div>
+                        <div class="shaixuanZKliT">关键字</div>
                         <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">关键字</div>
+                        <div class="shaixuanZKliT">公开状态</div>
                         <div class="shaixuanZKliI active"></div>
                     </div>
                 </div>
@@ -139,14 +139,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="PJListli PJID">项目编号</div>
                     <div class="PJListli PJcreater">创建者</div>
                     <div class="PJListli PJtime">创建时间</div>
-                    <!-- <div class="PJListli PJother1">其他1</div>
-                    <div class="PJListli PJother2">其他2</div>
-                    <div class="PJListli PJother3">其他3</div>
-                    <div class="PJListli PJother4">其他4</div> -->
-                    <div class="PJListli PJyibu">异步/同步</div>
                     <div class="PJListli PJkeyword">关键字</div>
-                    <!-- <div class="PJListli PJcaozuo">操作</div> -->
-                    <!-- <div class="PJListli PJother4">其他4</div> -->
+                    <div class="PJListli PJopenor">公开状态</div>
                 </div>
                 <div class="PJListline"></div>
                 <div class="PJul">
@@ -163,13 +157,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                                <div class="PJliCli PJID">${project.p_number }</div>
 	                                <div class="PJliCli PJcreater">${project.creatorName }</div>
 	                                <div class="PJliCli PJtime">${project.create_datetime }</div>
-	                                <c:if test="${project.is_asy == 0}">
-	                                	<div class="PJliCli PJyibu">同步</div>
-	                                </c:if>
-	                                <c:if test="${project.is_asy == 1}">
-	                                	<div class="PJliCli PJyibu">异步</div>
-	                                </c:if>
 	                                <div class="PJliCli PJkeyword">${project.key_words }</div>
+	                                <c:if test="${project.is_open == 0}">
+	                                	<div class="PJliCli PJopenor">未公开</div>
+	                                </c:if>
+	                                <c:if test="${project.is_open == 1}">
+	                                	<div class="PJliCli PJopenor">已公开</div>
+	                                </c:if>
 
 	                            </a>
 	                        </div>

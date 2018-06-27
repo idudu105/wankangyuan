@@ -104,31 +104,29 @@
                 </div>
             </div>
             <div class="paixu">
-                <div class="sortt">排序：</div>
                 <div class="sortZ">
                     <div class="sortZc">
-                        <div class="sortZt">时间</div>
-                        <img src="/wankangyuan/static/img/sanjiao_blue.png" alt="" class="sortZi" />
-                    </div>
-                    <div class="sortulK">
-                        <div class="sortul">
-                            <div class="sort_timeup sortli">升序排列</div>
-                            <div class="sort_timedown sortli">降序排列</div>
-                        </div>
+                        <div class="sortZt">时间:</div>
+                       	<input type="radio" <c:if test="${timeRadio == 'desc' }">checked</c:if> value="desc" name="time" id="timeDesc"/>&nbsp;降&nbsp;&nbsp;
+                       	<input type="radio" <c:if test="${timeRadio == 'asc' }">checked</c:if> value="asc" name="time" id="timeAsc"/>&nbsp;升
                     </div>
                 </div>
                 <div class="sortZ">
                     <div class="sortZc">
-                        <div class="sortZt">回复/查看</div>
-                        <img src="/wankangyuan/static/img/sanjiao_blue.png" alt="" class="sortZi" />
-                    </div>
-                    <div class="sortulK">
-                        <div class="sortul">
-                            <div class="sort_replyup sortli">升序排列</div>
-                            <div class="sort_replydown sortli">降序排列</div>
-                        </div>
+                        <div class="sortZt">回复:</div>
+                       	<input type="radio" <c:if test="${followRadio == 'desc' }">checked</c:if> value="desc" name="follow" id="followDesc"/>&nbsp;降&nbsp;&nbsp;
+                       	<input type="radio" <c:if test="${followRadio == 'asc' }">checked</c:if> value="asc" name="follow" id="followAsc"/>&nbsp;升
                     </div>
                 </div>
+                <div class="sortZ">
+                    <div class="sortZc">
+                        <div class="sortZt">查看:</div>
+                       	<input type="radio" <c:if test="${lookRadio == 'desc' }">checked</c:if> value="desc" name="look" id="lookDesc"/>&nbsp;降&nbsp;&nbsp;
+                       	<input type="radio" <c:if test="${lookRadio == 'asc' }">checked</c:if> value="asc" name="look" id="lookAsc"/>&nbsp;升
+                    </div>
+                </div>
+                <a href="#"><div class="sortt">排序</div></a>
+                
                 <c:if test="${authoritys['70'] == true }">
                 	<div class="addtheme">+创建主题</div>
                 </c:if>
@@ -206,9 +204,21 @@
 	        jump: true, //是否支持跳转
 	        callback: function(page) { // 回调函数
 	            if(page!=${page}){
-	                window.location.href="/wankangyuan/projectTopic/selectProjectTopic?page="+page+"&strip=${rows}";
+	            	var timeRadio = $('input:radio[name="time"]:checked').val();
+	    	    	var followRadio = $('input:radio[name="follow"]:checked').val();
+	    	    	var lookRadio = $('input:radio[name="look"]:checked').val();
+	    	    	
+	                window.location.href="/wankangyuan/projectTopic/selectProjectTopic?page="
+	                		+page+"&timeRadio="+timeRadio+"&followRadio="+followRadio+"&lookRadio="+lookRadio;
 	            }
 	        }
+	    });
+	    
+	    $(".sortt").click(function (){
+	    	var timeRadio = $('input:radio[name="time"]:checked').val();
+	    	var followRadio = $('input:radio[name="follow"]:checked').val();
+	    	var lookRadio = $('input:radio[name="look"]:checked').val();
+            window.location.href="/wankangyuan/projectTopic/selectProjectTopic?timeRadio="+timeRadio+"&followRadio="+followRadio+"&lookRadio="+lookRadio;
 	    });
     	
 	    $(".themeaddBs").click(function (){
@@ -219,7 +229,6 @@
 	    		alert("内容不能为空！");
 	    		return;
 	    	}
-	    	
 	    	$.ajax({
 	    		url:"/wankangyuan/projectTopic/insertProjectTopic",
 	    		type:"post",
@@ -239,7 +248,6 @@
 	    		error : function(){
 	    			alert("联网失败");
 	    		}
-	    		
 	    	});
 	    });
     	

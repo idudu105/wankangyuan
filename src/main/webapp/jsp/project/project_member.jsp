@@ -247,20 +247,23 @@
                             
                             <div class="QXGLkMrz">
                             	<c:forEach items="${projectRoles}" var="projectRole" varStatus="status">
-                            		<div class="QXGLkMrzM">
-	                                    <div class="QXGLkMrzMz">
-	                                        <div class="fuxuanK2 fuxuanK30">
-	                                        	<c:if test="${status.index == 0 }">
-	                                        		<input name="idssss" type="checkbox" checked class="input_check" id="check${projectRole.id }" value="${projectRole.id }">
-	                                        	</c:if>
-	                                        	<c:if test="${status.index != 0 }">
-	                                        		<input name="idssss" type="checkbox" class="input_check" id="check${projectRole.id }" value="${projectRole.id }">
-	                                        	</c:if>
-				                                <label for="check${projectRole.id }"></label>
-				                            </div>
-	                                        <div class="QXGLkMrzMzt">${projectRole.role_name }</div>
-	                                    </div>
-	                                </div>
+                            		<c:if test="${projectRole.id != 1 }">
+	                            		<div class="QXGLkMrzM">
+		                                    <div class="QXGLkMrzMz">
+		                                        <div class="fuxuanK2 fuxuanK30">
+		                                        	<c:if test="${status.index == 0 }">
+		                                        		<input name="idssss" type="checkbox" checked class="input_check" id="check${projectRole.id }" value="${projectRole.id }">
+		                                        	</c:if>
+		                                        	<c:if test="${status.index != 0 }">
+		                                        		<input name="idssss" type="checkbox" class="input_check" id="check${projectRole.id }" value="${projectRole.id }">
+		                                        	</c:if>
+					                                <label for="check${projectRole.id }"></label>
+					                            </div>
+		                                        <div class="QXGLkMrzMzt">${projectRole.role_name }</div>
+		                                    </div>
+		                                </div>
+                            		</c:if>
+                            		
                             	</c:forEach>
                             </div>
                            
@@ -288,11 +291,16 @@
                 
                 	<c:forEach items="${projectMembers}" var="projectMemberTemp">
 	                	<div class="PJli">
-	                        <div class="PJliC">	                            
-	                            
-	                            <div class="fuxuanK2 fuxuanK20">
-	                                <input name="ids" type="checkbox" class="input_check" id="check${projectMemberTemp.id }" value="${projectMemberTemp.id }">
-	                                <label for="check${projectMemberTemp.id }"></label>
+	                        <div class="PJliC">
+	                        	<div class="fuxuanK2 fuxuanK20">
+	                                <c:if test="${projectMemberTemp.role_name != '创建者'}">
+	                            		<input name="ids" type="checkbox" class="input_check" id="check${projectMemberTemp.id }" value="${projectMemberTemp.id }">
+	                                	<label for="check${projectMemberTemp.id }"></label>
+	                            	</c:if>
+	                            	<c:if test="${projectMemberTemp.role_name == '创建者'}">
+	                            		<input class="input_check" value="00">
+	                                	<label for="check00"></label>
+	                            	</c:if>
 	                            </div>
 	                            <div class="PJliCli PJliCli2 memname">${projectMemberTemp.username}</div>
 	                            <div class="PJliCli PJliCli2 memrole">${projectMemberTemp.role_name}</div>

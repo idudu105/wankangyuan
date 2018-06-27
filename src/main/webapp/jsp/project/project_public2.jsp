@@ -83,7 +83,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <div class="shaixuan">
                 <div class="shaixuanC">
                     <div class="listZT">
-                        <a href="project_public.jsp">
+                        <a href="/wankangyuan/jsp/project/project_public.jsp">
                             <div class="listZTli listZT2 active">
                                 <div class="listZT2d"></div>
                                 <div class="listZT2d"></div>
@@ -122,7 +122,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                    <div class="PJK2litime">
 	                        <div class="PJK2litimeT1">${project.create_datetime }</div>
 	                    </div>
-	                    <div class="PJK2lidetail">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet</div>
+	                    <div class="PJK2lidetail">${project.introduction }</div>
 	                </div>    
 	                	
                 </c:forEach>

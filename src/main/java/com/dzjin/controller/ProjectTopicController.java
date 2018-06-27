@@ -76,16 +76,29 @@ public class ProjectTopicController {
 	 */
 	@RequestMapping("/selectProjectTopic")
 	public String selectProjectTopic(HttpServletRequest httpServletRequest , HttpSession httpSession , 
-			Integer page , Integer strip){
+			Integer page , Integer strip , String timeRadio , String followRadio , String lookRadio){
 		if(page == null){
 			page = 1;
 		}
 		if(strip == null){
 			strip = 12;
 		}
+		if(timeRadio == null){
+			timeRadio = new String("desc");
+		}
+		if(followRadio == null){
+			followRadio = new String("desc");
+		}
+		if(lookRadio == null){
+			lookRadio = new String("desc");
+		}
+		httpSession.setAttribute("timeRadio", timeRadio);
+		httpSession.setAttribute("followRadio", followRadio);
+		httpSession.setAttribute("lookRadio", lookRadio);
 		//获取当前项目的信息
 		Project project = (Project)httpSession.getAttribute("project");
-		Map<String, Object> result = projectTopicService.selectProjectTopic(page , strip , project.getId());
+		Map<String, Object> result = projectTopicService.selectProjectTopic(
+				page , strip , project.getId() , timeRadio , followRadio , lookRadio);
 		httpSession.setAttribute("projectTopics", result.get("list"));
 		httpSession.setAttribute("total", result.get("total"));
 		httpSession.setAttribute("page", page);
@@ -139,7 +152,7 @@ public class ProjectTopicController {
 		
 		//设置TOP5的话题
 		Project project = (Project) httpSession.getAttribute("project");
-		Map<String, Object> result = projectTopicService.selectProjectTopic(1, 5, project.getId());
+		Map<String, Object> result = projectTopicService.selectProjectTopic(1, 5, project.getId() , "desc", "desc", "desc");
 		httpSession.setAttribute("topProjectTopics", result.get("list"));
 		
 		

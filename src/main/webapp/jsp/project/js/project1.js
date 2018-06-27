@@ -939,34 +939,34 @@ function pro_member(){
 
 //讨论版
 function pro_discuss(){
-    var opaixu=document.querySelectorAll('.paixu')[0];//排序框依据下拉按钮
-    var asortZc=opaixu.querySelectorAll('.sortZc');//排序依据下拉按钮
-    var asortulK=opaixu.querySelectorAll('.sortulK');//排序下拉框
-
-    var paixuKpd=[];
-    for(var i=0;i<asortZc.length;i++){
-        paixuKpd[i]=0;
-    }
-
-    for(var i=0;i<asortZc.length;i++){
-        (function(index){
-            asortZc[index].onclick=function(){
-                if(paixuKpd[index]==0){
-                    for(var j=0;j<asortulK.length;j++){
-                        asortulK[j].className="sortulK";
-                        paixuKpd[j]=0;
-                    }
-                    asortulK[index].className='sortulK active';
-                    paixuKpd[index]=1;
-                }else{
-                    asortulK[index].className='sortulK';
-                    paixuKpd[index]=0;
-                }
-
-            }
-
-        })(i)
-    }
+//    var opaixu=document.querySelectorAll('.paixu')[0];//排序框依据下拉按钮
+//    //var asortZc=opaixu.querySelectorAll('.sortZc');//排序依据下拉按钮
+//    var asortulK=opaixu.querySelectorAll('.sortulK');//排序下拉框
+//
+//    var paixuKpd=[];
+//    for(var i=0;i<asortZc.length;i++){
+//        paixuKpd[i]=0;
+//    }
+//
+//    for(var i=0;i<asortZc.length;i++){
+//        (function(index){
+//            asortZc[index].onclick=function(){
+//                if(paixuKpd[index]==0){
+//                    for(var j=0;j<asortulK.length;j++){
+//                        asortulK[j].className="sortulK";
+//                        paixuKpd[j]=0;
+//                    }
+//                    asortulK[index].className='sortulK active';
+//                    paixuKpd[index]=1;
+//                }else{
+//                    asortulK[index].className='sortulK';
+//                    paixuKpd[index]=0;
+//                }
+//
+//            }
+//
+//        })(i)
+//    }
 
 //创建框的位置以及显示隐藏效果
     var oaddtheme=document.querySelectorAll('.addtheme')[0];//创建主题按钮

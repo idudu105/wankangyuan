@@ -34,10 +34,15 @@ public interface ProjectTopicDao {
 			+ "where project_topic.user_id=user.id and project_topic.id=#{id} order by id desc")
 	public ProjectTopic getProjectTopicById(@Param("id") Integer id);
 	
-	@Select("select project_topic.* , user.username ,user.headimg  from project_topic,user "
+	@Select("select project_topic.* , user.username ,user.headimg from project_topic,user "
 			+ "where project_topic.user_id=user.id "
-			+ "and project_topic.project_id=#{project_id} order by id desc")
-	public List<ProjectTopic> selectProjectTopic(@Param("project_id")Integer project_id);
+			+ "and project_topic.project_id=#{project_id} "
+			+ "order by create_datetime ${timeRadio},follow_up_num ${followRadio},look_num ${lookRadio}")
+	public List<ProjectTopic> selectProjectTopic(
+			@Param("project_id")Integer project_id,
+			@Param("timeRadio")String timeRadio,
+			@Param("followRadio")String followRadio,
+			@Param("lookRadio")String lookRadio);
 	
 	@Delete("delete from project_topic where id=#{project_topic_id}")
 	public int deleteProjectTopic(@Param("project_topic_id")Integer project_topic_id);

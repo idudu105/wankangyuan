@@ -124,7 +124,7 @@ public class ProjectMemberController {
 		Map<String, Object> map = new HashMap<>();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		projectUser.setBind_date_time(simpleDateFormat.format(new Date()));
-		projectUser.setRole_id(1);//设置项目成员角色
+		projectUser.setRole_id(2);//设置项目成员角色
 		if(projectUserService.insertProjectUser(projectUser) == 1){
 			map.put("result", true);
 			map.put("message", "增加项目成员成功！");
@@ -156,7 +156,7 @@ public class ProjectMemberController {
 			projectMember.setUser_id(Integer.valueOf(idString[i]));
 			projectMember.setLinkman_id(user.getId());	
 			projectMember.setBind_date_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-			projectMember.setRole_id(1);//设置项目成员角色	
+			projectMember.setRole_id(2);//设置项目成员角色	
 			if(projectUserService.insertProjectUser(projectMember) == 1){
 				num++;
 			}
