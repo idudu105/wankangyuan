@@ -123,7 +123,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                    </div>
 	                    <div class="PJK2licre">
 	                        <div class="PJK2licreT1">创建人：</div>
-	                        <div class="PJK2licreT2">${project.creator }</div>
+	                        <div class="PJK2licreT2">${project.creatorName }</div>
 	                    </div>
 	                    <div class="PJK2litime">
 	                        <div class="PJK2litimeT1">${project.create_datetime }</div>

@@ -197,7 +197,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                            
 	                                <div class="PJliCli PJname">${project.p_name}</div>
 	                                <div class="PJliCli PJID">${project.p_number }</div>
-	                                <div class="PJliCli PJcreater">${project.creator }</div>
+	                                <div class="PJliCli PJcreater">${project.creatorName }</div>
 	                                <div class="PJliCli PJtime">${project.create_datetime }</div>
 	                                <div class="PJliCli PJkeyword">${project.key_words }</div>
 	                                <c:if test="${project.is_open == 0}">

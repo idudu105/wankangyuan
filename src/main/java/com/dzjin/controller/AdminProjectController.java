@@ -95,5 +95,21 @@ public class AdminProjectController {
 		map.put("message", num+"个项目取消发布到门户成功，"+(idStrings.length-num)+"个项目取消发布到门户失败！");
 		return map;
 	}
+	
+	@RequestMapping("/selectShowProject")
+	public String selectShowProject(HttpSession httpSession , Integer page , Integer strip){
+		if(page == null){
+			page = 1;
+		}
+		if(strip == null){
+			strip =6;
+		}
+		Map<String, Object> map = adminProjectService.selectIsShowProject(page, strip, new String("") , 1);
+		httpSession.setAttribute("showProjects", map.get("list"));
+		httpSession.setAttribute("total", map.get("total"));
+		httpSession.setAttribute("page", page);
+		httpSession.setAttribute("rows", strip);
+		return "/";
+	}
 
 }

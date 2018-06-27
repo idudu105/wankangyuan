@@ -101,10 +101,8 @@
                 }
                 
                 if(totalPages > 10 && pageIndex >= 5) {
-                	//lis.eq(pageIndex-1).show();
                 	lis.eq(pageIndex-6).nextUntil(lis.eq(pageIndex+5)).show();
                 	lis.eq(pageIndex-5).prevAll().hide();
-                	
                 }
                 
                 if(totalPages > 10 && pageIndex >= 5 && pageIndex >= totalPages - 5){

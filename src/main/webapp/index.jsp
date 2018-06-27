@@ -15,6 +15,7 @@
 </head>
 <link rel="stylesheet" type="text/css" href="/wankangyuan/static/css/index.css" />
 <script type="text/javascript" src="/wankangyuan/static/js/project1.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/jquery.min.js"></script>
 
 <script type="text/javascript">
     window.onload=function(){
@@ -22,13 +23,14 @@
     }
 </script>
 <body>
+
     <div class="Box">
         <div class="box">
             <div class="top">
                 <h1><img src="/wankangyuan/static/img/newlogo2.png" class="logo" height="70" width="218" alt="" /></h1>
-                <a href="javascript:;"><div class="link">链接</div></a>
-                <a href="register.html"><div class="register">注册</div></a>
-                <a href="login.html"><div class="login">登录</div></a>
+                <a href="/wankangyuan/admin/login" target="_blank"><div class="link">链接</div></a>
+                <a href="/wankangyuan/register"><div class="register">注册</div></a>
+                <a href="/wankangyuan/login"><div class="login">登录</div></a>
                 <img src="/wankangyuan/static/img/search.png" alt="" class="searchI2" />
                 <div class="searchK">
                     <img src="/wankangyuan/static/img/search.png" alt="" class="searchI" />
@@ -42,32 +44,14 @@
                         <div class="xiangmuLC">平台项目</div>
                     </div>
                     <div class="xiangmuLM">
-                        <div class="xiangmuLMz">
-                            <div class="xiangmuLMzT">13例结直肠癌病人的基因表达模式研究13例结直肠癌病人的基因表达模式研究13例结直肠</div>
-                            <div class="xiangmuLMzM">病例对照研究是以现在确诊的患有某特定疾病的病人作为病例，以不患有该病但具有可比性的个体作为对照，通过询问，实验室检查或复查病史，搜集既往各种可能的危险因素的暴露史，测量并比较病例组与对照组中各因素的暴露比例，经统计学检验，若两组差别有意义，则可认为因素与疾病之间存在着统计学上的关联。</div>
-                        </div>
-                        <div class="xiangmuLMz">
-                            <div class="xiangmuLMzT">13例结直肠癌病人的基因表达模式研究13例结直肠癌病人的基因表达模式研究13例结直肠</div>
-                            <div class="xiangmuLMzM">病例对照研究是以现在确诊的患有某特定疾病的病人作为病例，以不患有该病但具有可比性的个体作为对照，通过询问，实验室检查或复查病史，搜集既往各种可能的危险因素的暴露史，测量并比较病例组与对照组中各因素的暴露比例，经统计学检验，若两组差别有意义，则可认为因素与疾病之间存在着统计学上的关联。</div>
-                        </div>
-                        <div class="xiangmuLMz">
-                            <div class="xiangmuLMzT">13例结直肠癌病人的基因表达模式研究13例结直肠癌病人的基因表达模式研究13例结直肠</div>
-                            <div class="xiangmuLMzM">病例对照研究是以现在确诊的患有某特定疾病的病人作为病例，以不患有该病但具有可比性的个体作为对照，通过询问，实验室检查或复查病史，搜集既往各种可能的危险因素的暴露史，测量并比较病例组与对照组中各因素的暴露比例，经统计学检验，若两组差别有意义，则可认为因素与疾病之间存在着统计学上的关联。</div>
-                        </div>
+                    	<c:forEach items="${showProjects }" var="showProjectTemp">
+                    		<div class="xiangmuLMz">
+	                            <div class="xiangmuLMzT">${showProjectTemp.p_name}</div>
+	                            <div class="xiangmuLMzM">${showProjectTemp.introduction}</div>
+	                        </div>
+                    	</c:forEach>
                     </div>
-                    
 	                <div class="xiangmuLB">
-	                    <!-- <div class="pageK">
-	                        <div class="pageLR">
-	                            <img src="/wankangyuan/static/img/pageL.png" class="pageLRi" alt="" />
-	                        </div>
-	                        <div class="pageNUM active">1</div>
-	                        <div class="pageNUM ">2</div>
-	                        <div class="pageNUM">3</div>
-	                        <div class="pageLR">
-	                            <img src="/wankangyuan/static/img/pageR.png" class="pageLRi" alt="" />
-	                        </div>
-	                    </div> -->
 	                    <div class="pageK" id="box" ></div>
 	                </div>
                 </div>
@@ -129,20 +113,20 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/indexPaging.js"></script>
 <script type="text/javascript">
-$('#box').paging({
-    initPageNo: ${page}, // 初始页码
-    totalPages: Math.ceil(${total}/${rows}), //总页数
-    totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
-    slideSpeed: 600, // 缓动速度。单位毫秒
-    jump: true, //是否支持跳转
-    callback: function(page) { // 回调函数
-        console.log(page);
-        if(page!=${page}){
-            window.location.href="/wankangyuan?page="+page+"&rows=${rows}";
-           
-        }
-    }
-});
+	$('#box').paging({
+	    initPageNo: ${page}, // 初始页码
+	    totalPages: Math.ceil(${total}/${rows}), //总页数
+	    totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
+	    slideSpeed: 600, // 缓动速度。单位毫秒
+	    jump: true, //是否支持跳转
+	    callback: function(page) { // 回调函数
+	        console.log(page);
+	        if(page!=${page}){
+	            window.location.href="/wankangyuan/adminProject/selectShowProject?page="+page;
+	           
+	        }
+	    }
+	});
 </script>
 
 </body>

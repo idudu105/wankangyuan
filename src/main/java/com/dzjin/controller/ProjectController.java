@@ -130,7 +130,13 @@ public class ProjectController {
 		
 		User user = (User)request.getAttribute("user");
 		ProjectUser projectUser = projectUserService.getProjectUser(project.getId(), user.getId());
-		List<ProjectAuthority> projectAuthorities = projectRoleService.selectProjectAuthorityByRoleId(projectUser.getRole_id());
+		List<ProjectAuthority> projectAuthorities = null;
+		if(projectUser == null){
+			projectAuthorities = projectRoleService.selectProjectAuthorityByRoleId(3);
+		}else{
+			projectAuthorities = projectRoleService.selectProjectAuthorityByRoleId(projectUser.getRole_id());
+		}
+		
 		Iterator<ProjectAuthority> iterator = projectAuthorities.iterator();
 		while(iterator.hasNext()){
 			ProjectAuthority projectAuthority = (ProjectAuthority)iterator.next();

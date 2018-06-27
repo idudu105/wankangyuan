@@ -155,7 +155,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                            <a href="/wankangyuan/project/getProjectDetail?id=${project.id}">
 	                                <div class="PJliCli PJname">${project.p_name}</div>
 	                                <div class="PJliCli PJID">${project.p_number }</div>
-	                                <div class="PJliCli PJcreater">${project.creator }</div>
+	                                <div class="PJliCli PJcreater">${project.creatorName }</div>
 	                                <div class="PJliCli PJtime">${project.create_datetime }</div>
 	                                <c:if test="${project.is_asy == 0}">
 	                                	<div class="PJliCli PJyibu">同步</div>
