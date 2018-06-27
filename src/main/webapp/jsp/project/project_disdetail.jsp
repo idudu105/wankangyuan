@@ -82,13 +82,20 @@
                             <div class="eisdeLTrT">${projectTopic.content }</div>
                             <div class="eisdeLTrB">
                                 <div class="eisdeLTrBl">${projectTopic.create_datetime }</div>
-                                <div class="eisdeLTrBde">删除</div>
-                                <div class="eisdeLTrBre">
-                                    <div class="eisdeLTrBreb">回复</div>
-                                    <div class="eisdeLTrBret">
-                                        (<span>${projectTopic.follow_up_num}</span>)
-                                    </div>
-                                </div>
+                                
+                                <c:if test="${authoritys['71'] == true }">
+			                    	<div class="eisdeLTrBde">删除</div>
+			                    </c:if>
+			                    
+			                    <c:if test="${authoritys['72'] == true }">
+			                    	<div class="eisdeLTrBre">
+	                                    <div class="eisdeLTrBreb">回复</div>
+	                                    <div class="eisdeLTrBret">
+	                                        (<span>${projectTopic.follow_up_num}</span>)
+	                                    </div>
+	                                </div>
+			                    </c:if> 
+                                
                             </div>
                         </div>
                     </div>
@@ -105,7 +112,9 @@
 	                                <div class="disdeLBzrt">${projectTopicFollowTemp.content}</div>
 	                                <div class="disdeLBzrb">
 	                                    <div class="disdeLBzrbti">${projectTopicFollowTemp.create_datetime}</div>
-	                                    <div class="disdeLBzrbde" onclick="deleteProjectTopicFllow(${projectTopicFollowTemp.id})">删除</div>
+	                                    <c:if test="${authoritys['73'] == true }">
+					                    	<div class="disdeLBzrbde" onclick="deleteProjectTopicFllow(${projectTopicFollowTemp.id})">删除</div>
+					                    </c:if>
 	                                </div>
 	                            </div>
 	                        </div>

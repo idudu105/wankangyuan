@@ -70,14 +70,36 @@
             </div>
             <div class="top2">
                 <div class="top2C">
-                    <div class="top2Ctl active">13例结直肠癌病人的基因表达</div>
-                    <a href="/wankangyuan/projectTopic/selectProjectTopic"><div class="top2Ctr">讨论版</div></a>
-                    <a href="/wankangyuan/projectMember/selectProjectMember"><div class="top2Ctr">成员</div></a>
-                    <a href="/wankangyuan/projectAppEnd/selectProjectAppEnd"><div class="top2Ctr active">应用结果</div></a>
-                    <a href="/wankangyuan/projectApp/selectProjectApp?p_id=${project.id}"><div class="top2Ctr">应用</div></a>
-                    <a href="/wankangyuan/projectFormatData/getSourceDatas?p_id=${project.id}"><div class="top2Ctr">格式数据</div></a>
-                    <a href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId"><div class="top2Ctr">文件</div></a>
-                    <a href="/wankangyuan/project/getProjectDetail"><div class="top2Ctr">基本信息</div></a>
+                    <div class="top2Ctl active">${project.p_name }</div>
+                    <c:if test="${authoritys['74'] == true }">
+                    	  <a href="/wankangyuan/projectTopic/selectProjectTopic"><div class="top2Ctr">讨论版</div></a>
+                    </c:if>
+                   
+                    <c:if test="${authoritys['63'] == true }">
+                    	 <a href="/wankangyuan/projectMember/selectProjectMember"><div class="top2Ctr">成员</div></a>
+                    </c:if>
+                    
+					<c:if test="${authoritys['57'] == true }">
+                    	 <a href="/wankangyuan/projectAppEnd/selectProjectAppEnd"><div class="top2Ctr active">应用结果</div></a>
+                    </c:if>
+                   
+                    <c:if test="${authoritys['42'] == true }">
+                    	<a href="/wankangyuan/projectApp/selectProjectApp?p_id=${project.id}"><div class="top2Ctr">应用</div></a>
+                    </c:if>
+                    
+                    <c:if test="${authoritys['31'] == true }">
+                    	<a href="/wankangyuan/projectFormatData/getSourceDatas?p_id=${project.id}"><div class="top2Ctr">格式数据</div></a>
+                    </c:if>
+                    
+                    <c:if test="${authoritys['27'] == true }">
+                    	<a href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId"><div class="top2Ctr">文件</div></a>
+                    </c:if>
+                    
+                    <c:if test="${authoritys['11'] == true }">
+                    	<a href="/wankangyuan/project/getProjectDetail"><div class="top2Ctr ">基本信息</div></a>
+                    </c:if>
+                    
+                    
                 </div>
             </div>
             <div class="shaixuan">
@@ -112,12 +134,19 @@
                         </div>
                         <div class="allT">全选</div>
                     </div>
-                    <div class="pro_menu pro_rem">移除</div>
-                    <div class="pro_menu pro_canfabu">取消发布</div>
-                    <div class="pro_menu pro_fabu">发布</div>
-                    <a href="project_appendre.html">
-                        <div class="pro_menu pro_rerun">重新运行</div>
-                    </a>
+                    <c:if test="${authoritys['53'] == true }">
+                    	<div class="pro_menu pro_rem">移除</div>
+                    </c:if>
+                    <c:if test="${authoritys['52'] == true }">
+                    	<div class="pro_menu pro_canfabu">取消发布</div>
+                    </c:if>
+                    <c:if test="${authoritys['51'] == true }">
+                    	<div class="pro_menu pro_fabu">发布</div>
+                    </c:if>
+                    <c:if test="${authoritys['50'] == true }">
+                    	<div class="pro_menu pro_rerun">重新运行</div>
+                    </c:if>
+                    
                     <div class="search2">
                         <div class="search2C">
                             <img src="/wankangyuan/static/img/search.png" alt="" class="search2Ci" />
@@ -131,7 +160,12 @@
             		<div class="PJK2li">
 	                    <div class="PJK2litop">
 	                        <a href="#">
-	                            <div class="PJK2litopT2" onclick="taskEndLocation(${projectAppTaskTemp.id})">${projectAppTaskTemp.taskName }</div>
+                        		<c:if test="${authoritys['54'] == true }">
+			                    	<div class="PJK2litopT2" onclick="taskEndLocation(${projectAppTaskTemp.id})">${projectAppTaskTemp.taskName }</div>
+			                    </c:if>
+			                    <c:if test="${authoritys['54'] != true }">
+			                    	<div class="PJK2litopT2" >${projectAppTaskTemp.taskName }（无打开权限）</div>
+			                    </c:if>  
 	                        </a>
 	                        <div class="fuxuanK2">
                                 <input name="ids" type="checkbox" class="input_check" id="check${projectAppTaskTemp.id }" value="${projectAppTaskTemp.id }">
@@ -216,7 +250,7 @@
 	    		window.location.href="/wankangyuan/projectAppEnd/selectProjectAppEnd?type=2&page=1&strip=12&searchWord="+searchWord;
 	    	}
 	    });
-	    
+	    //发布应用结果
 	    $(".pro_fabu").click(function (){
 	    	var afuxuanK=document.querySelectorAll('.fuxuanK2');
             var afuxuan=[];
@@ -251,7 +285,7 @@
             	}
             });
 	    });
-	    
+	    //取消发布应用结果
 	    $(".pro_canfabu").click(function (){
 	    	var afuxuanK=document.querySelectorAll('.fuxuanK2');
             var afuxuan=[];
@@ -287,6 +321,7 @@
             });
 	    });
 	    
+	    //移除应用结果
 	    $(".pro_rem").click(function (){
 	    	var afuxuanK=document.querySelectorAll('.fuxuanK2');
             var afuxuan=[];
@@ -320,6 +355,53 @@
             		alert("联网失败");
             	}
             });
+	    });
+	    
+	    //重新运行应用
+	    $(".pro_rerun").click(function (){
+	    	var afuxuanK=document.querySelectorAll('.fuxuanK2');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].value);
+            	}
+            }
+            if(ids == ""){
+            	alert("请勾选应用！");
+            	return;
+            }
+            if(ids.length >1){
+            	alert("一次最多运行一个应用！");
+            	return;
+            }
+            var task_id = ids.join(",");
+            var operType = 'update';
+            
+            $.ajax({
+            	url:"/wankangyuan/projectAppEnd/projectAppReRun",
+            	type:"post",
+            	data:{
+            		task_id:task_id,
+            		operType:operType
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			window.open(data.message
+                        		,'_blank'
+                        		,'width=1200,height=600,menubar=no,toolbar=no,status=no,scrollbars=yes')
+            		}else{
+            			alert("应用运行地址解失败！");
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });  
 	    });
     </script>
 </body>
