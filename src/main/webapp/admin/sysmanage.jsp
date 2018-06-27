@@ -137,7 +137,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="promanage.html">
+                            <a href="/wankangyuan/adminProject/selectAdminProject">
                                 <!-- <i class="icon-bar-chart"></i> -->
                                 <span class="hidden-tablet"> 项目管理</span>
                             </a>
