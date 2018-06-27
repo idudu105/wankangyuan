@@ -3,6 +3,8 @@ package com.dzjin.controller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dzjin.model.Project;
+import com.dzjin.model.ProjectAuthority;
 import com.dzjin.model.ProjectUser;
 import com.dzjin.service.ProjectRoleService;
 import com.dzjin.service.ProjectService;
@@ -63,7 +66,7 @@ public class ProjectController {
 	 * @return
 	 */
 	@RequestMapping("/getProjectDetail")
-	public String getProjectDetail(HttpSession httpSession , Integer id){
+	public String getProjectDetail(HttpServletRequest request , HttpSession httpSession , Integer id){
 		
 		Project project = null;
 		if(null == id){
@@ -83,7 +86,60 @@ public class ProjectController {
 		/*
 		 * 此处需要根据项目ID和当前成员的ID查询当前用户在当前项目内的角色，然后放到Session中，供页面上进行显示。
 		 */
-
+		Map<String, Object> authoritys = new HashMap<String , Object>();
+		//基本信息
+		authoritys.put("1", false);
+		authoritys.put("10", false);//保存简介
+		//文件管理
+		authoritys.put("2", false);
+		authoritys.put("20", false);//添加根
+		authoritys.put("21", false);//添加叶
+		authoritys.put("22", false);//上传文件
+		authoritys.put("23", false);//修改文件夹名称
+		authoritys.put("24", false);//删除文件夹
+		authoritys.put("25", false);//删除文件
+		authoritys.put("26", false);//下载文件
+		//格式数据管理
+		authoritys.put("3", false);
+		authoritys.put("30", false);//移除格式数据
+		//应用管理
+		authoritys.put("4", false);
+		authoritys.put("40", false);//运行应用
+		authoritys.put("41", false);//移除应用
+		//应用结果管理
+		authoritys.put("5", false);
+		authoritys.put("50", false);//重新运行应用
+		authoritys.put("51", false);//发布应用运行结果
+		authoritys.put("52", false);//取消发布应用运行结果
+		authoritys.put("53", false);//移除应用运行结果
+		authoritys.put("54", false);//打开应用结果地址
+		authoritys.put("55", false);//查看应用运行结果参数
+		authoritys.put("56", false);//查看应用运行结果文件
+		//成员管理
+		authoritys.put("6", false);
+		authoritys.put("60", false);//添加成员
+		authoritys.put("61", false);//权限管理
+		authoritys.put("62", false);//删除成员
+		//主题管理
+		authoritys.put("7", false);
+		authoritys.put("70", false);//创建主题
+		authoritys.put("71", false);//删除主题
+		authoritys.put("72", false);//回复主题
+		authoritys.put("73", false);//删除主题回复
+		
+		
+		User user = (User)request.getAttribute("user");
+		ProjectUser projectUser = projectUserService.getProjectUser(id, user.getId());
+		List<ProjectAuthority> projectAuthorities = projectRoleService.selectProjectAuthorityByRoleId(projectUser.getRole_id());
+		Iterator<ProjectAuthority> iterator = projectAuthorities.iterator();
+		while(iterator.hasNext()){
+			ProjectAuthority projectAuthority = (ProjectAuthority)iterator.next();
+			authoritys.put(projectAuthority.getAuthority_number(), true);
+			ProjectAuthority projectAuthorityTemp = projectRoleService.getProjectAuthority(Integer.valueOf(projectAuthority.getParent_id()));
+			authoritys.put(projectAuthorityTemp.getAuthority_number(), true);
+		}
+		httpSession.setAttribute("authoritys", authoritys);
+		
 		return "/jsp/project/project_detail.jsp";
 		
 	}

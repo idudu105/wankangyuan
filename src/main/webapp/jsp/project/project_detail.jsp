@@ -74,9 +74,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <a href="/wankangyuan/projectMember/selectProjectMember"><div class="top2Ctr">成员</div></a>
                     <a href="/wankangyuan/projectAppEnd/selectProjectAppEnd"><div class="top2Ctr">应用结果</div></a>
                     <a href="/wankangyuan/projectApp/selectProjectApp?p_id=${project.id}"><div class="top2Ctr">应用</div></a>
-                    <a href="/wankangyuan/projectFormatData/getSourceDatas?p_id=${project.id}"><div class="top2Ctr">格式数据</div></a>
-                    <a href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId"><div class="top2Ctr">文件</div></a>
-                    <a href="javascript:;"><div class="top2Ctr active">基本信息</div></a>
+                    <c:if test="${authoritys['3'] == true }">
+                    	<a href="/wankangyuan/projectFormatData/getSourceDatas?p_id=${project.id}"><div class="top2Ctr">格式数据</div></a>
+                    </c:if>
+                    
+                    <c:if test="${authoritys['2'] == true }">
+                    	<a href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId"><div class="top2Ctr">文件</div></a>
+                    </c:if>
+                    
+                    <c:if test="${authoritys['1'] == true }">
+                    	<a href="javascript:;"><div class="top2Ctr active">基本信息</div></a>
+                    </c:if>
+                    
+                    
                 </div>
             </div>
             <div class="prodexq">

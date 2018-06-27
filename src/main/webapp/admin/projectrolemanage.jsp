@@ -79,7 +79,7 @@
                 <ul class="nav pull-right">
                     <!-- start: User Dropdown -->
                     <li class="dropdown">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="http://themifycloud.com/demos/templates/janux/table.html#">
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" href=" ">
                             <i class="halflings-icon white user"></i>用户名
                             <span class="caret"></span>
                         </a>
@@ -95,9 +95,9 @@
                         </ul>
                     </li>
                     <!-- end: User Dropdown -->
-                </ul>
-            </div>
-            <!-- end: Header Menu -->
+                   </ul>
+               </div>
+               <!-- end: Header Menu -->
         </div>
     </div>
 </div>

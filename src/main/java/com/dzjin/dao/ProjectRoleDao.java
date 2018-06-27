@@ -100,5 +100,8 @@ public interface ProjectRoleDao {
 	 */
 	@Select("select * from project_authority")
 	public List<ProjectAuthority> selectProjectAuthority();
+	
+	@Select("select * from project_authority where id=#{id}")
+	public ProjectAuthority getProjectAuthority(@Param("id")Integer id);
  
 }

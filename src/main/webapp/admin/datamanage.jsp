@@ -75,40 +75,33 @@
                 <a class="brand" href="usermanage.html"><img src="img/newlogo2.png" height="70" width="218" alt="" /></a>
 
                 <!-- start: Header Menu -->
-                <div class="nav-no-collapse header-nav">
-                    <ul class="nav pull-right">
-                        <!-- start: User Dropdown -->
-                        <li class="dropdown">
-                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="http://themifycloud.com/demos/templates/janux/table.html#">
-                                <i class="halflings-icon white user"></i>用户名
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li class="dropdown-menu-title">
-                                    <span>账户设置</span>
-                                </li>
-                                <li>
-                                    <a href="javascript:;">
-                                        <i class="halflings-icon user"></i>修改密码
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:;">
-                                        <i class="halflings-icon off"></i>退出系统
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- end: User Dropdown -->
-                    </ul>
-                </div>
-                <!-- end: Header Menu -->
+            	<div class="nav-no-collapse header-nav">
+	                <ul class="nav pull-right">
+	                    <!-- start: User Dropdown -->
+	                    <li class="dropdown">
+	                        <a class="btn dropdown-toggle" data-toggle="dropdown" href=" ">
+	                            <i class="halflings-icon white user"></i>用户名
+	                            <span class="caret"></span>
+	                        </a>
+	                        <ul class="dropdown-menu">
+	                            <li class="dropdown-menu-title">
+	                                <span>账户设置</span>
+	                            </li>
+	                            <li>
+	                                <a href="/wankangyuan/admin/logout">
+	                                    <i class="halflings-icon off"></i>退出系统
+	                                </a>
+	                            </li>
+	                        </ul>
+	                    </li>
+	                    <!-- end: User Dropdown -->
+	               	</ul>
+               </div>
+               <!-- end: Header Menu -->
             </div>
         </div>
     </div>
     <!-- end: Header -->
-    
-    
 
     <div class="container-fluid-full">
         <div class="row-fluid">
@@ -118,41 +111,47 @@
                 <div class="nav-collapse sidebar-nav">
                     <ul class="nav nav-tabs nav-stacked main-menu">
                         <li>
-                            <a href="javascript:;">
-                                <!-- <i class="icon-bar-chart"></i> -->
-                                <span class="hidden-tablet"> 用户管理</span>
-                            </a>
-                        </li>	
-                        <li>
-                            <a href="javascript:;">
-                                <!-- <i class="icon-bar-chart"></i> -->
-                                <span class="hidden-tablet"> 角色管理</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">
-                                <!-- <i class="icon-bar-chart"></i> -->
-                                <span class="hidden-tablet"> 菜单管理</span>
-                            </a>
-                        </li>
-                        <li class="active">
-                            <a href="javascript:;">
-                                <!-- <i class="icon-bar-chart"></i> -->
-                                <span class="hidden-tablet"> 格式数据管理</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">
-                                <!-- <i class="icon-bar-chart"></i> -->
-                                <span class="hidden-tablet"> 系统配置</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">
-                                <!-- <i class="icon-bar-chart"></i> -->
-                                <span class="hidden-tablet"> 项目管理</span>
-                            </a>
-                        </li>
+	                        <a href="/wankangyuan/admin/viewUserManage">
+	                            <!-- <i class="icon-bar-chart"></i> -->
+	                            <span class="hidden-tablet"> 用户管理</span>
+	                        </a>
+	                    </li>   
+	                    <li>
+	                        <a href="/wankangyuan/admin/viewRoleManage">
+	                            <!-- <i class="icon-bar-chart"></i> -->
+	                            <span class="hidden-tablet"> 角色管理</span>
+	                        </a>
+	                    </li>
+	                    <li>
+	                        <a href="/wankangyuan/admin/viewResourceManage">
+	                            <!-- <i class="icon-bar-chart"></i> -->
+	                            <span class="hidden-tablet"> 菜单管理</span>
+	                        </a>
+	                    </li>
+	                    <li>
+	                        <a href="/wankangyuan/admin/formatdata">
+	                            <!-- <i class="icon-bar-chart"></i> -->
+	                            <span class="hidden-tablet"> 格式数据管理</span>
+	                        </a>
+	                    </li>
+	                    <li>
+	                        <a href="/wankangyuan/admin/SysConfigManage">
+	                            <!-- <i class="icon-bar-chart"></i> -->
+	                            <span class="hidden-tablet"> 系统配置</span>
+	                        </a>
+	                    </li>
+	                    <li>
+	                        <a href="/wankangyuan/adminProject/selectAdminProject">
+	                            <!-- <i class="icon-bar-chart"></i> -->
+	                            <span class="hidden-tablet"> 项目管理</span>
+	                        </a>
+	                    </li>
+	                    <li>
+	                        <a href="/wankangyuan/projectRole/selectProjectRole">
+	                            <!-- <i class="icon-bar-chart"></i> -->
+	                            <span class="hidden-tablet"> 项目内角色管理</span>
+	                        </a>
+	                    </li>
                     </ul>
                 </div>
             </div>
