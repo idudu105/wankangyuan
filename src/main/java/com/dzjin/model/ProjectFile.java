@@ -17,6 +17,15 @@ public class ProjectFile {
 	private String file_size;	//文件大小
 	private String create_datetime;		//文件上传时间
 	private int creator_id;		//文件创建者ID
+	private String username;
+	
+	
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	public int getId() {
 		return id;
 	}

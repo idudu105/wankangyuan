@@ -9,12 +9,19 @@ import org.apache.ibatis.annotations.Select;
 
 import com.dzjin.model.ProjectDataRelation;
 
-/** 
-* @Author dzjin
-* @Time 2018年6月4日 上午8:57:10 
-* @Version 1.0
-* <p>Description:</p>
-*/
+/**
+ * 
+ * 项目名称：wankangyuan 
+ * 类名称：ProjectDataDao 
+ * 类描述： 项目格式数据dao
+ * 创建人：dzjin 
+ * 创建时间：2018年6月28日 上午10:06:01 
+ * 修改人：dzjin 
+ * 修改时间：2018年6月28日 上午10:06:01 
+ * 修改备注： 
+ * @version 
+ *
+ */
 public interface ProjectDataDao {
 	
 	@Insert("insert ignore into project_data_relation(p_id,source_data_id) values(#{p_id},#{source_data_id})")

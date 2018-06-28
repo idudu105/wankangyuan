@@ -166,7 +166,7 @@
                         <i class="icon-angle-right"></i>
                     </li>
                     <li>
-                        <a href="http://themifycloud.com/demos/templates/janux/table.html#">Tables</a>
+                        <a href="">格式数据管理</a>
                     </li>
                 </ul>
 

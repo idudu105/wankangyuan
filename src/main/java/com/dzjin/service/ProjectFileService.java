@@ -46,7 +46,11 @@ public class ProjectFileService {
 		}
 		return result;
 	}
-	
+	/**
+	 * 查询某个文件夹下面的文件
+	 * @param floder_id
+	 * @return
+	 */
 	public List<ProjectFile> selectProjectFileByFloderId(Integer floder_id){
 		List<ProjectFile> projectFiles = new ArrayList<ProjectFile>();
 		getProjectFiles(floder_id, projectFiles);

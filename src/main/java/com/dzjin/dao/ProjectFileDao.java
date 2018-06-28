@@ -23,7 +23,9 @@ public interface ProjectFileDao {
 	@Update("update project_file set floder_id=#{floder_id} where id=#{id}")
 	public int updateFloderId(@Param("floder_id")Integer floder_id , @Param("id")Integer id);
 	
-	@Select("select * from project_file where floder_id=#{floder_id}")
+	@Select("select project_file.* , user.username "
+			+ "from project_file,user "
+			+ "where floder_id=#{floder_id} and user.id=project_file.creator_id")
 	public List<ProjectFile> selectProjectFileByFloderId(@Param("floder_id")Integer floder_id);
 	
 	@Delete("delete from project_file where id=#{id}")

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,6 +46,9 @@ public class ProjectFloderFileController {
 	ProjectFloderService projectFloderService;
 	@Autowired
 	ProjectFileService projectFileService;
+	
+	@Value("${project.file.location}")
+	private String fileLocation;
 	
 	/**
 	 * 查询文件目录结构
@@ -186,9 +190,10 @@ public class ProjectFloderFileController {
 			map.put("message", "文件不能超过10M");
 			return map;
 		}
+		
 		//文件上传地址
-		String path ="/usr/projectFiles/";
-		//String path ="G:/projectFiles/";
+		//String path ="/usr/projectFiles/";
+		String path =this.fileLocation;
         String fileName = file.getOriginalFilename();
         String type="."+fileName.substring(fileName.lastIndexOf(".")+1);
         String originalFilename = new String(fileName);

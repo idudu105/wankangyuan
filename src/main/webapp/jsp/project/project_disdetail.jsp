@@ -243,7 +243,6 @@
 	    
 	    //删除回复消息
 	    function deleteProjectTopicFllow(id){
-	    	alert(id);
 	    	$.ajax({
 	    		url:"/wankangyuan/projectTopic/deleteProjectTopicFollow",
 	    		type:"post",

@@ -252,22 +252,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="prof_lbRmULt">
 			                            
 						        <div class="allK">
-			                        <div class="quanxuanK">
-			                            <input type="checkbox" class="input_check" id="check0">
-			                            <label for="check0"></label>
-			                        </div>
-			                        <div class="allT">全选</div>
+			                        
+			                        <div class="allT">选择</div>
 			                    </div>
 
                                 <div class="prof_lbRmULtli prof_lbRmULt2">文件名称</div>
                                 <div class="prof_lbRmULtli prof_lbRmULt3">类型</div>
-                                <div class="prof_lbRmULtli prof_lbRmULt4">大小</div>
+                                <div class="prof_lbRmULtli prof_lbRmULt4">大小（KB）</div>
                                 <div class="prof_lbRmULtli prof_lbRmULt5">创建时间</div>
                                 <div class="prof_lbRmULtli prof_lbRmULt6">创建人</div>
-                                <div class="prof_lbRmULtli prof_lbRmULt7">操作</div>
+                                <div class="prof_lbRmULtli prof_lbRmULt7">预览</div>
                             </div>
-                            <div class="prof_lbRmULm" id="filesList">
-                            </div>
+                            <div class="prof_lbRmULm" id="filesList"></div>
+                            <!-- <div class="pageK" id="box"></div> -->
                         </div>
                     </div>
                 </div>
@@ -285,7 +282,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <div class="fileaddM">
                     <div class="fileaddMt">
                         <div class="fileaddMz addMtzname">名称</div>
-                        <div class="fileaddMz addMtzsize">大小</div>
+                        <div class="fileaddMz addMtzsize">大小（KB）</div>
                         <div class="fileaddMz addMtznum">文件数</div>
                         <div class="fileaddMz addMtzopea">操作</div>
                     </div>
@@ -314,9 +311,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<form id="uploadForm" style="display:none;">
 	    <input type="file" name="file" onchange="upFile()" id="uploadFile"/>
 	</form>
-    
+	
+	<a download="" href="" target="_blank" id="downFile">下载
+	</a>  
+	
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    <!-- <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script> -->
     <script type="text/javascript">
+    
+	   /* $('#box').paging({
+	        initPageNo: ${page}, // 初始页码
+	        totalPages: Math.ceil(${total}/${rows}), //总页数
+	        totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
+	        slideSpeed: 600, // 缓动速度。单位毫秒
+	        jump: true, //是否支持跳转
+	        callback: function(page) { // 回调函数
+	            console.log(page);
+	        	var user_id=${user.id};
+	            if(page!=${page}){
+	            	var searchWord = $(".searchCt").val();
+	            	var p_id = ${project.id};
+	                window.location.href="/wankangyuan/projectApp/selectProjectApp?type=1&p_id="+p_id+"&page="+page+"&strip=${rows}&searchWord="+searchWord;
+	            }
+	        }
+	    });*/
     
     	var ids = [];
     	var floder_id = 0; 
@@ -365,13 +383,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        });
 		}
 	  	
-	  	//取消文件上传，remove掉数据
+	  	//取消文件上传，移除掉文件数据
 	  	function removeFiv(id){
 	  		var box = document.getElementById(id);
 	  		box.parentNode.removeChild(box);
 	  	}
 	  	
-	  	//提交一组文件
+	  	//提交一组文件，并将文件关系绑定到文件夹-文件关系表中
 	  	function upFiles(){	  		
 	  		var files = ids.join(",");
 	  		//进行ajax请求
@@ -393,33 +411,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  			error : function(){
 	  				alert("联网失败");
 	  			}
-	  			
 	  		});	  	
 	  	}
 	  	
     	//删除一组文件
     	function deleteFiles(){
-    		
     		var afuxuanK=document.querySelectorAll('.fuxuanK2');
-    		
             var afuxuan=[];
             for(var i=0;i<afuxuanK.length;i++){
                 afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
             }
-            
             var ids = [];
             for(var i=0;i<afuxuanK.length;i++){
             	if(afuxuan[i].checked){
             		ids.push(afuxuan[i].value);
             	}
             }
-            
-            
             if(ids == ""){
             	alert("请勾选文件！");
             	return;
             }
-            
             //网络请求删除一组文件
             $.ajax({
             	url:"/wankangyuan/projectFloderFile/deleteFiles",
@@ -430,6 +441,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	dataType:"json",
             	success : function(data){
             		if(data.result == true){
+            			alert("文件删除成功！");
             			window.location.href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId";
             		}else{
             			alert(data.message);
@@ -441,9 +453,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	}
             	
             });
-            
-    		
     	}
+    	
+    	//下载文件
+    	$(".prof_lbRmTdo").click(function (){
+			var afuxuanK=document.querySelectorAll('.fuxuanK2');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].name);
+            	}
+            }
+            if(ids == ""){
+            	alert("请勾选文件！");
+            	return;
+            }
+            var a = document.getElementById("downFile");  
+            a.href="localhost:8098/download/"+ids[0];  
+            a.download=ids[0];  
+            a.click();
+    	});
     
     
     </script>

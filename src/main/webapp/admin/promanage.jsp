@@ -72,7 +72,7 @@
                     <span class="icon-bar"></span>
                 </a>
                 <!-- <a class="brand" href="index.html"><span>JANUX</span></a> -->
-                <a class="brand" href="usermanage.html"><img src="img/newlogo2.png" height="70" width="218" alt="" /></a>
+                <a class="brand" href="usermanage.html"><img src="<%=request.getContextPath()%>/admin/img/newlogo2.png" height="70" width="218" alt="" /></a>
 
 	            <!-- start: Header Menu -->
 	            <div class="nav-no-collapse header-nav">

@@ -27,12 +27,17 @@ import com.xtkong.service.SourceService;
 import com.xtkong.util.ConstantsHBase;
 
 /**
- * @Author dzjin
- * @Time 2018年6月4日 上午9:02:04
- * @Version 1.0
- *          <p>
- *          Description:
- *          </p>
+ * 
+ * 项目名称：wankangyuan 
+ * 类名称：ProjectFormatDataController 
+ * 类描述： 项目内格式数据controller
+ * 创建人：dzjin 
+ * 创建时间：2018年6月28日 上午9:30:34 
+ * 修改人：dzjin 
+ * 修改时间：2018年6月28日 上午9:30:34 
+ * 修改备注： 
+ * @version 
+ *
  */
 @Controller
 @RequestMapping("/projectFormatData")

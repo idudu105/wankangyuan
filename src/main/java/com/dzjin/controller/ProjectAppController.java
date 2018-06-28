@@ -62,7 +62,7 @@ public class ProjectAppController {
 		}
 		if(searchWord == null){
 			searchWord = new String("");
-			httpSession.setAttribute("projectAppSearchWord", null);
+			httpSession.setAttribute("projectAppSearchWord", searchWord);
 		}else{
 			//更新关键字
 			httpSession.setAttribute("projectAppSearchWord", searchWord);
