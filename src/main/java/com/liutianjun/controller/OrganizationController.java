@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.liutianjun.pojo.OrgMember;
 import com.liutianjun.pojo.Organization;
 import com.liutianjun.service.MessageService;
 import com.liutianjun.service.OrgMemberService;
@@ -80,6 +81,11 @@ public class OrganizationController {
 	public Map<String,Object> addNewGroup(Integer parentId, String organizationName) {
 		resultMap.put("status", 400);
 		resultMap.put("message", "添加失败!");
+		List<OrgMember> list = orgMemberService.findOrgMembersByGroupId(parentId);
+		if(null != list && list.size() > 0) {
+			resultMap.put("message", "该目录有成员，不能添加组!");
+			return resultMap;
+		}
 		Organization organization = organizationService.selectByPrimaryKey(parentId);
 		String username = (String)SecurityUtils.getSubject().getPrincipal();
 		if(!username.equals(organization.getCreator())){
