@@ -121,7 +121,7 @@
                         </div>
                     </div>
                     <div class="appexpMLz">
-                        <div class="appexpMLzt_1">是否显示：</div>
+                        <div class="appexpMLzt_1">是否公开：</div>
                         <div class="appexpMLzrk_1">
                             <input type="radio" class="appexpMLzr_1" name="isDisplay" value="1" <c:if test="${1 eq application.isDisplay }">checked="checked"</c:if> />是
                             <input type="radio" class="appexpMLzr_1" name="isDisplay" value="0" <c:if test="${0 eq application.isDisplay }">checked="checked"</c:if> />否

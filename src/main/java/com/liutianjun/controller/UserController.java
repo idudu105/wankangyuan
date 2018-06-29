@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -33,8 +34,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.liutianjun.pojo.Friends;
 import com.liutianjun.pojo.SysConfig;
 import com.liutianjun.pojo.User;
+import com.liutianjun.service.FriendsService;
 import com.liutianjun.service.RoleService;
 import com.liutianjun.service.SysConfigService;
 import com.liutianjun.service.UserService;
@@ -61,6 +64,9 @@ public class UserController {
 	
 	@Autowired
 	private RoleService roleService;
+	
+	@Autowired
+	private FriendsService friendsService;
 	
 	@Autowired
 	private SysConfigService sysConfigService;
@@ -139,7 +145,7 @@ public class UserController {
 			return resultMap;
 		}
 		//检查用户名
-		if(null != userService.selectByEmail(user.getUsername())){
+		if(null != userService.selectByUsername(user.getUsername())){
 			resultMap.put("message", "用户名已经存在!");
 			return resultMap;
 		}
@@ -514,7 +520,7 @@ public class UserController {
 	@RequestMapping(value="/admin/insertUserInfo",method=RequestMethod.POST)
 	public String insertUserInfo(User user,RedirectAttributes attributes) {
 		//检查用户名
-		if(null != userService.selectByEmail(user.getUsername())){
+		if(null != userService.selectByUsername(user.getUsername())){
 			attributes.addFlashAttribute("msg", "用户名已经存在!");
 			return "redirect:/viewUserManage";
 		}
@@ -677,6 +683,59 @@ public class UserController {
 	}
 	
 	/**
+	 * 获取所有用户信息
+	 * @Title: findAllUser 
+	 * @param username
+	 * @return 
+	 * String
+	 */
+	@RequestMapping(value="/user/findStrangerList",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String findAllUser(String username) {
+		
+		try {
+			Map<String, Object> map = userService.findAll(1, 10, username);
+			@SuppressWarnings("unchecked")
+			List<User> userList = (List<User>) map.get("list");
+			
+			//获取我的好友
+			String me = (String)SecurityUtils.getSubject().getPrincipal();
+			User user = userService.selectByUsername(me);
+			List<Friends> myFriendsList = friendsService.findAllMyFriends(user.getId(), null);
+			
+			//排除已加好友
+			if(null != userList && userList.size()>0 && null != myFriendsList && myFriendsList.size()>0) {
+				Iterator<User> iterator = userList.iterator();
+				User user1;
+				while(iterator.hasNext()) {
+					user1 = iterator.next();
+					if(user1.getId() == user.getId()) {
+						iterator.remove();
+						user1 = iterator.next();
+					}
+					for(int i=0;i<myFriendsList.size();i++) {
+						if(user1.getId() == myFriendsList.get(i).getFriendId()) {
+							iterator.remove();
+							break;
+						}
+					}
+					
+				}
+			}
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			String userListstr = objectMapper.writeValueAsString(userList);
+			
+			
+			return userListstr;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	
+	}
+	
+	/**
 	 * 查找所有组内成员
 	 * @Title: getOrgAllByName 
 	 * @param username
@@ -690,7 +749,6 @@ public class UserController {
 			List<User> orgUserList = userService.findOrgAll(username);
 			ObjectMapper objectMapper = new ObjectMapper();
 			String jsonOrgUserList = objectMapper.writeValueAsString(orgUserList);
-			
 			return jsonOrgUserList;
 		} catch (Exception e) {
 			e.printStackTrace();

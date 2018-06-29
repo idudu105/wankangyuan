@@ -123,10 +123,10 @@
                         <div class="shaixuanZKliT">创建时间</div>
                         <div class="shaixuanZKliI active"></div>
                     </div>
-                    <div class="shaixuanZKli">
+                    <!-- <div class="shaixuanZKli">
                         <div class="shaixuanZKliT">是否公开</div>
                         <div class="shaixuanZKliI active"></div>
-                    </div>
+                    </div> -->
                     <div class="shaixuanZKli">
                         <div class="shaixuanZKliT">异步/同步</div>
                         <div class="shaixuanZKliI active"></div>
@@ -180,7 +180,7 @@
                     <div class="PJListli appname" name="appName" order="app_name">应用名称</div>
                     <div class="PJListli appcreater" name="creator" order="creator">创建人</div>
                     <div class="PJListli apptime" name="createTime" order="create_time">创建时间</div>
-                    <div class="PJListli appopen" name="isDisplay" order="is_display">是否公开</div>
+                    <!-- <div class="PJListli appopen" name="isDisplay" order="is_display">是否公开</div> -->
                     <div class="PJListli PJyibu" name="isAsync" order="is_async">异步/同步</div>
                     <div class="PJListli PJkeyword" name="keywords" order="keywords">关键字</div>
                     <div class="PJListli appexplain" name="appIntro" order="app_intro">应用描述</div>
@@ -200,13 +200,13 @@
                                 <div class="PJliCli appcreater" data-bind="text:creator"></div>
                                 <div class="PJliCli apptime" data-bind="text:createTime"></div>
                                 
-                                <div class="PJliCli appopen">
-                                <!-- ko if: "${user.username}" == creator -->我创建的<!-- /ko -->
-                            	<!-- ko if: "${user.username}" != creator -->
-                                	<!-- ko if: 0 == isDisplay -->私有<!-- /ko -->
-                            		<!-- ko if: 1 == isDisplay -->公开<!-- /ko -->
-                            	<!-- /ko -->
-                                </div>
+                                <!-- <div class="PJliCli appopen">
+                                ko if: "${user.username}" == creator我创建的/ko
+                            	ko if: "${user.username}" != creator
+                                	ko if: 0 == isDisplay私有/ko
+                            		ko if: 1 == isDisplay公开/ko
+                            	/ko
+                                </div> -->
                                 
                                 <div class="PJliCli PJyibu">
                                 <!-- ko if: 0 == isAsync -->同步<!-- /ko -->

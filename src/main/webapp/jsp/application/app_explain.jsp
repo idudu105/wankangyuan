@@ -129,7 +129,7 @@
                         </div>
                     </div> --%>
                     <div class="appexpMLz">
-                        <div class="appexpMLzt1">是否显示：</div>
+                        <div class="appexpMLzt1">是否公开：</div>
                         <div class="appexpMLzt2">
                             <c:if test="${0 eq application.isDisplay }">否</c:if>
                             <c:if test="${1 eq application.isDisplay }">是</c:if>

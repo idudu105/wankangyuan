@@ -1856,30 +1856,52 @@ function friend_manage(){
     var osearch_2=document.querySelectorAll('.search_2')[0];//上方按钮栏搜索栏
     var osearch_3=document.querySelectorAll('.search_3')[0];//上方按钮栏搜索栏
 
-    // var zuzhi_PD=[];
-    // for(var i=0;i<afriendMMlTTz.length;i++){
-    //     zuzhi_PD.push(0);
-    // }
 
+    var ozhizhen=document.createElement('img');//指针图片
+    ozhizhen.className="zhizhen";
+    ozhizhen.src="../static/img/zhizhen2.png";
+
+    var panduanjicunqi=0;
+    
+    var afriendMMlTTzBz2=document.querySelectorAll('.friendMMlTTzBz2');
+    var afriendMMlTTzBz2Tk=document.querySelectorAll('.friendMMlTTzBz2Tk');
+    var afriendMMlTTzBz2Mk=document.querySelectorAll('.friendMMlTTzBz2Mk');
+
+    var zuzhi_PD=[];
+    for(var i=0;i<afriendMMlTTz.length;i++){
+        zuzhi_PD.push(0);
+    }
+
+//console.log(afriendMMlTTz.length);
 //组织结构点击效果
     for(var i=0;i<afriendMMlTTz.length;i++){
         (function(index){
             var ofriendMMlTTzT=afriendMMlTTz[index].querySelectorAll('.friendMMlTTzT')[0];
             ofriendMMlTTzT.onclick=function(){
+                ofriendMMlTTzT.appendChild(ozhizhen);//插入指针
+                ozzsyKpd.value=ofriendMMlTTzT.parentNode.getAttribute("name");
+                //console.log("添加组预存框"+ozzsyKpd.value);
+
+                // console.log(zuzhi_PD[index]);
+                if(zuzhi_PD[index]==0){
+                    panduanjicunqi=0;
+                }else if(zuzhi_PD[index]==1){
+                    panduanjicunqi=1;
+                }
+                // console.log(panduanjicunqi);
+
                 for(var j=0;j<afriendMMlTTz.length;j++){
                     afriendMMlTTz[j].className="friendMMlTTz";
-                    // zuzhi_PD[j]=0;
+                    zuzhi_PD[j]=0;
                 }
-                // if(zuzhi_PD[index]==0){
+
+                if(panduanjicunqi==0){
                     afriendMMlTTz[index].className="friendMMlTTz active";
-                    // zuzhi_PD[index]=1;
-                // }else{
-                    // afriendMMlTTz[index].className="friendMMlTTz";
-                    // zuzhi_PD[index]=0;
-                // }
-                
-                ozzsyKpd.value=afriendMMlTTz[index].getAttribute("name");
-                console.log(ozzsyKpd.value);
+                    zuzhi_PD[index]=1;
+                }else if(panduanjicunqi==1){
+                    afriendMMlTTz[index].className="friendMMlTTz active2";
+                    zuzhi_PD[index]=0;
+                }
 
             }
         })(i)
@@ -1889,6 +1911,11 @@ function friend_manage(){
     for(var i=0;i<afriendMMlTTzBz.length;i++){
         (function(index){
             afriendMMlTTzBz[index].onclick=function(){
+                afriendMMlTTzBz[index].appendChild(ozhizhen);//插入指针图片
+                ozzsyKpd.value=afriendMMlTTzBz[index].getAttribute("name");
+                //console.log("添加组预存框"+ozzsyKpd.value);
+
+
                 for(var j=0;j<afriendMMlTTzBz.length;j++){
                     afriendMMlTTzBz[j].style.color="#666";
                 }
@@ -1897,11 +1924,11 @@ function friend_manage(){
 
                 //组修改框内置预存框的写入
                 ozzsy_editKpd.value=afriendMMlTTzBz[index].getAttribute("name");
-                // console.log(ozzsy_editKpd.value);
+                // console.log("修改组预存框"+ozzsy_editKpd.value);
 
                 //组删除框内置预存框的写入
                 ozzsy_delKpd.value=afriendMMlTTzBz[index].getAttribute("name");
-                // console.log(ozzsy_delKpd.value);
+                // console.log("删除组预存框"+ozzsy_delKpd.value);
                 
                 //右侧框切换
                 afriendMMrz[0].className="friendMMrz active";
@@ -1917,6 +1944,44 @@ function friend_manage(){
         })(i)
     }
 
+//特殊组的点击效果（该组内有包含组的时候）
+    var teshuzuPD=[];
+    for(var i=0;i<afriendMMlTTzBz2.length;i++){
+        teshuzuPD.push(0);
+    }
+    // console.log(teshuzuPD);
+    
+    for(var i=0;i<afriendMMlTTzBz2.length;i++){
+        (function(index){
+            afriendMMlTTzBz2Tk[index].onclick=function(){
+                afriendMMlTTzBz2Tk[index].appendChild(ozhizhen);//插入指针图片
+                ozzsyKpd.value=afriendMMlTTzBz2Tk[index].parentNode.getAttribute("name");
+                //console.log("添加组预存框"+ozzsyKpd.value);
+
+                //组修改框内置预存框的写入
+                ozzsy_editKpd.value=afriendMMlTTzBz2Tk[index].parentNode.getAttribute("name");
+                // console.log("修改组预存框"+ozzsy_editKpd.value);
+
+                //组删除框内置预存框的写入
+                ozzsy_delKpd.value=afriendMMlTTzBz2Tk[index].parentNode.getAttribute("name");
+                // console.log("删除组预存框"+ozzsy_delKpd.value);
+
+                if(teshuzuPD[index]==0){
+                    afriendMMlTTzBz2[index].className="friendMMlTTzBz2 active";
+                    afriendMMlTTzBz2Mk[index].style.display="block";
+                    teshuzuPD[index]=1;
+
+                }else if(teshuzuPD[index]==1){
+                    afriendMMlTTzBz2[index].className="friendMMlTTzBz2";
+                    afriendMMlTTzBz2Mk[index].style.display="none";
+                    teshuzuPD[index]=0;
+                }
+                
+            }
+        })(i)
+    }
+    
+    
 // 我的好友点击效果
     ofriendMMlTBa.onclick=function(){
         for(var j=0;j<afriendMMlTTzBz.length;j++){
@@ -2058,8 +2123,8 @@ function friend_manage(){
 
 //从组中移除成员
     ofriend_yichuzu.onclick=function(){
-        allKnone();
-        ozuyichuK.style.display="block";//此行为点击按钮后，框显示，若要加判断则注释此行
+        //allKnone();
+        //ozuyichuK.style.display="block";//此行为点击按钮后，框显示，若要加判断则注释此行
         
         event.stopPropagation();
     }
@@ -2069,8 +2134,8 @@ function friend_manage(){
 
 //移除好友
     ofriend_yichuhy.onclick=function(){
-        allKnone();
-        oyichuhyK.style.display="block";//此行为点击按钮后，框显示，若要加判断则注释此行
+        //allKnone();
+        //oyichuhyK.style.display="block";//此行为点击按钮后，框显示，若要加判断则注释此行
         
         event.stopPropagation();
     }
@@ -2128,10 +2193,10 @@ function friend_manage(){
 
             if(afriendMMrz[index].querySelectorAll('.fuxuanK2')[0]){
                 afuxuanK=afriendMMrz[index].querySelectorAll('.fuxuanK2');
-                console.log("k2");
+                //console.log("k2");
             }else if(afriendMMrz[index].querySelectorAll('.fuxuanK3')[0]){
                 afuxuanK=afriendMMrz[index].querySelectorAll('.fuxuanK3');
-                console.log("k3");
+                //console.log("k3");
             }
 
             if(afuxuanK[0]){

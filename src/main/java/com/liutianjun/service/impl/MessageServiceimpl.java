@@ -173,8 +173,7 @@ public class MessageServiceimpl implements MessageService {
 			message.setResult("已通过");
 			
 			//通过后，双向添加好友
-			i += friendsService.insert(message.getUserId(), message.getObjId());
-			i += friendsService.insert(message.getObjId(), message.getUserId());
+			i += friendsService.toBeFriend(message.getUserId(), message.getObjId());
 		}
 		message.setUpdateTime(new Date());
 		i += messageDao.updateByPrimaryKey(message);

@@ -30,10 +30,16 @@ public interface OrganizationService {
 	//根据父id显示组列表
 	List<Organization> findOrgList(Integer parentId);
 	
+	List<Organization> findOrgList(Integer parentId,List<Integer> list);
+	
 	//处理添加组织结构请求
 	int dealAddOrgRequest(Integer id, Integer cmd);
 	
 	//根据id获取组织
 	Organization selectByPrimaryKey(Integer id);
+	
+	//根据用户名获取组织结构IDS
+	List<Integer> fingOrgIds();
+	
 	
 }

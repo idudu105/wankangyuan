@@ -18,4 +18,7 @@ public interface FriendsService {
 	//更新我的好友信息
 	int updateFriendsInfo(Integer userId);
 	
+	//互相加好友
+	int toBeFriend(Integer userId,Integer objId);
+	
 }

@@ -2,6 +2,7 @@ package com.liutianjun.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class Organization implements Serializable {
     /**
@@ -18,6 +19,16 @@ public class Organization implements Serializable {
      * 父ID
      */
     private Integer parentId;
+
+    /**
+     * id结构
+     */
+    private String parentIds;
+
+    /**
+     * 根id
+     */
+    private Integer rootId;
 
     /**
      * 真实姓名
@@ -53,10 +64,21 @@ public class Organization implements Serializable {
      * 状态 0:审核中 1:有效
      */
     private Integer status;
+    
+    private List<Organization> groupList;
+    
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public List<Organization> getGroupList() {
+		return groupList;
+	}
+
+	public void setGroupList(List<Organization> groupList) {
+		this.groupList = groupList;
+	}
+
+	public Integer getId() {
         return id;
     }
 
@@ -78,6 +100,22 @@ public class Organization implements Serializable {
 
     public void setParentId(Integer parentId) {
         this.parentId = parentId;
+    }
+
+    public String getParentIds() {
+        return parentIds;
+    }
+
+    public void setParentIds(String parentIds) {
+        this.parentIds = parentIds == null ? null : parentIds.trim();
+    }
+
+    public Integer getRootId() {
+        return rootId;
+    }
+
+    public void setRootId(Integer rootId) {
+        this.rootId = rootId;
     }
 
     public String getRealName() {
@@ -145,6 +183,8 @@ public class Organization implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", organizationName=").append(organizationName);
         sb.append(", parentId=").append(parentId);
+        sb.append(", parentIds=").append(parentIds);
+        sb.append(", rootId=").append(rootId);
         sb.append(", realName=").append(realName);
         sb.append(", creator=").append(creator);
         sb.append(", phone=").append(phone);
@@ -152,6 +192,7 @@ public class Organization implements Serializable {
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", status=").append(status);
+        sb.append(", groupList=").append(groupList);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

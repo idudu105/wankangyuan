@@ -1,10 +1,12 @@
 package com.liutianjun.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.liutianjun.pojo.Organization;
 import com.liutianjun.service.MessageService;
+import com.liutianjun.service.OrgMemberService;
 import com.liutianjun.service.OrganizationService;
 
 /**
@@ -35,6 +38,9 @@ public class OrganizationController {
 	
 	@Autowired
 	private MessageService messageService;
+	
+	@Autowired
+	private OrgMemberService orgMemberService;
 	
 	/**
 	 * 添加新组织结构
@@ -142,7 +148,7 @@ public class OrganizationController {
 	@ResponseBody
 	public Map<String,Object> deleteGroup(Integer id) {
 		resultMap.put("status", 400);
-		resultMap.put("message", "更新失败!");
+		resultMap.put("message", "删除失败!");
 		Organization organization = organizationService.selectByPrimaryKey(id);
 		String username = (String)SecurityUtils.getSubject().getPrincipal();
 		if(!username.equals(organization.getCreator())){
@@ -151,10 +157,29 @@ public class OrganizationController {
 		}
 		if(0 != organizationService.deleteGroupById(id)) {
 			resultMap.put("status", 200);
-			resultMap.put("message", "更新成功!");
+			resultMap.put("message", "删除成功!");
 		}
 		
 		return resultMap;
+	}
+	
+	/**
+	 * 查询组织结构
+	 * @Title: fingOrgList 
+	 * @return
+	 * @throws Exception 
+	 * String
+	 */
+	@RequestMapping(value="/findOrgList",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String fingOrgList() throws Exception {
+		List<Integer> list = orgMemberService.findMyGroupIds();
+		List<Integer> list2 = organizationService.fingOrgIds();
+		list.addAll(list2);
+		List<Organization> orgList = organizationService.findOrgList(0,list);
+		ObjectMapper objectMapper = new ObjectMapper();
+		String jsonOrgList = objectMapper.writeValueAsString(orgList);
+		return jsonOrgList;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.liutianjun.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,8 +40,12 @@ public class OrganizationServiceImpl implements OrganizationService {
 	public int addNewOrg(Organization record) {
 		record.setCreateTime(new Date());
 		record.setParentId(0);
+		record.setRootId(0);
 		record.setStatus(0);
-		return organizationDao.insert(record);
+		organizationDao.insert(record);
+		record.setRootId(record.getId());
+		
+		return organizationDao.updateByPrimaryKeySelective(record);
 	}
 
 	/**
@@ -53,11 +58,14 @@ public class OrganizationServiceImpl implements OrganizationService {
 	 */
 	@Override
 	public int addNewGroup(Integer parentId, String organizationName) {
+		Organization org = organizationDao.selectByPrimaryKey(parentId);
+		
 		//获取用户名
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 		Organization organization = new Organization();
 		organization.setCreateTime(new Date());
 		organization.setParentId(parentId);
+		organization.setRootId(org.getRootId());
 		organization.setOrganizationName(organizationName);
 		organization.setCreator(username);
 		organization.setStatus(1);
@@ -104,7 +112,33 @@ public class OrganizationServiceImpl implements OrganizationService {
 			criteria.andParentIdEqualTo(parentId);
 		}
 		criteria.andStatusEqualTo(1);
-		return organizationDao.selectByExample(example);
+		List<Organization> orgList = organizationDao.selectByExample(example);
+		for (Organization org : orgList) {
+			org.setGroupList(findOrgList(org.getId()));
+		}
+		
+		return orgList;
+	}
+	
+	@Override
+	public List<Organization> findOrgList(Integer parentId,List<Integer> list) {
+		OrganizationQuery example = new OrganizationQuery();
+		Criteria criteria = example.createCriteria();
+		if(null != list && list.size()>0) {
+			criteria.andRootIdIn(list);
+		}else {
+			criteria.andRootIdEqualTo(-1);
+		}
+		if(parentId != -1) {
+			criteria.andParentIdEqualTo(parentId);
+		}
+		criteria.andStatusEqualTo(1);
+		List<Organization> orgList = organizationDao.selectByExample(example);
+		for (Organization org : orgList) {
+			org.setGroupList(findOrgList(org.getId(),list));
+		}
+		
+		return orgList;
 	}
 
 	/**
@@ -143,6 +177,28 @@ public class OrganizationServiceImpl implements OrganizationService {
 	@Override
 	public Organization selectByPrimaryKey(Integer id) {
 		return organizationDao.selectByPrimaryKey(id);
+	}
+
+	/**
+	 * 根据用户名获取组织结构IDS
+	 * <p>Title: fingOrgIds</p>  
+	 * <p>Description: </p>  
+	 * @return
+	 */
+	@Override
+	public List<Integer> fingOrgIds() {
+		List<Integer> list = new ArrayList<>();
+		String username = (String)SecurityUtils.getSubject().getPrincipal();
+		OrganizationQuery example = new OrganizationQuery();
+		Criteria criteria = example.createCriteria();
+		criteria.andCreatorEqualTo(username);
+		List<Organization> orgList = organizationDao.selectByExample(example);
+		if(null != orgList && orgList.size() > 0) {
+			for (Organization organization : orgList) {
+				list.add(organization.getRootId());
+			}
+		}
+		return list;
 	}
 	
 	

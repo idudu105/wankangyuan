@@ -161,10 +161,10 @@
                         <div class="cyaddKT2">
                             <input name="isOrg" type="hidden" value="0">
                             <input name="username" type="text" class="cyaddKT2p" placeholder="输入要搜索的用户名" />
-                            <input type="button" class="cyaddKT2b" value="搜索" data-bind="click:showMembers" />
+                            <input type="button" class="cyaddKT2b" value="搜索" data-bind="click:getMyFriends" />
                         </div>
                         </form>
-                        <form id="updateUserOrgForm">
+                        <form id="addOrgMembersForm">
                         <div class="cyaddKM">
                             <table class="cyaddKMtb">
                                 <tr class="biaotou">
@@ -173,13 +173,13 @@
                                     <th class="youxiang">邮箱</th>
                                     <th class="caozuo">操作</th>
                                 </tr>
-                                <tbody data-bind="foreach: members">
+                                <tbody data-bind="foreach: friends">
                                 <tr class="biaoxiang" >
-                                    <th class="touxiang"><img data-bind="attr:{src: headimg}"  alt="" class="touxiangi" /></th>
-                                    <th class="yonghuming" data-bind="text: username"></th>
-                                    <th class="youxiang" data-bind="text: email"></th>
+                                    <th class="touxiang"><img data-bind="attr:{src: friendHeadimg}"  alt="" class="touxiangi" /></th>
+                                    <th class="yonghuming" data-bind="text: friendName"></th>
+                                    <th class="youxiang" data-bind="text: friendEmail"></th>
                                     <th class="caozuo">
-                                        <input name="ids" type="checkbox" class="caozuochk" data-bind="value: id" />
+                                        <input name="userIds" type="checkbox" class="caozuochk" data-bind="value: friendId" />
                                     </th>
                                 </tr>
                                 </tbody>
@@ -187,8 +187,9 @@
                         </div>
 
                         <div class="cyaddKB">
-                            <div class="cyaddKBt">添加到</div>
-                            <select name="organizationId" id="" class="cyaddKBs">
+                            <!-- <div class="cyaddKBt">添加到</div> -->
+                            <input id="groupId" type="hidden" name="groupId">
+                            <%-- <select name="organizationId" id="" class="cyaddKBs">
                             <c:forEach items="${orgList }" var="org">
                             <c:if test="${0 ne org.parentId}">
                                 <option value="${org.id }">
@@ -198,8 +199,8 @@
                                 </option>
                             </c:if>
                             </c:forEach>
-                            </select>
-                            <input type="button" class="cyaddKBb" value="添加" onclick="updateUserOrg()" />
+                            </select> --%>
+                            <input type="button" class="cyaddKBb" value="添加" onclick="addOrgMembers()" />
                         </div>
 	                    </form>
                     </div>
@@ -284,10 +285,9 @@
                             <img src="<%=request.getContextPath()%>/static/img/close.png" alt="" class="hyaddKTi" />
                         </div>
                         <div class="cyaddKT2">
-                        <form id="orgMemberForm">
-                            <input type="hidden" name="isOrg" value="-1">
+                        <form id="findStrangerListForm">
                             <input name="username" type="text" class="cyaddKT2p" placeholder="输入要搜索的用户名" />
-                            <input type="button" class="cyaddKT2b" value="搜索" data-bind="click:showOrgMember" />
+                            <input type="button" class="cyaddKT2b" value="搜索" data-bind="click:findStrangerList" />
                         </form>
                         </div>
                         <div class="cyaddKM">
@@ -299,7 +299,7 @@
                                     <th class="youxiang">邮箱</th>
                                     <th class="caozuo">操作</th>
                                 </tr>
-                                <tbody data-bind="foreach:orgMember">
+                                <tbody data-bind="foreach:strangerList">
                                 <tr class="biaoxiang">
                                     <th class="touxiang"><img data-bind="attr:{src: headimg}" alt="" class="touxiangi" /></th>
                                     <th class="yonghuming" data-bind="text:username"></th>
@@ -321,9 +321,9 @@
                     <div class="friendMMl">
                         <div class="friendMMlT"><!-- 除添加好友外 -->
                             <div class="friendMMlTT"><!-- 除我的好友外 -->
-                                <c:forEach items="${orgList }" var="org" varStatus="status">
+                                <%-- <c:forEach items="${orgList }" var="org" varStatus="status">
                                 <c:if test="${org.parentId eq 0 }">
-                                <div class="friendMMlTTz <c:if test='${status.count eq 1}'>active</c:if>" name="${org.id }"><!-- 每个组织结构 -->
+                                <div class="friendMMlTTz" name="${org.id }"><!-- 每个组织结构 -->
                                     <div class="friendMMlTTzT">
                                         <span class="fri_name">${org.organizationName }</span>
                                         <div class="friendMMlTTzTi"></div>
@@ -341,7 +341,18 @@
                                     </div>
                                 </div>
                                 </c:if>
-                                </c:forEach>
+                                </c:forEach> --%>
+                                <div data-bind="foreach: orgList">
+                                <div class="friendMMlTTz" data-bind="attr:{name: id}" ><!-- 每个组织结构 -->
+                                    <div class="friendMMlTTzT">
+                                        <span class="fri_name" data-bind="text: organizationName"></span>
+                                        <div class="friendMMlTTzTi"></div>
+                                    </div>
+                                    <div class="friendMMlTTzB">
+                                        <div data-bind="template: { name: 'orgTmpl', foreach: groupList }"></div>
+                                    </div>
+                                </div>
+                              </div>
                             </div>
                             <div class="friendMMlTB">
                                 <a href="javascript:;" class="friendMMlTBa">
@@ -376,7 +387,7 @@
                                     <tr class="">
                                         <td class="xuanze">
                                             <div class="fuxuanK2">
-                                                <input name="orgerIds" type="checkbox" class="input_check" data-bind="value: id,attr:{id:'check1_'+($index()+1)}">
+                                                <input name="orgIds" type="checkbox" class="input_check" data-bind="value: id,attr:{id:'check1_'+($index()+1)}">
                                                 <label data-bind="attr:{for:'check1_'+($index()+1)}"></label>
                                             </div>
                                         </td>
@@ -385,7 +396,7 @@
                                         </td>
                                         <td class="yonghuming"><span data-bind="text: username"></span></td>
                                         <td class="youxiang"><span data-bind="text: email"></span></td>
-                                        <td class="juese"><span data-bind="text: roleIds"></span></td>
+                                        <td class="juese"><span data-bind="text: orgRole"></span></td>
                                         <td>
                                             <span data-bind="if:password"><span class="caozuo bukecaozuo" data-bind="text:password"></span></span>
                                             <span class="caozuo kecaozuo" data-bind="ifnot:password,click: $root.sendFriendRequest">加好友</span>
@@ -458,10 +469,37 @@
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/knockout-3.4.2.js"></script>
 
+<!--菜单项模板-->
+<script id="orgTmpl" type="text/html">
+<!-- ko if:groupList.length -->
+<div class="friendMMlTTzBz2" data-bind="attr:{name: id}" data-bind="text: organizationName">
+    <div class="friendMMlTTzBz2Tk">
+        <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
+        <div class="friendMMlTTzBzt" data-bind="text: organizationName"></div>
+        <div class="friendMMlTTzTi"></div>
+    </div>
+    <div class="friendMMlTTzBz2Mk" data-bind="template: { name: 'orgTmpl', foreach: groupList }">
+        <div class="friendMMlTTzBz" data-bind="attr:{name: id}">
+            <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
+            <div class="friendMMlTTzBzt" data-bind="text: organizationName"></div>
+        </div>
+    </div>
+</div>
+<!-- /ko -->
+
+<!-- ko ifnot:groupList.length -->
+    <div class="friendMMlTTzBz" data-bind="attr:{name: id},click:function(data, event){$root.showOrgers(id) }">
+        <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
+        <div class="friendMMlTTzBzt" data-bind="text: organizationName"></div>
+    </div>
+<!-- /ko -->
+                                        
+</script>
+
 <script type="text/javascript">
 //从组里移除
 $(".friend_yichuzu").click(function() {
-	var ids = $("input[name='orgerIds']");
+	var ids = $("input[name='orgIds']");
     var checkNum = 0;
     for (var i = 0; i < ids.length; i++) {
         if (ids[i].checked) {
@@ -602,9 +640,12 @@ function deleteGroup() {
     },"json");
 }
 
-function updateUserOrg() {
+function addOrgMembers() {
+	if(null == $('#groupId').val() || '' == $('#groupId').val()) {
+        return layer.msg("请选择组!",function(){}),!1;
+    }
 	var load = layer.load();
-    $.post("/wankangyuan/user/updateUserOrg",$('#updateUserOrgForm').serialize() ,function(result){
+    $.post("/wankangyuan/orgMember/addOrgMembers",$('#addOrgMembersForm').serialize() ,function(result){
         layer.close(load);
         if(result && result.status!= 200){
             return layer.msg(result.message,function(){}),!1;
@@ -629,27 +670,22 @@ function ViewModel() {
     
     var centUser = '${user.username}';
     
+    
     //组内成员
     self.orgers = ko.observableArray(); //添加动态监视数组对象
     //显示组内成员
     self.showOrgers = function(id){
+    	$("#groupId").val(id);
     	centOrgId=id;
     	self.orgers.removeAll();
-    	$.get("/wankangyuan/user/getUserByOrg",{organizationId:id},function(data){
+    	$.get("/wankangyuan/orgMember/findOrgMembers",{groupId:id},function(data){
             //alert(data);
             var list = JSON.parse(data);
             for (var i in list){
-                
-            	//转换角色名
-                for(var j in roles) {
-                	if(list[i].roleIds == roles[j].id){
-                		list[i].roleIds = roles[j].description;
-                	}
-                }
             	//根据好友列表判断状态
             	list[i].password = null;
             	for(var k in myfriends) {
-                    if(list[i].id == myfriends[k].friendId){
+                    if(list[i].userId == myfriends[k].friendId){
                         list[i].password = "已添加";
                     }
                     
@@ -667,19 +703,13 @@ function ViewModel() {
     
     self.getOrgers = function() {
     	self.orgers.removeAll();
-    	$.get("/wankangyuan/user/getOrgAllByName",{username:$("#orgMemberSearch").val()},function(data){
+    	$.get("/wankangyuan/orgMember/findOrgMembersByname",{username:$("#orgMemberSearch").val()},function(data){
     		var list = JSON.parse(data);
             for (var i in list){
-                //转换角色名
-                for(var j in roles) {
-                    if(list[i].roleIds == roles[j].id){
-                        list[i].roleIds = roles[j].description;
-                    }
-                }
                 //根据好友列表判断状态
                 list[i].password = null;
                 for(var k in myfriends) {
-                    if(list[i].id == myfriends[k].friendId){
+                    if(list[i].userId == myfriends[k].friendId){
                         list[i].password = "已添加";
                     }
                 }
@@ -701,7 +731,7 @@ function ViewModel() {
     //移除组内成员
     self.removeOrgers = function() {
     	var load = layer.load();
-        $.post("/wankangyuan/user/removeOrgByIds",$('#orgersForm').serialize() ,function(result){
+        $.post("/wankangyuan/orgMember/removeOrgMembers",$('#orgersForm').serialize() ,function(result){
             layer.close(load);
             if(result && result.status!= 200){
                 return layer.msg(result.message,function(){}),!1;
@@ -718,7 +748,7 @@ function ViewModel() {
         },"json");
     }
     //成员列表
-    self.members = ko.observableArray(); 
+    /* self.members = ko.observableArray(); 
     self.showMembers = function() {
     	self.members.removeAll();
         $.get("/wankangyuan/user/getOrgUserByName",$('#getUserByNameForm').serialize(),function(data){
@@ -728,19 +758,20 @@ function ViewModel() {
                 
             }
         });
-    }
-    //组内成员列表
-    self.orgMember = ko.observableArray(); 
-    self.showOrgMember = function() {
-    	self.orgMember.removeAll();
-        $.get("/wankangyuan/user/getOrgUserByName",$('#orgMemberForm').serialize(),function(data){
+    } */
+    //所有陌生人
+    self.strangerList = ko.observableArray(); 
+    self.findStrangerList = function() {
+        self.strangerList.removeAll();
+        $.get("/wankangyuan/user/findStrangerList",$('#findStrangerListForm').serialize(),function(data){
             var list = JSON.parse(data);
             for (var i in list){
-            	self.orgMember.push(list[i]);
+                self.strangerList.push(list[i]);
             }
             
         });
     }
+    
     //初始化组能成员
     //self.showOrgMember();
     
@@ -837,6 +868,28 @@ function ViewModel() {
     }
     
     //-----------------------------------------------------
+    
+    var organization = function(id,organizationName, groupList) {
+    this.id = ko.observable(id);
+    this.organizationName = ko.observable(organizationName);
+    this.groupList = ko.observableArray(groupList || []); //下级子菜单
+};
+    
+    //组织结构
+    self.orgList = ko.observableArray();
+    self.getOrgList = function() {
+        self.orgList.removeAll();
+        $.get("/wankangyuan/organization/findOrgList",{},function(data){
+        	var orgListJson = JSON.parse(data);
+            for (var i in orgListJson){
+                self.orgList.push(new organization(orgListJson[i].id,orgListJson[i].organizationName,orgListJson[i].groupList));
+                
+            }
+            friend_manage();
+        });
+    }
+    
+    self.getOrgList();
 }
 var vm = new ViewModel();
 ko.applyBindings(vm);

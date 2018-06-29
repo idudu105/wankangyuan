@@ -8,16 +8,13 @@ import org.apache.shiro.SecurityUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.liutianjun.pojo.Friends;
-import com.liutianjun.pojo.Organization;
 import com.liutianjun.pojo.User;
 import com.liutianjun.service.FriendsService;
-import com.liutianjun.service.OrganizationService;
 import com.liutianjun.service.UserService;
 
 /**
@@ -41,9 +38,6 @@ public class FriendsController {
 	@Autowired
 	private UserService userService;
 	
-	@Autowired
-	private OrganizationService organizationService;
-	
 	/**
 	 * 进入好友管理
 	 * @Title: viewFriendsManage 
@@ -52,9 +46,7 @@ public class FriendsController {
 	 * String
 	 */
 	@RequestMapping(value="/viewFriendsManage",method=RequestMethod.GET)
-	public String viewFriendsManage(Model model) {
-		List<Organization> orgList = organizationService.findOrgList(-1);
-		model.addAttribute("orgList", orgList);
+	public String viewFriendsManage() {
 		//获取用户名
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 	    //获取用户

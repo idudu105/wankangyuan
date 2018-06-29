@@ -48,16 +48,35 @@ public class FriendsServiceImpl implements FriendsService {
 	 */
 	@Override
 	public int insert(Integer userId, Integer friendId) {
+		if(0 == findMyFriend(userId, friendId)) {
+			Friends friends = new Friends();
+			friends.setUserId(userId);
+			friends.setFriendId(friendId);
+			
+			friends.setCreateTime(new Date());
+			
+			copyUserToFriends(friendId, friends);
+			
+			return friendsDao.insert(friends);
+		}
+		return 0;
 		
-		Friends friends = new Friends();
-		friends.setUserId(userId);
-		friends.setFriendId(friendId);
-		
-		friends.setCreateTime(new Date());
-		
-		copyUserToFriends(friendId, friends);
-		
-		return friendsDao.insert(friends);
+	}
+	
+	/**
+	 * 查找我的好友
+	 * @Title: findMyFriend 
+	 * @param userId
+	 * @param friendId
+	 * @return 
+	 * int
+	 */
+	private int findMyFriend(Integer userId, Integer friendId) {
+		FriendsQuery example = new FriendsQuery();
+		Criteria criteria = example.createCriteria();
+		criteria.andUserIdEqualTo(userId);
+		criteria.andFriendIdEqualTo(friendId);
+		return friendsDao.countByExample(example);
 	}
 
 	/**
@@ -96,6 +115,7 @@ public class FriendsServiceImpl implements FriendsService {
 	 */
 	@Override
 	public List<Friends> findAllMyFriends(Integer userId,String friendName) {
+		insert(userId, userId);
 		FriendsQuery example = new FriendsQuery();
 		Criteria criteria = example.createCriteria();
 		criteria.andUserIdEqualTo(userId);
@@ -142,6 +162,34 @@ public class FriendsServiceImpl implements FriendsService {
 		
 		Role role = roleService.selectByPrimaryKey(Integer.valueOf(friendUser.getRoleIds()));
 		friends.setFriendRolename(role.getDescription());
+	}
+
+	/**
+	 * 加好友
+	 * <p>Title: toBeFriend</p>  
+	 * <p>Description: </p>  
+	 * @param userId
+	 * @param objId
+	 * @return
+	 */
+	@Override
+	public int toBeFriend(Integer userId, Integer objId) {
+		List<Friends> userFriends = findAllMyFriends(userId, "");
+		for (Friends friends : userFriends) {
+			if(friends.getFriendId() == objId) {
+				friendsDao.deleteByPrimaryKey(friends.getId());
+			}
+		}
+		List<Friends> objFriends = findAllMyFriends(objId, "");
+		for (Friends friends : objFriends) {
+			if(friends.getFriendId() == userId) {
+				friendsDao.deleteByPrimaryKey(friends.getId());
+			}
+		}
+		int i = 0;
+		i += insert(userId, objId);
+		i += insert(objId, userId);
+		return i;
 	}
 
 }

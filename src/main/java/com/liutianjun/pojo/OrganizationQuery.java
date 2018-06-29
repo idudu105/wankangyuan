@@ -337,6 +337,136 @@ public class OrganizationQuery {
             return (Criteria) this;
         }
 
+        public Criteria andParentIdsIsNull() {
+            addCriterion("parent_ids is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdsIsNotNull() {
+            addCriterion("parent_ids is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdsEqualTo(String value) {
+            addCriterion("parent_ids =", value, "parentIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdsNotEqualTo(String value) {
+            addCriterion("parent_ids <>", value, "parentIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdsGreaterThan(String value) {
+            addCriterion("parent_ids >", value, "parentIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdsGreaterThanOrEqualTo(String value) {
+            addCriterion("parent_ids >=", value, "parentIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdsLessThan(String value) {
+            addCriterion("parent_ids <", value, "parentIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdsLessThanOrEqualTo(String value) {
+            addCriterion("parent_ids <=", value, "parentIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdsLike(String value) {
+            addCriterion("parent_ids like", value, "parentIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdsNotLike(String value) {
+            addCriterion("parent_ids not like", value, "parentIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdsIn(List<String> values) {
+            addCriterion("parent_ids in", values, "parentIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdsNotIn(List<String> values) {
+            addCriterion("parent_ids not in", values, "parentIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdsBetween(String value1, String value2) {
+            addCriterion("parent_ids between", value1, value2, "parentIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdsNotBetween(String value1, String value2) {
+            addCriterion("parent_ids not between", value1, value2, "parentIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdIsNull() {
+            addCriterion("root_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdIsNotNull() {
+            addCriterion("root_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdEqualTo(Integer value) {
+            addCriterion("root_id =", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdNotEqualTo(Integer value) {
+            addCriterion("root_id <>", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdGreaterThan(Integer value) {
+            addCriterion("root_id >", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("root_id >=", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdLessThan(Integer value) {
+            addCriterion("root_id <", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdLessThanOrEqualTo(Integer value) {
+            addCriterion("root_id <=", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdIn(List<Integer> values) {
+            addCriterion("root_id in", values, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdNotIn(List<Integer> values) {
+            addCriterion("root_id not in", values, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdBetween(Integer value1, Integer value2) {
+            addCriterion("root_id between", value1, value2, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("root_id not between", value1, value2, "rootId");
+            return (Criteria) this;
+        }
+
         public Criteria andRealNameIsNull() {
             addCriterion("real_name is null");
             return (Criteria) this;

@@ -146,7 +146,7 @@ input{
     width:125px;
     height:160px;
     background:url(../img/userbutK.png) no-repeat;
-    z-index: 500;
+    z-index: 5000;
     display:none;
     padding-top:12px;
 }
@@ -5047,8 +5047,17 @@ input{
     font-size:18px;
 }
 .friendMMlTTz.active .friendMMlTTzT{
-    color:#5ca0e5;
+    /* color:#5ca0e5; */
 }
+
+.zhizhen{
+    display: inline-block;
+    vertical-align: middle;
+    width:18px;
+    height:18px;
+    margin-left:20px;
+}
+
 .friendMMlTTzTi{
     width:16px;
     height:16px;
@@ -5057,7 +5066,11 @@ input{
     display:inline-block;
     vertical-align: middle;
 }
-.friendMMlTTz.active .friendMMlTTzTi{
+.friendMMlTTz.active>.friendMMlTTzT>.friendMMlTTzTi{
+    background:url(../img/yuan_jian.png) no-repeat;
+}
+
+.friendMMlTTzBz2.active>.friendMMlTTzBz2Tk>.friendMMlTTzTi{
     background:url(../img/yuan_jian.png) no-repeat;
 }
 
@@ -5083,6 +5096,24 @@ input{
     cursor:pointer;
     color:#666666;
 }
+
+.friendMMlTTzBz2{
+    width:170px;
+    /*border-bottom:1px solid #dadada;*/
+    text-align: left;
+    cursor:pointer;
+    color:#666666;
+}
+.friendMMlTTzBz2Tk{
+    border-bottom:1px solid #dadada;
+    padding:12px 15px;
+    width:170px;
+}
+.friendMMlTTzBz2Mk{
+    padding-left:20px;
+    display:none;
+}
+
 .friendMMlTTzBzi{
     display:inline-block;
     vertical-align: middle;
