@@ -21,10 +21,13 @@ import com.xtkong.dao.hbase.HBaseFormatNodeDao;
 import com.xtkong.dao.hbase.HBaseSourceDataDao;
 import com.xtkong.model.FormatType;
 import com.xtkong.model.Source;
+import com.xtkong.model.SourceField;
 import com.xtkong.service.FormatFieldService;
 import com.xtkong.service.FormatTypeService;
+import com.xtkong.service.PhoenixClient;
 import com.xtkong.service.SourceFieldService;
 import com.xtkong.service.SourceService;
+import com.xtkong.util.ConstantsHBase;
 
 @Controller
 @RequestMapping("/sourceData")
@@ -50,11 +53,12 @@ public class SourceDataController {
 	 * @param user_id
 	 */
 	@RequestMapping("/firstIn")
-	public String getSourceDatas(HttpServletRequest request , HttpSession httpSession, String type, Integer currPage, Integer page,
-			Integer strip, String startRowStr) {
+	public String firstIn(HttpServletRequest request, HttpSession httpSession, String type, Integer page,
+			Integer strip) {
 
-		return getSourceDatas(request , httpSession, type, null, currPage, page, strip, startRowStr);
+		return getSourceDatas(request, httpSession, type, null, page, strip,null,null);
 	}
+
 	/**
 	 * sources 采集源列表
 	 * 
@@ -71,12 +75,9 @@ public class SourceDataController {
 	 * @return
 	 */
 	@RequestMapping("/getSourceDatas")
-	public String getSourceDatas(HttpServletRequest request , HttpSession httpSession, String type, Integer cs_id, Integer currPage,
-			Integer page, Integer strip, String startRowStr) {
-		User user = (User)request.getAttribute("user");
-		if (currPage == null) {
-			currPage = 0;
-		}
+	public String getSourceDatas(HttpServletRequest request, HttpSession httpSession, String type, Integer cs_id,
+			Integer page, Integer strip,Integer csf_id,String searchWord) {
+		User user = (User) request.getAttribute("user");
 		if (page == null) {
 			page = 1;
 		}
@@ -95,28 +96,61 @@ public class SourceDataController {
 			Source source = sourceService.getSourceByCs_id(cs_id);
 			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
 
-			httpSession.setAttribute("source", source);// 采集源字段列表
+			// httpSession.setAttribute("source", source);// 采集源字段列表
 			// 源数据字段
-			List<List<String>> sourceDatas = new ArrayList<>();
+			// List<List<String>> sourceDatas = new ArrayList<>();
+			Map<String, Map<String, Object>> result = new HashMap<>();
+			String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
+			String family = ConstantsHBase.FAMILY_INFO;
+			List<String> qualifiers = new ArrayList<>();
+			for (SourceField sourceField : source.getSourceFields()) {
+				qualifiers.add(String.valueOf(sourceField.getCsf_id()));
+			}
+			Map<String, String> whereEqual = new HashMap<>();
+			Map<String, String> whereLike = new HashMap<>();
+			if (csf_id != null) {
+				if (searchWord==null) {
+					searchWord="";
+				}
+				whereLike.put(String.valueOf(csf_id), searchWord);
+			}
+			String condition = null;
 			// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
 			switch (type) {
 			case "1":
-				sourceDatas = HBaseSourceDataDao.getSourceDatasByUid(Integer.toString(cs_id), String.valueOf(user.getId()),
-						source.getSourceFields(), currPage, page, strip, startRowStr);
-				httpSession.setAttribute("sourceDatas", sourceDatas);//
+				condition = PhoenixClient.getPheonixSQLQualifier(tableName, ConstantsHBase.QUALIFIER_USER) + "='"
+						+ String.valueOf(user.getId()) + "' OR "
+						+ PhoenixClient.getPheonixSQLQualifier(tableName, ConstantsHBase.QUALIFIER_CREATE) + "='"
+						+ String.valueOf(user.getId()) + "'";
+//				whereEqual.put(ConstantsHBase.QUALIFIER_USER, String.valueOf(user.getId()));
 				break;
 			case "2":
-				sourceDatas = HBaseSourceDataDao.getSourceDatasCreated(Integer.toString(cs_id), String.valueOf(user.getId()),
-						source.getSourceFields(), page, strip);
-				httpSession.setAttribute("sourceDatas", sourceDatas);//
+				SourceField publicStatus = new SourceField();
+				publicStatus.setCs_id(cs_id);
+				publicStatus.setCsf_name("公开状态");
+				source.getSourceFields().add(publicStatus);
+				qualifiers.add(ConstantsHBase.QUALIFIER_PUBLIC);
+				whereEqual.put(ConstantsHBase.QUALIFIER_CREATE, String.valueOf(user.getId()));
 				break;
 			case "3":
-				sourceDatas = HBaseSourceDataDao.getSourceDatasPublic(Integer.toString(cs_id), source.getSourceFields(),
-						page, strip);
-				httpSession.setAttribute("sourceDatas", sourceDatas);//
+				whereEqual.put(ConstantsHBase.QUALIFIER_PUBLIC, String.valueOf(ConstantsHBase.VALUE_PUBLIC_TRUE));
 				break;
 			}
-			httpSession.setAttribute("total", 20);
+			result = PhoenixClient.select(tableName, qualifiers, whereEqual, whereLike, condition, page, strip);
+			String resultMsg = String.valueOf((result.get("msg")).get("msg"));
+			for (int j = 0; j < 6; j++) {
+				resultMsg = String.valueOf((result.get("msg")).get("msg"));
+				if (resultMsg.equals("success")) {
+					break;
+				} else {
+					result = PhoenixClient.reSelectWhere(resultMsg, tableName, family, qualifiers, whereEqual,
+							whereLike, page, strip);
+				}
+			}
+			httpSession.setAttribute("defaultcs_id", cs_id);
+			httpSession.setAttribute("source", source);// 采集源字段列表
+			httpSession.setAttribute("sourceDatas", result.get("records").get("data"));// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
+			httpSession.setAttribute("total", result.get("page").get("totalCount"));
 			httpSession.setAttribute("page", page);
 			httpSession.setAttribute("rows", strip);
 		}
@@ -135,7 +169,6 @@ public class SourceDataController {
 
 	}
 
-	
 	/**
 	 * 获取添加源数据表单
 	 * 
@@ -165,15 +198,13 @@ public class SourceDataController {
 	 * 
 	 * @param cs_id
 	 *            采集源
-	 * @param uid
-	 *            用户
 	 * @param sourceFieldDatas
 	 *            采集源字段id、 数据值
 	 */
 	@RequestMapping("/insertSourceData")
 	@ResponseBody
-	public Map<String, Object> insertSourceData(HttpServletRequest request , String cs_id, String sourceFieldDatas) {
-		User user = (User)request.getAttribute("user");
+	public Map<String, Object> insertSourceData(HttpServletRequest request, String cs_id, String sourceFieldDatas) {
+		User user = (User) request.getAttribute("user");
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		if (HBaseSourceDataDao.insertSourceData(cs_id, String.valueOf(user.getId()),
@@ -213,8 +244,6 @@ public class SourceDataController {
 		}
 		return map;
 	}
-
-
 
 	/**
 	 * 通过sourceDataId获取一条源数据
@@ -302,8 +331,9 @@ public class SourceDataController {
 
 	@RequestMapping("/addMySource")
 	@ResponseBody
-	public Map<String, Object> addMySource(String cs_id, String sourceDataIds) {
-		int uid = 1;
+	public Map<String, Object> addMySource(HttpServletRequest request,String cs_id, String sourceDataIds) {
+		User user = (User) request.getAttribute("user");
+		Integer uid = user.getId();
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (HBaseSourceDataDao.addMySource(cs_id, String.valueOf(uid), sourceDataIds,
 				sourceFieldService.getSourceFields(Integer.valueOf(cs_id)))) {

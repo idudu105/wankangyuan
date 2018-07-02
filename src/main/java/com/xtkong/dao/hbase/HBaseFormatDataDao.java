@@ -18,10 +18,13 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.filter.BinaryComparator;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.PageFilter;
 import org.apache.hadoop.hbase.filter.PrefixFilter;
+import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
+import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
 import org.apache.hadoop.hbase.filter.FilterList.Operator;
 import org.apache.hadoop.hbase.util.Bytes;
 
@@ -40,8 +43,9 @@ public class HBaseFormatDataDao {
 	 *            格式类型
 	 */
 	public static void createFormatDataTable(String cs_id, String ft_id) {
-		createFormatDataTable(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id,
-				new String[] { ConstantsHBase.FAMILY_INFO }, ConstantsHBase.VERSION_FORMAT);
+
+		String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+		createFormatDataTable(tableName, new String[] { ConstantsHBase.FAMILY_INFO }, ConstantsHBase.VERSION_FORMAT);
 	}
 
 	private static void createFormatDataTable(String tableName, String[] columnFamilies, int version) {
@@ -55,28 +59,47 @@ public class HBaseFormatDataDao {
 	 * @param cs_id
 	 * @param ft_id
 	 *            格式类型id
+	 * @param sourceDataId
 	 * @param formatNodeId
 	 *            节点id
 	 * @param formatFieldDatas
 	 *            格式数据字段、 数据值
 	 * @return
 	 */
-	public static boolean insertFormatData(String cs_id, String ft_id, String formatNodeId,
+	public static boolean insertFormatData(String cs_id, String ft_id, String sourceDataId, String formatNodeId,
 			Map<String, String> formatFieldDatas) {
 		HBaseDB db = HBaseDB.getInstance();
 		Long count = db.getNewId(ConstantsHBase.TABLE_GID, formatNodeId, ConstantsHBase.FAMILY_GID_GID,
 				ConstantsHBase.QUALIFIER_GID_GID_GID);
 		String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
-		String rowKey = formatNodeId  + count;
+		String rowKey = formatNodeId + "_"  + count;
 		Put put = new Put(Bytes.toBytes(rowKey));
-
 		for (Entry<String, String> formatFieldData : formatFieldDatas.entrySet()) {
 			put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(formatFieldData.getKey()),
 					Bytes.toBytes(formatFieldData.getValue()));
 		}
+		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(ConstantsHBase.QUALIFIER_SOURCEDATAID),
+				Bytes.toBytes(String.valueOf(sourceDataId)));
+		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(ConstantsHBase.QUALIFIER_FORMATNODEID),
+				Bytes.toBytes(formatNodeId));
 		return db.putRow(tableName, put);
 	}
-
+	public static boolean insertFormatDataMeta(String cs_id, String ft_id, String sourceDataId, String formatNodeId,
+			Map<String, String> formatFieldDatas) {
+		HBaseDB db = HBaseDB.getInstance();
+		String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+		String rowKey = formatNodeId;
+		Put put = new Put(Bytes.toBytes(rowKey));
+		for (Entry<String, String> formatFieldData : formatFieldDatas.entrySet()) {
+			put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(formatFieldData.getKey()),
+					Bytes.toBytes(formatFieldData.getValue()));
+		}
+		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(ConstantsHBase.QUALIFIER_SOURCEDATAID),
+				Bytes.toBytes(sourceDataId));
+		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(ConstantsHBase.QUALIFIER_FORMATNODEID),
+				Bytes.toBytes(formatNodeId));
+		return db.putRow(tableName, put);
+	}
 	/**
 	 * 列值过滤行键
 	 * 
@@ -88,12 +111,12 @@ public class HBaseFormatDataDao {
 	public static String getFormatDataId(String cs_id, String ft_id, String formatNodeId,
 			Map<String, String> formatFieldDatas) {
 		String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
-		String prefixFilter = formatNodeId ;
+		String prefixFilter = formatNodeId + "_" ;
 		String formatDataId = null;
 		HBaseDB db = HBaseDB.getInstance();
 		List<String> rowkeys = db.getRowkeys(tableName, prefixFilter, formatFieldDatas);
 		if (!rowkeys.isEmpty()) {
-			formatDataId=rowkeys.get(0);
+			formatDataId = rowkeys.get(0);
 		}
 		return formatDataId;
 	}
@@ -197,7 +220,7 @@ public class HBaseFormatDataDao {
 			// 列簇约束结果集
 			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
 			// 前缀formatNodeId_过滤
-			Filter filter1 = new PrefixFilter(Bytes.toBytes(formatNodeId));
+			Filter filter1 = new PrefixFilter(Bytes.toBytes(formatNodeId + "_" ));
 			Filter filter2 = new PageFilter(strip);
 			FilterList filterList = new FilterList(Operator.MUST_PASS_ALL, filter1, filter2);
 			scan.setFilter(filterList);
@@ -232,6 +255,7 @@ public class HBaseFormatDataDao {
 		// TODO Auto-generated method stub
 		return formatDatas;
 	}
+
 	public static List<List<String>> getFormatDatas(String cs_id, String ft_id, String formatNodeId,
 			List<FormatField> formatFields) {
 		List<List<String>> formatDatas = new ArrayList<>();
@@ -242,7 +266,7 @@ public class HBaseFormatDataDao {
 			// 列簇约束结果集
 			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
 			// 前缀formatNodeId_过滤
-			Filter filter = new PrefixFilter(Bytes.toBytes(formatNodeId));
+			Filter filter = new PrefixFilter(Bytes.toBytes(formatNodeId + "_"));
 			scan.setFilter(filter);
 			ResultScanner resultScanner = table.getScanner(scan);
 			Iterator<Result> iterator = resultScanner.iterator();
@@ -274,6 +298,8 @@ public class HBaseFormatDataDao {
 	 * @param cs_id
 	 * @param ft_id
 	 *            格式类型id
+	 * @param sourceDataId
+	 * @param formatNodeId
 	 * @param formatDataId
 	 * @param formatFieldDatas
 	 *            格式数据字段、 数据值
@@ -284,14 +310,56 @@ public class HBaseFormatDataDao {
 		HBaseDB db = HBaseDB.getInstance();
 		String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
 		Put put = new Put(Bytes.toBytes(formatDataId));
-
 		for (Entry<String, String> formatFieldData : formatFieldDatas.entrySet()) {
 			put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(formatFieldData.getKey()),
 					Bytes.toBytes(formatFieldData.getValue()));
 		}
 		return db.putRow(tableName, put);
 	}
-
+	public static boolean updateFormatDatas(String cs_id, String ft_id, String formatNodeId,
+			Map<String, String> formatFieldDatas) {
+		boolean b=false;
+		try {
+			HBaseDB db = HBaseDB.getInstance();
+			String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+			Table table = db.getTable(tableName);
+			Scan scan = new Scan();
+			// 列簇约束结果集
+			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
+			// 值formatNodeId过滤
+			Filter filter = new SingleColumnValueFilter(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+					Bytes.toBytes(ConstantsHBase.QUALIFIER_FORMATNODEID), CompareOp.EQUAL,
+					new BinaryComparator(Bytes.toBytes(formatNodeId)));
+			scan.setFilter(filter);
+			
+			ResultScanner resultScanner = table.getScanner(scan);
+			Iterator<Result> iterator = resultScanner.iterator();
+			List<byte[]> rowkeys = new ArrayList<>();
+			while (iterator.hasNext()) {
+				Result result = iterator.next();
+				if (!result.isEmpty()) {
+					rowkeys.add(result.getRow());
+				}
+			}
+			
+			resultScanner.close();
+			for (byte[] rowkey : rowkeys) {
+				Put put = new Put(rowkey);
+				for (Entry<String, String> formatFieldData : formatFieldDatas.entrySet()) {
+					put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(formatFieldData.getKey()),
+							Bytes.toBytes(formatFieldData.getValue()));
+				}	
+				if(db.putRow(tableName, put)){
+					b=true;
+				}else {
+					return false;
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return b;
+	}
 	/**
 	 * 批量删除格式数据
 	 * 
@@ -312,7 +380,6 @@ public class HBaseFormatDataDao {
 
 	public static void deleteFormatDataTable(String cs_id, String ft_id) {
 		HBaseDB.getInstance().deleteTable(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id);
-		;
 
 	}
 

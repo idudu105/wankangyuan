@@ -1,5 +1,6 @@
 package com.xtkong.controller.user;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import com.xtkong.dao.hbase.HBaseFormatDataDao;
 import com.xtkong.model.FormatField;
 import com.xtkong.service.FormatFieldService;
 import com.xtkong.service.FormatTypeService;
+import com.xtkong.service.PhoenixClient;
 import com.xtkong.service.SourceFieldService;
 import com.xtkong.service.SourceService;
 import com.xtkong.util.ConstantsHBase;
@@ -45,10 +47,10 @@ public class FormatDataController {
 	 */
 	@RequestMapping("/insertFormatData")
 	@ResponseBody
-	public Map<String, Object> insertFormatData(String cs_id, String ft_id, String formatNodeId,
+	public Map<String, Object> insertFormatData(String cs_id, String ft_id, String sourceDataId, String formatNodeId,
 			String formatFieldDatas) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (HBaseFormatDataDao.insertFormatData(cs_id, ft_id, formatNodeId,
+		if (HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId,
 				new Gson().fromJson(formatFieldDatas, new TypeToken<Map<String, String>>() {
 				}.getType()))) {
 			map.put("result", true);
@@ -73,12 +75,20 @@ public class FormatDataController {
 	 */
 	@RequestMapping("/updateFormatData")
 	@ResponseBody
-	public Map<String, Object> updateFormatData(String cs_id, String ft_id, String formatDataId,
+	public Map<String, Object> updateFormatData(String cs_id, String ft_id, String formatNodeId, String formatDataId,
 			String formatFieldDatas) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (HBaseFormatDataDao.updateFormatData(cs_id, ft_id, formatDataId,
-				new Gson().fromJson(formatFieldDatas, new TypeToken<Map<String, String>>() {
-				}.getType()))) {
+		boolean b = false;
+		if (formatNodeId != null) {
+			b = HBaseFormatDataDao.updateFormatDatas(cs_id, ft_id, formatNodeId,
+					new Gson().fromJson(formatFieldDatas, new TypeToken<Map<String, String>>() {
+					}.getType()));
+		} else {
+			b = HBaseFormatDataDao.updateFormatData(cs_id, ft_id, formatDataId,
+					new Gson().fromJson(formatFieldDatas, new TypeToken<Map<String, String>>() {
+					}.getType()));
+		}
+		if (b) {
 			map.put("result", true);
 			map.put("message", "更新成功");
 		} else {
@@ -108,25 +118,68 @@ public class FormatDataController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// meta数据
 		List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(ft_id, ConstantsHBase.IS_meta_true);
-		List<List<String>> metaDatas = HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
-				Integer.toString(ft_id), formatNodeId, meta);
+		// List<List<String>> metaDatas =
+		// HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
+		// Integer.toString(ft_id), formatNodeId, meta);
 		// data数据
 		List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(ft_id, ConstantsHBase.IS_meta_false);
-		List<List<String>> dataDatas = HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
-				Integer.toString(ft_id), formatNodeId, data,  page,  strip);
+		// List<List<String>> dataDatas =
+		// HBaseFormatDataDao.getFormatDatas(Integer.toString(cs_id),
+		// Integer.toString(ft_id), formatNodeId, data, page, strip);
+
+		String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+		String family = ConstantsHBase.FAMILY_INFO;
+		List<String> mateQualifiers = new ArrayList<>();
+		for (FormatField formatField : meta) {
+			mateQualifiers.add(String.valueOf(formatField.getFf_id()));
+		}
+		Map<String, String> whereEqual = new HashMap<>();
+		whereEqual.put(ConstantsHBase.QUALIFIER_FORMATNODEID, formatNodeId);
+		Map<String, String> whereLike = new HashMap<>();
+		Map<String, Map<String, Object>> metaDatas = PhoenixClient.select(tableName, family, mateQualifiers,
+				whereEqual, whereLike, 1, 1);
+
+		List<String> dataQualifiers = new ArrayList<>();
+		for (FormatField formatField : data) {
+			dataQualifiers.add(String.valueOf(formatField.getFf_id()));
+		}
+		Map<String, Map<String, Object>> dataDatas = PhoenixClient.select(tableName, family, dataQualifiers,
+				whereEqual, whereLike, page, strip);
+
 		if (metaDatas != null) {
 			map.put("result", true);
-			map.put("meta", meta);
-			map.put("metaDatas", metaDatas);
-			map.put("data", data);
-			map.put("dataDatas", dataDatas);
+			String metaMsg = String.valueOf((metaDatas.get("msg")).get("msg"));
+			String dataMsg = String.valueOf((dataDatas.get("msg")).get("msg"));
+			for (int j = 0; j < 6; j++) {
+				metaMsg = String.valueOf((metaDatas.get("msg")).get("msg"));
+				dataMsg = String.valueOf((dataDatas.get("msg")).get("msg"));
+				if ((metaMsg.equals("success")) && (dataMsg.equals("success"))) {
+					break;
+				}
+				if (!(metaMsg.equals("success"))) {
+					metaDatas = PhoenixClient.reSelectWhere(metaMsg, tableName, family, mateQualifiers, whereEqual,
+							whereLike, 1, 1);
+				}
+				if (!(dataMsg.equals("success"))) {
+					dataDatas = PhoenixClient.reSelectWhere(dataMsg, tableName, family, dataQualifiers, whereEqual,
+							whereLike, page, strip);
+				}
+			}
+
 		} else {
 			map.put("result", false);
 			map.put("message", "获取失败");
 		}
+		map.put("meta", meta);
+		map.put("metaDatas", metaDatas.get("records").get("data"));
+		map.put("data", data);
+		map.put("dataDatas", dataDatas.get("records").get("data"));
+		map.put("total", dataDatas.get("page").get("totalCount"));
+		map.put("page", page);
+		map.put("rows", strip);
 		return map;
 	}
-	
+
 	/**
 	 * 批量删除格式数据
 	 * 

@@ -20,8 +20,10 @@ import com.xtkong.dao.hbase.HBaseSourceDataDao;
 import com.xtkong.model.FormatField;
 import com.xtkong.model.FormatType;
 import com.xtkong.model.Source;
+import com.xtkong.model.SourceField;
 import com.xtkong.service.FormatFieldService;
 import com.xtkong.service.FormatTypeService;
+import com.xtkong.service.PhoenixClient;
 import com.xtkong.service.SourceFieldService;
 import com.xtkong.service.SourceService;
 import com.xtkong.util.ConstantsHBase;
@@ -110,7 +112,20 @@ public class ProjectFormatDataController {
 	 * @return
 	 */
 	@RequestMapping("/getSourceDatas")
-	public String getSourceDatas(HttpSession httpSession, Integer p_id, Integer cs_id) {
+	public String getSourceDatas(HttpSession httpSession, Integer p_id, Integer cs_id,Integer page, Integer strip, String searchWord) {
+		if(page == null){
+			page = 1;
+		}
+		if(strip == null){
+			strip = 12;
+		}
+		if(searchWord == null){
+			searchWord = new String("");
+			httpSession.setAttribute("searchWord", null);
+		}else{
+			//更新关键字
+			httpSession.setAttribute("searchWord", searchWord);
+		}
 		List<Source> sources = sourceService.getSourcesForUser();
 
 		httpSession.setAttribute("sources", sources);// 采集源列表
@@ -123,15 +138,42 @@ public class ProjectFormatDataController {
 			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
 			httpSession.setAttribute("source", source);// 采集源字段列表
 
-			List<String> sourceDataIds = projectDataService.select(p_id);
+		/*	List<String> sourceDataIds = projectDataService.select(p_id,cs_id);
 			// 源数据字段
 			List<List<String>> sourceDatas = new ArrayList<>();
 			if (!sourceDataIds.isEmpty()) {
 				// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
 				sourceDatas = HBaseSourceDataDao.getSourceDatasByIds(Integer.toString(cs_id), sourceDataIds,
 						source.getSourceFields());
+			}*/
+			String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
+			String family=ConstantsHBase.FAMILY_INFO;
+			
+			List<String> qualifiers = new ArrayList<>();
+			for (SourceField sourceField : source.getSourceFields()) {
+				qualifiers.add(String.valueOf(sourceField.getCsf_id()));
 			}
-			httpSession.setAttribute("sourceDatas", sourceDatas);//
+			Map<String, String> whereEqual = new HashMap<>();
+			whereEqual.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
+			
+			Map<String, String> whereLike = new HashMap<>();
+			whereLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()), searchWord);
+			
+			Map<String, Map<String, Object>> result= PhoenixClient.select(tableName, family,qualifiers,  whereEqual, whereLike, strip, page);
+			String resultMsg = String.valueOf((result.get("msg")).get("msg"));
+			for (int j = 0; j < 6; j++) {
+				resultMsg = String.valueOf((result.get("msg")).get("msg"));
+				if (resultMsg.equals("success")) {
+					break;
+				} else {
+					result = PhoenixClient.reSelectWhere(resultMsg, tableName, family, qualifiers, whereEqual,
+							whereLike, page, strip);
+				}
+			}
+			httpSession.setAttribute("sourceDatas", result.get("records").get("data"));// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
+			httpSession.setAttribute("total", result.get("page").get("totalCount"));
+			httpSession.setAttribute("page", page);
+			httpSession.setAttribute("rows", strip);
 
 		}
 		return "/jsp/project/project_data.jsp";

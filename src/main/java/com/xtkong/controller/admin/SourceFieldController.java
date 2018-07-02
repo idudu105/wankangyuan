@@ -1,18 +1,25 @@
 package com.xtkong.controller.admin;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.liutianjun.pojo.User;
 import com.xtkong.dao.SourceDao;
 import com.xtkong.model.SourceField;
+import com.xtkong.service.PhoenixClient;
 import com.xtkong.service.SourceFieldService;
+import com.xtkong.util.ConstantsHBase;
 
 @Controller
 @RequestMapping(value = "/sourceField")
@@ -24,10 +31,9 @@ public class SourceFieldController {
 
 	@RequestMapping("/insertSourceField")
 	@ResponseBody
-	public Map<String, Object> insertSourceField(SourceField sourceField, Integer uid) {
-		if (uid == null) {
-			uid=1;
-		}
+	public Map<String, Object> insertSourceField(HttpServletRequest request,SourceField sourceField) {
+		User user = (User) request.getAttribute("user");
+		 Integer uid = user.getId();
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -36,6 +42,9 @@ public class SourceFieldController {
 		sourceField.setCreate_uid(uid);
 
 		if (1 == sourceFieldService.insertSourceField(sourceField)) {
+			PhoenixClient.alterViewAddColumn(ConstantsHBase.TABLE_PREFIX_SOURCE_ + sourceField.getCs_id(),
+					ConstantsHBase.FAMILY_INFO, String.valueOf(
+							sourceFieldService.getSourceFieldId(sourceField.getCs_id(), sourceField.getCsf_name())));
 			map.put("result", true);
 			map.put("message", "新增成功");
 		} else {
@@ -49,19 +58,18 @@ public class SourceFieldController {
 	@ResponseBody
 	public Map<String, Object> getSourceField(Integer csf_id) {
 		Map<String, Object> map = new HashMap<String, Object>();
-
+		SourceField sourceField = sourceFieldService.getSourceField(csf_id);
 		map.put("result", true);
-		map.put("sourceField", sourceFieldService.getSourceField(csf_id));
+		map.put("sourceField", sourceField);
 
 		return map;
 	}
 
 	@RequestMapping("/updateSourceField")
 	@ResponseBody
-	public Map<String, Object> updateSourceField(SourceField sourceField, Integer uid) {
-		if (uid == null) {
-			uid=1;
-		}
+	public Map<String, Object> updateSourceField(HttpServletRequest request,SourceField sourceField) {
+		User user = (User) request.getAttribute("user");
+		 Integer uid = user.getId();
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -84,11 +92,20 @@ public class SourceFieldController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String[] csf_idStrs = csf_ids.split(",");
 		int i = 0;
+		Integer cs_id = null;
+		List<String> qualifiers = new ArrayList<>();
 		for (String csf_id : csf_idStrs) {
+			if (csf_id == null) {
+				cs_id = sourceFieldService.getSourceField(Integer.valueOf(csf_id)).getCs_id();
+			}
 			if (1 == sourceFieldService.deleteSourceField(Integer.valueOf(csf_id))) {
 				i++;
+				qualifiers.add(csf_id);
 			}
 		}
+		String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
+		String family = ConstantsHBase.FAMILY_INFO;
+		PhoenixClient.alterViewDropColumns(tableName, family, qualifiers);
 		if (i == csf_idStrs.length) {
 			map.put("result", true);
 			map.put("message", "成功删除" + i + "行");

@@ -55,23 +55,16 @@ public class ExportController {
 		 */
 		// 1.创建一个workbook，对应一个Excel文件
 		HSSFWorkbook workbook = new HSSFWorkbook();
-		// 2.在workbook中添加一个sheet，对应Excel中的一个sheet
-		Source source = sourceService.getSourceByCs_id(cs_id);
-		HSSFSheet sheet = workbook.createSheet("源数据模版-" + source.getCs_name());
-		// 3.在sheet中添加表头第0行，老版本poi对excel行数列数有限制short
-		HSSFRow row = sheet.createRow((short) 0);
-		// 4.创建单元格，设置值表头，设置表头居中
+		// 2.单元格居中
 		HSSFCellStyle style = workbook.createCellStyle();
 		// 居中格式
 		style.setAlignment(HorizontalAlignment.CENTER);
 
-		// 设置表头
-		source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
-		HSSFCell cell = row.createCell(0);
-		for (int i = 0; i < source.getSourceFields().size(); i++) {
-			cell = row.createCell((i));
-			cell.setCellValue(source.getSourceFields().get(i).getCsf_name());
-		}
+		// 3.在workbook中添加一个sheet，对应Excel中的一个sheet
+
+		HSSFSheet sheet = workbook.createSheet("源数据模版");
+		sheet = sheetSourceDataForm(sheet, style, cs_id);
+
 		try {
 			OutputStream output = response.getOutputStream();
 			workbook.write(output);
@@ -94,43 +87,14 @@ public class ExportController {
 	@RequestMapping("/sourceData")
 	public void sourceData(HttpServletResponse response, String cs_id, String sourceDataIds) {
 		response.setContentType("application/vnd.ms-excel");
-		/**
-		 * 以下为生成Excel操作
-		 */
-		// 1.创建一个workbook，对应一个Excel文件
+
 		HSSFWorkbook workbook = new HSSFWorkbook();
-		// 2.单元格居中
 		HSSFCellStyle style = workbook.createCellStyle();
-		// 居中格式
 		style.setAlignment(HorizontalAlignment.CENTER);
 
-		// 3.在workbook中添加一个sheet，对应Excel中的一个sheet
-		Source source = sourceService.getSourceByCs_id(Integer.valueOf(cs_id));
-		HSSFSheet sheet = workbook.createSheet("源数据-" + source.getCs_name());
-		// 4.在sheet中添加表头第0行，老版本poi对excel行数列数有限制short
-		HSSFRow row = sheet.createRow((short) 0);
-
+		HSSFSheet sheet = workbook.createSheet("源数据");
+		sheet = sheetSourceDataByIds(sheet, style, cs_id, sourceDataIds);
 		// 设置表头
-		source.setSourceFields(sourceFieldService.getSourceFields(Integer.valueOf(cs_id)));
-		HSSFCell cell = row.createCell(0);
-		for (int i = 0; i < source.getSourceFields().size(); i++) {
-			cell = row.createCell((i));
-			cell.setCellValue(source.getSourceFields().get(i).getCsf_name());
-			cell.setCellStyle(style);
-		}
-		// 写入各条记录，每条记录对应Excel中的一行
-
-		List<List<String>> sourceDatas = HBaseSourceDataDao.getSourceDatasByIds(cs_id, sourceDataIds,
-				source.getSourceFields());
-		for (int iRow = 0; iRow < sourceDatas.size(); iRow++) {
-			row = sheet.createRow((short) iRow + 1);
-			for (int j = 0; j < source.getSourceFields().size(); j++) {
-				cell = row.createCell(j);
-				cell.setCellValue(sourceDatas.get(iRow).get(j + 1));
-				cell.setCellStyle(style);
-			}
-		}
-
 		try {
 			OutputStream output = response.getOutputStream();
 			workbook.write(output);
@@ -152,7 +116,7 @@ public class ExportController {
 	 * @param ft_id
 	 */
 	@RequestMapping("/formatType")
-	public void formatType(HttpServletResponse response, String cs_id, String sourceDataId, String ft_id) { 
+	public void formatType(HttpServletResponse response, String cs_id, String sourceDataId, String ft_id) {
 		response.setContentType("application/vnd.ms-excel");
 		/**
 		 * 以下为生成Excel操作
@@ -161,8 +125,6 @@ public class ExportController {
 		HSSFCellStyle style = workbook.createCellStyle();
 		style.setAlignment(HorizontalAlignment.CENTER);
 		HSSFSheet sheet;
-		HSSFRow row;
-		HSSFCell cell;
 		FormatType formatType = HBaseFormatNodeDao.getFormatNodes(cs_id, sourceDataId, ft_id);
 		String formatNodeId;
 		String formatNodeName;
@@ -171,46 +133,11 @@ public class ExportController {
 			formatNodeName = formatNode.getValue();
 			// meta数据
 			sheet = workbook.createSheet("公共数据-" + formatNodeName);
-			row = sheet.createRow((short) 0);
-			// 设置表头
-			List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
-					ConstantsHBase.IS_meta_true);
-			cell = row.createCell(0);
-			for (int i = 0; i < meta.size(); i++) {
-				cell = row.createCell((i));
-				cell.setCellValue(meta.get(i).getFf_name());
-				cell.setCellStyle(style);
-			}
-			// 写入各条记录，每条记录对应Excel中的一行
-			List<List<String>> metaDatas = HBaseFormatDataDao.getFormatDataMetas(cs_id, ft_id, formatNodeId, meta);
-			row = sheet.createRow((short) 1);
-			for (int j = 0; j < metaDatas.size(); j++) {
-				cell = row.createCell(j);
-				cell.setCellValue(metaDatas.get(j).get(2));
-				cell.setCellStyle(style);
-			}
+			sheet = sheetFormatDatas(sheet, style, cs_id, ft_id, formatNodeId, ConstantsHBase.IS_meta_true);
 
 			// data数据
 			sheet = workbook.createSheet("专属数据-" + formatNodeName);
-			row = sheet.createRow((short) 0);
-			List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
-					ConstantsHBase.IS_meta_false);
-			cell = row.createCell(0);
-			for (int i = 0; i < data.size(); i++) {
-				cell = row.createCell((i));
-				cell.setCellValue(data.get(i).getFf_name());
-				cell.setCellStyle(style);
-			}
-			List<List<String>> dataDatas = HBaseFormatDataDao.getFormatDatas(cs_id, ft_id, formatNodeId, data);
-			for (int iRow = 0; iRow < dataDatas.size(); iRow++) {
-				row = sheet.createRow((short) iRow + 1);
-				for (int j = 0; j < data.size(); j++) {
-					cell = row.createCell(j);
-					cell.setCellValue(dataDatas.get(iRow).get(j + 1));
-					cell.setCellStyle(style);
-				}
-			}
-
+			sheet = sheetFormatDatas(sheet, style, cs_id, ft_id, formatNodeId, ConstantsHBase.IS_meta_false);
 		}
 
 		try {
@@ -237,56 +164,18 @@ public class ExportController {
 	@RequestMapping("/formatNode")
 	public void formatNode(HttpServletResponse response, String cs_id, String ft_id, String formatNodeId) {
 		response.setContentType("application/vnd.ms-excel");
-		/**
-		 * 以下为生成Excel操作
-		 */
+
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFCellStyle style = workbook.createCellStyle();
 		style.setAlignment(HorizontalAlignment.CENTER);
+
 		// meta数据
 		HSSFSheet sheet = workbook.createSheet("公共数据");
-		HSSFRow row = sheet.createRow((short) 0);
-		// 设置表头
-
-		List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
-				ConstantsHBase.IS_meta_true);
-		HSSFCell cell = row.createCell(0);
-		for (int i = 0; i < meta.size(); i++) {
-			cell = row.createCell((i));
-			cell.setCellValue(meta.get(i).getFf_name());
-			cell.setCellStyle(style);
-		}
-		// 写入各条记录，每条记录对应Excel中的一行
-		List<List<String>> metaDatas = HBaseFormatDataDao.getFormatDataMetas(cs_id, ft_id, formatNodeId, meta);
-		row = sheet.createRow((short) 1);
-		for (int j = 0; j < metaDatas.size(); j++) {
-			cell = row.createCell(j);
-			cell.setCellValue(metaDatas.get(j).get(2));
-			cell.setCellStyle(style);
-		}
+		sheet = sheetFormatDatas(sheet, style, cs_id, ft_id, formatNodeId, ConstantsHBase.IS_meta_true);
 
 		// data数据
 		sheet = workbook.createSheet("专属数据");
-		row = sheet.createRow((short) 0);
-
-		List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
-				ConstantsHBase.IS_meta_false);
-		cell = row.createCell(0);
-		for (int i = 0; i < data.size(); i++) {
-			cell = row.createCell((i));
-			cell.setCellValue(data.get(i).getFf_name());
-			cell.setCellStyle(style);
-		}
-		List<List<String>> dataDatas = HBaseFormatDataDao.getFormatDatas(cs_id, ft_id, formatNodeId, data);
-		for (int iRow = 0; iRow < dataDatas.size(); iRow++) {
-			row = sheet.createRow((short) iRow + 1);
-			for (int j = 0; j < data.size(); j++) {
-				cell = row.createCell(j);
-				cell.setCellValue(dataDatas.get(iRow).get(j + 1));
-				cell.setCellStyle(style);
-			}
-		}
-
+		sheet = sheetFormatDatas(sheet, style, cs_id, ft_id, formatNodeId, ConstantsHBase.IS_meta_false);
 		try {
 			OutputStream output = response.getOutputStream();
 			workbook.write(output);
@@ -299,6 +188,7 @@ public class ExportController {
 		}
 
 	}
+
 	/**
 	 * 导出格式数据上传格式
 	 * 
@@ -315,15 +205,7 @@ public class ExportController {
 		HSSFCellStyle style = workbook.createCellStyle();
 		style.setAlignment(HorizontalAlignment.CENTER);
 		HSSFSheet sheet = workbook.createSheet("格式数据");
-		HSSFRow row = sheet.createRow((short) 0);
-		// 设置表头
-		List<FormatField> formatFields = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id), ConstantsHBase.IS_meta_false);
-		HSSFCell cell = row.createCell(0);
-		for (int i = 0; i < formatFields.size(); i++) {
-			cell = row.createCell((i));
-			cell.setCellValue(formatFields.get(i).getFf_name());
-			cell.setCellStyle(style);
-		}		
+		sheet = sheetFormatFieldForm(sheet, style, ft_id, ConstantsHBase.IS_meta_false);
 		try {
 			OutputStream output = response.getOutputStream();
 			workbook.write(output);
@@ -335,6 +217,7 @@ public class ExportController {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * 导出某格式数据
 	 * 
@@ -349,35 +232,12 @@ public class ExportController {
 	public void formatData(HttpServletResponse response, String cs_id, String ft_id, String formatDataIds,
 			Integer type) {
 		response.setContentType("application/vnd.ms-excel");
-		/**
-		 * 以下为生成Excel操作
-		 */
+
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFCellStyle style = workbook.createCellStyle();
 		style.setAlignment(HorizontalAlignment.CENTER);
 		HSSFSheet sheet = workbook.createSheet("格式数据");
-		HSSFRow row = sheet.createRow((short) 0);
-		// 设置表头
-		List<FormatField> formatFields = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id), type);
-		HSSFCell cell = row.createCell(0);
-		for (int i = 0; i < formatFields.size(); i++) {
-			cell = row.createCell((i));
-			cell.setCellValue(formatFields.get(i).getFf_name());
-			cell.setCellStyle(style);
-		}
-		// 写入各条记录，每条记录对应Excel中的一行
-
-		List<List<String>> formatDatas = HBaseFormatDataDao.getFormatDataByIds(cs_id, ft_id, formatDataIds,
-				formatFields);
-		for (int iRow = 0; iRow < formatDatas.size(); iRow++) {
-			row = sheet.createRow((short) iRow + 1);
-			for (int j = 0; j < formatFields.size(); j++) {
-				cell = row.createCell(j);
-				cell.setCellValue(formatDatas.get(iRow).get(j + 1));
-				cell.setCellStyle(style);
-			}
-		}
-
+		sheet = sheetFormatDataByIds(sheet, style, cs_id, ft_id, formatDataIds, type);
 		try {
 			OutputStream output = response.getOutputStream();
 			workbook.write(output);
@@ -389,6 +249,150 @@ public class ExportController {
 			e.printStackTrace();
 		}
 
+	}
+
+	private HSSFSheet sheetSourceDataForm(HSSFSheet sheet, HSSFCellStyle style, Integer cs_id) {
+		Source source = sourceService.getSourceByCs_id(cs_id);
+		// 4.在sheet中添加表头第0行，老版本poi对excel行数列数有限制short
+		HSSFRow row = sheet.createRow((short) 0);
+		// 设置表头
+		source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
+		HSSFCell cell = row.createCell(0);
+		for (int i = 0; i < source.getSourceFields().size(); i++) {
+			cell = row.createCell((i));
+			cell.setCellValue(source.getSourceFields().get(i).getCsf_name());
+		}
+		return sheet;
+	}
+
+	private HSSFSheet sheetSourceDataByIds(HSSFSheet sheet, HSSFCellStyle style, String cs_id, String sourceDataIds) {
+		// 在sheet中添加表头第0行，老版本poi对excel行数列数有限制short
+		HSSFRow row = sheet.createRow((short) 0);
+		Source source = sourceService.getSourceByCs_id(Integer.valueOf(cs_id));
+		// 设置表头
+		source.setSourceFields(sourceFieldService.getSourceFields(Integer.valueOf(cs_id)));
+		HSSFCell cell = row.createCell(0);
+		for (int i = 0; i < source.getSourceFields().size(); i++) {
+			cell = row.createCell((i));
+			cell.setCellValue(source.getSourceFields().get(i).getCsf_name());
+			cell.setCellStyle(style);
+		}
+		if (sourceDataIds != null) {
+			// 写入各条记录，每条记录对应Excel中的一行
+			List<List<String>> sourceDatas = HBaseSourceDataDao.getSourceDatasByIds(cs_id, sourceDataIds,
+					source.getSourceFields());
+			for (int iRow = 0; iRow < sourceDatas.size(); iRow++) {
+				row = sheet.createRow((short) iRow + 1);
+				for (int j = 0; j < source.getSourceFields().size(); j++) {
+					cell = row.createCell(j);
+					cell.setCellValue(sourceDatas.get(iRow).get(j + 1));
+					cell.setCellStyle(style);
+				}
+			}
+		}
+		return sheet;
+	}
+
+	private HSSFSheet sheetFormatFieldForm(HSSFSheet sheet, HSSFCellStyle style, String ft_id, Integer isMeta) {
+		HSSFRow row = sheet.createRow((short) 0);
+		// 设置表头
+		List<FormatField> formatFields = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id), isMeta);
+		HSSFCell cell = row.createCell(0);
+		for (int i = 0; i < formatFields.size(); i++) {
+			cell = row.createCell((i));
+			cell.setCellValue(formatFields.get(i).getFf_name());
+			cell.setCellStyle(style);
+		}
+		return sheet;
+	}
+
+	private HSSFSheet sheetFormatDataByIds(HSSFSheet sheet, HSSFCellStyle style, String cs_id, String ft_id,
+			String formatDataIds, Integer isMeta) {
+		HSSFRow row = sheet.createRow((short) 0);
+		// 设置表头
+		List<FormatField> formatFields = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id), isMeta);
+		HSSFCell cell = row.createCell(0);
+		for (int i = 0; i < formatFields.size(); i++) {
+			cell = row.createCell((i));
+			cell.setCellValue(formatFields.get(i).getFf_name());
+			cell.setCellStyle(style);
+		}
+
+		List<List<String>> formatDatas = HBaseFormatDataDao.getFormatDataByIds(cs_id, ft_id, formatDataIds,
+				formatFields);
+
+		/*
+		 * Map<String, Map<String, Object>> result = new HashMap<>(); String
+		 * tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" +
+		 * ft_id; String family = ConstantsHBase.FAMILY_INFO; List<String>
+		 * qualifiers = new ArrayList<>(); for (FormatField formatField :
+		 * formatFields) {
+		 * qualifiers.add(String.valueOf(formatField.getFf_id())); } result =
+		 * PhoenixClient.select(tableName, family, qualifiers, null, null, null,
+		 * null);
+		 * 
+		 * String resultMsg = String.valueOf((result.get("msg")).get("msg"));
+		 * for (int j = 0; j < 6; j++) { resultMsg =
+		 * String.valueOf((result.get("msg")).get("msg")); if
+		 * (resultMsg.equals("success")) { break; } else { result =
+		 * PhoenixClient.reSelectWhere(resultMsg, tableName, family, qualifiers,
+		 * null, null, null, null); } } List<List<String>> formatDatas =
+		 * (List<List<String>>) result.get("records").get("data");
+		 */
+		// 写入各条记录，每条记录对应Excel中的一行
+		if (isMeta == ConstantsHBase.IS_meta_true) {
+			row = sheet.createRow((short) 1);
+			for (int j = 0; j < formatFields.size(); j++) {
+				cell = row.createCell(j);
+				cell.setCellValue(formatDatas.get(0).get(j + 1));
+				cell.setCellStyle(style);
+			}
+		} else {
+			for (int iRow = 0; iRow < formatDatas.size(); iRow++) {
+				row = sheet.createRow((short) iRow + 1);
+				for (int j = 0; j < formatFields.size(); j++) {
+					cell = row.createCell(j);
+					cell.setCellValue(formatDatas.get(iRow).get(j + 1));
+					cell.setCellStyle(style);
+				}
+			}
+		}
+		return sheet;
+	}
+
+	private HSSFSheet sheetFormatDatas(HSSFSheet sheet, HSSFCellStyle style, String cs_id, String ft_id,
+			String formatNodeId, Integer isMeta) {
+		HSSFRow row = sheet.createRow((short) 0);
+		// 设置表头
+		List<FormatField> formatFields = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id), isMeta);
+		HSSFCell cell = row.createCell(0);
+		for (int i = 0; i < formatFields.size(); i++) {
+			cell = row.createCell((i));
+			cell.setCellValue(formatFields.get(i).getFf_name());
+			cell.setCellStyle(style);
+		}
+
+		List<List<String>> formatDatas = HBaseFormatDataDao.getFormatDatas(cs_id, ft_id, formatNodeId, formatFields);
+
+		// 写入各条记录，每条记录对应Excel中的一行
+		if (isMeta == ConstantsHBase.IS_meta_true) {
+			row = sheet.createRow((short) 1);
+			for (int j = 0; j < formatFields.size(); j++) {
+				cell = row.createCell(j);
+				cell.setCellValue(formatDatas.get(0).get(j + 1));
+				cell.setCellStyle(style);
+			}
+		} else {
+			for (int iRow = 0; iRow < formatDatas.size(); iRow++) {
+				row = sheet.createRow((short) iRow + 1);
+				for (int j = 0; j < formatFields.size(); j++) {
+					cell = row.createCell(j);
+					cell.setCellValue(formatDatas.get(iRow).get(j + 1));
+					cell.setCellStyle(style);
+				}
+			}
+		}
+		return sheet;
 	}
 
 }

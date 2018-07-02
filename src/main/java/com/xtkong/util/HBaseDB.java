@@ -32,8 +32,6 @@ import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
 import org.apache.hadoop.hbase.filter.FilterList.Operator;
 import org.apache.hadoop.hbase.util.Bytes;
 
-import com.xtkong.model.SourceField;
-
 public class HBaseDB {
 	// 避免多线程导致生成多个实例
 	private static final HBaseDB hBaseDBTool = new HBaseDB();
@@ -50,9 +48,6 @@ public class HBaseDB {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	private HBaseDB() {
 	}
 
 	public static HBaseDB getInstance() {
@@ -191,7 +186,17 @@ public class HBaseDB {
 		}
 
 	}
-
+	public boolean putRow(Object tableName, List<Put> puts) {
+		try {
+			Table table = getTable(tableName.toString());
+			table.put(puts);
+			table.close();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 	public boolean putRow(Object tableName, Put put) {
 		try {
 			Table table = getTable(tableName.toString());
@@ -202,7 +207,6 @@ public class HBaseDB {
 			e.printStackTrace();
 			return false;
 		}
-
 	}
 
 	/**
@@ -265,10 +269,10 @@ public class HBaseDB {
 	 * 
 	 * @param tableName 表名
 	 * @param scan 扫描条件
-	 * @param quelifiers 列名
+	 * @param qualifiers 列名
 	 * @return 行键、列值、列值、列值
 	 */
-	public static List<List<String>> getQuelifierValues(String tableName, Scan scan, List<String> quelifiers) {
+	public static List<List<String>> getQuelifierValues(String tableName, Scan scan, List<String> qualifiers) {
 		List<List<String>> quelifierValues = new ArrayList<List<String>>();
 		try {
 			HBaseDB db = HBaseDB.getInstance();
@@ -281,9 +285,9 @@ public class HBaseDB {
 					List<String> quelifierValue = new ArrayList<>();
 					// 获取行键
 					quelifierValue.add(Bytes.toString(result.getRow()));
-					for (String quelifier : quelifiers) {
+					for (String qualifier : qualifiers) {
 						quelifierValue.add(Bytes.toString(
-								result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(quelifier))));
+								result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(qualifier))));
 					}
 					quelifierValues.add(quelifierValue);
 				}

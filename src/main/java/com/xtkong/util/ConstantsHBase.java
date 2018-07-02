@@ -25,19 +25,29 @@ public class ConstantsHBase {
 	public static final String FAMILY_INFO = "INFO";
 	/** 各表列名 */
 	public static final String QUALIFIER_GID_GID_GID = "GID";
-	public static final String QUALIFIER_NODE = "NODE";
-
-	public static final String QUALIFIER_ADD = "ADD";// 添加
-	public static final String QUALIFIER_PUBLIC = "PUBLIC";// 公共，1公共，0不公开（默认）
-
+//source
 	public static final String QUALIFIER_PROJECT = "PROJECT";// 项目
+	public static final String QUALIFIER_CREATE = "CREATE";// 我创建的
+	public static final String QUALIFIER_USER = "USER";// 我的
+	public static final String QUALIFIER_PUBLIC = "PUBLIC";// 公共，1公共，0不公开（默认）
+//node
+	public static final String QUALIFIER_FORMATTYPE = "FORMATTYPE";// 结点格式类型
+	public static final String QUALIFIER_NODENAME = "NODENAME";// 结点名
+//format,node	
+	public static final String QUALIFIER_SOURCEDATAID = "SOURCEDATAID";// 源数据id
+//format
+	public static final String QUALIFIER_FORMATNODEID = "FORMATNODEID";// 结点id
+
+	public static final String QUALIFIER_NODE = "NODE";
+	public static final String QUALIFIER_ADD = "ADD";// 添加
+
 	/** 值 */
 
 	public static final String VALUE_ADD_TRUE = "1";// 1添加数据
 	public static final String VALUE_ADD_FALSE = "0";// 0自建数据（默认）
 
-	public static final String VALUE_PUBLIC_TRUE = "1";// 1公共
-	public static final String VALUE_PUBLIC_FALSE = "0";// 0不公开（默认）
+	public static final String VALUE_PUBLIC_TRUE = "已公开";// 1公共
+	public static final String VALUE_PUBLIC_FALSE = "未公开";// 0不公开（默认）
 	/** 存储版本 */
 	public static final int VERSION_SOURCE = 1;
 	public static final int VERSION_NODE = 1;
@@ -55,7 +65,8 @@ public class ConstantsHBase {
 		try {
 			// path = ConstantsHBase.class.getResource("/").getPath();
 			path = System.getProperty("user.dir"); // 获得项目根目录的绝对路径
-//			System.out.println(path + "\\src\\main\\resources\\config.properties");
+			// System.out.println(path +
+			// "\\src\\main\\resources\\config.properties");
 			fis = new FileInputStream(path + "\\src\\main\\resources\\config.properties");
 			Properties properties = new Properties();
 			properties.load(fis);
