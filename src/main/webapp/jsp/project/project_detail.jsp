@@ -162,7 +162,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                 </div>
             </div>
-            
 
             <div class="bottom">
                 <a href="javascript:;">
@@ -178,14 +177,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
         </div>
     </div>
+    
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
     <script type="text/javascript">
     	
     	//提交编辑后的结果
     	function saveProjectIntroduction(){
-    		
     		var introduction = $(".prodexLt").val();
-    		//进行ajax请求
     		$.ajax({
     			url:"/wankangyuan/project/updatePorjectIntroduction",
     			type:"post",
@@ -195,21 +194,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			},
     			success : function(data){
     				if(data.result == true){
-    					window.location.href="/wankangyuan/project/getProjectDetail";
+    					layer.msg("保存成功");
+    					//不需要刷新页面
+    					//window.location.href="/wankangyuan/project/getProjectDetail";
     				}else{
-    					alert(data.message);
+    					layer.msg(data.message);
     				}
     			},
     			error : function(){
-    				alert("联网失败");
+    				layer.msg("联网失败");
     			}
-    			
     		});
-    		
     	}
-    
-    
-    
+
     </script>
 </body>
 </html>

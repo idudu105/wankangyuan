@@ -69,7 +69,7 @@ public interface ProjectTopicDao {
 	@Select("select project_topic_follow.* , user.username,user.headimg "
 			+ "from project_topic_follow , user "
 			+ "where project_topic_id=#{project_topic_id} "
-			+ "and project_topic_follow.user_id = user.id")
+			+ "and project_topic_follow.user_id = user.id order by project_topic_follow.id asc")
 	public List<ProjectTopicFollow> selectProjectTopicFollow(@Param("project_topic_id")Integer project_topic_id);
 	
 	@Delete("delete from project_topic_follow where id=#{id}")

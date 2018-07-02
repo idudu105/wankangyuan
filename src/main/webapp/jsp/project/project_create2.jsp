@@ -179,12 +179,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
     <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
     <script type="text/javascript">
     	
     	
-    	//点击添加到我的项目之中
+    	//改变项目公开状态
     	function updateProjectOpenState(is_open){
-    		
     		var afuxuanK=document.querySelectorAll('.fuxuanK3');
             var afuxuan=[];
             for(var i=0;i<afuxuanK.length;i++){
@@ -196,84 +196,117 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             		ids.push(afuxuan[i].value);
             	}
             }
-            
             if(ids == ""){
-            	alert("请勾选项目！");
+            	layer.msg('请勾选项目');
             	return;
             }
-            
-            
-            //网络请求添加公共项目到我的项目中
-            $.ajax({
-            	url:"/wankangyuan/project/updateProjectOpenState",
-            	type:"post",
-            	data:{
-            		ids:ids.join(","),
-            		is_open:is_open
-            	},
-            	dataType:"json",
-            	success : function(data){
-            		if(data.result == true){
-            			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1&type=2";
-            		}else{
-            			alert(data.message);
-            			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1&type=2";
-            		}
-            	},
-            	error : function(){
-            		alert("联网失败");
-            	}
-            	
-            });
-            
-    		
+            if(is_open == 0){
+            	layer.confirm('请确认取消公开项目？',{
+                	btn:['确认','取消'],
+                	icon:2
+                },function(){
+                	//公开项目
+                    $.ajax({
+                    	url:"/wankangyuan/project/updateProjectOpenState",
+                    	type:"post",
+                    	data:{
+                    		ids:ids.join(","),
+                    		is_open:is_open
+                    	},
+                    	dataType:"json",
+                    	success : function(data){
+                    		if(data.result == true){
+                    			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1";
+                    		}else{
+                    			layer.msg(data.message);
+                    			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1";
+                    		}
+                    	},
+                    	error : function(){
+                    		layer.msg("联网失败");
+                    	}
+                    });
+                },function(){
+                	return;
+                });
+            }
+            if(is_open == 1){
+            	layer.confirm('请确认公开项目？',{
+                	btn:['确认','取消'],
+                	icon:2
+                },function(){
+                	//公开项目
+                    $.ajax({
+                    	url:"/wankangyuan/project/updateProjectOpenState",
+                    	type:"post",
+                    	data:{
+                    		ids:ids.join(","),
+                    		is_open:is_open
+                    	},
+                    	dataType:"json",
+                    	success : function(data){
+                    		if(data.result == true){
+                    			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1&type=2";
+                    		}else{
+                    			layer.msg(data.message);
+                    			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1&type=2";
+                    		}
+                    	},
+                    	error : function(){
+                    		layer.msg("联网失败");
+                    	}
+                    });
+                },function(){
+                	return;
+                });
+            }    		
     	}
     	
-    	//点击添加到我的项目之中
+    	//删除项目
     	function deleteProjects(){
     		
     		var afuxuanK=document.querySelectorAll('.fuxuanK3');
-    		
             var afuxuan=[];
             for(var i=0;i<afuxuanK.length;i++){
                 afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
             }
-            
             var ids = [];
             for(var i=0;i<afuxuanK.length;i++){
             	if(afuxuan[i].checked){
             		ids.push(afuxuan[i].value);
             	}
             }
-            
             if(ids == ""){
-            	alert("请勾选项目！");
+            	layer.msg('请勾选项目');
             	return;
             }
-            
-            //网络请求添加公共项目到我的项目中
-            $.ajax({
-            	url:"/wankangyuan/project/deleteProjects",
-            	type:"post",
-            	data:{
-            		ids:ids.join(","),
-            	},
-            	dataType:"json",
-            	success : function(data){
-            		if(data.result == true){
-            			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1&type=2";
-            		}else{
-            			alert(data.message);
-            			window.location.href="/wankangyuan/project/selectCreatedProject?creator=1&type=2";
-            		}
-            	},
-            	error : function(){
-            		alert("联网失败");
-            	}
-            	
+            layer.confirm('请确认删除所选项目？',{
+            	btn:['确认','取消'],
+            	icon:2
+            },function(){
+            	//网络请求添加公共项目到我的项目中
+                $.ajax({
+                	url:"/wankangyuan/project/deleteProjects",
+                	type:"post",
+                	data:{
+                		ids:ids.join(","),
+                	},
+                	dataType:"json",
+                	success : function(data){
+                		if(data.result == true){
+                			layer.msg("项目已删除");
+                		}else{
+                			layer.msg(data.message);
+                		}
+                		window.location.href="/wankangyuan/project/selectCreatedProject?creator=1&type=2";
+                	},
+                	error : function(){
+                		alert("联网失败");
+                	}
+                });
+            },function(){
+            	return;
             });
-            
-    		
     	}
     	
     	$('#box').paging({

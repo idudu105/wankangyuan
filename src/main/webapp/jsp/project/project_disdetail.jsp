@@ -101,9 +101,9 @@
                     </div>
                     
                     <div class="disdetailLB">
-                     	<c:forEach items="${projectTopicFollows}" var="projectTopicFollowTemp">
+                     	<c:forEach items="${projectTopicFollows}" var="projectTopicFollowTemp" varStatus="status">
                      		<div class="disdeLBz">
-	                            <div class="disdeLBzl"><span>3</span>楼</div>
+	                            <div class="disdeLBzl"><span>${(page-1)*12+status.index+1 }</span>楼</div>
 	                            <div class="disdeLBzc">
 	                                <img src="${projectTopicFollowTemp.headimg}"alt="" class="disdeLBzci" />
 	                                <div class="disdeLBzcn">${projectTopicFollowTemp.username}</div>
@@ -181,6 +181,7 @@
     
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
     <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
     <script type="text/javascript">
     
 	  	//创建框的位置以及显示隐藏效果
@@ -243,51 +244,69 @@
 	    
 	    //删除回复消息
 	    function deleteProjectTopicFllow(id){
-	    	$.ajax({
-	    		url:"/wankangyuan/projectTopic/deleteProjectTopicFollow",
-	    		type:"post",
-	    		data:{
-	    			id:id
-	    		},
-	    		dataType:"json",
-	    		success : function(data){
-	    			if(data.result == true){
-	    				alert("删除成功！");
-	    				var project_topic_id = ${projectTopic.id};
-	    				window.location.href="/wankangyuan/projectTopic/selectProjectTopicFollow?project_topic_id="+project_topic_id;
-	    			}else{
-	    				alert(data.message);
-	    			}
-	    		},
-	    		error : function(){
-	    			alert("联网失败");
-	    		}
+	    	layer.confirm('确认删除跟帖？',{
+	    		btn:['确认','取消'],
+	    		icon:2
+	    	},function(){
+	    		$.ajax({
+		    		url:"/wankangyuan/projectTopic/deleteProjectTopicFollow",
+		    		type:"post",
+		    		data:{
+		    			id:id
+		    		},
+		    		dataType:"json",
+		    		success : function(data){
+		    			if(data.result == true){
+		    				layer.msg('跟帖删除成功！');
+		    				var project_topic_id = ${projectTopic.id};
+		    				window.location.href="/wankangyuan/projectTopic/selectProjectTopicFollow?project_topic_id="+project_topic_id;
+		    			}else{
+		    				alert(data.message);
+		    			}
+		    		},
+		    		error : function(){
+		    			layer.msg('联网失败！');
+		    		}
+		    	});
+	    	},function(){
+	    		return;
 	    	});
+	    	
 	    }
 	    
 	    //删除主题
 	    $(".eisdeLTrBde").click(function(){
 			var project_topic_id = ${projectTopic.id};
-	    	//进行ajax请求
-	    	$.ajax({
-	    		url:"/wankangyuan/projectTopic/deleteProjectTopic",
-	    		type:"post",
-	    		data:{
-	    			project_topic_id:project_topic_id
-	    		},
-	    		dataType:"json",
-	    		success : function(data){
-	    			if(data.result == true){
-	    				alert("主题删除成功！");
-	    				window.location.href="/wankangyuan/projectTopic/selectProjectTopic";
-	    			}else{
-	    				alert(data.message);
-	    			}
-	    		},
-	    		error : function(){
-	    			alert("联网失败");
-	    		}
-	    	});
+        	
+        	layer.confirm('确认删除主题？',{
+        		btn:['确认','取消'],
+        		icon:2
+        	},function(){
+        		
+        		//进行ajax请求
+    	    	$.ajax({
+    	    		url:"/wankangyuan/projectTopic/deleteProjectTopic",
+    	    		type:"post",
+    	    		data:{
+    	    			project_topic_id:project_topic_id
+    	    		},
+    	    		dataType:"json",
+    	    		success : function(data){
+    	    			if(data.result == true){
+    	    				layer.msg('主题删除成功！');
+    	    				window.location.href="/wankangyuan/projectTopic/selectProjectTopic";
+    	    			}else{
+    	    				alert(data.message);
+    	    			}
+    	    		},
+    	    		error : function(){
+    	    			layer.msg('联网失败！');
+    	    		}
+    	    	});
+        	},function(){
+        		return;
+        	});
+			
 	    });
 
     

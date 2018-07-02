@@ -24,12 +24,12 @@ import com.liutianjun.pojo.User;
  * 
  * 项目名称：wankangyuan 
  * 类名称：ProjectRoleController 
- * 类描述： 项目内权限controller
+ * 类描述： 项目默认角色的控制接口，一共包含默认创建者、项目成员以及浏览者三个默认的角色的管理，同时还可以添加其他默认的角色；
  * 创建人：dzjin 
  * 创建时间：2018年6月19日 上午9:41:56 
  * 修改人：dzjin 
  * 修改时间：2018年6月19日 上午9:41:56 
- * 修改备注： 
+ * 修改备注： 添加备注信息
  * @version 
  *
  */
@@ -41,11 +41,11 @@ public class ProjectRoleController {
 	ProjectRoleService projectRoleService;
 	
 	/**
-	 * 查询项目角色
+	 * 查询项目默认角色，管理端使用
 	 * @param httpSession
-	 * @param page
-	 * @param stirp
-	 * @return
+	 * @param page	页数
+	 * @param stirp	页面大小
+	 * @return	管理端角色管理界面
 	 */
 	@RequestMapping("/selectProjectRole")
 	public String selectProjectRole(HttpSession httpSession  , Integer page , Integer stirp){
@@ -62,16 +62,15 @@ public class ProjectRoleController {
 		httpSession.setAttribute("rows", stirp);
 		List<ProjectAuthority> projectAuthorities = projectRoleService.selectProjectAuthority();
 		httpSession.setAttribute("projectAuthorities", projectAuthorities);
-		
 		return "/admin/projectrolemanage.jsp";
 	}
 	
 	/**
-	 * 新增加角色并绑定角色
+	 * 管理端新增默认角色并赋予指定的权限
 	 * @param session
-	 * @param role_name
-	 * @param auth_ids
-	 * @return
+	 * @param role_name	默认角色名称
+	 * @param auth_ids	权限列表，以逗号分隔开
+	 * @return	新建项目内默认角色姐结果
 	 */
 	@RequestMapping("/addProjectRole")
 	@ResponseBody
@@ -79,6 +78,7 @@ public class ProjectRoleController {
 			String role_name , String auth_ids){
 		
 		Map<String, Object> map = new HashMap<String , Object>();
+		//不能新建创建者、项目成员以及浏览者系统配置的角色
 		switch (role_name) {
 			case "创建者":
 				map.put("result", false);
@@ -100,40 +100,42 @@ public class ProjectRoleController {
 		projectRole.setRole_name(role_name);
 		projectRole.setCreate_datetime(simpleDateFormat.format(new Date()));
 		projectRole.setUpdate_datetime(simpleDateFormat.format(new Date()));
+		//新建项目默认角色记录
 		if(projectRoleService.insertProjectRole(projectRole) == 1){
 			int num = 0;
 			User user = (User)request.getAttribute("user");
 			if(!auth_ids.equals("")){
 				String[] ids = auth_ids.split(",");
+				//赋予该角色指定的权限
 				for (int i = 0 ; i<ids.length ; i++){
 					ProjectRoleAuthority projectRoleAuthority = new ProjectRoleAuthority();
 					projectRoleAuthority.setUser_id(user.getId());
 					projectRoleAuthority.setRole_id(projectRole.getId());
 					projectRoleAuthority.setAuthority_id(Integer.valueOf(ids[i]));
-					
 					projectRoleAuthority.setBind_datetime(simpleDateFormat.format(new Date()));
 					if(projectRoleService.insertProjectRoleAuthority(projectRoleAuthority) == 1){
 						num++;
 					}
 				}
 				map.put("result", true);
-				map.put("message", num+"条权限赋予成功，"+(ids.length-num)+"条权限赋予失败！");
+				map.put("message", num+"条权限赋予成功，"+(ids.length-num)+"条权限赋予失败");
 			}else{
+				//角色没有权限
 				map.put("result", true);
-				map.put("message", "角色新增成功！");
+				map.put("message", "角色新建成功");
 			}
 		}else{
 			map.put("result", false);
-			map.put("message", "增加角色失败！");
+			map.put("message", "新建角色失败");
 		}
 		return map;
 	}
 	
 	/**
-	 * 删除项目内角色
+	 * 批量删除项目默认角色，注意创建者、项目成员以及浏览者角色是不能被删除的
 	 * @param session
-	 * @param ids
-	 * @return
+	 * @param ids	默认角色ID组
+	 * @return	删除结果
 	 */
 	@RequestMapping("/deleteProjectRoles")
 	@ResponseBody
@@ -158,9 +160,9 @@ public class ProjectRoleController {
 	}
 	
 	/**
-	 * 获取角色信息以及对应的权限列表
+	 * 通过ID获取项目默认角色的名称以及对应的权限列表
 	 * @param session
-	 * @param id
+	 * @param id	项目默认角色ID
 	 * @return
 	 */
 	@RequestMapping("/getAuthorityByRoleId")
@@ -175,22 +177,30 @@ public class ProjectRoleController {
 		return map;
 	}
 	
+	/**
+	 * 更新项目默认角色
+	 * @param request
+	 * @param session
+	 * @param role_id	项目默认角色ID
+	 * @param role_name	角色名
+	 * @param auth_ids	权限ID组
+	 * @return	默认角色更新信息
+	 */
 	@RequestMapping("/updateProjectRoleAuthority")
 	@ResponseBody
 	public Map<String, Object> updateProjectRoleAuthority(HttpServletRequest request , HttpSession session , 
 			Integer role_id , String role_name , String auth_ids){
-		
-		//删除目前所有的所有角色
-		projectRoleService.deleteProjectRoleAuthorityByRoleId(role_id);
-		//更新角色名称
+		Map<String, Object> map = new HashMap<>();
+		//更新默认角色
 		ProjectRole projectRole = new ProjectRole();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mmL:ss");
 		projectRole.setUpdate_datetime(simpleDateFormat.format(new Date()));
 		projectRole.setId(role_id);
 		projectRole.setRole_name(role_name);
-		Map<String, Object> map = new HashMap<>();
 		if(projectRoleService.updateProjectRole(projectRole) == 1){
-			//更新权限
+			//删除该角色当前含有的所有权限
+			projectRoleService.deleteProjectRoleAuthorityByRoleId(role_id);
+			//重新赋予权限
 			int num = 0;
 			User user = (User)request.getAttribute("user");
 			if(!auth_ids.equals("")){
@@ -209,11 +219,11 @@ public class ProjectRoleController {
 				map.put("message", num+"条权限赋予成功，"+(ids.length-num)+"条权限赋予失败！");
 			}else{
 				map.put("result", true);
-				map.put("message", "角色更新成功！");
+				map.put("message", "角色更新成功");
 			}
 		}else{
 			map.put("result", false);
-			map.put("message", "角色更新失败！");
+			map.put("message", "角色更新失败");
 		}
 		return map;
 	}

@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dzjin.model.Project;
 import com.dzjin.model.ProjectAuthority;
+import com.dzjin.model.ProjectCustomRole;
+import com.dzjin.model.ProjectRole;
 import com.dzjin.model.ProjectUser;
+import com.dzjin.service.ProjectCustomRoleService;
 import com.dzjin.service.ProjectRoleService;
 import com.dzjin.service.ProjectService;
 import com.dzjin.service.ProjectUserService;
@@ -33,6 +36,8 @@ public class ProjectController {
 	ProjectRoleService projectRoleService;
 	@Autowired
 	ProjectUserService projectUserService;
+	@Autowired
+	ProjectCustomRoleService projectCustomRoleService;
 	
 	/**
 	 * 新建项目
@@ -47,12 +52,43 @@ public class ProjectController {
 		User user = (User)request.getAttribute("user");
 		project.setCreator(String.valueOf(user.getId()));
 		if(projectService.insertProject(project) == 1){
-			//设置当前用户在新建项目内的创建者角色
+			//创建项目内的默认创建者、项目成员以及访问者权限
+			List<ProjectRole> projectRoles = projectRoleService.selectProjectRole();
+			Iterator<ProjectRole> iterator = projectRoles.iterator();
+			int id = 0;
+			while(iterator.hasNext()){
+				ProjectRole projectRole = (ProjectRole)iterator.next();
+				List<ProjectAuthority> projectAuthorities = 
+						projectRoleService.selectProjectAuthorityByRoleId(projectRole.getId());
+				Iterator<ProjectAuthority> iterator2 = projectAuthorities.iterator();
+				StringBuffer stringBuffer = new StringBuffer();
+				while(iterator2.hasNext()){
+					ProjectAuthority projectAuthority = (ProjectAuthority)iterator2.next();
+					stringBuffer.append(projectAuthority.getAuthority_number()+",");
+				}
+				ProjectCustomRole projectCustomRole = new ProjectCustomRole();
+				projectCustomRole.setRolename(projectRole.getRole_name());
+				projectCustomRole.setP_id(project.getId());
+				projectCustomRole.setAuthorities(stringBuffer.toString());
+				projectCustomRole.setCreator_id(user.getId());
+				projectCustomRole.setCreate_datetime(simpleDateFormat.format(new Date()));
+				projectCustomRoleService.insertProjectCustomRole(projectCustomRole);
+				id = projectCustomRole.getId();
+			}
+			//设置当前用户为新建项目的成员
 			ProjectUser projectUser = new ProjectUser();
 			projectUser.setProject_id(project.getId());
 			projectUser.setUser_id(user.getId());
 			projectUser.setLinkman_id(user.getId());
-			projectUser.setRole_id(1);
+			ProjectCustomRole projectCustomRole = 
+					projectCustomRoleService.getProjectCustomRoleByRolename("创建者", project.getId());
+			if(projectCustomRole != null){
+				//正常角色
+				projectUser.setRole_id(projectCustomRole.getId());
+			}else{
+				//替代角色
+				projectUser.setRole_id(id);
+			}
 			projectUser.setBind_date_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			projectUserService.insertProjectUser(projectUser);
 		}
@@ -87,67 +123,39 @@ public class ProjectController {
 		 * 此处需要根据项目ID和当前成员的ID查询当前用户在当前项目内的角色，然后放到Session中，供页面上进行显示。
 		 */
 		Map<String, Object> authoritys = new HashMap<String , Object>();
-//		//基本信息
-//		authoritys.put("1", false);
-//		authoritys.put("10", false);//保存简介
-//		//文件管理
-//		authoritys.put("2", false);
-//		authoritys.put("20", false);//添加根
-//		authoritys.put("21", false);//添加叶
-//		authoritys.put("22", false);//上传文件
-//		authoritys.put("23", false);//修改文件夹名称
-//		authoritys.put("24", false);//删除文件夹
-//		authoritys.put("25", false);//删除文件
-//		authoritys.put("26", false);//下载文件
-//		//格式数据管理
-//		authoritys.put("3", false);
-//		authoritys.put("30", false);//移除格式数据
-//		//应用管理
-//		authoritys.put("4", false);
-//		authoritys.put("40", false);//运行应用
-//		authoritys.put("41", false);//移除应用
-//		//应用结果管理
-//		authoritys.put("5", false);
-//		authoritys.put("50", false);//重新运行应用
-//		authoritys.put("51", false);//发布应用运行结果
-//		authoritys.put("52", false);//取消发布应用运行结果
-//		authoritys.put("53", false);//移除应用运行结果
-//		authoritys.put("54", false);//打开应用结果地址
-//		authoritys.put("55", false);//查看应用运行结果参数
-//		authoritys.put("56", false);//查看应用运行结果文件
-//		//成员管理
-//		authoritys.put("6", false);
-//		authoritys.put("60", false);//添加成员
-//		authoritys.put("61", false);//权限管理
-//		authoritys.put("62", false);//删除成员
-//		//主题管理
-//		authoritys.put("7", false);
-//		authoritys.put("70", false);//创建主题
-//		authoritys.put("71", false);//删除主题
-//		authoritys.put("72", false);//回复主题
-//		authoritys.put("73", false);//删除主题回复
-		
-		
 		User user = (User)request.getAttribute("user");
 		ProjectUser projectUser = projectUserService.getProjectUser(project.getId(), user.getId());
 		List<ProjectAuthority> projectAuthorities = null;
 		if(projectUser == null){
+			//如果是访问者
 			projectAuthorities = projectRoleService.selectProjectAuthorityByRoleId(3);
+			Iterator<ProjectAuthority> iterator = projectAuthorities.iterator();
+			while(iterator.hasNext()){
+				ProjectAuthority projectAuthority = (ProjectAuthority)iterator.next();
+				authoritys.put(projectAuthority.getAuthority_number(), true);
+			}
 		}else{
-			projectAuthorities = projectRoleService.selectProjectAuthorityByRoleId(projectUser.getRole_id());
-		}
-		
-		Iterator<ProjectAuthority> iterator = projectAuthorities.iterator();
-		while(iterator.hasNext()){
-			ProjectAuthority projectAuthority = (ProjectAuthority)iterator.next();
-			authoritys.put(projectAuthority.getAuthority_number(), true);
-//			ProjectAuthority projectAuthorityTemp = projectRoleService.getProjectAuthority(Integer.valueOf(projectAuthority.getParent_id()));
-//			authoritys.put(projectAuthorityTemp.getAuthority_number(), true);
+			//如果是创建者
+			if(project.getCreator().equals(String.valueOf(user.getId()))){
+				projectAuthorities = projectRoleService.selectProjectAuthorityByRoleId(1);
+				Iterator<ProjectAuthority> iterator = projectAuthorities.iterator();
+				while(iterator.hasNext()){
+					ProjectAuthority projectAuthority = (ProjectAuthority)iterator.next();
+					authoritys.put(projectAuthority.getAuthority_number(), true);
+				}
+			}else{
+				//如果是除创建者之外的角色，直接从项目自定义角色中取出权限列表即可
+				ProjectCustomRole projectCustomRole = projectCustomRoleService.getProjectCustomRole(projectUser.getRole_id());
+				if(projectCustomRole.getAuthorities() != null){
+					String[] auths = projectCustomRole.getAuthorities().split(",");
+					for(int i =0;i<auths.length;i++){
+						authoritys.put(auths[i], true);
+					}
+				}
+			}
 		}
 		httpSession.setAttribute("authoritys", authoritys);
-		
 		return "/jsp/project/project_detail.jsp";
-		
 	}
 	
 	/**

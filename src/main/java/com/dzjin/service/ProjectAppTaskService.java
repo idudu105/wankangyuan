@@ -35,6 +35,10 @@ public class ProjectAppTaskService {
 		return projectAppTaskDao.insertProjectAppTask(projectAppTask);
 	}
 	
+	public int updateProjectAppTask(ProjectAppTask projectAppTask){
+		return projectAppTaskDao.updateProjectAppTask(projectAppTask);
+	}
+	
 	public Map<String, Object> selectProjectAppTask(Integer page , Integer strip , Integer project_id , String searchWord){
 		PageHelper.startPage(page, strip);
 		List<ProjectAppTask> projectAppTasks = projectAppTaskDao.selectProjectAppTask(project_id , searchWord);
