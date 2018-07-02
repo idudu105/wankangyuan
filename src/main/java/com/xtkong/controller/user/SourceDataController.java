@@ -147,7 +147,7 @@ public class SourceDataController {
 							whereLike, page, strip);
 				}
 			}
-			httpSession.setAttribute("defaultcs_id", cs_id);
+			httpSession.setAttribute("thiscs_id", cs_id);
 			httpSession.setAttribute("source", source);// 采集源字段列表
 			httpSession.setAttribute("sourceDatas", result.get("records").get("data"));// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
 			httpSession.setAttribute("total", result.get("page").get("totalCount"));
