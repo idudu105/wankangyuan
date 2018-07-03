@@ -111,7 +111,7 @@ public class FormatNodeController {
 	 * @return
 	 */
 	@RequestMapping("/getFormatNodeById")
-	public String getSourceDataById(HttpSession httpSession, String cs_id, String sourceDataId, String ft_id,
+	public String getFormatNodeById(HttpSession httpSession, String cs_id, String sourceDataId, String ft_id,
 			String formatNodeId, String type, Integer page, Integer strip) {
 
 		HashMap<String, FormatType> formatTypeMap = new HashMap<>();
@@ -121,7 +121,6 @@ public class FormatNodeController {
 		}
 		List<FormatType> formatTypeFolders = HBaseFormatNodeDao.getFormatTypeFolders(cs_id, sourceDataId,
 				formatTypeMap);
-		httpSession.setAttribute("formatTypeFolders", formatTypeFolders);
 
 		// meta数据
 		List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
@@ -186,17 +185,30 @@ public class FormatNodeController {
 				formatData.add(metaDataList.get(0).get(++i));
 				metaDataListTemp.add(formatData);
 		}
+		httpSession.setAttribute("formatTypeFolders", formatTypeFolders);
 		httpSession.setAttribute("formatNodeId", formatNodeId);
 		httpSession.setAttribute("metaDatas", metaDataListTemp);
 		httpSession.setAttribute("data", data);
 		httpSession.setAttribute("dataDatas", dataDatas.get("records").get("data"));
 		httpSession.setAttribute("sourceDataId", sourceDataId);
 		
-		if (type.equals("2")) {
-			return "redirect:/jsp/formatdata/data_dataclick2.jsp";
-		} else {
+		
+		switch (type) {
+		case "1":
 			return "redirect:/jsp/formatdata/data_dataclick.jsp";
+		case "2":
+			return "redirect:/jsp/formatdata/data_dataclick2.jsp";
+		case "3":
+			return "redirect:/jsp/formatdata/data_dataclick.jsp";
+		case "4":
+			return "redirect:/jsp/project/project_dataclick.jsp";
 		}
+		return "redirect:/jsp/formatdata/data_dataclick.jsp";
+//		if (type.equals("2")) {
+//			return "redirect:/jsp/formatdata/data_dataclick2.jsp";
+//		} else {
+//			return "redirect:/jsp/formatdata/data_dataclick.jsp";
+//		}
 	}
 
 	/**
