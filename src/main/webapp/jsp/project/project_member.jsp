@@ -372,8 +372,8 @@
 	                                	<label for="check00"></label>
 	                            	</c:if>
 	                            </div>
-	                            <div class="PJliCli PJliCli2 memname">${projectMemberTemp.username}</div>
-	                            <div class="PJliCli PJliCli2 memrole">
+	                            <div class="PJliCli  memname">${projectMemberTemp.username}</div>
+	                            <div class="PJliCli  memrole">
 	                            	<c:if test="${projectMemberTemp.user_id != project.creator}">
 	                            		${projectMemberTemp.role_name}
 	                            	</c:if>
@@ -381,10 +381,10 @@
 	                            		创建者
 	                            	</c:if>
 	                            </div>
-	                            <div class="PJliCli PJliCli2 memcontact">${projectMemberTemp.linkman_username}</div>
-	                            <div class="PJliCli PJliCli2 memintime">${projectMemberTemp.bind_date_time}</div>
-	                            <div class="PJliCli PJliCli2 memupfile">${projectMemberTemp.file_num }</div>
-	                            <div class="PJliCli PJliCli2 memtopic">${projectMemberTemp.topic_num }/${projectMemberTemp.topic_follow_num }</div>
+	                            <div class="PJliCli  memcontact">${projectMemberTemp.linkman_username}</div>
+	                            <div class="PJliCli  memintime">${projectMemberTemp.bind_date_time}</div>
+	                            <div class="PJliCli  memupfile">${projectMemberTemp.file_num }</div>
+	                            <div class="PJliCli  memtopic">${projectMemberTemp.topic_num }/${projectMemberTemp.topic_follow_num }</div>
 	                        </div>
 	                        <div class="PJliline"></div>
 	                    </div>
