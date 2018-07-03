@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.hadoop.hbase.client.Scan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,69 +51,94 @@ public class CommonSelect {
 
 	@RequestMapping("/commenSelect")
 	@ResponseBody
-	public Map<String, Map<String, Object>> commenSelect(List<String> userid, List<String> projectid, String select,boolean isAddWhere,
-			Map<String, String> conditionEqual,Map<String, String> conditionLike, Integer currPage, Integer pageSize) {
-		
+	public Map<String, Object> commenSelect(List<String> userid, List<String> projectid, String select,
+			boolean isAddWhere, Map<String, String> conditionEqual, Map<String, String> conditionLike, Integer currPage,
+			Integer pageSize) {
+		boolean and = false;
+		if (isAddWhere) {
+			select += " WHERE ";
+			isAddWhere = false;
+		} else {
+			select += " AND ";
+			and = true;
+		}
 		if (userid != null && !userid.isEmpty()) {
-			if (isAddWhere) {
-				select += " WHERE ";
-				isAddWhere = false;
-			}else{
-				 select += "AND";
-			}
 			select += "(";
 			for (String string : userid) {
 				select += " \"" + ConstantsHBase.QUALIFIER_USER + "\"= '" + string + "' OR";
 			}
-			select = select.substring(0, select.lastIndexOf("OR")) + ")";
+			select = select.substring(0, select.lastIndexOf("OR")) + ") AND ";
+			and = true;
 		}
 		if (projectid != null && !projectid.isEmpty()) {
-			if (isAddWhere) {
-				select += " WHERE ";
-				isAddWhere = false;
-			}else{
-				 select += "AND";
-			}
 			select += " (";
 			for (String string : projectid) {
 				select += " \"" + ConstantsHBase.QUALIFIER_PROJECT + "\"= '" + string + "' OR";
 			}
-			select = select.substring(0, select.lastIndexOf("OR")) + ")";
+			select = select.substring(0, select.lastIndexOf("OR")) + ") AND ";
+			and = true;
 		}
-		if (isAddWhere) {
-			select += " WHERE ";
-			isAddWhere = false;
-		}else{
-			 select += "AND";
-		}
-		return PhoenixClient.select(select, isAddWhere, conditionEqual, conditionLike, currPage, pageSize);
-	}
-
-	@RequestMapping("/commenSelect")
-	@ResponseBody
-	public Map<String, Map<String, Object>> commenSelect(List<String> select, List<String> userid,
-			List<String> projectid, Integer currPage, Integer pageSize) {
-		String tableName = null;
-		;
-		Map<String, String> whereEqual = new HashMap<>();
-		if (userid != null && !userid.isEmpty()) {
-			for (String string : userid) {
-				whereEqual.put(ConstantsHBase.QUALIFIER_USER, string);
+		if ((conditionEqual != null) && (!conditionEqual.isEmpty())) {
+			for (Entry<String, String> eqlual : conditionEqual.entrySet()) {
+				select +=  eqlual.getKey() + "='" + eqlual.getValue() + "' AND ";
+				and = true;
 			}
 		}
-		if (projectid != null && !projectid.isEmpty()) {
-			for (String string : projectid) {
-				whereEqual.put(ConstantsHBase.QUALIFIER_PROJECT, string);
+		if ((conditionLike != null) && (!conditionLike.isEmpty())) {
+			for (Entry<String, String> like : conditionLike.entrySet()) {
+				select +=  like.getKey() + " like '%" + like.getValue() + "%' AND ";
+				and = true;
 			}
 		}
-		if (whereEqual != null) {
-
+		if (and) {
+			select = select.substring(0, select.lastIndexOf("AND"));
 		}
-		Map<String, String> whereLike = new HashMap<>();
-		String condition = null;
-		;
-		return PhoenixClient.select(tableName, select, whereEqual, whereLike, condition, currPage, pageSize);
+		System.out.println("\n"+select+"\n");
+		return PhoenixClient.select(select);
 	}
+
+	public static void main(String[] args) {
+		CommonSelect commenSl=new CommonSelect();
+		List<String> userid=new ArrayList<>();
+		userid.add("45");
+		List<String> projectid=new ArrayList<>();
+		String select=null;
+		select= "SELECT * FROM \"SOURCE_62\" ";
+		boolean isAddWhere=true;
+		Map<String, String> conditionEqual=new HashMap<>();
+//		conditionEqual.put("INFO.PROJECT", "114");
+		Map<String, String> conditionLike=new HashMap<>();
+		conditionLike.put("\"89\"", "e");
+		Integer currPage=null;
+		Integer pageSize=null;
+		Map<String, Object> result = commenSl.commenSelect(userid, projectid, select, isAddWhere, 
+				conditionEqual, conditionLike, currPage, pageSize);
+		System.out.println("\n"+new Gson().toJson(result).toString()+"\n");
+	}
+
+//	@RequestMapping("/commenSelect")
+//	@ResponseBody
+//	public Map<String, Map<String, Object>> commenSelect(List<String> select, List<String> userid,
+//			List<String> projectid, Integer currPage, Integer pageSize) {
+//		String tableName = null;
+//		Map<String, String> whereEqual = new HashMap<>();
+//		if (userid != null && !userid.isEmpty()) {
+//			for (String string : userid) {
+//				whereEqual.put(ConstantsHBase.QUALIFIER_USER, string);
+//			}
+//		}
+//		if (projectid != null && !projectid.isEmpty()) {
+//			for (String string : projectid) {
+//				whereEqual.put(ConstantsHBase.QUALIFIER_PROJECT, string);
+//			}
+//		}
+//		if (whereEqual != null) {
+//
+//		}
+//		Map<String, String> whereLike = new HashMap<>();
+//		String condition = null;
+//		return PhoenixClient.select(tableName, select, whereEqual, whereLike, condition, currPage, pageSize);
+//	}
 
 	@RequestMapping("/commenHBaseGetRowkeys")
 	@ResponseBody

@@ -186,7 +186,7 @@ public class PhoenixClient {
 		}
 		return map;
 	}
-
+	
 	/**
 	 * HBase表 映射Pheonix视图
 	 * 
@@ -498,7 +498,46 @@ public class PhoenixClient {
 		return map;
 
 	}
+	public static Map<String, Object> select(String phoenixSQL) {
+		Map<String, Object> map = new HashMap<>();
+		List<String> head = new ArrayList<String>();
+		List<Map<String, String>> datas=new ArrayList<>();
+		try {
+			Connection conn = PhoenixClient.getConnection();
+			if (conn == null) {
+				map.put("msg", "Phoenix DB连接超时！");
+				return map;
+			}
 
+			PreparedStatement stmt  =conn.prepareStatement(phoenixSQL);
+			ResultSet set = stmt.executeQuery(phoenixSQL);
+			// 准备查询
+//			Statement stmt = conn.createStatement();
+//			PhoenixResultSet set = (PhoenixResultSet) stmt.executeQuery(phoenixSQL);
+			// 查询出来的列是不固定的，所以这里通过遍历的方式获取列名
+			ResultSetMetaData meta = set.getMetaData();
+			if (head.size() == 0) {
+				for (int i = 1, count = meta.getColumnCount(); i <= count; i++) {
+					head.add(meta.getColumnName(i));
+				}
+			}
+			while (set.next()) {
+				Map<String, String> data=new HashMap<>();
+				for (int i = 0, len = head.size(); i < len; i++) {
+					data.put(head.get(i), set.getString(head.get(i)));
+				}
+				datas.add(data);
+			}
+			// 结果封装
+			map.put("data", datas);
+			map.put("msg", "success");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			map.put("msg", "SQL执行出错：" + e.getMessage());
+			return map;
+		}
+		return map;
+	}
 	public static void main(String[] args) {
 //		 viewTEST();
 		
