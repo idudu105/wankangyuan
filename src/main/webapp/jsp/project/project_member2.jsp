@@ -179,7 +179,7 @@
                 <div class="friendMMl">
                     <div class="friendMMlT">
                         <div class="friendMMlTT">
-                            <c:forEach items="${orgList }" var="org" varStatus="status">
+                            <%-- <c:forEach items="${orgList }" var="org" varStatus="status">
                             <c:if test="${org.parentId eq 0 }">
                             <div class="friendMMlTTz <c:if test='${status.count eq 1}'>active</c:if>" name="${org.id }"><!-- 每个组织结构 -->
                                 <div class="friendMMlTTzT">
@@ -199,7 +199,18 @@
                                 </div>
                             </div>
                             </c:if>
-                            </c:forEach>
+                            </c:forEach> --%>
+                            <div data-bind="foreach: orgList">
+                                <div class="friendMMlTTz" data-bind="attr:{name: id}" ><!-- 每个组织结构 -->
+                                    <div class="friendMMlTTzT">
+                                        <span class="fri_name" data-bind="text: organizationName"></span>
+                                        <div class="friendMMlTTzTi"></div>
+                                    </div>
+                                    <div class="friendMMlTTzB">
+                                        <div data-bind="template: { name: 'orgTmpl', foreach: groupList }"></div>
+                                    </div>
+                                </div>
+                              </div>
                         </div>
                     </div>
                 </div>
@@ -358,7 +369,7 @@
 	        }
 	    });
 		
-      	//定义ViewModel
+      	/* //定义ViewModel
         function ViewModel() {
       		
             var self = this;
@@ -380,7 +391,7 @@
             }
         }
         var vm = new ViewModel();
-        ko.applyBindings(vm);
+        ko.applyBindings(vm); */
         
         
         //添加人员到项目中
@@ -530,7 +541,266 @@
         });
 
 	</script>
+<!--菜单项模板-->
+<script id="orgTmpl" type="text/html">
+<!-- ko if:groupList.length -->
+<div class="friendMMlTTzBz2" data-bind="attr:{name: id}" data-bind="text: organizationName">
+    <div class="friendMMlTTzBz2Tk">
+        <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
+        <div class="friendMMlTTzBzt" data-bind="text: organizationName"></div>
+        <div class="friendMMlTTzTi"></div>
+    </div>
+    <div class="friendMMlTTzBz2Mk" data-bind="template: { name: 'orgTmpl', foreach: groupList }">
+        <div class="friendMMlTTzBz" data-bind="attr:{name: id}">
+            <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
+            <div class="friendMMlTTzBzt" data-bind="text: organizationName"></div>
+        </div>
+    </div>
+</div>
+<!-- /ko -->
+
+<!-- ko ifnot:groupList.length -->
+    <div class="friendMMlTTzBz" data-bind="attr:{name: id},click:function(data, event){$root.showOrgers(id) }">
+        <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
+        <div class="friendMMlTTzBzt" data-bind="text: organizationName"></div>
+    </div>
+<!-- /ko -->
+                                        
+</script>
+
+<script type="text/javascript">
+//定义ViewModel
+function ViewModel() {
+    var self = this;
+    //当前组织ID
+    var centOrgId;
     
+    var centUser = '${user.username}';
+    
+    
+    //组内成员
+    self.orgers = ko.observableArray(); //添加动态监视数组对象
+    //显示组内成员
+    self.showOrgers = function(id){
+        $("#groupId").val(id);
+        centOrgId=id;
+        self.orgers.removeAll();
+        $.get("/wankangyuan/orgMember/findOrgMembers",{groupId:id},function(data){
+            //alert(data);
+            var list = JSON.parse(data);
+            for (var i in list){
+                //根据好友列表判断状态
+                list[i].password = null;
+                for(var k in myfriends) {
+                    if(list[i].userId == myfriends[k].friendId){
+                        list[i].password = "已添加";
+                    }
+                    
+                }
+                if(list[i].username == centUser) {
+                    list[i].password = "当前用户";
+                }
+                
+                self.orgers.push(list[i]);
+                
+            }
+            friendmanage_quanxuan();
+        });
+    }
+    
+    self.getOrgers = function() {
+        self.orgers.removeAll();
+        $.get("/wankangyuan/orgMember/findOrgMembersByname",{username:$("#orgMemberSearch").val()},function(data){
+            var list = JSON.parse(data);
+            for (var i in list){
+                //根据好友列表判断状态
+                list[i].password = null;
+                for(var k in myfriends) {
+                    if(list[i].userId == myfriends[k].friendId){
+                        list[i].password = "已添加";
+                    }
+                }
+                if(list[i].username == centUser) {
+                    list[i].password = "当前用户";
+                }
+                self.orgers.push(list[i]);
+            }
+            friendmanage_quanxuan();
+        });
+    }
+    
+    self.searchOrgers = function(data, event) {
+        if(event.keyCode == "13") {  
+            self.getOrgers();
+        }  
+    }
+    
+    //移除组内成员
+    self.removeOrgers = function() {
+        var load = layer.load();
+        $.post("/wankangyuan/orgMember/removeOrgMembers",$('#orgersForm').serialize() ,function(result){
+            layer.close(load);
+            if(result && result.status!= 200){
+                return layer.msg(result.message,function(){}),!1;
+            }else{
+                layer.msg(result.message, {
+                    anim: 0,
+                    end: function (index) {
+                        self.showOrgers(centOrgId);
+                    }
+                });
+                
+            }
+            $('.zuyichuK').hide();
+        },"json");
+    }
+    //成员列表
+    /* self.members = ko.observableArray(); 
+    self.showMembers = function() {
+        self.members.removeAll();
+        $.get("/wankangyuan/user/getOrgUserByName",$('#getUserByNameForm').serialize(),function(data){
+            var list = JSON.parse(data);
+            for (var i in list){
+                self.members.push(list[i]);
+                
+            }
+        });
+    } */
+    //所有陌生人
+    self.strangerList = ko.observableArray(); 
+    self.findStrangerList = function() {
+        self.strangerList.removeAll();
+        $.get("/wankangyuan/user/findStrangerList",$('#findStrangerListForm').serialize(),function(data){
+            var list = JSON.parse(data);
+            for (var i in list){
+                self.strangerList.push(list[i]);
+            }
+            
+        });
+    }
+    
+    //初始化组能成员
+    //self.showOrgMember();
+    
+    //发送好友申请
+    self.sendFriendRequest = function(user) {
+        var load = layer.load();
+        $.post("/wankangyuan/message/sendFriendRequest",{userId:user.id} ,function(result){
+            layer.close(load);
+            if(result && result.status!= 200){
+                return layer.msg(result.message,function(){}),!1;
+            }else{
+                layer.msg(result.message, {
+                    anim: 0,
+                    end: function (index) {
+                        self.showOrgers(centOrgId);
+                    }
+                });
+            }
+        },"json");
+    }
+    
+    //批量发送好友申请
+    self.sendAllFriendRequest = function(user) {
+        var load = layer.load();
+        $.post("/wankangyuan/message/sendAllFriendRequest",$('#addFriendsForm').serialize() ,function(result){
+            layer.close(load);
+            if(result && result.status!= 200){
+                return layer.msg(result.message,function(){}),!1;
+            }else{
+                layer.msg(result.message, {
+                    anim: 0,
+                });
+            }
+        },"json");
+    }
+    
+    //-----------------------------------------------------
+    
+    //角色列表
+    var roles;
+    self.getRoles = function() {
+        $.get("/wankangyuan/role/getRoleList",{},function(data){
+            roles = JSON.parse(data);
+        });
+    }
+    //初始化角色信息
+    self.getRoles();
+    
+    //-----------------------------------------------------
+    
+    //我的好友列表
+    self.friends = ko.observableArray();
+    var myfriends;
+    self.getMyFriends = function() {
+        self.friends.removeAll();
+        $.get("/wankangyuan/friends/getMyFriends",{friendName:$("#myFriendSearch").val()},function(data){
+            myfriends = JSON.parse(data);
+            for (var i in myfriends){
+                self.friends.push(myfriends[i]);
+                
+            }
+            friendmanage_quanxuan();
+        });
+    }
+    self.getMyFriends();
+    
+    //移除好友
+    self.removeMyFriends = function() {
+        var load = layer.load();
+        $.post("/wankangyuan/friends/removeFriends",$('#myFriendsForm').serialize() ,function(result){
+            layer.close(load);
+            if(result && result.status!= 200){
+                return layer.msg(result.message,function(){}),!1;
+            }else{
+                layer.msg(result.message, {
+                    anim: 0,
+                    end:function() {
+                        $(".yichuhyK").hide();
+                        self.getMyFriends();    
+                    }
+                });
+            }
+        },"json");
+    }
+    
+    self.searchMyFriends = function(data, event) {
+        if(event.keyCode == "13") {  
+            self.getMyFriends();
+        }  
+    }
+    
+    self.sendMessage = function(friend) {
+        window.location.href="/wankangyuan/friendMessage/viewSendMessage?objId="+ friend.friendId;
+    }
+    
+    //-----------------------------------------------------
+    
+    var organization = function(id,organizationName, groupList) {
+    this.id = ko.observable(id);
+    this.organizationName = ko.observable(organizationName);
+    this.groupList = ko.observableArray(groupList || []); //下级子菜单
+};
+    
+    //组织结构
+    self.orgList = ko.observableArray();
+    self.getOrgList = function() {
+        self.orgList.removeAll();
+        $.get("/wankangyuan/organization/findOrgList",{},function(data){
+            var orgListJson = JSON.parse(data);
+            for (var i in orgListJson){
+                self.orgList.push(new organization(orgListJson[i].id,orgListJson[i].organizationName,orgListJson[i].groupList));
+                
+            }
+            friend_manage();
+        });
+    }
+    
+    self.getOrgList();
+}
+var vm = new ViewModel();
+ko.applyBindings(vm);
+</script>  
     
 </body>
 </html>
