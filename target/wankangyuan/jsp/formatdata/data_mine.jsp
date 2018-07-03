@@ -128,12 +128,17 @@
 							<div class="pro_addI"></div>
 						</div>
 					</div>
-					<div class="pro_menu pro_rem">移除</div>
+					<div class="pro_menu pro_rem"id="removeSourceDatas">移出</div>
 					<div class="pro_menu pro_export">导出</div>
 					<!-- 展示数据源列表 ， 需要为select 的option 的onclick设置事件监听-->
 					<select id="source_Select" class="pro_menusel">
 						<c:forEach items="${sources}" var="source">
-							<option value="${source.cs_id }">${source.cs_name}</option>
+							<c:if test="${source.cs_id!=thiscs_id}">
+								<option value="${source.cs_id}">${source.cs_name}</option>
+							</c:if>
+							<c:if test="${source.cs_id==thiscs_id}">										
+								<option value="${source.cs_id}" selected="selected">${source.cs_name}</option>
+							</c:if>
 						</c:forEach>
 					</select>
 
@@ -267,7 +272,51 @@
 		src="/wankangyuan/static/js/jquery.min.js"></script>
 	<script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
 	<script type="text/javascript">
-    
+	$("#removeSourceDatas").click(function (){
+		
+		var afuxuanK=document.querySelectorAll('.fuxuanK2');
+        var afuxuan=[];
+        for(var i=0;i<afuxuanK.length;i++){
+            afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+        }
+        var ids = [];
+        for(var i=0;i<afuxuanK.length;i++){
+        	if(afuxuan[i].checked){
+        		ids.push(afuxuan[i].name);
+        	}
+        }
+        if(ids == ""){
+        	alert("请勾选待移出的选项！");
+        	return;
+        }
+        var result = confirm("确认移出选中的数据源数据吗？");
+		if(result == true){
+			var cs_id = $("#source_Select").val();
+            $.ajax({
+            	url:"/wankangyuan/sourceData/removeSourceDatas",
+            	type:"post",
+            	data:{
+            		sourceDataIds:ids.join(","),
+            		cs_id:cs_id
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			alert(data.message);
+            			window.location.href="/wankangyuan/sourceData/firstIn?type=1";
+            		}else{
+            			alert(data.message);
+            		}
+            	},
+            	error : function(){
+            		alert("联网失败");
+            	}
+            });
+		}else{
+			return;
+		}
+});
+
 	  	//将格式数据添加到项目
 		$(".pro_addli").click(function (){
 			

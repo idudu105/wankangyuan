@@ -125,10 +125,10 @@
                     <div class="pro_menu pro_adddata">+添加源数据</div>
                    	<select name="" id="source_Select" class="pro_menusel" >
 						<c:forEach items="${sources}" var="source">
-							<c:if test="${source.cs_id!=eval(defaultcs_id)}">										
-								<option value="${source.cs_id}" >${source.cs_name}</option>
+							<c:if test="${source.cs_id!=thiscs_id}">
+								<option value="${source.cs_id}">${source.cs_name}</option>
 							</c:if>
-							<c:if test="${source.cs_id==eval(defaultcs_id)}">										
+							<c:if test="${source.cs_id==thiscs_id}">										
 								<option value="${source.cs_id}" selected="selected">${source.cs_name}</option>
 							</c:if>
 						</c:forEach>						
@@ -346,7 +346,6 @@
     	}
     	
     	$("#source_Select").change(function(){
-            alert("sssss");
     		cs_id = $("#source_Select").val();
    			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id;
     	

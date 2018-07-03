@@ -25,11 +25,6 @@
         pro_data();
         // data_mine();
         // data_create();
-
-        alert("sssss");
-        $("#source_Select").val(defaultcs_id);
-        alert("${defaultcs_id}");
-        alert(defaultcs_id);
     }
 </script>
 <body>
@@ -121,7 +116,12 @@
                     <div class="pro_menu">添加至我的</div>
                     <select id="source_Select" class="pro_menusel" >
 						<c:forEach items="${sources}" var="source">
-							<option value="${source.cs_id }" >${source.cs_name}</option>
+							<c:if test="${source.cs_id!=thiscs_id}">
+								<option value="${source.cs_id}">${source.cs_name}</option>
+							</c:if>
+							<c:if test="${source.cs_id==thiscs_id}">										
+								<option value="${source.cs_id}" selected="selected">${source.cs_name}</option>
+							</c:if>
 						</c:forEach>						
 					</select>
                 </div>
