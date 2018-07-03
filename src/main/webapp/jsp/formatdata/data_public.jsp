@@ -25,11 +25,6 @@
         pro_data();
         // data_mine();
         // data_create();
-
-        alert("sssss");
-        $("#source_Select").val(defaultcs_id);
-        alert("${defaultcs_id}");
-        alert(defaultcs_id);
     }
 </script>
 <body>

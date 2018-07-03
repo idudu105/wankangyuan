@@ -290,6 +290,13 @@ public class PhoenixClient {
 		}
 		pheonixSQL += " FROM \"" + tableName + "\"";
 		boolean isAddWhere = true;
+		if (condition != null) {
+			if (isAddWhere) {
+				pheonixSQL += " WHERE ";
+				isAddWhere = false;
+			}
+			pheonixSQL +=condition+ " AND ";
+		}
 		
 		if ((whereEqual != null) && (!whereEqual.isEmpty())) {
 			if (isAddWhere) {
@@ -308,13 +315,6 @@ public class PhoenixClient {
 			for (Entry<String, String> like : whereLike.entrySet()) {
 				pheonixSQL += "\"" + tableName + "\".\"" +  like.getKey() + "\" like '%" + like.getValue() + "%' AND ";
 			}
-		}
-		if (condition != null) {
-			if (isAddWhere) {
-				pheonixSQL += " WHERE ";
-				isAddWhere = false;
-			}
-			pheonixSQL +=condition+ " AND ";
 		}
 		if (!isAddWhere) {
 			pheonixSQL = pheonixSQL.substring(0, pheonixSQL.lastIndexOf("AND"));
@@ -374,7 +374,31 @@ public class PhoenixClient {
 		System.out.println(pheonixSQL);
 		return selectPage(pheonixSQL, page, strip);
 	}
-
+	public static Map<String, Map<String, Object>> select(String pheonixSQL,boolean isAddWhere, Map<String, String> whereEqual, Map<String, String> whereLike, Integer page, Integer strip) {
+		if ((whereEqual != null) && (!whereEqual.isEmpty())) {
+			if (isAddWhere) {
+				pheonixSQL += " WHERE ";
+				isAddWhere = false;
+			}
+			for (Entry<String, String> eqlual : whereEqual.entrySet()) {
+				pheonixSQL += "\""  + eqlual.getKey() + "\"='" + eqlual.getValue() + "' AND ";
+			}
+		}
+		if ( (whereLike != null) && (!whereLike.isEmpty())) {
+			if (isAddWhere) {
+				pheonixSQL += " WHERE ";
+				isAddWhere = false;
+			}
+			for (Entry<String, String> like : whereLike.entrySet()) {
+				pheonixSQL += "\""+  like.getKey() + "\" like '%" + like.getValue() + "%' AND ";
+			}
+		}
+		if (!isAddWhere) {
+			pheonixSQL = pheonixSQL.substring(0, pheonixSQL.lastIndexOf("AND"));
+		}
+		System.out.println(pheonixSQL);
+		return selectPage(pheonixSQL, page, strip);
+	}
 	/**
 	 * 
 	 * @param pheonixSQL

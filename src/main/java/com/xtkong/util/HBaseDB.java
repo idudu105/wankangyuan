@@ -313,7 +313,6 @@ public class HBaseDB {
 			// 设置行键
 			Delete delete = new Delete(Bytes.toBytes(rowKey.toString()));
 			table.delete(delete);
-			System.out.println("tableName:" + tableName + ",rowKey:" + rowKey);
 			table.close();
 			return true;
 		} catch (Exception e) {
@@ -321,7 +320,19 @@ public class HBaseDB {
 			return false;
 		}
 	}
-
+	public boolean checkAndDelete(Object tableName, Object rowKey, Object family, Object quelifier, Object value) {
+		try {
+			Table table = getTable(tableName.toString());
+			Delete delete = new Delete(Bytes.toBytes(rowKey.toString()));
+			table.checkAndDelete(Bytes.toBytes(rowKey.toString()), Bytes.toBytes(family.toString()), Bytes.toBytes(quelifier.toString()),
+					Bytes.toBytes(value.toString()), delete);
+			table.close();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 	/**
 	 * 跳过页
 	 * 

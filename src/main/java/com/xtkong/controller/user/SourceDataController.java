@@ -300,7 +300,21 @@ public class SourceDataController {
 		}
 		return map;
 	}
-
+	@RequestMapping("/removeSourceDatas")
+	@ResponseBody
+	public Map<String, Object> removeSourceDatas(HttpServletRequest request,String cs_id, String sourceDataIds) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		User user = (User) request.getAttribute("user");
+		Integer uid = user.getId();
+		if (HBaseSourceDataDao.removeSourceDatas(cs_id,String.valueOf(uid), sourceDataIds)) {
+			map.put("result", true);
+			map.put("message", "删除成功");
+		} else {
+			map.put("result", false);
+			map.put("message", "删除失败");
+		}
+		return map;
+	}
 	@RequestMapping("/open")
 	@ResponseBody
 	public Map<String, Object> open(String cs_id, String sourceDataIds) {

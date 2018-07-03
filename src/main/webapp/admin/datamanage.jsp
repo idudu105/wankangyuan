@@ -69,13 +69,13 @@
 }
 </style>
 </head>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 	window.onload = function() {
 		alert("dasdasd");
 
 
 	}
-</script>
+</script>-->
 <body style="cursor: auto;">
 	<!-- start: Header顶端 -->
 	<div class="navbar">
