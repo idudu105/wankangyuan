@@ -111,7 +111,7 @@ $("#sendEmailCode").click(function(){
     var anniu2=document.querySelectorAll('.loginMzRb2')[0];//禁用发送验证码
     
     var email = $("#email").val();
-    var emailReg =/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+    var emailReg =/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     if (!emailReg.test(email)) {  
         return layer.msg('请输入有效的邮箱！',function(){}),!1;
     }else{
