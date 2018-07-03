@@ -1,6 +1,11 @@
 package com.xtkong.controller.user;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +14,7 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -66,32 +72,40 @@ public class ImportController {
 			HSSFSheet sheetAt = hssfWorkbook.getSheetAt(0);
 			HSSFCell cell = null;
 			HSSFRow row = null;
-			
-			HashMap< String,Integer> index_nameMap = new HashMap<>();
+
+			HashMap<String, Integer> index_nameMap = new HashMap<>();
 			row = sheetAt.getRow(sheetAt.getFirstRowNum());
 			for (int j = row.getFirstCellNum(); j < row.getLastCellNum(); j++) {
 				cell = row.getCell(j);
-				index_nameMap.put( cell.getStringCellValue(),j);
+				try {
+					index_nameMap.put(getStringCellValue(cell), j);
+				} catch (Exception e) {
+					e.printStackTrace();
+					continue;
+				}
 			}
-			
+
 			List<SourceField> sourceFields = sourceFieldService.getSourceFields(Integer.valueOf(cs_id));
 			// 待导入文件中要导入的列的索引,对应的配置表中的字段id
 			HashMap<Integer, String> index_csfIdMap = new HashMap<>();
 			for (SourceField sourceField : sourceFields) {
 				if (index_nameMap.containsKey(sourceField.getCsf_name())) {
-					index_csfIdMap.put(index_nameMap.get(sourceField.getCsf_name()), String.valueOf(sourceField.getCs_id()));
+					index_csfIdMap.put(index_nameMap.get(sourceField.getCsf_name()),
+							String.valueOf(sourceField.getCs_id()));
 				}
 			}
-			
-//			row = sheetAt.getRow(sheetAt.getFirstRowNum());
-//			for (int j = row.getFirstCellNum(); j < row.getLastCellNum(); j++) {
-//				cell = row.getCell(j);
-//				String csf_Id = String.valueOf(sourceFieldService.getSourceFieldId(Integer.valueOf(cs_id),
-//						 cell.getStringCellValue()));
-//				if (!csf_Id.equals("null")) {
-//					index_csfIdMap.put(j, csf_Id);
-//				}
-//			}
+
+			// row = sheetAt.getRow(sheetAt.getFirstRowNum());
+			// for (int j = row.getFirstCellNum(); j < row.getLastCellNum();
+			// j++) {
+			// cell = row.getCell(j);
+			// String csf_Id =
+			// String.valueOf(sourceFieldService.getSourceFieldId(Integer.valueOf(cs_id),
+			// getStringCellValue(cell)));
+			// if (!csf_Id.equals("null")) {
+			// index_csfIdMap.put(j, csf_Id);
+			// }
+			// }
 
 			for (int i = sheetAt.getFirstRowNum() + 1; i < sheetAt.getPhysicalNumberOfRows(); i++) {
 				row = sheetAt.getRow(i);
@@ -100,14 +114,19 @@ public class ImportController {
 				}
 				Map<String, String> sourceFieldDatas = new HashMap<>();
 				for (Entry<Integer, String> index_csfId : index_csfIdMap.entrySet()) {
-					cell = row.getCell(index_csfId.getKey());
-					sourceFieldDatas.put(index_csfId.getValue(),  cell.getStringCellValue());
+					try {
+						cell = row.getCell(index_csfId.getKey());
+						sourceFieldDatas.put(index_csfId.getValue(), getStringCellValue(cell));
+					} catch (Exception e) {
+						e.printStackTrace();
+						continue;
+					}
 				}
 				// for (int j = row.getFirstCellNum(); j < row.getLastCellNum();
 				// j++) {
 				// cell = row.getCell(j);
 				// sourceFieldDatas.put(String.valueOf(sourceFields.get(j).getCsf_id()),
-				// cell.toString());
+				// getStringCellValue(cell));
 				// }
 				HBaseSourceDataDao.insertSourceData(cs_id, String.valueOf(user.getId()), sourceFieldDatas);
 			}
@@ -142,12 +161,17 @@ public class ImportController {
 			HSSFSheet sheetAt = hssfWorkbook.getSheetAt(0);
 			HSSFCell cell = null;
 			HSSFRow row = null;
-			
-			HashMap< String,Integer> index_nameMap = new HashMap<>();
+
+			HashMap<String, Integer> index_nameMap = new HashMap<>();
 			row = sheetAt.getRow(sheetAt.getFirstRowNum());
 			for (int j = row.getFirstCellNum(); j < row.getLastCellNum(); j++) {
 				cell = row.getCell(j);
-				index_nameMap.put( cell.getStringCellValue(),j);
+				try {
+					index_nameMap.put(getStringCellValue(cell), j);
+				} catch (Exception e) {
+					e.printStackTrace();
+					continue;
+				}
 			}
 			List<FormatField> datas = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
 					ConstantsHBase.IS_meta_false);
@@ -155,19 +179,10 @@ public class ImportController {
 			HashMap<Integer, String> index_ffIdMap = new HashMap<>();
 			for (FormatField formatField : datas) {
 				if (index_nameMap.containsKey(formatField.getFf_name())) {
-					index_ffIdMap.put(index_nameMap.get(formatField.getFf_name()), String.valueOf(formatField.getFf_id()));
+					index_ffIdMap.put(index_nameMap.get(formatField.getFf_name()),
+							String.valueOf(formatField.getFf_id()));
 				}
 			}
-//			row = sheetAt.getRow(sheetAt.getFirstRowNum());
-//			for (int j = row.getFirstCellNum(); j < row.getLastCellNum(); j++) {
-//				cell = row.getCell(j);
-//
-//				String ff_Id = String.valueOf(formatFieldService.getFormatField_ff_id(Integer.valueOf(ft_id),
-//						 cell.getStringCellValue()));
-//				if (!ff_Id.equals("null")) {
-//					index_ffIdMap.put(j, ff_Id);
-//				}
-//			}
 			for (int i = sheetAt.getFirstRowNum() + 1; i < sheetAt.getPhysicalNumberOfRows(); i++) {
 				row = sheetAt.getRow(i);
 				if (row == null) {
@@ -175,15 +190,14 @@ public class ImportController {
 				}
 				Map<String, String> formatFieldDatas = new HashMap<>();
 				for (Entry<Integer, String> index_csfId : index_ffIdMap.entrySet()) {
-					cell = row.getCell(index_csfId.getKey());
-					formatFieldDatas.put(index_csfId.getValue(),  cell.getStringCellValue());
+					try {
+						cell = row.getCell(index_csfId.getKey());
+						formatFieldDatas.put(index_csfId.getValue(), getStringCellValue(cell));
+					} catch (Exception e) {
+						e.printStackTrace();
+						continue;
+					}
 				}
-				// for (int j = row.getFirstCellNum(); j < row.getLastCellNum();
-				// j++) {
-				// cell = row.getCell(j);
-				// formatFieldDatas.put(String.valueOf(data.get(j).getFf_id()),
-				// cell.toString());
-				// }
 				HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId, formatFieldDatas);
 			}
 			hssfWorkbook.close();
@@ -195,4 +209,73 @@ public class ImportController {
 
 		return map;
 	}
+
+	@SuppressWarnings("deprecation")
+	private String getStringCellValue(HSSFCell cell) {
+		String cellValue = "";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		DecimalFormat decimalFormat = new DecimalFormat("#.#");
+		if (cell == null) {
+			return cellValue;
+		}
+		switch (cell.getCellType()) {
+		case HSSFCell.CELL_TYPE_NUMERIC: // 数字
+			if (HSSFDateUtil.isCellDateFormatted(cell)) {
+				double d = cell.getNumericCellValue();
+				Date date = HSSFDateUtil.getJavaDate(d);
+				cellValue = simpleDateFormat.format(date);
+			} else {
+				cellValue = decimalFormat.format((cell.getNumericCellValue()));
+			}
+			break;
+		case HSSFCell.CELL_TYPE_STRING: // 字符串
+			cellValue = cell.getStringCellValue();
+			break;
+		case HSSFCell.CELL_TYPE_BOOLEAN: // Boolean
+			cellValue = String.valueOf(cell.getBooleanCellValue());
+			break;
+		case HSSFCell.CELL_TYPE_FORMULA: // 公式
+			cellValue = cell.getCellFormula().toString();
+			break;
+		case HSSFCell.CELL_TYPE_BLANK: // 空值
+			cellValue = "";
+			break;
+		case HSSFCell.CELL_TYPE_ERROR: // 故障
+			cellValue = "";
+			break;
+		default:
+			cellValue = cell.toString();
+			break;
+		}
+
+		return cellValue;
+	}
+
+	public static void main(String[] args) {
+		File f = new File("E:\\Users\\admin\\Desktop\\formatDataModel.xls");
+		ImportController importController = new ImportController();
+		try {
+			FileInputStream is = new FileInputStream(f);
+			HSSFWorkbook wbs = new HSSFWorkbook(is);
+			HSSFSheet childSheet = wbs.getSheetAt(0);
+			// System.out.println(childSheet.getPhysicalNumberOfRows());
+			System.out.println("有行数" + childSheet.getLastRowNum());
+			for (int j = 0; j < childSheet.getPhysicalNumberOfRows(); j++) {
+				HSSFRow row = childSheet.getRow(j);
+				// System.out.println(row.getPhysicalNumberOfCells());
+				// System.out.println("有列数" + row.getLastCellNum());
+				if (null != row) {
+					for (int k = 0; k < row.getLastCellNum(); k++) {
+						HSSFCell cell = row.getCell(k);
+						System.out.print(cell.toString() + ":" + importController.getStringCellValue(cell) + "  ");
+					}
+				}
+				System.out.println();
+			}
+			wbs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

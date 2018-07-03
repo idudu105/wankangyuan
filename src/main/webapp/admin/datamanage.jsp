@@ -69,7 +69,13 @@
 }
 </style>
 </head>
+<script type="text/javascript">
+	window.onload = function() {
+		alert("dasdasd");
 
+
+	}
+</script>
 <body style="cursor: auto;">
 	<!-- start: Header顶端 -->
 	<div class="navbar">
@@ -763,11 +769,6 @@
 	<script type="text/javascript" src="formatType.js"></script>
 
 	<script type="text/javascript" src="formatField.js"></script>
-	<script>
-		$(document).ready(function(e) {
-			alert("测试");
-		});
-	</script>
 	<!-- end: JavaScript -->
 
 </body>

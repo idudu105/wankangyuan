@@ -1,6 +1,5 @@
 //获取某个采集源的基本信息配置以及格式数据类型配置
 $(".box_xxtabz").click(function(){
-	alert("联网失败");
     $("input[name='cs_id']").val(this.id);
     $("input[name='format_add_cs_id']").val(this.id);
     
