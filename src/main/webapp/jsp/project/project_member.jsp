@@ -106,6 +106,7 @@
             </div>
             <div class="shaixuan">
                 <div class="shaixuanC">
+                    <!-- 
                     <div class="listZT">
                         <a href="/wankangyuan/jsp/project/project_member2.jsp">
                             <div class="listZTli listZT1 active">
@@ -121,7 +122,9 @@
                             </div>
                         </a>
                     </div>
+                    
                     <div class="jiangeline"></div>
+                     -->
                     <div class="shaixuanBT">
                         <div class="shaixuanBTt">筛选</div>
                         <div class="shaixuanBTiK">

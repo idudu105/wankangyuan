@@ -170,12 +170,18 @@ public class ProjectService {
 		String[] ids = idStrings.split(",");
 		boolean result = true;
 		for(int i = 0 ; i< ids.length ; i++){
-			ProjectUser projectUser = new ProjectUser();
-			projectUser.setProject_id(Integer.valueOf(ids[i]));
-			projectUser.setUser_id(user_id);
-			if(1 != projectDao.deleteProjectUser(projectUser)){
-				result = false;
+			
+			Project project = projectDao.getProjectDetail(Integer.valueOf(ids[i]));
+			if(Integer.valueOf(project.getCreator()) != user_id){
+				ProjectUser projectUser = new ProjectUser();
+				projectUser.setProject_id(Integer.valueOf(ids[i]));
+				projectUser.setUser_id(user_id);
+				
+				if(1 != projectDao.deleteProjectUser(projectUser)){
+					result = false;
+				}
 			}
+			
 		}
 		return result;
 	}

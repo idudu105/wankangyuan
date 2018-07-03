@@ -241,9 +241,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="prof_lbRm">
                         <div class="prof_lbRmT">
                             <!-- <input type="button" class="prof_lbRmTl prof_lbRmTbt prof_lbRmTse" value="筛选" /> -->
-                            <c:if test="${authoritys['26'] == true }">
-		                    	<input type="button" class="prof_lbRmTr prof_lbRmTbt prof_lbRmTdo " value="下载" />
-		                    </c:if>                       
+                                                  
                             <c:if test="${authoritys['25'] == true }">
 		                    	<input type="button" class="prof_lbRmTr prof_lbRmTbt prof_lbRmTde " value="删除" onclick="deleteFiles()"/>
 		                    </c:if>
@@ -261,7 +259,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 <div class="prof_lbRmULtli prof_lbRmULt4">大小（KB）</div>
                                 <div class="prof_lbRmULtli prof_lbRmULt5">创建时间</div>
                                 <div class="prof_lbRmULtli prof_lbRmULt6">创建人</div>
-                                <div class="prof_lbRmULtli prof_lbRmULt7">预览</div>
+                                <c:if test="${authoritys['26'] == true }">
+			                    	<div class="prof_lbRmULtli prof_lbRmULt7">下载</div>
+			                    </c:if> 
+                                
                             </div>
                             <div class="prof_lbRmULm" id="filesList"></div>
                             <!-- <div class="pageK" id="box"></div> -->
@@ -454,6 +455,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	}
     	
     	//下载文件
+    	/*
     	$(".prof_lbRmTdo").click(function (){
 			var afuxuanK=document.querySelectorAll('.fuxuanK2');
             var afuxuan=[];
@@ -477,7 +479,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             for(var i=0;i<ids.length;i++){
             	window.open("localhost:8098/download/"+ids[i] , "_black");
             }
-    	});
+    	});*/
 
     </script>
     

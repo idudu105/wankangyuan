@@ -588,7 +588,7 @@ function pro_file(){
 	                                    '<div class="prof_lbRmULmli prof_lbRmULt4">'+data.projectFiles[index].file_size+'</div>'+
 	                                    '<div class="prof_lbRmULmli prof_lbRmULt5">'+data.projectFiles[index].create_datetime+'</div>'+
 	                                    '<div class="prof_lbRmULmli prof_lbRmULt6">'+data.projectFiles[index].username+'</div>'+
-	                                    '<div class="prof_lbRmULmli prof_lbRmULt7 prof_lbRmULmYL">预览</div>'+
+	                                    '<a href="http://localhost:8098/download/'+data.projectFiles[index].file_location+'" download="'+data.projectFiles[index].file_name+'">下载</a>'+
         							'</div>');
         					}
         				}else{

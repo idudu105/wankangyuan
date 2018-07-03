@@ -18,9 +18,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.dzjin.model.Project;
 import com.dzjin.model.ProjectAuthority;
 import com.dzjin.model.ProjectCustomRole;
+import com.dzjin.model.ProjectFile;
+import com.dzjin.model.ProjectFloder;
 import com.dzjin.model.ProjectRole;
 import com.dzjin.model.ProjectUser;
 import com.dzjin.service.ProjectCustomRoleService;
+import com.dzjin.service.ProjectFileService;
+import com.dzjin.service.ProjectFloderService;
 import com.dzjin.service.ProjectRoleService;
 import com.dzjin.service.ProjectService;
 import com.dzjin.service.ProjectUserService;
@@ -38,6 +42,10 @@ public class ProjectController {
 	ProjectUserService projectUserService;
 	@Autowired
 	ProjectCustomRoleService projectCustomRoleService;
+	@Autowired
+	ProjectFileService projectFileService;
+	@Autowired
+	ProjectFloderService projectFloderService;
 	
 	/**
 	 * 新建项目
@@ -111,8 +119,20 @@ public class ProjectController {
 		}else{
 			project = projectService.getProjectDetail(id);
 		}
+		
+		List<ProjectFloder> projectFloders = 
+				projectFloderService.selectProjectFloderByProjectId(project.getId());
+		Iterator<ProjectFloder> iterator2 = projectFloders.iterator();
+		int num = 0;
+		while(iterator2.hasNext()){
+			ProjectFloder projectFloder = 
+					(ProjectFloder)iterator2.next();
+			List<ProjectFile> projectFiles = 
+					projectFileService.selectProjectFileByFloderId(projectFloder.getId());
+			num+=projectFiles.size();
+		}
 
-		project.setFileNum(projectService.countProjectFile(project.getId()));
+		project.setFileNum(num);
 		project.setAppNum(projectService.countProjectApp(project.getId()));
 		project.setAppResultNum(projectService.countProjectAppTask(project.getId()));
 		project.setMemberNum(projectService.countProjectUser(project.getId()));
