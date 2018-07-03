@@ -1,6 +1,6 @@
 //获取某个采集源的基本信息配置以及格式数据类型配置
 $(".box_xxtabz").click(function(){
-	
+	alert("联网失败");
     $("input[name='cs_id']").val(this.id);
     $("input[name='format_add_cs_id']").val(this.id);
     
@@ -151,7 +151,7 @@ $("#editSourceSubmit").click(function (){
 		success : function(data){
 			if(data.result == true){
 				alert(data.message);
-				window.location.href="/wankangyuan/admin/formatdata";
+				window.location.href="/wankangyuan/admin/formatdata?cs_id="+cs_id;
 			}else{
 				alert(data.message);
 			}
@@ -176,7 +176,7 @@ $("#deleteSourceSubmit").click(function (){
 		success : function(data){
 			if(data.result == true){
 				alert(data.message);
-				window.location.href="/wankangyuan/admin/formatdata";
+				window.location.href="/wankangyuan/admin/formatdata?cs_id"+cs_id;
 			}else{
 				alert(data.message);
 			}
@@ -209,7 +209,7 @@ $("#insertSourceFieldSubmit").click(function (){
 		},
 		success : function(data){
 			if(data.result == true){
-				window.location.href="/wankangyuan/admin/formatdata";
+				window.location.href="/wankangyuan/admin/formatdata?cs_id="+insertSourceFieldForm.cs_id.value;
 			}else{
 				alert(data.message);
 			}
@@ -241,7 +241,7 @@ $("#updateSourceFieldSubmit").click(function (){
 		success : function(data){
 			if(data.result == true){
 				alert("数据源字段更新成功！");
-				window.location.href="/wankangyuan/admin/formatdata";
+				window.location.href="/wankangyuan/admin/formatdata?cs_id="+updateSourceFieldForm.edit_csf_id.value;
 			}else{
 				alert(data.message);
 			}
@@ -276,7 +276,7 @@ $("#deleteSourceFieldSubmit").click(function (){
 			if(data.result == true){
 				//进行删除成功后的跳页处理
 				alert(data.message);
-				window.location.href="/wankangyuan/admin/formatdata";
+				window.location.href="/wankangyuan/admin/formatdata?csf_ids="+csf_ids;
 
 			}else{
 				alert(data.message);

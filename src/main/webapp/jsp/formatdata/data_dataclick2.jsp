@@ -380,6 +380,7 @@
             	data:{
             		cs_id:cs_id,
             		ft_id:ft_id,
+            		sourceDataId:sourceDataId,
             		formatNodeId:formatNodeId,
             		formatFieldDatas:JSON.stringify(formatFieldDatas)
             	},
@@ -512,7 +513,7 @@
             	data:{
             		cs_id:cs_id,
             		ft_id:ft_id,
-            		formatDataId:formatNodeId,
+            		formatNodeId:formatNodeId,
             		formatFieldDatas:JSON.stringify(formatFieldDatas)
             	},
             	dataType:"json",

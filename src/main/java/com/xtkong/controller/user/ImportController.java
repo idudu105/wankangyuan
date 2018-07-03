@@ -2,6 +2,7 @@ package com.xtkong.controller.user;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -21,10 +22,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.liutianjun.pojo.User;
 import com.xtkong.dao.hbase.HBaseFormatDataDao;
 import com.xtkong.dao.hbase.HBaseSourceDataDao;
+import com.xtkong.model.FormatField;
+import com.xtkong.model.SourceField;
 import com.xtkong.service.FormatFieldService;
 import com.xtkong.service.FormatTypeService;
 import com.xtkong.service.SourceFieldService;
 import com.xtkong.service.SourceService;
+import com.xtkong.util.ConstantsHBase;
 
 @Controller
 @RequestMapping("/import")
@@ -62,19 +66,32 @@ public class ImportController {
 			HSSFSheet sheetAt = hssfWorkbook.getSheetAt(0);
 			HSSFCell cell = null;
 			HSSFRow row = null;
-			// List<SourceField> sourceFields =
-			// sourceFieldService.getSourceFields(Integer.valueOf(cs_id));
-			// 待导入文件中要导入的列的索引,对应的配置表中的字段id
-			HashMap<Integer, String> index_csfIdMap = new HashMap<>();
+			
+			HashMap< String,Integer> index_nameMap = new HashMap<>();
 			row = sheetAt.getRow(sheetAt.getFirstRowNum());
 			for (int j = row.getFirstCellNum(); j < row.getLastCellNum(); j++) {
 				cell = row.getCell(j);
-				String csf_Id = String
-						.valueOf(sourceFieldService.getSourceFieldId(Integer.valueOf(cs_id), cell.toString()));
-				if (!csf_Id.equals("null")) {
-					index_csfIdMap.put(j, csf_Id);
+				index_nameMap.put( cell.getStringCellValue(),j);
+			}
+			
+			List<SourceField> sourceFields = sourceFieldService.getSourceFields(Integer.valueOf(cs_id));
+			// 待导入文件中要导入的列的索引,对应的配置表中的字段id
+			HashMap<Integer, String> index_csfIdMap = new HashMap<>();
+			for (SourceField sourceField : sourceFields) {
+				if (index_nameMap.containsKey(sourceField.getCsf_name())) {
+					index_csfIdMap.put(index_nameMap.get(sourceField.getCsf_name()), String.valueOf(sourceField.getCs_id()));
 				}
 			}
+			
+//			row = sheetAt.getRow(sheetAt.getFirstRowNum());
+//			for (int j = row.getFirstCellNum(); j < row.getLastCellNum(); j++) {
+//				cell = row.getCell(j);
+//				String csf_Id = String.valueOf(sourceFieldService.getSourceFieldId(Integer.valueOf(cs_id),
+//						 cell.getStringCellValue()));
+//				if (!csf_Id.equals("null")) {
+//					index_csfIdMap.put(j, csf_Id);
+//				}
+//			}
 
 			for (int i = sheetAt.getFirstRowNum() + 1; i < sheetAt.getPhysicalNumberOfRows(); i++) {
 				row = sheetAt.getRow(i);
@@ -84,7 +101,7 @@ public class ImportController {
 				Map<String, String> sourceFieldDatas = new HashMap<>();
 				for (Entry<Integer, String> index_csfId : index_csfIdMap.entrySet()) {
 					cell = row.getCell(index_csfId.getKey());
-					sourceFieldDatas.put(index_csfId.getValue(), cell.toString());
+					sourceFieldDatas.put(index_csfId.getValue(),  cell.getStringCellValue());
 				}
 				// for (int j = row.getFirstCellNum(); j < row.getLastCellNum();
 				// j++) {
@@ -125,34 +142,48 @@ public class ImportController {
 			HSSFSheet sheetAt = hssfWorkbook.getSheetAt(0);
 			HSSFCell cell = null;
 			HSSFRow row = null;
-//			List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
-//					ConstantsHBase.IS_meta_false);
-			// 待导入文件中要导入的列的索引,对应的配置表中的字段id
-			HashMap<Integer, String> index_ffIdMap = new HashMap<>();
+			
+			HashMap< String,Integer> index_nameMap = new HashMap<>();
 			row = sheetAt.getRow(sheetAt.getFirstRowNum());
 			for (int j = row.getFirstCellNum(); j < row.getLastCellNum(); j++) {
 				cell = row.getCell(j);
-				
-				String ff_Id = String
-						.valueOf(formatFieldService.getFormatField_ff_id(Integer.valueOf(ft_id), String.valueOf("'"+cell.toString()+"'")));
-				if (!ff_Id.equals("null")) {
-					index_ffIdMap.put(j, ff_Id);
+				index_nameMap.put( cell.getStringCellValue(),j);
+			}
+			List<FormatField> datas = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
+					ConstantsHBase.IS_meta_false);
+			// 待导入文件中要导入的列的索引,对应的配置表中的字段id
+			HashMap<Integer, String> index_ffIdMap = new HashMap<>();
+			for (FormatField formatField : datas) {
+				if (index_nameMap.containsKey(formatField.getFf_name())) {
+					index_ffIdMap.put(index_nameMap.get(formatField.getFf_name()), String.valueOf(formatField.getFf_id()));
 				}
 			}
+//			row = sheetAt.getRow(sheetAt.getFirstRowNum());
+//			for (int j = row.getFirstCellNum(); j < row.getLastCellNum(); j++) {
+//				cell = row.getCell(j);
+//
+//				String ff_Id = String.valueOf(formatFieldService.getFormatField_ff_id(Integer.valueOf(ft_id),
+//						 cell.getStringCellValue()));
+//				if (!ff_Id.equals("null")) {
+//					index_ffIdMap.put(j, ff_Id);
+//				}
+//			}
 			for (int i = sheetAt.getFirstRowNum() + 1; i < sheetAt.getPhysicalNumberOfRows(); i++) {
 				row = sheetAt.getRow(i);
 				if (row == null) {
 					continue;
-				}				
+				}
 				Map<String, String> formatFieldDatas = new HashMap<>();
 				for (Entry<Integer, String> index_csfId : index_ffIdMap.entrySet()) {
 					cell = row.getCell(index_csfId.getKey());
-					formatFieldDatas.put(index_csfId.getValue(), cell.toString());
+					formatFieldDatas.put(index_csfId.getValue(),  cell.getStringCellValue());
 				}
-//				for (int j = row.getFirstCellNum(); j < row.getLastCellNum(); j++) {
-//					cell = row.getCell(j);
-//					formatFieldDatas.put(String.valueOf(data.get(j).getFf_id()), cell.toString());
-//				}
+				// for (int j = row.getFirstCellNum(); j < row.getLastCellNum();
+				// j++) {
+				// cell = row.getCell(j);
+				// formatFieldDatas.put(String.valueOf(data.get(j).getFf_id()),
+				// cell.toString());
+				// }
 				HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId, formatFieldDatas);
 			}
 			hssfWorkbook.close();

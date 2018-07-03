@@ -34,7 +34,7 @@ $("#addFormatFieldSubmit").click(function (){
 		success : function(data){
 			if(data.result == true){
 				alert("增加格式字段成功");
-				window.location.href="/wankangyuan/admin/formatdata";
+				window.location.href="/wankangyuan/admin/formatdata?ft_id="+ft_id;
 			}else{
 				alert(data.message);
 			}
@@ -80,7 +80,7 @@ $("#editFormatFieldSubmit").click(function(){
 		success : function(data){
 			if(data.result == true){
 				alert(data.message);
-				window.location.href="/wankangyuan/admin/formatdata";
+				window.location.href="/wankangyuan/admin/formatdata?ff_id="+ff_id;
 			}else{
 				alert(data.message);
 			}
@@ -133,7 +133,7 @@ $("#deleteFormatFieldsSubmit").click(function (){
 			if(data.result == true){
 				//进行删除成功后的刷新页面处理
 				alert(data.message);
-				window.location.href="/wankangyuan/admin/formatdata";
+				window.location.href="/wankangyuan/admin/formatdata?ff_ids="+ff_ids;
 
 			}else{
 				alert(data.message);

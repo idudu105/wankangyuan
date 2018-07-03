@@ -315,17 +315,7 @@
                 
             </div>
 
-            <div class="pageK">
-                <div class="pageLR">
-                    <img src="img/pageL.png" class="pageLRi" alt="" />
-                </div>
-                <div class="pageNUM active">1</div>
-                <div class="pageNUM ">2</div>
-                <div class="pageNUM">3</div>
-                <div class="pageLR">
-                    <img src="img/pageR.png" class="pageLRi" alt="" />
-                </div>
-            </div>
+        	<div class="pageK" id="box"></div>
 
             <div class="bottom">
                 <a href="javascript:;">
@@ -341,5 +331,78 @@
             </div>
         </div>
     </div>
+    
+    <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    	<script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
+		
+    <script type="text/javascript">
+    
+    	$(".pro_menu").click(function (){
+			var afuxuanK=document.querySelectorAll('.fuxuanK2');
+    		
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].name);
+            	}
+            }
+            
+            if(ids == ""){
+            	alert("请勾选源数据！");
+            	return;
+            }else{
+            	var cs_id = $("#source_Select").val();
+            	$.ajax({
+        			url:"/wankangyuan/sourceData/addMySource",
+        			type:"post",
+        			data:{
+        				cs_id:cs_id,
+        				sourceDataIds:ids.join(",")
+        			},
+        			success : function(data){
+        				alert(data.message);
+        				cs_id = $("#source_Select").val();
+        				window.location.href="/wankangyuan/sourceData/getSourceDatas?type=1&cs_id="+cs_id;
+        			},
+        			error : function(){
+        				alert("联网失败");
+        			}
+        			
+        		});
+            }
+    	});
+    	
+    	//更换数据源时，更新列表
+	  	$("#source_Select").change(function(){
+    		cs_id = $("#source_Select").val();
+   			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=3&cs_id="+cs_id;
+    	});
+    	
+    	//进入到详情页
+    	function datainHref(sourceDataId){
+    		var cs_id = $("#source_Select").val();
+    		window.location.href="/wankangyuan/sourceData/getSourceDataById?cs_id="+cs_id+"&sourceDataId="+sourceDataId+"&type=3";
+    	}
+    	$('#box').paging({
+    		initPageNo: ${page}, // 初始页码
+    		totalPages: Math.ceil(${total}/${rows}), //总页数
+    		totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
+    		slideSpeed: 600, // 缓动速度。单位毫秒
+    		jump: true, //是否支持跳转
+    		callback: function(page) { // 回调函数
+    			console.log(page);
+    			var user_id=${user.id};
+    			var cs_id = $("#source_Select").val();
+    			if(page!=${page}){
+    				window.location.href="/wankangyuan/sourceData/getSourceDatas?type=3&cs_id="+cs_id+"&user_id="+user_id+"&page="+page+"&strip=${rows}";
+    			}
+    		}
+    	}); 
+    </script>
 </body>
 </html>

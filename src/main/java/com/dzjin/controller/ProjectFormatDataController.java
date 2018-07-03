@@ -12,14 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dzjin.model.ProjectDataRelation;
 import com.dzjin.service.ProjectDataService;
 import com.xtkong.controller.user.FormatNodeController;
-import com.xtkong.controller.user.SourceDataController;
-import com.xtkong.dao.hbase.HBaseFormatDataDao;
 import com.xtkong.dao.hbase.HBaseFormatNodeDao;
 import com.xtkong.dao.hbase.HBaseSourceDataDao;
-import com.xtkong.model.FormatField;
 import com.xtkong.model.FormatType;
 import com.xtkong.model.Source;
 import com.xtkong.model.SourceField;
@@ -56,14 +52,17 @@ public class ProjectFormatDataController {
 
 	@RequestMapping("/insert")
 	@ResponseBody
-	public Map<String, Object> insert(HttpSession session, Integer p_id, String sourceDataIds) {
+	public Map<String, Object> insert(HttpSession session, Integer p_id, String sourceDataIds, String cs_id) {
 
 		Map<String, Object> map = new HashMap<>();
 
 		String[] source_data_id = sourceDataIds.split(",");
 
+		Map<String, String> sourceFieldDatas=new HashMap<>()				;
+		sourceFieldDatas.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
 		for (int i = 0; i < source_data_id.length; i++) {
-			projectDataService.insert(new ProjectDataRelation(p_id, source_data_id[i]));
+//			projectDataService.insert(new ProjectDataRelation(p_id, source_data_id[i]));
+			HBaseSourceDataDao.updateSourceData(cs_id, source_data_id[i], sourceFieldDatas);
 		}
 		/*
 		 * if(num == source_data_id.length){ map.put("result", true);
@@ -79,14 +78,16 @@ public class ProjectFormatDataController {
 
 	@RequestMapping("/remove")
 	@ResponseBody
-	public Map<String, Object> remove(HttpSession session, Integer p_id, String sourceDataIds) {
+	public Map<String, Object> remove(HttpSession session, Integer p_id, String sourceDataIds, String cs_id) {
 
 		Map<String, Object> map = new HashMap<>();
 
 		String[] source_data_id = sourceDataIds.split(",");
-
+		Map<String, String> sourceFieldDatas=new HashMap<>();
+		sourceFieldDatas.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf("  "));
 		for (int i = 0; i < source_data_id.length; i++) {
-			projectDataService.remove(new ProjectDataRelation(p_id, source_data_id[i]));
+//			projectDataService.remove(new ProjectDataRelation(p_id, source_data_id[i]));
+			HBaseSourceDataDao.updateSourceData(cs_id, source_data_id[i], sourceFieldDatas);
 		}
 		/*
 		 * if(num == source_data_id.length){ map.put("result", true);
@@ -156,7 +157,9 @@ public class ProjectFormatDataController {
 			whereEqual.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
 
 			Map<String, String> whereLike = new HashMap<>();
-			whereLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()), searchWord);
+			if (searchWord != null) {
+				whereLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()), searchWord);
+			}
 
 			Map<String, Map<String, Object>> result = PhoenixClient.select(tableName, family, qualifiers, whereEqual,
 					whereLike, strip, page);

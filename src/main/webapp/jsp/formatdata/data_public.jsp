@@ -25,6 +25,11 @@
         pro_data();
         // data_mine();
         // data_create();
+
+        alert("sssss");
+        $("#source_Select").val(defaultcs_id);
+        alert("${defaultcs_id}");
+        alert(defaultcs_id);
     }
 </script>
 <body>
@@ -299,17 +304,7 @@
                 </div>
             </div>
 
-            <div class="pageK">
-                <div class="pageLR">
-                    <img src="/wankangyuan/static/img/pageL.png" class="pageLRi" alt="" />
-                </div>
-                <div class="pageNUM active">1</div>
-                <div class="pageNUM ">2</div>
-                <div class="pageNUM">3</div>
-                <div class="pageLR">
-                    <img src="/wankangyuan/static/img/pageR.png" class="pageLRi" alt="" />
-                </div>
-            </div>
+       	<div class="pageK" id="box"></div>
 
             <div class="bottom">
                 <a href="javascript:;">
@@ -327,7 +322,8 @@
     </div>
     
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
-    
+    	<script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
+		
     <script type="text/javascript">
     
     	$(".pro_menu").click(function (){
@@ -381,7 +377,21 @@
     		var cs_id = $("#source_Select").val();
     		window.location.href="/wankangyuan/sourceData/getSourceDataById?cs_id="+cs_id+"&sourceDataId="+sourceDataId+"&type=3";
     	}
-    	
+    	$('#box').paging({
+    		initPageNo: ${page}, // 初始页码
+    		totalPages: Math.ceil(${total}/${rows}), //总页数
+    		totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
+    		slideSpeed: 600, // 缓动速度。单位毫秒
+    		jump: true, //是否支持跳转
+    		callback: function(page) { // 回调函数
+    			console.log(page);
+    			var user_id=${user.id};
+    			var cs_id = $("#source_Select").val();
+    			if(page!=${page}){
+    				window.location.href="/wankangyuan/sourceData/getSourceDatas?type=3&cs_id="+cs_id+"&user_id="+user_id+"&page="+page+"&strip=${rows}";
+    			}
+    		}
+    	}); 
     </script>
 </body>
 </html>
