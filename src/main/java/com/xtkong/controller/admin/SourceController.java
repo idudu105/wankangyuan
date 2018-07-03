@@ -1,7 +1,11 @@
 package com.xtkong.controller.admin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,8 +16,10 @@ import com.xtkong.dao.hbase.HBaseFormatNodeDao;
 import com.xtkong.dao.hbase.HBaseSourceDataDao;
 import com.xtkong.model.Source;
 import com.xtkong.service.FormatTypeService;
+import com.xtkong.service.PhoenixClient;
 import com.xtkong.service.SourceFieldService;
 import com.xtkong.service.SourceService;
+import com.xtkong.util.ConstantsHBase;
 
 @Controller
 @RequestMapping(value = "/source")
@@ -32,12 +38,31 @@ public class SourceController {
 	 * @return
 	 */
 	@RequestMapping(value = "/insertSource")
-	public String insertSource(Source source) {
+	public String insertSource(HttpSession httpSession,Source source) {
 		sourceService.insertSource(source);
-		Integer cs_id=sourceService.getSourceId(source.getCs_name());
+		Integer cs_id = sourceService.getSourceId(source.getCs_name());
+//		source.setCs_id(cs_id);
+//		source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
+//		source.setFormatTypes(formatTypeService.getFormatTypes(cs_id));
+		
 		HBaseSourceDataDao.createSourceDataTable(String.valueOf(cs_id));
+		List<String> sourceQualifiers = new ArrayList<>();
+		sourceQualifiers.add(ConstantsHBase.QUALIFIER_PROJECT);
+		sourceQualifiers.add(ConstantsHBase.QUALIFIER_CREATE);
+		sourceQualifiers.add(ConstantsHBase.QUALIFIER_USER);
+		sourceQualifiers.add(ConstantsHBase.QUALIFIER_PUBLIC);
+		PhoenixClient.createView(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, ConstantsHBase.FAMILY_INFO, sourceQualifiers);
+		
 		HBaseFormatNodeDao.createFormatNodeTable(String.valueOf(cs_id));
-		return "redirect:/admin/formatdata";
+		List<String> nodeQualifiers = new ArrayList<>();
+		nodeQualifiers.add(ConstantsHBase.QUALIFIER_FORMATTYPE);
+		nodeQualifiers.add(ConstantsHBase.QUALIFIER_NODENAME);
+		nodeQualifiers.add(ConstantsHBase.QUALIFIER_SOURCEDATAID);
+		PhoenixClient.createView(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id, ConstantsHBase.FAMILY_INFO, nodeQualifiers);
+		
+//		httpSession.setAttribute("source", source);
+
+		return "redirect:/admin/formatdata?cs_id="+cs_id;
 	}
 
 	/**
@@ -64,6 +89,7 @@ public class SourceController {
 		}
 		return map;
 	}
+
 	@RequestMapping("/updateSource")
 	@ResponseBody
 	public Map<String, Object> updateSource(Source source) {
@@ -86,7 +112,10 @@ public class SourceController {
 		try {
 			if (1 == sourceService.deleteSource(cs_id)) {
 				HBaseSourceDataDao.deleteSourceDataTable(String.valueOf(cs_id));
+				PhoenixClient.dropView(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id);
+				
 				HBaseFormatNodeDao.deleteFormatNodeTable(String.valueOf(cs_id));
+				PhoenixClient.dropView(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id);
 				map.put("result", true);
 				map.put("message", "删除成功");
 			} else {

@@ -16,7 +16,7 @@ import com.dzjin.model.ProjectRoleAuthority;
  * 
  * 项目名称：wankangyuan 
  * 类名称：ProjectRoleDao 
- * 类描述： 项目内权限dao
+ * 类描述： 项目内默认角色dao
  * 创建人：dzjin 
  * 创建时间：2018年6月19日 上午11:29:27 
  * 修改人：dzjin 

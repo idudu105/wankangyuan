@@ -236,51 +236,55 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
     <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
     <script type="text/javascript">
    
-    	//点击添加到我的项目之中
+    	//退出项目
     	function exit(){
-    		
     		var afuxuanK=document.querySelectorAll('.fuxuanK2');
-    		
             var afuxuan=[];
             for(var i=0;i<afuxuanK.length;i++){
                 afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
             }
-            
             var ids = [];
             for(var i=0;i<afuxuanK.length;i++){
             	if(afuxuan[i].checked){
             		ids.push(afuxuan[i].value);
             	}
             }
-            
-            
             if(ids == ""){
-            	alert("请勾选项目！");
+            	layer.msg("请勾选项目");
             	return;
             }
-            
-            //网络请求添加公共项目到我的项目中
-            $.ajax({
-            	url:"/wankangyuan/project/exit",
-            	type:"post",
-            	data:{
-            		ids:ids.join(",")
-            	},
-            	dataType:"json",
-            	success : function(data){
-            		if(data.result == true){
-            			window.location.href="/wankangyuan/project/selectMyProject?user_id=1";
-            		}else{
-            			alert(data.message);
-            			window.location.href="/wankangyuan/project/selectMyProject?user_id=1";
-            		}
-            	},
-            	error : function(){
-            		alert("联网失败");
-            	}
+            layer.confirm('请确认退出所选项目？',{
+            	btn:['确认','取消'],
+            	icon:2
+            },function(){
+            	//退出项目
+                $.ajax({
+                	url:"/wankangyuan/project/exit",
+                	type:"post",
+                	data:{
+                		ids:ids.join(",")
+                	},
+                	dataType:"json",
+                	success : function(data){
+                		if(data.result == true){
+                			window.location.href="/wankangyuan/project/selectMyProject?user_id=1";
+                		}else{
+                			layer.msg(data.message);
+                			window.location.href="/wankangyuan/project/selectMyProject?user_id=1";
+                		}
+                	},
+                	error : function(){
+                		layer.msg("联网失败");
+                	}
+                });
+            },function(){
+            	return;
             });
+
+            
     	}
     	
     	$('#box').paging({
@@ -299,14 +303,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             }
         });
     	
-            $(".searchCt").bind("keypress" , function(event){
-        		if(event.keyCode == 13){
-        			var user_id=${user.id};
-        			window.location.href="/wankangyuan/project/selectMyProject?user_id="
-        					+user_id+"&searchWord="+this.value;
-        			
-        		}
-        	});
+        $(".searchCt").bind("keypress" , function(event){
+    		if(event.keyCode == 13){
+    			var user_id=${user.id};
+    			window.location.href="/wankangyuan/project/selectMyProject?user_id="
+    					+user_id+"&searchWord="+this.value;
+    			
+    		}
+    	});
     </script>
     
 </body>

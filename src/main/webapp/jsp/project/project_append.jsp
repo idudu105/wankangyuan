@@ -324,6 +324,7 @@
     
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
     <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
     <script type="text/javascript">
     
 	    $('#box').paging({
@@ -361,13 +362,14 @@
             	}
             }
             if(ids == ""){
-            	alert("请勾选应用！");
+            	layer.msg("请勾选应用");
             	return;
             }
             if(ids.length >1){
-            	alert("一次最多运行一个应用！");
+            	layer.msg("一次最多运行一个应用");
             	return;
             }
+            
             var task_id = ids.join(",");
             var operType = 'update';
             
@@ -385,11 +387,11 @@
                         		,'_blank'
                         		,'width=1200,height=600,menubar=no,toolbar=no,status=no,scrollbars=yes')
             		}else{
-            			alert("应用运行地址解失败！");
+            			layer.msg("应用参数地址解析失败");
             		}
             	},
             	error : function(){
-            		alert("联网失败");
+            		layer.msg("联网失败");
             	}
             });  
 	    });
@@ -410,11 +412,11 @@
                         		,'_blank'
                         		,'width=1200,height=600,menubar=no,toolbar=no,status=no,scrollbars=yes')
             		}else{
-            			alert("应用运行地址解失败！");
+            			layer.msg("应用参数地址解析失败");
             		}
             	},
             	error : function(){
-            		alert("联网失败");
+            		layer.msg("联网失败");
             	}
             });
 	    }
@@ -433,11 +435,11 @@
                         		,'_blank'
                         		,'width=1200,height=600,menubar=no,toolbar=no,status=no,scrollbars=yes')
             		}else{
-            			alert("应用运行地址解失败！");
+            			layer.msg("应用结果地址解析失败");
             		}
             	},
             	error : function(){
-            		alert("联网失败");
+            		layer.msg("联网失败");
             	}
             });
 	    }
@@ -456,15 +458,15 @@
                         		,'_blank'
                         		,'width=1200,height=600,menubar=no,toolbar=no,status=no,scrollbars=yes')
             		}else{
-            			alert("应用运行地址解失败！");
+            			layer.msg("应用结果文件地址解析失败");
             		}
             	},
             	error : function(){
-            		alert("联网失败");
+            		layer.msg("联网失败");
             	}
             });
 	    }
-	    
+	    //发布应用结果到门户
 	    $(".pro_fabu").click(function (){
 	    	var afuxuanK=document.querySelectorAll('.fuxuanK2');
             var afuxuan=[];
@@ -478,28 +480,37 @@
             	}
             }
             if(ids == ""){
-            	alert("请勾选应用！");
+            	layer.msg("请勾选应用");
             	return;
             }
-            var taskIds = ids.join(",");
-            $.ajax({
-            	url:"/wankangyuan/projectAppEnd/projectAppTaskRelease",
-            	type:"post",
-            	data:{
-            		taskIds:taskIds
-            	},
-            	dataType:"json",
-            	success : function(data){
-            		alert(data.message);
-            		var searchWord = $(".search2Ct").val();
-            		window.location.href="/wankangyuan/projectAppEnd/selectProjectAppEnd?type=1&page=1&strip=12&searchWord="+searchWord;
-            	},
-            	error : function(){
-            		alert("联网失败");
-            	}
+            layer.confirm('请确认发布应用结果？',{
+            	btn:['确认','取消'],
+            	icon:2
+            },function(){
+            	var taskIds = ids.join(",");
+                $.ajax({
+                	url:"/wankangyuan/projectAppEnd/projectAppTaskRelease",
+                	type:"post",
+                	data:{
+                		taskIds:taskIds
+                	},
+                	dataType:"json",
+                	success : function(data){
+                		layer.msg(data.message);
+                		var searchWord = $(".search2Ct").val();
+                		window.location.href="/wankangyuan/projectAppEnd/selectProjectAppEnd?type=1&page=1&strip=12&searchWord="+searchWord;
+                	},
+                	error : function(){
+                		layer.msg("联网失败");
+                	}
+                });
+            },function(){
+            	return;
             });
+            
 	    });
 	    
+	    //取消发布应用结果到门户
 	    $(".pro_canfabu").click(function (){
 	    	var afuxuanK=document.querySelectorAll('.fuxuanK2');
             var afuxuan=[];
@@ -513,28 +524,37 @@
             	}
             }
             if(ids == ""){
-            	alert("请勾选应用！");
+            	layer.msg("请勾选应用");
             	return;
             }
-            var taskIds = ids.join(",");
-            $.ajax({
-            	url:"/wankangyuan/projectAppEnd/projectAppTaskUnRelease",
-            	type:"post",
-            	data:{
-            		taskIds:taskIds
-            	},
-            	dataType:"json",
-            	success : function(data){
-            		alert(data.message);
-            		var searchWord = $(".search2Ct").val();
-            		window.location.href="/wankangyuan/projectAppEnd/selectProjectAppEnd?type=1&page=1&strip=12&searchWord="+searchWord;
-            	},
-            	error : function(){
-            		alert("联网失败");
-            	}
+            layer.confirm('请确认取消发布应用结果？',{
+            	btn:['确认','取消'],
+            	icon:2
+            },function(){
+            	var taskIds = ids.join(",");
+                $.ajax({
+                	url:"/wankangyuan/projectAppEnd/projectAppTaskUnRelease",
+                	type:"post",
+                	data:{
+                		taskIds:taskIds
+                	},
+                	dataType:"json",
+                	success : function(data){
+                		layer.msg(data.message);
+                		var searchWord = $(".search2Ct").val();
+                		window.location.href="/wankangyuan/projectAppEnd/selectProjectAppEnd?type=1&page=1&strip=12&searchWord="+searchWord;
+                	},
+                	error : function(){
+                		layer.msg("联网失败");
+                	}
+                });
+            },function(){
+            	return;
             });
+            
 	    });
 	    
+	    //移除应用结果
 	    $(".pro_rem").click(function (){
 	    	var afuxuanK=document.querySelectorAll('.fuxuanK2');
             var afuxuan=[];
@@ -548,25 +568,32 @@
             	}
             }
             if(ids == ""){
-            	alert("请勾选应用！");
+            	layer.msg("请勾选应用");
             	return;
             }
-            var taskIds = ids.join(",");
-            $.ajax({
-            	url:"/wankangyuan/projectAppEnd/projectAppTaskDelete",
-            	type:"post",
-            	data:{
-            		taskIds:taskIds
-            	},
-            	dataType:"json",
-            	success : function(data){
-            		alert(data.message);
-            		var searchWord = $(".search2Ct").val();
-            		window.location.href="/wankangyuan/projectAppEnd/selectProjectAppEnd?type=1&page=1&strip=12&searchWord="+searchWord;
-            	},
-            	error : function(){
-            		alert("联网失败");
-            	}
+            layer.confirm('请确认移除应用结果？',{
+            	btn:['确认','取消'],
+            	icon:2
+            },function(){
+            	var taskIds = ids.join(",");
+                $.ajax({
+                	url:"/wankangyuan/projectAppEnd/projectAppTaskDelete",
+                	type:"post",
+                	data:{
+                		taskIds:taskIds
+                	},
+                	dataType:"json",
+                	success : function(data){
+                		layer.msg(data.message);
+                		var searchWord = $(".search2Ct").val();
+                		window.location.href="/wankangyuan/projectAppEnd/selectProjectAppEnd?type=1&page=1&strip=12&searchWord="+searchWord;
+                	},
+                	error : function(){
+                		layer.msg("联网失败");
+                	}
+                });
+            },function(){
+            	return;
             });
 	    });
     

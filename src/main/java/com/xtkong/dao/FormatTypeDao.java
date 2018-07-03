@@ -27,10 +27,10 @@ public interface FormatTypeDao {
 	 *            采集源
 	 * @return 格式类型列表
 	 */
-	@Select("select * from format_type where cs_id=#{cs_id} order by ft_id ")
+	@Select("select * from view_format_type where cs_id=#{cs_id} order by ft_id ")
 	public List<FormatType> getFormatTypes(@Param("cs_id") Integer cs_id);
 
-	@Select("select * from format_type where ft_id=#{ft_id}  ")
+	@Select("select * from view_format_type where ft_id=#{ft_id}  ")
 	public FormatType getFormatType(@Param("ft_id") Integer ft_id);
 
 	@Select("select cs_id from format_type where ft_id=#{ft_id}  ")

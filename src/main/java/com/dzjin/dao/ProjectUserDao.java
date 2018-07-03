@@ -35,7 +35,9 @@ public interface ProjectUserDao {
 	 * @param id
 	 * @return
 	 */
-	@Select("select project_user.* ,project_role.role_name , u1.username , u2.username as linkman_username from project_user,user u1 , user u2 , project_role where project_user.user_id = u1.id and project_user.linkman_id = u2.id and project_user.role_id = project_role.id and project_id=#{id} and u1.username like '%${searchWord}%' order by id desc")
+	@Select("select project_user.* ,project_custom_role.rolename as role_name , u1.username , u2.username as linkman_username "
+			+ "from project_user,user u1 , user u2 , project_custom_role "
+			+ "where project_user.user_id = u1.id and project_user.linkman_id = u2.id and project_user.role_id = project_custom_role.id and project_id=#{id} and u1.username like '%${searchWord}%' order by id desc")
 	public List<ProjectUser> selectProjectUsers(@Param("id")Integer id , @Param("searchWord")String searchWord);
 	
 	/**

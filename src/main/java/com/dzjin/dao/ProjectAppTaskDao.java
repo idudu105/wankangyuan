@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -28,7 +29,15 @@ public interface ProjectAppTaskDao {
 	@Insert("insert into project_app_task"
 			+ "(param,project_id,user_id,app_id,username,taskDescription,taskName,create_datetime) "
 			+ "values(#{param},#{project_id},#{user_id},#{app_id},#{username},#{taskDescription},#{taskName},#{create_datetime})")
+	@Options(useGeneratedKeys = true , keyColumn="id" , keyProperty="id")
 	public int insertProjectAppTask(ProjectAppTask projectAppTask);
+	
+	@Update("update project_app_task "
+			+ "set param=#{param} , project_id=#{project_id} , user_id=#{user_id} , "
+			+ "app_id=#{app_id} , username=#{username} , taskDescription=#{taskDescription} , "
+			+ "taskName=#{taskName} , create_datetime=#{create_datetime} "
+			+ "where id=#{id}")
+	public int updateProjectAppTask(ProjectAppTask projectAppTask);
 	
 	@Select("select project_app_task.*,application.app_name "
 			+ "from project_app_task , application "

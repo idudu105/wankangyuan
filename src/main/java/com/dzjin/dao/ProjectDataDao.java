@@ -27,8 +27,8 @@ public interface ProjectDataDao {
 	@Insert("insert ignore into project_data_relation(p_id,source_data_id) values(#{p_id},#{source_data_id})")
 	public int insert(ProjectDataRelation projectDataRelation);
 	
-	@Select("select source_data_id from project_data_relation where p_id=#{p_id}")
-	public List<String> select(@Param("p_id")Integer p_id);
+	@Select("select source_data_id from project_data_relation where p_id=#{p_id} and cs_id=#{cs_id}")
+	public List<String> select(@Param("p_id")Integer p_id,@Param("cs_id")Integer cs_id);
 	
 	@Delete("delete from project_data_relation where p_id=#{p_id} and source_data_id=#{source_data_id}")
 	public int remove(ProjectDataRelation projectDataRelation);

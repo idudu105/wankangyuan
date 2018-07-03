@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.dzjin.dao.ProjectDao;
 import com.dzjin.model.Project;
+import com.dzjin.model.ProjectCustomRole;
 import com.dzjin.model.ProjectUser;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -22,6 +23,8 @@ public class ProjectService {
 	ProjectDao projectDao;
 	@Autowired
 	ProjectUserService projectUserService;
+	@Autowired
+	ProjectCustomRoleService projectCustomRoleService;
 	
 	/**
 	 * 插入项目
@@ -125,7 +128,13 @@ public class ProjectService {
 			if(null == projectDao.getProjectUserByPidAndUid(projectUser)){
 				//未绑定关系，添加用户为项目成员
 				projectUser.setLinkman_id(user_id);
-				projectUser.setRole_id(2);//项目成员角色
+				ProjectCustomRole projectCustomRole = 
+						projectCustomRoleService.getProjectCustomRoleByRolename("项目成员", Integer.valueOf(ids[i]));
+				if(projectCustomRole != null){
+					projectUser.setRole_id(2);//项目成员角色
+				}else{
+					return false;
+				}
 				projectUser.setBind_date_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 				if(projectUserService.insertProjectUser(projectUser) != 1){
 					result = false;

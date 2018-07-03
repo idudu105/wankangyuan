@@ -1000,31 +1000,6 @@ function pro_member(){
             oQXGLk.style.display='none';
             QXGLkpd=0;
         }else{
-        	//判断是不是选中了成员
-        	
-        	var afuxuanK=document.querySelectorAll('.fuxuanK20');
-        	var afuxuan=[];
-            for(var i=0;i<afuxuanK.length;i++){
-                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
-            }
-            var ids = [];
-            var role_ids = [];
-            for(var i=0;i<afuxuanK.length;i++){
-            	if(afuxuan[i].checked){
-            		ids.push(afuxuan[i].value);
-            		role_ids.push(afuxuan[i].name);
-            	}
-            }
-            if(ids == ""){
-            	alert("请勾选用户！");
-            	return;
-            }
-            if(ids.length > 1){
-            	alert("一次最多只能修改一位用户的权限！");
-            	return;
-            }
-            
-            $('.QXGLkMrz').find('input[name=idssss]').attr("checked", false);  
                                 	
             oQXGLk.style.display="block";
             QXGLkpd=1;

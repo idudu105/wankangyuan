@@ -83,7 +83,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <div class="shaixuan">
                 <div class="shaixuanC">
                     <div class="listZT">
-                        <a href="/wankangyuan/jsp/project/project_public.jsp">
+                        <a href="<%=request.getContextPath()%>/jsp/project/project_public.jsp">
                             <div class="listZTli listZT2 active">
                                 <div class="listZT2d"></div>
                                 <div class="listZT2d"></div>
@@ -147,7 +147,55 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
     <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
     <script type="text/javascript">
+    
+	  	//添加到我的项目中
+		function addToMine(){
+			
+			var afuxuanK=document.querySelectorAll('.fuxuanK2');
+	        var afuxuan=[];
+	        for(var i=0;i<afuxuanK.length;i++){
+	            afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+	        }
+	        var ids = [];
+	        for(var i=0;i<afuxuanK.length;i++){
+	        	if(afuxuan[i].checked){
+	        		ids.push(afuxuan[i].value);
+	        	}
+	        }
+	        if(ids == ""){
+	        	layer.msg("请勾选项目");
+	        	return;
+	        }
+	        layer.confirm('请确认添加到我的项目中？',{
+	        	btn:['确认','取消'],
+	        	icon:2
+	        },function(){
+	        	//添加到我的项目中
+	            $.ajax({
+	            	url:"/wankangyuan/project/addPublicProjectToMine",
+	            	type:"post",
+	            	data:{
+	            		ids:ids.join(",")
+	            	},
+	            	dataType:"json",
+	            	success : function(data){
+	            		if(data.result == true){
+	            			window.location.href="/wankangyuan/project/selectMyProject?type=2&user_id=1";
+	            		}else{
+	            			layer.msg(data.message);
+	            			window.location.href="/wankangyuan/project/selectMyProject?type=2&user_id=1";
+	            		}
+	            	},
+	            	error : function(){
+	            		layer.msg("联网失败");
+	            	}
+	            });
+	        },function(){
+	        	return;
+	        });
+		}
     	//点击添加到我的项目之中
     	function addToMine(){
     		var afuxuanK=document.querySelectorAll('.fuxuanK3');

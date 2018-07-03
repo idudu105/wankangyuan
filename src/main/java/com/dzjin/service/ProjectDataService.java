@@ -24,8 +24,8 @@ public class ProjectDataService {
 		return projectDataDao.insert(projectDataRelation);
 	}
 	
-	public List<String> select(Integer p_id){
-		return projectDataDao.select(p_id);
+	public List<String> select(Integer p_id,Integer cs_id){
+		return projectDataDao.select(p_id,cs_id);
 	}
 	
 	public int remove(ProjectDataRelation projectDataRelation){

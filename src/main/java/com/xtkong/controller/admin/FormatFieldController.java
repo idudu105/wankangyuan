@@ -1,17 +1,24 @@
 package com.xtkong.controller.admin;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.liutianjun.pojo.User;
 import com.xtkong.model.FormatField;
 import com.xtkong.service.FormatFieldService;
+import com.xtkong.service.PhoenixClient;
+import com.xtkong.util.ConstantsHBase;
 
 @Controller
 @RequestMapping(value = "/formatField")
@@ -22,17 +29,17 @@ public class FormatFieldController {
 	/**
 	 * 新增一条格式字段
 	 * 
-	 * @param formatField 
+	 * @param formatField
 	 *            待增格式字段
 	 * @param uid
+	 * @param cs_id
 	 * @return 执行情况
 	 */
 	@RequestMapping("/insertFormatField")
 	@ResponseBody
-	public Map<String, Object> insertFormatField(FormatField formatField,Integer uid) {
-		if (uid == null) {
-			uid=1;
-		}
+	public Map<String, Object> insertFormatField(HttpServletRequest request,FormatField formatField, Integer cs_id) {
+		User user = (User) request.getAttribute("user");
+		Integer uid = user.getId();
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -40,6 +47,9 @@ public class FormatFieldController {
 		formatField.setCreate_uid(uid);
 
 		if (1 == formatFieldService.insertFormatField(formatField)) {
+			PhoenixClient.alterViewAddColumn(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + formatField.getFt_id(),
+					ConstantsHBase.FAMILY_INFO, String.valueOf(
+							formatFieldService.getFormatField_ff_id(formatField.getFt_id(), formatField.getFf_name())));
 			map.put("result", true);
 			map.put("message", "新增成功");
 		} else {
@@ -59,10 +69,9 @@ public class FormatFieldController {
 	 */
 	@RequestMapping("/updateFormatField")
 	@ResponseBody
-	public Map<String, Object> updateFormatField(FormatField formatField,Integer uid) {
-		if (uid == null) {
-			uid=1;
-		}
+	public Map<String, Object> updateFormatField(HttpServletRequest request,FormatField formatField) {
+		User user = (User) request.getAttribute("user");
+		Integer uid = user.getId();
 		Map<String, Object> map = new HashMap<String, Object>();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		formatField.setUpdate_datetime(simpleDateFormat.format(new Date()));
@@ -80,27 +89,34 @@ public class FormatFieldController {
 	/**
 	 * 删除一条格式字段
 	 * 
+	 * @param cs_id
+	 * 
 	 * @param ff_id
 	 *            待删除格式字段id
 	 * @return 执行情况
 	 */
 	@RequestMapping("/deleteFormatField")
 	@ResponseBody
-	public Map<String, Object> deleteFormatField(String ff_ids) {
+	public Map<String, Object> deleteFormatField(String ff_ids, String cs_id) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		String[]ff_idStrs= ff_ids.split(",");
+		String[] ff_idStrs = ff_ids.split(",");
 		int i = 0;
+		List<String> qualifiers = new ArrayList<>();
 		for (String ff_id : ff_idStrs) {
 			if (1 == formatFieldService.deleteFormatField(Integer.valueOf(ff_id))) {
+				qualifiers.add(ff_id);
 				i++;
 			}
 		}
-		if (i==ff_idStrs.length) {
+		String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
+		String family = ConstantsHBase.FAMILY_INFO;
+		PhoenixClient.alterViewDropColumns(tableName, family, qualifiers);
+		if (i == ff_idStrs.length) {
 			map.put("result", true);
-			map.put("message", "成功删除"+i+"行");
-		}else{
+			map.put("message", "成功删除" + i + "行");
+		} else {
 			map.put("result", false);
-			map.put("message", "已删除："+i+"行，剩余"+(ff_idStrs.length-i)+"行未删除");
+			map.put("message", "已删除：" + i + "行，剩余" + (ff_idStrs.length - i) + "行未删除");
 		}
 		return map;
 	}

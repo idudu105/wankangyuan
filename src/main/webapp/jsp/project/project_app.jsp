@@ -275,7 +275,9 @@
     
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
     <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
     <script type="text/javascript">
+    
 	    $('#box').paging({
 	        initPageNo: ${page}, // 初始页码
 	        totalPages: Math.ceil(${total}/${rows}), //总页数
@@ -317,25 +319,33 @@
             	}
             }
             if(ids == ""){
-            	alert("请勾选应用！");
+            	layer.msg("请勾选应用");
             	return;
             }
-            $.ajax({
-            	url:"/wankangyuan/projectApp/deleteProjectAppRelation",
-            	type:"post",
-            	data:{
-            		p_id:p_id,
-            		ids:ids.join(",")
-            	},
-            	dataType:"json",
-            	success : function(data){
-            		alert(data.message);
-    				window.location.href="/wankangyuan/projectApp/selectProjectApp?type=1&p_id="+p_id;
-            	},
-            	error : function(){
-            		alert("联网失败");
-            	}
+            layer.confirm('请确认移除应用？',{
+            	btn:['确认','取消'],
+            	icon:2
+            },function(){
+            	$.ajax({
+                	url:"/wankangyuan/projectApp/deleteProjectAppRelation",
+                	type:"post",
+                	data:{
+                		p_id:p_id,
+                		ids:ids.join(",")
+                	},
+                	dataType:"json",
+                	success : function(data){
+                		layer.msg(data.message);
+        				window.location.href="/wankangyuan/projectApp/selectProjectApp?type=1&p_id="+p_id;
+                	},
+                	error : function(){
+                		layer.msg('联网失败');
+                	}
+                });
+            },function(){
+            	return;
             });
+            
 		});
 		
 		//点击项目运行
@@ -352,15 +362,14 @@
             	}
             }
             if(ids == ""){
-            	alert("请勾选应用！");
+            	layer.msg("请勾选应用");
             	return;
             }
             if(ids.length >1){
-            	alert("一次最多运行一个应用！");
+            	layer.msg("一次最多运行一个应用");
             	return;
             }
             var app_id = ids.join(",");
-            
             $.ajax({
             	url:"/wankangyuan/projectApp/projectAppRun",
             	type:"post",
@@ -374,11 +383,11 @@
                         		,'_blank'
                         		,'width=1200,height=600,menubar=no,toolbar=no,status=no,scrollbars=yes')
             		}else{
-            			alert("应用运行地址解失败！");
+            			layer.msg("应用运行地址解失败");
             		}
             	},
             	error : function(){
-            		alert("联网失败");
+            		layer.msg('联网失败');
             	}
             });    
 		});

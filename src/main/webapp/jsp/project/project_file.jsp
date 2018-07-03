@@ -312,10 +312,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    <input type="file" name="file" onchange="upFile()" id="uploadFile"/>
 	</form>
 	
-	<a download="" href="" target="_blank" id="downFile">下载
-	</a>  
+	<a id="downFile" target="_black">下载</a>  
 	
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
     <!-- <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script> -->
     <script type="text/javascript">
     
@@ -360,7 +360,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            processData: false,
 	            success: function (data) {
 	                if(data.result == true){
-	                	
 	                	var fileUploadList = $("#fileUploadList");
 	                	fileUploadList.append(
 	                		'<div class="fileaddMm" id=\"'+data.id+'\">'+
@@ -372,13 +371,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                        '</div>'
 	                	);
 	                	ids.push(data.id);
-
 	                }else{
-	                	alert(data.message);
+	                	layer.msg(data.message);
 	                }
 	            },
 	            error: function () {
-	            	alert("联网失败");
+	            	layer.msg("联网失败");
 	            }
 	        });
 		}
@@ -405,11 +403,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  				if(data.result == true){
 	  					window.location.href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId";
 	  				}else{
-	  					alert(data.message);
+	  					layer.msg(data.message);
 	  				}
 	  			},
 	  			error : function(){
-	  				alert("联网失败");
+	  				layer.msg("联网失败");
 	  			}
 	  		});	  	
 	  	}
@@ -441,15 +439,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	dataType:"json",
             	success : function(data){
             		if(data.result == true){
-            			alert("文件删除成功！");
+            			layer.msg("文件删除成功");
             			window.location.href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId";
             		}else{
-            			alert(data.message);
+            			layer.msg(data.message);
             			window.location.href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId";
             		}
             	},
             	error : function(){
-            		alert("联网失败");
+            		layer.msg("联网失败");
             	}
             	
             });
@@ -466,21 +464,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             for(var i=0;i<afuxuanK.length;i++){
             	if(afuxuan[i].checked){
             		ids.push(afuxuan[i].name);
+            		var a = document.getElementById("downFile");  
+                    a.href="localhost:8098/download/"+afuxuan[i].name;  
+                    a.download=afuxuan[i].name;  
+                    a.click();
             	}
             }
             if(ids == ""){
             	alert("请勾选文件！");
             	return;
             }
-            var a = document.getElementById("downFile");  
-            a.href="localhost:8098/download/"+ids[0];  
-            a.download=ids[0];  
-            a.click();
+            for(var i=0;i<ids.length;i++){
+            	window.open("localhost:8098/download/"+ids[i] , "_black");
+            }
     	});
-    
-    
-    </script>
-	  	
 
+    </script>
+    
 </body>
 </html>

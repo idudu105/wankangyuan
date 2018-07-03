@@ -24,7 +24,7 @@ import com.liutianjun.service.ApplicationService;
  * 
  * 项目名称：wankangyuan 
  * 类名称：ProjectAppEndController 
- * 类描述： 应用结果controller
+ * 类描述： 项目-应用结果controller
  * 创建人：dzjin 
  * 创建时间：2018年6月13日 下午7:50:34 
  * 修改人：dzjin 
@@ -43,16 +43,17 @@ public class ProjectAppTaskController {
 	ApplicationService applicationService;
 	
 	/**
-	 * 查询应用结果
+	 * 查询项目内应用结果
 	 * @param httpSession
-	 * @param type
-	 * @param page
-	 * @param strip
-	 * @param searchWord
-	 * @return
+	 * @param type 返回页面类型，1或者null代表返回到列表页面，2代表返回到返回到卡片界面
+	 * @param page 页数
+	 * @param strip 页面
+	 * @param searchWord 搜索关键字
+	 * @return 返回项目内应用结果界面
 	 */
 	@RequestMapping("/selectProjectAppEnd")
 	public String selectProjectAppEnd(HttpSession httpSession , Integer type , Integer page , Integer strip , String searchWord){
+		
 		if(page == null){
 			page = 1;
 		}
@@ -80,26 +81,25 @@ public class ProjectAppTaskController {
 		}
 		
 	}
-	
+
 	/**
-	 * 插入应用运行结果，主要是供甲方调用使用
-	 * @param id
-	 * @param param 运行参数
-	 * @param project_id 项目ID
-	 * @param user_id 用户ID
-	 * @param app_id 应用ID
-	 * @param username 用户名
-	 * @param taskDescription 结果介绍
-	 * @param taskName 结果名称
-	 * @param session 
+	 * 新增项目内应用结果接口，供甲方调用
+	 * @param param
+	 * @param project_id
+	 * @param user_id
+	 * @param app_id
+	 * @param username
+	 * @param taskDescription
+	 * @param taskName
+	 * @param session
+	 * @param request
 	 * @return
-	 * 
 	 * 测试样例：
-	 * http://localhost:8098/wankangyuan/projectAppTask/insertProjectAppEnd?param=参数&project.id=69&userid=1&app.id=169&username=admin&taskDescription=应用描述信息&taskName=应用结果名称
+	 * http://localhost:8098/wankangyuan/projectAppTask/insertOrUpdateProjectAppEnd?param=参数&project.id=69&userid=1&app.id=169&username=admin&taskDescription=应用描述信息&taskName=应用结果名称
 	 */
-	@RequestMapping("/insertProjectAppEnd")
+	@RequestMapping("/insertOrUpdateProjectAppEnd")
 	@ResponseBody
-	public Map<String, Object> insertProjectAppEnd(
+	public Map<String, Object> insertOrUpdateProjectAppEnd(
 			@RequestParam(name = "param")String param ,
 			@RequestParam(name = "project.id")String project_id ,
 			@RequestParam(name = "userid")String user_id ,
@@ -121,22 +121,26 @@ public class ProjectAppTaskController {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		projectAppTask.setCreate_datetime(simpleDateFormat.format(new Date()));
 		
-		String id = (String)request.getAttribute("taskId");
 		Map<String, Object> map = new HashMap<String , Object>();
+		//从请求中获取应用运行结果ID，如果是首次运行，该ID应该是null，如果是重新运行，则该ID不为null
+		String id = (String)request.getAttribute("taskId");
 		if(id == null){
-			//首次运行
+			//首次运行，向数据库中添加一条应用结果记录
 			if(projectAppTaskService.insertProjectAppTask(projectAppTask) == 1){
 				map.put("msg", "success");
-				map.put("taskId", "uuid");
+				map.put("taskId", projectAppTask.getId());
 			}else{
 				map.put("msg", "failure");
 			}
 		}else{
-			//重新运行
+			//重新运行，更新传过来的参数
 			projectAppTask.setId(id);
-			
-			map.put("msg", "success");
-			map.put("taskId", "uuid");
+			if(projectAppTaskService.updateProjectAppTask(projectAppTask) == 1){
+				map.put("msg", "success");
+				map.put("taskId", projectAppTask.getId());
+			}else{
+				map.put("msg", "failure");
+			}
 		}
 		return map;
 	}
@@ -144,20 +148,23 @@ public class ProjectAppTaskController {
 	/**
 	 * 重新运行应用或者查看应用参数
 	 * @param httpSession
-	 * @param task_id
-	 * @param operType query查看参数	update重新运行应用
+	 * @param task_id 项目内应用结果ID
+	 * @param operType query查看参数；update重新运行应用
 	 * @return
 	 */
 	@RequestMapping("/projectAppReRun")
 	@ResponseBody
 	public Map<String, Object> projectAppReRun(HttpSession httpSession , Integer task_id , String operType){
-		
 		Map<String, Object> map = new HashMap<>();
 		ProjectAppTask projectAppTask = projectAppTaskService.getProjectAppTask(task_id);
-		Application application = applicationService.selectByPrimaryKey(
-				Integer.valueOf(projectAppTask.getApp_id()));
+		Application application = applicationService.selectByPrimaryKey(Integer.valueOf(projectAppTask.getApp_id()));
+		if(application == null){
+			map.put("result", false);
+			map.put("message", "相关应用查询失败！");
+			return map;
+		}
 		String paraAddress = application.getParaAddress();
-		//需要对地址进行解析
+		//对参数地址进行解析
 		if(paraAddress != null && !paraAddress.equals("") && paraAddress.indexOf('?') != -1){
 			String head = paraAddress.split("[?]")[0];
 			String newParaAddress = 
@@ -168,21 +175,20 @@ public class ProjectAppTaskController {
 					+"&taskId="+projectAppTask.getId()
 					+"&opertype="+operType
 					+"&app.id="+projectAppTask.getApp_id();
-			
 			map.put("result", true);
 			map.put("message", newParaAddress);
 			
 		}else{
 			map.put("result", false);
+			map.put("message", "相关应用参数地址解析失败！");
 		}
-		
 		return map;
 	}
 	
 	/**
 	 * 生成应用结果地址
 	 * @param httpSession
-	 * @param task_id
+	 * @param task_id 应用ID
 	 * @return
 	 */
 	@RequestMapping("/projectAppTaskResultEnd")
@@ -191,31 +197,34 @@ public class ProjectAppTaskController {
 		
 		Map<String, Object> map = new HashMap<>();
 		ProjectAppTask projectAppTask = projectAppTaskService.getProjectAppTask(task_id);
-		Application application = applicationService.selectByPrimaryKey(
-				Integer.valueOf(projectAppTask.getApp_id()));
+		Application application = applicationService.selectByPrimaryKey(Integer.valueOf(projectAppTask.getApp_id()));
+		if(application == null){
+			map.put("result", false);
+			map.put("message", "相关应用查询失败！");
+			return map;
+		}
 		String resultAddress = application.getResultAddress();
 		//需要对地址进行解析
 		if(resultAddress != null && !resultAddress.equals("") && resultAddress.indexOf('?') != -1){
 			String head = resultAddress.split("[?]")[0];
 			String newResultAddress = 
 					head
-					+"&userid="+projectAppTask.getUser_id()
+					+"?userid="+projectAppTask.getUser_id()
 					+"&username="+projectAppTask.getUsername()
 					+"&taskId="+projectAppTask.getId();
 			map.put("result", true);
 			map.put("message", newResultAddress);
-			
 		}else{
 			map.put("result", false);
+			map.put("message", "应用结果地址解析失败！");
 		}
-		
 		return map;
 	}
 	
 	/**
 	 * 生成应用结果文件地址
 	 * @param httpSession
-	 * @param task_id
+	 * @param task_id 应用结果ID
 	 * @return
 	 */
 	@RequestMapping("/projectAppTaskResultFile")
@@ -224,15 +233,19 @@ public class ProjectAppTaskController {
 		
 		Map<String, Object> map = new HashMap<>();
 		ProjectAppTask projectAppTask = projectAppTaskService.getProjectAppTask(task_id);
-		Application application = applicationService.selectByPrimaryKey(
-				Integer.valueOf(projectAppTask.getApp_id()));
+		Application application = applicationService.selectByPrimaryKey(Integer.valueOf(projectAppTask.getApp_id()));
+		if(application == null){
+			map.put("result", false);
+			map.put("message", "相关应用查询失败！");
+			return map;
+		}
 		String fileResultAddress = application.getFileResultAddress();
 		//需要对地址进行解析
 		if(fileResultAddress != null && !fileResultAddress.equals("") && fileResultAddress.indexOf('?') != -1){
 			String head = fileResultAddress.split("[?]")[0];
 			String newFileResultAddress = 
 					head
-					+"&userid="+projectAppTask.getUser_id()
+					+"?userid="+projectAppTask.getUser_id()
 					+"&username="+projectAppTask.getUsername()
 					+"&taskId="+projectAppTask.getId();
 			map.put("result", true);
@@ -240,15 +253,15 @@ public class ProjectAppTaskController {
 			
 		}else{
 			map.put("result", false);
+			map.put("message", "应用结果地址解析失败！");
 		}
-		
 		return map;
 	}
 	
 	/**
 	 * 发布应用结果
 	 * @param session
-	 * @param taskIds
+	 * @param taskIds 应用结果ID数组，以英文逗号分隔
 	 * @return
 	 */
 	@RequestMapping("/projectAppTaskRelease")
@@ -263,14 +276,14 @@ public class ProjectAppTaskController {
 		}
 		Map<String, Object> map = new HashMap<String , Object>();
 		map.put("result", true);
-		map.put("message", num+"条记录发布成功，"+(task_ids.length - num) +"条记录发布失败！");
+		map.put("message", num+"条应用结果发布成功，"+(task_ids.length - num) +"条应用结果发布失败！");
 		return map;
 	}
 	
 	/**
 	 * 取消发布应用结果
 	 * @param session
-	 * @param taskIds
+	 * @param taskIds 应用结果ID数组，以英文逗号分隔
 	 * @return
 	 */
 	@RequestMapping("/projectAppTaskUnRelease")
@@ -285,14 +298,14 @@ public class ProjectAppTaskController {
 		}
 		Map<String, Object> map = new HashMap<String , Object>();
 		map.put("result", true);
-		map.put("message", num+"条记录取消发布成功，"+(task_ids.length - num) +"条记录取消发布失败！");
+		map.put("message", num+"条应用结果取消发布成功，"+(task_ids.length - num) +"条应用结果取消发布失败！");
 		return map;
 	}
 	
 	/**
 	 * 移除应用结果
 	 * @param session
-	 * @param taskIds
+	 * @param taskIds 应用结果ID数组，以英文逗号分隔
 	 * @return
 	 */
 	@RequestMapping("/projectAppTaskDelete")
@@ -307,7 +320,7 @@ public class ProjectAppTaskController {
 		}
 		Map<String, Object> map = new HashMap<String , Object>();
 		map.put("result", true);
-		map.put("message", num+"条记录取移除成功，"+(task_ids.length - num) +"条记录移除失败！");
+		map.put("message", num+"条应用结果取移除成功，"+(task_ids.length - num) +"条应用结果移除失败！");
 		return map;
 	}
 	

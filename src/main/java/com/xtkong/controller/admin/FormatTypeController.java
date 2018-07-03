@@ -1,20 +1,27 @@
 package com.xtkong.controller.admin;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.liutianjun.pojo.User;
 import com.xtkong.dao.SourceDao;
 import com.xtkong.dao.hbase.HBaseFormatDataDao;
 import com.xtkong.model.FormatType;
 import com.xtkong.service.FormatFieldService;
 import com.xtkong.service.FormatTypeService;
+import com.xtkong.service.PhoenixClient;
+import com.xtkong.util.ConstantsHBase;
 
 @Controller
 @RequestMapping(value = "/formatType")
@@ -36,10 +43,9 @@ public class FormatTypeController {
 	 */
 	@RequestMapping("/insertFormatType")
 	@ResponseBody
-	public Map<String, Object> insertFormatType(FormatType formatType, Integer uid) {
-		if (uid == null) {
-			uid=1;
-		}
+	public Map<String, Object> insertFormatType(HttpServletRequest request,FormatType formatType) {
+		User user = (User) request.getAttribute("user");
+		Integer uid = user.getId();
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -49,8 +55,16 @@ public class FormatTypeController {
 		if (1 == formatTypeService.insertFormatType(formatType)) {
 			map.put("result", true);
 			map.put("message", "新增成功");
+			String cs_id=String.valueOf(formatType.getCs_id());
 			Integer ft_id=formatTypeService.getFormatTypeId(formatType.getCs_id(), formatType.getFt_name());
-			HBaseFormatDataDao.createFormatDataTable(String.valueOf(formatType.getCs_id()), String.valueOf(ft_id));
+			HBaseFormatDataDao.createFormatDataTable(cs_id, String.valueOf(ft_id));
+		
+			String tableName=ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+			String family=ConstantsHBase.FAMILY_INFO;
+			List<String> typeQualifiers=new ArrayList<>();
+			typeQualifiers.add(ConstantsHBase.QUALIFIER_SOURCEDATAID);
+			typeQualifiers.add(ConstantsHBase.QUALIFIER_FORMATNODEID);
+			PhoenixClient.createView(tableName, family, typeQualifiers);
 		} else {
 			map.put("result", false);
 			map.put("message", "新增失败");
@@ -90,10 +104,9 @@ public class FormatTypeController {
 	 */
 	@RequestMapping("/updateFormatType")
 	@ResponseBody
-	public Map<String, Object> updateFormatType(FormatType formatType, Integer uid) {
-		if (uid == null) {
-			uid=1;
-		}
+	public Map<String, Object> updateFormatType(HttpServletRequest request,FormatType formatType) {
+		User user = (User) request.getAttribute("user");
+		Integer uid = user.getId();
 		Map<String, Object> map = new HashMap<String, Object>();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		formatType.setUpdate_datetime(simpleDateFormat.format(new Date()));
@@ -127,6 +140,7 @@ public class FormatTypeController {
 		for (String ft_id : ft_idStrs) {
 			if (1 == formatTypeService.deleteFormatType(Integer.valueOf(ft_id))) {
 				HBaseFormatDataDao.deleteFormatDataTable(String.valueOf(cs_id), String.valueOf(ft_id));
+				PhoenixClient.dropView(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id);
 				i++;
 			}
 		}

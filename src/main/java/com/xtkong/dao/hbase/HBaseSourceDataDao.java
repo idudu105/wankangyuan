@@ -2,6 +2,7 @@ package com.xtkong.dao.hbase;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import com.xtkong.model.SourceField;
+import com.xtkong.service.PhoenixClient;
 import com.xtkong.util.ConstantsHBase;
 import com.xtkong.util.HBaseDB;
 
@@ -37,8 +39,10 @@ public class HBaseSourceDataDao {
 	 */
 	public static void createSourceDataTable(String cs_id) {
 		// 源数据基础信息表
-		createSourceDataTable(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, new String[] { ConstantsHBase.FAMILY_INFO },
-				ConstantsHBase.VERSION_SOURCE);
+		String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
+		createSourceDataTable(tableName, new String[] { ConstantsHBase.FAMILY_INFO }, ConstantsHBase.VERSION_SOURCE);
+		// PhoenixClient.createView(tableName, ConstantsHBase.FAMILY_INFO,
+		// null);
 	}
 
 	private static void createSourceDataTable(String tableName, String[] columnFamilies, int version) {
@@ -62,8 +66,8 @@ public class HBaseSourceDataDao {
 				ConstantsHBase.QUALIFIER_GID_GID_GID);
 		String rowKey = uid + "_" + cs_id + "_" + count;
 		Put put = new Put(Bytes.toBytes(rowKey));
-		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(ConstantsHBase.QUALIFIER_ADD),
-				Bytes.toBytes(ConstantsHBase.VALUE_ADD_FALSE));
+		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(ConstantsHBase.QUALIFIER_CREATE),
+				Bytes.toBytes(String.valueOf(uid)));
 		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(ConstantsHBase.QUALIFIER_PUBLIC),
 				Bytes.toBytes(ConstantsHBase.VALUE_PUBLIC_FALSE));
 		for (Entry<String, String> sourceFieldData : sourceFieldDatas.entrySet()) {
@@ -101,36 +105,58 @@ public class HBaseSourceDataDao {
 		return sourceDatas;
 	}
 
-	/**
-	 * 
-	 * @param cs_id
-	 * @param uid
-	 * @param sourceFields
-	 * @param page
-	 *            页码
-	 * @param strip
-	 *            大小
-	 * @return
-	 */
-	/*
-	 * public static List<List<String>> getSourceDatasByUid(String cs_id, String
-	 * uid, List<SourceField> sourceFields, Integer page, Integer strip) { if
-	 * (page == null) { page = 1; } if (strip == null) { strip = 10; } String
-	 * tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id; Scan scan = new
-	 * Scan(); // 列簇约束结果集
-	 * scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO)); //
-	 * 前缀uid+"_"+source+"_"过滤 Filter filter1 = new
-	 * PrefixFilter(Bytes.toBytes(uid + "_" + cs_id + "_")); Filter filter2 =
-	 * new PageFilter(strip); FilterList filterList = new
-	 * FilterList(Operator.MUST_PASS_ALL, filter1, filter2);
-	 * scan.setFilter(filterList);
-	 * 
-	 * byte[] startRow = null; byte[] POSTFIX = new byte[] { 0x00 }; startRow =
-	 * HBaseDB.getStartRow(tableName, scan, startRow, page - 1, strip); if
-	 * (startRow != null) { // 非第一页 startRow = Bytes.add(startRow, POSTFIX);
-	 * scan.withStartRow(startRow); } return getSourceDatas(tableName, scan,
-	 * sourceFields); }
-	 */
+	public static Map<String, Map<String, Object>> getSourceDatasByUidP(String cs_id, String uid,
+			List<String> qualifiers, Integer page, Integer strip) {
+		String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
+		String family = ConstantsHBase.FAMILY_INFO;
+
+		Map<String, String> whereEqual = new HashMap<>();
+		whereEqual.put(ConstantsHBase.QUALIFIER_USER, String.valueOf(uid));
+
+		Map<String, String> whereLike = new HashMap<>();
+		// whereLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()),
+		// searchWord);
+
+		Map<String, Map<String, Object>> result = PhoenixClient.select(tableName, family, qualifiers, whereEqual,
+				whereLike, page, strip);
+		return result;
+	}
+
+	public static Map<String, Map<String, Object>> getSourceDatasCreatedP(String cs_id, String uid,
+			List<String> qualifiers, Integer page, Integer strip) {
+		String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
+		String family = ConstantsHBase.FAMILY_INFO;
+
+		Map<String, String> whereEqual = new HashMap<>();
+		whereEqual.put(ConstantsHBase.QUALIFIER_CREATE, String.valueOf(uid));
+
+		Map<String, String> whereLike = new HashMap<>();
+		// whereLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()),
+		// searchWord);
+
+		Map<String, Map<String, Object>> result = PhoenixClient.select(tableName, family, qualifiers, whereEqual,
+				whereLike, page, strip);
+		return result;
+
+	}
+
+	public static Map<String, Map<String, Object>> getSourceDatasPublicP(String cs_id, List<String> qualifiers,
+			Integer page, Integer strip) {
+		String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
+		String family = ConstantsHBase.FAMILY_INFO;
+
+		Map<String, String> whereEqual = new HashMap<>();
+		whereEqual.put(ConstantsHBase.QUALIFIER_PUBLIC, String.valueOf(ConstantsHBase.VALUE_PUBLIC_TRUE));
+
+		Map<String, String> whereLike = new HashMap<>();
+		// whereLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()),
+		// searchWord);
+
+		Map<String, Map<String, Object>> result = PhoenixClient.select(tableName, family, qualifiers, whereEqual,
+				whereLike, page, strip);
+		return result;
+	}
+
 	public static List<List<String>> getSourceDatasByUid(String cs_id, String uid, List<SourceField> sourceFields,
 			Integer currPage, Integer nextPage, Integer strip, String startRowStr) {
 		if (currPage == null) {
@@ -356,30 +382,62 @@ public class HBaseSourceDataDao {
 	}
 
 	public static boolean addMySource(String cs_id, String uid, String sourceDataIds, List<SourceField> sourceFields) {
-		try {
+		List<String> sourceDataIdList = new ArrayList<>();
+		for (String sourceDataId : sourceDataIds.split(",")) {
+			if (!sourceDataId.startsWith(uid + "_" + cs_id + "_"))
+				sourceDataIdList.add(sourceDataId);
+		}
+		return addMySource(cs_id, uid, sourceDataIdList, sourceFields);
+	}
 
+	public static boolean addMySource(String cs_id, String uid, List<String> sourceDataIds,
+			List<SourceField> sourceFields) {
+		try {
 			HBaseDB db = HBaseDB.getInstance();
-			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id);
+			String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
+			String family=ConstantsHBase.FAMILY_INFO;
+			Table table = db.getTable(tableName);
 			List<Get> gets = new ArrayList<Get>();
-			for (String sourceDataId : sourceDataIds.split(",")) {
-				if (!sourceDataId.startsWith(uid + "_" + cs_id + "_"))
+			for (String sourceDataId : sourceDataIds) {
 					gets.add(new Get(Bytes.toBytes(sourceDataId)));
 			}
 			// 存放批量操作的结果
 			Result[] results = table.get(gets);
-
 			for (Result result : results) {
 				Long count = db.getNewId(ConstantsHBase.TABLE_GID, uid + "_" + cs_id, ConstantsHBase.FAMILY_GID_GID,
 						ConstantsHBase.QUALIFIER_GID_GID_GID);
-				String rowKey = uid + "_" + cs_id + "_" + count;
-				Put put = new Put(Bytes.toBytes(rowKey));
-
+				String sourceDataId = uid + "_" + cs_id + "_" + count;
+				Put put = new Put(Bytes.toBytes(sourceDataId));
+				put.addColumn(Bytes.toBytes(family), Bytes.toBytes(ConstantsHBase.QUALIFIER_USER),
+						Bytes.toBytes(uid));
+				put.addColumn(Bytes.toBytes(family), Bytes.toBytes(ConstantsHBase.QUALIFIER_PUBLIC),
+						Bytes.toBytes(ConstantsHBase.VALUE_PUBLIC_FALSE));
 				for (SourceField sourceField : sourceFields) {
-					put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(sourceField.getCsf_id()),
-							result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+					put.addColumn(Bytes.toBytes(family), Bytes.toBytes(String.valueOf(sourceField.getCsf_id())),
+							result.getValue(Bytes.toBytes(family),
 									Bytes.toBytes(String.valueOf(sourceField.getCsf_id()))));
 				}
-				if (!db.putRow(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, put)) {
+				if (db.putRow(tableName, put)) {
+					String oldSourceDataId=Bytes.toString(result.getRow());
+					List<List<String>> formatNodes=HBaseFormatNodeDao.getFormatNodes(cs_id, oldSourceDataId);
+					for (List<String>  formatNode : formatNodes) {
+						String formatNodeId=formatNode.get(0);
+						String ft_id=formatNode.get(1);
+						String nodeName=formatNode.get(2);
+						HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName,null);
+						String tableStr=ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+						Map<String, Map<String, Object>> records = PhoenixClient.executeQuery("SELECT * FROM \""+tableStr+"\"");
+						List<String> head = (List<String>) records.get("records").get("head");
+						List<List<String>> datas =(List<List<String>>) records.get("records").get("data");
+						for (List<String> data : datas) {
+							Map<String, String> formatFieldDatas=new HashMap<>();
+							for (int i = 0; i < head.size(); i++) {
+								formatFieldDatas.put(head.get(i), data.get(i));
+							}
+							HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId, formatFieldDatas);							
+						}						
+					}
+				} else {
 					return false;
 				}
 			}
@@ -471,4 +529,35 @@ public class HBaseSourceDataDao {
 	public static void deleteSourceDataTable(String cs_id) {
 		HBaseDB.getInstance().deleteTable(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id);
 	}
+
+	/**
+	 * 
+	 * @param cs_id
+	 * @param uid
+	 * @param sourceFields
+	 * @param page
+	 *            页码
+	 * @param strip
+	 *            大小
+	 * @return
+	 */
+	/*
+	 * public static List<List<String>> getSourceDatasByUid(String cs_id, String
+	 * uid, List<SourceField> sourceFields, Integer page, Integer strip) { if
+	 * (page == null) { page = 1; } if (strip == null) { strip = 10; } String
+	 * tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id; Scan scan = new
+	 * Scan(); // 列簇约束结果集
+	 * scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO)); //
+	 * 前缀uid+"_"+source+"_"过滤 Filter filter1 = new
+	 * PrefixFilter(Bytes.toBytes(uid + "_" + cs_id + "_")); Filter filter2 =
+	 * new PageFilter(strip); FilterList filterList = new
+	 * FilterList(Operator.MUST_PASS_ALL, filter1, filter2);
+	 * scan.setFilter(filterList);
+	 * 
+	 * byte[] startRow = null; byte[] POSTFIX = new byte[] { 0x00 }; startRow =
+	 * HBaseDB.getStartRow(tableName, scan, startRow, page - 1, strip); if
+	 * (startRow != null) { // 非第一页 startRow = Bytes.add(startRow, POSTFIX);
+	 * scan.withStartRow(startRow); } return getSourceDatas(tableName, scan,
+	 * sourceFields); }
+	 */
 }
