@@ -135,12 +135,24 @@
                     <c:if test="${authoritys['62'] == true }">
                     	<div class="pro_menu pro_mandel">删除成员</div>
                     </c:if>
+                    <c:if test="${authoritys['62'] != true }">
+                    	<div class="pro_menu pro_mandel" style="display:none;">删除成员</div>
+                    </c:if>
+                    
                     <c:if test="${authoritys['61'] == true }">
                     	<div class="pro_menu pro_manGL">权限管理</div>
                     	<div class="pro_menu role_change">更改角色</div>
                     </c:if>
+                    <c:if test="${authoritys['61'] != true }">
+                    	<div class="pro_menu pro_manGL" style="display:none;">权限管理</div>
+                    	<div class="pro_menu role_change" style="display:none;">更改角色</div>
+                    </c:if>
+                    
                     <c:if test="${authoritys['60'] == true }">
                     	<div class="pro_menu pro_manadd">添加成员</div>
+                    </c:if>
+                    <c:if test="${authoritys['60'] != true }">
+                    	<div class="pro_menu pro_manadd" style="display:none;">添加成员</div>
                     </c:if>
                     
                     <div class="search2">

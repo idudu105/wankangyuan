@@ -123,8 +123,14 @@
                     <c:if test="${authoritys['41'] == true }">
                     	<div class="pro_menu pro_rem">移除</div>
                     </c:if>
+                    <c:if test="${authoritys['41'] != true }">
+                    	<div class="pro_menu pro_rem" style="display:none;">移除</div>
+                    </c:if>
                     <c:if test="${authoritys['40'] == true }">
                     	<div class="pro_menu pro_run">运行</div>
+                    </c:if>
+                    <c:if test="${authoritys['40'] != true }">
+                    	<div class="pro_menu pro_run" style="display:none;">运行</div>
                     </c:if>
                     
                     <div class="search2">

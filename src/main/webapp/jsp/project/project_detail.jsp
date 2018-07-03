@@ -110,6 +110,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <c:if test="${authoritys['10'] == true }">
 		                    	 <input type="button" class="prodexLb" value="保存" onclick="saveProjectIntroduction()"/>
 		                    </c:if>
+		                    <c:if test="${authoritys['10'] != true }">
+		                    	 <input type="button" class="prodexLb" value="保存" onclick="saveProjectIntroduction()" style="display:none;"/>
+		                    </c:if>
                             
                         </div>
                         <textarea name="" id="" class="prodexLt" >${project.introduction}</textarea>

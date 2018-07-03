@@ -106,24 +106,48 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="prof_lbLt">
                         <div class="prof_lbLtL">文件树</div>
                         <div class="prof_lbLtR">
+                        
 	                        <c:if test="${authoritys['20'] == true }">
 		                    	<input type="button" class="prof_lbLtRt prof_lbLtRaddg" value="添加根" />
                             	<div class="prof_lbLtRline"></div>
 		                    </c:if>
+		                    <c:if test="${authoritys['20'] != true }">
+		                    	<input type="button" class="prof_lbLtRt prof_lbLtRaddg" value="添加根" style="display:none;"/>
+                            	<div class="prof_lbLtRline" style="display:none;"></div>
+		                    </c:if>
+		                    
 		                    <c:if test="${authoritys['21'] == true }">
 		                    	<input type="button" class="prof_lbLtRt prof_lbLtRaddy" value="添加叶" />
-                            <div class="prof_lbLtRline"></div>
+                            	<div class="prof_lbLtRline"></div>
 		                    </c:if>
+		                    <c:if test="${authoritys['21'] != true }">
+		                    	<input type="button" class="prof_lbLtRt prof_lbLtRaddy" value="添加叶" style="display:none;"/>
+                            	<div class="prof_lbLtRline" style="display:none;"></div>
+		                    </c:if>
+		                    
 		                    <c:if test="${authoritys['22'] == true }">
 		                    	<input type="button" class="prof_lbLtRt prof_lbLtRtup" value="上传" />
-                            <div class="prof_lbLtRline"></div>
+                            	<div class="prof_lbLtRline"></div>
 		                    </c:if>
+		                    <c:if test="${authoritys['22'] != true }">
+		                    	<input type="button" class="prof_lbLtRt prof_lbLtRtup" value="上传" style="display:none;"/>
+                            	<div class="prof_lbLtRline" style="display:none;"></div>
+		                    </c:if>
+		                    
 		                    <c:if test="${authoritys['23'] == true }">
 		                    	<input type="button" class="prof_lbLtRt prof_lbLtRtch" value="修改" />
                             	<div class="prof_lbLtRline"></div>
 		                    </c:if>
+		                    <c:if test="${authoritys['23'] != true }">
+		                    	<input type="button" class="prof_lbLtRt prof_lbLtRtch" value="修改" style="display:none;"/>
+                            	<div class="prof_lbLtRline" style="display:none;"></div>
+		                    </c:if>
+		                    
 		                    <c:if test="${authoritys['24'] == true }">
 		                    	<input type="button" class="prof_lbLtRt prof_lbLtRtde" value="删除" />
+		                    </c:if> 
+		                    <c:if test="${authoritys['24'] != true }">
+		                    	<input type="button" class="prof_lbLtRt prof_lbLtRtde" value="删除" style="display:none;"/>
 		                    </c:if> 
                         </div>
                     </div>

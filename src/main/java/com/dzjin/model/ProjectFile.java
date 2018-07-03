@@ -18,8 +18,14 @@ public class ProjectFile {
 	private String create_datetime;		//文件上传时间
 	private int creator_id;		//文件创建者ID
 	private String username;
+	private int p_id;	//所在项目ID
 	
-	
+	public int getP_id() {
+		return p_id;
+	}
+	public void setP_id(int p_id) {
+		this.p_id = p_id;
+	}
 	public String getUsername() {
 		return username;
 	}

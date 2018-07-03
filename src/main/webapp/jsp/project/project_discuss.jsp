@@ -130,6 +130,9 @@
                 <c:if test="${authoritys['70'] == true }">
                 	<div class="addtheme">+创建主题</div>
                 </c:if>
+                <c:if test="${authoritys['70'] != true }">
+                	<div class="addtheme" style="display:none;">+创建主题</div>
+                </c:if>
                 
             </div>
             <div class="themeK">

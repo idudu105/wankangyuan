@@ -90,5 +90,15 @@ public class ProjectFileService {
 		}
 		return result;
 	}
+	
+	/**
+	 * 计算项目内成员上传文件数量
+	 * @param p_id
+	 * @param creator_id
+	 * @return
+	 */
+	public int countProjectFileNumByPidAndUid(Integer p_id , Integer creator_id){
+		return projectFileDao.countProjectFileNumByPidAndUid(p_id, creator_id);
+	}
 
 }

@@ -132,7 +132,9 @@
 					<c:if test="${authoritys['30'] == true }">
                     	<div class="pro_menu pro_rem">移除</div>
                     </c:if>
-					
+                    <c:if test="${authoritys['30'] != true }">
+                    	<div class="pro_menu pro_rem" style="display:none;">移除</div>
+                    </c:if>
 					
 					<select id="source_Select" class="pro_menusel">
 						<c:forEach items="${sources}" var="source">

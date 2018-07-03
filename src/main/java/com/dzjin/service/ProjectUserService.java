@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dzjin.dao.ProjectUserDao;
-import com.dzjin.model.ProjectFile;
-import com.dzjin.model.ProjectFloder;
 import com.dzjin.model.ProjectUser;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -58,20 +56,7 @@ public class ProjectUserService {
 		Iterator<ProjectUser> iterator = projectUsers.iterator();
 		while(iterator.hasNext()){
 			ProjectUser projectUser = (ProjectUser)iterator.next();
-			List<ProjectFloder> projectFloders = 
-					projectFloderService.selectProjectFloderByProjectId(id);
-			Iterator<ProjectFloder> iterator2 = projectFloders.iterator();
-			int num = 0;
-			while(iterator2.hasNext()){
-				ProjectFloder projectFloder = 
-						(ProjectFloder)iterator2.next();
-				List<ProjectFile> projectFiles = 
-						projectFileService.selectProjectFileByFloderId(projectFloder.getId());
-				num+=projectFiles.size();
-			}
-			
-			
-			projectUser.setFile_num(num);
+			projectUser.setFile_num(projectFileService.countProjectFileNumByPidAndUid(id, projectUser.getUser_id()));
 			projectUser.setTopic_num(projectUserDao.countProjectUserTopicNum(id, projectUser.getUser_id()));
 			projectUser.setTopic_follow_num(projectUserDao.countProjectUserTopicFollowNum(id, projectUser.getUser_id()));	
 		}

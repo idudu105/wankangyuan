@@ -181,7 +181,7 @@ public class ProjectFloderFileController {
 	@RequestMapping("/upload")
 	@ResponseBody
 	public Map<String, Object> upload(@RequestParam(value = "file", required = false) MultipartFile file , 
-			HttpServletRequest request){
+			HttpServletRequest request , HttpSession httpSession){
 		//返回结果
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -218,12 +218,14 @@ public class ProjectFloderFileController {
         //向数据库中插入一条记录
         ProjectFile projectFile = new ProjectFile();
         User user = (User)request.getAttribute("user");
+        Project project = (Project)httpSession.getAttribute("project");
         projectFile.setCreator_id(user.getId());
         projectFile.setFile_location(fileName);
         projectFile.setFile_name(originalFilename);
         projectFile.setFile_size(String.valueOf(file.getSize()/1024));
         projectFile.setFile_type(type);
         projectFile.setCreate_datetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        projectFile.setP_id(project.getId());
         
         if(1 == projectFileService.insertPorjectFile(projectFile)){
         	map.put("result", true);

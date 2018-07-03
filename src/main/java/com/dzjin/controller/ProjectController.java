@@ -119,7 +119,7 @@ public class ProjectController {
 		}else{
 			project = projectService.getProjectDetail(id);
 		}
-		
+		//获取项目内文件列表，统计项目内文件数量
 		List<ProjectFloder> projectFloders = 
 				projectFloderService.selectProjectFloderByProjectId(project.getId());
 		Iterator<ProjectFloder> iterator2 = projectFloders.iterator();
@@ -131,12 +131,12 @@ public class ProjectController {
 					projectFileService.selectProjectFileByFloderId(projectFloder.getId());
 			num+=projectFiles.size();
 		}
-
 		project.setFileNum(num);
+		//获取项目内应用、应用结果、成员数量
 		project.setAppNum(projectService.countProjectApp(project.getId()));
 		project.setAppResultNum(projectService.countProjectAppTask(project.getId()));
 		project.setMemberNum(projectService.countProjectUser(project.getId()));
-		
+
 		httpSession.setAttribute("project", project);
 		
 		/*
@@ -147,15 +147,17 @@ public class ProjectController {
 		ProjectUser projectUser = projectUserService.getProjectUser(project.getId(), user.getId());
 		List<ProjectAuthority> projectAuthorities = null;
 		if(projectUser == null){
-			//如果是访问者
-			projectAuthorities = projectRoleService.selectProjectAuthorityByRoleId(3);
-			Iterator<ProjectAuthority> iterator = projectAuthorities.iterator();
-			while(iterator.hasNext()){
-				ProjectAuthority projectAuthority = (ProjectAuthority)iterator.next();
-				authoritys.put(projectAuthority.getAuthority_number(), true);
+			//如果是访问者，需要查询当前项目自定义的访问者权限
+			ProjectCustomRole projectCustomRole = 
+					projectCustomRoleService.getProjectCustomRoleByRolename("访问者" , project.getId());
+			if(projectCustomRole.getAuthorities() != null){
+				String[] auths = projectCustomRole.getAuthorities().split(",");
+				for(int i =0;i<auths.length;i++){
+					authoritys.put(auths[i], true);
+				}
 			}
 		}else{
-			//如果是创建者
+			//如果是创建者，系统中创建者的权限是不能进行修改的，默认含有所有的权限，所以直接去查项目内的角色即可。
 			if(project.getCreator().equals(String.valueOf(user.getId()))){
 				projectAuthorities = projectRoleService.selectProjectAuthorityByRoleId(1);
 				Iterator<ProjectAuthority> iterator = projectAuthorities.iterator();
@@ -164,7 +166,7 @@ public class ProjectController {
 					authoritys.put(projectAuthority.getAuthority_number(), true);
 				}
 			}else{
-				//如果是除创建者之外的角色，直接从项目自定义角色中取出权限列表即可
+				//如果是除创建者之外的角色，直接从项目自定义角色中取出权限列表即可。
 				ProjectCustomRole projectCustomRole = projectCustomRoleService.getProjectCustomRole(projectUser.getRole_id());
 				if(projectCustomRole.getAuthorities() != null){
 					String[] auths = projectCustomRole.getAuthorities().split(",");

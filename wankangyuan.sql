@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50173
 File Encoding         : 65001
 
-Date: 2018-07-03 18:12:56
+Date: 2018-07-04 07:52:15
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -168,14 +168,11 @@ INSERT INTO `format_field` VALUES ('60', 'ff2', '41', '1', '', '', '1', '1', '1'
 INSERT INTO `format_field` VALUES ('61', 'ff3', '41', '1', '', '', '1', '1', '1', '', '', '2018-06-28 09:58:29', '1', ' ', '0');
 INSERT INTO `format_field` VALUES ('62', 'donorId', '39', '0', '', '', '1', '1', '1', 'I%03s%07d formated unique donor ID', '', '2018-06-28 10:26:02', '1', ' ', '0');
 INSERT INTO `format_field` VALUES ('63', 'donorOriginalId', '39', '0', '', '', '1', '0', '1', '', '', '2018-06-28 10:26:39', '1', ' ', '0');
-INSERT INTO `format_field` VALUES ('73', 'A', '45', '1', '', '', '1', '1', '1', '', '', '2018-06-29 17:02:46', '1', ' ', '0');
-INSERT INTO `format_field` VALUES ('74', 'A', '45', '1', '', '', '1', '1', '1', '', '', '2018-06-29 17:36:52', '1', ' ', '0');
-INSERT INTO `format_field` VALUES ('75', 'A', '45', '1', '', '', '1', '1', '1', '', '', '2018-06-29 17:36:57', '1', ' ', '0');
 INSERT INTO `format_field` VALUES ('76', 'A', '45', '1', '', '', '1', '1', '1', '', '', '2018-06-29 17:37:05', '1', ' ', '0');
 INSERT INTO `format_field` VALUES ('77', 'a', '45', '0', '', '', '1', '1', '1', '', '', '2018-06-29 17:37:36', '1', ' ', '0');
 INSERT INTO `format_field` VALUES ('78', 'b', '45', '0', '', '', '1', '1', '1', '', '', '2018-06-29 17:37:42', '1', '  ', '0');
 INSERT INTO `format_field` VALUES ('79', 'AA', '46', '1', '', '', '1', '1', '1', '', '', '2018-06-29 19:40:55', '1', ' ', '0');
-INSERT INTO `format_field` VALUES ('81', 'aa', '46', '0', '', '', '1', '1', '1', '', '', '2018-06-29 19:45:28', '1', ' ', '0');
+INSERT INTO `format_field` VALUES ('81', 'SSS', '46', '0', '', '', '1', '1', '1', '', '', '2018-06-29 19:45:28', '1', ' ', '0');
 
 -- ----------------------------
 -- Table structure for `format_type`
@@ -264,7 +261,7 @@ INSERT INTO `friends` VALUES ('42', '1', '36', null, 'lifeifei', '超级管理�
 INSERT INTO `friends` VALUES ('43', '34', '1', null, 'admin', '超级管理员', '/wankangyuan/userFiles/1/headImg.jpg', '472746759@qq.com', '简介23333', '2018-06-28 10:57:56', '2018-07-03 16:27:34');
 INSERT INTO `friends` VALUES ('44', '1', '34', null, 'wul', '超级管理员', '/wankangyuan/userFiles/34/headImg.jpg', 'wuling199102@gmail.com', 'this is a description about ...', '2018-06-28 10:57:56', '2018-07-03 14:33:06');
 INSERT INTO `friends` VALUES ('55', '1', '1', null, 'admin', '超级管理员', '/wankangyuan/userFiles/1/headImg.jpg', 'bbb@qq.com', '简介23333', '2018-06-29 14:09:55', '2018-07-03 14:33:06');
-INSERT INTO `friends` VALUES ('64', '30', '30', null, 'dzjin', '普通用户', '/wankangyuan/userFiles/30/headImg.jpg', 'dzjin5678@163.com', null, '2018-07-02 14:38:57', '2018-07-02 15:48:30');
+INSERT INTO `friends` VALUES ('64', '30', '30', null, 'dzjin', '普通用户', '/wankangyuan/userFiles/30/headImg.jpg', 'dzjin5678@163.com', null, '2018-07-02 14:38:57', '2018-07-04 07:31:00');
 INSERT INTO `friends` VALUES ('63', '43', '43', null, 'a121bc1', '普通用户', '/wankangyuan/static/img/head.jpg', 'a121bc@163.com', null, '2018-06-29 16:58:35', '2018-06-29 16:58:35');
 INSERT INTO `friends` VALUES ('61', '31', '1', null, 'admin', '超级管理员', '/wankangyuan/userFiles/1/headImg.jpg', 'bbb@qq.com', '简介23333', '2018-06-29 15:25:54', '2018-07-02 11:17:57');
 INSERT INTO `friends` VALUES ('62', '1', '31', null, 'a121bc', '普通用户', '/wankangyuan/static/img/touxiang_6.png', 'a121bc1@163.com', null, '2018-06-29 15:25:54', '2018-07-03 14:33:07');
@@ -298,11 +295,12 @@ CREATE TABLE `message` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=199 DEFAULT CHARSET=utf8 COMMENT='ltj-通知表';
+) ENGINE=MyISAM AUTO_INCREMENT=200 DEFAULT CHARSET=utf8 COMMENT='ltj-通知表';
 
 -- ----------------------------
 -- Records of message
 -- ----------------------------
+INSERT INTO `message` VALUES ('199', '1', '48', null, '0', '新组织申请创建：组织结构名称:测试 真实姓名:普通 联系电话:1111111111 单位简介:eee', '0', null, null, '2018-07-04 07:28:15', null);
 INSERT INTO `message` VALUES ('198', '35', '36', null, '1', 'lifeifei申请加您为好友，请及时处理。', '1', '已通过', null, '2018-07-03 17:45:36', '2018-07-03 17:46:10');
 INSERT INTO `message` VALUES ('197', '36', '47', null, '1', 'wuling申请加您为好友，请及时处理。', '1', '已通过', null, '2018-07-03 17:38:51', '2018-07-03 17:39:19');
 INSERT INTO `message` VALUES ('196', '47', '36', null, '1', 'lifeifei申请加您为好友，请及时处理。', '1', '已通过', null, '2018-07-03 17:38:09', '2018-07-03 17:43:53');
@@ -378,7 +376,7 @@ CREATE TABLE `organization` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `status` int(1) DEFAULT NULL COMMENT '状态 0:审核中 1:有效',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=48 DEFAULT CHARSET=utf8 COMMENT='ltj-组织关系表';
+) ENGINE=MyISAM AUTO_INCREMENT=49 DEFAULT CHARSET=utf8 COMMENT='ltj-组织关系表';
 
 -- ----------------------------
 -- Records of organization
@@ -400,6 +398,7 @@ INSERT INTO `organization` VALUES ('43', '分组02', '40', null, '40', null, 'ad
 INSERT INTO `organization` VALUES ('44', '新测试2', '0', null, '44', 'a121bc', 'a121bc', '123', '111', '2018-06-29 16:01:20', null, '1');
 INSERT INTO `organization` VALUES ('45', '分组02', '44', null, '44', null, 'a121bc', null, null, '2018-06-29 16:17:54', null, '1');
 INSERT INTO `organization` VALUES ('47', '分组02-01', '41', null, '40', null, 'admin', null, null, '2018-06-29 17:31:51', null, '1');
+INSERT INTO `organization` VALUES ('48', '测试', '0', null, '48', '普通', 'dzjin', '1111111111', 'eee', '2018-07-04 07:28:14', null, '0');
 
 -- ----------------------------
 -- Table structure for `project`
@@ -651,36 +650,38 @@ CREATE TABLE `project_file` (
   `file_size` double(10,0) DEFAULT NULL COMMENT '文件大小',
   `create_datetime` varchar(255) DEFAULT NULL COMMENT '创建时间',
   `creator_id` int(11) DEFAULT NULL COMMENT '创建人ID',
+  `p_id` int(11) DEFAULT NULL COMMENT '项目ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8 COMMENT='dzjin-项目文件\r\n';
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8 COMMENT='dzjin-项目文件\r\n';
 
 -- ----------------------------
 -- Records of project_file
 -- ----------------------------
-INSERT INTO `project_file` VALUES ('31', '59', 'Android Studio自带侧滑栏的解析.docx', '1529996324354.docx', '.docx', '295', '2018-06-26 14:58:44', '30');
-INSERT INTO `project_file` VALUES ('32', '59', 'Android 开发.docx', '1529996592459.docx', '.docx', '21', '2018-06-26 15:03:12', '1');
-INSERT INTO `project_file` VALUES ('33', '59', 'Centos shell.docx', '1529996595294.docx', '.docx', '15', '2018-06-26 15:03:15', '1');
-INSERT INTO `project_file` VALUES ('38', '74', 'test.docx', '1530069256332.docx', '.docx', '0', '2018-06-27 11:14:16', '35');
-INSERT INTO `project_file` VALUES ('39', '75', 'desk7.jpg', '1530069258138.jpg', '.jpg', '821', '2018-06-27 11:14:18', '34');
-INSERT INTO `project_file` VALUES ('40', '74', 'test-2.docx', '1530069260394.docx', '.docx', '14', '2018-06-27 11:14:20', '35');
-INSERT INTO `project_file` VALUES ('41', '75', 'desk6.jpg', '1530069288130.jpg', '.jpg', '1524', '2018-06-27 11:14:48', '34');
-INSERT INTO `project_file` VALUES ('42', '79', 'test.docx', '1530069306899.docx', '.docx', '0', '2018-06-27 11:15:06', '35');
-INSERT INTO `project_file` VALUES ('43', '79', 'test-2.docx', '1530069310651.docx', '.docx', '14', '2018-06-27 11:15:10', '35');
-INSERT INTO `project_file` VALUES ('44', '75', 'desk5.jpg', '1530069313104.jpg', '.jpg', '90', '2018-06-27 11:15:13', '34');
-INSERT INTO `project_file` VALUES ('45', '81', 'test.txt', '1530069347993.txt', '.txt', '0', '2018-06-27 11:15:47', '35');
-INSERT INTO `project_file` VALUES ('46', '81', 'test2.txt', '1530069379514.txt', '.txt', '0', '2018-06-27 11:16:19', '35');
-INSERT INTO `project_file` VALUES ('47', '76', 'selenium_scrollTop.note', '1530069392921.note', '.note', '1', '2018-06-27 11:16:32', '34');
-INSERT INTO `project_file` VALUES ('48', '76', 'python_stylerules.note', '1530069413496.note', '.note', '4', '2018-06-27 11:16:53', '34');
-INSERT INTO `project_file` VALUES ('49', '82', 'test.docx', '1530069420202.docx', '.docx', '0', '2018-06-27 11:17:00', '35');
-INSERT INTO `project_file` VALUES ('50', '82', 'test-2.docx', '1530069425230.docx', '.docx', '14', '2018-06-27 11:17:05', '35');
-INSERT INTO `project_file` VALUES ('52', '87', 'test.docx', '1530083886456.docx', '.docx', '0', '2018-06-27 15:18:06', '36');
-INSERT INTO `project_file` VALUES ('53', '87', 'test-2.docx', '1530083889596.docx', '.docx', '14', '2018-06-27 15:18:09', '36');
-INSERT INTO `project_file` VALUES ('54', '88', 'test.txt', '1530083902904.txt', '.txt', '0', '2018-06-27 15:18:22', '36');
-INSERT INTO `project_file` VALUES ('55', '88', 'test2.txt', '1530083912405.txt', '.txt', '0', '2018-06-27 15:18:32', '36');
-INSERT INTO `project_file` VALUES ('61', '89', '运行应用的对接材料.docx', '1530143571007.docx', '.docx', '544', '2018-06-28 07:52:51', '30');
-INSERT INTO `project_file` VALUES ('62', '89', '平台权限管理注意事项.docx', '1530143580310.docx', '.docx', '14', '2018-06-28 07:53:00', '30');
-INSERT INTO `project_file` VALUES ('64', '89', 'usermanage.html', '1530144650501.html', '.html', '24', '2018-06-28 08:10:50', '30');
-INSERT INTO `project_file` VALUES ('70', '99', 'word list 8.mp3', '1530606427955.mp3', '.mp3', '9705', '2018-07-03 16:27:07', '30');
+INSERT INTO `project_file` VALUES ('31', '59', 'Android Studio自带侧滑栏的解析.docx', '1529996324354.docx', '.docx', '295', '2018-06-26 14:58:44', '30', null);
+INSERT INTO `project_file` VALUES ('32', '59', 'Android 开发.docx', '1529996592459.docx', '.docx', '21', '2018-06-26 15:03:12', '1', null);
+INSERT INTO `project_file` VALUES ('33', '59', 'Centos shell.docx', '1529996595294.docx', '.docx', '15', '2018-06-26 15:03:15', '1', null);
+INSERT INTO `project_file` VALUES ('38', '74', 'test.docx', '1530069256332.docx', '.docx', '0', '2018-06-27 11:14:16', '35', null);
+INSERT INTO `project_file` VALUES ('39', '75', 'desk7.jpg', '1530069258138.jpg', '.jpg', '821', '2018-06-27 11:14:18', '34', null);
+INSERT INTO `project_file` VALUES ('40', '74', 'test-2.docx', '1530069260394.docx', '.docx', '14', '2018-06-27 11:14:20', '35', null);
+INSERT INTO `project_file` VALUES ('41', '75', 'desk6.jpg', '1530069288130.jpg', '.jpg', '1524', '2018-06-27 11:14:48', '34', null);
+INSERT INTO `project_file` VALUES ('42', '79', 'test.docx', '1530069306899.docx', '.docx', '0', '2018-06-27 11:15:06', '35', null);
+INSERT INTO `project_file` VALUES ('43', '79', 'test-2.docx', '1530069310651.docx', '.docx', '14', '2018-06-27 11:15:10', '35', null);
+INSERT INTO `project_file` VALUES ('44', '75', 'desk5.jpg', '1530069313104.jpg', '.jpg', '90', '2018-06-27 11:15:13', '34', null);
+INSERT INTO `project_file` VALUES ('45', '81', 'test.txt', '1530069347993.txt', '.txt', '0', '2018-06-27 11:15:47', '35', null);
+INSERT INTO `project_file` VALUES ('46', '81', 'test2.txt', '1530069379514.txt', '.txt', '0', '2018-06-27 11:16:19', '35', null);
+INSERT INTO `project_file` VALUES ('47', '76', 'selenium_scrollTop.note', '1530069392921.note', '.note', '1', '2018-06-27 11:16:32', '34', null);
+INSERT INTO `project_file` VALUES ('48', '76', 'python_stylerules.note', '1530069413496.note', '.note', '4', '2018-06-27 11:16:53', '34', null);
+INSERT INTO `project_file` VALUES ('49', '82', 'test.docx', '1530069420202.docx', '.docx', '0', '2018-06-27 11:17:00', '35', null);
+INSERT INTO `project_file` VALUES ('50', '82', 'test-2.docx', '1530069425230.docx', '.docx', '14', '2018-06-27 11:17:05', '35', null);
+INSERT INTO `project_file` VALUES ('52', '87', 'test.docx', '1530083886456.docx', '.docx', '0', '2018-06-27 15:18:06', '36', null);
+INSERT INTO `project_file` VALUES ('53', '87', 'test-2.docx', '1530083889596.docx', '.docx', '14', '2018-06-27 15:18:09', '36', null);
+INSERT INTO `project_file` VALUES ('54', '88', 'test.txt', '1530083902904.txt', '.txt', '0', '2018-06-27 15:18:22', '36', null);
+INSERT INTO `project_file` VALUES ('55', '88', 'test2.txt', '1530083912405.txt', '.txt', '0', '2018-06-27 15:18:32', '36', null);
+INSERT INTO `project_file` VALUES ('61', '89', '运行应用的对接材料.docx', '1530143571007.docx', '.docx', '544', '2018-06-28 07:52:51', '30', null);
+INSERT INTO `project_file` VALUES ('62', '89', '平台权限管理注意事项.docx', '1530143580310.docx', '.docx', '14', '2018-06-28 07:53:00', '30', null);
+INSERT INTO `project_file` VALUES ('64', '89', 'usermanage.html', '1530144650501.html', '.html', '24', '2018-06-28 08:10:50', '30', null);
+INSERT INTO `project_file` VALUES ('71', '99', 'word list 1.mp3', '1530660436347.mp3', '.mp3', '9745', '2018-07-04 07:27:16', '30', '114');
+INSERT INTO `project_file` VALUES ('72', '99', 'word list 3.mp3', '1530660442668.mp3', '.mp3', '9855', '2018-07-04 07:27:22', '30', '114');
 
 -- ----------------------------
 -- Table structure for `project_floder`
@@ -1066,8 +1067,8 @@ CREATE TABLE `user` (
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES ('0', ' ', ' ', ' ', '0', ' ', ' ', ' ', null, null, null, null, null, null, '1');
-INSERT INTO `user` VALUES ('1', 'admin', 'd3c59d25033dbf980d29554025c23a75', '8d78869f470951332959580424d4bf4f', '1', '核心技术', '简介23333', '1', '0', '18611111111', '472746759@qq.com', '/wankangyuan/userFiles/1/headImg.jpg', null, '2018-07-03 16:59:41', '1');
-INSERT INTO `user` VALUES ('30', 'dzjin', '58ce44846be5935a817d0b6f5e9f3896', '4a541b41c59a668568383e8ced500063', null, null, null, '3', '28', '13821951017', 'dzjin5678@163.com', '/wankangyuan/userFiles/30/headImg.jpg', '2018-06-26 14:21:41', '2018-07-03 18:11:52', '1');
+INSERT INTO `user` VALUES ('1', 'admin', 'd3c59d25033dbf980d29554025c23a75', '8d78869f470951332959580424d4bf4f', '1', '核心技术', '简介23333', '1', '0', '18611111111', '472746759@qq.com', '/wankangyuan/userFiles/1/headImg.jpg', null, '2018-07-04 07:43:24', '1');
+INSERT INTO `user` VALUES ('30', 'dzjin', '58ce44846be5935a817d0b6f5e9f3896', '4a541b41c59a668568383e8ced500063', null, null, null, '3', '28', '13821951017', 'dzjin5678@163.com', '/wankangyuan/userFiles/30/headImg.jpg', '2018-06-26 14:21:41', '2018-07-04 07:50:33', '1');
 INSERT INTO `user` VALUES ('31', 'a121bc', 'cff2685f019157ea9a5fe3393214fac0', '9c4559a6da6a577a5704cd3b8f6e0b0f', null, null, null, '3', '26', '18322069238', 'a121bc1@163.com', '/wankangyuan/static/img/touxiang_6.png', '2018-06-26 15:27:33', '2018-07-03 13:46:48', '1');
 INSERT INTO `user` VALUES ('32', '472746759', '45ea6008ba6f66b0f59ce5620d5a3cdf', '197f8929faefd7c1bf1375433abcc754', null, null, null, '3', '26', '18322069239', '472746759@qq.com', '/wankangyuan/static/img/touxiang_7.png', '2018-06-26 15:58:01', '2018-06-26 15:58:34', '1');
 INSERT INTO `user` VALUES ('33', 'julien', '4c6355e0d3403203e17ca9ed01123697', '167d430e39ecd61d42f559953e4cea7c', null, null, null, '3', '28', '15822117400', '849647122@qq.com', null, '2018-06-26 16:12:13', '2018-06-26 16:57:22', '1');

@@ -134,17 +134,33 @@
                         </div>
                         <div class="allT">全选</div>
                     </div>
+                    
                     <c:if test="${authoritys['53'] == true }">
                     	<div class="pro_menu pro_rem">移除</div>
                     </c:if>
+                    <c:if test="${authoritys['53'] != true }">
+                    	<div class="pro_menu pro_rem" style="display:none;">移除</div>
+                    </c:if>
+                    
                     <c:if test="${authoritys['52'] == true }">
                     	<div class="pro_menu pro_canfabu">取消发布</div>
                     </c:if>
+                    <c:if test="${authoritys['52'] != true }">
+                    	<div class="pro_menu pro_canfabu" style="display:none;">取消发布</div>
+                    </c:if>
+                    
                     <c:if test="${authoritys['51'] == true }">
                     	<div class="pro_menu pro_fabu">发布</div>
                     </c:if>
+                    <c:if test="${authoritys['51'] != true }">
+                    	<div class="pro_menu pro_fabu" style="display:none;">发布</div>
+                    </c:if>
+                    
                     <c:if test="${authoritys['50'] == true }">
                     	<div class="pro_menu pro_rerun">重新运行</div>
+                    </c:if>
+                    <c:if test="${authoritys['50'] != true }">
+                    	<div class="pro_menu pro_rerun" style="display:none;">重新运行</div>
                     </c:if>
                     
                     <div class="search2">

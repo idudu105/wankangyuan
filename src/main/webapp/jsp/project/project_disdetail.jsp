@@ -86,6 +86,9 @@
                                 <c:if test="${authoritys['71'] == true }">
 			                    	<div class="eisdeLTrBde">删除</div>
 			                    </c:if>
+			                    <c:if test="${authoritys['71'] != true }">
+			                    	<div class="eisdeLTrBde" style="display:none;">删除</div>
+			                    </c:if>
 			                    
 			                    <c:if test="${authoritys['72'] == true }">
 			                    	<div class="eisdeLTrBre">
@@ -94,8 +97,15 @@
 	                                        (<span>${projectTopic.follow_up_num}</span>)
 	                                    </div>
 	                                </div>
-			                    </c:if> 
-                                
+			                    </c:if>
+			                    <c:if test="${authoritys['72'] != true }">
+			                    	<div class="eisdeLTrBre" style="display:none;">
+	                                    <div class="eisdeLTrBreb">回复</div>
+	                                    <div class="eisdeLTrBret">
+	                                        (<span>${projectTopic.follow_up_num}</span>)
+	                                    </div>
+	                                </div>
+			                    </c:if>
                             </div>
                         </div>
                     </div>

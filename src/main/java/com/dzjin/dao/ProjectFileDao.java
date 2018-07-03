@@ -15,8 +15,8 @@ import com.dzjin.model.ProjectFile;
 
 public interface ProjectFileDao {
 	
-	@Insert("insert into project_file(file_name,file_location,file_type,file_size,create_datetime,creator_id) "
-			+ "values(#{file_name},#{file_location},#{file_type},#{file_size},#{create_datetime},#{creator_id})")
+	@Insert("insert into project_file(file_name,file_location,file_type,file_size,create_datetime,creator_id,p_id) "
+			+ "values(#{file_name},#{file_location},#{file_type},#{file_size},#{create_datetime},#{creator_id},#{p_id})")
 	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
 	public int insertPorjectFile(ProjectFile projectFile);
 	
@@ -30,6 +30,9 @@ public interface ProjectFileDao {
 	
 	@Delete("delete from project_file where id=#{id}")
 	public int deleteFile(@Param("id")Integer id);
+	
+	@Select("select count(*) from project_file where p_id=#{p_id} and creator_id=#{creator_id}")
+	public int countProjectFileNumByPidAndUid(@Param("p_id")Integer p_id , @Param("creator_id")Integer creator_id);
 	
  
 }
