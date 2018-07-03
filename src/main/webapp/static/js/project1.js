@@ -1846,6 +1846,7 @@ function friend_manage(){
     var ozzsyKpd=document.querySelectorAll('.zzsyKpd')[0];//添加组框内置预存框
     var ozzsy_editKpd=document.querySelectorAll('.zzsy_editKpd')[0];//修改组框内置预存框
     var ozzsy_delKpd=document.querySelectorAll('.zzsy_delKpd')[0];//删除组框内置预存框
+    
 
     var afriendMMrz=document.querySelectorAll('.friendMMrz');//右侧成员框和好友框
 
@@ -1879,7 +1880,10 @@ function friend_manage(){
             var ofriendMMlTTzT=afriendMMlTTz[index].querySelectorAll('.friendMMlTTzT')[0];
             ofriendMMlTTzT.onclick=function(){
                 ofriendMMlTTzT.appendChild(ozhizhen);//插入指针
-                ozzsyKpd.value=ofriendMMlTTzT.parentNode.getAttribute("name");
+                if(ozzsyKpd){
+                	ozzsyKpd.value=ofriendMMlTTzT.parentNode.getAttribute("name");
+                }
+                
                 //console.log("添加组预存框"+ozzsyKpd.value);
 
                 // console.log(zuzhi_PD[index]);
@@ -1912,7 +1916,10 @@ function friend_manage(){
         (function(index){
             afriendMMlTTzBz[index].onclick=function(){
                 afriendMMlTTzBz[index].appendChild(ozhizhen);//插入指针图片
-                ozzsyKpd.value=afriendMMlTTzBz[index].getAttribute("name");
+                if(ozzsyKpd){
+                	ozzsyKpd.value=afriendMMlTTzBz[index].getAttribute("name");
+                }
+                
                 //console.log("添加组预存框"+ozzsyKpd.value);
 
 
@@ -1923,11 +1930,17 @@ function friend_manage(){
                 afriendMMlTTzBz[index].style.color="#5ca0e5";
 
                 //组修改框内置预存框的写入
-                ozzsy_editKpd.value=afriendMMlTTzBz[index].getAttribute("name");
+                if(ozzsy_editKpd){
+                	ozzsy_editKpd.value=afriendMMlTTzBz[index].getAttribute("name");
+                }
+                
                 // console.log("修改组预存框"+ozzsy_editKpd.value);
 
                 //组删除框内置预存框的写入
-                ozzsy_delKpd.value=afriendMMlTTzBz[index].getAttribute("name");
+                if(ozzsy_delKpd){
+                	ozzsy_delKpd.value=afriendMMlTTzBz[index].getAttribute("name");
+                }
+                
                 // console.log("删除组预存框"+ozzsy_delKpd.value);
                 
                 //右侧框切换
@@ -1955,15 +1968,24 @@ function friend_manage(){
         (function(index){
             afriendMMlTTzBz2Tk[index].onclick=function(){
                 afriendMMlTTzBz2Tk[index].appendChild(ozhizhen);//插入指针图片
-                ozzsyKpd.value=afriendMMlTTzBz2Tk[index].parentNode.getAttribute("name");
+                if(ozzsyKpd){
+                	ozzsyKpd.value=afriendMMlTTzBz2Tk[index].parentNode.getAttribute("name");
+                }
+                
                 //console.log("添加组预存框"+ozzsyKpd.value);
 
                 //组修改框内置预存框的写入
-                ozzsy_editKpd.value=afriendMMlTTzBz2Tk[index].parentNode.getAttribute("name");
+                if(ozzsy_editKpd){
+                	ozzsy_editKpd.value=afriendMMlTTzBz2Tk[index].parentNode.getAttribute("name");
+                }
+                
                 // console.log("修改组预存框"+ozzsy_editKpd.value);
 
                 //组删除框内置预存框的写入
-                ozzsy_delKpd.value=afriendMMlTTzBz2Tk[index].parentNode.getAttribute("name");
+                if(ozzsy_delKpd){
+                	ozzsy_delKpd.value=afriendMMlTTzBz2Tk[index].parentNode.getAttribute("name");
+                }
+                
                 // console.log("删除组预存框"+ozzsy_delKpd.value);
 
                 if(teshuzuPD[index]==0){

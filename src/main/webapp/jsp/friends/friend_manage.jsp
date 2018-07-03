@@ -342,7 +342,7 @@
                                 </div>
                                 </c:if>
                                 </c:forEach> --%>
-                                <div data-bind="foreach: orgList">
+                              <div data-bind="foreach: orgList">
                                 <div class="friendMMlTTz" data-bind="attr:{name: id}" ><!-- 每个组织结构 -->
                                     <div class="friendMMlTTzT">
                                         <span class="fri_name" data-bind="text: organizationName"></span>

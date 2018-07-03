@@ -747,31 +747,65 @@ function pro_file(){
 
 //好友管理页面
 function friend_manage(){
-	
     var ofriendMMlTT=document.querySelectorAll('.friendMMlTT')[0];//除我的好友外
     var afriendMMlTTz=ofriendMMlTT.querySelectorAll('.friendMMlTTz');//每个组织结构
     var afriendMMlTTzBz=document.querySelectorAll('.friendMMlTTzBz');//每个组织结构内的组
 
-    var ozzsyKpd=document.querySelectorAll('.zzsyKpd')[0];//添加组框内置预存框
-    var ozzsy_editKpd=document.querySelectorAll('.zzsy_editKpd')[0];//修改组框内置预存框
-    var ozzsy_delKpd=document.querySelectorAll('.zzsy_delKpd')[0];//删除组框内置预存框
-
     var afriendMMrz=document.querySelectorAll('.friendMMrz');//右侧成员框和好友框
 
-    var osearch_2=document.querySelectorAll('.search_2')[0];//上方按钮栏搜索栏
+    var ofriend_qunfa=document.querySelectorAll('.friend_qunfa')[0];//群发消息按钮
+    var ofriend_yichuzu=document.querySelectorAll('.friend_yichuzu')[0];//从组中移除按钮
+    var ofriend_yichuhy=document.querySelectorAll('.friend_yichuhy')[0];//移除好友按钮
 
-    //组织结构点击效果
+    var osearch_2=document.querySelectorAll('.search_2')[0];//上方按钮栏搜索栏
+    var osearch_3=document.querySelectorAll('.search_3')[0];//上方按钮栏搜索栏
+
+
+    var ozhizhen=document.createElement('img');//指针图片
+    ozhizhen.className="zhizhen";
+    ozhizhen.src="../static/img/zhizhen2.png";
+
+    var panduanjicunqi=0;
+    
+    var afriendMMlTTzBz2=document.querySelectorAll('.friendMMlTTzBz2');
+    var afriendMMlTTzBz2Tk=document.querySelectorAll('.friendMMlTTzBz2Tk');
+    var afriendMMlTTzBz2Mk=document.querySelectorAll('.friendMMlTTzBz2Mk');
+
+    var zuzhi_PD=[];
+    for(var i=0;i<afriendMMlTTz.length;i++){
+        zuzhi_PD.push(0);
+    }
+
+//console.log(afriendMMlTTz.length);
+//组织结构点击效果
     for(var i=0;i<afriendMMlTTz.length;i++){
         (function(index){
             var ofriendMMlTTzT=afriendMMlTTz[index].querySelectorAll('.friendMMlTTzT')[0];
             ofriendMMlTTzT.onclick=function(){
+                ofriendMMlTTzT.appendChild(ozhizhen);//插入指针
+
+                //console.log("添加组预存框"+ozzsyKpd.value);
+
+                // console.log(zuzhi_PD[index]);
+                if(zuzhi_PD[index]==0){
+                    panduanjicunqi=0;
+                }else if(zuzhi_PD[index]==1){
+                    panduanjicunqi=1;
+                }
+                // console.log(panduanjicunqi);
+
                 for(var j=0;j<afriendMMlTTz.length;j++){
                     afriendMMlTTz[j].className="friendMMlTTz";
+                    zuzhi_PD[j]=0;
                 }
-                afriendMMlTTz[index].className="friendMMlTTz active";
 
-                ozzsyKpd.value=afriendMMlTTz[index].getAttribute("name");
-                console.log(ozzsyKpd.value);
+                if(panduanjicunqi==0){
+                    afriendMMlTTz[index].className="friendMMlTTz active";
+                    zuzhi_PD[index]=1;
+                }else if(panduanjicunqi==1){
+                    afriendMMlTTz[index].className="friendMMlTTz active2";
+                    zuzhi_PD[index]=0;
+                }
 
             }
         })(i)
@@ -781,15 +815,104 @@ function friend_manage(){
     for(var i=0;i<afriendMMlTTzBz.length;i++){
         (function(index){
             afriendMMlTTzBz[index].onclick=function(){
-                for(var j=0;j<afriendMMlTTzBz.length;j++){
-                    afriendMMlTTzBz[j].style.color="#666";
+                afriendMMlTTzBz[index].appendChild(ozhizhen);//插入指针图片
+            }
+        })(i)
+    }
+
+//特殊组的点击效果（该组内有包含组的时候）
+    var teshuzuPD=[];
+    for(var i=0;i<afriendMMlTTzBz2.length;i++){
+        teshuzuPD.push(0);
+    }
+    // console.log(teshuzuPD);
+    
+    for(var i=0;i<afriendMMlTTzBz2.length;i++){
+        (function(index){
+            afriendMMlTTzBz2Tk[index].onclick=function(){
+                afriendMMlTTzBz2Tk[index].appendChild(ozhizhen);//插入指针图片
+
+                if(teshuzuPD[index]==0){
+                    afriendMMlTTzBz2[index].className="friendMMlTTzBz2 active";
+                    afriendMMlTTzBz2Mk[index].style.display="block";
+                    teshuzuPD[index]=1;
+
+                }else if(teshuzuPD[index]==1){
+                    afriendMMlTTzBz2[index].className="friendMMlTTzBz2";
+                    afriendMMlTTzBz2Mk[index].style.display="none";
+                    teshuzuPD[index]=0;
                 }
-                afriendMMlTTzBz[index].style.color="#5ca0e5";
-               
+                
             }
         })(i)
     }
     
+    
+
+
+  
+    // var ozzjgKpd=0;//添加组织结构框判断
+  //右侧多选
+    for(var i=0;i<afriendMMrz.length;i++){
+        (function(index){
+            var oquanxuanK=afriendMMrz[index].querySelectorAll('.quanxuanK')[0];
+            var oquanxuan=oquanxuanK.querySelectorAll('.input_check')[0];
+
+            var afuxuan=[];
+            var afuxuanK=[];
+
+            if(afriendMMrz[index].querySelectorAll('.fuxuanK2')[0]){
+                afuxuanK=afriendMMrz[index].querySelectorAll('.fuxuanK2');
+                //console.log("k2");
+            }else if(afriendMMrz[index].querySelectorAll('.fuxuanK3')[0]){
+                afuxuanK=afriendMMrz[index].querySelectorAll('.fuxuanK3');
+                //console.log("k3");
+            }
+
+            if(afuxuanK[0]){
+                for(var i=0;i<afuxuanK.length;i++){
+                    afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+                }
+            }
+            
+
+            oquanxuanK.onchange=function(){
+                if(oquanxuan.checked){
+                    for(var i=0;i<afuxuanK.length;i++){
+                        afuxuan[i].checked=1;
+                    }
+                }else{
+                    console.log(2);
+                    for(var i=0;i<afuxuanK.length;i++){
+                        afuxuan[i].checked=0;
+                    }
+                }
+            }
+
+
+            if(afuxuanK[0]){
+                for(var i=0;i<afuxuanK.length;i++){
+                    (function(index){
+                        afuxuanK[i].onchange=function(){
+                            var fuxuanPD=0;
+                            for(var j=0;j<afuxuanK.length;j++){
+                                if(afuxuan[j].checked){
+                                    fuxuanPD++;
+                                }
+                                console.log(afuxuan[j].checked);
+                            }
+                            console.log(fuxuanPD);
+                            if(fuxuanPD==afuxuanK.length){
+                                oquanxuan.checked=1;
+                            }else if(fuxuanPD!=afuxuanK.length){
+                                oquanxuan.checked=0;
+                            }
+                        }
+                    })(i)
+                }
+            }
+        })(i)
+    }
 }
 
 function friendmanage_quanxuan(){
