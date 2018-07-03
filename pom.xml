@@ -49,11 +49,20 @@
 			<artifactId>phoenix-core</artifactId>
 			<version>4.14.0-HBase-1.4</version>
 			<exclusions>
-                <exclusion>
-                    <artifactId>jdk.tools</artifactId>
-                    <groupId>jdk.tools</groupId>
-                </exclusion>
-            </exclusions>
+				<exclusion>
+					<artifactId>jdk.tools</artifactId>
+					<groupId>jdk.tools</groupId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-hdfs</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase-client</artifactId>
+				</exclusion>
+
+			</exclusions>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.thetransactioncompany/cors-filter -->

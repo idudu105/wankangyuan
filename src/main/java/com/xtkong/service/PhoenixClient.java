@@ -504,8 +504,11 @@ public class PhoenixClient {
 //		pheonixSQL="SELECT B.\"ID\",B.\"1\",A.\"ID\",A.\"1\" FROM B  LEFT OUTER JOIN  A  ON B.\"1\"=A.\"1\"";
 //		pheonixSQL="SELECT ID,\"89\",\"90\",\"91\",\"92\",\"93\",\"94\" FROM \"SOURCE_62\""
 //				+ " WHERE \"SOURCE_62\".\"USER\"='45' OR \"SOURCE_62\".\"CREATE\"='45' ";
-		pheonixSQL="SELECT *"
-				+ " FROM \"FORMAT_62_45\" WHERE  SOURCEDATAID='1_62_1' AND  \"FORMAT_62_45\".\"ID\"!='17' ";				 
+//		pheonixSQL="SELECT *"
+//				+ " FROM \"FORMAT_62_45\" WHERE  SOURCEDATAID='1_62_1' AND  \"FORMAT_62_45\".\"ID\"!='17' ";
+		pheonixSQL=" SELECT ID,\"INFO\".\"89\",\"INFO\".\"90\",\"INFO\".\"91\",\"INFO\".\"92\",\"INFO\".\"93\","
+		 		+ "\"INFO\".\"94\",\"INFO\".\"95\" FROM \"SOURCE_62\" WHERE \"INFO\".\"PROJECT\"='114' "
+		 		+ "AND \"INFO\".\"89\" like '%%' ";
 		result =selectPage(pheonixSQL, page, strip);
 //		String resultMsg = String.valueOf((result.get("msg")).get("msg"));
 //		for (int j = 0; j < 2; j++) {
