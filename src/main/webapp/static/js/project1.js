@@ -166,7 +166,7 @@ function project1(){
     oPJListline.style.width=oPJList.offsetWidth*0.98+"px";
     // console.log(oPJListline.offsetWidth);
 
-//点击表头的排序筛选功能
+  //点击表头的排序筛选功能
     var oPJK=document.querySelectorAll('.PJK')[0];//项目框
     var oBTSX=document.querySelectorAll('.BTSX')[0];//项目表头筛选框
     // var oBTSXpd=document.querySelectorAll('.BTSXpd')[0];//项目表头筛选框判断
@@ -174,26 +174,26 @@ function project1(){
     var oPJList=document.querySelectorAll('.PJList')[0];//项目表头栏
     var aPJListli=oPJList.querySelectorAll('.PJListli');//项目表头
 
-    var BTSXpd=-1;//项目表头筛选框判断
+    // var BTSXpd=-1;//项目表头筛选框判断
 
     //点击设置排序筛选框
     for(var i=0;i<aPJListli.length;i++){
         (function(j){
             aPJListli[j].onclick=function(){
-                if(BTSXpd==j){
-                    oBTSX.style.display="none";
-                    BTSXpd=-1;
-                }else{
+                // if(BTSXpd==j){
+                //     oBTSX.style.display="none";
+                //     BTSXpd=-1;
+                // }else{
                     oBTSX.style.display="block";
-                    BTSXpd=j;
-                }
+                    // BTSXpd=j;
+                // }
                 var BTSXleft=aPJListli[j].offsetLeft;
                 // oBTSX.name=aPJListli[j].innerHTML;
-                /*if(document.querySelectorAll('.BTSXpd')[0]){
+                if(document.querySelectorAll('.BTSXpd')[0]){
                     var oBTSXpd=document.querySelectorAll('.BTSXpd')[0];//项目表头筛选框判断
                     oBTSXpd.value=aPJListli[j].title;
                     console.log(oBTSXpd.value);
-                }*/
+                }
                 
                 
                 console.log(BTSXleft);
@@ -201,10 +201,25 @@ function project1(){
                     BTSXleft=1118;
                 }
                 oBTSX.style.left=BTSXleft-20+'px'; 
+                event.stopPropagation();
             }
         })(i)
     }
-
+    // $(document).click(function(){
+    //     console.log(1);
+    // })
+    window.onclick=function(){
+        //console.log(1);
+        oBTSX.style.display="none";
+    }
+    document.onclick=function(){
+        //console.log(1);
+        oBTSX.style.display="none";
+    }
+    oBTSX.onclick=function(){
+        event.stopPropagation();
+    }
+    
     var aBTSXcliI=oBTSX.querySelectorAll('.BTSXcliI');//筛选框排序箭头
     var oBTSXcliIpd=document.querySelectorAll('.BTSXcliIpd')[0];//筛选框选择判断
     for(var i=0;i<aBTSXcliI.length;i++){

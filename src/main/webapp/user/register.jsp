@@ -183,8 +183,14 @@ function register(){
 		return layer.msg('密码不少于8个字符！',function(){}),!1;
 	}
 	
-	if($("#phone").val().trim() == ''){
-		return layer.msg('请输入手机号!',function(){}),!1;
+	if($("#phone").val().trim() != ''){
+		//return layer.msg('请输入手机号!',function(){}),!1;
+		
+		var phoneReg = /(^1[3|4|5|6|7|8]\d{9}$)|(^09\d{8}$)/;  
+	    var phone = $("#phone").val();  
+	    if (!phoneReg.test(phone)) {  
+	        return layer.msg('请输入有效的手机号码！',function(){}),!1;
+	    }
 	}
 	
 	if($("#password").val() != $("#re_password").val()){

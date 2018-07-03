@@ -95,7 +95,7 @@
                         <input id="oldPhone" type="text" class="updateinfoRct1 udPHphone" disabled="disabled" value="${user.phone }" />
                     </div>
                     <div class="updateinfoRcz">
-                        <input id="newPhone" name="phone" type="text" class="updateinfoRct1 udPHphone2 updateQLk" placeholder="请输入新手机号"  />
+                        <input id="newPhone" name="phone" type="number" class="updateinfoRct1 udPHphone2 updateQLk" placeholder="请输入新手机号"  />
                     </div>
                     <div class="updateinfoRB">
                         <div id="phoneClose" class="udinfoRbca">取消</div>
@@ -355,7 +355,7 @@ function updateUserInfo() {
 }
 function updateUserPhone(){
 	
-	var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;  
+	var phoneReg = /(^1[3|4|5|6|7|8]\d{9}$)|(^09\d{8}$)/;  
     var phone = $('#newPhone').val();  
     if (!phoneReg.test(phone)) {  
         return layer.msg('请输入有效的手机号码！',function(){}),!1;

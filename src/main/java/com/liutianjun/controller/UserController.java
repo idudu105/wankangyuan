@@ -381,6 +381,12 @@ public class UserController {
 			resultMap.put("message", "邮箱验证码错误!");
 			return resultMap;
 		}
+		//检查邮箱
+		if(null != userService.selectByEmail(email)){
+			resultMap.put("message", "Email已经存在!");
+			return resultMap;
+		}
+		
 		//获取用户名
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 	    //获取用户
