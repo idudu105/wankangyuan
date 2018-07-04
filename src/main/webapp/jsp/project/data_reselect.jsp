@@ -14,11 +14,67 @@
     <meta charset="UTF-8" />
     <title>Document</title>
 </head>
-<link rel="stylesheet" type="text/css" href="/wankangyuan/jsp/project/css/project1.css" />
+<link rel="stylesheet" type="text/css" href="/wankangyuan/static/css/project1.css" />
 <script type="text/javascript" src="/wankangyuan/jsp/project/js/project1.js"></script>
 <script type="text/javascript">
+
     window.onload=function(){
     	pro_appendre2();
+    	
+    	// 全选框和复选框的动作
+        if(document.querySelectorAll('.quanxuanK')[0]){
+            oquanxuanK=document.querySelectorAll('.quanxuanK')[0];
+            var oquanxuan=oquanxuanK.querySelectorAll('.input_check')[0];
+            var afuxuan=[];
+            var afuxuanK=[];
+            if(document.querySelectorAll('.fuxuanK2')[0]){
+                afuxuanK=document.querySelectorAll('.fuxuanK2');
+                console.log("k2");
+            }else if(document.querySelectorAll('.fuxuanK3')[0]){
+                afuxuanK=document.querySelectorAll('.fuxuanK3');
+                console.log("k3");
+            }
+            if(afuxuanK[0]){
+                for(var i=0;i<afuxuanK.length;i++){
+                    afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+                }
+            }
+            oquanxuanK.onchange=function(){
+                if(oquanxuan.checked){
+                    for(var i=0;i<afuxuanK.length;i++){
+                        afuxuan[i].checked=1;
+                    }
+                }else{
+                    console.log(2);
+                    for(var i=0;i<afuxuanK.length;i++){
+                        afuxuan[i].checked=0;
+                    }
+                }
+            }
+            if(afuxuanK[0]){
+                for(var i=0;i<afuxuanK.length;i++){
+                    (function(index){
+                        afuxuanK[i].onchange=function(){
+                            var fuxuanPD=0;
+                            for(var j=0;j<afuxuanK.length;j++){
+                                if(afuxuan[j].checked){
+                                    fuxuanPD++;
+                                }
+                                console.log(afuxuan[j].checked);
+                            }
+                            console.log(fuxuanPD);
+                            if(fuxuanPD==afuxuanK.length){
+                                oquanxuan.checked=1;
+                            }else if(fuxuanPD!=afuxuanK.length){
+                                oquanxuan.checked=0;
+                            }
+                        }
+                    })(i)
+                }
+            }
+        }else{
+            console.log(222);
+        }
     }
 </script>
 <body>
@@ -27,118 +83,52 @@
             <div class="proreK2">
                 <div class="inportT">
                     <div class="inportTt">选择格式数据</div>
+                    <select id="source_Select" class="pro_menusel">
+						<c:forEach items="${sources}" var="source">
+							<c:if test="${source.cs_id!=thiscs_id}">
+								<option value="${source.cs_id}">${source.cs_name}</option>
+							</c:if>
+							<c:if test="${source.cs_id==thiscs_id}">										
+								<option value="${source.cs_id}" selected="selected">${source.cs_name}</option>
+							</c:if>
+						</c:forEach>						
+					</select>
                 </div>
                 <div class="proreKC">
                 	<!-- 格式数据字段需要根据不同的数据源进行变化 -->
                     <div class="proreT">
-                        <div class="proreTli datali">数据名称</div>
-                        <div class="proreTli datali">数据1</div>
-                        <div class="proreTli datali">数据2</div>
-                        <div class="proreTli datali">数据3</div>
-                        <div class="proreTli datali">数据4</div>
-                        <div class="proreTli datali">创建人</div>
-                        <div class="proreTli datali">创建时间</div>
-                        <div class="proreTli datacreater">创建人</div>
+                        <div class="allK">
+							<div class="quanxuanK">
+								<input type="checkbox" class="input_check" name="0" id="check0">
+								<label for="check0"></label>
+							</div>
+							<div class="allT">全选</div>
+						</div>
+						<c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
+							<div class="PJListli">${sourceFieldTemp.csf_name}</div>
+						</c:forEach>	
                     </div>
                     <div class="proreM">
                     	
                     	<!-- begin -->
                         <div class="proreMz">
-                            <div class="proreMzc">
-                                <div class="proreMli datali">张三</div>
-                                <div class="proreMli datali">临床数据</div>
-                                <div class="proreMli datali">分子数据</div>
-                                <div class="proreMli datali">数据31</div>
-                                <div class="proreMli datali">数据41</div>
-                                <div class="proreMli datali">创建人1</div>
-                                <div class="proreMli datali">创建时间1</div>
-                                <div class="proreMli datacreater">创建人1</div>
-                            </div>
-                            <div class="PJliB active">
-                                <div class="PJliB1">
-                                    <div class="PJliB1L">
-                                        <div class="PJliB1Lt">临床数据</div>
-                                    </div>
-                                    <div class="PJliBR">
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK">
-                                                    <input type="checkbox" class="input_check" id="check1_1">
-                                                    <label for="check1_1"></label>
-                                                </div>
-                                                <div class="PJliB2Lt">CT</div>
-                                            </div>
-                                            <div class="PJliBR">
-                                                <div class="PJliB2">
-                                                    <div class="PJliB2L">
-                                                        <div class="fuxuanK">
-                                                            <input type="checkbox" class="input_check" id="check1_2">
-                                                            <label for="check1_2"></label>
-                                                        </div>
-                                                        <div class="PJliB2Lt">CT1</div>
-                                                    </div>
-                                                </div>
-                                                <div class="PJliB2">
-                                                    <div class="PJliB2L">
-                                                        <div class="fuxuanK">
-                                                            <input type="checkbox" class="input_check" id="check1_3">
-                                                            <label for="check1_3"></label>
-                                                        </div>
-                                                        <div class="PJliB2Lt">CT2</div>
-                                                    </div>
-                                                </div>
-                                                <div class="PJliB2">
-                                                    <div class="PJliB2L">
-                                                        <div class="fuxuanK">
-                                                            <input type="checkbox" class="input_check" id="check1_4">
-                                                            <label for="check1_4"></label>
-                                                        </div>
-                                                        <div class="PJliB2Lt">CT3</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="PJliB2">
-                                            <div class="PJliB2L">
-                                                <div class="fuxuanK">
-                                                    <input type="checkbox" class="input_check" id="check1_5">
-                                                    <label for="check1_5"></label>
-                                                </div>
-                                                <div class="PJliB2Lt">XG</div>
-                                            </div>
-                                            <div class="PJliBR">
-                                                <div class="PJliB2">
-                                                    <div class="PJliB2L">
-                                                        <div class="fuxuanK">
-                                                            <input type="checkbox" class="input_check" id="check1_6">
-                                                            <label for="check1_6"></label>
-                                                        </div>
-                                                        <div class="PJliB2Lt">XG1</div>
-                                                    </div>
-                                                </div>
-                                                <div class="PJliB2">
-                                                    <div class="PJliB2L">
-                                                        <div class="fuxuanK">
-                                                            <input type="checkbox" class="input_check" id="check1_7">
-                                                            <label for="check1_7"></label>
-                                                        </div>
-                                                        <div class="PJliB2Lt">XG2</div>
-                                                    </div>
-                                                </div>
-                                                <div class="PJliB2">
-                                                    <div class="PJliB2L">
-                                                        <div class="fuxuanK">
-                                                            <input type="checkbox" class="input_check" id="check1_8">
-                                                            <label for="check1_8"></label>
-                                                        </div>
-                                                        <div class="PJliB2Lt">XG3</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <c:forEach items="${sourceDatas}" var="sourceData">
+								<div class="PJli">
+									<div class="PJliC">
+										<c:forEach items="${sourceData}" var="sourceDataField" varStatus="status">
+											<c:if test="${status.index==0}">
+												<div class="fuxuanK2">
+													<input type="checkbox" class="input_check" name="${sourceDataField}" id="check${sourceDataField}">
+													<label for="check${sourceDataField}"></label>
+												</div>
+											</c:if>
+											<c:if test="${status.index!=0}">
+												<div class="PJliCli2">${sourceDataField}</div>
+											</c:if>
+										</c:forEach>
+									</div>
+								</div>
+							</c:forEach>
                         </div>
 						<!-- end -->
 						
@@ -150,5 +140,12 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    <script type="text/javascript">
+	    $("#source_Select").change(function(){
+			cs_id = $("#source_Select").val();
+				window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id;
+		});
+    </script>
 </body>
 </html>
