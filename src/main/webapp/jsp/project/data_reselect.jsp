@@ -170,7 +170,7 @@
             }
             var cs_id = $("#source_Select").val();
             $.ajax({
-            	url:"/wankangyuan/commen/selectCondition",
+            	url:"/wankangyuan/common/selectCondition",
             	type:"post",
             	data:{
             		cs_id:cs_id,
