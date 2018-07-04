@@ -146,11 +146,12 @@ public class PhoenixClient {
 				return map;
 			}
 
-			PreparedStatement stmt  =conn.prepareStatement(phoenixSQL);
+			PreparedStatement stmt = conn.prepareStatement(phoenixSQL);
 			ResultSet set = stmt.executeQuery(phoenixSQL);
 			// 准备查询
-//			Statement stmt = conn.createStatement();
-//			PhoenixResultSet set = (PhoenixResultSet) stmt.executeQuery(phoenixSQL);
+			// Statement stmt = conn.createStatement();
+			// PhoenixResultSet set = (PhoenixResultSet)
+			// stmt.executeQuery(phoenixSQL);
 			// 查询出来的列是不固定的，所以这里通过遍历的方式获取列名
 			ResultSetMetaData meta = set.getMetaData();
 			if (head.size() == 0) {
@@ -174,7 +175,7 @@ public class PhoenixClient {
 			msg.put("msg", "success");
 			map.put("msg", msg);
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			msg.put("msg", "SQL执行出错：" + e.getMessage());
 			map.put("msg", msg);
 			return map;
@@ -186,7 +187,7 @@ public class PhoenixClient {
 		}
 		return map;
 	}
-	
+
 	/**
 	 * HBase表 映射Pheonix视图
 	 * 
@@ -277,15 +278,18 @@ public class PhoenixClient {
 		// System.out.println();
 		return count;
 	}
+
 	public static String getPheonixSQLQualifier(String tableName, String qualifier) {
 		return "\"" + tableName + "\".\"" + qualifier + "\"";
 	}
+
 	public static Map<String, Map<String, Object>> select(String tableName, List<String> qualifiers,
-			Map<String, String> whereEqual, Map<String, String> whereLike,String condition, Integer page, Integer strip) {
+			Map<String, String> whereEqual, Map<String, String> whereLike, String condition, Integer page,
+			Integer strip) {
 		String pheonixSQL = " SELECT ID";
-		if ((tableName != null)  && (qualifiers != null) && (!qualifiers.isEmpty())) {
+		if ((tableName != null) && (qualifiers != null) && (!qualifiers.isEmpty())) {
 			for (String qualifier : qualifiers) {
-				pheonixSQL += ",\"" + tableName + "\".\"" +qualifier + "\"";
+				pheonixSQL += ",\"" + tableName + "\".\"" + qualifier + "\"";
 			}
 		}
 		pheonixSQL += " FROM \"" + tableName + "\"";
@@ -295,25 +299,25 @@ public class PhoenixClient {
 				pheonixSQL += " WHERE ";
 				isAddWhere = false;
 			}
-			pheonixSQL +=condition+ " AND ";
+			pheonixSQL += condition + " AND ";
 		}
-		
+
 		if ((whereEqual != null) && (!whereEqual.isEmpty())) {
 			if (isAddWhere) {
 				pheonixSQL += " WHERE ";
 				isAddWhere = false;
 			}
 			for (Entry<String, String> eqlual : whereEqual.entrySet()) {
-				pheonixSQL += "\""  + tableName + "\".\"" + eqlual.getKey() + "\"='" + eqlual.getValue() + "' AND ";
+				pheonixSQL += "\"" + tableName + "\".\"" + eqlual.getKey() + "\"='" + eqlual.getValue() + "' AND ";
 			}
 		}
-		if ( (whereLike != null) && (!whereLike.isEmpty())) {
+		if ((whereLike != null) && (!whereLike.isEmpty())) {
 			if (isAddWhere) {
 				pheonixSQL += " WHERE ";
 				isAddWhere = false;
 			}
 			for (Entry<String, String> like : whereLike.entrySet()) {
-				pheonixSQL += "\"" + tableName + "\".\"" +  like.getKey() + "\" like '%" + like.getValue() + "%' AND ";
+				pheonixSQL += "\"" + tableName + "\".\"" + like.getKey() + "\" like '%" + like.getValue() + "%' AND ";
 			}
 		}
 		if (!isAddWhere) {
@@ -359,7 +363,7 @@ public class PhoenixClient {
 				pheonixSQL += "\"" + family + "\"." + "\"" + eqlual.getKey() + "\"='" + eqlual.getValue() + "' AND ";
 			}
 		}
-		if ( (whereLike != null) && (!whereLike.isEmpty())) {
+		if ((whereLike != null) && (!whereLike.isEmpty())) {
 			if (isAddWhere) {
 				pheonixSQL += " WHERE ";
 				isAddWhere = false;
@@ -374,23 +378,25 @@ public class PhoenixClient {
 		System.out.println(pheonixSQL);
 		return selectPage(pheonixSQL, page, strip);
 	}
-	public static Map<String, Map<String, Object>> select(String pheonixSQL,boolean isAddWhere, Map<String, String> whereEqual, Map<String, String> whereLike, Integer page, Integer strip) {
+
+	public static Map<String, Map<String, Object>> select(String pheonixSQL, boolean isAddWhere,
+			Map<String, String> whereEqual, Map<String, String> whereLike, Integer page, Integer strip) {
 		if ((whereEqual != null) && (!whereEqual.isEmpty())) {
 			if (isAddWhere) {
 				pheonixSQL += " WHERE ";
 				isAddWhere = false;
 			}
 			for (Entry<String, String> eqlual : whereEqual.entrySet()) {
-				pheonixSQL += "\""  + eqlual.getKey() + "\"='" + eqlual.getValue() + "' AND ";
+				pheonixSQL += "\"" + eqlual.getKey() + "\"='" + eqlual.getValue() + "' AND ";
 			}
 		}
-		if ( (whereLike != null) && (!whereLike.isEmpty())) {
+		if ((whereLike != null) && (!whereLike.isEmpty())) {
 			if (isAddWhere) {
 				pheonixSQL += " WHERE ";
 				isAddWhere = false;
 			}
 			for (Entry<String, String> like : whereLike.entrySet()) {
-				pheonixSQL += "\""+  like.getKey() + "\" like '%" + like.getValue() + "%' AND ";
+				pheonixSQL += "\"" + like.getKey() + "\" like '%" + like.getValue() + "%' AND ";
 			}
 		}
 		if (!isAddWhere) {
@@ -399,6 +405,7 @@ public class PhoenixClient {
 		System.out.println(pheonixSQL);
 		return selectPage(pheonixSQL, page, strip);
 	}
+
 	/**
 	 * 
 	 * @param pheonixSQL
@@ -422,15 +429,15 @@ public class PhoenixClient {
 			if ((page == null) || (strip == null)) {
 				map = PhoenixClient.executeQuery(pheonixSQL);
 			} else if ((page > 0) && (strip > 0)) {
-				map = PhoenixClient
-						.executeQuery(pheonixSQL + " LIMIT " + strip + " OFFSET " + strip * (page - 1));
-//				Integer count = count("SELECT COUNT(*)" + pheonixSQL.substring(index));
-				Integer count =(Integer) map.get("page").get("totalCount");
+				map = PhoenixClient.executeQuery(pheonixSQL + " LIMIT " + strip + " OFFSET " + strip * (page - 1));
+				// Integer count = count("SELECT COUNT(*)" +
+				// pheonixSQL.substring(index));
+				Integer count = (Integer) map.get("page").get("totalCount");
 				Map<String, Object> pages = new HashMap<String, Object>();
 				pages.put("totalCount", count);
 				pages.put("pageSize", strip);
 				Integer totalPage = count / strip;
-				if ((count % strip != 0)||(totalPage==0)) {
+				if ((count % strip != 0) || (totalPage == 0)) {
 					totalPage++;
 				}
 				pages.put("totalPage", totalPage);
@@ -472,12 +479,12 @@ public class PhoenixClient {
 		Map<String, Map<String, Object>> map = new HashMap<>();
 		// ERROR 504 (42703): Undefined column. columnName\u003dPROJECT"}
 		// ERROR 1012 (42M03): Table undefined. tableName\u003dSOURCE_4845"}
-	
+
 		if (msg.contains("Table undefined")) {
 			PhoenixClient.createView(tableName, family, qualifiers);
 		}
 		if (msg.contains("Undefined column")) {
-			List<String> qualifiersAdd=qualifiers;
+			List<String> qualifiersAdd = qualifiers;
 			if ((whereEqual != null) && (!whereEqual.isEmpty())) {
 				for (String qualifier : whereEqual.keySet()) {
 					if (!qualifiersAdd.contains(qualifier)) {
@@ -498,39 +505,123 @@ public class PhoenixClient {
 		return map;
 
 	}
-	public static Map<String, Object> select(String phoenixSQL) {
+
+	/**
+	 * 
+	 * @param userid
+	 * @param projectid
+	 * @param select
+	 * @param isAddWhere
+	 * @param conditionEqual
+	 * @param conditionLike
+	 * @param currPage
+	 * @param pageSize
+	 * @return
+	 */
+	public Map<String, Object> commenSelect(List<String> userid, List<String> projectid, String select,
+			boolean isAddWhere, Map<String, String> conditionEqual, Map<String, String> conditionLike, Integer currPage,
+			Integer pageSize) {
+		boolean and = false;
+		if (isAddWhere) {
+			select += " WHERE ";
+			isAddWhere = false;
+		} else {
+			select += " AND ";
+			and = true;
+		}
+		if (userid != null && !userid.isEmpty()) {
+			select += "(";
+			for (String string : userid) {
+				select += " \"" + ConstantsHBase.QUALIFIER_USER + "\"= '" + string + "' OR";
+			}
+			select = select.substring(0, select.lastIndexOf("OR")) + ") AND ";
+			and = true;
+		}
+		if (projectid != null && !projectid.isEmpty()) {
+			select += " (";
+			for (String string : projectid) {
+				select += " \"" + ConstantsHBase.QUALIFIER_PROJECT + "\"= '" + string + "' OR";
+			}
+			select = select.substring(0, select.lastIndexOf("OR")) + ") AND ";
+			and = true;
+		}
+		if ((conditionEqual != null) && (!conditionEqual.isEmpty())) {
+			for (Entry<String, String> eqlual : conditionEqual.entrySet()) {
+				select += eqlual.getKey() + "='" + eqlual.getValue() + "' AND ";
+				and = true;
+			}
+		}
+		if ((conditionLike != null) && (!conditionLike.isEmpty())) {
+			for (Entry<String, String> like : conditionLike.entrySet()) {
+				select += like.getKey() + " like '%" + like.getValue() + "%' AND ";
+				and = true;
+			}
+		}
+		if (and) {
+			select = select.substring(0, select.lastIndexOf("AND"));
+		}
+		return select(select, currPage, pageSize);
+	}
+
+	/**
+	 * 通用查询
+	 * 
+	 * @param phoenixSQL
+	 * @param page
+	 * @param strip
+	 * @return
+	 */
+	public static Map<String, Object> select(String phoenixSQL, Integer page, Integer strip) {
 		Map<String, Object> map = new HashMap<>();
-		List<String> head = new ArrayList<String>();
-		List<Map<String, String>> datas=new ArrayList<>();
 		try {
 			Connection conn = PhoenixClient.getConnection();
 			if (conn == null) {
 				map.put("msg", "Phoenix DB连接超时！");
 				return map;
 			}
-
-			PreparedStatement stmt  =conn.prepareStatement(phoenixSQL);
-			ResultSet set = stmt.executeQuery(phoenixSQL);
+			if ((page != null) && (strip != null) && (page > 0) && (strip > 0)) {
+				phoenixSQL += " LIMIT " + strip + " OFFSET " + strip * (page - 1);
+			}
 			// 准备查询
-//			Statement stmt = conn.createStatement();
-//			PhoenixResultSet set = (PhoenixResultSet) stmt.executeQuery(phoenixSQL);
+			PreparedStatement stmt = conn.prepareStatement(phoenixSQL);
+			ResultSet set = stmt.executeQuery(phoenixSQL);
 			// 查询出来的列是不固定的，所以这里通过遍历的方式获取列名
 			ResultSetMetaData meta = set.getMetaData();
+			List<String> head = new ArrayList<String>();
 			if (head.size() == 0) {
 				for (int i = 1, count = meta.getColumnCount(); i <= count; i++) {
-					head.add(meta.getColumnName(i));
+					String id = meta.getColumnName(i);
+					head.add(id);
 				}
 			}
+			List<Map<String, String>> datas = new ArrayList<>();
 			while (set.next()) {
-				Map<String, String> data=new HashMap<>();
+				Map<String, String> data = new HashMap<>();
 				for (int i = 0, len = head.size(); i < len; i++) {
-					data.put(head.get(i), set.getString(head.get(i)));
+					String value = set.getString(head.get(i));
+					if (value == null) {
+						value = "";
+					}
+					data.put(head.get(i), value);
 				}
 				datas.add(data);
 			}
 			// 结果封装
 			map.put("data", datas);
 			map.put("msg", "success");
+			if ((page != null) && (strip != null) && (page > 0) && (strip > 0)) {
+				Map<String, Object> pages = new HashMap<String, Object>();
+				Integer totalCount =datas.size();
+				pages.put("totalCount", totalCount);
+				pages.put("pageSize", strip);
+				Integer totalPage = totalCount / strip;
+				if ((totalCount % strip != 0) || (totalPage == 0)) {
+					totalPage++;
+				}
+				pages.put("totalPage", totalPage);
+				pages.put("currPage", page);
+				map.put("page", pages);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			map.put("msg", "SQL执行出错：" + e.getMessage());
@@ -538,59 +629,69 @@ public class PhoenixClient {
 		}
 		return map;
 	}
+
 	public static void main(String[] args) {
-//		 viewTEST();
-		
+		// viewTEST();
+
 		int cs_id = 62;
 		String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
 		String family = ConstantsHBase.FAMILY_INFO;
 		List<String> qualifiers = new ArrayList<>();
-//		qualifiers.add(ConstantsHBase.QUALIFIER_PROJECT);
-//		qualifiers.add("67");
-//		qualifiers.add("68");
-//		qualifiers.add("69");
-//		qualifiers.add("70");
+		// qualifiers.add(ConstantsHBase.QUALIFIER_PROJECT);
+		// qualifiers.add("67");
+		// qualifiers.add("68");
+		// qualifiers.add("69");
+		// qualifiers.add("70");
 		Integer page = 1;
 		Integer strip = 200;
 		Map<String, String> whereEqual = new HashMap<String, String>();
-//		 whereEqual.put(ConstantsHBase.QUALIFIER_PROJECT, "77");
-//		 whereEqual.put(ConstantsHBase.QUALIFIER_USER, "7");
+		// whereEqual.put(ConstantsHBase.QUALIFIER_PROJECT, "77");
+		// whereEqual.put(ConstantsHBase.QUALIFIER_USER, "7");
 		Map<String, String> whereLike = new HashMap<String, String>();
-//		whereLike.put("70", "");
-		
-		Map<String, Map<String, Object>> result =null;
-//		result =select(tableName, family, qualifiers, whereEqual, whereLike, null, null);
+		// whereLike.put("70", "");
+
+		Map<String, Map<String, Object>> result = null;
+		// result =select(tableName, family, qualifiers, whereEqual, whereLike,
+		// null, null);
 
 		String pheonixSQL;
-//		pheonixSQL="SELECT * FROM "+tableName+" where (id='1_62_1' or id='1_62_2') and \"90\"='eqe'";
-//		pheonixSQL="SELECT B.\"ID\" as aid,\"INFO\".\"1\" as a1,B.\"2\" as a2,BB.\"INFO\".\"B\" FROM  B BB ";
-//		pheonixSQL="SELECT B.\"ID\",B.\"1\",A.\"ID\",A.\"1\" FROM B  LEFT OUTER JOIN  A  ON B.\"1\"=A.\"1\"";
-//		pheonixSQL="SELECT ID,\"89\",\"90\",\"91\",\"92\",\"93\",\"94\" FROM \"SOURCE_62\""
-//				+ " WHERE \"SOURCE_62\".\"USER\"='45' OR \"SOURCE_62\".\"CREATE\"='45' ";
-//		pheonixSQL="SELECT *"
-//				+ " FROM \"FORMAT_62_45\" WHERE  SOURCEDATAID='1_62_1' AND  \"FORMAT_62_45\".\"ID\"!='17' ";
-		pheonixSQL=" SELECT ID,\"INFO\".\"89\",\"INFO\".\"90\",\"INFO\".\"91\",\"INFO\".\"92\",\"INFO\".\"93\","
-		 		+ "\"INFO\".\"94\",\"INFO\".\"95\" FROM \"SOURCE_62\" WHERE \"INFO\".\"PROJECT\"='114' "
-		 		+ "AND \"INFO\".\"89\" like '%%' ";
-		result =selectPage(pheonixSQL, page, strip);
-//		String resultMsg = String.valueOf((result.get("msg")).get("msg"));
-//		for (int j = 0; j < 2; j++) {
-//			resultMsg = String.valueOf((result.get("msg")).get("msg"));
-//			if (resultMsg.equals("success")) {
-//				break;
-//			} else {
-//				result = PhoenixClient.reSelectWhere(resultMsg, tableName, family, qualifiers, whereEqual,
-//						whereLike, page, strip);
-//			}
-//		}
-		System.out.println("\n"+new Gson().toJson(result).toString()+"\n");
-		//		 System.out.println(new Gson().toJson(selectPage(" SELECT * FROM source_60", currPage, pageSize)).toString());
+		// pheonixSQL="SELECT * FROM "+tableName+" where (id='1_62_1' or
+		// id='1_62_2') and \"90\"='eqe'";
+		// pheonixSQL="SELECT B.\"ID\" as aid,\"INFO\".\"1\" as a1,B.\"2\" as
+		// a2,BB.\"INFO\".\"B\" FROM B BB ";
+		// pheonixSQL="SELECT B.\"ID\",B.\"1\",A.\"ID\",A.\"1\" FROM B LEFT
+		// OUTER JOIN A ON B.\"1\"=A.\"1\"";
+		// pheonixSQL="SELECT ID,\"89\",\"90\",\"91\",\"92\",\"93\",\"94\" FROM
+		// \"SOURCE_62\""
+		// + " WHERE \"SOURCE_62\".\"USER\"='45' OR
+		// \"SOURCE_62\".\"CREATE\"='45' ";
+		// pheonixSQL="SELECT *"
+		// + " FROM \"FORMAT_62_45\" WHERE SOURCEDATAID='1_62_1' AND
+		// \"FORMAT_62_45\".\"ID\"!='17' ";
+		pheonixSQL = " SELECT ID,\"INFO\".\"89\",\"INFO\".\"90\",\"INFO\".\"91\",\"INFO\".\"92\",\"INFO\".\"93\","
+				+ "\"INFO\".\"94\",\"INFO\".\"95\" FROM \"SOURCE_62\" WHERE \"INFO\".\"PROJECT\"='114' "
+				+ "AND \"INFO\".\"89\" like '%%' ";
+		result = selectPage(pheonixSQL, page, strip);
+		// String resultMsg = String.valueOf((result.get("msg")).get("msg"));
+		// for (int j = 0; j < 2; j++) {
+		// resultMsg = String.valueOf((result.get("msg")).get("msg"));
+		// if (resultMsg.equals("success")) {
+		// break;
+		// } else {
+		// result = PhoenixClient.reSelectWhere(resultMsg, tableName, family,
+		// qualifiers, whereEqual,
+		// whereLike, page, strip);
+		// }
+		// }
+		System.out.println("\n" + new Gson().toJson(result).toString() + "\n");
+		// System.out.println(new Gson().toJson(selectPage(" SELECT * FROM
+		// source_60", currPage, pageSize)).toString());
 
 		// System.out.println(new Gson().toJson(select(tableName, family,
 		// qualifiers, 10, 2)).toString());
 		//
 		// dropView("FORMAT_1_2");
-//		 viewTEST();
+		// viewTEST();
 		// System.out.println(new
 		// Gson().toJson(PhoenixClient.executeQuery("SELECT * FROM FORMAT_1_2
 		// ")).toString());
@@ -613,23 +714,28 @@ public class PhoenixClient {
 
 		List<String> pheonixSQLs = new ArrayList<>();
 
-//		 pheonixSQLs.add(" DROP table IF  EXISTS \"B\"   ");
-		
-//		 pheonixSQLs.add(" create table IF NOT EXISTS \"B\" (id varchar primary key, \"INFO\".\"B\" varchar,\"INFO\".\"1\" varchar)DATA_BLOCK_ENCODING='NONE'");
-//		pheonixSQLs.add("ALTER table  \"B\" ADD  IF NOT EXISTS \"" + "INFO" + "\"." + "\"2\"" + " varchar");
-//		pheonixSQLs.add("ALTER table  \"B\" ADD  IF NOT EXISTS " + "INFO" + "." + "BB" + " varchar");
-//		
-//		pheonixSQLs.add("UPSERT INTO B SELECT * FROM a");
-		
-//		pheonixSQLs.add("ALTER table  \"b\" DROP COLUMN  IF  EXISTS \"" + "INFO" + "\"." + "\"244\"");
+		// pheonixSQLs.add(" DROP table IF EXISTS \"B\" ");
+
+		// pheonixSQLs.add(" create table IF NOT EXISTS \"B\" (id varchar
+		// primary key, \"INFO\".\"B\" varchar,\"INFO\".\"1\"
+		// varchar)DATA_BLOCK_ENCODING='NONE'");
+		// pheonixSQLs.add("ALTER table \"B\" ADD IF NOT EXISTS \"" + "INFO" +
+		// "\"." + "\"2\"" + " varchar");
+		// pheonixSQLs.add("ALTER table \"B\" ADD IF NOT EXISTS " + "INFO" + "."
+		// + "BB" + " varchar");
+		//
+		// pheonixSQLs.add("UPSERT INTO B SELECT * FROM a");
+
+		// pheonixSQLs.add("ALTER table \"b\" DROP COLUMN IF EXISTS \"" + "INFO"
+		// + "\"." + "\"244\"");
 		// pheonixSQLs.add("ALTER VIEW \"FORMAT_1_2\" ADD INFO.D varchar");
 
 		// pheonixSQLpublic static void viewTESTs.add(" create TABLE IF NOT
 		// EXISTS \"A\" (id varchar not null primary key, \"1\" varchar,\"2\"
 		// varchar)default_column_family='INFO'");
-		 pheonixSQLs.add("upsert into B (ID,\"1\",\"2\") values		 ('1002','b小明','b12')");
-		 pheonixSQLs.add("upsert into B (id,\"1\",\"2\") values		 ('1012','b红','b22')");
-		 pheonixSQLs.add("upsert into B (id,\"1\",\"2\") values		 ('1032','b红2','b21')");
+		pheonixSQLs.add("upsert into B (ID,\"1\",\"2\") values		 ('1002','b小明','b12')");
+		pheonixSQLs.add("upsert into B (id,\"1\",\"2\") values		 ('1012','b红','b22')");
+		pheonixSQLs.add("upsert into B (id,\"1\",\"2\") values		 ('1032','b红2','b21')");
 
 		// pheonixSQLs.add("ALTER TABLE A ADD sex varchar");
 		// pheonixSQLs.add(" upsert into A (ID,sex) values ('100','男')");
