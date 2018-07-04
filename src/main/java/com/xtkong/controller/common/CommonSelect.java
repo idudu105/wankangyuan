@@ -44,27 +44,19 @@ public class CommonSelect {
 	@Autowired
 	ProjectService projectService;
 
-	/**
-	 * @param table
-	 *            [{ 表类型,采集源,格式类型},{}]
-	 * @param tableCol
-	 *            [{表,列1,列2},{}]
-	 */
-	@RequestMapping("/common1")
+	@RequestMapping("/selectCondition")
 	@ResponseBody
-	public String commonSelect(List<List<String>> table, List<List<String>> tableCol) {
-		for (List<String> list : table) {
-			switch (list.get(0)) {
-			case "source":
-
-				break;
-			case "type":
-				break;
-			default:
-				return "";
+	public Map<String, Object> selectCondition(String cs_id, String sourceDataIds) {
+		String selectContdation = "";
+		if (sourceDataIds != null) {
+			for (String sourceDataId : sourceDataIds.split(",")) {
+				selectContdation += ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id + ".id='" + sourceDataId + "' OR ";
 			}
+			selectContdation = selectContdation.substring(0, selectContdation.lastIndexOf("OR"));
 		}
-		return null;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("message", selectContdation);
+		return map;
 	}
 
 	@RequestMapping("/commonSelectJson")
@@ -104,41 +96,34 @@ public class CommonSelect {
 		if (gsonMap.containsKey("pageSize")) {
 			pageSize = gsonMap.get("pageSize").toString();
 		}
-
-		return commonSelect(userid, projectid, select, isAddWhere, conditionEqual, conditionLike, currPage, pageSize);
-	}
-
-	@RequestMapping("/selectCondition")
-	@ResponseBody
-	public Map<String, Object> selectCondition(String cs_id, String sourceDataIds) {
-		String selectContdation = "";
-		if (sourceDataIds != null) {
-			for (String sourceDataId : sourceDataIds.split(",")) {
-				selectContdation += ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id + ".id='" + sourceDataId + "' OR ";
-			}
-			selectContdation = selectContdation.substring(0, selectContdation.lastIndexOf("OR"));
+		String selectContdation = null;
+		if (gsonMap.containsKey("selectContdation")) {
+			selectContdation = gsonMap.get("selectContdation").toString();
 		}
-		Map<String, Object> map = new HashMap<String , Object>();
-		map.put("message", selectContdation);
-		return map;
+		if (selectContdation != null) {
+			return commonSelect(userid, projectid, select, isAddWhere, selectContdation, currPage, pageSize);
+		} else {
+			return commonSelect(userid, projectid, select, isAddWhere, conditionEqual, conditionLike, currPage,
+					pageSize);
+		}
 	}
+
 	/**
 	 * 
 	 * @param userid
 	 * @param projectid
 	 * @param select
 	 * @param isAddWhere
-	 * @param conditionEqual
-	 * @param conditionLike
+	 *            这个参数用于说明最外层select语句中是否已经包含where条件，true表示没有包含，false表示包含。
+	 * @param selectContdation
 	 * @param currPage
 	 * @param pageSize
 	 * @return
 	 */
 	@RequestMapping("/commonSelect1")
 	@ResponseBody
-	public String commonSelect1(List<String> userid, List<String> projectid, String select, String selectContdation,
-			String currPage, String pageSize) {
-		boolean isAddWhere = isAddWhere(select);
+	public String commonSelect(List<String> userid, List<String> projectid, String select, Boolean isAddWhere,
+			String selectContdation, String currPage, String pageSize) {
 		if (isAddWhere) {
 			select += " WHERE ";
 		} else {
@@ -281,31 +266,28 @@ public class CommonSelect {
 		System.out.println("\n" + result + "\n");
 	}
 
-	// @RequestMapping("/commonSelect")
-	// @ResponseBody
-	// public Map<String, Map<String, Object>> commonSelect(List<String> select,
-	// List<String> userid,
-	// List<String> projectid, Integer currPage, Integer pageSize) {
-	// String tableName = null;
-	// Map<String, String> whereEqual = new HashMap<>();
-	// if (userid != null && !userid.isEmpty()) {
-	// for (String string : userid) {
-	// whereEqual.put(ConstantsHBase.QUALIFIER_USER, string);
-	// }
-	// }
-	// if (projectid != null && !projectid.isEmpty()) {
-	// for (String string : projectid) {
-	// whereEqual.put(ConstantsHBase.QUALIFIER_PROJECT, string);
-	// }
-	// }
-	// if (whereEqual != null) {
-	//
-	// }
-	// Map<String, String> whereLike = new HashMap<>();
-	// String condition = null;
-	// return PhoenixClient.select(tableName, select, whereEqual, whereLike,
-	// condition, currPage, pageSize);
-	// }
+	/**
+	 * @param table
+	 *            [{ 表类型,采集源,格式类型},{}]
+	 * @param tableCol
+	 *            [{表,列1,列2},{}]
+	 */
+	@RequestMapping("/common1")
+	@ResponseBody
+	public String commonSelect(List<List<String>> table, List<List<String>> tableCol) {
+		for (List<String> list : table) {
+			switch (list.get(0)) {
+			case "source":
+
+				break;
+			case "type":
+				break;
+			default:
+				return "";
+			}
+		}
+		return null;
+	}
 
 	@RequestMapping("/commonHBaseGetRowkeys")
 	@ResponseBody

@@ -707,42 +707,5 @@ public class PhoenixClient {
 		// }
 	}
 
-	@Test
-	public static void viewTEST() {
-
-		List<String> pheonixSQLs = new ArrayList<>();
-
-		// pheonixSQLs.add(" DROP table IF EXISTS \"B\" ");
-
-		// pheonixSQLs.add(" create table IF NOT EXISTS \"B\" (id varchar
-		// primary key, \"INFO\".\"B\" varchar,\"INFO\".\"1\"
-		// varchar)DATA_BLOCK_ENCODING='NONE'");
-		// pheonixSQLs.add("ALTER table \"B\" ADD IF NOT EXISTS \"" + "INFO" +
-		// "\"." + "\"2\"" + " varchar");
-		// pheonixSQLs.add("ALTER table \"B\" ADD IF NOT EXISTS " + "INFO" + "."
-		// + "BB" + " varchar");
-		//
-		// pheonixSQLs.add("UPSERT INTO B SELECT * FROM a");
-
-		// pheonixSQLs.add("ALTER table \"b\" DROP COLUMN IF EXISTS \"" + "INFO"
-		// + "\"." + "\"244\"");
-		// pheonixSQLs.add("ALTER VIEW \"FORMAT_1_2\" ADD INFO.D varchar");
-
-		// pheonixSQLpublic static void viewTESTs.add(" create TABLE IF NOT
-		// EXISTS \"A\" (id varchar not null primary key, \"1\" varchar,\"2\"
-		// varchar)default_column_family='INFO'");
-		pheonixSQLs.add("upsert into B (ID,\"1\",\"2\") values		 ('1002','b小明','b12')");
-		pheonixSQLs.add("upsert into B (id,\"1\",\"2\") values		 ('1012','b红','b22')");
-		pheonixSQLs.add("upsert into B (id,\"1\",\"2\") values		 ('1032','b红2','b21')");
-
-		// pheonixSQLs.add("ALTER TABLE A ADD sex varchar");
-		// pheonixSQLs.add(" upsert into A (ID,sex) values ('100','男')");
-		// pheonixSQLs.add(" upsert into test.person (idcardnum,sex) values
-		// ('101','女')");
-		// pheonixSQLs.add(" upsert into test.person (idcardnum,sex) values
-		// ('103','男')");
-
-		PhoenixClient.executeUpdate(pheonixSQLs);
-	}
 
 }
