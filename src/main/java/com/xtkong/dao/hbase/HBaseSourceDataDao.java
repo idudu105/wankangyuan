@@ -68,6 +68,8 @@ public class HBaseSourceDataDao {
 		Put put = new Put(Bytes.toBytes(rowKey));
 		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(ConstantsHBase.QUALIFIER_CREATE),
 				Bytes.toBytes(String.valueOf(uid)));
+		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(ConstantsHBase.QUALIFIER_USER),
+				Bytes.toBytes(String.valueOf(uid)));
 		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(ConstantsHBase.QUALIFIER_PUBLIC),
 				Bytes.toBytes(ConstantsHBase.VALUE_PUBLIC_FALSE));
 		for (Entry<String, String> sourceFieldData : sourceFieldDatas.entrySet()) {

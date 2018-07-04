@@ -43,7 +43,7 @@ public interface FormatFieldDao {
 	@Select("select ft_id from format_field where ff_id=#{ff_id} ")
 	public Integer getFormatField_ft_id(@Param("ff_id") Integer ff_id);
 
-	@Select("select ff_id from format_field where ft_id=#{ft_id}  and ff_name=#{ff_name}")
+	@Select("select ff_id from format_field where ft_id=#{ft_id}  and ff_name=#{ff_name} ORDER BY ff_id ASC LIMIT 1")
 	public Integer getFormatField_ff_id(@Param("ft_id") Integer ft_id, @Param("ff_name") String ff_name);
 
 	@Delete("delete from format_field where ff_id=#{ff_id}")

@@ -3,7 +3,6 @@
  * */
 package com.xtkong.util;
 
-import java.io.FileInputStream;
 import java.util.Properties;
 
 public class ConstantsHBase {
@@ -25,17 +24,17 @@ public class ConstantsHBase {
 	public static final String FAMILY_INFO = "INFO";
 	/** 各表列名 */
 	public static final String QUALIFIER_GID_GID_GID = "GID";
-//source
+	// source
 	public static final String QUALIFIER_PROJECT = "PROJECT";// 项目
 	public static final String QUALIFIER_CREATE = "CREATE";// 我创建的
 	public static final String QUALIFIER_USER = "USER";// 我的
 	public static final String QUALIFIER_PUBLIC = "PUBLIC";// 公共，1公共，0不公开（默认）
-//node
+	// node
 	public static final String QUALIFIER_FORMATTYPE = "FORMATTYPE";// 结点格式类型
 	public static final String QUALIFIER_NODENAME = "NODENAME";// 结点名
-//format,node	
+	// format,node
 	public static final String QUALIFIER_SOURCEDATAID = "SOURCEDATAID";// 源数据id
-//format
+	// format
 	public static final String QUALIFIER_FORMATNODEID = "FORMATNODEID";// 结点id
 
 	public static final String QUALIFIER_NODE = "NODE";
@@ -60,17 +59,17 @@ public class ConstantsHBase {
 	// 扫描器最大缓冲，一次扫描请求返回数据量
 	public static final int SCAN_CACHING_MAX = 50;
 	static {
-		String path;
-		FileInputStream fis;
-		try {
-			// path = ConstantsHBase.class.getResource("/").getPath();
-			path = System.getProperty("user.dir"); // 获得项目根目录的绝对路径
-			// System.out.println(path +
-			// "\\src\\main\\resources\\config.properties");
-			fis = new FileInputStream(path + "\\src\\main\\resources\\config.properties");
+		try {			
 			Properties properties = new Properties();
-			properties.load(fis);
-			fis.close();
+			try {
+				properties.load(ConstantsHBase.class.getClass().getResourceAsStream("/config.properties"));
+			} catch (Exception e) {
+				try {
+					properties.load(ConstantsHBase.class.getClassLoader().getResourceAsStream("/config.properties"));
+				} catch (Exception e1) {
+					properties.load(ConstantsHBase.class.getResourceAsStream("/config.properties"));
+				}
+			}
 
 			String hbaseZookeeperQuorum = properties.getProperty("hbase.zookeeper.quorum");
 			if (hbaseZookeeperQuorum != null) {
@@ -97,5 +96,8 @@ public class ConstantsHBase {
 			e.printStackTrace();
 			System.out.println("初始化配置文件失败！");
 		}
+	}
+
+	public static void main(String[] args) {
 	}
 }

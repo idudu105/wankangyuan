@@ -30,7 +30,7 @@ public interface SourceFieldDao {
 	@Select("select * from view_collection_source_field where cs_id=#{cs_id} order by csf_id ")
 	public List<SourceField> getSourceFields(@Param("cs_id") int cs_id);
 	
-	@Select("select csf_id from collection_source_field where cs_id=#{cs_id} and csf_name=#{csf_name} ")
+	@Select("select csf_id from collection_source_field where cs_id=#{cs_id} and csf_name=#{csf_name} ORDER BY csf_id ASC LIMIT 1 ")
 	public Integer getSourceFieldId(@Param("cs_id") int cs_id,@Param("csf_name") String csf_name);
 
 	@Select("select * from view_collection_source_field where csf_id=#{csf_id}")

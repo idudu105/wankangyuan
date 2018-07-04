@@ -118,11 +118,11 @@ public class SourceDataController {
 			// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
 			switch (type) {
 			case "1":
-				condition = PhoenixClient.getPheonixSQLQualifier(tableName, ConstantsHBase.QUALIFIER_USER) + "='"
-						+ String.valueOf(user.getId()) + "' OR "
-						+ PhoenixClient.getPheonixSQLQualifier(tableName, ConstantsHBase.QUALIFIER_CREATE) + "='"
-						+ String.valueOf(user.getId()) + "'";
-//				whereEqual.put(ConstantsHBase.QUALIFIER_USER, String.valueOf(user.getId()));
+//				condition = PhoenixClient.getPheonixSQLQualifier(tableName, ConstantsHBase.QUALIFIER_USER) + "='"
+//						+ String.valueOf(user.getId()) + "' OR "
+//						+ PhoenixClient.getPheonixSQLQualifier(tableName, ConstantsHBase.QUALIFIER_CREATE) + "='"
+//						+ String.valueOf(user.getId()) + "'";
+				whereEqual.put(ConstantsHBase.QUALIFIER_USER, String.valueOf(user.getId()));
 				break;
 			case "2":
 				SourceField publicStatus = new SourceField();
