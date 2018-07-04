@@ -84,12 +84,12 @@
                 <div class="inportT">
                     <div class="inportTt">选择格式数据</div>
                     <select id="source_Select" class="pro_menusel">
-						<c:forEach items="${sources}" var="source">
-							<c:if test="${source.cs_id!=thiscs_id}">
-								<option value="${source.cs_id}">${source.cs_name}</option>
+						<c:forEach items="${sources}" var="sourceTemp">
+							<c:if test="${sourceTemp.cs_id!=source.cs_id}">
+								<option value="${sourceTemp.cs_id}">${sourceTemp.cs_name}</option>
 							</c:if>
-							<c:if test="${source.cs_id==thiscs_id}">										
-								<option value="${source.cs_id}" selected="selected">${source.cs_name}</option>
+							<c:if test="${sourceTemp.cs_id==source.cs_id}">										
+								<option value="${sourceTemp.cs_id}" selected="selected">${sourceTemp.cs_name}</option>
 							</c:if>
 						</c:forEach>						
 					</select>
@@ -135,17 +135,57 @@
                     </div>
                 </div>
                 <div class="proreB">
-               		<input type="button" class="proreb proreb1" value="提交" />
+               		<input id="submit_data" type="button" class="proreb" value="提交" />
                 </div>
             </div>
         </div>
     </div>
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/wankangyuan/static/js/layer/layer.js"></script>
     <script type="text/javascript">
+    	
+    	//切换数据源
 	    $("#source_Select").change(function(){
-			cs_id = $("#source_Select").val();
-				window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id;
+			var cs_id = $("#source_Select").val();
+			var p_id = ${p_id};
+			window.location.href="/wankangyuan/projectFormatData/getAllSourceDatas?cs_id="+cs_id+"&p_id="+p_id;
 		});
+    	//提交勾选的数据
+    	$("#submit_data").click(function (){
+    		
+    		var afuxuanK=document.querySelectorAll('.fuxuanK2');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var ids = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		ids.push(afuxuan[i].name);
+            	}
+            }
+            if(ids == ""){
+            	layer.msg("请勾选源数据");
+            	return;
+            }
+            var cs_id = $("#source_Select").val();
+            $.ajax({
+            	url:"/wankangyuan/commen/selectCondition",
+            	type:"post",
+            	data:{
+            		cs_id:cs_id,
+            		sourceDataIds:ids.join(",")
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		layer.msg(data.message);
+            	},
+            	error : function(){
+            		layer.msg("联网失败");
+            	}
+            });
+    	});	
+	    
     </script>
 </body>
 </html>

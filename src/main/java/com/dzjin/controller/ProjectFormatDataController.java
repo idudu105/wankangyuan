@@ -187,7 +187,7 @@ public class ProjectFormatDataController {
 	@RequestMapping("/getAllSourceDatas")
 	public String getAllSourceDatas(HttpSession httpSession, Integer p_id, Integer cs_id) {
 		List<Source> sources = sourceService.getSourcesForUser();
-
+		httpSession.setAttribute("p_id", p_id);
 		httpSession.setAttribute("sources", sources);// 采集源列表
 
 		if (!sources.isEmpty()) {
@@ -225,7 +225,7 @@ public class ProjectFormatDataController {
 			httpSession.setAttribute("sourceDatas", result.get("records").get("data"));// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
 
 		}
-		return "redirect:/jsp/project/data_reselect.jsp";
+		return "/jsp/project/data_reselect.jsp";
 	}
 
 	@RequestMapping("/getSourceDataById")
