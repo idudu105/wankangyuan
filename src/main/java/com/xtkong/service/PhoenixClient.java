@@ -633,7 +633,7 @@ public class PhoenixClient {
 	public static void main(String[] args) {
 		// viewTEST();
 
-		int cs_id = 62;
+		int cs_id = 49;
 		String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
 		String family = ConstantsHBase.FAMILY_INFO;
 		List<String> qualifiers = new ArrayList<>();
@@ -668,9 +668,7 @@ public class PhoenixClient {
 		// pheonixSQL="SELECT *"
 		// + " FROM \"FORMAT_62_45\" WHERE SOURCEDATAID='1_62_1' AND
 		// \"FORMAT_62_45\".\"ID\"!='17' ";
-		pheonixSQL = " SELECT ID,\"INFO\".\"89\",\"INFO\".\"90\",\"INFO\".\"91\",\"INFO\".\"92\",\"INFO\".\"93\","
-				+ "\"INFO\".\"94\",\"INFO\".\"95\" FROM \"SOURCE_62\" WHERE \"INFO\".\"PROJECT\"='114' "
-				+ "AND \"INFO\".\"89\" like '%%' ";
+		pheonixSQL = " SELECT * FROM \"SOURCE_49\"  ";
 		result = selectPage(pheonixSQL, page, strip);
 		// String resultMsg = String.valueOf((result.get("msg")).get("msg"));
 		// for (int j = 0; j < 2; j++) {
