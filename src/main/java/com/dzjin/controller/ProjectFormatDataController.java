@@ -58,10 +58,11 @@ public class ProjectFormatDataController {
 
 		String[] source_data_id = sourceDataIds.split(",");
 
-		Map<String, String> sourceFieldDatas=new HashMap<>()				;
+		Map<String, String> sourceFieldDatas = new HashMap<>();
 		sourceFieldDatas.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
 		for (int i = 0; i < source_data_id.length; i++) {
-//			projectDataService.insert(new ProjectDataRelation(p_id, source_data_id[i]));
+			// projectDataService.insert(new ProjectDataRelation(p_id,
+			// source_data_id[i]));
 			HBaseSourceDataDao.updateSourceData(cs_id, source_data_id[i], sourceFieldDatas);
 		}
 		/*
@@ -83,10 +84,11 @@ public class ProjectFormatDataController {
 		Map<String, Object> map = new HashMap<>();
 
 		String[] source_data_id = sourceDataIds.split(",");
-		Map<String, String> sourceFieldDatas=new HashMap<>();
+		Map<String, String> sourceFieldDatas = new HashMap<>();
 		sourceFieldDatas.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf("  "));
 		for (int i = 0; i < source_data_id.length; i++) {
-//			projectDataService.remove(new ProjectDataRelation(p_id, source_data_id[i]));
+			// projectDataService.remove(new ProjectDataRelation(p_id,
+			// source_data_id[i]));
 			HBaseSourceDataDao.updateSourceData(cs_id, source_data_id[i], sourceFieldDatas);
 		}
 		/*
@@ -180,6 +182,49 @@ public class ProjectFormatDataController {
 
 		}
 		return "redirect:/jsp/project/project_data.jsp";
+	}
+
+	@RequestMapping("/getAllSourceDatas")
+	public String getAllSourceDatas(HttpSession httpSession, Integer p_id, Integer cs_id) {
+		List<Source> sources = sourceService.getSourcesForUser();
+
+		httpSession.setAttribute("sources", sources);// 采集源列表
+
+		if (!sources.isEmpty()) {
+			if (cs_id == null) {
+				cs_id = sourceService.getSourcesForUserLimit(1).get(0).getCs_id();
+			}
+			Source source = sourceService.getSourceByCs_id(cs_id);
+			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
+			httpSession.setAttribute("source", source);// 采集源字段列表
+			String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
+			String family = ConstantsHBase.FAMILY_INFO;
+
+			List<String> qualifiers = new ArrayList<>();
+			for (SourceField sourceField : source.getSourceFields()) {
+				qualifiers.add(String.valueOf(sourceField.getCsf_id()));
+			}
+			Map<String, String> whereEqual = new HashMap<>();
+			whereEqual.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
+
+			Map<String, String> whereLike = new HashMap<>();
+
+			Map<String, Map<String, Object>> result = PhoenixClient.select(tableName, family, qualifiers, whereEqual,
+					whereLike, null, null);
+			String resultMsg = String.valueOf((result.get("msg")).get("msg"));
+			for (int j = 0; j < 6; j++) {
+				resultMsg = String.valueOf((result.get("msg")).get("msg"));
+				if (resultMsg.equals("success")) {
+					break;
+				} else {
+					result = PhoenixClient.reSelectWhere(resultMsg, tableName, family, qualifiers, whereEqual,
+							whereLike, null, null);
+				}
+			}
+			httpSession.setAttribute("sourceDatas", result.get("records").get("data"));// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
+
+		}
+		return "redirect:/jsp/project/data_reselect.jsp";
 	}
 
 	@RequestMapping("/getSourceDataById")
