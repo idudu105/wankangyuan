@@ -624,7 +624,7 @@ public class PhoenixClient {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			map.put("msg", "SQL执行出错：" + e.getMessage());
+			map.put("msg", "SQL执行出错：\n SQL:  "+phoenixSQL+"\n异常信息:  " + e.getMessage());
 			return map;
 		}
 		return map;

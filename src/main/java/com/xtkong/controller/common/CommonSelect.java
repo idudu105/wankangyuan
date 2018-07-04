@@ -1,4 +1,4 @@
-package com.xtkong.controller.admin;
+package com.xtkong.controller.common;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +31,7 @@ import com.xtkong.util.ConstantsHBase;
 import com.xtkong.util.HBaseDB;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/common")
 public class CommonSelect {
 	@Autowired
 	SourceService sourceService;
@@ -50,9 +50,9 @@ public class CommonSelect {
 	 * @param tableCol
 	 *            [{表,列1,列2},{}]
 	 */
-	@RequestMapping("/commen1")
+	@RequestMapping("/common1")
 	@ResponseBody
-	public String commenSelect(List<List<String>> table, List<List<String>> tableCol) {
+	public String commonSelect(List<List<String>> table, List<List<String>> tableCol) {
 		for (List<String> list : table) {
 			switch (list.get(0)) {
 			case "source":
@@ -67,9 +67,9 @@ public class CommonSelect {
 		return null;
 	}
 
-	@RequestMapping("/commenSelectJson")
+	@RequestMapping("/commonSelectJson")
 	@ResponseBody
-	public String commenSelect(String jsonStr) {
+	public String commonSelect(String jsonStr) {
 		Map<String, Object> gsonMap = new Gson().fromJson(jsonStr, new TypeToken<Map<String, Object>>() {
 		}.getType());
 		List<String> userid = null;
@@ -98,27 +98,29 @@ public class CommonSelect {
 		}
 		String currPage = null;
 		if (gsonMap.containsKey("currPage")) {
-			currPage=gsonMap.get("currPage").toString();
+			currPage = gsonMap.get("currPage").toString();
 		}
 		String pageSize = null;
 		if (gsonMap.containsKey("pageSize")) {
-			pageSize=gsonMap.get("pageSize").toString();
+			pageSize = gsonMap.get("pageSize").toString();
 		}
 
-		return commenSelect(userid, projectid, select, isAddWhere, conditionEqual, conditionLike, currPage, pageSize);
+		return commonSelect(userid, projectid, select, isAddWhere, conditionEqual, conditionLike, currPage, pageSize);
 	}
 
-	@RequestMapping("/selectContdation")
+	@RequestMapping("/selectCondition")
 	@ResponseBody
-	public String selectContdation(String cs_id, String sourceDataIds) {
+	public Map<String, Object> selectCondition(String cs_id, String sourceDataIds) {
 		String selectContdation = "";
 		if (sourceDataIds != null) {
 			for (String sourceDataId : sourceDataIds.split(",")) {
-				selectContdation += ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id + ".id=" + sourceDataId + " OR ";
+				selectContdation += ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id + ".id='" + sourceDataId + "' OR ";
 			}
 			selectContdation = selectContdation.substring(0, selectContdation.lastIndexOf("OR"));
 		}
-		return selectContdation;
+		Map<String, Object> map = new HashMap<String , Object>();
+		map.put("message", selectContdation);
+		return map;
 	}
 	/**
 	 * 
@@ -132,35 +134,37 @@ public class CommonSelect {
 	 * @param pageSize
 	 * @return
 	 */
-	@RequestMapping("/commenSelect1")
+	@RequestMapping("/commonSelect1")
 	@ResponseBody
-	public String commenSelect1(List<String> userid, List<String> projectid, String select, String selectContdation, String currPage, String pageSize) {
-		boolean isAddWhere=false;
-		boolean and = false;
+	public String commonSelect1(List<String> userid, List<String> projectid, String select, String selectContdation,
+			String currPage, String pageSize) {
+		boolean isAddWhere = isAddWhere(select);
 		if (isAddWhere) {
 			select += " WHERE ";
-			isAddWhere = false;
 		} else {
 			select += " AND ";
-			and = true;
 		}
 		if (userid != null && !userid.isEmpty()) {
 			select += "(";
 			for (String string : userid) {
-				select += " \"" + ConstantsHBase.QUALIFIER_USER + "\"= '" + string + "' OR";
+				select += " \"" + ConstantsHBase.QUALIFIER_USER + "\"= '" + string + "' OR ";
 			}
 			select = select.substring(0, select.lastIndexOf("OR")) + ") AND ";
-			and = true;
 		}
 		if (projectid != null && !projectid.isEmpty()) {
 			select += " (";
 			for (String string : projectid) {
-				select += " \"" + ConstantsHBase.QUALIFIER_PROJECT + "\"= '" + string + "' OR";
+				select += " \"" + ConstantsHBase.QUALIFIER_PROJECT + "\"= '" + string + "' OR ";
 			}
 			select = select.substring(0, select.lastIndexOf("OR")) + ") AND ";
-			and = true;
 		}
-		if (and) {
+		if (selectContdation != null) {
+			select += " " + selectContdation + " ";
+		}
+		if (select.trim().endsWith("WHERE")) {
+			select = select.substring(0, select.lastIndexOf("WHERE"));
+		}
+		if (select.trim().endsWith("AND")) {
 			select = select.substring(0, select.lastIndexOf("AND"));
 		}
 		if (currPage == null) {
@@ -172,6 +176,12 @@ public class CommonSelect {
 		return new Gson().toJson(PhoenixClient.select(select, Integer.valueOf(currPage), Integer.valueOf(pageSize)))
 				.toString();
 	}
+
+	private boolean isAddWhere(String select) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	/**
 	 * 
 	 * @param userid
@@ -184,9 +194,9 @@ public class CommonSelect {
 	 * @param pageSize
 	 * @return
 	 */
-	@RequestMapping("/commenSelect")
+	@RequestMapping("/commonSelect")
 	@ResponseBody
-	public String commenSelect(List<String> userid, List<String> projectid, String select, boolean isAddWhere,
+	public String commonSelect(List<String> userid, List<String> projectid, String select, boolean isAddWhere,
 			Map<String, String> conditionEqual, Map<String, String> conditionLike, String currPage, String pageSize) {
 
 		boolean and = false;
@@ -239,7 +249,7 @@ public class CommonSelect {
 	}
 
 	public static void main(String[] args) {
-		CommonSelect commenSl = new CommonSelect();
+		CommonSelect commonSl = new CommonSelect();
 		List<String> userid = new ArrayList<>();
 		// userid.add("45");
 		// userid.add("5");
@@ -263,17 +273,17 @@ public class CommonSelect {
 		jsonStr = "{\"userid\":[\"45\",\"1\"],\"projectid\":[\"94\",\"114\"],\"select\":\"SELECT SOURCE_62.PROJECT,SOURCE_62.user,SOURCE_62.\"89\",SOURCE_62.\"90\",SOURCE_62.\"91\",SOURCE_62.\"92\",SOURCE_62.\"93\",FORMAT_62_45.FORMAT_62_45 FROM \"SOURCE_62\" \",\"isAddWhere\":true,\"conditionEqual\":{\"SOURCE_62.\"92\"\":\"value92\",\"SOURCE_62.\"93\"\":\"SOURCE_62.id\"},\"conditionLike\":{\"SOURCE_62.\"90\"\":\"value91\"},\"currPage\":\"1\",\"pageSize\":\"20\"}";
 		String result = null;
 		//
-		// result = commenSl.commenSelect(userid, projectid, select, isAddWhere,
+		// result = commonSl.commonSelect(userid, projectid, select, isAddWhere,
 		// conditionEqual, conditionLike, currPage,
 		// pageSize);
 
-		result = commenSl.commenSelect(jsonStr);
+		result = commonSl.commonSelect(jsonStr);
 		System.out.println("\n" + result + "\n");
 	}
 
-	// @RequestMapping("/commenSelect")
+	// @RequestMapping("/commonSelect")
 	// @ResponseBody
-	// public Map<String, Map<String, Object>> commenSelect(List<String> select,
+	// public Map<String, Map<String, Object>> commonSelect(List<String> select,
 	// List<String> userid,
 	// List<String> projectid, Integer currPage, Integer pageSize) {
 	// String tableName = null;
@@ -297,17 +307,17 @@ public class CommonSelect {
 	// condition, currPage, pageSize);
 	// }
 
-	@RequestMapping("/commenHBaseGetRowkeys")
+	@RequestMapping("/commonHBaseGetRowkeys")
 	@ResponseBody
-	public List<String> commenHBaseGetRowkeys(String tableName, String prefixFilter,
+	public List<String> commonHBaseGetRowkeys(String tableName, String prefixFilter,
 			Map<String, String> columnValueFilters) {
 		return HBaseDB.getInstance().getRowkeys(tableName, prefixFilter, columnValueFilters);
 
 	}
 
-	@RequestMapping("/commenHBaseScan")
+	@RequestMapping("/commonHBaseScan")
 	@ResponseBody
-	public List<List<String>> commenHBaseScan(String tableName, Scan scan, List<String> qualifiers) {
+	public List<List<String>> commonHBaseScan(String tableName, Scan scan, List<String> qualifiers) {
 
 		HBaseDB.getInstance();
 		return HBaseDB.getQuelifierValues(tableName, scan, qualifiers);
