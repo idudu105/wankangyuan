@@ -197,6 +197,7 @@ public class ProjectFormatDataController {
 			Source source = sourceService.getSourceByCs_id(cs_id);
 			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
 			httpSession.setAttribute("source", source);// 采集源字段列表
+			
 			String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
 			String family = ConstantsHBase.FAMILY_INFO;
 

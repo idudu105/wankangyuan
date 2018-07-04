@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.druid.sql.visitor.functions.If;
 import com.dzjin.service.ProjectService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -88,7 +89,18 @@ public class CommonSelect {
 
 		return commenSelect(userid, projectid, select, isAddWhere, conditionEqual, conditionLike, currPage, pageSize);
 	}
-
+	
+	@RequestMapping("/selectContdation")
+	public String selectContdation(String cs_id,String sourceDataIds) {		
+		String selectContdation="";
+		if (sourceDataIds != null) {
+			for (String sourceDataId : sourceDataIds.split(",")) {
+				selectContdation+=ConstantsHBase.TABLE_PREFIX_SOURCE_+cs_id+".id="+sourceDataId+" OR ";
+			}
+			selectContdation = selectContdation.substring(0, selectContdation.lastIndexOf("OR")) ;
+		}
+		return selectContdation;
+	}
 	/**
 	 * 
 	 * @param userid
