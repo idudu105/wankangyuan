@@ -164,7 +164,7 @@ public class ProjectFormatDataController {
 			}
 
 			Map<String, Map<String, Object>> result = PhoenixClient.select(tableName, family, qualifiers, whereEqual,
-					whereLike, strip, page);
+					whereLike, page, strip);
 			String resultMsg = String.valueOf((result.get("msg")).get("msg"));
 			for (int j = 0; j < 6; j++) {
 				resultMsg = String.valueOf((result.get("msg")).get("msg"));

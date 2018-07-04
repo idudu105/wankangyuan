@@ -44,12 +44,6 @@ public class CommonSelect {
 	@Autowired
 	ProjectService projectService;
 
-	@RequestMapping("/commenSelectSql")
-	@ResponseBody
-	public String commenSql(String pheonixSQL) {
-		return new Gson().toJson(PhoenixClient.executeQuery(pheonixSQL));
-	}
-
 	/**
 	 * @param table
 	 *            [{ 表类型,采集源,格式类型},{}]
@@ -78,28 +72,105 @@ public class CommonSelect {
 	public String commenSelect(String jsonStr) {
 		Map<String, Object> gsonMap = new Gson().fromJson(jsonStr, new TypeToken<Map<String, Object>>() {
 		}.getType());
-		List<String> userid = (List<String>) gsonMap.get("userid");
-		List<String> projectid = (List<String>) gsonMap.get("projectid");
-		String select = (String) gsonMap.get("select");
-		boolean isAddWhere = (boolean) gsonMap.get("isAddWhere");
-		Map<String, String> conditionEqual = (Map<String, String>) gsonMap.get("conditionEqual");
-		Map<String, String> conditionLike = (Map<String, String>) gsonMap.get("conditionLike");
-		String currPage = gsonMap.get("currPage").toString();
-		String pageSize = gsonMap.get("pageSize").toString();
+		List<String> userid = null;
+		if (gsonMap.containsKey("userid")) {
+			userid = (List<String>) gsonMap.get("userid");
+		}
+		List<String> projectid = null;
+		if (gsonMap.containsKey("projectid")) {
+			projectid = (List<String>) gsonMap.get("projectid");
+		}
+		String select = null;
+		if (gsonMap.containsKey("select")) {
+			select = (String) gsonMap.get("select");
+		}
+		boolean isAddWhere = false;
+		if (gsonMap.containsKey("isAddWhere")) {
+			isAddWhere = (boolean) gsonMap.get("isAddWhere");
+		}
+		Map<String, String> conditionEqual = null;
+		if (gsonMap.containsKey("conditionEqual")) {
+			conditionEqual = (Map<String, String>) gsonMap.get("conditionEqual");
+		}
+		Map<String, String> conditionLike = null;
+		if (gsonMap.containsKey("conditionLike")) {
+			conditionLike = (Map<String, String>) gsonMap.get("conditionLike");
+		}
+		String currPage = null;
+		if (gsonMap.containsKey("currPage")) {
+			currPage=gsonMap.get("currPage").toString();
+		}
+		String pageSize = null;
+		if (gsonMap.containsKey("pageSize")) {
+			pageSize=gsonMap.get("pageSize").toString();
+		}
 
 		return commenSelect(userid, projectid, select, isAddWhere, conditionEqual, conditionLike, currPage, pageSize);
 	}
-	
+
 	@RequestMapping("/selectContdation")
-	public String selectContdation(String cs_id,String sourceDataIds) {		
-		String selectContdation="";
+	@ResponseBody
+	public String selectContdation(String cs_id, String sourceDataIds) {
+		String selectContdation = "";
 		if (sourceDataIds != null) {
 			for (String sourceDataId : sourceDataIds.split(",")) {
-				selectContdation+=ConstantsHBase.TABLE_PREFIX_SOURCE_+cs_id+".id="+sourceDataId+" OR ";
+				selectContdation += ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id + ".id=" + sourceDataId + " OR ";
 			}
-			selectContdation = selectContdation.substring(0, selectContdation.lastIndexOf("OR")) ;
+			selectContdation = selectContdation.substring(0, selectContdation.lastIndexOf("OR"));
 		}
 		return selectContdation;
+	}
+	/**
+	 * 
+	 * @param userid
+	 * @param projectid
+	 * @param select
+	 * @param isAddWhere
+	 * @param conditionEqual
+	 * @param conditionLike
+	 * @param currPage
+	 * @param pageSize
+	 * @return
+	 */
+	@RequestMapping("/commenSelect1")
+	@ResponseBody
+	public String commenSelect1(List<String> userid, List<String> projectid, String select, String selectContdation, String currPage, String pageSize) {
+		boolean isAddWhere=false;
+		boolean and = false;
+		if (isAddWhere) {
+			select += " WHERE ";
+			isAddWhere = false;
+		} else {
+			select += " AND ";
+			and = true;
+		}
+		if (userid != null && !userid.isEmpty()) {
+			select += "(";
+			for (String string : userid) {
+				select += " \"" + ConstantsHBase.QUALIFIER_USER + "\"= '" + string + "' OR";
+			}
+			select = select.substring(0, select.lastIndexOf("OR")) + ") AND ";
+			and = true;
+		}
+		if (projectid != null && !projectid.isEmpty()) {
+			select += " (";
+			for (String string : projectid) {
+				select += " \"" + ConstantsHBase.QUALIFIER_PROJECT + "\"= '" + string + "' OR";
+			}
+			select = select.substring(0, select.lastIndexOf("OR")) + ") AND ";
+			and = true;
+		}
+		if (and) {
+			select = select.substring(0, select.lastIndexOf("AND"));
+		}
+		if (currPage == null) {
+			currPage = "0";
+		}
+		if (pageSize == null) {
+			pageSize = "0";
+		}
+		return new Gson().toJson(PhoenixClient.select(select, Integer.valueOf(currPage), Integer.valueOf(pageSize)))
+				.toString();
 	}
 	/**
 	 * 
@@ -158,13 +229,12 @@ public class CommonSelect {
 			select = select.substring(0, select.lastIndexOf("AND"));
 		}
 		if (currPage == null) {
-			currPage="0";
+			currPage = "0";
 		}
 		if (pageSize == null) {
-			pageSize="0";
+			pageSize = "0";
 		}
-		return new Gson()
-				.toJson(PhoenixClient.select(select, Integer.valueOf(currPage), Integer.valueOf(pageSize)))
+		return new Gson().toJson(PhoenixClient.select(select, Integer.valueOf(currPage), Integer.valueOf(pageSize)))
 				.toString();
 	}
 
@@ -192,11 +262,12 @@ public class CommonSelect {
 		String jsonStr = null;
 		jsonStr = "{\"userid\":[\"45\",\"1\"],\"projectid\":[\"94\",\"114\"],\"select\":\"SELECT SOURCE_62.PROJECT,SOURCE_62.user,SOURCE_62.\"89\",SOURCE_62.\"90\",SOURCE_62.\"91\",SOURCE_62.\"92\",SOURCE_62.\"93\",FORMAT_62_45.FORMAT_62_45 FROM \"SOURCE_62\" \",\"isAddWhere\":true,\"conditionEqual\":{\"SOURCE_62.\"92\"\":\"value92\",\"SOURCE_62.\"93\"\":\"SOURCE_62.id\"},\"conditionLike\":{\"SOURCE_62.\"90\"\":\"value91\"},\"currPage\":\"1\",\"pageSize\":\"20\"}";
 		String result = null;
-//
-//		result = commenSl.commenSelect(userid, projectid, select, isAddWhere, conditionEqual, conditionLike, currPage,
-//				pageSize);
+		//
+		// result = commenSl.commenSelect(userid, projectid, select, isAddWhere,
+		// conditionEqual, conditionLike, currPage,
+		// pageSize);
 
-		 result = commenSl.commenSelect(jsonStr);
+		result = commenSl.commenSelect(jsonStr);
 		System.out.println("\n" + result + "\n");
 	}
 
