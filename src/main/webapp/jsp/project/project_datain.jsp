@@ -40,8 +40,8 @@
                     <div class="topT ">应用</div>
                 </a>
                 <div class="touxiangK">
-                    <a href="/wankangyuan/userInfo">
-                        <img src="${user.headimg }" alt="" class="touxiang" />
+                   <a href="/wankangyuan/userInfo">
+                        <img src="${user.headimg }" onerror='this.src="/wankangyuan/static/img/head.jpg"' class="touxiang" />
                     </a>
                     <div class="userbutK">
                         <a href="/wankangyuan/userInfo">

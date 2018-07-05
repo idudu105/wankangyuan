@@ -42,8 +42,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </a>
                     <div class="userbutK">
                         <a href="/wankangyuan/userInfo">
-                            <div class="userbut">用户信息</div>
-                        </a>
+                        	<img src="${user.headimg }" onerror='this.src="/wankangyuan/static/img/head.jpg"' class="touxiang" />
+                    	</a>
                         <a href="/wankangyuan/message/viewMessage">
                             <div class="userbut">系统消息
                             <c:if test="${systemMSG }">
