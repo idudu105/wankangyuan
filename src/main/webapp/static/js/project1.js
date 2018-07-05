@@ -347,7 +347,7 @@ function pro_detail(){
     //     })(i)
     // }
     
-    var oxiangmuRMzKC=document.querySelectorAll('.xiangmuRMzKC')[0];//长图
+	var oxiangmuRMzKC=document.querySelectorAll('.xiangmuRMzKC')[0];//长图
     var axiangmuRMi=oxiangmuRMzKC.querySelectorAll('.xiangmuRMi');//图
     var DWlength=oxiangmuRMzKC.querySelectorAll('.xiangmuRMz')[0].offsetWidth;//取单位图宽度
 
