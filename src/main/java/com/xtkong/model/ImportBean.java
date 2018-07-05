@@ -11,6 +11,7 @@ public class ImportBean {
 	private String userid;//给哪个用户导入数据
 	private Basic basic;//采集源基础信息
 	private List<Analysis> analysisList;//配置的分析结果
+	@SuppressWarnings("unchecked")
 	public ImportBean(String jsonStr) {
 		Map<String, Object> gsonMap = new Gson().fromJson(jsonStr, new TypeToken<Map<String, Object>>() {
 		}.getType());

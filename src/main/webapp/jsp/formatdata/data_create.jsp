@@ -35,7 +35,7 @@
                 <a href="/wankangyuan/project/selectMyProject">
                 	<div class="topT">项目</div>
                 </a>
-                <a href="/wankangyuan/sourceData/firstIn?type=1">
+                <a href="/wankangyuan/sourceData/getSourceDatas?type=1">
                     <div class="topT active">格式数据</div>
                 </a>
                 <a href="/wankangyuan/application/viewMine">
@@ -43,7 +43,7 @@
                 </a>
                 <div class="touxiangK">
                     <a href="/wankangyuan/userInfo">
-                        <img src="${user.headimg }" alt="" class="touxiang" />
+                        <img src="${user.headimg }" onerror='this.src="/wankangyuan/static/img/head.jpg"'  }" alt="" class="touxiang" />
                     </a>
                     <div class="userbutK">
                         <a href="/wankangyuan/userInfo">
@@ -74,9 +74,9 @@
             </div>
             <div class="top2">
                 <div class="top2C">
-                    <a href="/wankangyuan/sourceData/firstIn?type=1"><div class="top2Cli">我的</div></a>
-                    <a href="/wankangyuan/sourceData/firstIn?type=2"><div class="top2Cli top2CliYJ">我创建的</div></a>
-                    <a href="/wankangyuan/sourceData/firstIn?type=3"><div class="top2Cli">公共</div></a>
+                    <a href="/wankangyuan/sourceData/getSourceDatas?type=1"><div class="top2Cli">我的</div></a>
+                    <a href="/wankangyuan/sourceData/getSourceDatas?type=2"><div class="top2Cli top2CliYJ">我创建的</div></a>
+                    <a href="/wankangyuan/sourceData/getSourceDatas?type=3"><div class="top2Cli">公共</div></a>
                     <!--
                     <div class="search">
                         <div class="searchC">
@@ -207,7 +207,7 @@
 									</c:if>
 								
 									<c:if test="${status.index==1}">										
-										<div class="PJliCli2 dataname">
+										<div class="PJliCli2">
 			                                <a href="#" onclick="datainHref('${sourceData[0]}')">
 			                                    <span>${sourceDataField}</span>
 			                                </a>
@@ -325,7 +325,7 @@
                     	success : function(data){
                     		if(data.result == true){
                     			alert(data.message);
-                    			window.location.href="/wankangyuan/sourceData/firstIn?type=2";
+                    			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id;
                     		}else{
                     			alert(data.message);
                     		}
@@ -382,6 +382,7 @@
     			},
     			success : function(data){
     				alert(data.message);
+        			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id;
     			},
     			error : function(){
     				alert("联网失败");
@@ -423,6 +424,7 @@
     			},
     			success : function(data){
     				alert(data.message);
+        			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id;
     			},
     			error : function(){
     				alert("联网失败");
@@ -477,7 +479,7 @@
 	            	if(data.result == false){
 	            		alert(data.message)
 	            	}else{
-	            		window.location.href="/wankangyuan/sourceData/firstIn?type=2";
+	        			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id;
 	            	}
 	            },
 	            error: function () {

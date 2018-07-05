@@ -43,7 +43,7 @@
                 </a>
                 <div class="touxiangK">
                     <a href="/wankangyuan/userInfo">
-                        <img src="${user.headimg }" alt="" class="touxiang" />
+                        <img src="${user.headimg }" onerror='this.src="/wankangyuan/static/img/head.jpg"'  }" alt="" class="touxiang" />
                     </a>
                     <div class="userbutK">
                         <a href="/wankangyuan/userInfo">
@@ -240,7 +240,7 @@
 									</c:if>
 								
 									<c:if test="${status.index==1}">										
-										<div class="PJliCli2 dataname">
+										<div class="PJliCli2">
 			                                <a href="#" onclick="datainHref('${sourceData[0]}')">
 			                                    <span>${sourceDataField}</span>
 			                                </a>

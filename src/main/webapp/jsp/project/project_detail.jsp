@@ -146,23 +146,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				        <div class="xiangmuRM">
 				            <div class="xiangmuRMzK">
 				                <div class="xiangmuRMzKC">
-				                    <div class="xiangmuRMz">
-				                        <img src="/wankangyuan/static/img/prodetail1_1.png" name="25例糖尿病患者的基因表达模式研究1" alt="" class="xiangmuRMi" />
-				                    </div>
-				                    <div class="xiangmuRMz">
-				                        <img src="/wankangyuan/static/img/prodetail1_2.png" name="25例糖尿病患者的基因表达模式研究2" alt="" class="xiangmuRMi" />
-				                    </div>
-				                    <div class="xiangmuRMz">
-				                        <img src="/wankangyuan/static/img/prodetail1_3.png" name="25例糖尿病患者的基因表达模式研究3" alt="" class="xiangmuRMi" />
-				                    </div>
+				                	<c:forEach items="${pAppTasks}" var="pAppTask" varStatus="status">
+				                		<c:if test="${status.index<=2}">
+				                			<div class="xiangmuRMz">
+						                        <iframe src="${pAppTask.result_address }" name="${pAppTask.taskName }" class="xiangmuRMi" ></iframe>
+						                    </div>
+				                		</c:if>
+				                	</c:forEach>
 				                </div>
 				            </div>
 				        </div>
-				        <div class="xiangmuRMt">25例糖尿病患者的基因表达模式研究</div>
+				        <div class="xiangmuRMt"></div>
 				        <div class="xiangmuRMB">
-				            <div class="xiangmuRMb active"></div>
-				            <div class="xiangmuRMb"></div>
-				            <div class="xiangmuRMb"></div>
+				        	<c:forEach items="${pAppTasks}" var="pAppTask" varStatus="status">
+		                		<c:if test="${status.index==0}">
+		                			<div class="xiangmuRMb active"></div>
+		                		</c:if>
+		                		<c:if test="${status.index==1}">
+		                			<div class="xiangmuRMb"></div>
+		                		</c:if>
+		                		<c:if test="${status.index==2}">
+		                			<div class="xiangmuRMb"></div>
+		                		</c:if>
+		                	</c:forEach>
 				        </div>
 				    </div>
 				</div>

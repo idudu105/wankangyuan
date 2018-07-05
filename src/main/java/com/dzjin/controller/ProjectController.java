@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dzjin.model.Project;
+import com.dzjin.model.ProjectAppTask;
 import com.dzjin.model.ProjectAuthority;
 import com.dzjin.model.ProjectCustomRole;
 import com.dzjin.model.ProjectFile;
 import com.dzjin.model.ProjectFloder;
 import com.dzjin.model.ProjectRole;
 import com.dzjin.model.ProjectUser;
+import com.dzjin.service.ProjectAppTaskService;
 import com.dzjin.service.ProjectCustomRoleService;
 import com.dzjin.service.ProjectFileService;
 import com.dzjin.service.ProjectFloderService;
@@ -46,7 +48,8 @@ public class ProjectController {
 	ProjectFileService projectFileService;
 	@Autowired
 	ProjectFloderService projectFloderService;
-	
+	@Autowired
+	ProjectAppTaskService projectAppTaskService;
 	/**
 	 * 新建项目
 	 * @param project
@@ -177,6 +180,11 @@ public class ProjectController {
 			}
 		}
 		httpSession.setAttribute("authoritys", authoritys);
+		
+		//获取当前项目已经发布的应用结果的地址
+		List<ProjectAppTask> pAppTasks = projectAppTaskService.selectReleasedProjectAppTask(project.getId());
+		httpSession.setAttribute("pAppTasks", pAppTasks);
+		
 		return "/jsp/project/project_detail.jsp";
 	}
 	

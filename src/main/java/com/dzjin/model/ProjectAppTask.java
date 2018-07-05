@@ -41,8 +41,15 @@ public class ProjectAppTask {
 	private String isRelease;
 	//异步/即时
 	private String isSync;
+	//结果地址
+	private String result_address;
 	
-	
+	public String getResult_address() {
+		return result_address;
+	}
+	public void setResult_address(String result_address) {
+		this.result_address = result_address;
+	}
 	public String getApp_name() {
 		return app_name;
 	}

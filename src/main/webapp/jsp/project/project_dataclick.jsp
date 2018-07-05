@@ -117,75 +117,77 @@
 						</c:forEach>
                     </div>
                 </div>
-                
-                
-                <div class="prodaclmR">
-                    <div class="prodaclmRz">
-                        <div class="pdclmRz_ul">
-                        </div>
-                        <div class="prodaclmRzT">
-                            
-                            <div class="prodaclmRzTt prodaclmRzTtmz">名称</div>
-                            <div class="prodaclmRzTt prodaclmRzTtnr">内容</div>
-                        </div>
-                        <div class="prodaclmRzB">
-                      		<c:forEach items="${metaDatas}" var="metaDataListTemp">
-	                            <div class="prodaclmRzBz">
-			                        <div class="prodaclmRzBzt prodaclmRzTtmz">${metaDataListTemp[1] }</div>
-			                        <div class="prodaclmRzBzt prodaclmRzTtmz">
-			                        	${metaDataListTemp[2] }
-			                        </div>			                        
-	                            </div>
+
+
+				<div class="prodaclmR">
+					<div class="prodaclmRz">
+						<div class="pdclmRz_ul"></div>
+						<div class="prodaclmRzT">
+
+							<div class="prodaclmRzTt prodaclmRzTtmz">名称</div>
+							<div class="prodaclmRzTt prodaclmRzTtnr">内容</div>
+						</div>
+						<div class="prodaclmRzB">
+							<c:forEach items="${metaDatas}" var="metaDataListTemp">
+								<div class="prodaclmRzBz">
+									<div class="prodaclmRzBzt prodaclmRzTtmz">${metaDataListTemp[1] }</div>
+									<div class="prodaclmRzBzt prodaclmRzTtmz">
+										${metaDataListTemp[2] }</div>
+								</div>
 							</c:forEach>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="prodaclmRz2">
-                        <div class="prodaclmRsxK">
-                            <div class="prodaclmRsx">
-                                <div class="prodaclmRsxT">筛选</div>
-                                <img src="/wankangyuan/static/img/sanjiao_blue.png" alt="" class="prodaclmRsxI" />
-                            </div>
-                        </div>
-                        <div class="shaixuanZK">
-                        	<c:forEach items="${data}" var="dataTemp">
-	                            <div class="shaixuanZKli">
-	                                <div class="shaixuanZKliT">${dataTemp.ff_name }</div>
-	                                <div class="shaixuanZKliI active"></div>
-	                            </div>
+						</div>
+					</div>
+					<br>
+					<div class="prodaclmRz2">
+						<div class="prodaclmRsxK">
+							<div class="prodaclmRsx">
+								<div class="prodaclmRsxT">筛选</div>
+								<img src="/wankangyuan/static/img/sanjiao_blue.png" alt=""
+									class="prodaclmRsxI" />
+							</div>
+						</div>
+						<div class="shaixuanZK">
+							<c:forEach items="${data}" var="dataTemp">
+								<div class="shaixuanZKli">
+									<div class="shaixuanZKliT">${dataTemp.ff_name }</div>
+									<div class="shaixuanZKliI active"></div>
+								</div>
 							</c:forEach>
-                        </div>
-                        <div class="prodaclmRsjK">
-                            <div class="prodaclmRzT">
-                                <div class="quanxuanK fxK1">
-                                    <input type="checkbox" class="input_check" id="check4_0">
-                                    <label for="check4_0"></label>
-                                </div>
-                                <c:forEach items="${data}" var="dataTemp">
-		                            <div class="prodaclmRzTt2">${dataTemp.ff_name }</div>
+						</div>
+						<div class="prodaclmRsjK">
+							<div class="prodaclmRzT">
+								<div class="quanxuanK fxK1">
+									<input type="checkbox" class="input_check" id="check4_0">
+									<label for="check4_0"></label>
+								</div>
+								<c:forEach items="${data}" var="dataTemp">
+									<div class="prodaclmRzTt2">${dataTemp.ff_name }</div>
 								</c:forEach>
-                            </div>
-                            <div class="prodaclmRzB">
-                                    <c:forEach items="${dataDatas}" var="dataDataTemp">
-                                    	<div class="prodaclmRzBz">
-		                                    <c:forEach items="${dataDataTemp}" var="dataDataTempTemp" varStatus="status">
-		                                    	<c:if test="${status.index == 0 }">
-		                                    		<div class="fuxuanK5 fxK1 fx4">
-				                                        <input type="checkbox" class="input_check" name="${dataDataTempTemp}" id="check4_${dataDataTempTemp}">
-				                                        <label for="check4_${dataDataTempTemp}"></label>
-				                                    </div>
-		                                    	</c:if>
-		                                    	<c:if test="${status.index != 0 }">
-		                                    		<div class="prodaclmRzTt3 prodaclmRzTtsj3">${dataDataTempTemp}</div>
-		                                    	</c:if>
-											</c:forEach>
-										</div>   
-									</c:forEach>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+							</div>
+							<div class="prodaclmRzB">
+								<c:forEach items="${dataDatas}" var="dataDataTemp">
+									<div class="prodaclmRzBz">
+										<c:forEach items="${dataDataTemp}" var="dataDataTempTemp"
+											varStatus="status">
+											<c:if test="${status.index == 0 }">
+												<div class="fuxuanK5 fxK1 fx4">
+													<input type="checkbox" class="input_check"
+														name="${dataDataTempTemp}" id="check4_${dataDataTempTemp}">
+													<label for="check4_${dataDataTempTemp}"></label>
+												</div>
+											</c:if>
+											<c:if test="${status.index != 0 }">
+												<div class="prodaclmRzTt3 prodaclmRzTtsj3">${dataDataTempTemp}</div>
+											</c:if>
+										</c:forEach>
+									</div>
+								</c:forEach>
+							</div>
+						</div>
+					</div>
+					<div class="pageK" id="box"></div>
+				</div>
+			</div>
             
 
             <div class="bottom">
@@ -204,9 +206,24 @@
     </div>
     
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
-    
+    <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
     <script type="text/javascript">
-    
+    $('#box').paging({
+    	initPageNo: ${page}, // 初始页码
+    	totalPages: Math.ceil(${total}/${rows}), //总页数
+    	totalCount: '合计&nbsp;' + ${total} + '&nbsp;条数据', // 条目总数
+    	slideSpeed: 600, // 缓动速度。单位毫秒
+    	jump: true, //是否支持跳转
+    	callback: function(page) { // 回调函数
+    		console.log(page);
+    		var cs_id = $('#cs_id').val();
+			var sourceDataId = $("#sourceDataId").val();
+    		if(page!=${page}){
+    			window.location.href="/wankangyuan/projectFormatData/getFormatNodeById?cs_id="
+					+cs_id+"&sourceDataId="+sourceDataId+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId+"&page="+page+"&strip=${rows}";
+    		}
+    	}
+    });
 	    function dataNodeClick(formatNodeId , ft_id){
 			var cs_id = $('#cs_id').val();
 			var sourceDataId = $("#sourceDataId").val();

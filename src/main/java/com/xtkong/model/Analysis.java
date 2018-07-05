@@ -16,6 +16,7 @@ public class Analysis {
 	private List<String> distDCol;// srcCol这些列对应的配置表中的字段
 	private List<String> defUnique;// 定义该批数据导入到设定采集源的设定结果下的设定节点中的唯一识别方式
 
+	@SuppressWarnings("unchecked")
 	public Analysis(Map<String, Object> analysisMap) {
 		if (analysisMap.containsKey("name")) {
 			name = analysisMap.get("name").toString();

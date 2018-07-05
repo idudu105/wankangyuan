@@ -36,13 +36,13 @@
 				</h1>
 				<a href="/wankangyuan/project/selectMyProject">
 					<div class="topT">项目</div>
-				</a> <a href="/wankangyuan/sourceData/firstIn?type=1">
+				</a> <a href="/wankangyuan/sourceData/getSourceDatas?type=1">
 					<div class="topT active">格式数据</div>
 				</a> <a href="/wankangyuan/application/viewMine">
 					<div class="topT ">应用</div>
 				</a>
 				<div class="touxiangK">
-					<a href="/wankangyuan/userInfo"> <img src="${user.headimg }"
+					<a href="/wankangyuan/userInfo"> <img src="${user.headimg }" onerror='this.src="/wankangyuan/static/img/head.jpg"'  }"
 						alt="" class="touxiang" />
 					</a>
 					<div class="userbutK">
@@ -80,11 +80,11 @@
 
 			<div class="top2">
 				<div class="top2C">
-					<a href="/wankangyuan/sourceData/firstIn?type=1"><div
+					<a href="/wankangyuan/sourceData/getSourceDatas?type=1"><div
 							class="top2Cli top2CliYJ">我的</div></a> <a
-						href="/wankangyuan/sourceData/firstIn?type=2"><div
+						href="/wankangyuan/sourceData/getSourceDatas?type=2"><div
 							class="top2Cli">我创建的</div></a> <a
-						href="/wankangyuan/sourceData/firstIn?type=3"><div
+						href="/wankangyuan/sourceData/getSourceDatas?type=3"><div
 							class="top2Cli">公共</div></a>
 					<!--
                     <div class="search">
@@ -132,12 +132,12 @@
 					<div class="pro_menu pro_export">导出</div>
 					<!-- 展示数据源列表 ， 需要为select 的option 的onclick设置事件监听-->
 					<select id="source_Select" class="pro_menusel">
-						<c:forEach items="${sources}" var="source">
-							<c:if test="${source.cs_id!=thiscs_id}">
-								<option value="${source.cs_id}">${source.cs_name}</option>
+						<c:forEach items="${sources}" var="sourcel">
+							<c:if test="${sourcel.cs_id!=source.cs_id}">
+								<option value="${sourcel.cs_id}">${sourcel.cs_name}</option>
 							</c:if>
-							<c:if test="${source.cs_id==thiscs_id}">										
-								<option value="${source.cs_id}" selected="selected">${source.cs_name}</option>
+							<c:if test="${sourcel.cs_id==source.cs_id}">										
+								<option value="${sourcel.cs_id}" selected="selected">${sourcel.cs_name}</option>
 							</c:if>
 						</c:forEach>
 					</select>
@@ -188,7 +188,7 @@
 									</c:if>
 
 									<c:if test="${status.index==1}">
-										<div class="PJliCli2 dataname">
+										<div class="PJliCli2">
 											<a href="#" onclick="datainHref('${sourceData[0]}')"> <span>${sourceDataField}</span>
 											</a>
 										</div>
@@ -303,7 +303,7 @@
             	success : function(data){
             		if(data.result == true){
             			alert(data.message);
-            			window.location.href="/wankangyuan/sourceData/firstIn?type=1";
+            			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=1";
             		}else{
             			alert(data.message);
             		}

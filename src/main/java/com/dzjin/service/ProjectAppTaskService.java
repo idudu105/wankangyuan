@@ -95,6 +95,10 @@ public class ProjectAppTaskService {
 		return map;
 	}
 	
+	public List<ProjectAppTask> selectReleasedProjectAppTask(Integer project_id){
+		return projectAppTaskDao.selectReleasedProjectAppTask(project_id);
+	}
+	
 	public ProjectAppTask getProjectAppTask(Integer id){
 		return projectAppTaskDao.getProjectAppTask(id);
 	}

@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.hadoop.hbase.util.Bytes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -113,7 +112,12 @@ public class FormatNodeController {
 	@RequestMapping("/getFormatNodeById")
 	public String getFormatNodeById(HttpSession httpSession, String cs_id, String sourceDataId, String ft_id,
 			String formatNodeId, String type, Integer page, Integer strip) {
-
+		if (page == null) {
+			page = 1;
+		}
+		if (strip == null) {
+			strip = 3;
+		}
 		HashMap<String, FormatType> formatTypeMap = new HashMap<>();
 		List<FormatType> formatTypes = formatTypeService.getFormatTypes(Integer.valueOf(cs_id));
 		for (FormatType formatType : formatTypes) {
@@ -175,6 +179,7 @@ public class FormatNodeController {
 						whereLike, page, strip);
 			}
 		}
+		@SuppressWarnings("unchecked")
 		List<List<String>>metaDataList=(List<List<String>>) metaDatas.get("records").get("data");
 		List<List<String>> metaDataListTemp = new ArrayList<>();
 		int i=0;

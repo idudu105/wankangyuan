@@ -91,7 +91,7 @@ public class ImportController {
 			for (SourceField sourceField : sourceFields) {
 				if (index_nameMap.containsKey(sourceField.getCsf_name())) {
 					index_csfIdMap.put(index_nameMap.get(sourceField.getCsf_name()),
-							String.valueOf(sourceField.getCs_id()));
+							String.valueOf(sourceField.getCsf_id()));
 				}
 			}
 

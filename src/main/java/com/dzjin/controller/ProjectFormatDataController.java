@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dzjin.service.ProjectDataService;
-import com.xtkong.controller.user.FormatNodeController;
 import com.xtkong.dao.hbase.HBaseFormatNodeDao;
 import com.xtkong.dao.hbase.HBaseSourceDataDao;
+import com.xtkong.model.FormatField;
 import com.xtkong.model.FormatType;
 import com.xtkong.model.Source;
 import com.xtkong.model.SourceField;
@@ -197,7 +197,7 @@ public class ProjectFormatDataController {
 			Source source = sourceService.getSourceByCs_id(cs_id);
 			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
 			httpSession.setAttribute("source", source);// 采集源字段列表
-			
+
 			String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
 			String family = ConstantsHBase.FAMILY_INFO;
 
@@ -210,8 +210,8 @@ public class ProjectFormatDataController {
 
 			Map<String, String> whereLike = new HashMap<>();
 
-			Map<String, Map<String, Object>> result = PhoenixClient.select(tableName, family, qualifiers, whereEqual,
-					whereLike, null, null);
+			Map<String, Map<String, Object>> result = PhoenixClient.select(tableName, qualifiers, whereEqual,
+					whereLike, null,  null,null);
 			String resultMsg = String.valueOf((result.get("msg")).get("msg"));
 			for (int j = 0; j < 6; j++) {
 				resultMsg = String.valueOf((result.get("msg")).get("msg"));
@@ -255,37 +255,86 @@ public class ProjectFormatDataController {
 	@RequestMapping("/getFormatNodeById")
 	public String getFormatNodeById(HttpSession httpSession, String cs_id, String sourceDataId, String ft_id,
 			String formatNodeId, Integer page, Integer strip) {
-		return new FormatNodeController().getFormatNodeById(httpSession, cs_id, sourceDataId, ft_id, formatNodeId, "4",
-				page, strip);
-		// HashMap<String, FormatType> formatTypeMap = new HashMap<>();
-		// List<FormatType> formatTypes =
-		// formatTypeService.getFormatTypes(Integer.valueOf(cs_id));
-		// for (FormatType formatType : formatTypes) {
-		// formatTypeMap.put(String.valueOf(formatType.getFt_id()), formatType);
-		// }
-		// List<FormatType> formatTypeFolders =
-		// HBaseFormatNodeDao.getFormatTypeFolders(cs_id, sourceDataId,
-		// formatTypeMap);
-		// httpSession.setAttribute("formatTypeFolders", formatTypeFolders);
-		//
-		// // meta数据
-		// List<FormatField> meta =
-		// formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
-		// ConstantsHBase.IS_meta_true);
-		// httpSession.setAttribute("formatNodeId", formatNodeId);
-		// List<List<String>> metaDatas =
-		// HBaseFormatDataDao.getFormatDataMetas(cs_id, ft_id, formatNodeId,
-		// meta);
-		// httpSession.setAttribute("metaDatas", metaDatas);
-		// // data数据
-		// List<FormatField> data =
-		// formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
-		// ConstantsHBase.IS_meta_false);
-		// httpSession.setAttribute("data", data);
-		// List<List<String>> dataDatas =
-		// HBaseFormatDataDao.getFormatDatas(cs_id, ft_id, formatNodeId, data);
-		// httpSession.setAttribute("dataDatas", dataDatas);
-		// httpSession.setAttribute("sourceDataId", sourceDataId);
-		// return "redirect:/jsp/project/project_dataclick.jsp";
+		if (page == null) {
+			page = 1;
+		}
+		if (strip == null) {
+			strip = 3;
+		}
+		HashMap<String, FormatType> formatTypeMap = new HashMap<>();
+		List<FormatType> formatTypes = formatTypeService.getFormatTypes(Integer.valueOf(cs_id));
+		for (FormatType formatType : formatTypes) {
+			formatTypeMap.put(String.valueOf(formatType.getFt_id()), formatType);
+		}
+		List<FormatType> formatTypeFolders = HBaseFormatNodeDao.getFormatTypeFolders(cs_id, sourceDataId,
+				formatTypeMap);
+
+		// meta数据
+		List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
+				ConstantsHBase.IS_meta_true);
+		// data数据
+		List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
+				ConstantsHBase.IS_meta_false);
+
+		String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+		String family = ConstantsHBase.FAMILY_INFO;
+		List<String> mateQualifiers = new ArrayList<>();
+		for (FormatField formatField : meta) {
+			mateQualifiers.add(String.valueOf(formatField.getFf_id()));
+		}
+		Map<String, String> whereEqual = new HashMap<>();
+		whereEqual.put(ConstantsHBase.QUALIFIER_FORMATNODEID, formatNodeId);
+		whereEqual.put("ID", formatNodeId);
+		Map<String, String> whereLike = new HashMap<>();
+		String condition = null;
+		Map<String, Map<String, Object>> metaDatas = PhoenixClient.select(tableName, mateQualifiers, whereEqual,
+				whereLike, condition, 1, 1);
+
+		List<String> dataQualifiers = new ArrayList<>();
+		for (FormatField formatField : data) {
+			dataQualifiers.add(String.valueOf(formatField.getFf_id()));
+		}
+		whereEqual.remove("ID");
+		condition = " \"" + tableName + "\".\"ID\"!='" + formatNodeId + "'";
+		Map<String, Map<String, Object>> dataDatas = PhoenixClient.select(tableName, dataQualifiers, whereEqual,
+				whereLike, condition, page, strip);
+		String metaMsg = String.valueOf((metaDatas.get("msg")).get("msg"));
+		String dataMsg = String.valueOf((dataDatas.get("msg")).get("msg"));
+		for (int j = 0; j < 6; j++) {
+			metaMsg = String.valueOf((metaDatas.get("msg")).get("msg"));
+			dataMsg = String.valueOf((dataDatas.get("msg")).get("msg"));
+			if ((metaMsg.equals("success")) && (dataMsg.equals("success"))) {
+				break;
+			}
+			if (!(metaMsg.equals("success"))) {
+				metaDatas = PhoenixClient.reSelectWhere(metaMsg, tableName, family, mateQualifiers, whereEqual,
+						whereLike, 1, 1);
+			}
+			if (!(dataMsg.equals("success"))) {
+				dataDatas = PhoenixClient.reSelectWhere(dataMsg, tableName, family, dataQualifiers, whereEqual,
+						whereLike, page, strip);
+			}
+		}
+		@SuppressWarnings("unchecked")
+		List<List<String>> metaDataList = (List<List<String>>) metaDatas.get("records").get("data");
+		List<List<String>> metaDataListTemp = new ArrayList<>();
+		int i = 0;
+		for (FormatField formatField : meta) {
+			List<String> formatData = new ArrayList<>();
+			formatData.add(String.valueOf(formatField.getFf_id()));
+			formatData.add(formatField.getFf_name());
+			formatData.add(metaDataList.get(0).get(++i));
+			metaDataListTemp.add(formatData);
+		}
+		httpSession.setAttribute("formatTypeFolders", formatTypeFolders);
+		httpSession.setAttribute("formatNodeId", formatNodeId);
+		httpSession.setAttribute("metaDatas", metaDataListTemp);
+		httpSession.setAttribute("data", data);
+		httpSession.setAttribute("dataDatas", dataDatas.get("records").get("data"));
+		httpSession.setAttribute("sourceDataId", sourceDataId);
+		httpSession.setAttribute("total", dataDatas.get("page").get("totalCount"));
+		httpSession.setAttribute("page", page);
+		httpSession.setAttribute("rows", strip);
+		return "redirect:/jsp/project/project_dataclick.jsp";
 	}
 }

@@ -20,8 +20,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.junit.Test;
-
 import com.google.gson.Gson;
 import com.xtkong.util.ConstantsHBase;
 
@@ -175,15 +173,10 @@ public class PhoenixClient {
 			msg.put("msg", "success");
 			map.put("msg", msg);
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			 e.printStackTrace();
 			msg.put("msg", "SQL执行出错：" + e.getMessage());
 			map.put("msg", msg);
 			return map;
-			// } catch (JsonIOException e) {
-			// e.printStackTrace();
-			// msg.put("msg", "JSON转换出错：" + e.getMessage());
-			// map.put("msg", msg);
-			// return map;
 		}
 		return map;
 	}
@@ -207,7 +200,6 @@ public class PhoenixClient {
 			}
 		}
 		String pheonixSQL = string.substring(0, string.lastIndexOf(",")) + ")";
-		// System.out.println(pheonixSQL);
 		pheonixSQLs.add(pheonixSQL);
 		PhoenixClient.executeUpdate(pheonixSQLs);
 	}
@@ -267,22 +259,35 @@ public class PhoenixClient {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Integer count(String pheonixSQL) {
-		Map<String, Map<String, Object>> map = PhoenixClient.executeQuery(pheonixSQL);
+	public static Integer count(String phoenixSQL) {
+		Map<String, Map<String, Object>> map = PhoenixClient.executeQuery(phoenixSQL);
 		Integer count = 0;
 		if ((map.get("msg")).get("msg").equals("success")) {
 			count = Integer.valueOf(((List<List<String>>) map.get("records").get("data")).get(0).get(0));
 		}
-		// System.out.println(pheonixSQL);
-		// System.out.println("count:" + count);
-		// System.out.println();
 		return count;
 	}
 
 	public static String getPheonixSQLQualifier(String tableName, String qualifier) {
 		return "\"" + tableName + "\".\"" + qualifier + "\"";
 	}
-
+	/**
+	 * @param tableName
+	 *            表/视图名
+	 * @param qualifiers
+	 *            列s
+	 * @param whereEqual
+	 *            等值条件
+	 * @param whereLike
+	 *            模糊条件
+	 * @param condition
+	 *            条件
+	 * @param page
+	 *            页码
+	 * @param strip
+	 *            分页大小
+	 * @return
+	 */
 	public static Map<String, Map<String, Object>> select(String tableName, List<String> qualifiers,
 			Map<String, String> whereEqual, Map<String, String> whereLike, String condition, Integer page,
 			Integer strip) {
@@ -323,27 +328,16 @@ public class PhoenixClient {
 		if (!isAddWhere) {
 			pheonixSQL = pheonixSQL.substring(0, pheonixSQL.lastIndexOf("AND"));
 		}
-		System.out.println(pheonixSQL);
+		if (pheonixSQL.trim().endsWith("WHERE")) {
+			pheonixSQL = pheonixSQL.substring(0, pheonixSQL.lastIndexOf("WHERE"));
+		}
+		if (pheonixSQL.trim().endsWith("AND")) {
+			pheonixSQL = pheonixSQL.substring(0, pheonixSQL.lastIndexOf("AND"));
+		}
 		return selectPage(pheonixSQL, page, strip);
 	}
 
-	/**
-	 * @param tableName
-	 *            表/视图名
-	 * @param family
-	 *            列簇
-	 * @param qualifiers
-	 *            列s
-	 * @param whereEqual
-	 *            等值条件
-	 * @param whereLike
-	 *            模糊条件
-	 * @param page
-	 *            页码
-	 * @param strip
-	 *            分页大小
-	 * @return
-	 */
+	
 	public static Map<String, Map<String, Object>> select(String tableName, String family, List<String> qualifiers,
 			Map<String, String> whereEqual, Map<String, String> whereLike, Integer page, Integer strip) {
 		String pheonixSQL = " SELECT ID";
@@ -379,32 +373,6 @@ public class PhoenixClient {
 		return selectPage(pheonixSQL, page, strip);
 	}
 
-	public static Map<String, Map<String, Object>> select(String pheonixSQL, boolean isAddWhere,
-			Map<String, String> whereEqual, Map<String, String> whereLike, Integer page, Integer strip) {
-		if ((whereEqual != null) && (!whereEqual.isEmpty())) {
-			if (isAddWhere) {
-				pheonixSQL += " WHERE ";
-				isAddWhere = false;
-			}
-			for (Entry<String, String> eqlual : whereEqual.entrySet()) {
-				pheonixSQL += "\"" + eqlual.getKey() + "\"='" + eqlual.getValue() + "' AND ";
-			}
-		}
-		if ((whereLike != null) && (!whereLike.isEmpty())) {
-			if (isAddWhere) {
-				pheonixSQL += " WHERE ";
-				isAddWhere = false;
-			}
-			for (Entry<String, String> like : whereLike.entrySet()) {
-				pheonixSQL += "\"" + like.getKey() + "\" like '%" + like.getValue() + "%' AND ";
-			}
-		}
-		if (!isAddWhere) {
-			pheonixSQL = pheonixSQL.substring(0, pheonixSQL.lastIndexOf("AND"));
-		}
-		System.out.println(pheonixSQL);
-		return selectPage(pheonixSQL, page, strip);
-	}
 
 	/**
 	 * 
@@ -429,10 +397,9 @@ public class PhoenixClient {
 			if ((page == null) || (strip == null)) {
 				map = PhoenixClient.executeQuery(pheonixSQL);
 			} else if ((page > 0) && (strip > 0)) {
+				Integer count = count("SELECT COUNT(*)" + pheonixSQL.substring(index));
 				map = PhoenixClient.executeQuery(pheonixSQL + " LIMIT " + strip + " OFFSET " + strip * (page - 1));
-				// Integer count = count("SELECT COUNT(*)" +
-				// pheonixSQL.substring(index));
-				Integer count = (Integer) map.get("page").get("totalCount");
+				// Integer count = (Integer) map.get("page").get("totalCount");
 				Map<String, Object> pages = new HashMap<String, Object>();
 				pages.put("totalCount", count);
 				pages.put("pageSize", strip);
@@ -507,63 +474,6 @@ public class PhoenixClient {
 	}
 
 	/**
-	 * 
-	 * @param userid
-	 * @param projectid
-	 * @param select
-	 * @param isAddWhere
-	 * @param conditionEqual
-	 * @param conditionLike
-	 * @param currPage
-	 * @param pageSize
-	 * @return
-	 */
-	public Map<String, Object> commenSelect(List<String> userid, List<String> projectid, String select,
-			boolean isAddWhere, Map<String, String> conditionEqual, Map<String, String> conditionLike, Integer currPage,
-			Integer pageSize) {
-		boolean and = false;
-		if (isAddWhere) {
-			select += " WHERE ";
-			isAddWhere = false;
-		} else {
-			select += " AND ";
-			and = true;
-		}
-		if (userid != null && !userid.isEmpty()) {
-			select += "(";
-			for (String string : userid) {
-				select += " \"" + ConstantsHBase.QUALIFIER_USER + "\"= '" + string + "' OR";
-			}
-			select = select.substring(0, select.lastIndexOf("OR")) + ") AND ";
-			and = true;
-		}
-		if (projectid != null && !projectid.isEmpty()) {
-			select += " (";
-			for (String string : projectid) {
-				select += " \"" + ConstantsHBase.QUALIFIER_PROJECT + "\"= '" + string + "' OR";
-			}
-			select = select.substring(0, select.lastIndexOf("OR")) + ") AND ";
-			and = true;
-		}
-		if ((conditionEqual != null) && (!conditionEqual.isEmpty())) {
-			for (Entry<String, String> eqlual : conditionEqual.entrySet()) {
-				select += eqlual.getKey() + "='" + eqlual.getValue() + "' AND ";
-				and = true;
-			}
-		}
-		if ((conditionLike != null) && (!conditionLike.isEmpty())) {
-			for (Entry<String, String> like : conditionLike.entrySet()) {
-				select += like.getKey() + " like '%" + like.getValue() + "%' AND ";
-				and = true;
-			}
-		}
-		if (and) {
-			select = select.substring(0, select.lastIndexOf("AND"));
-		}
-		return select(select, currPage, pageSize);
-	}
-
-	/**
 	 * 通用查询
 	 * 
 	 * @param phoenixSQL
@@ -571,7 +481,7 @@ public class PhoenixClient {
 	 * @param strip
 	 * @return
 	 */
-	public static Map<String, Object> select(String phoenixSQL, Integer page, Integer strip) {
+	public static Map<String, Object> commonSelect(String phoenixSQL, Integer page, Integer strip) {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			Connection conn = PhoenixClient.getConnection();
@@ -580,6 +490,19 @@ public class PhoenixClient {
 				return map;
 			}
 			if ((page != null) && (strip != null) && (page > 0) && (strip > 0)) {
+				Map<String, Object> pages = new HashMap<String, Object>();
+				Integer totalCount = count(phoenixSQL);
+				pages.put("totalCount", totalCount);
+				pages.put("pageSize", strip);
+				Integer totalPage = totalCount / strip;
+				if ((totalCount % strip != 0) || (totalPage == 0)) {
+					totalPage++;
+				}
+				pages.put("totalPage", totalPage);
+				pages.put("currPage", page);
+				map.put("page", pages);
+			
+				
 				phoenixSQL += " LIMIT " + strip + " OFFSET " + strip * (page - 1);
 			}
 			// 准备查询
@@ -609,27 +532,15 @@ public class PhoenixClient {
 			// 结果封装
 			map.put("data", datas);
 			map.put("msg", "success");
-			if ((page != null) && (strip != null) && (page > 0) && (strip > 0)) {
-				Map<String, Object> pages = new HashMap<String, Object>();
-				Integer totalCount =datas.size();
-				pages.put("totalCount", totalCount);
-				pages.put("pageSize", strip);
-				Integer totalPage = totalCount / strip;
-				if ((totalCount % strip != 0) || (totalPage == 0)) {
-					totalPage++;
-				}
-				pages.put("totalPage", totalPage);
-				pages.put("currPage", page);
-				map.put("page", pages);
-			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			map.put("msg", "SQL执行出错：\n SQL:  "+phoenixSQL+"\n异常信息:  " + e.getMessage());
+			map.put("msg", "SQL执行出错：\n SQL:  " + phoenixSQL + "\n异常信息:  " + e.getMessage());
 			return map;
 		}
 		return map;
 	}
 
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		// viewTEST();
 
@@ -668,7 +579,8 @@ public class PhoenixClient {
 		// pheonixSQL="SELECT *"
 		// + " FROM \"FORMAT_62_45\" WHERE SOURCEDATAID='1_62_1' AND
 		// \"FORMAT_62_45\".\"ID\"!='17' ";
-		pheonixSQL = " SELECT * FROM \"SOURCE_49\"  ";
+		pheonixSQL = " SELECT * FROM \"SOURCE_62\" WHERE \"93\"='value93'  ORDER BY ID DESC ";
+//		pheonixSQL = "SELECT COUNT(*)FROM \"SOURCE_62\" WHERE \"93\"='value93'   ORDER BY ID DESC ";
 		result = selectPage(pheonixSQL, page, strip);
 		// String resultMsg = String.valueOf((result.get("msg")).get("msg"));
 		// for (int j = 0; j < 2; j++) {
@@ -706,6 +618,5 @@ public class PhoenixClient {
 
 		// }
 	}
-
 
 }

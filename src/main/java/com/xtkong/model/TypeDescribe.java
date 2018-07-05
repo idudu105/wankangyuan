@@ -8,6 +8,7 @@ public class TypeDescribe {
 	private String typeName;
 	private List<String> columns;
 
+	@SuppressWarnings("unchecked")
 	public TypeDescribe(Map<String, Object> typeDescribe) {
 		if (typeDescribe.containsKey("type")) {
 			typeName = typeDescribe.get("type").toString();
