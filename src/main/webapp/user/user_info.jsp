@@ -34,7 +34,7 @@
                 </a>
                 <div class="touxiangK">
                     <a href="/wankangyuan/userInfo">
-                        <img src="${user.headimg }" alt="" class="touxiang" />
+                        <img src="${user.headimg }" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="touxiang" />
                     </a>
                     <div class="userbutK">
                         <a href="/wankangyuan/userInfo">
@@ -138,7 +138,7 @@
             <div class="userM">
                 <div class="userML">
                     <div class="userMLi">
-                        <img src="${user.headimg }" alt="" class="userMLi" />
+                        <img src="${user.headimg }" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="userMLi" />
                     </div>
                     <div class="userMLtK">
                         <div class="userMLt">${user.username }</div>
@@ -170,7 +170,7 @@
                         </div>
                     </div>
                     <div class="userMRT">
-                        <img src="${user.headimg }" alt="" class="userMRTi" />
+                        <img src="${user.headimg }" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="userMRTi" />
                         <div class="userMRTt">
                             <span class="userMRTts">更改头像</span>
                         </div>

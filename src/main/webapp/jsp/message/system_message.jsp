@@ -36,7 +36,7 @@
                 </a>
                 <div class="touxiangK">
                     <a href="user_info.html">
-                        <img src="${user.headimg }" alt="" class="touxiang" />
+                        <img src="${user.headimg }" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="touxiang" />
                     </a>
                     <div class="userbutK">
                         <a href="/wankangyuan/userInfo">
@@ -69,7 +69,7 @@
             <div class="userM">
                 <div class="userML">
                     <div class="userMLi">
-                        <img src="${user.headimg }" alt="" class="userMLi" />
+                        <img src="${user.headimg }" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="userMLi" />
                     </div>
                     <div class="userMLtK">
                         <div class="userMLt">${user.username }</div>
@@ -101,7 +101,7 @@
                                     <c:forEach items="${list }" var="message">
                                         <div name="${message.id }" class="messageMz">
                                             <div class="messageMzik">
-                                                <img src="${message.headimg}" alt="" class="messageMzi" />
+                                                <img src="${message.headimg}" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="messageMzi" />
                                             </div>
                                             <div class="messageMztk">
                                                 <div class="messageMztk_1">
@@ -161,7 +161,7 @@
                                     <c:if test="${0 eq message.type }">
                                         <div name="${message.id }" class="messageMz">
                                             <div class="messageMzik">
-                                                <img src="${message.headimg}" alt="" class="messageMzi" />
+                                                <img src="${message.headimg}" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="messageMzi" />
                                             </div>
                                             <div class="messageMztk">
                                                 <div class="messageMztk_1">
@@ -202,7 +202,7 @@
                                     <c:if test="${1 eq message.type }">
                                         <div name="${message.id }" class="messageMz">
                                             <div class="messageMzik">
-                                                <img src="${message.headimg}" alt="" class="messageMzi" />
+                                                <img src="${message.headimg}" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="messageMzi" />
                                             </div>
                                             <div class="messageMztk">
                                                 <div class="messageMztk_1">
@@ -237,7 +237,7 @@
                                     <c:if test="${2 eq message.type }">
                                         <div name="${message.id }" class="messageMz">
                                             <div class="messageMzik">
-                                                <img src="${message.headimg}" alt="" class="messageMzi" />
+                                                <img src="${message.headimg}" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="messageMzi" />
                                             </div>
                                             <div class="messageMztk">
                                                 <div class="messageMztk_1">

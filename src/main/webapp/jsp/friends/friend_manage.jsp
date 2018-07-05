@@ -37,7 +37,7 @@
                 </a>
                 <div class="touxiangK">
                     <a href="/wankangyuan/userInfo">
-                        <img src="${user.headimg }" alt="" class="touxiang" />
+                        <img src="${user.headimg }" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="touxiang" />
                     </a>
                     <div class="userbutK">
                         <a href="/wankangyuan/userInfo">
@@ -301,7 +301,7 @@
                                 </tr>
                                 <tbody data-bind="foreach:strangerList">
                                 <tr class="biaoxiang">
-                                    <th class="touxiang"><img data-bind="attr:{src: headimg}" alt="" class="touxiangi" /></th>
+                                    <th class="touxiang"><img data-bind="attr:{src: headimg}" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="touxiangi" /></th>
                                     <th class="yonghuming" data-bind="text:username"></th>
                                     <th class="youxiang" data-bind="text:email"></th>
                                     <th class="caozuo">
@@ -392,7 +392,7 @@
                                             </div>
                                         </td>
                                         <td class="touxiangk">
-                                            <img data-bind="attr:{src:headimg}" alt="" class="touxiangi" />
+                                            <img data-bind="attr:{src:headimg}" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="touxiangi" />
                                         </td>
                                         <td class="yonghuming"><span data-bind="text: username"></span></td>
                                         <td class="youxiang"><span data-bind="text: email"></span></td>

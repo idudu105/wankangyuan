@@ -191,7 +191,8 @@ function project1(){
                 // oBTSX.name=aPJListli[j].innerHTML;
                 if(document.querySelectorAll('.BTSXpd')[0]){
                     var oBTSXpd=document.querySelectorAll('.BTSXpd')[0];//项目表头筛选框判断
-                    oBTSXpd.value=aPJListli[j].title;
+                    oBTSXpd.value=$(aPJListli[j]).attr('name');
+                    console.log($(aPJListli[j]).attr('name'));
                     console.log(oBTSXpd.value);
                 }
                 

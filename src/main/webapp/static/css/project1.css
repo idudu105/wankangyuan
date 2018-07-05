@@ -679,8 +679,12 @@ input{
 .PJliCli2.dataname,.PJListli.dataname{
     width:260px;
 }
-.PJliCli2.dataname span{
+.PJliCli2 span{
     color:#5ca0e5;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
 }
 .PJliCli2.dataage,.PJListli.dataage{
     width:160px;
