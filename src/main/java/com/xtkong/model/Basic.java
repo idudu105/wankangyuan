@@ -9,6 +9,7 @@ public class Basic {
 	private List<String> distCol;//srcCol这些列对应的配置表中的字段
 	private List<String> defUnique;//定义该批数据导入到设定采集源的基础信息的唯一识别方式
 
+	@SuppressWarnings("unchecked")
 	public Basic(Map<String, Object> basicMap) {
 		if (basicMap.containsKey("fileurl")) {
 			fileurl = basicMap.get("fileurl").toString();

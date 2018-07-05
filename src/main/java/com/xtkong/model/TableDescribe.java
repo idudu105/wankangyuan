@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 public class TableDescribe {
 	private String sourceName;
 	private List<String>  columns;
 	private List<TypeDescribe> analysis;
 	
+	@SuppressWarnings("unchecked")
 	public TableDescribe(Map<String, Object> sourceDescribe) {
 		if (sourceDescribe.containsKey("source")) {
 			sourceName = sourceDescribe.get("source").toString();

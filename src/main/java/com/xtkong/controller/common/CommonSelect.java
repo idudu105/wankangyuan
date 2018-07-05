@@ -12,9 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.druid.sql.visitor.functions.If;
 import com.dzjin.service.ProjectService;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.xtkong.dao.hbase.HBaseFormatDataDao;
 import com.xtkong.dao.hbase.HBaseFormatNodeDao;
@@ -59,52 +59,69 @@ public class CommonSelect {
 		return map;
 	}
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/commonSelectJson")
 	@ResponseBody
 	public String commonSelect(String jsonStr) {
-		Map<String, Object> gsonMap = new Gson().fromJson(jsonStr, new TypeToken<Map<String, Object>>() {
-		}.getType());
-		List<String> userid = null;
-		if (gsonMap.containsKey("userid")) {
-			userid = (List<String>) gsonMap.get("userid");
-		}
-		List<String> projectid = null;
-		if (gsonMap.containsKey("projectid")) {
-			projectid = (List<String>) gsonMap.get("projectid");
-		}
-		String select = null;
-		if (gsonMap.containsKey("select")) {
-			select = (String) gsonMap.get("select");
-		}
-		boolean isAddWhere = false;
-		if (gsonMap.containsKey("isAddWhere")) {
-			isAddWhere = (boolean) gsonMap.get("isAddWhere");
-		}
-		Map<String, String> conditionEqual = null;
-		if (gsonMap.containsKey("conditionEqual")) {
-			conditionEqual = (Map<String, String>) gsonMap.get("conditionEqual");
-		}
-		Map<String, String> conditionLike = null;
-		if (gsonMap.containsKey("conditionLike")) {
-			conditionLike = (Map<String, String>) gsonMap.get("conditionLike");
-		}
-		String currPage = null;
-		if (gsonMap.containsKey("currPage")) {
-			currPage = gsonMap.get("currPage").toString();
-		}
-		String pageSize = null;
-		if (gsonMap.containsKey("pageSize")) {
-			pageSize = gsonMap.get("pageSize").toString();
-		}
-		String selectContdation = null;
-		if (gsonMap.containsKey("selectContdation")) {
-			selectContdation = gsonMap.get("selectContdation").toString();
-		}
-		if (selectContdation != null) {
-			return commonSelect(userid, projectid, select, isAddWhere, selectContdation, currPage, pageSize);
-		} else {
-			return commonSelect(userid, projectid, select, isAddWhere, conditionEqual, conditionLike, currPage,
-					pageSize);
+		List<String> userid;
+		List<String> projectid;
+		String select;
+		Boolean isAddWhere;
+		Map<String, String> conditionEqual;
+		Map<String, String> conditionLike;
+		String currPage;
+		String pageSize;
+		String selectContdation;
+		try {
+			Map<String, Object> gsonMap = new Gson().fromJson(jsonStr, new TypeToken<Map<String, Object>>() {
+			}.getType());
+			userid = null;
+			if (gsonMap.containsKey("userid")) {
+				userid = (List<String>) gsonMap.get("userid");
+			}
+			projectid = null;
+			if (gsonMap.containsKey("projectid")) {
+				projectid = (List<String>) gsonMap.get("projectid");
+			}
+			select = null;
+			if (gsonMap.containsKey("select")) {
+				select = (String) gsonMap.get("select");
+			}
+			isAddWhere = false;
+			if (gsonMap.containsKey("isAddWhere")) {
+				isAddWhere = (Boolean) gsonMap.get("isAddWhere");
+			}
+			conditionEqual = null;
+			if (gsonMap.containsKey("conditionEqual")) {
+				conditionEqual = (Map<String, String>) gsonMap.get("conditionEqual");
+			}
+			conditionLike = null;
+			if (gsonMap.containsKey("conditionLike")) {
+				conditionLike = (Map<String, String>) gsonMap.get("conditionLike");
+			}
+			currPage = null;
+			if (gsonMap.containsKey("currPage")) {
+				currPage = gsonMap.get("currPage").toString();
+			}
+			pageSize = null;
+			if (gsonMap.containsKey("pageSize")) {
+				pageSize = gsonMap.get("pageSize").toString();
+			}
+			selectContdation = null;
+			if (gsonMap.containsKey("selectContdation")) {
+				selectContdation = gsonMap.get("selectContdation").toString();
+			}
+			if (selectContdation != null) {
+				return commonSelect(userid, projectid, select, isAddWhere, selectContdation, currPage, pageSize);
+			} else {
+				return commonSelect(userid, projectid, select, isAddWhere, conditionEqual, conditionLike, currPage,
+						pageSize);
+			}
+		} catch (JsonSyntaxException e) {
+			e.printStackTrace();
+			Map<String, Object> map = new HashMap<>();
+			map.put("msg", "Json解析异常，请核对Json格式！\n提示："+e.getMessage());
+			return new Gson().toJson(map).toString();
 		}
 	}
 
@@ -158,13 +175,8 @@ public class CommonSelect {
 		if (pageSize == null) {
 			pageSize = "0";
 		}
-		return new Gson().toJson(PhoenixClient.select(select, Integer.valueOf(currPage), Integer.valueOf(pageSize)))
+		return new Gson().toJson(PhoenixClient.commonSelect(select, Integer.valueOf(currPage), Integer.valueOf(pageSize)))
 				.toString();
-	}
-
-	private boolean isAddWhere(String select) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	/**
@@ -229,10 +241,11 @@ public class CommonSelect {
 		if (pageSize == null) {
 			pageSize = "0";
 		}
-		return new Gson().toJson(PhoenixClient.select(select, Integer.valueOf(currPage), Integer.valueOf(pageSize)))
+		return new Gson().toJson(PhoenixClient.commonSelect(select, Integer.valueOf(currPage), Integer.valueOf(pageSize)))
 				.toString();
 	}
 
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		CommonSelect commonSl = new CommonSelect();
 		List<String> userid = new ArrayList<>();

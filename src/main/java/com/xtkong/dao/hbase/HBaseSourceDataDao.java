@@ -392,6 +392,7 @@ public class HBaseSourceDataDao {
 		return addMySource(cs_id, uid, sourceDataIdList, sourceFields);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static boolean addMySource(String cs_id, String uid, List<String> sourceDataIds,
 			List<SourceField> sourceFields) {
 		try {

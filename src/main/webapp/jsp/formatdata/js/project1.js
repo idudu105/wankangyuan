@@ -974,7 +974,7 @@ function data_create(){
         		if(data.result == true){
         			alert(data.message);
         			//刷新页面
-        			window.location.href="/wankangyuan/sourceData/firstIn?type=2";
+        			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id;       			                    
         		}else{
         			alert(data.message);
         		}

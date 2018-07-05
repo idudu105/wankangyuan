@@ -98,6 +98,4 @@ public class ConstantsHBase {
 		}
 	}
 
-	public static void main(String[] args) {
-	}
 }

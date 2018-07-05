@@ -58,7 +58,10 @@ public class SourceDataController {
 
 		return getSourceDatas(request, httpSession, type, null, page, strip,null,null);
 	}
-
+	
+	
+	
+	
 	/**
 	 * sources 采集源列表
 	 * 
