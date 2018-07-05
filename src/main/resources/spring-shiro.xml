@@ -154,6 +154,7 @@
                 /index.jsp = anon
                 /register = anon
                 /open/** = anon
+                /common/** = anon
                 /forgetPassword = anon
                 /admin/img/** = anon
                 /admin/js/** = anon
