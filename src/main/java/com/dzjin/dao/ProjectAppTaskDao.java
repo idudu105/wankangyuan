@@ -49,6 +49,11 @@ public interface ProjectAppTaskDao {
 			@Param("project_id")Integer project_id , 
 			@Param("searchWord")String searchWord);
 	
+	@Select("select project_app_task.*,application.result_address "
+			+ "from project_app_task,application where project_id=#{project_id} "
+			+ "and isRelease=1 and application.id=project_app_task.app_id order by id desc")
+	public List<ProjectAppTask> selectReleasedProjectAppTask(@Param("project_id")Integer project_id);
+	
 	@Select("select * from project_app_task where id=#{id}")
 	public ProjectAppTask getProjectAppTask(@Param("id")Integer id);
 	
