@@ -243,9 +243,9 @@
 				                    <c:if test="${authoritys['54'] != true }">
 				                    	<div class="PJliCli appendname">${projectAppTaskTemp.taskName }（无打开权限）</div>
 				                    </c:if> 
-	                                <div class="PJliCli appname">${projectAppTaskTemp.app_name }</div>
-	                                <div class="PJliCli appcreater">${projectAppTaskTemp.username }</div>
-	                                <div class="PJliCli apptime">${projectAppTaskTemp.create_datetime }</div>
+	                                <div class="PJliCli appname" style="color:#000000;">${projectAppTaskTemp.app_name }</div>
+	                                <div class="PJliCli appcreater" style="color:#000000;">${projectAppTaskTemp.username }</div>
+	                                <div class="PJliCli apptime" style="color:#000000;">${projectAppTaskTemp.create_datetime }</div>
 	                                <c:if test="${authoritys['55'] == true }">
 				                    	<div class="PJliCli apptime param" onclick="showParam(${projectAppTaskTemp.id})">查看</div>
 				                    </c:if>
@@ -253,15 +253,24 @@
 				                    	<div class="PJliCli apptime param">（无查看权限）</div>
 				                    </c:if> 
 	                                
-	                                <div class="PJliCli apptime">${projectAppTaskTemp.taskDescription }</div>
-	                                <div class="PJliCli appjindu">完成</div>
+	                                <div class="PJliCli apptime" style="color:#000000;">${projectAppTaskTemp.taskDescription }</div>
+	                                
+	                                <c:if test="${projectAppTaskTemp.progress == null}">
+	                                	<div class="PJliCli appjindu" style="color:#000000;">0%</div>
+	                                </c:if>
+	                                <c:if test="${projectAppTaskTemp.progress != null}">
+	                                	<div class="PJliCli appjindu" style="color:#000000;">${projectAppTaskTemp.progress }</div>
+	                                </c:if>
+	                                
+	                                
+	                                
 	                                <c:if test="${projectAppTaskTemp.isRelease == 0 }">
-	                                	<div class="PJliCli appfabuZT">未发布</div>
+	                                	<div class="PJliCli appfabuZT" style="color:#000000;">未发布</div>
 	                                </c:if>
 	                                <c:if test="${projectAppTaskTemp.isRelease == 1 }">
-	                                	<div class="PJliCli appfabuZT">已发布</div>
+	                                	<div class="PJliCli appfabuZT" style="color:#000000;">已发布</div>
 	                                </c:if>
-	                                <div class="PJliCli appYBorJS">即时</div>
+	                                <div class="PJliCli appYBorJS" style="color:#000000;">即时</div>
 	                                <c:if test="${authoritys['56'] == true }">
 				                    	<div class="PJliCli " onclick="showResultFile(${projectAppTaskTemp.id})">查看</div>
 				                    </c:if>
