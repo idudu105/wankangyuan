@@ -60,11 +60,10 @@ public class FormatTypeController {
 			HBaseFormatDataDao.createFormatDataTable(cs_id, String.valueOf(ft_id));
 		
 			String tableName=ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
-			String family=ConstantsHBase.FAMILY_INFO;
 			List<String> typeQualifiers=new ArrayList<>();
 			typeQualifiers.add(ConstantsHBase.QUALIFIER_SOURCEDATAID);
 			typeQualifiers.add(ConstantsHBase.QUALIFIER_FORMATNODEID);
-			PhoenixClient.createView(tableName, family, typeQualifiers);
+			PhoenixClient.createView(tableName, typeQualifiers);
 		} else {
 			map.put("result", false);
 			map.put("message", "新增失败");

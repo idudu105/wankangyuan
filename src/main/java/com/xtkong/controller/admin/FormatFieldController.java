@@ -48,7 +48,7 @@ public class FormatFieldController {
 
 		if (1 == formatFieldService.insertFormatField(formatField)) {
 			PhoenixClient.alterViewAddColumn(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + formatField.getFt_id(),
-					ConstantsHBase.FAMILY_INFO, String.valueOf(
+					 String.valueOf(
 							formatFieldService.getFormatField_ff_id(formatField.getFt_id(), formatField.getFf_name())));
 			map.put("result", true);
 			map.put("message", "新增成功");
@@ -109,8 +109,7 @@ public class FormatFieldController {
 			}
 		}
 		String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
-		String family = ConstantsHBase.FAMILY_INFO;
-		PhoenixClient.alterViewDropColumns(tableName, family, qualifiers);
+		PhoenixClient.alterViewDropColumns(tableName, qualifiers);
 		if (i == ff_idStrs.length) {
 			map.put("result", true);
 			map.put("message", "成功删除" + i + "行");

@@ -31,9 +31,9 @@ public class SourceFieldController {
 
 	@RequestMapping("/insertSourceField")
 	@ResponseBody
-	public Map<String, Object> insertSourceField(HttpServletRequest request,SourceField sourceField) {
+	public Map<String, Object> insertSourceField(HttpServletRequest request, SourceField sourceField) {
 		User user = (User) request.getAttribute("user");
-		 Integer uid = user.getId();
+		Integer uid = user.getId();
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -42,9 +42,8 @@ public class SourceFieldController {
 		sourceField.setCreate_uid(uid);
 
 		if (1 == sourceFieldService.insertSourceField(sourceField)) {
-			PhoenixClient.alterViewAddColumn(ConstantsHBase.TABLE_PREFIX_SOURCE_ + sourceField.getCs_id(),
-					ConstantsHBase.FAMILY_INFO, String.valueOf(
-							sourceFieldService.getSourceFieldId(sourceField.getCs_id(), sourceField.getCsf_name())));
+			PhoenixClient.alterViewAddColumn(ConstantsHBase.TABLE_PREFIX_SOURCE_ + sourceField.getCs_id(), String
+					.valueOf(sourceFieldService.getSourceFieldId(sourceField.getCs_id(), sourceField.getCsf_name())));
 			map.put("result", true);
 			map.put("message", "新增成功");
 		} else {
@@ -67,9 +66,9 @@ public class SourceFieldController {
 
 	@RequestMapping("/updateSourceField")
 	@ResponseBody
-	public Map<String, Object> updateSourceField(HttpServletRequest request,SourceField sourceField) {
+	public Map<String, Object> updateSourceField(HttpServletRequest request, SourceField sourceField) {
 		User user = (User) request.getAttribute("user");
-		 Integer uid = user.getId();
+		Integer uid = user.getId();
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -104,8 +103,7 @@ public class SourceFieldController {
 			}
 		}
 		String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
-		String family = ConstantsHBase.FAMILY_INFO;
-		PhoenixClient.alterViewDropColumns(tableName, family, qualifiers);
+		PhoenixClient.alterViewDropColumns(tableName, qualifiers);
 		if (i == csf_idStrs.length) {
 			map.put("result", true);
 			map.put("message", "成功删除" + i + "行");

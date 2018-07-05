@@ -38,31 +38,31 @@ public class SourceController {
 	 * @return
 	 */
 	@RequestMapping(value = "/insertSource")
-	public String insertSource(HttpSession httpSession,Source source) {
+	public String insertSource(HttpSession httpSession, Source source) {
 		sourceService.insertSource(source);
 		Integer cs_id = sourceService.getSourceId(source.getCs_name());
-//		source.setCs_id(cs_id);
-//		source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
-//		source.setFormatTypes(formatTypeService.getFormatTypes(cs_id));
-		
+		// source.setCs_id(cs_id);
+		// source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
+		// source.setFormatTypes(formatTypeService.getFormatTypes(cs_id));
+
 		HBaseSourceDataDao.createSourceDataTable(String.valueOf(cs_id));
 		List<String> sourceQualifiers = new ArrayList<>();
 		sourceQualifiers.add(ConstantsHBase.QUALIFIER_PROJECT);
 		sourceQualifiers.add(ConstantsHBase.QUALIFIER_CREATE);
 		sourceQualifiers.add(ConstantsHBase.QUALIFIER_USER);
 		sourceQualifiers.add(ConstantsHBase.QUALIFIER_PUBLIC);
-		PhoenixClient.createView(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, ConstantsHBase.FAMILY_INFO, sourceQualifiers);
-		
+		PhoenixClient.createView(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, sourceQualifiers);
+
 		HBaseFormatNodeDao.createFormatNodeTable(String.valueOf(cs_id));
 		List<String> nodeQualifiers = new ArrayList<>();
 		nodeQualifiers.add(ConstantsHBase.QUALIFIER_FORMATTYPE);
 		nodeQualifiers.add(ConstantsHBase.QUALIFIER_NODENAME);
 		nodeQualifiers.add(ConstantsHBase.QUALIFIER_SOURCEDATAID);
-		PhoenixClient.createView(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id, ConstantsHBase.FAMILY_INFO, nodeQualifiers);
-		
-//		httpSession.setAttribute("source", source);
+		PhoenixClient.createView(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id, nodeQualifiers);
 
-		return "redirect:/admin/formatdata?cs_id="+cs_id;
+		// httpSession.setAttribute("source", source);
+
+		return "redirect:/admin/formatdata?cs_id=" + cs_id;
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class SourceController {
 			if (1 == sourceService.deleteSource(cs_id)) {
 				HBaseSourceDataDao.deleteSourceDataTable(String.valueOf(cs_id));
 				PhoenixClient.dropView(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id);
-				
+
 				HBaseFormatNodeDao.deleteFormatNodeTable(String.valueOf(cs_id));
 				PhoenixClient.dropView(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id);
 				map.put("result", true);

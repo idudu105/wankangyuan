@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dzjin.model.ProjectDataRelation;
 import com.dzjin.service.ProjectDataService;
 import com.xtkong.dao.hbase.HBaseFormatNodeDao;
 import com.xtkong.dao.hbase.HBaseSourceDataDao;
@@ -61,8 +62,7 @@ public class ProjectFormatDataController {
 		Map<String, String> sourceFieldDatas = new HashMap<>();
 		sourceFieldDatas.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
 		for (int i = 0; i < source_data_id.length; i++) {
-			// projectDataService.insert(new ProjectDataRelation(p_id,
-			// source_data_id[i]));
+			projectDataService.insert(new ProjectDataRelation(p_id, source_data_id[i]));
 			HBaseSourceDataDao.updateSourceData(cs_id, source_data_id[i], sourceFieldDatas);
 		}
 		/*
@@ -87,8 +87,7 @@ public class ProjectFormatDataController {
 		Map<String, String> sourceFieldDatas = new HashMap<>();
 		sourceFieldDatas.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf("  "));
 		for (int i = 0; i < source_data_id.length; i++) {
-			// projectDataService.remove(new ProjectDataRelation(p_id,
-			// source_data_id[i]));
+			projectDataService.remove(new ProjectDataRelation(p_id, source_data_id[i]));
 			HBaseSourceDataDao.updateSourceData(cs_id, source_data_id[i], sourceFieldDatas);
 		}
 		/*
@@ -139,40 +138,49 @@ public class ProjectFormatDataController {
 			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
 			httpSession.setAttribute("source", source);// 采集源字段列表
 
-			/*
-			 * List<String> sourceDataIds =
-			 * projectDataService.select(p_id,cs_id); // 源数据字段
-			 * List<List<String>> sourceDatas = new ArrayList<>(); if
-			 * (!sourceDataIds.isEmpty()) { // 源数据字段数据，注：每个列表第一个值sourceDataId不显示
-			 * sourceDatas =
-			 * HBaseSourceDataDao.getSourceDatasByIds(Integer.toString(cs_id),
-			 * sourceDataIds, source.getSourceFields()); }
-			 */
 			String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
-			String family = ConstantsHBase.FAMILY_INFO;
-
 			List<String> qualifiers = new ArrayList<>();
+			Map<String, String> conditionEqual = new HashMap<>();
+			Map<String, String> conditionLike = new HashMap<>();
+			String condition = null;
+			List<String> sourceDataIds = projectDataService.select(p_id, cs_id); // 源数据字段
+			// List<List<String>> sourceDatas = new ArrayList<>();
+			// if (!sourceDataIds.isEmpty()) { //
+			// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
+			// sourceDatas =
+			// HBaseSourceDataDao.getSourceDatasByIds(Integer.toString(cs_id),
+			// sourceDataIds,
+			// source.getSourceFields());
+			// }
+
 			for (SourceField sourceField : source.getSourceFields()) {
 				qualifiers.add(String.valueOf(sourceField.getCsf_id()));
 			}
-			Map<String, String> whereEqual = new HashMap<>();
-			whereEqual.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
-
-			Map<String, String> whereLike = new HashMap<>();
-			if (searchWord != null) {
-				whereLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()), searchWord);
+			if (sourceDataIds != null && !sourceDataIds.isEmpty()) {
+				condition = " (";
+				for (String sourceDataId : sourceDataIds) {
+					condition += "ID= '" + sourceDataId + "' OR ";
+				}
+				condition = condition.substring(0, condition.lastIndexOf("OR"));
 			}
+			// conditionEqual.put(ConstantsHBase.QUALIFIER_PROJECT,
+			// String.valueOf(p_id));
 
-			Map<String, Map<String, Object>> result = PhoenixClient.select(tableName, family, qualifiers, whereEqual,
-					whereLike, page, strip);
+			if (searchWord != null) {
+				conditionLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()), searchWord);
+			}
+			String phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike,
+					condition, page, strip);
+
+			Map<String, Map<String, Object>> result = PhoenixClient.select(phoenixSQL);
 			String resultMsg = String.valueOf((result.get("msg")).get("msg"));
 			for (int j = 0; j < 6; j++) {
 				resultMsg = String.valueOf((result.get("msg")).get("msg"));
 				if (resultMsg.equals("success")) {
 					break;
 				} else {
-					result = PhoenixClient.reSelectWhere(resultMsg, tableName, family, qualifiers, whereEqual,
-							whereLike, page, strip);
+					PhoenixClient.undefined(resultMsg, tableName, qualifiers, conditionEqual, conditionLike);
+					result = PhoenixClient.select(phoenixSQL);
 				}
 			}
 			httpSession.setAttribute("sourceDatas", result.get("records").get("data"));// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
@@ -199,27 +207,37 @@ public class ProjectFormatDataController {
 			httpSession.setAttribute("source", source);// 采集源字段列表
 
 			String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
-			String family = ConstantsHBase.FAMILY_INFO;
 
 			List<String> qualifiers = new ArrayList<>();
 			for (SourceField sourceField : source.getSourceFields()) {
 				qualifiers.add(String.valueOf(sourceField.getCsf_id()));
 			}
-			Map<String, String> whereEqual = new HashMap<>();
-			whereEqual.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
+			Map<String, String> conditionEqual = new HashMap<>();
+			// conditionEqual.put(ConstantsHBase.QUALIFIER_PROJECT,
+			// String.valueOf(p_id));
 
-			Map<String, String> whereLike = new HashMap<>();
+			Map<String, String> conditionLike = new HashMap<>();
+			String condition=null;
+			List<String> sourceDataIds = projectDataService.select(p_id, cs_id); // 源数据字段
+			if (sourceDataIds != null && !sourceDataIds.isEmpty()) {
+				condition = " (";
+				for (String sourceDataId : sourceDataIds) {
+					condition += "ID= '" + sourceDataId + "' OR ";
+				}
+				condition = condition.substring(0, condition.lastIndexOf("OR"));
+			}
+			String phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike, condition,
+					null, null);
 
-			Map<String, Map<String, Object>> result = PhoenixClient.select(tableName, qualifiers, whereEqual,
-					whereLike, null,  null,null);
+			Map<String, Map<String, Object>> result = PhoenixClient.select(phoenixSQL);
 			String resultMsg = String.valueOf((result.get("msg")).get("msg"));
 			for (int j = 0; j < 6; j++) {
 				resultMsg = String.valueOf((result.get("msg")).get("msg"));
 				if (resultMsg.equals("success")) {
 					break;
 				} else {
-					result = PhoenixClient.reSelectWhere(resultMsg, tableName, family, qualifiers, whereEqual,
-							whereLike, null, null);
+					PhoenixClient.undefined(resultMsg, tableName, qualifiers, conditionEqual, conditionLike);
+					result = PhoenixClient.select(phoenixSQL);
 				}
 			}
 			httpSession.setAttribute("sourceDatas", result.get("records").get("data"));// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
@@ -277,27 +295,28 @@ public class ProjectFormatDataController {
 				ConstantsHBase.IS_meta_false);
 
 		String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
-		String family = ConstantsHBase.FAMILY_INFO;
 		List<String> mateQualifiers = new ArrayList<>();
 		for (FormatField formatField : meta) {
 			mateQualifiers.add(String.valueOf(formatField.getFf_id()));
 		}
-		Map<String, String> whereEqual = new HashMap<>();
-		whereEqual.put(ConstantsHBase.QUALIFIER_FORMATNODEID, formatNodeId);
-		whereEqual.put("ID", formatNodeId);
-		Map<String, String> whereLike = new HashMap<>();
+		Map<String, String> conditionEqual = new HashMap<>();
+		conditionEqual.put(ConstantsHBase.QUALIFIER_FORMATNODEID, formatNodeId);
+		conditionEqual.put("ID", formatNodeId);
+		Map<String, String> conditionLike = new HashMap<>();
 		String condition = null;
-		Map<String, Map<String, Object>> metaDatas = PhoenixClient.select(tableName, mateQualifiers, whereEqual,
-				whereLike, condition, 1, 1);
+		String metaphoenixSQL = PhoenixClient.getPhoenixSQL(tableName, mateQualifiers, conditionEqual, conditionLike,
+				condition, 1, 1);
+		Map<String, Map<String, Object>> metaDatas = PhoenixClient.select(metaphoenixSQL);
 
 		List<String> dataQualifiers = new ArrayList<>();
 		for (FormatField formatField : data) {
 			dataQualifiers.add(String.valueOf(formatField.getFf_id()));
 		}
-		whereEqual.remove("ID");
+		conditionEqual.remove("ID");
 		condition = " \"" + tableName + "\".\"ID\"!='" + formatNodeId + "'";
-		Map<String, Map<String, Object>> dataDatas = PhoenixClient.select(tableName, dataQualifiers, whereEqual,
-				whereLike, condition, page, strip);
+		String dataphoenixSQL = PhoenixClient.getPhoenixSQL(tableName, dataQualifiers, conditionEqual, conditionLike,
+				condition, page, strip);
+		Map<String, Map<String, Object>> dataDatas = PhoenixClient.select(dataphoenixSQL);
 		String metaMsg = String.valueOf((metaDatas.get("msg")).get("msg"));
 		String dataMsg = String.valueOf((dataDatas.get("msg")).get("msg"));
 		for (int j = 0; j < 6; j++) {
@@ -307,12 +326,12 @@ public class ProjectFormatDataController {
 				break;
 			}
 			if (!(metaMsg.equals("success"))) {
-				metaDatas = PhoenixClient.reSelectWhere(metaMsg, tableName, family, mateQualifiers, whereEqual,
-						whereLike, 1, 1);
+				PhoenixClient.undefined(metaMsg, tableName, mateQualifiers, conditionEqual, conditionLike);
+				metaDatas = PhoenixClient.select(metaphoenixSQL);
 			}
 			if (!(dataMsg.equals("success"))) {
-				dataDatas = PhoenixClient.reSelectWhere(dataMsg, tableName, family, dataQualifiers, whereEqual,
-						whereLike, page, strip);
+				PhoenixClient.undefined(dataMsg, tableName, dataQualifiers, conditionEqual, conditionLike);
+				dataDatas = PhoenixClient.select(dataphoenixSQL);
 			}
 		}
 		@SuppressWarnings("unchecked")

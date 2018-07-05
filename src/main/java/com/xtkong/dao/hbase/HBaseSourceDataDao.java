@@ -110,34 +110,32 @@ public class HBaseSourceDataDao {
 	public static Map<String, Map<String, Object>> getSourceDatasByUidP(String cs_id, String uid,
 			List<String> qualifiers, Integer page, Integer strip) {
 		String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
-		String family = ConstantsHBase.FAMILY_INFO;
 
-		Map<String, String> whereEqual = new HashMap<>();
-		whereEqual.put(ConstantsHBase.QUALIFIER_USER, String.valueOf(uid));
+		Map<String, String> conditionEqual = new HashMap<>();
+		conditionEqual.put(ConstantsHBase.QUALIFIER_USER, String.valueOf(uid));
 
-		Map<String, String> whereLike = new HashMap<>();
-		// whereLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()),
+		Map<String, String> conditionLike = new HashMap<>();
+		// conditionLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()),
 		// searchWord);
-
-		Map<String, Map<String, Object>> result = PhoenixClient.select(tableName, family, qualifiers, whereEqual,
-				whereLike, page, strip);
+		String phoenixSQL=PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike, null, page, strip);
+		
+		Map<String, Map<String, Object>> result = PhoenixClient.select(phoenixSQL);
 		return result;
 	}
 
 	public static Map<String, Map<String, Object>> getSourceDatasCreatedP(String cs_id, String uid,
 			List<String> qualifiers, Integer page, Integer strip) {
 		String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
-		String family = ConstantsHBase.FAMILY_INFO;
 
-		Map<String, String> whereEqual = new HashMap<>();
-		whereEqual.put(ConstantsHBase.QUALIFIER_CREATE, String.valueOf(uid));
+		Map<String, String> conditionEqual = new HashMap<>();
+		conditionEqual.put(ConstantsHBase.QUALIFIER_CREATE, String.valueOf(uid));
 
-		Map<String, String> whereLike = new HashMap<>();
-		// whereLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()),
+		Map<String, String> conditionLike = new HashMap<>();
+		// conditionLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()),
 		// searchWord);
-
-		Map<String, Map<String, Object>> result = PhoenixClient.select(tableName, family, qualifiers, whereEqual,
-				whereLike, page, strip);
+		String phoenixSQL=PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike, null, page, strip);
+		
+		Map<String, Map<String, Object>> result = PhoenixClient.select(phoenixSQL);
 		return result;
 
 	}
@@ -145,17 +143,16 @@ public class HBaseSourceDataDao {
 	public static Map<String, Map<String, Object>> getSourceDatasPublicP(String cs_id, List<String> qualifiers,
 			Integer page, Integer strip) {
 		String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
-		String family = ConstantsHBase.FAMILY_INFO;
 
-		Map<String, String> whereEqual = new HashMap<>();
-		whereEqual.put(ConstantsHBase.QUALIFIER_PUBLIC, String.valueOf(ConstantsHBase.VALUE_PUBLIC_TRUE));
+		Map<String, String> conditionEqual = new HashMap<>();
+		conditionEqual.put(ConstantsHBase.QUALIFIER_PUBLIC, String.valueOf(ConstantsHBase.VALUE_PUBLIC_TRUE));
 
-		Map<String, String> whereLike = new HashMap<>();
-		// whereLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()),
+		Map<String, String> conditionLike = new HashMap<>();
+		// conditionLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()),
 		// searchWord);
-
-		Map<String, Map<String, Object>> result = PhoenixClient.select(tableName, family, qualifiers, whereEqual,
-				whereLike, page, strip);
+		String phoenixSQL=PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike, null, page, strip);
+		
+		Map<String, Map<String, Object>> result = PhoenixClient.select(phoenixSQL);
 		return result;
 	}
 
@@ -431,7 +428,7 @@ public class HBaseSourceDataDao {
 						String nodeName=formatNode.get(2);
 						HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName,null);
 						String tableStr=ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
-						Map<String, Map<String, Object>> records = PhoenixClient.executeQuery("SELECT * FROM \""+tableStr+"\"");
+						Map<String, Map<String, Object>> records = PhoenixClient.select("SELECT * FROM \""+tableStr+"\"");
 						List<String> head = (List<String>) records.get("records").get("head");
 						List<List<String>> datas =(List<List<String>>) records.get("records").get("data");
 						for (List<String> data : datas) {

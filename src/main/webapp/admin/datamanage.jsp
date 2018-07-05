@@ -161,7 +161,7 @@
 					<li><i class="icon-home"></i> <a
 						href="/wankangyuan/admin/viewIndex">首页</a> <i
 						class="icon-angle-right"></i></li>
-					<li><a href="/wankangyuan/admin/viewUserManage">用户管理</a></li>
+					<li><a href="/wankangyuan/admin/formatdata">格式数据管理</a></li>
 				</ul>
 
 

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dzjin.service.ProjectDataService;
 import com.dzjin.service.ProjectService;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -33,6 +34,10 @@ import com.xtkong.util.HBaseDB;
 @Controller
 @RequestMapping("/common")
 public class CommonSelect {
+
+	@Autowired
+	ProjectDataService projectDataService;
+
 	@Autowired
 	SourceService sourceService;
 	@Autowired
@@ -111,16 +116,16 @@ public class CommonSelect {
 			if (gsonMap.containsKey("selectContdation")) {
 				selectContdation = gsonMap.get("selectContdation").toString();
 			}
-			if (selectContdation != null) {
-				return commonSelect(userid, projectid, select, isAddWhere, selectContdation, currPage, pageSize);
-			} else {
+			if (conditionEqual != null&&conditionLike!=null) {
 				return commonSelect(userid, projectid, select, isAddWhere, conditionEqual, conditionLike, currPage,
 						pageSize);
+			} else {
+				return commonSelect(userid, projectid, select, isAddWhere, selectContdation, currPage, pageSize);
 			}
 		} catch (JsonSyntaxException e) {
 			e.printStackTrace();
 			Map<String, Object> map = new HashMap<>();
-			map.put("msg", "Json解析异常，请核对Json格式！\n提示："+e.getMessage());
+			map.put("msg", "Json解析异常，请核对Json格式！  Json:"+jsonStr+" 提示："+e.getMessage());
 			return new Gson().toJson(map).toString();
 		}
 	}
@@ -155,8 +160,16 @@ public class CommonSelect {
 		}
 		if (projectid != null && !projectid.isEmpty()) {
 			select += " (";
-			for (String string : projectid) {
-				select += " \"" + ConstantsHBase.QUALIFIER_PROJECT + "\"= '" + string + "' OR ";
+			for (String pid : projectid) {
+				List<String> sourceDataIds = projectDataService.select(Integer.valueOf(pid)); // 源数据字段
+				if (sourceDataIds != null && !sourceDataIds.isEmpty()) {
+					select = " (";
+					for (String sourceDataId : sourceDataIds) {
+						select += "ID= '" + sourceDataId + "' OR ";
+					}
+					select = select.substring(0, select.lastIndexOf("OR"));
+				}
+				select += " \"" + ConstantsHBase.QUALIFIER_PROJECT + "\"= '" + pid + "' OR ";
 			}
 			select = select.substring(0, select.lastIndexOf("OR")) + ") AND ";
 		}

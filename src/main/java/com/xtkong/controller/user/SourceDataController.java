@@ -56,12 +56,9 @@ public class SourceDataController {
 	public String firstIn(HttpServletRequest request, HttpSession httpSession, String type, Integer page,
 			Integer strip) {
 
-		return getSourceDatas(request, httpSession, type, null, page, strip,null,null);
+		return getSourceDatas(request, httpSession, type, null, page, strip, null, null);
 	}
-	
-	
-	
-	
+
 	/**
 	 * sources 采集源列表
 	 * 
@@ -79,7 +76,7 @@ public class SourceDataController {
 	 */
 	@RequestMapping("/getSourceDatas")
 	public String getSourceDatas(HttpServletRequest request, HttpSession httpSession, String type, Integer cs_id,
-			Integer page, Integer strip,Integer csf_id,String searchWord) {
+			Integer page, Integer strip, Integer csf_id, String desc_asc) {
 		User user = (User) request.getAttribute("user");
 		if (page == null) {
 			page = 1;
@@ -89,9 +86,8 @@ public class SourceDataController {
 		}
 		List<Project> projects;
 		List<Source> sources = sourceService.getSourcesForUser();
-
 		httpSession.setAttribute("sources", sources);// 采集源列表
-
+		
 		if (!sources.isEmpty()) {
 			if (cs_id == null) {
 				cs_id = sourceService.getSourcesForUserLimit(1).get(0).getCs_id();
@@ -99,33 +95,19 @@ public class SourceDataController {
 			Source source = sourceService.getSourceByCs_id(cs_id);
 			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
 
-			// httpSession.setAttribute("source", source);// 采集源字段列表
-			// 源数据字段
-			// List<List<String>> sourceDatas = new ArrayList<>();
 			Map<String, Map<String, Object>> result = new HashMap<>();
 			String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
-			String family = ConstantsHBase.FAMILY_INFO;
 			List<String> qualifiers = new ArrayList<>();
+			Map<String, String> conditionEqual = new HashMap<>();
+			Map<String, String> conditionLike = new HashMap<>();
+			String condition = null;
 			for (SourceField sourceField : source.getSourceFields()) {
 				qualifiers.add(String.valueOf(sourceField.getCsf_id()));
 			}
-			Map<String, String> whereEqual = new HashMap<>();
-			Map<String, String> whereLike = new HashMap<>();
-			if (csf_id != null) {
-				if (searchWord==null) {
-					searchWord="";
-				}
-				whereLike.put(String.valueOf(csf_id), searchWord);
-			}
-			String condition = null;
 			// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
 			switch (type) {
 			case "1":
-//				condition = PhoenixClient.getPheonixSQLQualifier(tableName, ConstantsHBase.QUALIFIER_USER) + "='"
-//						+ String.valueOf(user.getId()) + "' OR "
-//						+ PhoenixClient.getPheonixSQLQualifier(tableName, ConstantsHBase.QUALIFIER_CREATE) + "='"
-//						+ String.valueOf(user.getId()) + "'";
-				whereEqual.put(ConstantsHBase.QUALIFIER_USER, String.valueOf(user.getId()));
+				conditionEqual.put(ConstantsHBase.QUALIFIER_USER, String.valueOf(user.getId()));
 				break;
 			case "2":
 				SourceField publicStatus = new SourceField();
@@ -133,27 +115,44 @@ public class SourceDataController {
 				publicStatus.setCsf_name("公开状态");
 				source.getSourceFields().add(publicStatus);
 				qualifiers.add(ConstantsHBase.QUALIFIER_PUBLIC);
-				whereEqual.put(ConstantsHBase.QUALIFIER_CREATE, String.valueOf(user.getId()));
+				conditionEqual.put(ConstantsHBase.QUALIFIER_CREATE, String.valueOf(user.getId()));
 				break;
 			case "3":
-				whereEqual.put(ConstantsHBase.QUALIFIER_PUBLIC, String.valueOf(ConstantsHBase.VALUE_PUBLIC_TRUE));
+				conditionEqual.put(ConstantsHBase.QUALIFIER_PUBLIC, String.valueOf(ConstantsHBase.VALUE_PUBLIC_TRUE));
 				break;
 			}
-			result = PhoenixClient.select(tableName, qualifiers, whereEqual, whereLike, condition, page, strip);
+			
+			String phoenixSQL=PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike, null, null, null);
+			Integer total=PhoenixClient.count(phoenixSQL);
+			//排序
+			if (csf_id != null) {
+				switch (desc_asc) {
+				case "DESC":
+					condition += "  ORDER BY " + csf_id + " DESC ";
+					break;
+				case "ASC":
+					condition += "  ORDER BY " + csf_id + " ASC ";
+					break;
+				}
+			}
+			phoenixSQL=PhoenixClient.getPhoenixSQL(phoenixSQL, condition, page, strip);
+			
+			result=PhoenixClient.select(phoenixSQL);
+			
 			String resultMsg = String.valueOf((result.get("msg")).get("msg"));
 			for (int j = 0; j < 6; j++) {
 				resultMsg = String.valueOf((result.get("msg")).get("msg"));
 				if (resultMsg.equals("success")) {
 					break;
 				} else {
-					result = PhoenixClient.reSelectWhere(resultMsg, tableName, family, qualifiers, whereEqual,
-							whereLike, page, strip);
+					PhoenixClient.undefined(resultMsg, tableName, qualifiers, conditionEqual, conditionLike);
+					result = PhoenixClient.select(phoenixSQL);
 				}
 			}
 			httpSession.setAttribute("thiscs_id", cs_id);
 			httpSession.setAttribute("source", source);// 采集源字段列表
 			httpSession.setAttribute("sourceDatas", result.get("records").get("data"));// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
-			httpSession.setAttribute("total", result.get("page").get("totalCount"));
+			httpSession.setAttribute("total", total);
 			httpSession.setAttribute("page", page);
 			httpSession.setAttribute("rows", strip);
 		}
@@ -303,13 +302,14 @@ public class SourceDataController {
 		}
 		return map;
 	}
+
 	@RequestMapping("/removeSourceDatas")
 	@ResponseBody
-	public Map<String, Object> removeSourceDatas(HttpServletRequest request,String cs_id, String sourceDataIds) {
+	public Map<String, Object> removeSourceDatas(HttpServletRequest request, String cs_id, String sourceDataIds) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		User user = (User) request.getAttribute("user");
 		Integer uid = user.getId();
-		if (HBaseSourceDataDao.removeSourceDatas(cs_id,String.valueOf(uid), sourceDataIds)) {
+		if (HBaseSourceDataDao.removeSourceDatas(cs_id, String.valueOf(uid), sourceDataIds)) {
 			map.put("result", true);
 			map.put("message", "删除成功");
 		} else {
@@ -318,6 +318,7 @@ public class SourceDataController {
 		}
 		return map;
 	}
+
 	@RequestMapping("/open")
 	@ResponseBody
 	public Map<String, Object> open(String cs_id, String sourceDataIds) {
@@ -348,7 +349,7 @@ public class SourceDataController {
 
 	@RequestMapping("/addMySource")
 	@ResponseBody
-	public Map<String, Object> addMySource(HttpServletRequest request,String cs_id, String sourceDataIds) {
+	public Map<String, Object> addMySource(HttpServletRequest request, String cs_id, String sourceDataIds) {
 		User user = (User) request.getAttribute("user");
 		Integer uid = user.getId();
 		Map<String, Object> map = new HashMap<String, Object>();
