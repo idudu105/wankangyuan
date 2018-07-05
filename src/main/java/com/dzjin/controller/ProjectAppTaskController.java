@@ -18,6 +18,7 @@ import com.dzjin.model.Project;
 import com.dzjin.model.ProjectAppTask;
 import com.dzjin.service.ProjectAppTaskService;
 import com.liutianjun.pojo.Application;
+import com.liutianjun.pojo.User;
 import com.liutianjun.service.ApplicationService;
 
 /**
@@ -52,7 +53,8 @@ public class ProjectAppTaskController {
 	 * @return 返回项目内应用结果界面
 	 */
 	@RequestMapping("/selectProjectAppEnd")
-	public String selectProjectAppEnd(HttpSession httpSession , Integer type , Integer page , Integer strip , String searchWord){
+	public String selectProjectAppEnd(HttpSession httpSession , HttpServletRequest request , 
+			Integer type , Integer page , Integer strip , String searchWord){
 		
 		if(page == null){
 			page = 1;
@@ -66,9 +68,9 @@ public class ProjectAppTaskController {
 		}else{
 			httpSession.setAttribute("projectAppTaskSearchWord", searchWord);
 		}
-		
+		User user = (User)request.getAttribute("user");
 		Project project = (Project) httpSession.getAttribute("project");
-		Map<String , Object> map = projectAppTaskService.selectProjectAppTask(page, strip, project.getId(),searchWord);
+		Map<String , Object> map = projectAppTaskService.selectProjectAppTask(page, strip, project.getId(),searchWord , user);
 		httpSession.setAttribute("projectAppTasks", map.get("list"));
 		httpSession.setAttribute("page", page);
 		httpSession.setAttribute("rows", strip);
