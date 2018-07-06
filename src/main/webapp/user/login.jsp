@@ -21,7 +21,6 @@
         <div class="box">
             <div class="top">
                 <h1><img src="<%=request.getContextPath()%>/static/img/newlogo2.png" class="logo" height="70" width="218" alt="" /></h1>
-                <div class="link">链接</div>
             </div>
             <div class="xiangmu">
                 <div class="loginK">
