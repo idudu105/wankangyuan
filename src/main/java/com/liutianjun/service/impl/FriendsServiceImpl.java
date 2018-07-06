@@ -155,13 +155,15 @@ public class FriendsServiceImpl implements FriendsService {
 	 */
 	private void copyUserToFriends(Integer friendsId, Friends friends) {
 		User friendUser = userDao.selectByPrimaryKey(friendsId);
-		friends.setFriendEmail(friendUser.getEmail());
-		friends.setFriendHeadimg(friendUser.getHeadimg());
-		friends.setFriendName(friendUser.getUsername());
-		friends.setFriendProfile(friendUser.getPersonalProfile());
-		
-		Role role = roleService.selectByPrimaryKey(Integer.valueOf(friendUser.getRoleIds()));
-		friends.setFriendRolename(role.getDescription());
+		if(friendUser != null) {
+			friends.setFriendEmail(friendUser.getEmail());
+			friends.setFriendHeadimg(friendUser.getHeadimg());
+			friends.setFriendName(friendUser.getUsername());
+			friends.setFriendProfile(friendUser.getPersonalProfile());
+			
+			Role role = roleService.selectByPrimaryKey(Integer.valueOf(friendUser.getRoleIds()));
+			friends.setFriendRolename(role.getDescription());
+		}
 	}
 
 	/**

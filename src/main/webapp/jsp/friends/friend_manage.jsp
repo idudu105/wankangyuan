@@ -13,7 +13,7 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/project1.js"></script>
 <script type="text/javascript">
     window.onload=function(){
-        // project0();
+        project0();
         // project1();
         // pro_mine();
         // user_info();
@@ -175,7 +175,7 @@
                                 </tr>
                                 <tbody data-bind="foreach: friends">
                                 <tr class="biaoxiang" >
-                                    <th class="touxiang"><img data-bind="attr:{src: friendHeadimg}"  alt="" class="touxiangi" /></th>
+                                    <th class="touxiang"><img data-bind="attr:{src: friendHeadimg}" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="touxiangi" /></th>
                                     <th class="yonghuming" data-bind="text: friendName"></th>
                                     <th class="youxiang" data-bind="text: friendEmail"></th>
                                     <th class="caozuo">
@@ -434,7 +434,7 @@
                                             </div>
                                         </td>
                                         <td class="touxiangk">
-                                            <img data-bind="attr:{src:friendHeadimg}" alt="" class="touxiangi" />
+                                            <img data-bind="attr:{src:friendHeadimg}" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="touxiangi" />
                                         </td>
                                         <td class="yonghuming"><span data-bind="text: friendName"></span></td>
                                         <td class="youxiang"><span data-bind="text: friendEmail"></span></td>

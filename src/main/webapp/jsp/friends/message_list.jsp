@@ -12,7 +12,7 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/project1.js"></script>
 <script type="text/javascript">
     window.onload=function(){
-        // project0();
+        project0();
         // project1();
         // pro_mine();
         // user_info();

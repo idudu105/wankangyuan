@@ -108,7 +108,7 @@
                     <div class="messsendMRM" data-bind="foreach: friendMessage">
                         <div class="messsendMRMz">
                             <div class="messsendMRMzik">
-                                <img alt="" class="messsendMRMzi" data-bind="attr:{src:senderHeadimg}" />
+                                <img alt="" class="messsendMRMzi" data-bind="attr:{src:senderHeadimg}" onerror='this.src="/wankangyuan/static/img/head.jpg"' />
                             </div>
                             <div class="messsendMRMzt">
                                 <div class="messsendMRMztT">
@@ -154,7 +154,7 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/moment.min.js"></script>
 
 <script type="text/javascript">
-
+project0();
 var centHost = window.location.host;
 
 var websocket = null;

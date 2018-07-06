@@ -151,7 +151,7 @@
         <property name="filterChainDefinitions">
             <value>
                 /static/** = anon <!--设置静态资源文件为游客可访问-->
-                /index.jsp = anon
+                /= anon
                 /register = anon
                 /open/** = anon
                 /common/** = anon
