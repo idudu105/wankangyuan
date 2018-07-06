@@ -56,6 +56,19 @@
     </div>
     
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
+<shiro:hasRole name="admin">  
+    <script type="text/javascript">
+    layer.msg("您已经登录");
+    layer.confirm('您已经登录，请问是否重新登录？', {
+          btn: ['重新登录','进入后台'] //按钮
+        }, function(){
+            window.location.href='/wankangyuan/admin/logout';
+        }, function(){
+            window.location.href='/wankangyuan/admin/viewIndex';
+        });
+    </script>
+</shiro:hasRole>   
+
 <c:if test="${not empty error}">
     <script type="text/javascript">
     layer.msg("${error}");
