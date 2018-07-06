@@ -342,7 +342,8 @@
 	        	type:"post",
 	        	data:{
 	        		p_id:p_id,
-	        		sourceDataIds:sourceDataIds.join(",")
+	        		sourceDataIds:sourceDataIds.join(","),
+            		cs_id:cs_id
 	        	},
 	        	dataType:"json",
 	        	success : function(data){

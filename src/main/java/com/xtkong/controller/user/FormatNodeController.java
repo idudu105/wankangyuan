@@ -146,25 +146,28 @@ public class FormatNodeController {
 		for (FormatField formatField : meta) {
 			mateQualifiers.add(String.valueOf(formatField.getFf_id()));
 		}
-		Map<String, String> whereEqual = new HashMap<>();
-		whereEqual.put(ConstantsHBase.QUALIFIER_FORMATNODEID, formatNodeId);
-		whereEqual.put("ID", formatNodeId);
-		Map<String, String> whereLike = new HashMap<>();
+		Map<String, String> conditionEqual = new HashMap<>();
+		conditionEqual.put(ConstantsHBase.QUALIFIER_FORMATNODEID, formatNodeId);
+		conditionEqual.put("ID", formatNodeId);
+		Map<String, String> conditionLike = new HashMap<>();
 		String condition=null;
-		String matephoenixSQL=PhoenixClient.getPhoenixSQL(tableName, mateQualifiers, whereEqual, whereLike, condition, 1, 1);
+		String matephoenixSQL=PhoenixClient.getPhoenixSQL(tableName, mateQualifiers, conditionEqual, conditionLike, condition, 1, 1);
 		Map<String, Map<String, Object>> metaDatas =PhoenixClient.select(matephoenixSQL);
 //				select(tableName,  mateQualifiers,
-//				whereEqual, whereLike,condition, 1, 1);
+//				conditionEqual, conditionLike,condition, 1, 1);
 
 		List<String> dataQualifiers = new ArrayList<>();
 		for (FormatField formatField : data) {
 			dataQualifiers.add(String.valueOf(formatField.getFf_id()));
 		}
-		whereEqual.remove("ID");
+		conditionEqual.remove("ID");
 		condition=" \""+tableName+"\".\"ID\"!='"+formatNodeId+"'";
-		String dataphoenixSQL=PhoenixClient.getPhoenixSQL(tableName, dataQualifiers, whereEqual, whereLike, condition, page, strip);
+		String dataphoenixSQL=PhoenixClient.getPhoenixSQL(tableName, dataQualifiers, conditionEqual, conditionLike, condition, null, null);
+		Integer dataCount=PhoenixClient.count(dataphoenixSQL);
+		
+		dataphoenixSQL=PhoenixClient.getPhoenixSQL(dataphoenixSQL, null, page, strip);
 		Map<String, Map<String, Object>> dataDatas = PhoenixClient.select(dataphoenixSQL);
-//				PhoenixClient.select(tableName, dataQualifiers, whereEqual, whereLike, condition, page, strip);
+//				PhoenixClient.select(tableName, dataQualifiers, conditionEqual, conditionLike, condition, page, strip);
 		String metaMsg = String.valueOf((metaDatas.get("msg")).get("msg"));
 		String dataMsg = String.valueOf((dataDatas.get("msg")).get("msg"));
 		for (int j = 0; j < 6; j++) {
@@ -174,16 +177,16 @@ public class FormatNodeController {
 				break;
 			}
 			if (!(metaMsg.equals("success"))) {
-				PhoenixClient.undefined(metaMsg, tableName, mateQualifiers, whereEqual, whereLike);
+				PhoenixClient.undefined(metaMsg, tableName, mateQualifiers, conditionEqual, conditionLike);
 				metaDatas =PhoenixClient.select(matephoenixSQL);
-//				metaDatas = PhoenixClient.reSelectWhere(metaMsg, tableName, family, mateQualifiers, whereEqual,
-//						whereLike, 1, 1);
+//				metaDatas = PhoenixClient.reSelectWhere(metaMsg, tableName, family, mateQualifiers, conditionEqual,
+//						conditionLike, 1, 1);
 			}
 			if (!(dataMsg.equals("success"))) {
-				PhoenixClient.undefined(dataMsg, tableName, dataQualifiers, whereEqual, whereLike);
+				PhoenixClient.undefined(dataMsg, tableName, dataQualifiers, conditionEqual, conditionLike);
 				dataDatas =PhoenixClient.select(dataphoenixSQL);
-//				dataDatas = PhoenixClient.reSelectWhere(dataMsg, tableName, family, dataQualifiers, whereEqual,
-//						whereLike, page, strip);
+//				dataDatas = PhoenixClient.reSelectWhere(dataMsg, tableName, family, dataQualifiers, conditionEqual,
+//						conditionLike, page, strip);
 			}
 		}
 		@SuppressWarnings("unchecked")
@@ -203,7 +206,9 @@ public class FormatNodeController {
 		httpSession.setAttribute("data", data);
 		httpSession.setAttribute("dataDatas", dataDatas.get("records").get("data"));
 		httpSession.setAttribute("sourceDataId", sourceDataId);
-		
+		httpSession.setAttribute("total", dataCount);
+		httpSession.setAttribute("page", page);
+		httpSession.setAttribute("rows", strip);
 		
 		switch (type) {
 		case "1":
