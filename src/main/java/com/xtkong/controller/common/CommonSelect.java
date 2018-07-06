@@ -64,6 +64,12 @@ public class CommonSelect {
 		return map;
 	}
 
+	/***
+	 * 通用查询，json
+	 * 
+	 * @param jsonStr
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/commonSelectJson")
 	@ResponseBody
@@ -116,7 +122,7 @@ public class CommonSelect {
 			if (gsonMap.containsKey("selectContdation")) {
 				selectContdation = gsonMap.get("selectContdation").toString();
 			}
-			if (conditionEqual != null&&conditionLike!=null) {
+			if (conditionEqual != null && conditionLike != null) {
 				return commonSelect(userid, projectid, select, isAddWhere, conditionEqual, conditionLike, currPage,
 						pageSize);
 			} else {
@@ -125,12 +131,13 @@ public class CommonSelect {
 		} catch (JsonSyntaxException e) {
 			e.printStackTrace();
 			Map<String, Object> map = new HashMap<>();
-			map.put("msg", "Json解析异常，请核对Json格式！  Json:"+jsonStr+" 提示："+e.getMessage());
+			map.put("msg", "Json解析异常，请核对Json格式！  Json:" + jsonStr + " 提示：" + e.getMessage());
 			return new Gson().toJson(map).toString();
 		}
 	}
 
 	/**
+	 * 通用查询，参数
 	 * 
 	 * @param userid
 	 * @param projectid
@@ -188,7 +195,8 @@ public class CommonSelect {
 		if (pageSize == null) {
 			pageSize = "0";
 		}
-		return new Gson().toJson(PhoenixClient.commonSelect(select, Integer.valueOf(currPage), Integer.valueOf(pageSize)))
+		return new Gson()
+				.toJson(PhoenixClient.commonSelect(select, Integer.valueOf(currPage), Integer.valueOf(pageSize)))
 				.toString();
 	}
 
@@ -254,7 +262,8 @@ public class CommonSelect {
 		if (pageSize == null) {
 			pageSize = "0";
 		}
-		return new Gson().toJson(PhoenixClient.commonSelect(select, Integer.valueOf(currPage), Integer.valueOf(pageSize)))
+		return new Gson()
+				.toJson(PhoenixClient.commonSelect(select, Integer.valueOf(currPage), Integer.valueOf(pageSize)))
 				.toString();
 	}
 

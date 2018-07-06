@@ -70,8 +70,16 @@ $(".box_xxtabz").click(function(){
 					
 					str+='<th class="biaoxiangth" id="error_msg'+sourceFields[i].csf_id+'">'+sourceFields[i].error_msg+'</th>';
 					str+='<th class="biaoxiangth">'+sourceFields[i].create_datetime+'</th>';
+					
+					if(sourceFields[i].update_datetime == null){
+						sourceFields[i].update_datetime = "";
+					}
 					str+='<th class="biaoxiangth">'+sourceFields[i].update_datetime+'</th>';
 					str+='<th class="biaoxiangth">'+sourceFields[i].creator+'</th>';
+					
+					if(sourceFields[i].updater == null){
+						sourceFields[i].updater = "";
+					}
 					str+='<th class="biaoxiangth">'+sourceFields[i].updater+'</th>';
 
    					str+='</tr>';

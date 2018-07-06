@@ -459,7 +459,7 @@
 								<form name="updateFormatTypeForm">
 									<input type="text" id="edit_ft_id" style="display: none;" />
 									<div class="addbiaoxT">
-										<div class="addbiaoxTt">添加格式化数据类型</div>
+										<div class="addbiaoxTt">更新格式化数据类型</div>
 										<div class="addbiaoxTx"></div>
 									</div>
 									<div class="addbiaoxli">

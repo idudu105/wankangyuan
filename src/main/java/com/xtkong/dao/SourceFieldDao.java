@@ -11,8 +11,8 @@ import org.apache.ibatis.annotations.Update;
 import com.xtkong.model.SourceField;
 
 public interface SourceFieldDao {
-	@Insert("insert into collection_source_field(csf_name,cs_id,type,check_rule,enumerated,not_null,description,error_msg,create_datetime,create_uid) "
-			+ "values(#{csf_name},#{cs_id},#{type},#{check_rule},#{enumerated},#{not_null},#{description},#{error_msg},#{create_datetime},#{create_uid})")
+	@Insert("insert into collection_source_field(csf_name,cs_id,type,check_rule,enumerated,not_null,description,error_msg,create_datetime,create_uid,update_datetime,update_uid) "
+			+ "values(#{csf_name},#{cs_id},#{type},#{check_rule},#{enumerated},#{not_null},#{description},#{error_msg},#{create_datetime},#{create_uid},#{update_datetime},#{update_uid})")
 	public int insertSourceField(SourceField sourceField);
 
 	@Update("update collection_source_field "

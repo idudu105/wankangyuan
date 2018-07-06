@@ -51,7 +51,9 @@ public class FormatTypeController {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		formatType.setCreate_datetime(simpleDateFormat.format(new Date()));
 		formatType.setCreate_uid(uid);
-
+		formatType.setUpdate_datetime(simpleDateFormat.format(new Date()));
+		formatType.setUpdate_uid(uid);
+		
 		if (1 == formatTypeService.insertFormatType(formatType)) {
 			map.put("result", true);
 			map.put("message", "新增成功");

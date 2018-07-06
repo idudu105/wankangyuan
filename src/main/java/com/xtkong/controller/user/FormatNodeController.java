@@ -116,7 +116,7 @@ public class FormatNodeController {
 			page = 1;
 		}
 		if (strip == null) {
-			strip = 3;
+			strip = 10;
 		}
 		HashMap<String, FormatType> formatTypeMap = new HashMap<>();
 		List<FormatType> formatTypes = formatTypeService.getFormatTypes(Integer.valueOf(cs_id));
@@ -143,14 +143,14 @@ public class FormatNodeController {
 		
 		String tableName =ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
 		List<String> mateQualifiers = new ArrayList<>();
+		Map<String, String> conditionEqual = new HashMap<>();
+		Map<String, String> conditionLike = new HashMap<>();
+		String condition=null;
 		for (FormatField formatField : meta) {
 			mateQualifiers.add(String.valueOf(formatField.getFf_id()));
 		}
-		Map<String, String> conditionEqual = new HashMap<>();
 		conditionEqual.put(ConstantsHBase.QUALIFIER_FORMATNODEID, formatNodeId);
-		conditionEqual.put("ID", formatNodeId);
-		Map<String, String> conditionLike = new HashMap<>();
-		String condition=null;
+		condition=" \""+tableName+"\".\"ID\"='"+formatNodeId+"'";
 		String matephoenixSQL=PhoenixClient.getPhoenixSQL(tableName, mateQualifiers, conditionEqual, conditionLike, condition, 1, 1);
 		Map<String, Map<String, Object>> metaDatas =PhoenixClient.select(matephoenixSQL);
 //				select(tableName,  mateQualifiers,
@@ -197,7 +197,11 @@ public class FormatNodeController {
 				List<String> formatData = new ArrayList<>();
 				formatData.add(String.valueOf(formatField.getFf_id()));
 				formatData.add(formatField.getFf_name());
-				formatData.add(metaDataList.get(0).get(++i));
+				try {
+					formatData.add(metaDataList.get(0).get(++i));
+				} catch (Exception e) {
+					formatData.add("");
+				}
 				metaDataListTemp.add(formatData);
 		}
 		httpSession.setAttribute("formatTypeFolders", formatTypeFolders);

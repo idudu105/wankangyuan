@@ -38,9 +38,10 @@ public class SourceFieldController {
 		// 设置创建时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		sourceField.setCreate_datetime(simpleDateFormat.format(new Date()));
-
 		sourceField.setCreate_uid(uid);
-
+		sourceField.setUpdate_datetime(simpleDateFormat.format(new Date()));
+		sourceField.setUpdate_uid(uid);
+		
 		if (1 == sourceFieldService.insertSourceField(sourceField)) {
 			PhoenixClient.alterViewAddColumn(ConstantsHBase.TABLE_PREFIX_SOURCE_ + sourceField.getCs_id(), String
 					.valueOf(sourceFieldService.getSourceFieldId(sourceField.getCs_id(), sourceField.getCsf_name())));
@@ -70,7 +71,7 @@ public class SourceFieldController {
 		User user = (User) request.getAttribute("user");
 		Integer uid = user.getId();
 		Map<String, Object> map = new HashMap<String, Object>();
-		// 设置创建时间
+		// 设置更新时间
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		sourceField.setCreate_datetime(simpleDateFormat.format(new Date()));
 		sourceField.setUpdate_uid(uid);

@@ -53,9 +53,13 @@ public class ImportController {
 
 	public Map<String, Object> sourceData(@RequestParam(value = "file", required = false) MultipartFile file,
 			String cs_id, HttpServletRequest request) {
-
-		User user = (User) request.getAttribute("user");
 		Map<String, Object> map = new HashMap<String, Object>();
+		if (cs_id == null) {
+			map.put("result", false);
+			map.put("message", "请求异常！");
+			return map;
+		}
+		User user = (User) request.getAttribute("user");
 		try {
 			if (file == null || file.getInputStream() == null) {
 				map.put("result", false);
@@ -128,7 +132,9 @@ public class ImportController {
 				// sourceFieldDatas.put(String.valueOf(sourceFields.get(j).getCsf_id()),
 				// getStringCellValue(cell));
 				// }
-				HBaseSourceDataDao.insertSourceData(cs_id, String.valueOf(user.getId()), sourceFieldDatas);
+				if (!sourceFieldDatas.isEmpty()) {
+					HBaseSourceDataDao.insertSourceData(cs_id, String.valueOf(user.getId()), sourceFieldDatas);
+				}
 			}
 			hssfWorkbook.close();
 		} catch (IOException e1) {
@@ -198,7 +204,9 @@ public class ImportController {
 						continue;
 					}
 				}
-				HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId, formatFieldDatas);
+				if (!formatFieldDatas.isEmpty()) {
+					HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId, formatFieldDatas);
+				}
 			}
 			hssfWorkbook.close();
 		} catch (IOException e1) {

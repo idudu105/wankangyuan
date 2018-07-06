@@ -59,6 +59,8 @@ public class SourceDataController {
 		return getSourceDatas(request, httpSession, type, null, page, strip, null, null);
 	}
 
+	
+	
 	/**
 	 * sources 采集源列表
 	 * 
@@ -170,6 +172,37 @@ public class SourceDataController {
 		}
 
 	}
+	@RequestMapping("/getSourceFieldData")
+	@ResponseBody
+	public Map<String, Object> name(HttpServletRequest request, HttpSession httpSession, String type, Integer cs_id,
+			 Integer csf_id, String desc_asc) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (cs_id == null||csf_id==null||type==null) {
+			map.put("result", false);
+			map.put("message", "查询失败");
+			return map;
+		}
+		Source source = sourceService.getSourceByCs_id(cs_id);
+		if (source != null) {
+			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
+			Map<String, Map<String, Object>> result = new HashMap<>();
+			String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
+			List<String> qualifiers = new ArrayList<>();
+			Map<String, String> conditionEqual = new HashMap<>();
+			Map<String, String> conditionLike = new HashMap<>();
+			String condition = null;
+			
+			String phoenixSQL=null;
+			
+			
+			map.put("result", true);
+		} else {
+			map.put("result", false);
+			map.put("message", "查询失败");
+		}
+		return map;
+	}
+	
 
 	/**
 	 * 获取添加源数据表单

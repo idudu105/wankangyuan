@@ -45,7 +45,7 @@ $("#updateFormatTypeFormSubmit").click(function (){
 		success:function(data){
 			if(data.result == true){
 				alert("格式数据类型更新成功！");
-				window.location.href="/wankangyuan/admin/formatdata?ft_id="+ft_id;
+				window.location.href="/wankangyuan/admin/formatdata?ft_id="+updateFormatTypeForm.edit_ft_id.value;
 			}else{
 				alert(data.message);
 			}

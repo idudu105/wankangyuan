@@ -12,11 +12,11 @@ import com.xtkong.model.FormatType;
 
 public interface FormatTypeDao {
 
-	@Insert("insert into format_type(ft_name,cs_id,floder,create_datetime,create_uid,is_view) values(#{ft_name},#{cs_id},#{floder},#{create_datetime},#{create_uid},#{is_view})")
+	@Insert("insert into format_type(ft_name,cs_id,floder,create_datetime,create_uid,is_view,update_uid,update_datetime) values(#{ft_name},#{cs_id},#{floder},#{create_datetime},#{create_uid},#{is_view},#{update_uid},#{update_datetime})")
 	public int insertFormatType(FormatType formatType);
 
 	@Update("update format_type "
-			+ "set ft_name=#{ft_name} , floder=#{floder} ,update_datetime=#{update_datetime},update_uid=#{update_uid} ，is_view=#{is_view}"
+			+ "set ft_name=#{ft_name} , floder=#{floder} ,update_datetime=#{update_datetime},update_uid=#{update_uid} , is_view=#{is_view} "
 			+ "where ft_id=#{ft_id}")
 	public int updateFormatType(FormatType FormatType);
 
