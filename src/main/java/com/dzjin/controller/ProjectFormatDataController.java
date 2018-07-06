@@ -149,7 +149,7 @@ public class ProjectFormatDataController {
 			Map<String, String> conditionEqual = new HashMap<>();
 			Map<String, String> conditionLike = new HashMap<>();
 			String condition = null;
-			List<String> sourceDataIds = projectDataService.select(p_id, cs_id); // 源数据字段
+//			List<String> sourceDataIds = projectDataService.select(p_id); // 源数据字段
 			// List<List<String>> sourceDatas = new ArrayList<>();
 			// if (!sourceDataIds.isEmpty()) { //
 			// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
@@ -162,20 +162,21 @@ public class ProjectFormatDataController {
 			for (SourceField sourceField : source.getSourceFields()) {
 				qualifiers.add(String.valueOf(sourceField.getCsf_id()));
 			}
-			if (sourceDataIds != null && !sourceDataIds.isEmpty()) {
-				condition = " (";
-				for (String sourceDataId : sourceDataIds) {
-					condition += "ID='" + sourceDataId + "' OR ";
-				}
-				condition = condition.substring(0, condition.lastIndexOf("OR"));
-			}
-			// conditionEqual.put(ConstantsHBase.QUALIFIER_PROJECT,
-			// String.valueOf(p_id));
+			conditionEqual.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
+//			if (sourceDataIds != null && !sourceDataIds.isEmpty()) {
+//				condition = " (";
+//				for (String sourceDataId : sourceDataIds) {
+//					condition += "ID='" + sourceDataId + "' OR ";
+//				}
+//				condition = condition.substring(0, condition.lastIndexOf("OR"));
+////			}
 
 			if (searchWord.equals("") && !source.getSourceFields().isEmpty()) {
 				conditionLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()), searchWord);
 			}
-			String phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike,
+			String phoenixSQL=PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionEqual, condition, null, null);
+			Integer count=PhoenixClient.count(phoenixSQL);
+			 phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike,
 					condition, page, strip);
 
 			Map<String, Map<String, Object>> result = PhoenixClient.select(phoenixSQL);
@@ -190,7 +191,7 @@ public class ProjectFormatDataController {
 				}
 			}
 			httpSession.setAttribute("sourceDatas", result.get("records").get("data"));// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
-			httpSession.setAttribute("total", result.get("page").get("totalCount"));
+			httpSession.setAttribute("total",count);
 			httpSession.setAttribute("page", page);
 			httpSession.setAttribute("rows", strip);
 

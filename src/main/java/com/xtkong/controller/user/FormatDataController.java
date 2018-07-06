@@ -132,22 +132,24 @@ public class FormatDataController {
 		for (FormatField formatField : meta) {
 			mateQualifiers.add(String.valueOf(formatField.getFf_id()));
 		}
-		Map<String, String> whereEqual = new HashMap<>();
-		whereEqual.put(ConstantsHBase.QUALIFIER_FORMATNODEID, formatNodeId);
-		Map<String, String> whereLike = new HashMap<>();
-		String matephoenixSQL=PhoenixClient.getPhoenixSQL(tableName, mateQualifiers, whereEqual, whereLike, null, 1, 1);
+		Map<String, String> conditionEqual = new HashMap<>();
+		conditionEqual.put(ConstantsHBase.QUALIFIER_FORMATNODEID, formatNodeId);
+		Map<String, String> conditionLike = new HashMap<>();
+		String matephoenixSQL=PhoenixClient.getPhoenixSQL(tableName, mateQualifiers, conditionEqual, conditionLike, null, 1, 1);
 		Map<String, Map<String, Object>> metaDatas =PhoenixClient.select(matephoenixSQL);
 //		Map<String, Map<String, Object>> metaDatas = PhoenixClient.select(tableName, family, mateQualifiers,
-//				whereEqual, whereLike, 1, 1);
+//				conditionEqual, conditionLike, 1, 1);
 
 		List<String> dataQualifiers = new ArrayList<>();
 		for (FormatField formatField : data) {
 			dataQualifiers.add(String.valueOf(formatField.getFf_id()));
 		}
-		String dataphoenixSQL=PhoenixClient.getPhoenixSQL(tableName, dataQualifiers, whereEqual, whereLike, null, page, strip);
+		String dataphoenixSQL=PhoenixClient.getPhoenixSQL(tableName, dataQualifiers, conditionEqual, conditionLike, null, null, null);
+		Integer dataCount=PhoenixClient.count(dataphoenixSQL);
+		dataphoenixSQL=PhoenixClient.getPhoenixSQL(dataphoenixSQL, null, page, strip);
 		Map<String, Map<String, Object>> dataDatas = PhoenixClient.select(dataphoenixSQL);
 //	Map<String, Map<String, Object>> dataDatas = PhoenixClient.select(tableName, family, dataQualifiers,
-//				whereEqual, whereLike, page, strip);
+//				conditionEqual, conditionLike, page, strip);
 
 		if (metaDatas != null) {
 			map.put("result", true);
@@ -160,16 +162,16 @@ public class FormatDataController {
 					break;
 				}
 				if (!(metaMsg.equals("success"))) {
-					PhoenixClient.undefined(metaMsg, tableName, mateQualifiers, whereEqual, whereLike);
+					PhoenixClient.undefined(metaMsg, tableName, mateQualifiers, conditionEqual, conditionLike);
 					metaDatas =PhoenixClient.select(matephoenixSQL);
-//					metaDatas = PhoenixClient.reSelectWhere(metaMsg, tableName, family, mateQualifiers, whereEqual,
-//							whereLike, 1, 1);
+//					metaDatas = PhoenixClient.reSelectWhere(metaMsg, tableName, family, mateQualifiers, conditionEqual,
+//							conditionLike, 1, 1);
 				}
 				if (!(dataMsg.equals("success"))) {
-					PhoenixClient.undefined(metaMsg, tableName, mateQualifiers, whereEqual, whereLike);
+					PhoenixClient.undefined(metaMsg, tableName, mateQualifiers, conditionEqual, conditionLike);
 					metaDatas =PhoenixClient.select(matephoenixSQL);
-//					dataDatas = PhoenixClient.reSelectWhere(dataMsg, tableName, family, dataQualifiers, whereEqual,
-//							whereLike, page, strip);
+//					dataDatas = PhoenixClient.reSelectWhere(dataMsg, tableName, family, dataQualifiers, conditionEqual,
+//							conditionLike, page, strip);
 				}
 			}
 
@@ -181,7 +183,7 @@ public class FormatDataController {
 		map.put("metaDatas", metaDatas.get("records").get("data"));
 		map.put("data", data);
 		map.put("dataDatas", dataDatas.get("records").get("data"));
-		map.put("total", dataDatas.get("page").get("totalCount"));
+		map.put("total", dataCount);
 		map.put("page", page);
 		map.put("rows", strip);
 		return map;

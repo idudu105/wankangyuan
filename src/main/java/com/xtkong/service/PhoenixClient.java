@@ -269,7 +269,7 @@ public class PhoenixClient {
 		String phoenixSQL = " ";
 		if ((conditionEqual != null) && (!conditionEqual.isEmpty())) {
 			for (Entry<String, String> eqlual : conditionEqual.entrySet()) {
-				phoenixSQL += "\"" + tableName + "\".\"" + eqlual.getKey() + "\"='" + eqlual.getValue() + "' AND ";
+				phoenixSQL += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + eqlual.getKey() + "\"='" + eqlual.getValue() + "' AND ";
 			}
 		}
 		if (phoenixSQL.trim().endsWith("AND")) {
@@ -289,7 +289,7 @@ public class PhoenixClient {
 		String phoenixSQL = " ";
 		if ((conditionLike != null) && (!conditionLike.isEmpty())) {
 			for (Entry<String, String> like : conditionLike.entrySet()) {
-				phoenixSQL += "\"" + tableName + "\".\"" + like.getKey() + "\" like '%" + like.getValue() + "%' AND ";
+				phoenixSQL += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + like.getKey() + "\" like '%" + like.getValue() + "%' AND ";
 			}
 		}
 		if (phoenixSQL.trim().endsWith("AND")) {
@@ -323,7 +323,7 @@ public class PhoenixClient {
 		if ((tableName != null) && (qualifiers != null) && (!qualifiers.isEmpty())) {
 			phoenixSQL += " SELECT ID ";
 			for (String qualifier : qualifiers) {
-				phoenixSQL += ",\"" + tableName + "\".\"" + qualifier + "\"";
+				phoenixSQL += ",\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + qualifier + "\"";
 			}
 		}
 		phoenixSQL += " FROM \"" + tableName + "\"  WHERE  ";
@@ -763,7 +763,7 @@ public class PhoenixClient {
 		phoenixSQLs.add(phoenixSQL);
 		// PhoenixClient.executeUpdate(phoenixSQLs);
 
-		createView(tableName, qualifiers);
+//		createView(tableName, qualifiers);
 		// phoenixSQLs.add("ALTER VIEW \"" + tableName + "\" ADD IF NOT EXISTS "
 		// + "\"" + family + "\"." + "\"XE\"" + " varchar");
 		// String phoenixSQL;
@@ -782,7 +782,7 @@ public class PhoenixClient {
 		// phoenixSQL = " ";
 		// phoenixSQL = "SELECT COUNT(*)FROM \"SOURCE_62\" WHERE
 		// \"93\"='value93' ORDER BY ID DESC ";
-		result = selectPage(phoenixSQL, null, null);
+		result = select("SELECT ID ,\"SOURCE_75\".\"118\",\"SOURCE_75\".\"119\",\"SOURCE_75\".\"121\",\"SOURCE_75\".\"PUBLIC\" FROM \"SOURCE_75\"  WHERE   \"SOURCE_75\".\"CREATE\"='1'   LIMIT 12 OFFSET 0");
 		// result = executeQuery("SELECT COUNT(1) FROM \"SOURCE_62\" ");
 		// String resultMsg = String.valueOf((result.get("msg")).get("msg"));
 		// for (int j = 0; j < 2; j++) {

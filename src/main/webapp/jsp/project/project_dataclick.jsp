@@ -218,6 +218,9 @@
     		console.log(page);
     		var cs_id = $('#cs_id').val();
 			var sourceDataId = $("#sourceDataId").val();
+    		var ft_id = $("#ft_id").val();
+    		var formatNodeId = $("#formatNodeId").val();
+    		var sourceDataId = $("#sourceDataId").val();
     		if(page!=${page}){
     			window.location.href="/wankangyuan/projectFormatData/getFormatNodeById?cs_id="
 					+cs_id+"&sourceDataId="+sourceDataId+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId+"&page="+page+"&strip=${rows}";
