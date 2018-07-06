@@ -307,7 +307,8 @@
 	            if(page!=${page}){
 	            	var searchWord = $(".search2Ct").val();
 	            	var p_id = ${project.id};
-	                window.location.href="/wankangyuan/projectFormatData/getSourceDatas?p_id="+p_id+"&type=1&p_id="+p_id+"&page="+page+"&searchWord="+searchWord;
+	            	var cs_id = $("#source_Select").val();
+	        		window.location.href="/wankangyuan/projectFormatData/getSourceDatas?p_id="+p_id+"&type=1&cs_id="+cs_id+"&page="+page+"&searchWord="+searchWord;
 	            }
 	        }
 	    });
@@ -362,7 +363,8 @@
             		if(data.result == true){
             			alert(data.message);
                 		var p_id = ${project.id};
-               			window.location.href="/wankangyuan/projectFormatData/getSourceDatas?p_id="+p_id+"&cs_id="+cs_id;
+                		var cs_id = $("#source_Select").val();
+                		window.location.href="/wankangyuan/projectFormatData/getSourceDatas?p_id="+p_id+"&cs_id="+cs_id;
             		}else{
             			alert(data.message);
             		}

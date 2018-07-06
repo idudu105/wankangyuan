@@ -196,7 +196,7 @@ public class PhoenixClient {
 		String string = "create VIEW IF NOT EXISTS \"" + tableName + "\" (id varchar  primary key, ";
 		if ((tableName != null) && (qualifiers != null) && (!qualifiers.isEmpty())) {
 			for (String qualifier : qualifiers) {
-				string += "\"" + qualifier + "\"" + "varchar, ";
+				string += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + qualifier + "\"" + " varchar, ";
 			}
 		}
 		String phoenixSQL = string.substring(0, string.lastIndexOf(",")) + ")";
@@ -214,8 +214,8 @@ public class PhoenixClient {
 		List<String> phoenixSQLs = new ArrayList<>();
 		if ((tableName != null) && (qualifiers != null) && (!qualifiers.isEmpty())) {
 			for (String qualifier : qualifiers) {
-				phoenixSQLs.add(
-						"ALTER VIEW \"" + tableName + "\" ADD IF NOT EXISTS " + "\"" + qualifier + "\"" + " varchar");
+				phoenixSQLs.add("ALTER VIEW \"" + tableName + "\" ADD IF NOT EXISTS " + "\""
+						+ ConstantsHBase.FAMILY_INFO + "\".\"" + qualifier + "\"" + " varchar");
 			}
 		}
 		if (!phoenixSQLs.isEmpty()) {
@@ -226,8 +226,8 @@ public class PhoenixClient {
 	public static void alterViewAddColumn(String tableName, String qualifier) {
 		List<String> phoenixSQLs = new ArrayList<>();
 		if ((tableName != null) && (qualifier != null)) {
-			phoenixSQLs
-					.add("ALTER VIEW \"" + tableName + "\" ADD IF NOT EXISTS " + "\"" + qualifier + "\"" + " varchar");
+			phoenixSQLs.add("ALTER VIEW \"" + tableName + "\" ADD IF NOT EXISTS " + "\"" + ConstantsHBase.FAMILY_INFO
+					+ "\".\"" + qualifier + "\"" + " varchar");
 		}
 		if (!phoenixSQLs.isEmpty()) {
 			PhoenixClient.executeUpdate(phoenixSQLs);
@@ -238,8 +238,8 @@ public class PhoenixClient {
 		List<String> phoenixSQLs = new ArrayList<>();
 		if ((tableName != null) && (qualifiers != null) && (!qualifiers.isEmpty())) {
 			for (String qualifier : qualifiers) {
-				phoenixSQLs.add("ALTER VIEW \"" + tableName + "\"  DROP COLUMN IF EXISTS " + "\"" + qualifier + "\""
-						+ " varchar");
+				phoenixSQLs.add("ALTER VIEW \"" + tableName + "\"  DROP COLUMN IF EXISTS " + "\""
+						+ ConstantsHBase.FAMILY_INFO + "\".\"" + qualifier + "\"" + " varchar");
 			}
 		}
 		if (!phoenixSQLs.isEmpty()) {
@@ -250,7 +250,8 @@ public class PhoenixClient {
 	public static void alterViewDropColumn(String tableName, String qualifier) {
 		List<String> phoenixSQLs = new ArrayList<>();
 		if ((tableName != null) && (qualifier != null)) {
-			phoenixSQLs.add("ALTER VIEW \"" + tableName + "\" DROP COLUMN IF EXISTS " + "\"" + qualifier + "\"");
+			phoenixSQLs.add("ALTER VIEW \"" + tableName + "\" DROP COLUMN IF EXISTS " + "\""
+					+ ConstantsHBase.FAMILY_INFO + "\".\"" + qualifier + "\"");
 		}
 		if (!phoenixSQLs.isEmpty()) {
 			PhoenixClient.executeUpdate(phoenixSQLs);
@@ -746,36 +747,38 @@ public class PhoenixClient {
 		Map<String, Map<String, Object>> result = null;
 		// result =select(tableName, family, qualifiers, whereEqual, whereLike,
 		// null, null);
-		// dropView(tableName);
+		dropView(tableName);
 		List<String> phoenixSQLs = new ArrayList<>();
 		// phoenixSQLs.add("DROP TABLE IF EXISTS \"" + tableName + "\"");
-		String string = "create TABLE IF NOT EXISTS \"" + tableName + "\" (id varchar  primary key, ";
-		if ((tableName != null) && (family != null) && (qualifiers != null) && (!qualifiers.isEmpty())) {
+		// executeUpdate(phoenixSQLs);
+
+		// List<String> phoenixSQLs = new ArrayList<>();
+		String string = "create VIEW IF NOT EXISTS \"" + tableName + "\" (id varchar  primary key, ";
+		if ((tableName != null) && (qualifiers != null) && (!qualifiers.isEmpty())) {
 			for (String qualifier : qualifiers) {
-				string += "\"" + family + "\"." + "\"HH" + qualifier + "\"" + "varchar, ";
+				string += "\"" + qualifier + "\"" + " varchar, ";
 			}
-			for (String qualifier : qualifiers) {
-				string += "\"" + "HHH" + "\"." + "\"" + qualifier + "\"" + "varchar, ";
-			}
-			string += "\"" + "HHH" + "\"." + "\"HHE\"" + "varchar, ";
-			string += "\"rr\".\"rer\" varchar, ";
 		}
 		String phoenixSQL = string.substring(0, string.lastIndexOf(",")) + ")";
-
 		phoenixSQLs.add(phoenixSQL);
+		// PhoenixClient.executeUpdate(phoenixSQLs);
+
+		createView(tableName, qualifiers);
 		// phoenixSQLs.add("ALTER VIEW \"" + tableName + "\" ADD IF NOT EXISTS "
 		// + "\"" + family + "\"." + "\"XE\"" + " varchar");
-		PhoenixClient.executeUpdate(phoenixSQLs);
 		// String phoenixSQL;
 		// phoenixSQL="SELECT * FROM "+tableName+" where (id='1_62_1' or
 		// id='1_62_2') and \"90\"='eqe'";
 		phoenixSQL = "SELECT * FROM XXQQ X";
 		// phoenixSQL="SELECT B.\"ID\",B.\"1\",A.\"ID\",A.\"1\" FROM B LEFT
 		// OUTER JOIN A ON B.\"1\"=A.\"1\"";
-		phoenixSQL = "SELECT ID,\"89\",\"90\",\"91\",\"92\",\"93\",\"94\" FROM		 \"SOURCE_62\""
-				+ " WHERE \"SOURCE_62\".\"USER\"='45' OR		 \"SOURCE_62\".\"CREATE\"='45' ";
-		phoenixSQL = "SELECT *"
-				+ " FROM \"FORMAT_62_45\" WHERE SOURCEDATAID='1_62_1' AND		 \"FORMAT_62_45\".\"ID\"!='17' ";
+		// phoenixSQL = "SELECT ID,\"89\",\"90\",\"91\",\"92\",\"93\",\"94\"
+		// FROM \"SOURCE_62\""
+		// + " WHERE \"SOURCE_62\".\"USER\"='45' OR
+		// \"SOURCE_62\".\"CREATE\"='45' ";
+		// phoenixSQL = "SELECT *"
+		// + " FROM \"FORMAT_62_45\" WHERE SOURCEDATAID='1_62_1' AND
+		// \"FORMAT_62_45\".\"ID\"!='17' ";
 		// phoenixSQL = " ";
 		// phoenixSQL = "SELECT COUNT(*)FROM \"SOURCE_62\" WHERE
 		// \"93\"='value93' ORDER BY ID DESC ";

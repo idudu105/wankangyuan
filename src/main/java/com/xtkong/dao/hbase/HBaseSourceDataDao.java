@@ -449,7 +449,72 @@ public class HBaseSourceDataDao {
 			return false;
 		}
 	}
+	public static boolean addProject(String p_id,String cs_id, String uid, String sourceDataIds, List<SourceField> sourceFields) {
+		List<String> sourceDataIdList = new ArrayList<>();
+		for (String sourceDataId : sourceDataIds.split(",")) {
+				sourceDataIdList.add(sourceDataId);
+		}
+		return addProject(p_id, cs_id, uid, sourceDataIdList, sourceFields);
+	}
 
+	@SuppressWarnings("unchecked")
+	public static boolean addProject(String p_id,String cs_id, String uid, List<String> sourceDataIds,
+			List<SourceField> sourceFields) {
+		try {
+			HBaseDB db = HBaseDB.getInstance();
+			String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
+			String family=ConstantsHBase.FAMILY_INFO;
+			Table table = db.getTable(tableName);
+			List<Get> gets = new ArrayList<Get>();
+			for (String sourceDataId : sourceDataIds) {
+					gets.add(new Get(Bytes.toBytes(sourceDataId)));
+			}
+			// 存放批量操作的结果
+			Result[] results = table.get(gets);
+			for (Result result : results) {
+				Long count = db.getNewId(ConstantsHBase.TABLE_GID, uid + "_" + cs_id, ConstantsHBase.FAMILY_GID_GID,
+						ConstantsHBase.QUALIFIER_GID_GID_GID);
+				String sourceDataId = uid + "_" + cs_id + "_" + count;
+				Put put = new Put(Bytes.toBytes(sourceDataId));
+				put.addColumn(Bytes.toBytes(family), Bytes.toBytes(ConstantsHBase.QUALIFIER_PUBLIC),
+						Bytes.toBytes(ConstantsHBase.VALUE_PUBLIC_FALSE));
+				put.addColumn(Bytes.toBytes(family), Bytes.toBytes(ConstantsHBase.QUALIFIER_PROJECT),
+						Bytes.toBytes(String.valueOf(p_id)));
+				for (SourceField sourceField : sourceFields) {
+					put.addColumn(Bytes.toBytes(family), Bytes.toBytes(String.valueOf(sourceField.getCsf_id())),
+							result.getValue(Bytes.toBytes(family),
+									Bytes.toBytes(String.valueOf(sourceField.getCsf_id()))));
+				}
+				if (db.putRow(tableName, put)) {
+					String oldSourceDataId=Bytes.toString(result.getRow());
+					List<List<String>> formatNodes=HBaseFormatNodeDao.getFormatNodes(cs_id, oldSourceDataId);
+					for (List<String>  formatNode : formatNodes) {
+						String formatNodeId=formatNode.get(0);
+						String ft_id=formatNode.get(1);
+						String nodeName=formatNode.get(2);
+						HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName,null);
+						String tableStr=ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+						Map<String, Map<String, Object>> records = PhoenixClient.select("SELECT * FROM \""+tableStr+"\"");
+						List<String> head = (List<String>) records.get("records").get("head");
+						List<List<String>> datas =(List<List<String>>) records.get("records").get("data");
+						for (List<String> data : datas) {
+							Map<String, String> formatFieldDatas=new HashMap<>();
+							for (int i = 0; i < head.size(); i++) {
+								formatFieldDatas.put(head.get(i), data.get(i));
+							}
+							HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId, formatFieldDatas);							
+						}						
+					}
+				} else {
+					return false;
+				}
+			}
+			table.close();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 	public static String getSourceDataId(String tableName, Scan scan) {
 		String sourceDataId = null;
 		try {

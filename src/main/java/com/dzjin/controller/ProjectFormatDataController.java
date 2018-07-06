@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dzjin.model.ProjectDataRelation;
 import com.dzjin.service.ProjectDataService;
+import com.liutianjun.pojo.User;
 import com.xtkong.dao.hbase.HBaseFormatNodeDao;
 import com.xtkong.dao.hbase.HBaseSourceDataDao;
 import com.xtkong.model.FormatField;
@@ -53,18 +55,21 @@ public class ProjectFormatDataController {
 
 	@RequestMapping("/insert")
 	@ResponseBody
-	public Map<String, Object> insert(HttpSession session, Integer p_id, String sourceDataIds, String cs_id) {
-
+	public Map<String, Object> insert(HttpServletRequest request, HttpSession session, Integer p_id,
+			String sourceDataIds, Integer cs_id) {
+		User user = (User) request.getAttribute("user");
+		Integer uid = user.getId();
 		Map<String, Object> map = new HashMap<>();
 
 		String[] source_data_id = sourceDataIds.split(",");
 
-		Map<String, String> sourceFieldDatas = new HashMap<>();
-		sourceFieldDatas.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
+//		Map<String, String> sourceFieldDatas = new HashMap<>();
+//		sourceFieldDatas.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
 		for (int i = 0; i < source_data_id.length; i++) {
-			projectDataService.insert(new ProjectDataRelation(p_id, source_data_id[i]));
-			HBaseSourceDataDao.updateSourceData(cs_id, source_data_id[i], sourceFieldDatas);
+			projectDataService.insert(p_id, source_data_id[i],cs_id);
 		}
+		HBaseSourceDataDao.addProject(String.valueOf(p_id), String.valueOf(cs_id), String.valueOf(uid), sourceDataIds,
+				sourceFieldService.getSourceFields(cs_id));
 		/*
 		 * if(num == source_data_id.length){ map.put("result", true);
 		 * map.put("message", "关系绑定成功！"); }else{ map.put("result", false);
@@ -84,12 +89,13 @@ public class ProjectFormatDataController {
 		Map<String, Object> map = new HashMap<>();
 
 		String[] source_data_id = sourceDataIds.split(",");
-		Map<String, String> sourceFieldDatas = new HashMap<>();
-		sourceFieldDatas.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf("  "));
+//		Map<String, String> sourceFieldDatas = new HashMap<>();
+//		sourceFieldDatas.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf("  "));
 		for (int i = 0; i < source_data_id.length; i++) {
 			projectDataService.remove(new ProjectDataRelation(p_id, source_data_id[i]));
-			HBaseSourceDataDao.updateSourceData(cs_id, source_data_id[i], sourceFieldDatas);
+//			HBaseSourceDataDao.updateSourceData(cs_id, source_data_id[i], sourceFieldDatas);
 		}
+		HBaseSourceDataDao.deleteSourceDatas(cs_id, sourceDataIds);
 		/*
 		 * if(num == source_data_id.length){ map.put("result", true);
 		 * map.put("message", "关系绑定成功！"); }else{ map.put("result", false);
@@ -159,14 +165,14 @@ public class ProjectFormatDataController {
 			if (sourceDataIds != null && !sourceDataIds.isEmpty()) {
 				condition = " (";
 				for (String sourceDataId : sourceDataIds) {
-					condition += "ID= '" + sourceDataId + "' OR ";
+					condition += "ID='" + sourceDataId + "' OR ";
 				}
 				condition = condition.substring(0, condition.lastIndexOf("OR"));
 			}
 			// conditionEqual.put(ConstantsHBase.QUALIFIER_PROJECT,
 			// String.valueOf(p_id));
 
-			if (searchWord != null) {
+			if (searchWord.equals("") && !source.getSourceFields().isEmpty()) {
 				conditionLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()), searchWord);
 			}
 			String phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike,
@@ -217,7 +223,7 @@ public class ProjectFormatDataController {
 			// String.valueOf(p_id));
 
 			Map<String, String> conditionLike = new HashMap<>();
-			String condition=null;
+			String condition = null;
 			List<String> sourceDataIds = projectDataService.select(p_id, cs_id); // 源数据字段
 			if (sourceDataIds != null && !sourceDataIds.isEmpty()) {
 				condition = " (";
@@ -226,8 +232,8 @@ public class ProjectFormatDataController {
 				}
 				condition = condition.substring(0, condition.lastIndexOf("OR"));
 			}
-			String phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike, condition,
-					null, null);
+			String phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike,
+					condition, null, null);
 
 			Map<String, Map<String, Object>> result = PhoenixClient.select(phoenixSQL);
 			String resultMsg = String.valueOf((result.get("msg")).get("msg"));

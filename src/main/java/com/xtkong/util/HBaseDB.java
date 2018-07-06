@@ -119,8 +119,13 @@ public class HBaseDB {
 		try {
 			Admin admin = connection.getAdmin();
 			TableName tableNameObject = TableName.valueOf(tableName);
-			if (admin.tableExists(tableNameObject)) {
-				table = connection.getTable(tableNameObject);
+			while (true) {
+				if (admin.tableExists(tableNameObject)) {
+					table = connection.getTable(tableNameObject);
+					break;
+				} else {
+					createTable(tableName, new String[] { ConstantsHBase.FAMILY_INFO }, 1);
+				}
 			}
 			admin.close();
 		} catch (Exception e) {
@@ -186,6 +191,7 @@ public class HBaseDB {
 		}
 
 	}
+
 	public boolean putRow(Object tableName, List<Put> puts) {
 		try {
 			Table table = getTable(tableName.toString());
@@ -197,6 +203,7 @@ public class HBaseDB {
 			return false;
 		}
 	}
+
 	public boolean putRow(Object tableName, Put put) {
 		try {
 			Table table = getTable(tableName.toString());
@@ -267,9 +274,12 @@ public class HBaseDB {
 	/**
 	 * 根据扫描条件Scan，获取行键及列值
 	 * 
-	 * @param tableName 表名
-	 * @param scan 扫描条件
-	 * @param qualifiers 列名
+	 * @param tableName
+	 *            表名
+	 * @param scan
+	 *            扫描条件
+	 * @param qualifiers
+	 *            列名
 	 * @return 行键、列值、列值、列值
 	 */
 	public static List<List<String>> getQuelifierValues(String tableName, Scan scan, List<String> qualifiers) {
@@ -320,12 +330,13 @@ public class HBaseDB {
 			return false;
 		}
 	}
+
 	public boolean checkAndDelete(Object tableName, Object rowKey, Object family, Object quelifier, Object value) {
 		try {
 			Table table = getTable(tableName.toString());
 			Delete delete = new Delete(Bytes.toBytes(rowKey.toString()));
-			table.checkAndDelete(Bytes.toBytes(rowKey.toString()), Bytes.toBytes(family.toString()), Bytes.toBytes(quelifier.toString()),
-					Bytes.toBytes(value.toString()), delete);
+			table.checkAndDelete(Bytes.toBytes(rowKey.toString()), Bytes.toBytes(family.toString()),
+					Bytes.toBytes(quelifier.toString()), Bytes.toBytes(value.toString()), delete);
 			table.close();
 			return true;
 		} catch (Exception e) {
@@ -333,6 +344,7 @@ public class HBaseDB {
 			return false;
 		}
 	}
+
 	/**
 	 * 跳过页
 	 * 
