@@ -56,9 +56,9 @@
     </div>
     
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
+<shiro:authenticated>
 <shiro:hasRole name="admin">  
     <script type="text/javascript">
-    layer.msg("您已经登录");
     layer.confirm('您已经登录，请问是否重新登录？', {
           btn: ['重新登录','进入后台'] //按钮
         }, function(){
@@ -67,7 +67,19 @@
             window.location.href='/wankangyuan/admin/viewIndex';
         });
     </script>
-</shiro:hasRole>   
+</shiro:hasRole>
+<shiro:lacksRole name = "admin">
+    <script type="text/javascript">
+    layer.confirm('您不是管理员，不能进入后台，是否重新登录？', {
+          btn: ['重新登录','返回项目'] //按钮
+        }, function(){
+            window.location.href='/wankangyuan/admin/logout';
+        }, function(){
+            window.location.href='/wankangyuan/project/selectMyProject';
+        });
+    </script>
+</shiro:lacksRole>
+</shiro:authenticated>
 
 <c:if test="${not empty error}">
     <script type="text/javascript">
