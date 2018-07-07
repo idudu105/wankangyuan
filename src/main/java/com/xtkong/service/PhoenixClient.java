@@ -1,5 +1,7 @@
 package com.xtkong.service;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -29,13 +31,18 @@ import com.xtkong.util.ConstantsHBase;
  */
 public class PhoenixClient {
 
+	private static PrintWriter pWriter;
 	/**
 	 * 利用静态块的方式初始化Driver，防止Tomcat加载不到（有时候比较诡异）
 	 */
 	static {
 		try {
 			Class.forName(ConstantsHBase.PhoenixDriver);
+			pWriter = new PrintWriter(("E:/Users/admin/Desktop/CC/新建文件夹/记录.txt"));
 		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -172,6 +179,10 @@ public class PhoenixClient {
 
 			msg.put("msg", "success");
 			map.put("msg", msg);
+			pWriter.println(map);
+			pWriter.println(new Gson().toJson(map).toString());
+			pWriter.println();
+			pWriter.flush();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			msg.put("msg", "SQL执行出错：" + e.getMessage());
@@ -265,15 +276,17 @@ public class PhoenixClient {
 	 * @param conditionEqual
 	 * @return
 	 */
-	public static String getPhoenixSQLConditionEqualsAND(String tableName, Map<String, String> conditionEqual) {
+	public static String getSQLConditionEquals(String tableName, Map<String, String> conditionEqual,
+			String type) {
 		String phoenixSQL = " ";
 		if ((conditionEqual != null) && (!conditionEqual.isEmpty())) {
 			for (Entry<String, String> eqlual : conditionEqual.entrySet()) {
-				phoenixSQL += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + eqlual.getKey() + "\"='" + eqlual.getValue() + "' AND ";
+				phoenixSQL += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + eqlual.getKey() + "\"='" + eqlual.getValue()
+						+ "' " + type + " ";
 			}
 		}
-		if (phoenixSQL.trim().endsWith("AND")) {
-			phoenixSQL = phoenixSQL.substring(0, phoenixSQL.lastIndexOf("AND"));
+		if (phoenixSQL.trim().endsWith(type)) {
+			phoenixSQL = phoenixSQL.substring(0, phoenixSQL.lastIndexOf(type));
 		}
 		return phoenixSQL;
 	}
@@ -282,18 +295,21 @@ public class PhoenixClient {
 	 * 构造模糊条件，内部and关系
 	 * 
 	 * @param tableName
+	 * @param type
 	 * @param conditionEqual
 	 * @return
 	 */
-	public static String getPhoenixSQLConditionLikesAND(String tableName, Map<String, String> conditionLike) {
+	public static String getSQLConditionLikes(String tableName, Map<String, String> conditionLike,
+			String type) {
 		String phoenixSQL = " ";
 		if ((conditionLike != null) && (!conditionLike.isEmpty())) {
 			for (Entry<String, String> like : conditionLike.entrySet()) {
-				phoenixSQL += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + like.getKey() + "\" like '%" + like.getValue() + "%' AND ";
+				phoenixSQL += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + like.getKey() + "\" like '%"
+						+ like.getValue() + "%' " + type + " ";
 			}
 		}
-		if (phoenixSQL.trim().endsWith("AND")) {
-			phoenixSQL = phoenixSQL.substring(0, phoenixSQL.lastIndexOf("AND"));
+		if (phoenixSQL.trim().endsWith(type)) {
+			phoenixSQL = phoenixSQL.substring(0, phoenixSQL.lastIndexOf(type));
 		}
 		return phoenixSQL;
 	}
@@ -327,11 +343,11 @@ public class PhoenixClient {
 			}
 		}
 		phoenixSQL += " FROM \"" + tableName + "\"  WHERE  ";
-		String phoenixSQLConditionEqualsAND = getPhoenixSQLConditionEqualsAND(tableName, conditionEqual);
+		String phoenixSQLConditionEqualsAND = getSQLConditionEquals(tableName, conditionEqual,"AND");
 		if (!phoenixSQLConditionEqualsAND.equals(" ")) {
 			phoenixSQL += phoenixSQLConditionEqualsAND + " AND ";
 		}
-		String phoenixSQLConditionLikesAND = getPhoenixSQLConditionLikesAND(tableName, conditionLike);
+		String phoenixSQLConditionLikesAND = getSQLConditionLikes(tableName, conditionLike,"AND");
 		if (!phoenixSQLConditionLikesAND.equals(" ")) {
 			phoenixSQL += phoenixSQLConditionLikesAND + " AND ";
 		}
@@ -371,7 +387,13 @@ public class PhoenixClient {
 		}
 		return phoenixSQL;
 	}
-
+	
+	public static String getSQLColumn(String tableName, String qualifier) {
+		return "\"" + tableName + "\".\"" + qualifier + "\"";
+	}
+	public static String getSQLColumn( String qualifier) {
+		return "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + qualifier + "\"";
+	}
 	/**
 	 * 根据Phoenix支持的SQL格式，查询Hbase的数据。
 	 * 
@@ -379,6 +401,9 @@ public class PhoenixClient {
 	 * @return 成功信息，数据，分页
 	 */
 	public static Map<String, Map<String, Object>> select(String phoenixSQL) {
+
+		pWriter.println(phoenixSQL);
+		pWriter.flush();
 		return executeQuery(phoenixSQL);
 	}
 
@@ -453,10 +478,7 @@ public class PhoenixClient {
 
 	}
 
-	public static String getPhoenixSQLQualifier(String tableName, String qualifier) {
-		return "\"" + tableName + "\".\"" + qualifier + "\"";
-	}
-
+	
 	/**
 	 * 
 	 * @param tableName
@@ -475,7 +497,8 @@ public class PhoenixClient {
 	 *            分页大小
 	 * @return
 	 */
-	public static Map<String, Map<String, Object>> select(String tableName, List<String> qualifiers,
+	@SuppressWarnings("unused")
+	private static Map<String, Map<String, Object>> select(String tableName, List<String> qualifiers,
 			Map<String, String> whereEqual, Map<String, String> whereLike, String condition, Integer page,
 			Integer strip) {
 		String phoenixSQL = " SELECT ID";
@@ -519,7 +542,7 @@ public class PhoenixClient {
 	 * @param strip
 	 * @return
 	 */
-	public static Map<String, Map<String, Object>> select(String tableName, String family, List<String> qualifiers,
+	private static Map<String, Map<String, Object>> select(String tableName, String family, List<String> qualifiers,
 			Map<String, String> whereEqual, Map<String, String> whereLike, Integer page, Integer strip) {
 		String phoenixSQL = " SELECT ID";
 		if ((tableName != null) && (family != null) && (qualifiers != null) && (!qualifiers.isEmpty())) {
@@ -558,7 +581,7 @@ public class PhoenixClient {
 	 *            页面大小
 	 * @return
 	 */
-	public static Map<String, Map<String, Object>> selectPage(String phoenixSQL, Integer page, Integer strip) {
+	private static Map<String, Map<String, Object>> selectPage(String phoenixSQL, Integer page, Integer strip) {
 		Map<String, Map<String, Object>> map = new HashMap<>();
 		Integer index = 0;
 		if ((index = phoenixSQL.indexOf("FROM")) == -1) {
@@ -615,7 +638,8 @@ public class PhoenixClient {
 	 *            分页大小
 	 * @return
 	 */
-	public static Map<String, Map<String, Object>> reSelectWhere(String msg, String tableName, String family,
+	@SuppressWarnings("unused")
+	private static Map<String, Map<String, Object>> reSelectWhere(String msg, String tableName, String family,
 			List<String> qualifiers, Map<String, String> whereEqual, Map<String, String> whereLike, Integer page,
 			Integer strip) {
 		Map<String, Map<String, Object>> map = new HashMap<>();
@@ -747,7 +771,7 @@ public class PhoenixClient {
 		Map<String, Map<String, Object>> result = null;
 		// result =select(tableName, family, qualifiers, whereEqual, whereLike,
 		// null, null);
-		dropView(tableName);
+//		dropView(tableName);
 		List<String> phoenixSQLs = new ArrayList<>();
 		// phoenixSQLs.add("DROP TABLE IF EXISTS \"" + tableName + "\"");
 		// executeUpdate(phoenixSQLs);
@@ -763,7 +787,7 @@ public class PhoenixClient {
 		phoenixSQLs.add(phoenixSQL);
 		// PhoenixClient.executeUpdate(phoenixSQLs);
 
-//		createView(tableName, qualifiers);
+		// createView(tableName, qualifiers);
 		// phoenixSQLs.add("ALTER VIEW \"" + tableName + "\" ADD IF NOT EXISTS "
 		// + "\"" + family + "\"." + "\"XE\"" + " varchar");
 		// String phoenixSQL;
@@ -782,7 +806,8 @@ public class PhoenixClient {
 		// phoenixSQL = " ";
 		// phoenixSQL = "SELECT COUNT(*)FROM \"SOURCE_62\" WHERE
 		// \"93\"='value93' ORDER BY ID DESC ";
-		result = select("SELECT ID ,\"SOURCE_75\".\"118\",\"SOURCE_75\".\"119\",\"SOURCE_75\".\"121\",\"SOURCE_75\".\"PUBLIC\" FROM \"SOURCE_75\"  WHERE   \"SOURCE_75\".\"CREATE\"='1'   LIMIT 12 OFFSET 0");
+		result = select(
+				"SELECT ID ,\"SOURCE_75\".\"118\",\"SOURCE_75\".\"119\",\"SOURCE_75\".\"121\",\"SOURCE_75\".\"PUBLIC\" FROM \"SOURCE_75\"  WHERE   \"SOURCE_75\".\"CREATE\"='1' "+" ORDER BY " + ("121") + " DESC "+"  LIMIT 12 OFFSET 0");
 		// result = executeQuery("SELECT COUNT(1) FROM \"SOURCE_62\" ");
 		// String resultMsg = String.valueOf((result.get("msg")).get("msg"));
 		// for (int j = 0; j < 2; j++) {

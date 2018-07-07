@@ -79,7 +79,7 @@ public class FormatDataController {
 			String formatFieldDatas) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		boolean b = false;
-		if (formatNodeId != null) {
+		if (formatDataId== null) {
 			b = HBaseFormatDataDao.updateFormatDatas(cs_id, ft_id, formatNodeId,
 					new Gson().fromJson(formatFieldDatas, new TypeToken<Map<String, String>>() {
 					}.getType()));

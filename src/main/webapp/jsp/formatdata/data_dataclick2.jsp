@@ -253,7 +253,7 @@
 					</div>
 					<div class="clmReditK">
 						<div class="clmReditT">
-							<div class="clmReditTt">添加/修改单个数据</div>
+							<div class="clmReditTt">添加单个数据</div>
 							<div class="clmReditTx"></div>
 						</div>
 						<div class="clmReditM">
@@ -267,6 +267,26 @@
 						<div>
 							<input type="button" class="dataeditb" id="addFormatDataSubmit"
 								value="提交" />
+						</div>
+					</div>
+
+					<div class="clmReditK">
+						<input type="text" id="edit_fd_id" style="display: none;" />
+						<div class="clmReditT">
+							<div class="clmReditTt">修改单个数据</div>
+							<div class="clmReditTx"></div>
+						</div>
+						<div class="clmReditM">
+							<c:forEach items="${data}" var="dataTemp">
+								<div class="clmReditMz">
+									<div class="clmReditMzt">${dataTemp.ff_name }</div>
+									<input type="text" class="clmReditMzp" id="${dataTemp.ff_id }" />
+								</div>
+							</c:forEach>
+						</div>
+						<div>
+							<input type="button" class="dataeditb"
+								id="updateFormatDataSubmit" value="提交" />
 						</div>
 					</div>
 					<div class="clmRinportK">
@@ -444,10 +464,54 @@
             	error : function(){
             		alert("联网失败");
             	}
-            });
-    		
+            });    		
     	});
-    	
+    	$("#updateFormatDataSubmit").click(function (){
+    		var formatDatas = document.querySelectorAll(".clmReditMzp");
+    		
+    		 if(formatDatas ==0){
+             	alert("请勾选待编辑的数据！");
+             	return;
+             }else if(formatDatas.length > 1){
+             	alert("最多选择一个数据！")
+             }else{
+            	var cs_id = $("#cs_id").val();
+         		var ft_id = $("#ft_id").val();
+         		var formatNodeId = $("#formatNodeId").val();
+         		var sourceDataId = $("#sourceDataId").val();
+         		var formatDataId=$("#edit_fd_id").val();
+         		var formatFieldDatas = {};
+         		for(var i = 0 ; i < formatDatas.length ; i++){
+         			formatFieldDatas[formatDatas[i].id] = formatDatas[i].value;
+         		}
+	    		$.ajax({
+	            	url:"/wankangyuan/formatData/updateFormatData",
+	            	type:"post",
+	            	data:{
+	            		cs_id:cs_id,
+	            		ft_id:ft_id,
+	            		sourceDataId:sourceDataId,
+	            		formatNodeId:formatNodeId,
+	            		formatDataId:formatDataId,
+	            		formatFieldDatas:JSON.stringify(formatFieldDatas)
+	            	},
+	            	dataType:"json",
+	            	success : function(data){
+	            		if(data.result == true){
+	            			alert(data.message);
+	            			//刷新页面
+	            			window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+	            				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+	            		}else{
+	            			alert(data.message);
+	            		}
+	            	},
+	            	error : function(){
+	            		alert("联网失败");
+	            	}
+	            });
+             }
+    	});
     	
     	$(".clmRsb_remove").click(function (){
     		var afuxuanK=document.querySelectorAll('.fx4');

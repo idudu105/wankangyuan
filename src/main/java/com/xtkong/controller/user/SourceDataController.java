@@ -56,11 +56,9 @@ public class SourceDataController {
 	public String firstIn(HttpServletRequest request, HttpSession httpSession, String type, Integer page,
 			Integer strip) {
 
-		return getSourceDatas(request, httpSession, type, null, page, strip, null, null);
+		return getSourceDatas(request, httpSession, type, null, page, strip, null, null, null, null);
 	}
 
-	
-	
 	/**
 	 * sources 采集源列表
 	 * 
@@ -76,9 +74,10 @@ public class SourceDataController {
 	 * @param strip
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/getSourceDatas")
 	public String getSourceDatas(HttpServletRequest request, HttpSession httpSession, String type, Integer cs_id,
-			Integer page, Integer strip, Integer csf_id, String desc_asc) {
+			Integer page, Integer strip, Integer csf_id, String desc_asc, String csfChooseDatas, String csfCondition) {
 		User user = (User) request.getAttribute("user");
 		if (page == null) {
 			page = 1;
@@ -88,13 +87,14 @@ public class SourceDataController {
 		}
 		List<Project> projects;
 		List<Source> sources = sourceService.getSourcesForUser();
-		httpSession.setAttribute("sources", sources);// 采集源列表
-		
+		List<List<String>> sourceDatas = new ArrayList<>();
+		Integer total = 0;
+		Source source = null;
 		if (!sources.isEmpty()) {
 			if (cs_id == null) {
 				cs_id = sourceService.getSourcesForUserLimit(1).get(0).getCs_id();
 			}
-			Source source = sourceService.getSourceByCs_id(cs_id);
+			source = sourceService.getSourceByCs_id(cs_id);
 			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
 
 			Map<String, Map<String, Object>> result = new HashMap<>();
@@ -102,9 +102,26 @@ public class SourceDataController {
 			List<String> qualifiers = new ArrayList<>();
 			Map<String, String> conditionEqual = new HashMap<>();
 			Map<String, String> conditionLike = new HashMap<>();
-			String condition = null;
+			String condition = "";
 			for (SourceField sourceField : source.getSourceFields()) {
 				qualifiers.add(String.valueOf(sourceField.getCsf_id()));
+			}
+			if (csfChooseDatas != null) {
+				if (csfCondition == null) {
+					csfCondition = " ( ";
+				} else {
+					csfCondition += " AND (";
+				}
+				for (String csfChooseData : csfChooseDatas.split(",")) {
+					csfCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(csf_id) + "\"='"
+							+ csfChooseData + "' OR ";
+				}
+				if (csfCondition.trim().endsWith("OR")) {
+					csfCondition = csfCondition.substring(0, csfCondition.lastIndexOf("OR")) + " ) ";
+				}
+			}
+			if (csfCondition != null) {
+				condition = csfCondition;
 			}
 			// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
 			switch (type) {
@@ -123,40 +140,44 @@ public class SourceDataController {
 				conditionEqual.put(ConstantsHBase.QUALIFIER_PUBLIC, String.valueOf(ConstantsHBase.VALUE_PUBLIC_TRUE));
 				break;
 			}
-			
-			String phoenixSQL=PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike, null, null, null);
-			Integer total=PhoenixClient.count(phoenixSQL);
-			//排序
+
+			String phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike,
+					condition, null, null);
+			total = PhoenixClient.count(phoenixSQL);
+			// 排序
 			if (csf_id != null) {
 				switch (desc_asc) {
 				case "DESC":
-					condition += "  ORDER BY " + csf_id + " DESC ";
+					condition = " ORDER BY " + PhoenixClient.getSQLColumn(String.valueOf(csf_id)) + " DESC ";
 					break;
 				case "ASC":
-					condition += "  ORDER BY " + csf_id + " ASC ";
+					condition = " ORDER BY " + PhoenixClient.getSQLColumn(String.valueOf(csf_id)) + " ASC ";
 					break;
 				}
 			}
-			phoenixSQL=PhoenixClient.getPhoenixSQL(phoenixSQL, condition, page, strip);
-			
-			result=PhoenixClient.select(phoenixSQL);
-			
+			phoenixSQL = PhoenixClient.getPhoenixSQL(phoenixSQL, condition, page, strip);
+
+			result = PhoenixClient.select(phoenixSQL);
+
 			String resultMsg = String.valueOf((result.get("msg")).get("msg"));
 			for (int j = 0; j < 6; j++) {
 				resultMsg = String.valueOf((result.get("msg")).get("msg"));
 				if (resultMsg.equals("success")) {
+					sourceDatas = (List<List<String>>) result.get("records").get("data");
 					break;
 				} else {
 					PhoenixClient.undefined(resultMsg, tableName, qualifiers, conditionEqual, conditionLike);
 					result = PhoenixClient.select(phoenixSQL);
 				}
 			}
+			httpSession.setAttribute("sources", sources);// 采集源列表
 			httpSession.setAttribute("thiscs_id", cs_id);
 			httpSession.setAttribute("source", source);// 采集源字段列表
-			httpSession.setAttribute("sourceDatas", result.get("records").get("data"));// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
+			httpSession.setAttribute("sourceDatas", sourceDatas);// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
 			httpSession.setAttribute("total", total);
 			httpSession.setAttribute("page", page);
 			httpSession.setAttribute("rows", strip);
+			httpSession.setAttribute("old_csfCondition", csfCondition);
 		}
 		switch (type) {
 		case "1":
@@ -172,37 +193,83 @@ public class SourceDataController {
 		}
 
 	}
-	@RequestMapping("/getSourceFieldData")
+
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/getSourceFieldDatas")
 	@ResponseBody
-	public Map<String, Object> name(HttpServletRequest request, HttpSession httpSession, String type, Integer cs_id,
-			 Integer csf_id, String desc_asc) {
+	public Map<String, Object> getSourceFieldDatas(HttpServletRequest request, HttpSession httpSession, String type,
+			Integer cs_id, Integer csf_id, String searchWord, String csfCondition) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (cs_id == null||csf_id==null||type==null) {
+		if (cs_id == null || csf_id == null || type == null) {
 			map.put("result", false);
 			map.put("message", "查询失败");
 			return map;
 		}
 		Source source = sourceService.getSourceByCs_id(cs_id);
 		if (source != null) {
+			User user = (User) request.getAttribute("user");
 			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
 			Map<String, Map<String, Object>> result = new HashMap<>();
 			String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
 			List<String> qualifiers = new ArrayList<>();
 			Map<String, String> conditionEqual = new HashMap<>();
 			Map<String, String> conditionLike = new HashMap<>();
-			String condition = null;
-			
-			String phoenixSQL=null;
-			
-			
+			String condition = csfCondition;
+			String phoenixSQL = null;
+
+			qualifiers.add(String.valueOf(csf_id));
+			switch (type) {
+			case "1":
+				conditionEqual.put(ConstantsHBase.QUALIFIER_USER, String.valueOf(user.getId()));
+				break;
+			case "2":
+				SourceField publicStatus = new SourceField();
+				publicStatus.setCs_id(cs_id);
+				publicStatus.setCsf_name("公开状态");
+				source.getSourceFields().add(publicStatus);
+				qualifiers.add(ConstantsHBase.QUALIFIER_PUBLIC);
+				conditionEqual.put(ConstantsHBase.QUALIFIER_CREATE, String.valueOf(user.getId()));
+				break;
+			case "3":
+				conditionEqual.put(ConstantsHBase.QUALIFIER_PUBLIC, String.valueOf(ConstantsHBase.VALUE_PUBLIC_TRUE));
+				break;
+			}
+			if (searchWord == null) {
+				searchWord = "";
+			}
+			conditionLike.put(String.valueOf(csf_id), searchWord);
+
+			phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike, condition,
+					null, null);
+			result = PhoenixClient.select(phoenixSQL);
+
+			List<String> csfDatas = new ArrayList<>();
+
+			String resultMsg = String.valueOf((result.get("msg")).get("msg"));
+			for (int j = 0; j < 6; j++) {
+				resultMsg = String.valueOf((result.get("msg")).get("msg"));
+				if (resultMsg.equals("success")) {
+					try {
+						for (List<String> datas : (List<List<String>>) result.get("records").get("data")) {
+							csfDatas.add(datas.get(1));
+						}
+					} catch (Exception e) {
+						continue;
+					}
+					break;
+				} else {
+					PhoenixClient.undefined(resultMsg, tableName, qualifiers, conditionEqual, conditionLike);
+					result = PhoenixClient.select(phoenixSQL);
+				}
+			}
 			map.put("result", true);
+			map.put("csfDatas", csfDatas);
 		} else {
 			map.put("result", false);
 			map.put("message", "查询失败");
 		}
 		return map;
 	}
-	
 
 	/**
 	 * 获取添加源数据表单

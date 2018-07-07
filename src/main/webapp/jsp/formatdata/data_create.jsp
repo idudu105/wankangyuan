@@ -158,7 +158,6 @@
                     </div>
                     <div class="inportM">
                         <div class="inportMt">请把相关数据按照分类准确输入到EXCEL表格模板中，上传数据后，表格会自动配置相关内容。</div>
-
                         <a href="#" class="inportMz inportMd" id="downloadExcelMode">下载EXCEL模板</a>
                         <div class="inportMz inportMu">上传数据</div>
                         <input type="file" class="inportMf" id="inportMf" onchange="upFile()"/>
@@ -195,36 +194,29 @@
                 <div class="PJul">
                 	<c:forEach items="${sourceDatas}" var="sourceData">
 						<div class="PJli">
-							<div class="PJliC">
-								
-								<c:forEach items="${sourceData}" var="sourceDataField" varStatus="status">
-								
+							<div class="PJliC">								
+								<c:forEach items="${sourceData}" var="sourceDataField" varStatus="status">								
 									<c:if test="${status.index==0}">										
 			                            <div class="fuxuanK2">
 			                                <input type="checkbox" class="input_check" name="${sourceDataField}" id="check${sourceDataField}">
 			                                <label for="check${sourceDataField}"></label>
 			                            </div>
-									</c:if>
-								
+									</c:if>								
 									<c:if test="${status.index==1}">										
 										<div class="PJliCli2">
 			                                <a href="#" onclick="datainHref('${sourceData[0]}')">
 			                                    <span>${sourceDataField}</span>
 			                                </a>
 			                            </div>
-									</c:if>
-									
+									</c:if>									
 									<c:if test="${status.index!=0 && status.index!=1}">
 										<div class="PJliCli2">${sourceDataField}</div>
-									</c:if>
-									
+									</c:if>									
 								</c:forEach>		
 							</div>
 							<div class="PJliline"></div>
-
 						</div>
-					</c:forEach>	 
-
+					</c:forEach>
                 </div>
 
                 <div class="BTSX">
@@ -285,6 +277,7 @@
                 </a>
                 <div class="botT">Copyright @2018天津万康源科技有限公司</div>
             </div>
+			<div >old_csfCondition ${old_csfCondition}</div>
         </div>
     </div>
 

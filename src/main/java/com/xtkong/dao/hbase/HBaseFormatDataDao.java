@@ -316,6 +316,7 @@ public class HBaseFormatDataDao {
 		}
 		return db.putRow(tableName, put);
 	}
+	
 	public static boolean updateFormatDatas(String cs_id, String ft_id, String formatNodeId,
 			Map<String, String> formatFieldDatas) {
 		boolean b=false;
