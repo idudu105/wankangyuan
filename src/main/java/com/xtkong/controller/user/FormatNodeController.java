@@ -49,10 +49,11 @@ public class FormatNodeController {
 	public Map<String, Object> insertFormatNode(String cs_id, String sourceDataId, String ft_id, String nodeName) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Map<String, String> formatFieldDatas = new HashMap<String, String>();
-		for (FormatField formatField : formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id), ConstantsHBase.IS_meta_true)) {
+		for (FormatField formatField : formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
+				ConstantsHBase.IS_meta_true)) {
 			formatFieldDatas.put(String.valueOf(formatField.getFf_id()), "  ");
 		}
-		if (HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName, formatFieldDatas)) {
+		if (HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName, formatFieldDatas) != null) {
 			map.put("result", true);
 			map.put("message", "新增成功");
 		} else {
@@ -105,95 +106,132 @@ public class FormatNodeController {
 	 * @param ft_id
 	 * @param formatNodeId
 	 * @param type
-	 * @param page 
-	 * @param strip 
+	 * @param page
+	 * @param strip
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/getFormatNodeById")
 	public String getFormatNodeById(HttpSession httpSession, String cs_id, String sourceDataId, String ft_id,
-			String formatNodeId, String type, Integer page, Integer strip) {
+			String formatNodeId, String type, Integer page, Integer strip, Integer searchId, String desc_asc,
+			String chooseDatas, String oldCondition) {
 		if (page == null) {
 			page = 1;
 		}
 		if (strip == null) {
 			strip = 10;
 		}
-		HashMap<String, FormatType> formatTypeMap = new HashMap<>();
-		List<FormatType> formatTypes = formatTypeService.getFormatTypes(Integer.valueOf(cs_id));
-		for (FormatType formatType : formatTypes) {
-			formatTypeMap.put(String.valueOf(formatType.getFt_id()), formatType);
-		}
-		List<FormatType> formatTypeFolders = HBaseFormatNodeDao.getFormatTypeFolders(cs_id, sourceDataId,
-				formatTypeMap);
 
-		// meta数据
-		List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
-				ConstantsHBase.IS_meta_true);
-//		httpSession.setAttribute("formatNodeId", formatNodeId);
-//		List<List<String>> metaDatas = HBaseFormatDataDao.getFormatDataMetas(cs_id, ft_id, formatNodeId, meta);
-//		httpSession.setAttribute("metaDatas", metaDatas);
-		// data数据
-		List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
-				ConstantsHBase.IS_meta_false);
-//		httpSession.setAttribute("data", data);
-//		List<List<String>> dataDatas = HBaseFormatDataDao.getFormatDatas(cs_id, ft_id, formatNodeId, data);
-//		httpSession.setAttribute("dataDatas", dataDatas);
-//		httpSession.setAttribute("sourceDataId", sourceDataId);
-	
-		
-		String tableName =ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
-		List<String> mateQualifiers = new ArrayList<>();
-		Map<String, String> conditionEqual = new HashMap<>();
-		Map<String, String> conditionLike = new HashMap<>();
-		String condition=null;
-		for (FormatField formatField : meta) {
-			mateQualifiers.add(String.valueOf(formatField.getFf_id()));
-		}
-		conditionEqual.put(ConstantsHBase.QUALIFIER_FORMATNODEID, formatNodeId);
-		condition=" \""+tableName+"\".\"ID\"='"+formatNodeId+"'";
-		String matephoenixSQL=PhoenixClient.getPhoenixSQL(tableName, mateQualifiers, conditionEqual, conditionLike, condition, 1, 1);
-		Map<String, Map<String, Object>> metaDatas =PhoenixClient.select(matephoenixSQL);
-//				select(tableName,  mateQualifiers,
-//				conditionEqual, conditionLike,condition, 1, 1);
-
-		List<String> dataQualifiers = new ArrayList<>();
-		for (FormatField formatField : data) {
-			dataQualifiers.add(String.valueOf(formatField.getFf_id()));
-		}
-		conditionEqual.remove("ID");
-		condition=" \""+tableName+"\".\"ID\"!='"+formatNodeId+"'";
-		String dataphoenixSQL=PhoenixClient.getPhoenixSQL(tableName, dataQualifiers, conditionEqual, conditionLike, condition, null, null);
-		Integer dataCount=PhoenixClient.count(dataphoenixSQL);
-		
-		dataphoenixSQL=PhoenixClient.getPhoenixSQL(dataphoenixSQL, null, page, strip);
-		Map<String, Map<String, Object>> dataDatas = PhoenixClient.select(dataphoenixSQL);
-//				PhoenixClient.select(tableName, dataQualifiers, conditionEqual, conditionLike, condition, page, strip);
-		String metaMsg = String.valueOf((metaDatas.get("msg")).get("msg"));
-		String dataMsg = String.valueOf((dataDatas.get("msg")).get("msg"));
-		for (int j = 0; j < 6; j++) {
-			metaMsg = String.valueOf((metaDatas.get("msg")).get("msg"));
-			dataMsg = String.valueOf((dataDatas.get("msg")).get("msg"));
-			if ((metaMsg.equals("success")) && (dataMsg.equals("success"))) {
-				break;
-			}
-			if (!(metaMsg.equals("success"))) {
-				PhoenixClient.undefined(metaMsg, tableName, mateQualifiers, conditionEqual, conditionLike);
-				metaDatas =PhoenixClient.select(matephoenixSQL);
-//				metaDatas = PhoenixClient.reSelectWhere(metaMsg, tableName, family, mateQualifiers, conditionEqual,
-//						conditionLike, 1, 1);
-			}
-			if (!(dataMsg.equals("success"))) {
-				PhoenixClient.undefined(dataMsg, tableName, dataQualifiers, conditionEqual, conditionLike);
-				dataDatas =PhoenixClient.select(dataphoenixSQL);
-//				dataDatas = PhoenixClient.reSelectWhere(dataMsg, tableName, family, dataQualifiers, conditionEqual,
-//						conditionLike, page, strip);
-			}
-		}
-		@SuppressWarnings("unchecked")
-		List<List<String>>metaDataList=(List<List<String>>) metaDatas.get("records").get("data");
+		List<FormatType> formatTypeFolders = new ArrayList<>();
 		List<List<String>> metaDataListTemp = new ArrayList<>();
-		int i=0;
-		for (FormatField formatField : meta) {
+		List<FormatField> data = new ArrayList<>();
+		List<List<String>> dataDataLists = new ArrayList<>();
+		Integer dataCount = 0;
+		if (cs_id != null && ft_id != null && sourceDataId != null && formatNodeId != null) {
+
+			HashMap<String, FormatType> formatTypeMap = new HashMap<>();
+			List<FormatType> formatTypes = formatTypeService.getFormatTypes(Integer.valueOf(cs_id));
+			for (FormatType formatType : formatTypes) {
+				formatTypeMap.put(String.valueOf(formatType.getFt_id()), formatType);
+			}
+			formatTypeFolders = HBaseFormatNodeDao.getFormatTypeFolders(cs_id, sourceDataId, formatTypeMap);
+
+			// meta数据
+			List<FormatField> meta = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
+					ConstantsHBase.IS_meta_true);
+			// httpSession.setAttribute("formatNodeId", formatNodeId);
+			// List<List<String>> metaDatas =
+			// HBaseFormatDataDao.getFormatDataMetas(cs_id, ft_id, formatNodeId,
+			// meta);
+			// httpSession.setAttribute("metaDatas", metaDatas);
+			// data数据
+			data = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id), ConstantsHBase.IS_meta_false);
+			// httpSession.setAttribute("data", data);
+			// List<List<String>> dataDatas =
+			// HBaseFormatDataDao.getFormatDatas(cs_id, ft_id, formatNodeId,
+			// data);
+			// httpSession.setAttribute("dataDatas", dataDatas);
+			// httpSession.setAttribute("sourceDataId", sourceDataId);
+
+			String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+			List<String> mateQualifiers = new ArrayList<>();
+			Map<String, String> conditionEqual = new HashMap<>();
+			Map<String, String> conditionLike = new HashMap<>();
+			String condition = null;
+			for (FormatField formatField : meta) {
+				mateQualifiers.add(String.valueOf(formatField.getFf_id()));
+			}
+			conditionEqual.put(ConstantsHBase.QUALIFIER_FORMATNODEID, formatNodeId);
+			condition = " \"" + tableName + "\".\"ID\"='" + formatNodeId + "'";
+			String matephoenixSQL = PhoenixClient.getPhoenixSQL(tableName, mateQualifiers, conditionEqual,
+					conditionLike, condition, 1, 1);
+			Map<String, Map<String, Object>> metaDatas = PhoenixClient.select(matephoenixSQL);
+			// select(tableName, mateQualifiers,
+			// conditionEqual, conditionLike,condition, 1, 1);
+
+			List<String> dataQualifiers = new ArrayList<>();
+			for (FormatField formatField : data) {
+				dataQualifiers.add(String.valueOf(formatField.getFf_id()));
+			}
+			// 筛选
+			if (searchId != null && chooseDatas != null && !chooseDatas.trim().isEmpty()) {
+				oldCondition = " ( ";
+				for (String csfChooseData : chooseDatas.split(",")) {
+					oldCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId) + "\"='"
+							+ csfChooseData + "' OR ";
+				}
+				if (oldCondition.trim().endsWith("OR")) {
+					oldCondition = oldCondition.substring(0, oldCondition.lastIndexOf("OR")) + " ) ";
+				}
+			}
+			if (oldCondition == null || oldCondition.trim().isEmpty()) {
+				condition = " \"" + tableName + "\".\"ID\"!='" + formatNodeId + "' ";
+			} else {
+				condition = " \"" + tableName + "\".\"ID\"!='" + formatNodeId + "' AND " + oldCondition;
+			}
+			// conditionEqual.remove("ID");
+			String dataphoenixSQL = PhoenixClient.getPhoenixSQL(tableName, dataQualifiers, conditionEqual,
+					conditionLike, condition, null, null);
+			dataCount = PhoenixClient.count(dataphoenixSQL);
+			// 排序
+			condition = null;
+			if (searchId != null) {
+				switch (desc_asc) {
+				case "DESC":
+					condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId)) + " DESC ";
+					break;
+				case "ASC":
+					condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId)) + " ASC ";
+					break;
+				}
+			}
+			dataphoenixSQL = PhoenixClient.getPhoenixSQL(dataphoenixSQL, condition, page, strip);
+			Map<String, Map<String, Object>> dataDatas = PhoenixClient.select(dataphoenixSQL);
+			// PhoenixClient.select(tableName, dataQualifiers, conditionEqual,
+			// conditionLike, condition, page, strip);
+			String metaMsg = String.valueOf((metaDatas.get("msg")).get("msg"));
+			String dataMsg = String.valueOf((dataDatas.get("msg")).get("msg"));
+			List<List<String>> metaDataList = new ArrayList<>();
+			for (int j = 0; j < 6; j++) {
+				metaMsg = String.valueOf((metaDatas.get("msg")).get("msg"));
+				dataMsg = String.valueOf((dataDatas.get("msg")).get("msg"));
+				if ((metaMsg.equals("success")) && (dataMsg.equals("success"))) {
+					metaDataList = (List<List<String>>) metaDatas.get("records").get("data");
+					dataDataLists = (List<List<String>>) dataDatas.get("records").get("data");
+					break;
+				}
+				if (!(metaMsg.equals("success"))) {
+					PhoenixClient.undefined(metaMsg, tableName, mateQualifiers, conditionEqual, conditionLike);
+					metaDatas = PhoenixClient.select(matephoenixSQL);
+				}
+				if (!(dataMsg.equals("success"))) {
+					PhoenixClient.undefined(dataMsg, tableName, dataQualifiers, conditionEqual, conditionLike);
+					dataDatas = PhoenixClient.select(dataphoenixSQL);
+				}
+			}
+
+			int i = 0;
+			for (FormatField formatField : meta) {
 				List<String> formatData = new ArrayList<>();
 				formatData.add(String.valueOf(formatField.getFf_id()));
 				formatData.add(formatField.getFf_name());
@@ -203,17 +241,19 @@ public class FormatNodeController {
 					formatData.add("");
 				}
 				metaDataListTemp.add(formatData);
+			}
 		}
 		httpSession.setAttribute("formatTypeFolders", formatTypeFolders);
 		httpSession.setAttribute("formatNodeId", formatNodeId);
 		httpSession.setAttribute("metaDatas", metaDataListTemp);
 		httpSession.setAttribute("data", data);
-		httpSession.setAttribute("dataDatas", dataDatas.get("records").get("data"));
+		httpSession.setAttribute("dataDatas", dataDataLists);
 		httpSession.setAttribute("sourceDataId", sourceDataId);
 		httpSession.setAttribute("total", dataCount);
 		httpSession.setAttribute("page", page);
 		httpSession.setAttribute("rows", strip);
-		
+		httpSession.setAttribute("oldCondition", oldCondition);
+
 		switch (type) {
 		case "1":
 			return "redirect:/jsp/formatdata/data_dataclick.jsp";
@@ -225,11 +265,11 @@ public class FormatNodeController {
 			return "redirect:/jsp/project/project_dataclick.jsp";
 		}
 		return "redirect:/jsp/formatdata/data_dataclick.jsp";
-//		if (type.equals("2")) {
-//			return "redirect:/jsp/formatdata/data_dataclick2.jsp";
-//		} else {
-//			return "redirect:/jsp/formatdata/data_dataclick.jsp";
-//		}
+		// if (type.equals("2")) {
+		// return "redirect:/jsp/formatdata/data_dataclick2.jsp";
+		// } else {
+		// return "redirect:/jsp/formatdata/data_dataclick.jsp";
+		// }
 	}
 
 	/**

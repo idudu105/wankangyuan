@@ -36,7 +36,7 @@
 				</h1>
 				<a href="/wankangyuan/project/selectMyProject?user_id=1">
 					<div class="topT active">项目</div>
-				</a> <a href="/wankangyuan/sourceData/firstIn?type=1">
+				</a> <a href="/wankangyuan/sourceData/getSourceDatas?type=1">
 					<div class="topT">格式数据</div>
 				</a> <a href="/wankangyuan/application/viewMine">
 					<div class="topT ">应用</div>
@@ -103,7 +103,7 @@
 
 					<c:if test="${authoritys['31'] == true }">
 						<a
-							href="/wankangyuan/projectFormatData/getSourceDatas?p_id=${project.id}"><div
+							href="/wankangyuan/sourceData/getSourceDatas?type=4&p_id=${project.id}"><div
 								class="top2Ctr active">格式数据</div></a>
 					</c:if>
 
@@ -308,7 +308,7 @@
 	            	var searchWord = $(".search2Ct").val();
 	            	var p_id = ${project.id};
 	            	var cs_id = $("#source_Select").val();
-	        		window.location.href="/wankangyuan/projectFormatData/getSourceDatas?p_id="+p_id+"&type=1&cs_id="+cs_id+"&page="+page+"&searchWord="+searchWord;
+	        		window.location.href="/wankangyuan/sourceData/getSourceDatas?type=4&p_id="+p_id+"&cs_id="+cs_id+"&page="+page+"&searchWord="+searchWord;
 	            }
 	        }
 	    });
@@ -316,14 +316,14 @@
     	//进入到详情页
     	function datainHref(sourceDataId){
     		var cs_id = $("#source_Select").val();
-    		window.location.href="/wankangyuan/projectFormatData/getSourceDataById?cs_id="+cs_id+"&sourceDataId="+sourceDataId;
+    		window.location.href="/wankangyuan/sourceData/getSourceDataById?type=4&cs_id="+cs_id+"&sourceDataId="+sourceDataId;
     	}
     	
     	
     	$("#source_Select").change(function(){
     		cs_id = $("#source_Select").val();
     		var p_id = ${project.id};
-   			window.location.href="/wankangyuan/projectFormatData/getSourceDatas?p_id="+p_id+"&cs_id="+cs_id;
+   			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=4&p_id="+p_id+"&cs_id="+cs_id;
     	
     	});
     	
@@ -364,7 +364,7 @@
             			alert(data.message);
                 		var p_id = ${project.id};
                 		var cs_id = $("#source_Select").val();
-                		window.location.href="/wankangyuan/projectFormatData/getSourceDatas?p_id="+p_id+"&cs_id="+cs_id;
+                		window.location.href="/wankangyuan/sourceData/getSourceDatas?type=4&p_id="+p_id+"&cs_id="+cs_id;
             		}else{
             			alert(data.message);
             		}

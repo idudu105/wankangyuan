@@ -367,7 +367,7 @@ public class PhoenixClient {
 	}
 
 	/**
-	 * 构造phoenixSQL,phoenixSQL+condition+page+strip
+	 * 构造phoenixSQL,phoenixSQL+(..)condition+page+strip
 	 * 
 	 * @param phoenixSQL
 	 * @param condition
@@ -388,11 +388,11 @@ public class PhoenixClient {
 		return phoenixSQL;
 	}
 	
-	public static String getSQLColumn(String tableName, String qualifier) {
-		return "\"" + tableName + "\".\"" + qualifier + "\"";
+	public static String getSQLTableColumn(String tableName, String qualifier) {
+		return " \"" + tableName + "\".\"" + qualifier + "\" ";
 	}
-	public static String getSQLColumn( String qualifier) {
-		return "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + qualifier + "\"";
+	public static String getSQLFamilyColumn( String qualifier) {
+		return " \"" + ConstantsHBase.FAMILY_INFO + "\".\"" + qualifier + "\" ";
 	}
 	/**
 	 * 根据Phoenix支持的SQL格式，查询Hbase的数据。
@@ -738,7 +738,9 @@ public class PhoenixClient {
 				datas.add(data);
 			}
 			// 结果封装
-			map.put("data", datas);
+			Map<String, Object> records = new HashMap<String, Object>();
+			records.put("data", datas);
+			map.put("records", records);
 			map.put("msg", "success");
 		} catch (SQLException e) {
 			e.printStackTrace();

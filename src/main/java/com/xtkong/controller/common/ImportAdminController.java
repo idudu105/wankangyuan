@@ -1,4 +1,4 @@
-package com.xtkong.controller.admin;
+package com.xtkong.controller.common;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,7 +26,7 @@ import com.xtkong.service.SourceFieldService;
 import com.xtkong.service.SourceService;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/common")
 public class ImportAdminController {
 	@Autowired
 	SourceService sourceService;
@@ -36,6 +36,7 @@ public class ImportAdminController {
 	FormatTypeService formatTypeService;
 	@Autowired
 	FormatFieldService formatFieldService;
+
 	@RequestMapping(value = "/import")
 	@ResponseBody
 	public Map<String, Object> test(String jsonStr) {
@@ -60,19 +61,16 @@ public class ImportAdminController {
 				if (importBean.getAnalysisList() != null) {
 					for (Analysis analysis : importBean.getAnalysisList()) {
 						if (analysis.getToBCol() != null) {
-							map = formatDataToBCol(importBean.getSourceid(), importBean.getUserid(),
-									analysis.getName(), analysis.getNodeName(),
-									analysis.getFileurl(), analysis.getBCol(),
-									analysis.getToBCol(), analysis.getSrcMCol(),
-									analysis.getDistMCol(), analysis.getSrcDCol(),
-									analysis.getDistDCol(), analysis.getDefUnique());
+							map = formatDataToBCol(importBean.getSourceid(), importBean.getUserid(), analysis.getName(),
+									analysis.getNodeName(), analysis.getFileurl(), analysis.getBCol(),
+									analysis.getToBCol(), analysis.getSrcMCol(), analysis.getDistMCol(),
+									analysis.getSrcDCol(), analysis.getDistDCol(), analysis.getDefUnique());
 						} else if (analysis.getToBColValue() != null) {
 							map = formatDataToBColValue(importBean.getSourceid(), importBean.getUserid(),
-									analysis.getName(), analysis.getNodeName(),
-									analysis.getFileurl(), analysis.getBCol(),
-									analysis.getToBColValue(), analysis.getSrcMCol(),
-									analysis.getDistMCol(), analysis.getSrcDCol(),
-									analysis.getDistDCol(), analysis.getDefUnique());
+									analysis.getName(), analysis.getNodeName(), analysis.getFileurl(),
+									analysis.getBCol(), analysis.getToBColValue(), analysis.getSrcMCol(),
+									analysis.getDistMCol(), analysis.getSrcDCol(), analysis.getDistDCol(),
+									analysis.getDefUnique());
 						}
 					}
 				}
@@ -135,9 +133,11 @@ public class ImportAdminController {
 				for (Entry<Integer, String> sourceFieldId : csfIndex_IdMap.entrySet()) {
 					sourceFieldDatas.put(sourceFieldId.getValue(), datas[sourceFieldId.getKey()]);
 				}
-				// 避免重复导入
-				if (HBaseSourceDataDao.getSourceDataId(String.valueOf(cs_id), userid, sourceFieldDatas) == null) {
-					HBaseSourceDataDao.insertSourceData(String.valueOf(cs_id), userid, sourceFieldDatas);
+				if (!sourceFieldDatas.isEmpty()) {
+					// 避免重复导入
+					if (HBaseSourceDataDao.getSourceDataId(String.valueOf(cs_id), userid, sourceFieldDatas) == null) {
+						HBaseSourceDataDao.insertSourceData(String.valueOf(cs_id), userid, sourceFieldDatas);
+					}
 				}
 			}
 			scanner.close();
@@ -273,14 +273,19 @@ public class ImportAdminController {
 				}
 
 				// 避免重复导入
-				if (HBaseFormatDataDao.getFormatDataId(String.valueOf(cs_id), String.valueOf(ft_id), formatNodeId,
-						metaDatas) == null) {
-					HBaseFormatDataDao.updateFormatData(String.valueOf(cs_id), String.valueOf(ft_id), formatNodeId,
-							metaDatas);
+				if (!metaDatas.isEmpty()) {
+					if (HBaseFormatDataDao.getFormatDataId(String.valueOf(cs_id), String.valueOf(ft_id), formatNodeId,
+							metaDatas) == null) {
+						HBaseFormatDataDao.updateFormatData(String.valueOf(cs_id), String.valueOf(ft_id), formatNodeId,
+								metaDatas);
+					}
 				}
-				if (HBaseFormatDataDao.getFormatDataId(String.valueOf(cs_id), String.valueOf(ft_id), formatNodeId,
-						dataDatas) == null) {
-					HBaseFormatDataDao.insertFormatData(String.valueOf(cs_id), String.valueOf(ft_id), sourceDataId, formatNodeId, dataDatas);
+				if (!dataDatas.isEmpty()) {
+					if (HBaseFormatDataDao.getFormatDataId(String.valueOf(cs_id), String.valueOf(ft_id), formatNodeId,
+							dataDatas) == null) {
+						HBaseFormatDataDao.insertFormatData(String.valueOf(cs_id), String.valueOf(ft_id), sourceDataId,
+								formatNodeId, dataDatas);
+					}
 				}
 			}
 
@@ -341,7 +346,7 @@ public class ImportAdminController {
 			Scanner scanner = new Scanner(new FileInputStream(fileurl));
 			String sourceDataId = HBaseSourceDataDao.getSourceDataId(String.valueOf(userid), String.valueOf(cs_id),
 					sourceFieldDatas);
-			if ((sourceDataId != null)&&(!sourceDataId.isEmpty()) ){
+			if ((sourceDataId != null) && (!sourceDataId.isEmpty())) {
 
 				// 待导入文件中要导入的列的索引,对应的配置表中的字段id
 				HashMap<Integer, String> metaIndex_IdMap = new HashMap<>();// metainfo字段
@@ -400,16 +405,20 @@ public class ImportAdminController {
 						}
 						formatNodeIds.put(sourceDataId, formatNodeId);
 					}
-
 					// 避免重复导入
-					if (HBaseFormatDataDao.getFormatDataId(String.valueOf(cs_id), String.valueOf(ft_id), formatNodeId,
-							metaDatas) == null) {
-						HBaseFormatDataDao.updateFormatData(String.valueOf(cs_id), String.valueOf(ft_id), formatNodeId,
-								metaDatas);
+					if (!metaDatas.isEmpty()) {
+						if (HBaseFormatDataDao.getFormatDataId(String.valueOf(cs_id), String.valueOf(ft_id),
+								formatNodeId, metaDatas) == null) {
+							HBaseFormatDataDao.updateFormatData(String.valueOf(cs_id), String.valueOf(ft_id),
+									formatNodeId, metaDatas);
+						}
 					}
-					if (HBaseFormatDataDao.getFormatDataId(String.valueOf(cs_id), String.valueOf(ft_id), formatNodeId,
-							dataDatas) == null) {
-						HBaseFormatDataDao.insertFormatData(String.valueOf(cs_id), String.valueOf(ft_id), sourceDataId, formatNodeId, dataDatas);
+					if (!dataDatas.isEmpty()) {
+						if (HBaseFormatDataDao.getFormatDataId(String.valueOf(cs_id), String.valueOf(ft_id),
+								formatNodeId, dataDatas) == null) {
+							HBaseFormatDataDao.insertFormatData(String.valueOf(cs_id), String.valueOf(ft_id),
+									sourceDataId, formatNodeId, dataDatas);
+						}
 					}
 				}
 			} else {
@@ -421,7 +430,7 @@ public class ImportAdminController {
 			map.put("result", "成功");
 		} catch (IOException e1) {
 			map.put("result", "失败");
-			
+
 			return map;
 		}
 		return map;
@@ -623,7 +632,8 @@ public class ImportAdminController {
 					formatFieldDatas.put(formatFieldId.getValue(), datas[formatFieldId.getKey()]);
 				}
 
-				HBaseFormatDataDao.insertFormatData(String.valueOf(cs_id), String.valueOf(ft_id), sourceDataId, formatNodeId, formatFieldDatas);
+				HBaseFormatDataDao.insertFormatData(String.valueOf(cs_id), String.valueOf(ft_id), sourceDataId,
+						formatNodeId, formatFieldDatas);
 
 			}
 

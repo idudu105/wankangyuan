@@ -56,7 +56,7 @@ public class SourceDataController {
 	public String firstIn(HttpServletRequest request, HttpSession httpSession, String type, Integer page,
 			Integer strip) {
 
-		return getSourceDatas(request, httpSession, type, null, page, strip, null, null, null, null);
+		return getSourceDatas(request, httpSession, type, null, page, strip, null, null, null, null, null, null, null);
 	}
 
 	/**
@@ -72,12 +72,15 @@ public class SourceDataController {
 	 * @param cs_id
 	 * @param page
 	 * @param strip
+	 * @param p_id
+	 * @param searchWord
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/getSourceDatas")
 	public String getSourceDatas(HttpServletRequest request, HttpSession httpSession, String type, Integer cs_id,
-			Integer page, Integer strip, Integer csf_id, String desc_asc, String csfChooseDatas, String csfCondition) {
+			Integer page, Integer strip, Integer searchId, String desc_asc, String searchWord, String chooseDatas,
+			String oldCondition, Integer p_id, String searchFirstWord) {
 		User user = (User) request.getAttribute("user");
 		if (page == null) {
 			page = 1;
@@ -106,23 +109,6 @@ public class SourceDataController {
 			for (SourceField sourceField : source.getSourceFields()) {
 				qualifiers.add(String.valueOf(sourceField.getCsf_id()));
 			}
-			if (csfChooseDatas != null) {
-				if (csfCondition == null) {
-					csfCondition = " ( ";
-				} else {
-					csfCondition += " AND (";
-				}
-				for (String csfChooseData : csfChooseDatas.split(",")) {
-					csfCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(csf_id) + "\"='"
-							+ csfChooseData + "' OR ";
-				}
-				if (csfCondition.trim().endsWith("OR")) {
-					csfCondition = csfCondition.substring(0, csfCondition.lastIndexOf("OR")) + " ) ";
-				}
-			}
-			if (csfCondition != null) {
-				condition = csfCondition;
-			}
 			// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
 			switch (type) {
 			case "1":
@@ -139,19 +125,52 @@ public class SourceDataController {
 			case "3":
 				conditionEqual.put(ConstantsHBase.QUALIFIER_PUBLIC, String.valueOf(ConstantsHBase.VALUE_PUBLIC_TRUE));
 				break;
+			case "4":
+				if (searchFirstWord == null) {
+					searchFirstWord = new String("");
+					httpSession.setAttribute("searchWord", null);
+				} else {
+					// 更新关键字
+					httpSession.setAttribute("searchWord", searchFirstWord);
+				}
+				conditionEqual.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
+				if (!source.getSourceFields().isEmpty()) {
+					conditionLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()), searchFirstWord);
+				}
+				break;
 			}
+			if (searchWord != null && searchId != null) {
+				// searchWord = "";
+				conditionLike.put(String.valueOf(searchId), searchWord);
+			}
+			// 筛选
+			if (searchId != null && chooseDatas != null && !chooseDatas.trim().isEmpty()) {
+				oldCondition = " ( ";
+				for (String csfChooseData : chooseDatas.split(",")) {
+					oldCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId) + "\"='"
+							+ csfChooseData + "' OR ";
+				}
+				if (oldCondition.trim().endsWith("OR")) {
+					oldCondition = oldCondition.substring(0, oldCondition.lastIndexOf("OR")) + " ) ";
+				}
+			}
+			// if (csfCondition != null&& !csfCondition.trim().isEmpty()) {
+			condition = oldCondition;
+			// }
 
 			String phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike,
 					condition, null, null);
 			total = PhoenixClient.count(phoenixSQL);
+
 			// 排序
-			if (csf_id != null) {
+			condition = null;
+			if (searchId != null) {
 				switch (desc_asc) {
 				case "DESC":
-					condition = " ORDER BY " + PhoenixClient.getSQLColumn(String.valueOf(csf_id)) + " DESC ";
+					condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId)) + " DESC ";
 					break;
 				case "ASC":
-					condition = " ORDER BY " + PhoenixClient.getSQLColumn(String.valueOf(csf_id)) + " ASC ";
+					condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId)) + " ASC ";
 					break;
 				}
 			}
@@ -177,7 +196,7 @@ public class SourceDataController {
 			httpSession.setAttribute("total", total);
 			httpSession.setAttribute("page", page);
 			httpSession.setAttribute("rows", strip);
-			httpSession.setAttribute("old_csfCondition", csfCondition);
+			httpSession.setAttribute("oldCondition", oldCondition);
 		}
 		switch (type) {
 		case "1":
@@ -188,6 +207,10 @@ public class SourceDataController {
 			projects = projectService.selectMyProject(user.getId());
 			httpSession.setAttribute("projects", projects);// 项目列表
 			return "redirect:/jsp/formatdata/data_create.jsp";
+		case "3":
+			return "redirect:/jsp/formatdata/data_public.jsp";
+		case "4":
+			return "redirect:/jsp/project/project_data.jsp";
 		default:
 			return "redirect:/jsp/formatdata/data_public.jsp";
 		}
@@ -197,10 +220,10 @@ public class SourceDataController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/getSourceFieldDatas")
 	@ResponseBody
-	public Map<String, Object> getSourceFieldDatas(HttpServletRequest request, HttpSession httpSession, String type,
-			Integer cs_id, Integer csf_id, String searchWord, String csfCondition) {
+	public Map<String, Object> getSourceFieldDatas(HttpServletRequest request, String type, Integer cs_id,
+			Integer searchId, String searchWord, String oldCondition) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (cs_id == null || csf_id == null || type == null) {
+		if (cs_id == null || searchId == null || type == null) {
 			map.put("result", false);
 			map.put("message", "查询失败");
 			return map;
@@ -208,26 +231,20 @@ public class SourceDataController {
 		Source source = sourceService.getSourceByCs_id(cs_id);
 		if (source != null) {
 			User user = (User) request.getAttribute("user");
-			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
 			Map<String, Map<String, Object>> result = new HashMap<>();
 			String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
 			List<String> qualifiers = new ArrayList<>();
 			Map<String, String> conditionEqual = new HashMap<>();
 			Map<String, String> conditionLike = new HashMap<>();
-			String condition = csfCondition;
+			String condition = oldCondition;
 			String phoenixSQL = null;
 
-			qualifiers.add(String.valueOf(csf_id));
+			qualifiers.add(String.valueOf(searchId));
 			switch (type) {
 			case "1":
 				conditionEqual.put(ConstantsHBase.QUALIFIER_USER, String.valueOf(user.getId()));
 				break;
 			case "2":
-				SourceField publicStatus = new SourceField();
-				publicStatus.setCs_id(cs_id);
-				publicStatus.setCsf_name("公开状态");
-				source.getSourceFields().add(publicStatus);
-				qualifiers.add(ConstantsHBase.QUALIFIER_PUBLIC);
 				conditionEqual.put(ConstantsHBase.QUALIFIER_CREATE, String.valueOf(user.getId()));
 				break;
 			case "3":
@@ -237,7 +254,7 @@ public class SourceDataController {
 			if (searchWord == null) {
 				searchWord = "";
 			}
-			conditionLike.put(String.valueOf(csf_id), searchWord);
+			conditionLike.put(String.valueOf(searchId), searchWord);
 
 			phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike, condition,
 					null, null);
@@ -311,7 +328,7 @@ public class SourceDataController {
 
 		if (HBaseSourceDataDao.insertSourceData(cs_id, String.valueOf(user.getId()),
 				new Gson().fromJson(sourceFieldDatas, new TypeToken<Map<String, String>>() {
-				}.getType()))) {
+				}.getType())) != null) {
 			map.put("result", true);
 			map.put("message", "新增成功");
 		} else {
@@ -377,6 +394,8 @@ public class SourceDataController {
 		httpSession.setAttribute("type123", type);
 		if (type.equals("2")) {
 			return "redirect:/jsp/formatdata/data_datain2.jsp";
+		} else if (type.equals("4")) {
+			return "redirect:/jsp/project/project_datain.jsp";
 		} else {
 			return "redirect:/jsp/formatdata/data_datain.jsp";
 		}

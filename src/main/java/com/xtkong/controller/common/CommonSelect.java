@@ -74,65 +74,66 @@ public class CommonSelect {
 	@RequestMapping("/commonSelectJson")
 	@ResponseBody
 	public String commonSelect(String jsonStr) {
-		List<String> userid;
-		List<String> projectid;
-		String select;
-		Boolean isAddWhere;
-		Map<String, String> conditionEqual;
-		Map<String, String> conditionLike;
-		String currPage;
-		String pageSize;
-		String selectContdation;
+		List<String> userid = null;
+		List<String> projectid = null;
+		String condition = null;
+		Boolean isAddWhere = false;
+		Map<String, String> conditionEqual = null;
+		Map<String, String> conditionLike = null;
+		String currPage = null;
+		String pageSize = null;
+		String selectContdation = null;
+
+		Map<String, Object> msg = new HashMap<>();
 		try {
 			Map<String, Object> gsonMap = new Gson().fromJson(jsonStr, new TypeToken<Map<String, Object>>() {
 			}.getType());
-			userid = null;
 			if (gsonMap.containsKey("userid")) {
 				userid = (List<String>) gsonMap.get("userid");
 			}
-			projectid = null;
 			if (gsonMap.containsKey("projectid")) {
 				projectid = (List<String>) gsonMap.get("projectid");
 			}
-			select = null;
 			if (gsonMap.containsKey("select")) {
-				select = (String) gsonMap.get("select");
+				Map<String, String> select = (Map<String, String>) gsonMap.get("select");
+				if (select.containsKey("condition")) {
+					condition = select.get("condition");
+				}
+			}else{
+				msg.put("msg", "查询语句缺失！");
+				return new Gson().toJson(msg).toString();
 			}
-			isAddWhere = false;
 			if (gsonMap.containsKey("isAddWhere")) {
 				isAddWhere = (Boolean) gsonMap.get("isAddWhere");
 			}
-			conditionEqual = null;
 			if (gsonMap.containsKey("conditionEqual")) {
 				conditionEqual = (Map<String, String>) gsonMap.get("conditionEqual");
 			}
-			conditionLike = null;
 			if (gsonMap.containsKey("conditionLike")) {
 				conditionLike = (Map<String, String>) gsonMap.get("conditionLike");
 			}
-			currPage = null;
-			if (gsonMap.containsKey("currPage")) {
-				currPage = gsonMap.get("currPage").toString();
+			if (gsonMap.containsKey("page")) {
+				Map<String, String>page=(Map<String, String>) gsonMap.get("page");
+				if (page.containsKey("currPage")) {
+					currPage = page.get("currPage").toString();
+				}
+				if (page.containsKey("pageSize")) {
+					pageSize = page.get("pageSize").toString();
+				}
 			}
-			pageSize = null;
-			if (gsonMap.containsKey("pageSize")) {
-				pageSize = gsonMap.get("pageSize").toString();
-			}
-			selectContdation = null;
 			if (gsonMap.containsKey("selectContdation")) {
 				selectContdation = gsonMap.get("selectContdation").toString();
 			}
 			if (conditionEqual != null && conditionLike != null) {
-				return commonSelect(userid, projectid, select, isAddWhere, conditionEqual, conditionLike, currPage,
+				return commonSelect(userid, projectid, condition, isAddWhere, conditionEqual, conditionLike, currPage,
 						pageSize);
 			} else {
-				return commonSelect(userid, projectid, select, isAddWhere, selectContdation, currPage, pageSize);
+				return commonSelect(userid, projectid, condition, isAddWhere, selectContdation, currPage, pageSize);
 			}
 		} catch (JsonSyntaxException e) {
 			e.printStackTrace();
-			Map<String, Object> map = new HashMap<>();
-			map.put("msg", "Json解析异常，请核对Json格式！  Json:" + jsonStr + " 提示：" + e.getMessage());
-			return new Gson().toJson(map).toString();
+			msg.put("msg", "Json解析异常，请核对Json格式！  Json:" + jsonStr + " 提示：" + e.getMessage());
+			return new Gson().toJson(msg).toString();
 		}
 	}
 
@@ -143,7 +144,7 @@ public class CommonSelect {
 	 * @param projectid
 	 * @param select
 	 * @param isAddWhere
-	 *            这个参数用于说明最外层select语句中是否已经包含where条件，true表示没有包含，false表示包含。
+	 *            这个参数用于说明最外层select语句中是否已经包含where条件，true表示没有包含，false(默认值)表示包含。
 	 * @param selectContdation
 	 * @param currPage
 	 * @param pageSize
@@ -153,6 +154,9 @@ public class CommonSelect {
 	@ResponseBody
 	public String commonSelect(List<String> userid, List<String> projectid, String select, Boolean isAddWhere,
 			String selectContdation, String currPage, String pageSize) {
+		if(isAddWhere==null){
+			isAddWhere=false;
+		}
 		if (isAddWhere) {
 			select += " WHERE ";
 		} else {

@@ -34,7 +34,7 @@
                 <a href="/wankangyuan/project/selectMyProject?user_id=1">
                 	<div class="topT active">项目</div>
                 </a>
-                <a href="/wankangyuan/sourceData/firstIn?type=1">
+                <a href="/wankangyuan/sourceData/getSourceDatas?type=1">
                     <div class="topT">格式数据</div>
                 </a>
                 <a href="/wankangyuan/application/viewMine">
@@ -74,7 +74,7 @@
             <div class="top2">
                 <div class="top2C">
                     <div class="top2Ctl active">
-                        <a href="/wankangyuan/projectFormatData/getSourceDataById?cs_id=${formatTypeFolders[0].cs_id}&sourceDataId=${sourceDataId}">
+                        <a href="/wankangyuan/sourceData/getSourceDataById?type=4&cs_id=${formatTypeFolders[0].cs_id}&sourceDataId=${sourceDataId}">
                             <img src="/wankangyuan/static/img/back.png" height="20" width="20" alt="" class="backI" />
                         </a>${sourceData[1]}
                         <input id="cs_id" value="${formatTypeFolders[0].cs_id }" style="display:none;"/>
@@ -222,7 +222,7 @@
     		var formatNodeId = $("#formatNodeId").val();
     		var sourceDataId = $("#sourceDataId").val();
     		if(page!=${page}){
-    			window.location.href="/wankangyuan/projectFormatData/getFormatNodeById?cs_id="
+    			window.location.href="/wankangyuan/formatNode/getFormatNodeById?type=4&cs_id="
 					+cs_id+"&sourceDataId="+sourceDataId+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId+"&page="+page+"&strip=${rows}";
     		}
     	}
@@ -230,7 +230,7 @@
 	    function dataNodeClick(formatNodeId , ft_id){
 			var cs_id = $('#cs_id').val();
 			var sourceDataId = $("#sourceDataId").val();
-			window.location.href="/wankangyuan/projectFormatData/getFormatNodeById?cs_id="
+			window.location.href="/wankangyuan/formatNode/getFormatNodeById?type=4&cs_id="
 					+cs_id+"&sourceDataId="+sourceDataId+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
 		}
 	

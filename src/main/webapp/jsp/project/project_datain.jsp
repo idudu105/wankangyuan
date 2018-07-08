@@ -73,7 +73,7 @@
             <div class="top2">
                 <div class="top2C">
                     <div class="top2Ctl active">
-                        <a href="/wankangyuan/projectFormatData/getSourceDatas?p_id=${project.id}">
+                        <a href="/wankangyuan/sourceData/getSourceDatas?type=4&p_id=${project.id}">
                             <img src="/wankangyuan/static/img/back.png" height="20" width="20" alt="" class="backI" />
                         </a>${sourceData[1]}
                         <input id="cs_id" value="${source.cs_id }" style="display:none;"/>
@@ -145,8 +145,8 @@
 		function dataNodeClick(formatNodeId , ft_id){
 			var cs_id = $('#cs_id').val();
 			var sourceDataId = $("#sourceDataId").val();
-			window.location.href="/wankangyuan/projectFormatData/getFormatNodeById?cs_id="
-					+cs_id+"&sourceDataId="+sourceDataId+"&type=1&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+			window.location.href="/wankangyuan/formatNode/getFormatNodeById?type=4&cs_id="
+					+cs_id+"&sourceDataId="+sourceDataId+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
 		}
 		
 	</script>

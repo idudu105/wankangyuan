@@ -171,10 +171,10 @@ public class ProjectFormatDataController {
 //				condition = condition.substring(0, condition.lastIndexOf("OR"));
 ////			}
 
-			if (searchWord.equals("") && !source.getSourceFields().isEmpty()) {
+			if (!source.getSourceFields().isEmpty()) {
 				conditionLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()), searchWord);
 			}
-			String phoenixSQL=PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionEqual, condition, null, null);
+			String phoenixSQL=PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike, condition, null, null);
 			Integer count=PhoenixClient.count(phoenixSQL);
 			 phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike,
 					condition, page, strip);
