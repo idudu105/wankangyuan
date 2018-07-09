@@ -64,24 +64,23 @@ public class ProjectAppTaskService {
 		PageHelper.startPage(page, strip);
 		List<ProjectAppTask> projectAppTasks = projectAppTaskDao.selectProjectAppTask(project_id , searchWord);
 		
-		//需要根据taskId网络请求运行结果进度
-		List<Map<String, Object>> appTaskRequest = new ArrayList<Map<String, Object>>();
 		Iterator<ProjectAppTask> iterator = projectAppTasks.iterator();
-		while(iterator.hasNext()){
+		while(iterator.hasNext()){//遍历分页查询出的每一个应用结果
 			ProjectAppTask projectAppTask = (ProjectAppTask)iterator.next();
-			Map<String, Object> appTaskRequestTemp = new HashMap<String , Object>();
+			
+			//需要根据taskId网络请求运行结果进度
+			List<Map<String, Object>> appTaskRequest = new ArrayList<Map<String, Object>>();
+			Map<String, Object> appTaskRequestTemp = new HashMap<String,Object>();//构造请求数据
 			appTaskRequestTemp.put("userId", user.getId());
 			appTaskRequestTemp.put("taskId", projectAppTask.getId());
 			appTaskRequestTemp.put("username", user.getUsername());
 			appTaskRequest.add(appTaskRequestTemp);
-			
 			String urlTemp = new String(url);
 			Application application = applicationService.selectByPrimaryKey(Integer.valueOf(projectAppTask.getApp_id()));
 			if(application.getComputeNodeName() != null){
-				urlTemp += "?server="+application.getComputeNodeName();
+				urlTemp += "?server="+application.getComputeNodeName();//每个应用结果的计算节点都不一样，请求的接口也不一样
 			}
-			
-			String result = sendPostRequest(urlTemp, new Gson().toJson(appTaskRequest));
+			String result = sendPostRequest(urlTemp, new Gson().toJson(appTaskRequest));//发送请求并获取返回的内容
 			if(result != null && !result.trim().equals("")){
 				JsonObject jsonObject = (JsonObject)new JsonParser().parse(result);
 				if(jsonObject.get("code").getAsString().equals("1")){
@@ -89,13 +88,12 @@ public class ProjectAppTaskService {
 					AppTaskProgressResult[] appTaskProgressResults = new Gson().fromJson(jsonElement, AppTaskProgressResult[].class);
 					for(int i=0;i<appTaskProgressResults.length;i++){
 						if(appTaskProgressResults[i].getId().equals(String.valueOf(projectAppTask.getId()))){
-							projectAppTask.setProgress(appTaskProgressResults[i].getProgress());
+							projectAppTask.setProgress(appTaskProgressResults[i].getProgress());//设置应用结果进度
 						}
 					}
 				}
 			}
 		}
-
 		PageInfo<ProjectAppTask> pageInfo = new PageInfo<ProjectAppTask>(projectAppTasks);
 		Map<String, Object> map = new HashMap<String , Object>();
 		map.put("list", projectAppTasks);
@@ -132,16 +130,10 @@ public class ProjectAppTaskService {
 		try{
 		    URL sendUrl = new URL(url);
 		    httpURLConnection = (HttpURLConnection)sendUrl.openConnection();
-		    //post方式请求
 		    httpURLConnection.setRequestMethod("POST");
-		    //设置头部信息
 		    httpURLConnection.setRequestProperty("headerdata", "ceshiyongde");
-		    //一定要设置 Content-Type 要不然服务端接收不到参数
 		    httpURLConnection.setRequestProperty("Content-Type", "application/Json; charset=UTF-8");
-		    //指示应用程序要将数据写入URL连接,其值默认为false（是否传参）
 		    httpURLConnection.setDoOutput(true);
-		    //httpURLConnection.setDoInput(true); 
-		    
 		    httpURLConnection.setUseCaches(false);
 		    httpURLConnection.setConnectTimeout(30000); //30秒连接超时
 		    httpURLConnection.setReadTimeout(30000);    //30秒读取超时

@@ -118,15 +118,13 @@ public class ProjectAppController {
 		String paraAddress = application.getParaAddress();
 		//对地址中的参数进行替换
 		if(paraAddress != null && !paraAddress.equals("")){
-			
+
 			paraAddress = paraAddress.replace("{project.id}", String.valueOf(project.getId()));
 			paraAddress = paraAddress.replace("{userid}", String.valueOf(user.getId()));
 			paraAddress = paraAddress.replace("{username}", String.valueOf(user.getUsername()));
 			paraAddress = paraAddress.replace("{app.id}", String.valueOf(application.getId()));
-
 			map.put("result", true);
 			map.put("message", paraAddress);
-			
 		}else{
 			map.put("result", false);
 		}
