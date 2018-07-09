@@ -197,6 +197,7 @@
     
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
     <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
     <script type="text/javascript">
     
 	    $('#box').paging({
@@ -229,7 +230,7 @@
 	    	var content = $("#content").val();
 	    	var project_id = ${project.id};
 	    	if(content == ""){
-	    		alert("内容不能为空！");
+	    		layer.msg("内容不能为空");
 	    		return;
 	    	}
 	    	$.ajax({
@@ -242,14 +243,14 @@
 	    		dataType:"json",
 	    		success : function(data){
 	    			if(data.result == true){
-	    				alert("主题创建成功");
+	    				layer.msg("主题创建成功");
 	    				window.location.href="/wankangyuan/projectTopic/selectProjectTopic";
 	    			}else{
-	    				alert(data.message);
+	    				layer.msg(data.message);
 	    			}
 	    		},
 	    		error : function(){
-	    			alert("联网失败");
+	    			layer.msg("联网失败");
 	    		}
 	    	});
 	    });

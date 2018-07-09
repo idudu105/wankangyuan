@@ -245,7 +245,7 @@
 		                        <tr class="">
 		                            <td class="xuanze">
 		                                <div class="fuxuanK2 fuxuanK40">
-		                                    <input name="orgerIds" type="checkbox" class="input_check" data-bind="value: id,attr:{id:'check1_'+($index()+1)}">
+		                                    <input name="orgerIds" type="checkbox" class="input_check" data-bind="value: userId,attr:{id:'check1_'+($index()+1)}">
 		                                    <label data-bind="attr:{for:'check1_'+($index()+1)}"></label>
 		                                </div>
 		                            </td>
@@ -818,11 +818,11 @@
 						dataType:"json",
 						success : function(data){
 							if(data.result == true){
-								alert(data.message);
+								layer.msg(data.message);
 								var searchWord = $(".search2Ct").val();
 	                			window.location.href="/wankangyuan/projectMember/selectProjectMember?searchWord="+searchWord;
 							}else{
-								alert(data.message);
+								layer.msg(data.message);
 							}
 						},
 						error : function(){

@@ -182,12 +182,15 @@ public class ProjectMemberController {
 			projectMember.setBind_date_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			ProjectCustomRole projectCustomRole = 
 					projectCustomRoleService.getProjectCustomRoleByRolename("项目成员", project.getId());
-			if(projectCustomRole != null){
+			
+			if(projectUserService.getProjectUser(projectMember.getProject_id(), projectMember.getUser_id()) == null
+					&& projectCustomRole != null){
 				projectMember.setRole_id(projectCustomRole.getId());//设置项目自定义成员角色ID
 				if(projectUserService.insertProjectUser(projectMember) == 1){
 					num++;
 				}
 			}
+
 		}
 		Map<String, Object> map = new HashMap<>();
 		map.put("result", true);
@@ -300,12 +303,6 @@ public class ProjectMemberController {
 	@ResponseBody
 	public Map<String, Object> updateProjectCustomRole(HttpServletRequest request , ProjectCustomRole projectCustomRole){
 		Map<String, Object> map = new HashMap<>();
-		
-		if(projectCustomRole.getRolename().equals("创建者") ){
-			map.put("result", false);
-			map.put("message", "默认创建者角色的权限不能更新");
-			return map;
-		}
 		
 		User user = (User)request.getAttribute("user");
 		projectCustomRole.setUpdater_id(user.getId());

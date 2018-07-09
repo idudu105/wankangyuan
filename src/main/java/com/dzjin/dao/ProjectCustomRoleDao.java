@@ -48,7 +48,7 @@ public interface ProjectCustomRoleDao {
 	@Update("update project_custom_role "
 			+ "set authorities=#{authorities} , "
 			+ "updater_id=#{updater_id} , update_datetime=#{update_datetime} "
-			+ "where id=#{id}")
+			+ "where id=#{id} and rolename!='创建者'")
 	public int updateProjectCustomRole(ProjectCustomRole projectCustomRole);
 
 }

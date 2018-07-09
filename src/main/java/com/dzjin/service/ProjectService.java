@@ -131,7 +131,7 @@ public class ProjectService {
 				ProjectCustomRole projectCustomRole = 
 						projectCustomRoleService.getProjectCustomRoleByRolename("项目成员", Integer.valueOf(ids[i]));
 				if(projectCustomRole != null){
-					projectUser.setRole_id(2);//项目成员角色
+					projectUser.setRole_id(projectCustomRole.getId());//项目成员角色
 				}else{
 					return false;
 				}
