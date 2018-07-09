@@ -40,7 +40,7 @@ public class ProjectTopicController {
 	ProjectTopicService projectTopicService;
 	
 	/**
-	 * 创建主题
+	 * 创建话题
 	 * @param projectTopic
 	 * @return
 	 */
@@ -61,7 +61,7 @@ public class ProjectTopicController {
 			map.put("result", true);
 		}else{
 			map.put("result", false);
-			map.put("message", "新增主题失败！");
+			map.put("message", "新增话题失败");
 		}
 		return map;
 	}
@@ -120,13 +120,13 @@ public class ProjectTopicController {
 			map.put("result", true);
 		}else{
 			map.put("result", false);
-			map.put("message", "删除主题失败！");
+			map.put("message", "删除话题失败");
 		}
 		return map;
 	}
 	
 	/**
-	 * 获取主题的详细内容以及主题的跟帖情况,同时获取最新的10条话题
+	 * 获取主题的详细内容以及主题的跟帖情况,同时获取最新的5条话题用于界面右端的显示
 	 * @param httpSession
 	 * @param project_topic_id
 	 * @param page
@@ -160,7 +160,7 @@ public class ProjectTopicController {
 	}
 	
 	/**
-	 * 回复主题
+	 * 新增话题回复
 	 * @param projectTopicFollow
 	 * @return
 	 */
@@ -181,17 +181,16 @@ public class ProjectTopicController {
 			projectTopic.setId(projectTopicFollow.getProject_topic_id());
 			projectTopic.setLast_datetime(simpleDateFormat.format(new Date()));
 			projectTopicService.updateLastDatetime(projectTopic);
-			
 			map.put("result", true);
 		}else{
 			map.put("result", false);
-			map.put("message", "回复主题失败！");
+			map.put("message", "话题回复失败");
 		}
 		return map;
 	}
 	
 	/**
-	 * 删除主题回复消息
+	 * 删除话题回复
 	 * @param id
 	 * @return
 	 */
@@ -205,7 +204,7 @@ public class ProjectTopicController {
 			map.put("result", true);
 		}else{
 			map.put("result", false);
-			map.put("message", "主题回复删除失败！");
+			map.put("message", "删除话题回复失败");
 		}
 		return map;
 	}

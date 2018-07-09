@@ -24,7 +24,7 @@ import com.liutianjun.pojo.User;
  * 
  * 项目名称：wankangyuan 
  * 类名称：ProjectRoleController 
- * 类描述： 项目默认角色的控制接口，一共包含默认创建者、项目成员以及浏览者三个默认的角色的管理，同时还可以添加其他默认的角色；
+ * 类描述： 项目默认角色的控制接口，一共包含默认创建者、项目成员以及浏览者三个默认的角色的管理，同时还可以添加其他默认的角色，这个接口是管理后台使用的。
  * 创建人：dzjin 
  * 创建时间：2018年6月19日 上午9:41:56 
  * 修改人：dzjin 
@@ -78,7 +78,7 @@ public class ProjectRoleController {
 			String role_name , String auth_ids){
 		
 		Map<String, Object> map = new HashMap<String , Object>();
-		//不能新建创建者、项目成员以及浏览者系统配置的角色
+		//不能新建创建者、项目成员以及访问者三个系统配置的角色
 		switch (role_name) {
 			case "创建者":
 				map.put("result", false);
@@ -191,9 +191,15 @@ public class ProjectRoleController {
 	public Map<String, Object> updateProjectRoleAuthority(HttpServletRequest request , HttpSession session , 
 			Integer role_id , String role_name , String auth_ids){
 		Map<String, Object> map = new HashMap<>();
-		//更新默认角色
+		//创建者的权限不能更改
+		if(role_id == 1){
+			map.put("result", false);
+			map.put("message", "创建者的权限不能更改");
+			return map;
+		}
+		//更新默认角色的权限
 		ProjectRole projectRole = new ProjectRole();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mmL:ss");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		projectRole.setUpdate_datetime(simpleDateFormat.format(new Date()));
 		projectRole.setId(role_id);
 		projectRole.setRole_name(role_name);

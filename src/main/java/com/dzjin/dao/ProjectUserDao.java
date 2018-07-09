@@ -113,4 +113,12 @@ public interface ProjectUserDao {
 			+ "and project_topic_follow.project_topic_id=project_topic.id")
 	public int countProjectUserTopicFollowNum(@Param("project_id")Integer project_id , @Param("user_id") Integer user_id);
 	
+	/**
+	 * 获取项目内被授予指定默认角色的成员的数量
+	 * @param role_id
+	 * @return
+	 */
+	@Select("select count(*) from project_user where role_id=#{role_id}")
+	public int countProjectCustomRoleUserNum(@Param("role_id")Integer role_id);
+	
 }

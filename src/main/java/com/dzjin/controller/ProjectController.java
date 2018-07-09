@@ -31,7 +31,19 @@ import com.dzjin.service.ProjectRoleService;
 import com.dzjin.service.ProjectService;
 import com.dzjin.service.ProjectUserService;
 import com.liutianjun.pojo.User;
-
+/**
+ * 
+ * 项目名称：wankangyuan 
+ * 类名称：ProjectController 
+ * 类描述： 项目controller
+ * 创建人：dzjin 
+ * 创建时间：2018年7月9日 上午9:56:37 
+ * 修改人：dzjin 
+ * 修改时间：2018年7月9日 上午9:56:37 
+ * 修改备注： 
+ * @version 
+ *
+ */
 @Controller
 @RequestMapping(value = "/project")
 public class ProjectController {
@@ -50,8 +62,12 @@ public class ProjectController {
 	ProjectFloderService projectFloderService;
 	@Autowired
 	ProjectAppTaskService projectAppTaskService;
+	
 	/**
-	 * 新建项目
+	 * 新建项目，需要做三件事情：
+	 * 1、插入一条项目信息记录到数据库中；
+	 * 2、查询出后台管理中配置的项目默认角色（比如创建者、项目成员或者是访问者，），并查询出其包含的默认权限，据此构造一条项目内的自定义角色，并存储在数据库中；
+	 * 3、构造一条项目成员记录，并赋予创建者的角色，如果不能成功的查询出创建者角色的ID，说明项目自定义角色的创建是有问题的，此处直接直接将原来新增的项目记录删除；
 	 * @param project
 	 * @return
 	 */
@@ -62,11 +78,11 @@ public class ProjectController {
 		project.setCreate_datetime(simpleDateFormat.format(new Date()));
 		User user = (User)request.getAttribute("user");
 		project.setCreator(String.valueOf(user.getId()));
+		//新增一条记录到数据库中
 		if(projectService.insertProject(project) == 1){
 			//创建项目内的默认创建者、项目成员以及访问者权限
 			List<ProjectRole> projectRoles = projectRoleService.selectProjectRole();
 			Iterator<ProjectRole> iterator = projectRoles.iterator();
-			int id = 0;
 			while(iterator.hasNext()){
 				ProjectRole projectRole = (ProjectRole)iterator.next();
 				List<ProjectAuthority> projectAuthorities = 
@@ -84,8 +100,8 @@ public class ProjectController {
 				projectCustomRole.setCreator_id(user.getId());
 				projectCustomRole.setCreate_datetime(simpleDateFormat.format(new Date()));
 				projectCustomRoleService.insertProjectCustomRole(projectCustomRole);
-				id = projectCustomRole.getId();
 			}
+			
 			//设置当前用户为新建项目的成员
 			ProjectUser projectUser = new ProjectUser();
 			projectUser.setProject_id(project.getId());
@@ -96,18 +112,25 @@ public class ProjectController {
 			if(projectCustomRole != null){
 				//正常角色
 				projectUser.setRole_id(projectCustomRole.getId());
+				projectUser.setBind_date_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+				projectUserService.insertProjectUser(projectUser);
 			}else{
-				//替代角色
-				projectUser.setRole_id(id);
+				//不能正确查询出项目自定义创建者角色，直接将之前新增的项目记录删除掉；
+				projectService.deleteProjects(String.valueOf(project.getId()));
 			}
-			projectUser.setBind_date_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-			projectUserService.insertProjectUser(projectUser);
 		}
 		return "/project/selectCreatedProject";
 	}
 	
 	/**
-	 * 获取项目基本信息
+	 * 获取项目基本信息，需要做一下几件事情：
+	 * 1、获取项目的基本信息；
+	 * 2、获取项目内的文件总数量；
+	 * 3、获取项目内的应用数量；
+	 * 4、获取项目内的应用结果数量；
+	 * 5、获取项目内的成员数量；
+	 * 6、查询出当前用户在该项目内的角色以及相应的权限；
+	 * 7、查询出需要展示在门户页的应用结果；
 	 * @param httpSession
 	 * @param id
 	 * @return
@@ -122,14 +145,12 @@ public class ProjectController {
 		}else{
 			project = projectService.getProjectDetail(id);
 		}
-		//获取项目内文件列表，统计项目内文件数量
-		List<ProjectFloder> projectFloders = 
-				projectFloderService.selectProjectFloderByProjectId(project.getId());
+		//获取项目内的根文件夹，并查询出每个根文件夹下的文件数量并统计总数量
+		List<ProjectFloder> projectFloders = projectFloderService.selectProjectRootFloderByProjectId(project.getId());
 		Iterator<ProjectFloder> iterator2 = projectFloders.iterator();
 		int num = 0;
 		while(iterator2.hasNext()){
-			ProjectFloder projectFloder = 
-					(ProjectFloder)iterator2.next();
+			ProjectFloder projectFloder = (ProjectFloder)iterator2.next();
 			List<ProjectFile> projectFiles = 
 					projectFileService.selectProjectFileByFloderId(projectFloder.getId());
 			num+=projectFiles.size();
@@ -150,7 +171,7 @@ public class ProjectController {
 		ProjectUser projectUser = projectUserService.getProjectUser(project.getId(), user.getId());
 		List<ProjectAuthority> projectAuthorities = null;
 		if(projectUser == null){
-			//如果是访问者，需要查询当前项目自定义的访问者权限
+			//用户记录为空，说明是是访问者，需要查询当前项目自定义的访问者权限
 			ProjectCustomRole projectCustomRole = 
 					projectCustomRoleService.getProjectCustomRoleByRolename("访问者" , project.getId());
 			if(projectCustomRole.getAuthorities() != null){
@@ -181,15 +202,27 @@ public class ProjectController {
 		}
 		httpSession.setAttribute("authoritys", authoritys);
 		
-		//获取当前项目已经发布的应用结果的地址
 		List<ProjectAppTask> pAppTasks = projectAppTaskService.selectReleasedProjectAppTask(project.getId());
+		//获取当前项目已经发布的应用结果的地址，需要对应用结果地址进行替换
+		Iterator<ProjectAppTask> iterator = pAppTasks.iterator();
+		while(iterator.hasNext()){
+			ProjectAppTask projectAppTask = (ProjectAppTask)iterator.next();
+			String resultAddress = projectAppTask.getResult_address();
+			//需要对地址参数进行替换
+			if(resultAddress != null && !resultAddress.equals("")){
+				resultAddress = resultAddress.replace("{taskId}", String.valueOf(projectAppTask.getProject_id()));
+				resultAddress = resultAddress.replace("{userid}", String.valueOf(projectAppTask.getUser_id()));
+				resultAddress = resultAddress.replace("{username}", String.valueOf(projectAppTask.getUsername()));
+				projectAppTask.setResult_address(resultAddress);
+			}
+		}
 		httpSession.setAttribute("pAppTasks", pAppTasks);
 		
 		return "/jsp/project/project_detail.jsp";
 	}
 	
 	/**
-	 * 刚更新项目简介
+	 * 更新项目简介
 	 * @param httpSession
 	 * @param introduction
 	 * @return
@@ -368,7 +401,7 @@ public class ProjectController {
 	}
 	
 	/**
-	 * 
+	 * 改变项目的公开状态
 	 * @param ids
 	 * @param type	0代表取消公开，1代表公开
 	 * @return	
@@ -381,7 +414,7 @@ public class ProjectController {
 			map.put("result", true);
 		}else{
 			map.put("result", false);
-			map.put("message", "部分项目更新公开状态失败！");
+			map.put("message", "部分项目更新公开状态失败");
 		}
 		return map;
 	}
@@ -399,7 +432,7 @@ public class ProjectController {
 			map.put("result", true);
 		}else{
 			map.put("result", false);
-			map.put("message", "部分项目删除失败！");
+			map.put("message", "部分项目删除失败");
 		}
 		return map;
 	}
@@ -418,7 +451,7 @@ public class ProjectController {
 			map.put("result", true);
 		}else{
 			map.put("result", false);
-			map.put("message", "部分项目退出失败！");
+			map.put("message", "部分项目退出失败");
 		}
 		return map;
 	}	

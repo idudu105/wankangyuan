@@ -178,7 +178,7 @@
             	},
             	dataType:"json",
             	success : function(data){
-            		layer.msg(data.message);
+            		window.parent.postMessage("选择形成的条件", data.message);
             	},
             	error : function(){
             		layer.msg("联网失败");

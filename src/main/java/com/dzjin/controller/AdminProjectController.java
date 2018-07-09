@@ -16,8 +16,7 @@ import com.dzjin.service.AdminProjectService;
  * 
  * 项目名称：wankangyuan 
  * 类名称：AdminProjectController 
- * 类描述： 后台项目管理
- * 
+ * 类描述： 后台项目管理，以及门户页项目展示的相关接口
  * 创建人：dzjin 
  * 创建时间：2018年6月26日 下午5:11:49 
  * 修改人：dzjin 
@@ -33,6 +32,15 @@ public class AdminProjectController {
 	@Autowired
 	AdminProjectService  adminProjectService;
 	
+	/**
+	 * 管理后台查询项目
+	 * @param session
+	 * @param page 页码
+	 * @param strip 页面大小
+	 * @param searchWord 查询关键字
+	 * @param type 查询类型，0表示查询未公开的项目，1表示查询公开的项目，2或者null表示查询所有的项目
+	 * @return
+	 */
 	@RequestMapping("/selectAdminProject")
 	public String selectAdminProject(HttpSession session , Integer page , Integer strip , String searchWord , Integer type){
 		
@@ -64,6 +72,12 @@ public class AdminProjectController {
 		return "/admin/promanage.jsp";
 	}
 	
+	/**
+	 * 发布项目到门户
+	 * @param session
+	 * @param ids
+	 * @return
+	 */
 	@RequestMapping("/updateProjectIsShow1")
 	@ResponseBody
 	public Map<String, Object> updateProjectIsShow1(HttpSession session , String ids){
@@ -80,6 +94,12 @@ public class AdminProjectController {
 		return map;
 	}
 	
+	/**
+	 * 取消发布项目到门户
+	 * @param session
+	 * @param ids
+	 * @return
+	 */
 	@RequestMapping("/updateProjectIsShow0")
 	@ResponseBody
 	public Map<String, Object> updateProjectIsShow0(HttpSession session , String ids){
@@ -96,6 +116,13 @@ public class AdminProjectController {
 		return map;
 	}
 	
+	/**
+	 * 选择发布到门户的项目
+	 * @param httpSession
+	 * @param page
+	 * @param strip
+	 * @return
+	 */
 	@RequestMapping("/selectShowProject")
 	public String selectShowProject(HttpSession httpSession , Integer page , Integer strip){
 		if(page == null){

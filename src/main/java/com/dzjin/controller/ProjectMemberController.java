@@ -128,34 +128,34 @@ public class ProjectMemberController {
 		return null;
 	}
 	
-	/**
-	 * 增加项目成员，是以邀请的形式添加的
-	 * @param session 
-	 * @param projectMember
-	 * @return
-	 */
-	@RequestMapping("/insertProjectMember")
-	@ResponseBody
-	public Map<String, Object> insertProjectMember(HttpSession session , ProjectUser projectUser){
-		Map<String, Object> map = new HashMap<>();
-		projectUser.setBind_date_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-		ProjectCustomRole projectCustomRole = 
-				projectCustomRoleService.getProjectCustomRoleByRolename("项目成员", projectUser.getProject_id());
-		if(projectCustomRole != null){
-			projectUser.setRole_id(projectCustomRole.getId());//设置项目自定义角色
-			if(projectUserService.insertProjectUser(projectUser) == 1){
-				map.put("result", true);
-				map.put("message", "增加项目成员成功");
-			}else{
-				map.put("result", false);
-				map.put("message", "增加项目成员失败");
-			}
-		}else{
-			map.put("result", false);
-			map.put("message", "项目内缺少自定义项目成员角色，请联系平台管理员");
-		}
-		return map;
-	}
+//	/**
+//	 * 
+//	 * @param session 
+//	 * @param projectMember
+//	 * @return
+//	 */
+//	@RequestMapping("/insertProjectMember")
+//	@ResponseBody
+//	public Map<String, Object> insertProjectMember(HttpSession session , ProjectUser projectUser){
+//		Map<String, Object> map = new HashMap<>();
+//		projectUser.setBind_date_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+//		ProjectCustomRole projectCustomRole = 
+//				projectCustomRoleService.getProjectCustomRoleByRolename("项目成员", projectUser.getProject_id());
+//		if(projectCustomRole != null){
+//			projectUser.setRole_id(projectCustomRole.getId());//设置项目自定义角色
+//			if(projectUserService.insertProjectUser(projectUser) == 1){
+//				map.put("result", true);
+//				map.put("message", "增加项目成员成功");
+//			}else{
+//				map.put("result", false);
+//				map.put("message", "增加项目成员失败");
+//			}
+//		}else{
+//			map.put("result", false);
+//			map.put("message", "项目内缺少自定义项目成员角色，请联系平台管理员");
+//		}
+//		return map;
+//	}
 	
 	/**
 	 * 批量添加项目成员
@@ -238,6 +238,10 @@ public class ProjectMemberController {
 		return map;
 	}
 	
+	
+	
+	
+	
 	/**
 	 * 获取项目内自定义角色的权限
 	 * @param session
@@ -257,6 +261,7 @@ public class ProjectMemberController {
 		}
 		return map;
 	}
+	
 	/**
 	 * 移除项目自定义角色
 	 * @param session
@@ -267,6 +272,14 @@ public class ProjectMemberController {
 	@ResponseBody
 	public Map<String, Object> deleteProjectCustomRole(Integer id){
 		Map<String, Object> map = new HashMap<String , Object>();
+		
+		//判断项目内是否含有成员被授予定义角色
+		if(projectUserService.countProjectCustomRoleUserNum(id)>0){
+			map.put("result", false);
+			map.put("message", "当前项目中含有成员被授予待移除的角色，角色不能移除");
+			return map;
+		}
+		
 		if(projectCustomRoleService.deleteprojectCustomRole(id) == 1){
 			map.put("result", true);
 			map.put("message", "项目自定义角色移除成功");
@@ -287,6 +300,13 @@ public class ProjectMemberController {
 	@ResponseBody
 	public Map<String, Object> updateProjectCustomRole(HttpServletRequest request , ProjectCustomRole projectCustomRole){
 		Map<String, Object> map = new HashMap<>();
+		
+		if(projectCustomRole.getRolename().equals("创建者") ){
+			map.put("result", false);
+			map.put("message", "默认创建者角色的权限不能更新");
+			return map;
+		}
+		
 		User user = (User)request.getAttribute("user");
 		projectCustomRole.setUpdater_id(user.getId());
 		projectCustomRole.setUpdate_datetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
@@ -300,11 +320,26 @@ public class ProjectMemberController {
 		return map;
 	}
 	
+	/**
+	 * 新增项目内自定义角色
+	 * @param request
+	 * @param httpSession
+	 * @param projectCustomRole
+	 * @return
+	 */
 	@RequestMapping("/insertProjectCustomRole")
 	@ResponseBody
 	public Map<String, Object> insertProjectCustomRole(
 			HttpServletRequest request , HttpSession httpSession , ProjectCustomRole projectCustomRole){
 		Map<String, Object> map = new HashMap<>();
+		
+		if(projectCustomRole.getRolename().equals("创建者") || projectCustomRole.getRolename().equals("项目成员")
+				|| projectCustomRole.getRolename().equals("访问者")){
+			map.put("result", false);
+			map.put("message", "默认自定义角色不能新增");
+			return map;
+		}
+		
 		User user = (User)request.getAttribute("user");
 		Project project = (Project)httpSession.getAttribute("project");
 		projectCustomRole.setP_id(project.getId());
@@ -321,7 +356,7 @@ public class ProjectMemberController {
 	}
 	
 	/**
-	 * 获取项目内成员列表
+	 * 获取项目内自定义角色列表
 	 * @param request
 	 * @param httpSession
 	 * @return

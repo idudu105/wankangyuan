@@ -114,5 +114,14 @@ public class ProjectUserService {
 	public int updateProjectUserRole(Integer id , Integer role_id){
 		return projectUserDao.updateProjectUserRole(id, role_id);
 	}
+	
+	/**
+	 * 获取项目内被授予指定默认角色的成员的数量
+	 * @param role_id
+	 * @return
+	 */
+	public int countProjectCustomRoleUserNum(Integer role_id){
+		return projectUserDao.countProjectCustomRoleUserNum(role_id);
+	}
 
 }

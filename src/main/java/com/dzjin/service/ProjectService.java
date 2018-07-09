@@ -170,8 +170,8 @@ public class ProjectService {
 		String[] ids = idStrings.split(",");
 		boolean result = true;
 		for(int i = 0 ; i< ids.length ; i++){
-			
 			Project project = projectDao.getProjectDetail(Integer.valueOf(ids[i]));
+			//创建者不能退出项目
 			if(Integer.valueOf(project.getCreator()) != user_id){
 				ProjectUser projectUser = new ProjectUser();
 				projectUser.setProject_id(Integer.valueOf(ids[i]));
@@ -181,7 +181,6 @@ public class ProjectService {
 					result = false;
 				}
 			}
-			
 		}
 		return result;
 	}

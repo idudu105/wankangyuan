@@ -101,7 +101,7 @@ public class ProjectAppTaskController {
 	 */
 	@RequestMapping("/insertOrUpdateProjectAppEnd")
 	@ResponseBody
-	public Map<String, Object> insertOrUpdateProjectAppEnd(
+	public String insertOrUpdateProjectAppEnd(
 			@RequestParam(name = "param")String param ,
 			@RequestParam(name = "project.id")String project_id ,
 			@RequestParam(name = "userid")String user_id ,
@@ -123,28 +123,24 @@ public class ProjectAppTaskController {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		projectAppTask.setCreate_datetime(simpleDateFormat.format(new Date()));
 		
-		Map<String, Object> map = new HashMap<String , Object>();
 		//从请求中获取应用运行结果ID，如果是首次运行，该ID应该是null，如果是重新运行，则该ID不为null
 		String id = (String)request.getAttribute("taskId");
 		if(id == null){
 			//首次运行，向数据库中添加一条应用结果记录
 			if(projectAppTaskService.insertProjectAppTask(projectAppTask) == 1){
-				map.put("msg", "success");
-				map.put("taskId", projectAppTask.getId());
+				return String.valueOf(projectAppTask.getId());
 			}else{
-				map.put("msg", "failure");
+				return "failure";
 			}
 		}else{
 			//重新运行，更新传过来的参数
 			projectAppTask.setId(id);
 			if(projectAppTaskService.updateProjectAppTask(projectAppTask) == 1){
-				map.put("msg", "success");
-				map.put("taskId", projectAppTask.getId());
+				return String.valueOf(projectAppTask.getId());
 			}else{
-				map.put("msg", "failure");
+				return "failure";
 			}
 		}
-		return map;
 	}
 	
 	/**
@@ -162,27 +158,26 @@ public class ProjectAppTaskController {
 		Application application = applicationService.selectByPrimaryKey(Integer.valueOf(projectAppTask.getApp_id()));
 		if(application == null){
 			map.put("result", false);
-			map.put("message", "相关应用查询失败！");
+			map.put("message", "相关应用查询失败");
 			return map;
 		}
 		String paraAddress = application.getParaAddress();
-		//对参数地址进行解析
-		if(paraAddress != null && !paraAddress.equals("") && paraAddress.indexOf('?') != -1){
-			String head = paraAddress.split("[?]")[0];
-			String newParaAddress = 
-					head
-					+"?project.id="+projectAppTask.getProject_id()
-					+"&userid="+projectAppTask.getUser_id()
-					+"&username="+projectAppTask.getUsername()
-					+"&taskId="+projectAppTask.getId()
-					+"&opertype="+operType
-					+"&app.id="+projectAppTask.getApp_id();
+		//对参数参数进行替换并新增结果id以及类型两个参数
+		if(paraAddress != null && !paraAddress.equals("")){
+			
+			paraAddress = paraAddress.replace("{project.id}", String.valueOf(projectAppTask.getProject_id()));
+			paraAddress = paraAddress.replace("{userid}", String.valueOf(projectAppTask.getUser_id()));
+			paraAddress = paraAddress.replace("{username}", String.valueOf(projectAppTask.getUsername()));
+			paraAddress = paraAddress.replace("{app.id}", String.valueOf(projectAppTask.getApp_id()));
+			paraAddress += "&taskId="+projectAppTask.getId();
+			paraAddress += "&opertype="+operType;
+
 			map.put("result", true);
-			map.put("message", newParaAddress);
+			map.put("message", paraAddress);
 			
 		}else{
 			map.put("result", false);
-			map.put("message", "相关应用参数地址解析失败！");
+			map.put("message", "相关应用参数地址解析失败");
 		}
 		return map;
 	}
@@ -202,23 +197,22 @@ public class ProjectAppTaskController {
 		Application application = applicationService.selectByPrimaryKey(Integer.valueOf(projectAppTask.getApp_id()));
 		if(application == null){
 			map.put("result", false);
-			map.put("message", "相关应用查询失败！");
+			map.put("message", "相关应用查询失败");
 			return map;
 		}
 		String resultAddress = application.getResultAddress();
-		//需要对地址进行解析
-		if(resultAddress != null && !resultAddress.equals("") && resultAddress.indexOf('?') != -1){
-			String head = resultAddress.split("[?]")[0];
-			String newResultAddress = 
-					head
-					+"?userid="+projectAppTask.getUser_id()
-					+"&username="+projectAppTask.getUsername()
-					+"&taskId="+projectAppTask.getId();
+		//需要对地址参数进行替换
+		if(resultAddress != null && !resultAddress.equals("")){
+			
+			resultAddress = resultAddress.replace("{taskId}", String.valueOf(projectAppTask.getProject_id()));
+			resultAddress = resultAddress.replace("{userid}", String.valueOf(projectAppTask.getUser_id()));
+			resultAddress = resultAddress.replace("{username}", String.valueOf(projectAppTask.getUsername()));
+			
 			map.put("result", true);
-			map.put("message", newResultAddress);
+			map.put("message", resultAddress);
 		}else{
 			map.put("result", false);
-			map.put("message", "应用结果地址解析失败！");
+			map.put("message", "应用结果地址解析失败");
 		}
 		return map;
 	}
@@ -238,24 +232,23 @@ public class ProjectAppTaskController {
 		Application application = applicationService.selectByPrimaryKey(Integer.valueOf(projectAppTask.getApp_id()));
 		if(application == null){
 			map.put("result", false);
-			map.put("message", "相关应用查询失败！");
+			map.put("message", "相关应用查询失败");
 			return map;
 		}
 		String fileResultAddress = application.getFileResultAddress();
 		//需要对地址进行解析
-		if(fileResultAddress != null && !fileResultAddress.equals("") && fileResultAddress.indexOf('?') != -1){
-			String head = fileResultAddress.split("[?]")[0];
-			String newFileResultAddress = 
-					head
-					+"?userid="+projectAppTask.getUser_id()
-					+"&username="+projectAppTask.getUsername()
-					+"&taskId="+projectAppTask.getId();
+		if(fileResultAddress != null && !fileResultAddress.equals("")){
+			
+			fileResultAddress = fileResultAddress.replace("{taskId}", String.valueOf(projectAppTask.getProject_id()));
+			fileResultAddress = fileResultAddress.replace("{userid}", String.valueOf(projectAppTask.getUser_id()));
+			fileResultAddress = fileResultAddress.replace("{username}", String.valueOf(projectAppTask.getUsername()));
+			
 			map.put("result", true);
-			map.put("message", newFileResultAddress);
+			map.put("message", fileResultAddress);
 			
 		}else{
 			map.put("result", false);
-			map.put("message", "应用结果地址解析失败！");
+			map.put("message", "应用结果地址解析失败");
 		}
 		return map;
 	}
@@ -278,7 +271,7 @@ public class ProjectAppTaskController {
 		}
 		Map<String, Object> map = new HashMap<String , Object>();
 		map.put("result", true);
-		map.put("message", num+"条应用结果发布成功，"+(task_ids.length - num) +"条应用结果发布失败！");
+		map.put("message", num+"条应用结果发布成功，"+(task_ids.length - num) +"条应用结果发布失败");
 		return map;
 	}
 	
@@ -300,7 +293,7 @@ public class ProjectAppTaskController {
 		}
 		Map<String, Object> map = new HashMap<String , Object>();
 		map.put("result", true);
-		map.put("message", num+"条应用结果取消发布成功，"+(task_ids.length - num) +"条应用结果取消发布失败！");
+		map.put("message", num+"条应用结果取消发布成功，"+(task_ids.length - num) +"条应用结果取消发布失败");
 		return map;
 	}
 	
@@ -322,7 +315,7 @@ public class ProjectAppTaskController {
 		}
 		Map<String, Object> map = new HashMap<String , Object>();
 		map.put("result", true);
-		map.put("message", num+"条应用结果取移除成功，"+(task_ids.length - num) +"条应用结果移除失败！");
+		map.put("message", num+"条应用结果取移除成功，"+(task_ids.length - num) +"条应用结果移除失败");
 		return map;
 	}
 	

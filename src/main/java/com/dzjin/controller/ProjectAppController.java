@@ -1,7 +1,6 @@
 package com.dzjin.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,13 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dzjin.model.Project;
 import com.dzjin.service.ProjectAppService;
-import com.dzjin.service.ProjectDataService;
 import com.liutianjun.pojo.Application;
 import com.liutianjun.pojo.User;
 import com.liutianjun.service.ApplicationService;
-import com.xtkong.model.Source;
-import com.xtkong.service.SourceFieldService;
-import com.xtkong.service.SourceService;
 
 /**
  * 
@@ -115,74 +110,27 @@ public class ProjectAppController {
 	@RequestMapping("/projectAppRun")
 	@ResponseBody
 	public Map<String, Object> projectAppRun(HttpServletRequest request , HttpSession session , Integer app_id){
-		//应用参数地址样例
-		/*http://localhost:8021/bd-visualapps/apps/heatmap/param.html
-		 * ?project.id={project.id}
-		 * &userid={userid}
-		 * &username={username}
-		 * &app.id={app.id}*/
+
 		Map<String, Object> map = new HashMap<>();
 		User user = (User) request.getAttribute("user");
 		Project project = (Project)session.getAttribute("project");
 		Application application = applicationService.selectByPrimaryKey(app_id);
 		String paraAddress = application.getParaAddress();
-		//对地址进行解析
-		if(paraAddress != null && !paraAddress.equals("") && paraAddress.indexOf('?') != -1){
-			String head = paraAddress.split("[?]")[0];
-			String newParaAddress = 
-					head
-					+"?project.id="+project.getId()
-					+"&userid="+user.getId()
-					+"&username="+user.getUsername()
-					+"&app.id="+app_id;
+		//对地址中的参数进行替换
+		if(paraAddress != null && !paraAddress.equals("")){
+			
+			paraAddress = paraAddress.replace("{project.id}", String.valueOf(project.getId()));
+			paraAddress = paraAddress.replace("{userid}", String.valueOf(user.getId()));
+			paraAddress = paraAddress.replace("{username}", String.valueOf(user.getUsername()));
+			paraAddress = paraAddress.replace("{app.id}", String.valueOf(application.getId()));
+
 			map.put("result", true);
-			map.put("message", newParaAddress);
+			map.put("message", paraAddress);
 			
 		}else{
 			map.put("result", false);
 		}
 		return map;
 	}
-	
-	//格式数据相关的逻辑处理类
-	@Autowired
-	SourceService sourceService;
-	@Autowired
-	SourceFieldService sourceFieldService;
-	@Autowired
-	ProjectDataService projectDataService;
-	
-	/**
-	 * 选择项目内格式数据
-	 * @param httpSession
-	 * @param p_id 项目ID
-	 * @param cs_id 源数据ID
-	 * @return 甲方选择格式数据列表
-	 */
-	@RequestMapping("/selectProjectData")
-	public String selectProjectData(HttpSession httpSession , Integer p_id , Integer cs_id){
-		
-		//获取数据源列表并放到session中
-		List<Source> sources = sourceService.getSourcesForUser();
-		httpSession.setAttribute("sources", sources);
-		
-		//当采集源列表不为空
-		if(!sources.isEmpty()){
-			//判断cs_id是不是为空，默认选择第一个采集源
-			if(cs_id == null){
-				cs_id = sourceService.getSourcesForUserLimit(1).get(0).getCs_id();
-			}
-			//获取采集源字段列表
-			Source source = sourceService.getSourceByCs_id(cs_id);
-			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
-			httpSession.setAttribute("source", source);// 采集源字段列表
-			
-			//遍历源数据列表，并查询对应的格式数据，只查询到格式结点就行，然后设置到源数据记录中
-			
-			//最后将源数据以及格式数据结点放到session中
-			
-		}
 
-		return "/jsp/project/data_reselect.jsp";
-	}
 }

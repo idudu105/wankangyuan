@@ -61,7 +61,8 @@ public class ProjectFloderFileController {
 		Project project = (Project)session.getAttribute("project");
 		User user = (User) request.getAttribute("user");
 		session.setAttribute("projectFloders", projectFloderService.selectProjectFloderByProjectId(project.getId()));
-		session.setAttribute("myFileNum", projectFloderService.countProjectUserFile(project.getId(), user.getId()));
+		session.setAttribute("myFileNum", 
+				projectFileService.countProjectFileNumByPidAndUid(project.getId(), user.getId()));
 		return "/jsp/project/project_file.jsp";
 	}
 	
@@ -194,6 +195,11 @@ public class ProjectFloderFileController {
 		//文件上传地址
 		//String path ="/usr/projectFiles/";
 		String path =this.fileLocation;
+		File temp = new File(path);
+		if(!temp.exists() && !temp.isDirectory()){
+			temp.mkdir();
+		}
+		
         String fileName = file.getOriginalFilename();
         String type="."+fileName.substring(fileName.lastIndexOf(".")+1);
         String originalFilename = new String(fileName);
@@ -253,7 +259,7 @@ public class ProjectFloderFileController {
 			map.put("result", true);
 		}else{
 			map.put("result", false);
-			map.put("message", "部分文件删除失败！");
+			map.put("message", "部分文件删除失败");
 		}
 		session.removeAttribute("projectFiles");
 		return map;

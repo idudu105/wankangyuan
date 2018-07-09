@@ -14,7 +14,22 @@ public class ProjectFloderService {
 	
 	@Autowired
 	ProjectFloderDao projectFloderDao;
+	
+	/**
+	 * 查询项目下的跟文件夹
+	 * @param p_id
+	 * @return
+	 */
+	public List<ProjectFloder> selectProjectRootFloderByProjectId(Integer p_id){
+		List<ProjectFloder> projectFloders = projectFloderDao.selectProjectFloderByProjectId(p_id);
+		return projectFloders;
+	}
 
+	/**
+	 * 查询一个项目下的文件夹
+	 * @param p_id
+	 * @return
+	 */
 	public List<ProjectFloder> selectProjectFloderByProjectId(Integer p_id){
 		List<ProjectFloder> projectFloders = projectFloderDao.selectProjectFloderByProjectId(p_id);
 		Iterator<ProjectFloder> pIterator = projectFloders.iterator();
@@ -25,6 +40,11 @@ public class ProjectFloderService {
 		return projectFloders;
 	}
 	
+	/**
+	 * 递归查询项目内文件夹
+	 * @param projectFloderParent
+	 * @return
+	 */
 	public List<ProjectFloder> getProjectFloders(ProjectFloder projectFloderParent){
 		
 		List<ProjectFloder> projectFloders = projectFloderDao.selectProjectFloderByParentId(projectFloderParent.getId());
@@ -41,21 +61,31 @@ public class ProjectFloderService {
 		}
 	}
 	
+	/**
+	 * 新增项目文件夹
+	 * @param projectFloder
+	 * @return
+	 */
 	public int insertProjectFloder(ProjectFloder projectFloder){
 		return projectFloderDao.insertProjectFloder(projectFloder);
 	}
 	
+	/**
+	 * 删除项目文件夹
+	 * @param id
+	 * @return
+	 */
 	public int deleteProjectFloder(String id){
 		return projectFloderDao.deleteProjectFloder(id);
 	}
 	
+	/**
+	 * 更新项目文件夹名称
+	 * @param projectFloder
+	 * @return
+	 */
 	public int updateProjectFloder(ProjectFloder projectFloder){
 		return projectFloderDao.updateProjectFloder(projectFloder);
 	}
-	
-	public int countProjectUserFile(Integer project_id , Integer user_id){
-		return projectFloderDao.countProjectUserFile(project_id, user_id);
-	}
-	
-	
+
 }

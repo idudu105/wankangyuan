@@ -68,7 +68,6 @@ public class ProjectFileService {
 				ProjectFloder projectFloder = (ProjectFloder) iterator.next();
 				getProjectFiles(projectFloder.getId(), projectFiles);
 			}
-			
 		}else{
 			//查看下面包含的文件
 			projectFiles.addAll(projectFileDao.selectProjectFileByFloderId(floder_id));
