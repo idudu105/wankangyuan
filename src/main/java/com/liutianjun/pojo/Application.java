@@ -45,9 +45,14 @@ public class Application implements Serializable {
     private Integer isAsync;
 
     /**
-     * 是否显示
+     * 是否显示 0-否 1-是
      */
     private Integer isDisplay;
+
+    /**
+     * 计算节点名称
+     */
+    private String computeNodeName;
 
     /**
      * 参数地址
@@ -75,11 +80,6 @@ public class Application implements Serializable {
     private String fileResultAddress;
 
     /**
-     * 应用详细描述
-     */
-    private String description;
-
-    /**
      * 创建时间
      */
     private Date createTime;
@@ -88,6 +88,11 @@ public class Application implements Serializable {
      * 修改时间
      */
     private Date updateTime;
+
+    /**
+     * 应用详细描述
+     */
+    private String description;
 
     private static final long serialVersionUID = 1L;
 
@@ -163,6 +168,14 @@ public class Application implements Serializable {
         this.isDisplay = isDisplay;
     }
 
+    public String getComputeNodeName() {
+        return computeNodeName;
+    }
+
+    public void setComputeNodeName(String computeNodeName) {
+        this.computeNodeName = computeNodeName == null ? null : computeNodeName.trim();
+    }
+
     public String getParaAddress() {
         return paraAddress;
     }
@@ -203,14 +216,6 @@ public class Application implements Serializable {
         this.fileResultAddress = fileResultAddress == null ? null : fileResultAddress.trim();
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description == null ? null : description.trim();
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -225,6 +230,14 @@ public class Application implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description == null ? null : description.trim();
     }
 
     @Override
@@ -242,14 +255,15 @@ public class Application implements Serializable {
         sb.append(", isSaveSystem=").append(isSaveSystem);
         sb.append(", isAsync=").append(isAsync);
         sb.append(", isDisplay=").append(isDisplay);
+        sb.append(", computeNodeName=").append(computeNodeName);
         sb.append(", paraAddress=").append(paraAddress);
         sb.append(", resultAddress=").append(resultAddress);
         sb.append(", appIntro=").append(appIntro);
         sb.append(", fileResult=").append(fileResult);
         sb.append(", fileResultAddress=").append(fileResultAddress);
-        sb.append(", description=").append(description);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
+        sb.append(", description=").append(description);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

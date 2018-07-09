@@ -16,15 +16,21 @@ public interface ApplicationDao {
 
     int insertSelective(Application record);
 
+    List<Application> selectByExampleWithBLOBs(ApplicationQuery example);
+
     List<Application> selectByExample(ApplicationQuery example);
 
     Application selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") Application record, @Param("example") ApplicationQuery example);
 
+    int updateByExampleWithBLOBs(@Param("record") Application record, @Param("example") ApplicationQuery example);
+
     int updateByExample(@Param("record") Application record, @Param("example") ApplicationQuery example);
 
     int updateByPrimaryKeySelective(Application record);
+
+    int updateByPrimaryKeyWithBLOBs(Application record);
 
     int updateByPrimaryKey(Application record);
 }

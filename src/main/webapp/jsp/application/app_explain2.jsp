@@ -128,6 +128,10 @@
                         </div>
                     </div>
                     <div class="appexpMLz">
+                        <div class="appexpMLzt_1">计算节点名称：</div>
+                        <input name="computeNodeName" type="text" class="appexpMLzp_1" value="${application.computeNodeName }" />
+                    </div>
+                    <div class="appexpMLz">
                         <div class="appexpMLzt_1">参数地址：</div>
                         <textarea name="paraAddress" class="appexpMLzta_1">${application.paraAddress }</textarea>
                     </div>

@@ -11,14 +11,17 @@
     <result column="is_save_system" property="isSaveSystem" jdbcType="INTEGER" />
     <result column="is_async" property="isAsync" jdbcType="INTEGER" />
     <result column="is_display" property="isDisplay" jdbcType="INTEGER" />
+    <result column="compute_node_name" property="computeNodeName" jdbcType="VARCHAR" />
     <result column="para_address" property="paraAddress" jdbcType="VARCHAR" />
     <result column="result_address" property="resultAddress" jdbcType="VARCHAR" />
     <result column="app_intro" property="appIntro" jdbcType="VARCHAR" />
     <result column="file_result" property="fileResult" jdbcType="VARCHAR" />
     <result column="file_result_address" property="fileResultAddress" jdbcType="VARCHAR" />
-    <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.liutianjun.pojo.Application" extends="BaseResultMap" >
+    <result column="description" property="description" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -81,13 +84,32 @@
   <sql id="Base_Column_List" >
     <if test="fields == null" >
       id, app_name, creator, app_type, keywords, versions, is_save_system, is_async, is_display, 
-      para_address, result_address, app_intro, file_result, file_result_address, description, 
+      compute_node_name, para_address, result_address, app_intro, file_result, file_result_address, 
       create_time, update_time
     </if>
     <if test="fields != null" >
       ${fields}
     </if>
   </sql>
+  <sql id="Blob_Column_List" >
+    description
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.liutianjun.pojo.ApplicationQuery" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from application
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.liutianjun.pojo.ApplicationQuery" >
     select
     <if test="distinct" >
@@ -105,9 +127,11 @@
       limit #{startRow} , #{pageSize}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
     select 
-    id,app_name,creator,app_type,keywords,versions,is_save_system,is_async,is_display,para_address,result_address,app_intro,file_result,file_result_address,description,create_time,update_time
+    id,app_name,creator,app_type,keywords,versions,is_save_system,is_async,is_display,compute_node_name,para_address,result_address,app_intro,file_result,file_result_address,create_time,update_time,description
+    ,
+    <include refid="Blob_Column_List" />
     from application
     where id = #{id,jdbcType=INTEGER}
   </select>
@@ -127,16 +151,16 @@
     </selectKey>
     insert into application (app_name, creator, app_type, 
       keywords, versions, is_save_system, 
-      is_async, is_display, para_address, 
-      result_address, app_intro, file_result, 
-      file_result_address, description, create_time, 
-      update_time)
+      is_async, is_display, compute_node_name, 
+      para_address, result_address, app_intro, 
+      file_result, file_result_address, create_time, 
+      update_time, description)
     values (#{appName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{appType,jdbcType=VARCHAR}, 
       #{keywords,jdbcType=VARCHAR}, #{versions,jdbcType=VARCHAR}, #{isSaveSystem,jdbcType=INTEGER}, 
-      #{isAsync,jdbcType=INTEGER}, #{isDisplay,jdbcType=INTEGER}, #{paraAddress,jdbcType=VARCHAR}, 
-      #{resultAddress,jdbcType=VARCHAR}, #{appIntro,jdbcType=VARCHAR}, #{fileResult,jdbcType=VARCHAR}, 
-      #{fileResultAddress,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{isAsync,jdbcType=INTEGER}, #{isDisplay,jdbcType=INTEGER}, #{computeNodeName,jdbcType=VARCHAR}, 
+      #{paraAddress,jdbcType=VARCHAR}, #{resultAddress,jdbcType=VARCHAR}, #{appIntro,jdbcType=VARCHAR}, 
+      #{fileResult,jdbcType=VARCHAR}, #{fileResultAddress,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{description,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.liutianjun.pojo.Application" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -168,6 +192,9 @@
       <if test="isDisplay != null" >
         is_display,
       </if>
+      <if test="computeNodeName != null" >
+        compute_node_name,
+      </if>
       <if test="paraAddress != null" >
         para_address,
       </if>
@@ -183,14 +210,14 @@
       <if test="fileResultAddress != null" >
         file_result_address,
       </if>
-      <if test="description != null" >
-        description,
-      </if>
       <if test="createTime != null" >
         create_time,
       </if>
       <if test="updateTime != null" >
         update_time,
+      </if>
+      <if test="description != null" >
+        description,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -218,6 +245,9 @@
       <if test="isDisplay != null" >
         #{isDisplay,jdbcType=INTEGER},
       </if>
+      <if test="computeNodeName != null" >
+        #{computeNodeName,jdbcType=VARCHAR},
+      </if>
       <if test="paraAddress != null" >
         #{paraAddress,jdbcType=VARCHAR},
       </if>
@@ -233,14 +263,14 @@
       <if test="fileResultAddress != null" >
         #{fileResultAddress,jdbcType=VARCHAR},
       </if>
-      <if test="description != null" >
-        #{description,jdbcType=VARCHAR},
-      </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -280,6 +310,9 @@
       <if test="record.isDisplay != null" >
         is_display = #{record.isDisplay,jdbcType=INTEGER},
       </if>
+      <if test="record.computeNodeName != null" >
+        compute_node_name = #{record.computeNodeName,jdbcType=VARCHAR},
+      </if>
       <if test="record.paraAddress != null" >
         para_address = #{record.paraAddress,jdbcType=VARCHAR},
       </if>
@@ -295,16 +328,40 @@
       <if test="record.fileResultAddress != null" >
         file_result_address = #{record.fileResultAddress,jdbcType=VARCHAR},
       </if>
-      <if test="record.description != null" >
-        description = #{record.description,jdbcType=VARCHAR},
-      </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.description != null" >
+        description = #{record.description,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update application
+    set id = #{record.id,jdbcType=INTEGER},
+      app_name = #{record.appName,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      app_type = #{record.appType,jdbcType=VARCHAR},
+      keywords = #{record.keywords,jdbcType=VARCHAR},
+      versions = #{record.versions,jdbcType=VARCHAR},
+      is_save_system = #{record.isSaveSystem,jdbcType=INTEGER},
+      is_async = #{record.isAsync,jdbcType=INTEGER},
+      is_display = #{record.isDisplay,jdbcType=INTEGER},
+      compute_node_name = #{record.computeNodeName,jdbcType=VARCHAR},
+      para_address = #{record.paraAddress,jdbcType=VARCHAR},
+      result_address = #{record.resultAddress,jdbcType=VARCHAR},
+      app_intro = #{record.appIntro,jdbcType=VARCHAR},
+      file_result = #{record.fileResult,jdbcType=VARCHAR},
+      file_result_address = #{record.fileResultAddress,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      description = #{record.description,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -320,12 +377,12 @@
       is_save_system = #{record.isSaveSystem,jdbcType=INTEGER},
       is_async = #{record.isAsync,jdbcType=INTEGER},
       is_display = #{record.isDisplay,jdbcType=INTEGER},
+      compute_node_name = #{record.computeNodeName,jdbcType=VARCHAR},
       para_address = #{record.paraAddress,jdbcType=VARCHAR},
       result_address = #{record.resultAddress,jdbcType=VARCHAR},
       app_intro = #{record.appIntro,jdbcType=VARCHAR},
       file_result = #{record.fileResult,jdbcType=VARCHAR},
       file_result_address = #{record.fileResultAddress,jdbcType=VARCHAR},
-      description = #{record.description,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
@@ -359,6 +416,9 @@
       <if test="isDisplay != null" >
         is_display = #{isDisplay,jdbcType=INTEGER},
       </if>
+      <if test="computeNodeName != null" >
+        compute_node_name = #{computeNodeName,jdbcType=VARCHAR},
+      </if>
       <if test="paraAddress != null" >
         para_address = #{paraAddress,jdbcType=VARCHAR},
       </if>
@@ -374,16 +434,37 @@
       <if test="fileResultAddress != null" >
         file_result_address = #{fileResultAddress,jdbcType=VARCHAR},
       </if>
-      <if test="description != null" >
-        description = #{description,jdbcType=VARCHAR},
-      </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.liutianjun.pojo.Application" >
+    update application
+    set app_name = #{appName,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      app_type = #{appType,jdbcType=VARCHAR},
+      keywords = #{keywords,jdbcType=VARCHAR},
+      versions = #{versions,jdbcType=VARCHAR},
+      is_save_system = #{isSaveSystem,jdbcType=INTEGER},
+      is_async = #{isAsync,jdbcType=INTEGER},
+      is_display = #{isDisplay,jdbcType=INTEGER},
+      compute_node_name = #{computeNodeName,jdbcType=VARCHAR},
+      para_address = #{paraAddress,jdbcType=VARCHAR},
+      result_address = #{resultAddress,jdbcType=VARCHAR},
+      app_intro = #{appIntro,jdbcType=VARCHAR},
+      file_result = #{fileResult,jdbcType=VARCHAR},
+      file_result_address = #{fileResultAddress,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      description = #{description,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.liutianjun.pojo.Application" >
@@ -396,12 +477,12 @@
       is_save_system = #{isSaveSystem,jdbcType=INTEGER},
       is_async = #{isAsync,jdbcType=INTEGER},
       is_display = #{isDisplay,jdbcType=INTEGER},
+      compute_node_name = #{computeNodeName,jdbcType=VARCHAR},
       para_address = #{paraAddress,jdbcType=VARCHAR},
       result_address = #{resultAddress,jdbcType=VARCHAR},
       app_intro = #{appIntro,jdbcType=VARCHAR},
       file_result = #{fileResult,jdbcType=VARCHAR},
       file_result_address = #{fileResultAddress,jdbcType=VARCHAR},
-      description = #{description,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

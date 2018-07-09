@@ -737,6 +737,76 @@ public class ApplicationQuery {
             return (Criteria) this;
         }
 
+        public Criteria andComputeNodeNameIsNull() {
+            addCriterion("compute_node_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andComputeNodeNameIsNotNull() {
+            addCriterion("compute_node_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andComputeNodeNameEqualTo(String value) {
+            addCriterion("compute_node_name =", value, "computeNodeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComputeNodeNameNotEqualTo(String value) {
+            addCriterion("compute_node_name <>", value, "computeNodeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComputeNodeNameGreaterThan(String value) {
+            addCriterion("compute_node_name >", value, "computeNodeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComputeNodeNameGreaterThanOrEqualTo(String value) {
+            addCriterion("compute_node_name >=", value, "computeNodeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComputeNodeNameLessThan(String value) {
+            addCriterion("compute_node_name <", value, "computeNodeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComputeNodeNameLessThanOrEqualTo(String value) {
+            addCriterion("compute_node_name <=", value, "computeNodeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComputeNodeNameLike(String value) {
+            addCriterion("compute_node_name like", value, "computeNodeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComputeNodeNameNotLike(String value) {
+            addCriterion("compute_node_name not like", value, "computeNodeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComputeNodeNameIn(List<String> values) {
+            addCriterion("compute_node_name in", values, "computeNodeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComputeNodeNameNotIn(List<String> values) {
+            addCriterion("compute_node_name not in", values, "computeNodeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComputeNodeNameBetween(String value1, String value2) {
+            addCriterion("compute_node_name between", value1, value2, "computeNodeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComputeNodeNameNotBetween(String value1, String value2) {
+            addCriterion("compute_node_name not between", value1, value2, "computeNodeName");
+            return (Criteria) this;
+        }
+
         public Criteria andParaAddressIsNull() {
             addCriterion("para_address is null");
             return (Criteria) this;
@@ -1084,76 +1154,6 @@ public class ApplicationQuery {
 
         public Criteria andFileResultAddressNotBetween(String value1, String value2) {
             addCriterion("file_result_address not between", value1, value2, "fileResultAddress");
-            return (Criteria) this;
-        }
-
-        public Criteria andDescriptionIsNull() {
-            addCriterion("description is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDescriptionIsNotNull() {
-            addCriterion("description is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDescriptionEqualTo(String value) {
-            addCriterion("description =", value, "description");
-            return (Criteria) this;
-        }
-
-        public Criteria andDescriptionNotEqualTo(String value) {
-            addCriterion("description <>", value, "description");
-            return (Criteria) this;
-        }
-
-        public Criteria andDescriptionGreaterThan(String value) {
-            addCriterion("description >", value, "description");
-            return (Criteria) this;
-        }
-
-        public Criteria andDescriptionGreaterThanOrEqualTo(String value) {
-            addCriterion("description >=", value, "description");
-            return (Criteria) this;
-        }
-
-        public Criteria andDescriptionLessThan(String value) {
-            addCriterion("description <", value, "description");
-            return (Criteria) this;
-        }
-
-        public Criteria andDescriptionLessThanOrEqualTo(String value) {
-            addCriterion("description <=", value, "description");
-            return (Criteria) this;
-        }
-
-        public Criteria andDescriptionLike(String value) {
-            addCriterion("description like", value, "description");
-            return (Criteria) this;
-        }
-
-        public Criteria andDescriptionNotLike(String value) {
-            addCriterion("description not like", value, "description");
-            return (Criteria) this;
-        }
-
-        public Criteria andDescriptionIn(List<String> values) {
-            addCriterion("description in", values, "description");
-            return (Criteria) this;
-        }
-
-        public Criteria andDescriptionNotIn(List<String> values) {
-            addCriterion("description not in", values, "description");
-            return (Criteria) this;
-        }
-
-        public Criteria andDescriptionBetween(String value1, String value2) {
-            addCriterion("description between", value1, value2, "description");
-            return (Criteria) this;
-        }
-
-        public Criteria andDescriptionNotBetween(String value1, String value2) {
-            addCriterion("description not between", value1, value2, "description");
             return (Criteria) this;
         }
 

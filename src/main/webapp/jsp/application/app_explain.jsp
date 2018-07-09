@@ -136,6 +136,10 @@
                         </div>
                     </div>
                     <div class="appexpMLz">
+                        <div class="appexpMLzt1">计算节点名称：</div>
+                        <div class="appexpMLzt2">${application.computeNodeName }</div>
+                    </div>
+                    <div class="appexpMLz">
                         <div class="appexpMLzt1">参数地址：</div>
                         <div class="appexpMLzt3">${application.paraAddress }</div>
                     </div><div class="appexpMLz">
