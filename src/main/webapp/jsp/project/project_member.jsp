@@ -770,6 +770,10 @@
             	layer.msg("一次只能修改一位成员的角色");
             	return;
             }
+            if(ids == 0){
+            	layer.msg("请勾选成员");
+            	return;
+            }
             //初始化项目内角色列表
             var roles = document.querySelectorAll('.QXGLkMlzt1');
             var content ='';

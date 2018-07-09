@@ -20,6 +20,8 @@ public class ProjectFileService {
 	ProjectFileDao projectFileDao;
 	@Autowired
 	ProjectFloderDao projectFloderDao;
+	@Autowired
+	ProjectFloderService projectFloderService;
 	
 	/**
 	 * 插入一条项目文件记录
@@ -97,7 +99,24 @@ public class ProjectFileService {
 	 * @return
 	 */
 	public int countProjectFileNumByPidAndUid(Integer p_id , Integer creator_id){
-		return projectFileDao.countProjectFileNumByPidAndUid(p_id, creator_id);
+		
+		List<ProjectFloder> projectFloders = projectFloderService.selectProjectRootFloderByProjectId(p_id);
+		List<ProjectFile> projectFiles = new ArrayList<ProjectFile>();
+		
+		Iterator<ProjectFloder> iterator = projectFloders.iterator();
+		while(iterator.hasNext()){
+			ProjectFloder projectFloder = (ProjectFloder)iterator.next();
+			projectFiles.addAll(selectProjectFileByFloderId(projectFloder.getId()));	
+		}
+		int num = 0;
+		Iterator<ProjectFile> iterator2 = projectFiles.iterator();
+		while(iterator2.hasNext()){
+			ProjectFile projectFile = (ProjectFile)iterator2.next();
+			if(projectFile.getCreator_id() == creator_id){
+				num++;
+			}
+		}
+		return num;
 	}
 
 }

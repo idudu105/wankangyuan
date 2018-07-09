@@ -13,13 +13,268 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <meta charset="UTF-8" />
     <title>Document</title>
 </head>
+<script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
 <link rel="stylesheet" type="text/css" href="/wankangyuan/static/css/project1.css" />
 <script type="text/javascript" src="/wankangyuan/jsp/project/js/project1.js"></script>
 <script type="text/javascript">
     window.onload=function(){
         project0();
         pro_data();
-        pro_file();
+        
+        var oprof_lbLtRtup=document.querySelectorAll('.prof_lbLtRtup')[0];//文件上传按钮
+        var ofileaddK=document.querySelectorAll('.fileaddK')[0]//文件上传框
+        var ofileaddTr=document.querySelectorAll('.fileaddTr')[0];//文件上传框关闭按钮
+        var owidth=document.body.clientWidth;//屏幕宽度
+
+        var ofileKpd=0;//文件上传框状态判断
+
+        ofileaddTr.onclick=function(){
+            if(ofileKpd==1){
+                ofileaddK.style.display="none";
+                ofileKpd=0;
+            }
+        }
+        oprof_lbLtRtup.onclick=function(){
+            if(ofileKpd==0){
+            	if(floder_id != 0){
+                    ofileaddK.style.display="block";
+                    console.log(owidth/2);
+                    console.log(ofileaddK.offsetWidth/2);
+                    ofileaddK.style.left=owidth/2-ofileaddK.offsetWidth/2+"px";//创建框居中
+                    ofileKpd=1;
+            	}else{
+            		layer.msg("请选择文件夹");
+            	}
+
+            }
+        }
+
+    	//文件树
+        var oprof_lbLmT=document.querySelectorAll('.prof_lbLmT')[0];
+        var aPJliB1L=oprof_lbLmT.querySelectorAll('.PJliB1L');
+        var aPJliB2L=oprof_lbLmT.querySelectorAll('.PJliB2L');
+
+        var aPJliBL=[];
+
+        for(var i=0;i<aPJliB1L.length;i++){
+            aPJliBL.push(aPJliB1L[i]);
+        }
+        for(var i=0;i<aPJliB2L.length;i++){
+            aPJliBL.push(aPJliB2L[i]);
+        }
+
+        console.log(aPJliBL);
+
+        oprof_lbLmT.onclick=function(){
+            for(var j=0;j<aPJliBL.length;j++){
+                aPJliBL[j].style.color="#666";
+            }
+        }
+
+        var aPJliB1Lt=document.querySelectorAll('.PJliB1Lt');
+        var aPJliB2Lt=document.querySelectorAll('.PJliB2Lt');
+        var awenjian=[];
+        for(var i=0;i<aPJliB1Lt.length;i++){
+            awenjian.push(aPJliB1Lt[i]);
+        }
+        for(var i=0;i<aPJliB2Lt.length;i++){
+            awenjian.push(aPJliB2Lt[i]);
+        }
+
+        //文件树文字点击变蓝
+        for(var i=0;i<awenjian.length;i++){
+            (function(index){
+                awenjian[index].onclick=function(){
+                    for(var j=0;j<awenjian.length;j++){
+                        awenjian[j].style.color="#666";
+                    }
+                    awenjian[index].style.color="#5ca0e5";
+                    //将floderID更新一下并进行网络请求
+                    floder_id = awenjian[index].id;
+                    var id = awenjian[index].id;
+            		//进行网络请求显示右面的文件夹
+            		$.ajax({
+            			url:"/wankangyuan/projectFloderFile/selectFilesByFloderId",
+            			type:"post",
+            			data:{
+            				floder_id:id
+            			},
+            			dataType:"json",
+            			success : function(data){
+            				if(data.result == true){
+            					//这个地方直接更新右面的文件列表
+            					var filesList = $("#filesList");
+            					filesList.empty();
+            					for(var index in data.projectFiles){
+            						if(data.projectFiles[index].id != null){
+            							
+            						
+	            						filesList.append(
+	            							'<div class="prof_lbRmULmLI">'+
+	        	                                '<div class="fuxuanK2">'+
+	        	                                	'<input type="checkbox" class="input_check" id="check'+data.projectFiles[index].id
+	        	                                		+'" name="'+data.projectFiles[index].file_location+'" value="'+data.projectFiles[index].id+'">'+
+	        	                                	'<label for="check'+data.projectFiles[index].id+'"></label>'+
+	    	    	                           	'</div>'+
+	    	                                    '<div class="prof_lbRmULmli prof_lbRmULt2">'+data.projectFiles[index].file_name+'</div>'+
+	    	                                    '<div class="prof_lbRmULmli prof_lbRmULt3">'+data.projectFiles[index].file_type+'</div>'+
+	    	                                    '<div class="prof_lbRmULmli prof_lbRmULt4">'+data.projectFiles[index].file_size+'</div>'+
+	    	                                    '<div class="prof_lbRmULmli prof_lbRmULt5">'+data.projectFiles[index].create_datetime+'</div>'+
+	    	                                    '<div class="prof_lbRmULmli prof_lbRmULt6">'+data.projectFiles[index].username+'</div>'+
+	    	                                    '<a style="color:#33B7FF" href="'+data.fileDownloadLocation+data.projectFiles[index].file_location+'" download="'+data.projectFiles[index].file_name+'">下载</a>'+
+	            							'</div>');
+            						}
+            					}
+            				}else{
+            					layer.msg(data.message);
+            				}
+            			},
+            			error : function(){
+            				layer.msg("联网失败");
+            			}
+            		});  
+                }
+            })(i)
+        }
+
+    //文件树添加根/叶、修改、删除
+        var oprof_lbLtRaddg=document.querySelectorAll('.prof_lbLtRaddg')[0];//添加根按钮
+        var oprof_lbLtRaddy=document.querySelectorAll('.prof_lbLtRaddy')[0];//添加叶按钮
+        var oprof_lbLtRtch=document.querySelectorAll('.prof_lbLtRtch')[0];//修改按钮
+        var oprof_lbLtRtde=document.querySelectorAll('.prof_lbLtRtde')[0];//删除按钮
+
+        //添加
+        var oprof_addK=document.querySelectorAll('.prof_addK')[0];//添加根、叶框
+        var oprof_aeTx=oprof_addK.querySelectorAll('.prof_aeTx')[0];//添加根、叶框关闭按钮
+        var oprof_aeb=oprof_addK.querySelectorAll('.prof_aeb')[0];//添加根、叶框提交按钮
+
+        oprof_lbLtRaddg.onclick=function(){
+        	g_y = 1;
+            oprof_addK.style.display="block";
+        }
+
+        oprof_lbLtRaddy.onclick=function(){
+        	g_y = 0;
+            if(floder_id == 0){
+            	layer.msg("请选中父文件夹");
+            	return;
+            }else{
+            	oprof_addK.style.display="block";
+            }
+        }
+
+        oprof_aeTx.onclick=function(){
+            oprof_addK.style.display="none";
+        }
+        oprof_aeb.onclick=function(){
+            oprof_addK.style.display="none";
+            var floder_name  = $("#leafFloderName").val();
+            $.ajax({
+            	url:"/wankangyuan/projectFloderFile/addProjectFloder",
+            	type:"post",
+            	data:{
+            		g_y:g_y,
+            		parent_id:floder_id,
+            		floder_name:floder_name
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			window.location.href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId";
+            		}else{
+            			layer.msg("叶目录添加失败");
+            		}
+            	},
+            	error : function(){
+            		layer.msg("联网失败");
+            	}
+            });
+
+        }
+
+
+        //修改
+        var oprof_editK=document.querySelectorAll('.prof_editK')[0];//添加根、叶框
+        var oprof_aeTx=oprof_editK.querySelectorAll('.prof_aeTx')[0];//添加根、叶框关闭按钮
+        var oprof_aeb=oprof_editK.querySelectorAll('.prof_aeb')[0];//添加根、叶框提交按钮
+
+        oprof_lbLtRtch.onclick=function(){
+        	if(floder_id == 0){
+        		layer.msg("请选择待修改名称的文件夹");
+        	}else{
+        		oprof_editK.style.display="block";
+        	}     
+        }
+        oprof_aeTx.onclick=function(){
+            oprof_editK.style.display="none";
+        }
+        oprof_aeb.onclick=function(){
+            oprof_editK.style.display="none";
+            var floder_name  = $("#floderNameEdit").val();
+            $.ajax({
+            	url:"/wankangyuan/projectFloderFile/updateProjectFloder",
+            	type:"post",
+            	data:{
+            		id:floder_id,
+            		floder_name:floder_name
+            	},
+            	dataType:"json",
+            	success : function(data){
+            		if(data.result == true){
+            			window.location.href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId";
+            		}else{
+            			layer.msg("文件夹名称修改失败");
+            		}
+            	},
+            	error : function(){
+            		layer.msg("联网失败");
+            	}
+            });
+            
+        }
+
+
+        //删除
+        var oprof_delK=document.querySelectorAll('.prof_delK')[0];//添加根、叶框
+        var oprof_aeTx=oprof_delK.querySelectorAll('.prof_aeTx')[0];//添加根、叶框关闭按钮
+        var oprof_aeb=oprof_delK.querySelectorAll('.prof_aeb')[0];//添加根、叶框提交按钮
+
+        oprof_lbLtRtde.onclick=function(){
+        	if(floder_id == 0){
+        		layer.msg("请选择待删除的文件夹");
+        	}else{
+        		oprof_delK.style.display="block";
+        	}    
+        }
+        oprof_aeTx.onclick=function(){
+            oprof_delK.style.display="none";
+        }
+        oprof_aeb.onclick=function(){
+        	$.ajax({
+        		url:"/wankangyuan/projectFloderFile/deleteProjectFloder",
+        		type:"post",
+        		data:{
+        			floder_id:floder_id
+        		},
+        		dataType:"json",
+        		success : function(data){
+        			if(data.result == true){
+        				layer.msg("文件夹删除成功");
+        				window.location.href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId";
+        			}else{
+        				layer.msg("文件夹删除失败");
+        			}
+        		},
+        		error : function(){
+        			layer.msg("联网失败");
+        		}
+        		
+        	});
+            oprof_delK.style.display="none";
+        }
+        
+        
     }
 </script>
 <body>
@@ -261,6 +516,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <div class="prof_lbR">
                     <div class="prof_lbRt">
                         <div class="prof_lbRtL">文件列表</div>
+                        <div class="search2">
+                            <div class="search2C">
+                                <img src="/wankangyuan/static/img/search.png" alt="" class="search2Ci" />
+                                <input type="text" class="search2Ct"  placeholder="搜索文件" />
+                            </div>
+                        </div>
                     </div>
                     <div class="prof_lbRm">
                         <div class="prof_lbRmT">
@@ -308,7 +569,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="fileaddMt">
                         <div class="fileaddMz addMtzname">名称</div>
                         <div class="fileaddMz addMtzsize">大小（KB）</div>
-                        <div class="fileaddMz addMtznum">文件数</div>
                         <div class="fileaddMz addMtzopea">操作</div>
                     </div>
                     <div class="fileaddMmK" id="fileUploadList"></div>
@@ -391,7 +651,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                            '<img src="/wankangyuan/static/img/file.png" height="20" width="16" alt="" class="fileaddMi" />'+
 	                            '<div class="fileaddMz addMtzname">'+data.originalFilename+'</div>'+
 	                            '<div class="fileaddMz addMtzsize">'+data.size+' KB</div>'+
-	                            '<div class="fileaddMz addMtznum">小一号</div>'+
 	                            '<div class="fileaddMz2 addMtzopea" onclick="removeFiv(\''+data.id+'\')">取消</div>'+
 	                        '</div>'
 	                	);
@@ -406,15 +665,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        });
 		}
 	  	
+		Array.prototype.removeByValue = function(val) {
+			for(var i=0; i<this.length; i++) {
+			  if(this[i] == val) {
+			    this.splice(i, 1);
+			    break;
+			  }
+			}
+		}
+	  	
 	  	//取消文件上传，移除掉文件数据
 	  	function removeFiv(id){
 	  		var box = document.getElementById(id);
 	  		box.parentNode.removeChild(box);
+	  		ids.removeByValue(id);
 	  	}
 	  	
 	  	//提交一组文件，并将文件关系绑定到文件夹-文件关系表中
 	  	function upFiles(){	  		
 	  		var files = ids.join(",");
+	  		if(files == ""){
+	  			layer.msg("请添加文件");
+	  			return;
+	  		}
 	  		//进行ajax请求
 	  		$.ajax({
 	  			url:"/wankangyuan/projectFloderFile/upFiles",
@@ -451,7 +724,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	}
             }
             if(ids == ""){
-            	alert("请勾选文件！");
+            	layer.msg("请勾选文件");
             	return;
             }
             //网络请求删除一组文件
@@ -478,33 +751,56 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             });
     	}
     	
-    	//下载文件
-    	/*
-    	$(".prof_lbRmTdo").click(function (){
-			var afuxuanK=document.querySelectorAll('.fuxuanK2');
-            var afuxuan=[];
-            for(var i=0;i<afuxuanK.length;i++){
-                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
-            }
-            var ids = [];
-            for(var i=0;i<afuxuanK.length;i++){
-            	if(afuxuan[i].checked){
-            		ids.push(afuxuan[i].name);
-            		var a = document.getElementById("downFile");  
-                    a.href="localhost:8098/download/"+afuxuan[i].name;  
-                    a.download=afuxuan[i].name;  
-                    a.click();
-            	}
-            }
-            if(ids == ""){
-            	alert("请勾选文件！");
-            	return;
-            }
-            for(var i=0;i<ids.length;i++){
-            	window.open("localhost:8098/download/"+ids[i] , "_black");
-            }
-    	});*/
-
+   	   $(".search2Ct").bind("keypress" , function(event){
+      		if(event.keyCode == 13){
+      			
+      		//进行网络请求显示右面的文件夹
+       		$.ajax({
+       			url:"/wankangyuan/projectFloderFile/selectFiles",
+       			type:"post",
+       			data:{
+       				searchWord:this.value
+       			},
+       			dataType:"json",
+       			success : function(data){
+       				if(data.result == true){
+       					//这个地方直接更新右面的文件列表
+       					var filesList = $("#filesList");
+       					filesList.empty();
+       					for(var index in data.projectFiles){
+       						if(data.projectFiles[index].id != null){
+       							
+       						
+           						filesList.append(
+           							'<div class="prof_lbRmULmLI">'+
+       	                                '<div class="fuxuanK2">'+
+       	                                	'<input type="checkbox" class="input_check" id="check'+data.projectFiles[index].id
+       	                                		+'" name="'+data.projectFiles[index].file_location+'" value="'+data.projectFiles[index].id+'">'+
+       	                                	'<label for="check'+data.projectFiles[index].id+'"></label>'+
+   	    	                           	'</div>'+
+   	                                    '<div class="prof_lbRmULmli prof_lbRmULt2">'+data.projectFiles[index].file_name+'</div>'+
+   	                                    '<div class="prof_lbRmULmli prof_lbRmULt3">'+data.projectFiles[index].file_type+'</div>'+
+   	                                    '<div class="prof_lbRmULmli prof_lbRmULt4">'+data.projectFiles[index].file_size+'</div>'+
+   	                                    '<div class="prof_lbRmULmli prof_lbRmULt5">'+data.projectFiles[index].create_datetime+'</div>'+
+   	                                    '<div class="prof_lbRmULmli prof_lbRmULt6">'+data.projectFiles[index].username+'</div>'+
+   	                                    '<a style="color:#33B7FF" href="'+data.fileDownloadLocation+data.projectFiles[index].file_location+'" download="'+data.projectFiles[index].file_name+'">下载</a>'+
+           							'</div>');
+       						}
+       					}
+       				}else{
+       					layer.msg(data.message);
+       				}
+       			},
+       			error : function(){
+       				layer.msg("联网失败");
+       			}
+       		});  
+     			
+      			
+      			
+      		}
+       	});
+    	
     </script>
     
 </body>

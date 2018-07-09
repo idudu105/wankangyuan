@@ -24,7 +24,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.liutianjun.pojo.Application;
 import com.liutianjun.pojo.User;
+import com.liutianjun.service.ApplicationService;
 
 /**
  * 
@@ -44,6 +46,8 @@ public class ProjectAppTaskService {
 	
 	@Autowired
 	ProjectAppTaskDao projectAppTaskDao;
+	@Autowired
+	ApplicationService applicationService;
 	
 	@Value("${project.task.rateSearch}")
 	private String url;
@@ -70,16 +74,19 @@ public class ProjectAppTaskService {
 			appTaskRequestTemp.put("taskId", projectAppTask.getId());
 			appTaskRequestTemp.put("username", user.getUsername());
 			appTaskRequest.add(appTaskRequestTemp);
-		}
-		String result = sendPostRequest(url, new Gson().toJson(appTaskRequest));
-		if(result != null && !result.trim().equals("")){
-			JsonObject jsonObject = (JsonObject)new JsonParser().parse(result);
-			if(jsonObject.get("code").getAsString().equals("1")){
-				JsonElement jsonElement = jsonObject.get("task");
-				AppTaskProgressResult[] appTaskProgressResults = new Gson().fromJson(jsonElement, AppTaskProgressResult[].class);
-				iterator = projectAppTasks.iterator();
-				while(iterator.hasNext()){
-					ProjectAppTask projectAppTask = (ProjectAppTask)iterator.next();
+			
+			String urlTemp = new String(url);
+			Application application = applicationService.selectByPrimaryKey(Integer.valueOf(projectAppTask.getApp_id()));
+			if(application.getComputeNodeName() != null){
+				urlTemp += "?server="+application.getComputeNodeName();
+			}
+			
+			String result = sendPostRequest(urlTemp, new Gson().toJson(appTaskRequest));
+			if(result != null && !result.trim().equals("")){
+				JsonObject jsonObject = (JsonObject)new JsonParser().parse(result);
+				if(jsonObject.get("code").getAsString().equals("1")){
+					JsonElement jsonElement = jsonObject.get("task");
+					AppTaskProgressResult[] appTaskProgressResults = new Gson().fromJson(jsonElement, AppTaskProgressResult[].class);
 					for(int i=0;i<appTaskProgressResults.length;i++){
 						if(appTaskProgressResults[i].getId().equals(String.valueOf(projectAppTask.getId()))){
 							projectAppTask.setProgress(appTaskProgressResults[i].getProgress());
@@ -88,6 +95,7 @@ public class ProjectAppTaskService {
 				}
 			}
 		}
+
 		PageInfo<ProjectAppTask> pageInfo = new PageInfo<ProjectAppTask>(projectAppTasks);
 		Map<String, Object> map = new HashMap<String , Object>();
 		map.put("list", projectAppTasks);

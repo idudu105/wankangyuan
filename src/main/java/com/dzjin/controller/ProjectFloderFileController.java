@@ -3,8 +3,11 @@ package com.dzjin.controller;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,6 +52,8 @@ public class ProjectFloderFileController {
 	
 	@Value("${project.file.location}")
 	private String fileLocation;
+	@Value("${project.file.download}")
+	private String fileDownloadLocation;
 	
 	/**
 	 * 查询文件目录结构
@@ -63,6 +68,22 @@ public class ProjectFloderFileController {
 		session.setAttribute("projectFloders", projectFloderService.selectProjectFloderByProjectId(project.getId()));
 		session.setAttribute("myFileNum", 
 				projectFileService.countProjectFileNumByPidAndUid(project.getId(), user.getId()));
+		
+		//获取项目内的根文件夹，并查询出每个根文件夹下的文件数量并统计总数量
+		List<ProjectFloder> projectFloders = projectFloderService.selectProjectRootFloderByProjectId(project.getId());
+		Iterator<ProjectFloder> iterator2 = projectFloders.iterator();
+		int num = 0;
+		while(iterator2.hasNext()){
+			ProjectFloder projectFloder = (ProjectFloder)iterator2.next();
+			List<ProjectFile> projectFiles = 
+					projectFileService.selectProjectFileByFloderId(projectFloder.getId());
+			num+=projectFiles.size();
+		}
+		project.setFileNum(num);
+		session.setAttribute("project", project);
+		
+		
+		
 		return "/jsp/project/project_file.jsp";
 	}
 	
@@ -171,6 +192,40 @@ public class ProjectFloderFileController {
 		Map<String, Object> map = new HashMap<>();
 		map.put("result", true);
 		map.put("projectFiles", projectFileService.selectProjectFileByFloderId(floder_id));
+		map.put("fileDownloadLocation", fileDownloadLocation);
+		return map;
+	}
+	
+	/**
+	 * 搜索文件
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping("/selectFiles")
+	@ResponseBody
+	public Map<String, Object> selectFiles(HttpSession session , String searchWord){
+		Map<String, Object> map = new HashMap<>();
+		Project project = (Project)session.getAttribute("project");
+		List<ProjectFloder> projectFloders = projectFloderService.selectProjectRootFloderByProjectId(project.getId());
+		List<ProjectFile> projectFiles = new ArrayList<ProjectFile>();
+		
+		Iterator<ProjectFloder> iterator = projectFloders.iterator();
+		while(iterator.hasNext()){
+			ProjectFloder projectFloder = (ProjectFloder)iterator.next();
+			projectFiles.addAll(projectFileService.selectProjectFileByFloderId(projectFloder.getId()));	
+		}
+		List<ProjectFile> searchProjectFiles =  new ArrayList<ProjectFile>();
+		Iterator<ProjectFile> iterator2 = projectFiles.iterator();
+		while(iterator2.hasNext()){
+			ProjectFile projectFile = (ProjectFile)iterator2.next();
+			if(projectFile.getFile_name().contains(searchWord)){
+				searchProjectFiles.add(projectFile);
+			}
+		}
+		map.put("result", true);
+		map.put("projectFiles", searchProjectFiles);
+		map.put("fileDownloadLocation", fileDownloadLocation);
+		
 		return map;
 	}
 	

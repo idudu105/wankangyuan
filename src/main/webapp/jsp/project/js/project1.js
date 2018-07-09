@@ -501,7 +501,7 @@ function pro_file(){
                 ofileaddK.style.left=owidth/2-ofileaddK.offsetWidth/2+"px";//创建框居中
                 ofileKpd=1;
         	}else{
-        		alert("请选择文件夹！");
+        		layer.msg("请选择文件夹");
         	}
 
         }
@@ -592,7 +592,7 @@ function pro_file(){
         							'</div>');
         					}
         				}else{
-        					alert(data.message);
+        					layer.msg(data.message);
         				}
         			},
         			error : function(){
@@ -625,7 +625,7 @@ function pro_file(){
     oprof_lbLtRaddy.onclick=function(){
     	g_y = 0;
         if(floder_id == 0){
-        	alert("请选中父文件夹");
+        	layer.msg("请选中父文件夹");
         	return;
         }else{
         	 oprof_addK.style.display="block";
@@ -651,15 +651,14 @@ function pro_file(){
         		if(data.result == true){
         			window.location.href="/wankangyuan/projectFloderFile/selectProjectFloderByProjectId";
         		}else{
-        			alert("叶目录添加失败！");
+        			layer.msg("叶目录添加失败");
         		}
         	},
         	error : function(){
-        		alert("联网失败");
+        		layer.msg("联网失败");
         	}
         });
-        
-        
+
     }
 
 
