@@ -80,8 +80,8 @@ public class CommonSelect {
 		Boolean isAddWhere = false;
 		Map<String, String> conditionEqual = null;
 		Map<String, String> conditionLike = null;
-		String currPage = null;
-		String pageSize = null;
+		Integer currPage = null;
+		Integer pageSize = null;
 		String selectContdation = null;
 
 		Map<String, Object> msg = new HashMap<>();
@@ -113,12 +113,12 @@ public class CommonSelect {
 				conditionLike = (Map<String, String>) gsonMap.get("conditionLike");
 			}
 			if (gsonMap.containsKey("page")) {
-				Map<String, String>page=(Map<String, String>) gsonMap.get("page");
+				Map<String, Double>page=(Map<String, Double>) gsonMap.get("page");
 				if (page.containsKey("currPage")) {
-					currPage = page.get("currPage").toString();
+					currPage = page.get("currPage").intValue();
 				}
 				if (page.containsKey("pageSize")) {
-					pageSize = page.get("pageSize").toString();
+					pageSize = page.get("pageSize").intValue();
 				}
 			}
 			if (gsonMap.containsKey("selectContdation")) {
@@ -153,7 +153,7 @@ public class CommonSelect {
 	@RequestMapping("/commonSelect1")
 	@ResponseBody
 	public String commonSelect(List<String> userid, List<String> projectid, String select, Boolean isAddWhere,
-			String selectContdation, String currPage, String pageSize) {
+			String selectContdation, Integer currPage, Integer pageSize) {
 		if(isAddWhere==null){
 			isAddWhere=false;
 		}
@@ -194,13 +194,13 @@ public class CommonSelect {
 			select = select.substring(0, select.lastIndexOf("AND"));
 		}
 		if (currPage == null) {
-			currPage = "0";
+			currPage = 0;
 		}
 		if (pageSize == null) {
-			pageSize = "0";
+			pageSize = 0;
 		}
 		return new Gson()
-				.toJson(PhoenixClient.commonSelect(select, Integer.valueOf(currPage), Integer.valueOf(pageSize)))
+				.toJson(PhoenixClient.commonSelect(select, currPage, pageSize))
 				.toString();
 	}
 
@@ -219,7 +219,7 @@ public class CommonSelect {
 	@RequestMapping("/commonSelect")
 	@ResponseBody
 	public String commonSelect(List<String> userid, List<String> projectid, String select, boolean isAddWhere,
-			Map<String, String> conditionEqual, Map<String, String> conditionLike, String currPage, String pageSize) {
+			Map<String, String> conditionEqual, Map<String, String> conditionLike, Integer currPage, Integer pageSize) {
 
 		boolean and = false;
 		if (isAddWhere) {
@@ -261,10 +261,10 @@ public class CommonSelect {
 			select = select.substring(0, select.lastIndexOf("AND"));
 		}
 		if (currPage == null) {
-			currPage = "0";
+			currPage =0;
 		}
 		if (pageSize == null) {
-			pageSize = "0";
+			pageSize = 0;
 		}
 		return new Gson()
 				.toJson(PhoenixClient.commonSelect(select, Integer.valueOf(currPage), Integer.valueOf(pageSize)))

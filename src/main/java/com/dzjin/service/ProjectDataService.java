@@ -20,10 +20,10 @@ public class ProjectDataService {
 	@Autowired
 	ProjectDataDao projectDataDao;
 	
-//	public int insert(ProjectDataRelation projectDataRelation){
-//		return projectDataDao.insert(projectDataRelation);
-//	}
-	public int insert(Integer p_id,String source_data_id,Integer cs_id){
+	public int insert(ProjectDataRelation projectDataRelation){
+		return projectDataDao.insert(projectDataRelation);
+	}
+	public int insertid(Integer p_id,String source_data_id,Integer cs_id){
 		return projectDataDao.insertid(p_id,source_data_id,cs_id);
 	}
 	public List<String> select(Integer p_id,Integer cs_id){

@@ -175,7 +175,7 @@
 				<div class="shaixuanZK">
 					<c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
 						<div class="shaixuanZKli">
-							<div class="shaixuanZKliT">${sourceFieldTemp.csf_name}</div>
+							<div class="shaixuanZKliT"id="${sourceFieldTemp.csf_id}" >${sourceFieldTemp.csf_name}</div>
 							<div class="shaixuanZKliI active"></div>
 						</div>
 					</c:forEach>

@@ -201,7 +201,7 @@
 						<div class="allT">全选</div>
 					</div>
 					<c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
-						<div class="PJListli">${sourceFieldTemp.csf_name}</div>
+						<div class="PJListli" id="${sourceFieldTemp.csf_id}">${sourceFieldTemp.csf_name}</div>
 					</c:forEach>
 				</div>
 				<div class="PJListline"></div>
@@ -239,9 +239,9 @@
 						<div class="BTSXcli">
 							<div class="BTSXcliT">排序：</div>
 							<img src="/wankangyuan/static/img/sort_up.png" alt=""
-								class="BTSXcliI" /> <img
+								class="BTSXcliI" onclick="updown('ASC')" /> <img
 								src="/wankangyuan/static/img/sort_down.png" alt=""
-								class="BTSXcliI" />
+								class="BTSXcliI" onclick="updown('DESC')" />
 						</div>
 						<div class="BTSXcli">
 							<div class="BTSXcliT">过滤：</div>
@@ -250,31 +250,10 @@
 						<div class="BTSXcli">
 							<div class="BTSXcliT">值筛选：</div>
 						</div>
-						<div class="BTSXcli2">
-							<div class="BTSXcli2li">
-								<div class="BTSXcli2liI"></div>
-								<div class="BTSXcli2liT">项目编号1</div>
-							</div>
-							<div class="BTSXcli2li">
-								<div class="BTSXcli2liI"></div>
-								<div class="BTSXcli2liT">项目编号1</div>
-							</div>
-							<div class="BTSXcli2li">
-								<div class="BTSXcli2liI"></div>
-								<div class="BTSXcli2liT">项目编号1</div>
-							</div>
-							<div class="BTSXcli2li">
-								<div class="BTSXcli2liI"></div>
-								<div class="BTSXcli2liT">项目编号1</div>
-							</div>
-							<div class="BTSXcli2li">
-								<div class="BTSXcli2liI"></div>
-								<div class="BTSXcli2liT">项目编号1</div>
-							</div>
-						</div>
+						<div class="BTSXcli2"></div>
 						<div class="BTSXcli3">
-							<div class="BTSXcli3BT BTSXcli3BTent">筛选</div>
-							<div class="BTSXcli3BT BTSXcli3BTres">重置</div>
+							<div class="BTSXcli3BT BTSXcli3BTent" onclick="shaixuan()">筛选</div>
+							<div class="BTSXcli3BT BTSXcli3BTres" onclick="chongzhi()">重置</div>
 						</div>
 					</div>
 				</div>
@@ -292,7 +271,7 @@
 				</a>
 				<div class="botT">Copyright @2018天津万康源科技有限公司</div>
 			</div>
-			<div id="oldCondition">${oldCondition}</div>
+			<div id="oldCondition" style="display: none;">${oldCondition}</div>
 		</div>
 	</div>
 
@@ -302,9 +281,80 @@
 	<script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
 
 	<script type="text/javascript">
-    
-    	$("#deleteSourceDatas").click(function (){
-    			
+
+	var cs_id=$('#source_Select').val();
+	var searchId="${searchId}";
+	var searchWord="";
+	var desc_asc="${desc_asc}";
+	var oldCondition=$("#oldCondition").html();
+	var page="${page}";
+	$("#source_Select").change(function(){
+		cs_id = $("#source_Select").val();
+			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id;
+	
+	});
+
+	$('.PJListli').click(function(){
+		searchId = $(this).attr('id');
+	})
+	
+	$('.BTSXcliGLK').keypress(function(e){
+		var that = $(this);
+		searchWord=that.val();
+		if (e.keyCode == 13) {
+			$.ajax({
+				type:"post",
+				url:"/wankangyuan/sourceData/getSourceFieldDatas",
+				async:true,
+				data:{
+					type:2,
+					cs_id:$('#source_Select').val(),
+					searchId:searchId,
+					searchWord:searchWord,
+            		oldCondition:oldCondition					
+				},
+				success:function(res){
+					if (res.result) {
+						var htmlStr = '';
+						var data = res.csfDatas;
+						for (var i in data) {
+							htmlStr += '<div class="BTSXcli2li">'
+									+		'<input type="checkbox" class="BTSXcli2liI" />'
+									+		'<div class="BTSXcli2liT">' + data[i] + '</div>'
+									+	'</div>';
+						}
+						$('.BTSXcli2').html(htmlStr);
+					}
+				}
+			});
+		}
+	})
+	
+	function updown(sc){
+		desc_asc=sc;
+	    window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id+"&searchId="+searchId+
+	    		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
+	}
+	
+	function chongzhi(){
+		$('#oldCondition').html('');
+		oldCondition="";
+	}	
+
+	function shaixuan(){
+		var afuxuanK=document.querySelectorAll('.BTSXcli2li');
+        var chooseDatasArr = [];
+        for(var i=0;i<afuxuanK.length;i++){
+        	if(afuxuanK[i].querySelectorAll('.BTSXcli2liI')[0].checked){
+        		chooseDatasArr.push(afuxuanK[i].querySelectorAll('.BTSXcli2liT')[0].innerHTML);
+        	}
+        }
+        var chooseDatas=chooseDatasArr.join(",");
+    	window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id+"&searchId="+
+		searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&chooseDatas="+chooseDatas+"&oldCondition="+oldCondition;
+	}
+	
+    	$("#deleteSourceDatas").click(function (){    			
     			var afuxuanK=document.querySelectorAll('.fuxuanK2');
                 var afuxuan=[];
                 for(var i=0;i<afuxuanK.length;i++){
@@ -328,19 +378,14 @@
                     	type:"post",
                     	data:{
                     		sourceDataIds:ids.join(","),
-                    		cs_id:cs_id,
-                    		searchId:"118",
-                    		desc_asc:"ASC",
-                    		searchWord:"",
-                    		chooseDatas:"",
-                    		oldCondition:$("#oldCondition").val()
+                    		cs_id:cs_id
                     	},
                     	dataType:"json",
                     	success : function(data){
                     		if(data.result == true){
                     			alert(data.message);
                     			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id+"&searchId="+
-                    					searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&chooseDatas="+chooseDatas+"&oldCondition="+oldCondition;
+                    					searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition+"&page="+page+"&strip=${rows}";
                     		}else{
                     			alert(data.message);
                     		}
@@ -360,11 +405,6 @@
     		window.location.href="/wankangyuan/sourceData/getSourceDataById?cs_id="+cs_id+"&sourceDataId="+sourceDataId+"&type=2";
     	}
     	
-    	$("#source_Select").change(function(){
-    		cs_id = $("#source_Select").val();
-   			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id;
-    	
-    	});
     	
     	$(".pro_open").click(function (){
     		
@@ -397,7 +437,9 @@
     			},
     			success : function(data){
     				alert(data.message);
-        			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id;
+        			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id+"&searchId="+searchId+
+        				    		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition
+        				    		+"&page="+page+"&strip=${rows}";
     			},
     			error : function(){
     				alert("联网失败");
@@ -439,7 +481,9 @@
     			},
     			success : function(data){
     				alert(data.message);
-        			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id;
+        			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id+"&searchId="+searchId+
+        				    		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition
+        				    		+"&page="+page+"&strip=${rows}";
     			},
     			error : function(){
     				alert("联网失败");
@@ -494,7 +538,9 @@
 	            	if(data.result == false){
 	            		alert(data.message)
 	            	}else{
-	        			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id;
+	        			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id+"&searchId="+searchId+
+	        				    		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition
+	        				    		+"&page="+page+"&strip=${rows}";
 	            	}
 	            },
 	            error: function () {
@@ -560,18 +606,15 @@
     		callback: function(page) { // 回调函数
     			console.log(page);
     			var user_id=${user.id};
-    			var cs_id = $("#source_Select").val();
-        		var searchId="118";
-        		var desc_asc="ASC";
-        		var searchWord="";
-        		var chooseDatas="Ad533,Ad534,Ad535,Ad536,Ad537,Ad538,Ad539,Ad540,Ad541,Ad542,Ad543,Ad544,Ad545,Ad546,Ad547,Ad548,Ad549";
-        		var oldCondition=$("#oldCondition").val();
     			if(page!=${page}){
     				window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id+"&page="+page+"&strip=${rows}"+"&searchId="+
-					searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&chooseDatas="+chooseDatas+"&oldCondition="+oldCondition;
+					searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
     			}
     		}
     	}); 
+    	
+    	/******************************************************************************/
+    	
 
     </script>
 

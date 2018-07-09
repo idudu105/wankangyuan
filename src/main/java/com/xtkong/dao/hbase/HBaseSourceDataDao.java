@@ -24,11 +24,11 @@ import org.apache.hadoop.hbase.filter.PrefixFilter;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 
-import com.alibaba.druid.sql.visitor.functions.If;
 import com.xtkong.model.SourceField;
 import com.xtkong.service.PhoenixClient;
 import com.xtkong.util.ConstantsHBase;
 import com.xtkong.util.HBaseDB;
+import com.xtkong.util.HbaseTest;
 
 public class HBaseSourceDataDao {
 
@@ -411,6 +411,7 @@ public class HBaseSourceDataDao {
 			// 存放批量操作的结果
 			Result[] results = table.get(gets);
 			for (Result result : results) {
+				String oldSourceDataId = Bytes.toString(result.getRow());
 				Long count = db.getNewId(ConstantsHBase.TABLE_GID, uid + "_" + cs_id, ConstantsHBase.FAMILY_GID_GID,
 						ConstantsHBase.QUALIFIER_GID_GID_GID);
 				String sourceDataId = uid + "_" + cs_id + "_" + count;
@@ -425,25 +426,55 @@ public class HBaseSourceDataDao {
 							.getValue(Bytes.toBytes(family), Bytes.toBytes(String.valueOf(sourceField.getCsf_id()))));
 				}
 				if (db.putRow(tableName, put)) {
-					String oldSourceDataId = Bytes.toString(result.getRow());
 					List<List<String>> formatNodes = HBaseFormatNodeDao.getFormatNodes(cs_id, oldSourceDataId);
 					for (List<String> formatNode : formatNodes) {
-						String formatNodeId = formatNode.get(0);
+						String oldFormatNodeId = formatNode.get(0);
 						String ft_id = formatNode.get(1);
 						String nodeName = formatNode.get(2);
-						HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName, null);
-						String tableStr = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
-						Map<String, Map<String, Object>> records = PhoenixClient
-								.select("SELECT * FROM \"" + tableStr + "\"");
-						List<String> head = (List<String>) records.get("records").get("head");
-						List<List<String>> datas = (List<List<String>>) records.get("records").get("data");
-						for (List<String> data : datas) {
-							Map<String, String> formatFieldDatas = new HashMap<>();
-							for (int i = 0; i < head.size(); i++) {
-								formatFieldDatas.put(head.get(i), data.get(i));
+						if (oldFormatNodeId != null) {
+							String tableStr = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+							Map<String, Map<String, Object>> records = PhoenixClient
+									.select("SELECT * FROM \"" + tableStr + "\" WHERE ID='" + oldFormatNodeId + "'");
+							List<String> head = (List<String>) records.get("records").get("head");
+							List<List<String>> datas = (List<List<String>>) records.get("records").get("data");
+
+							String formatNodeId = null;
+							for (List<String> data : datas) {
+								Map<String, String> formatFieldDatas = new HashMap<>();
+								for (int i = 0; i < head.size(); i++) {
+									if (!head.get(i).equals("ID")) {
+										try {
+											formatFieldDatas.put(head.get(i), data.get(i));
+										} catch (Exception e) {
+											continue;
+										}
+									}
+								}
+								formatNodeId = HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName,
+										formatFieldDatas);
+								HbaseTest.println(formatNodeId);
 							}
-							HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId,
-									formatFieldDatas);
+							if (formatNodeId != null) {
+								records = PhoenixClient.select("SELECT * FROM \"" + tableStr + "\" WHERE ID!='"
+										+ oldFormatNodeId + "' AND " + "\"" + ConstantsHBase.FAMILY_INFO + "\".\""
+										+ ConstantsHBase.QUALIFIER_FORMATNODEID + "\"='" + oldFormatNodeId + "'  ");
+								head = (List<String>) records.get("records").get("head");
+								datas = (List<List<String>>) records.get("records").get("data");
+								for (List<String> data : datas) {
+									Map<String, String> formatFieldDatas = new HashMap<>();
+									for (int i = 0; i < head.size(); i++) {
+										if (!head.get(i).equals("ID")) {
+											try {
+												formatFieldDatas.put(head.get(i), data.get(i));
+											} catch (Exception e) {
+												continue;
+											}
+										}
+									}
+									HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId,
+											formatFieldDatas);
+								}
+							}
 						}
 					}
 				} else {
@@ -500,21 +531,49 @@ public class HBaseSourceDataDao {
 						String oldFormatNodeId = formatNode.get(0);
 						String ft_id = formatNode.get(1);
 						String nodeName = formatNode.get(2);
-						String formatNodeId = HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName,
-								null);
-						if (formatNodeId != null) {
+						if (oldFormatNodeId != null) {
 							String tableStr = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
 							Map<String, Map<String, Object>> records = PhoenixClient
 									.select("SELECT * FROM \"" + tableStr + "\" WHERE ID='" + oldFormatNodeId + "'");
 							List<String> head = (List<String>) records.get("records").get("head");
 							List<List<String>> datas = (List<List<String>>) records.get("records").get("data");
+
+							String formatNodeId = null;
 							for (List<String> data : datas) {
 								Map<String, String> formatFieldDatas = new HashMap<>();
 								for (int i = 0; i < head.size(); i++) {
-									formatFieldDatas.put(head.get(i), data.get(i));
+									if (!head.get(i).equals("ID")) {
+										try {
+											formatFieldDatas.put(head.get(i), data.get(i));
+										} catch (Exception e) {
+											continue;
+										}
+									}
 								}
-								HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId,
+								formatNodeId = HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName,
 										formatFieldDatas);
+								HbaseTest.println(formatNodeId);
+							}
+							if (formatNodeId != null) {
+								records = PhoenixClient.select("SELECT * FROM \"" + tableStr + "\" WHERE ID!='"
+										+ oldFormatNodeId + "' AND " + "\"" + ConstantsHBase.FAMILY_INFO + "\".\""
+										+ ConstantsHBase.QUALIFIER_FORMATNODEID + "\"='" + oldFormatNodeId + "'  ");
+								head = (List<String>) records.get("records").get("head");
+								datas = (List<List<String>>) records.get("records").get("data");
+								for (List<String> data : datas) {
+									Map<String, String> formatFieldDatas = new HashMap<>();
+									for (int i = 0; i < head.size(); i++) {
+										if (!head.get(i).equals("ID")) {
+											try {
+												formatFieldDatas.put(head.get(i), data.get(i));
+											} catch (Exception e) {
+												continue;
+											}
+										}
+									}
+									HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId,
+											formatFieldDatas);
+								}
 							}
 						}
 					}

@@ -1,7 +1,5 @@
 package com.xtkong.service;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -24,6 +22,7 @@ import java.util.concurrent.TimeoutException;
 
 import com.google.gson.Gson;
 import com.xtkong.util.ConstantsHBase;
+import com.xtkong.util.HbaseTest;
 
 /**
  * 利用Phoenix访问Hbase
@@ -31,18 +30,14 @@ import com.xtkong.util.ConstantsHBase;
  */
 public class PhoenixClient {
 
-	private static PrintWriter pWriter;
+	
 	/**
 	 * 利用静态块的方式初始化Driver，防止Tomcat加载不到（有时候比较诡异）
 	 */
 	static {
 		try {
 			Class.forName(ConstantsHBase.PhoenixDriver);
-			pWriter = new PrintWriter(("E:/Users/admin/Desktop/CC/新建文件夹/记录.txt"));
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -165,7 +160,11 @@ public class PhoenixClient {
 			while (set.next()) {
 				List<String> data = new ArrayList<>();
 				for (int i = 0, len = head.size(); i < len; i++) {
-					data.add(set.getString(head.get(i)));
+					String value=set.getString(head.get(i));
+					if (value == null) {
+						value="";
+					}
+					data.add(value);
 				}
 				datas.add(data);
 			}
@@ -179,10 +178,7 @@ public class PhoenixClient {
 
 			msg.put("msg", "success");
 			map.put("msg", msg);
-			pWriter.println(map);
-			pWriter.println(new Gson().toJson(map).toString());
-			pWriter.println();
-			pWriter.flush();
+			HbaseTest.toJson(map);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			msg.put("msg", "SQL执行出错：" + e.getMessage());
@@ -276,8 +272,7 @@ public class PhoenixClient {
 	 * @param conditionEqual
 	 * @return
 	 */
-	public static String getSQLConditionEquals(String tableName, Map<String, String> conditionEqual,
-			String type) {
+	public static String getSQLConditionEquals(String tableName, Map<String, String> conditionEqual, String type) {
 		String phoenixSQL = " ";
 		if ((conditionEqual != null) && (!conditionEqual.isEmpty())) {
 			for (Entry<String, String> eqlual : conditionEqual.entrySet()) {
@@ -299,8 +294,7 @@ public class PhoenixClient {
 	 * @param conditionEqual
 	 * @return
 	 */
-	public static String getSQLConditionLikes(String tableName, Map<String, String> conditionLike,
-			String type) {
+	public static String getSQLConditionLikes(String tableName, Map<String, String> conditionLike, String type) {
 		String phoenixSQL = " ";
 		if ((conditionLike != null) && (!conditionLike.isEmpty())) {
 			for (Entry<String, String> like : conditionLike.entrySet()) {
@@ -337,17 +331,19 @@ public class PhoenixClient {
 			Map<String, String> conditionLike, String condition, Integer page, Integer strip) {
 		String phoenixSQL = " ";
 		if ((tableName != null) && (qualifiers != null) && (!qualifiers.isEmpty())) {
-			phoenixSQL += " SELECT ID ";
+			phoenixSQL = "SELECT ID ";
 			for (String qualifier : qualifiers) {
 				phoenixSQL += ",\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + qualifier + "\"";
 			}
+		}else {
+			return phoenixSQL;
 		}
 		phoenixSQL += " FROM \"" + tableName + "\"  WHERE  ";
-		String phoenixSQLConditionEqualsAND = getSQLConditionEquals(tableName, conditionEqual,"AND");
+		String phoenixSQLConditionEqualsAND = getSQLConditionEquals(tableName, conditionEqual, "AND");
 		if (!phoenixSQLConditionEqualsAND.equals(" ")) {
 			phoenixSQL += phoenixSQLConditionEqualsAND + " AND ";
 		}
-		String phoenixSQLConditionLikesAND = getSQLConditionLikes(tableName, conditionLike,"AND");
+		String phoenixSQLConditionLikesAND = getSQLConditionLikes(tableName, conditionLike, "AND");
 		if (!phoenixSQLConditionLikesAND.equals(" ")) {
 			phoenixSQL += phoenixSQLConditionLikesAND + " AND ";
 		}
@@ -387,13 +383,15 @@ public class PhoenixClient {
 		}
 		return phoenixSQL;
 	}
-	
+
 	public static String getSQLTableColumn(String tableName, String qualifier) {
 		return " \"" + tableName + "\".\"" + qualifier + "\" ";
 	}
-	public static String getSQLFamilyColumn( String qualifier) {
+
+	public static String getSQLFamilyColumn(String qualifier) {
 		return " \"" + ConstantsHBase.FAMILY_INFO + "\".\"" + qualifier + "\" ";
 	}
+
 	/**
 	 * 根据Phoenix支持的SQL格式，查询Hbase的数据。
 	 * 
@@ -401,9 +399,7 @@ public class PhoenixClient {
 	 * @return 成功信息，数据，分页
 	 */
 	public static Map<String, Map<String, Object>> select(String phoenixSQL) {
-
-		pWriter.println(phoenixSQL);
-		pWriter.flush();
+		HbaseTest.println(phoenixSQL);
 		return executeQuery(phoenixSQL);
 	}
 
@@ -478,7 +474,6 @@ public class PhoenixClient {
 
 	}
 
-	
 	/**
 	 * 
 	 * @param tableName
@@ -773,7 +768,7 @@ public class PhoenixClient {
 		Map<String, Map<String, Object>> result = null;
 		// result =select(tableName, family, qualifiers, whereEqual, whereLike,
 		// null, null);
-//		dropView(tableName);
+		// dropView(tableName);
 		List<String> phoenixSQLs = new ArrayList<>();
 		// phoenixSQLs.add("DROP TABLE IF EXISTS \"" + tableName + "\"");
 		// executeUpdate(phoenixSQLs);
@@ -808,8 +803,11 @@ public class PhoenixClient {
 		// phoenixSQL = " ";
 		// phoenixSQL = "SELECT COUNT(*)FROM \"SOURCE_62\" WHERE
 		// \"93\"='value93' ORDER BY ID DESC ";
-		result = select(
-				"SELECT ID ,\"SOURCE_75\".\"118\",\"SOURCE_75\".\"119\",\"SOURCE_75\".\"121\",\"SOURCE_75\".\"PUBLIC\" FROM \"SOURCE_75\"  WHERE   \"SOURCE_75\".\"CREATE\"='1' "+" ORDER BY " + ("121") + " DESC "+"  LIMIT 12 OFFSET 0");
+		// result = select(
+		// "SELECT ID
+		// ,\"SOURCE_75\".\"118\",\"SOURCE_75\".\"119\",\"SOURCE_75\".\"121\",\"SOURCE_75\".\"PUBLIC\"
+		// FROM \"SOURCE_75\" WHERE \"SOURCE_75\".\"CREATE\"='1' "+" ORDER BY "
+		// + ("121") + " DESC "+" LIMIT 12 OFFSET 0");
 		// result = executeQuery("SELECT COUNT(1) FROM \"SOURCE_62\" ");
 		// String resultMsg = String.valueOf((result.get("msg")).get("msg"));
 		// for (int j = 0; j < 2; j++) {
@@ -822,6 +820,10 @@ public class PhoenixClient {
 		// whereLike, page, strip);
 		// }
 		// }
+//		result = commonSelect(
+//				" SELECT * FROM \"SOURCE_75\"  WHERE \"USER\"= '1'  AND  ( \"INFO\".\"118\"='Ad533' OR \"INFO\".\"118\"='Ad534' OR \"INFO\".\"118\"='Ad535' OR \"INFO\".\"118\"='Ad536' OR \"INFO\".\"118\"='Ad537' OR \"INFO\".\"118\"='Ad538' OR \"INFO\".\"118\"='Ad539' OR \"INFO\".\"118\"='Ad540' OR \"INFO\".\"118\"='Ad541' OR \"INFO\".\"118\"='Ad542' OR \"INFO\".\"118\"='Ad543' OR \"INFO\".\"118\"='Ad544' OR \"INFO\".\"118\"='Ad545' OR \"INFO\".\"118\"='Ad546' OR \"INFO\".\"118\"='Ad547' OR \"INFO\".\"118\"='Ad548' OR \"INFO\".\"118\"='Ad549' )  ",
+//				1, 10);
+		result=select("SELECT DISTINCT \"97\" FROM \"FORMAT_75_56\" WHERE FORMATNODEID='1_75_63_56_1' order by \"97\" ");
 		System.out.println("\n" + new Gson().toJson(result).toString() + "\n");
 		// System.out.println(new Gson().toJson(selectPage(" SELECT * FROM
 		// source_60", currPage, pageSize)).toString());

@@ -60,21 +60,23 @@ public class SourceDataController {
 	}
 
 	/**
-	 * sources 采集源列表
 	 * 
-	 * source 选中采集源的字段列表
-	 * 
-	 * sourceDatas 源数据字数据，注：每个列表第一个值sourceDataId不显示
-	 * 
+	 * @param request
 	 * @param httpSession
 	 * @param type
-	 *            "1":我的 "2":我创建的 "3":公开
+	 *            "1":我的 "2":我创建的 "3":公开"4":项目
 	 * @param cs_id
 	 * @param page
 	 * @param strip
-	 * @param p_id
+	 * @param searchId
+	 * @param desc_asc
 	 * @param searchWord
-	 * @return
+	 * @param chooseDatas
+	 * @param oldCondition
+	 * @param p_id
+	 * @param searchFirstWord
+	 * @return sources 采集源列表 source 选中采集源的字段列表 sourceDatas
+	 *         源数据字数据，注：每个列表第一个值sourceDataId不显示
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/getSourceDatas")
@@ -128,10 +130,6 @@ public class SourceDataController {
 			case "4":
 				if (searchFirstWord == null) {
 					searchFirstWord = new String("");
-					httpSession.setAttribute("searchWord", null);
-				} else {
-					// 更新关键字
-					httpSession.setAttribute("searchWord", searchFirstWord);
 				}
 				conditionEqual.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
 				if (!source.getSourceFields().isEmpty()) {
@@ -196,7 +194,10 @@ public class SourceDataController {
 			httpSession.setAttribute("total", total);
 			httpSession.setAttribute("page", page);
 			httpSession.setAttribute("rows", strip);
+			httpSession.setAttribute("searchId", searchId);
+			httpSession.setAttribute("desc_asc", desc_asc);
 			httpSession.setAttribute("oldCondition", oldCondition);
+			httpSession.setAttribute("searchWord", searchFirstWord);
 		}
 		switch (type) {
 		case "1":
@@ -221,7 +222,7 @@ public class SourceDataController {
 	@RequestMapping("/getSourceFieldDatas")
 	@ResponseBody
 	public Map<String, Object> getSourceFieldDatas(HttpServletRequest request, String type, Integer cs_id,
-			Integer searchId, String searchWord, String oldCondition) {
+			Integer searchId, String searchWord, String oldCondition, Integer p_id, String searchFirstWord) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (cs_id == null || searchId == null || type == null) {
 			map.put("result", false);
@@ -250,14 +251,40 @@ public class SourceDataController {
 			case "3":
 				conditionEqual.put(ConstantsHBase.QUALIFIER_PUBLIC, String.valueOf(ConstantsHBase.VALUE_PUBLIC_TRUE));
 				break;
+			case "4":
+				if (searchFirstWord == null) {
+					searchFirstWord = new String("");
+				}
+				conditionEqual.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
+				if (!source.getSourceFields().isEmpty()) {
+					conditionLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()), searchFirstWord);
+				}
+				break;
 			}
 			if (searchWord == null) {
 				searchWord = "";
 			}
 			conditionLike.put(String.valueOf(searchId), searchWord);
 
-			phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike, condition,
-					null, null);
+			// phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers,
+			// conditionEqual, conditionLike, condition,
+			// null, null);
+			// phoenixSQL = "SELECT DISTINCT
+			// "+phoenixSQL.substring(phoenixSQL.indexOf("SELECT ID ,"));
+			if (condition == null || condition.trim().isEmpty()) {
+				phoenixSQL = "SELECT DISTINCT " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId))
+						+ " FROM \"" + tableName + "\"  WHERE  "
+						+ PhoenixClient.getSQLConditionEquals(tableName, conditionEqual, "AND") + " AND "
+						+ PhoenixClient.getSQLConditionLikes(tableName, conditionLike, "AND") + " ORDER BY "
+						+ PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId));
+
+			} else {
+				phoenixSQL = "SELECT DISTINCT " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId))
+						+ " FROM \"" + tableName + "\"  WHERE  "
+						+ PhoenixClient.getSQLConditionEquals(tableName, conditionEqual, "AND") + " AND "
+						+ PhoenixClient.getSQLConditionLikes(tableName, conditionLike, "AND") + " AND " + condition
+						+ " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId));
+			}
 			result = PhoenixClient.select(phoenixSQL);
 
 			List<String> csfDatas = new ArrayList<>();
@@ -268,7 +295,7 @@ public class SourceDataController {
 				if (resultMsg.equals("success")) {
 					try {
 						for (List<String> datas : (List<List<String>>) result.get("records").get("data")) {
-							csfDatas.add(datas.get(1));
+							csfDatas.add(datas.get(0));
 						}
 					} catch (Exception e) {
 						continue;

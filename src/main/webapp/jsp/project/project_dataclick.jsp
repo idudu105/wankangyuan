@@ -149,7 +149,7 @@
 						<div class="shaixuanZK">
 							<c:forEach items="${data}" var="dataTemp">
 								<div class="shaixuanZKli">
-									<div class="shaixuanZKliT">${dataTemp.ff_name }</div>
+									<div class="shaixuanZKliT"id="${dataTemp.ff_id}">${dataTemp.ff_name }</div>
 									<div class="shaixuanZKliI active"></div>
 								</div>
 							</c:forEach>

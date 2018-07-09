@@ -209,6 +209,7 @@ public class HBaseDB {
 			Table table = getTable(tableName.toString());
 			table.put(put);
 			table.close();
+			HbaseTest.toJson(put);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

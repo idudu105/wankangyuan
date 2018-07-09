@@ -252,7 +252,10 @@ public class FormatNodeController {
 		httpSession.setAttribute("total", dataCount);
 		httpSession.setAttribute("page", page);
 		httpSession.setAttribute("rows", strip);
+		httpSession.setAttribute("searchId", searchId);
+		httpSession.setAttribute("desc_asc", desc_asc);
 		httpSession.setAttribute("oldCondition", oldCondition);
+		
 
 		switch (type) {
 		case "1":

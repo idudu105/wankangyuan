@@ -24,8 +24,9 @@ import com.dzjin.model.ProjectDataRelation;
  */
 public interface ProjectDataDao {
 	
-//	@Insert("insert ignore into project_data_relation(p_id,source_data_id) values(#{p_id},#{source_data_id})")
-//	public int insert(ProjectDataRelation projectDataRelation);
+	@Insert("insert ignore into project_data_relation(p_id,source_data_id) values(#{p_id},#{source_data_id})")
+	public int insert(ProjectDataRelation projectDataRelation);
+	
 	@Insert("insert into project_data_relation(p_id,source_data_id,cs_id) values(#{p_id},#{source_data_id},#{cs_id})")
 	public int insertid(@Param("p_id")Integer p_id,@Param("source_data_id")String source_data_id,@Param("cs_id")Integer cs_id);
 	

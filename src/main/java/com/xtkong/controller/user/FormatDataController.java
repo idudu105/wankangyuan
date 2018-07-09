@@ -54,9 +54,20 @@ public class FormatDataController {
 	public Map<String, Object> insertFormatData(String cs_id, String ft_id, String sourceDataId, String formatNodeId,
 			String formatFieldDatas) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId,
-				new Gson().fromJson(formatFieldDatas, new TypeToken<Map<String, String>>() {
-				}.getType()))!=null) {
+		
+		Map<String, String> fieldDatas=new Gson().fromJson(formatFieldDatas, new TypeToken<Map<String, String>>() {
+		}.getType());
+		
+		List<FormatField> formatFields=formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id), ConstantsHBase.IS_meta_true);
+		List<List<String>> metaDatas = HBaseFormatDataDao.getFormatDataMetas(cs_id, ft_id, formatNodeId, formatFields);
+		for (List<String> list : metaDatas) {
+			try {
+				fieldDatas.put(list.get(0), list.get(2));
+			} catch (Exception e) {
+				continue;
+			}
+		}
+		if (HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId,fieldDatas)!=null) {
 			map.put("result", true);
 			map.put("message", "新增成功");
 		} else {
@@ -203,7 +214,8 @@ public class FormatDataController {
 	@RequestMapping("/getSourceFieldDatas")
 	@ResponseBody
 	public Map<String, Object> getSourceFieldDatas(HttpServletRequest request, HttpSession httpSession, String type,
-			Integer cs_id, Integer ft_id, String formatNodeId, Integer searchId, String searchWord, String odlCondition) {
+			Integer cs_id, Integer ft_id, String formatNodeId, Integer searchId, String searchWord,
+			String odlCondition) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (type == null || cs_id == null || ft_id == null || formatNodeId == null || searchId == null) {
 			map.put("result", false);
@@ -231,8 +243,22 @@ public class FormatDataController {
 			} else {
 				condition = " \"" + tableName + "\".\"ID\"!='" + formatNodeId + "' AND " + odlCondition;
 			}
-			phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike, condition,
-					null, null);
+//			phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike, condition,
+//					null, null);
+			if (condition == null || condition.trim().isEmpty()) {
+				phoenixSQL = "SELECT DISTINCT " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId))
+						+ " FROM \"" + tableName + "\"  WHERE  "
+						+ PhoenixClient.getSQLConditionEquals(tableName, conditionEqual, "AND") + " AND "
+						+ PhoenixClient.getSQLConditionLikes(tableName, conditionLike, "AND") + " ORDER BY "
+						+ PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId));
+
+			} else {
+				phoenixSQL = "SELECT DISTINCT " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId))
+						+ " FROM \"" + tableName + "\"  WHERE  "
+						+ PhoenixClient.getSQLConditionEquals(tableName, conditionEqual, "AND") + " AND "
+						+ PhoenixClient.getSQLConditionLikes(tableName, conditionLike, "AND") + " AND " + condition
+						+ " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId));
+			}
 			result = PhoenixClient.select(phoenixSQL);
 
 			List<String> ffDatas = new ArrayList<>();
@@ -243,7 +269,7 @@ public class FormatDataController {
 				if (resultMsg.equals("success")) {
 					try {
 						for (List<String> datas : (List<List<String>>) result.get("records").get("data")) {
-							ffDatas.add(datas.get(1));
+							ffDatas.add(datas.get(0));
 						}
 					} catch (Exception e) {
 						continue;
@@ -273,9 +299,9 @@ public class FormatDataController {
 	 */
 	@RequestMapping("/deleteFormatDatas")
 	@ResponseBody
-	public Map<String, Object> deleteFormatDatas(String cs_id, String ft_id, String formatNodeIds) {
+	public Map<String, Object> deleteFormatDatas(String cs_id, String ft_id, String formatDataIds) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (HBaseFormatDataDao.deleteFormatDatas(cs_id, ft_id, formatNodeIds)) {
+		if (HBaseFormatDataDao.deleteFormatDatas(cs_id, ft_id, formatDataIds)) {
 			map.put("result", true);
 			map.put("message", "删除成功");
 		} else {

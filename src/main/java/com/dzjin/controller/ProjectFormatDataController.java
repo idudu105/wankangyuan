@@ -66,9 +66,9 @@ public class ProjectFormatDataController {
 //		Map<String, String> sourceFieldDatas = new HashMap<>();
 //		sourceFieldDatas.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
 		for (int i = 0; i < source_data_id.length; i++) {
-			projectDataService.insert(p_id, source_data_id[i],cs_id);
+			projectDataService.insert(new ProjectDataRelation(p_id, source_data_id[i]));
 		}
-		HBaseSourceDataDao.addProject(String.valueOf(p_id), String.valueOf(cs_id), String.valueOf(uid), sourceDataIds,
+		boolean result=HBaseSourceDataDao.addProject(String.valueOf(p_id), String.valueOf(cs_id), String.valueOf(uid), sourceDataIds,
 				sourceFieldService.getSourceFields(cs_id));
 		/*
 		 * if(num == source_data_id.length){ map.put("result", true);
@@ -76,8 +76,13 @@ public class ProjectFormatDataController {
 		 * map.put("message",
 		 * "共绑定"+num+"条关系，剩余"+(source_data_id.length-num)+"条关系绑定失败！"); }
 		 */
-		map.put("result", true);
-		map.put("message", "关系绑定成功！");
+		if (result) {
+			map.put("result", true);
+			map.put("message", "关系绑定成功！");
+		}else{
+			map.put("result", false);
+			map.put("message", "关系绑定失败！");
+		}
 
 		return map;
 	}
