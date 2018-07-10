@@ -717,7 +717,7 @@ public class UserController {
 					user1 = iterator.next();
 					if(user1.getId() == user.getId()) {
 						iterator.remove();
-						user1 = iterator.next();
+						continue;
 					}
 					for(int i=0;i<myFriendsList.size();i++) {
 						if(user1.getId() == myFriendsList.get(i).getFriendId()) {
