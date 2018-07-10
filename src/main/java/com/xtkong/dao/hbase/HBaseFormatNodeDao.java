@@ -68,14 +68,7 @@ public class HBaseFormatNodeDao {
 		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(ConstantsHBase.QUALIFIER_SOURCEDATAID),
 				Bytes.toBytes(String.valueOf(sourceDataId)));
 		boolean b = db.putRow(tableName, put);
-		// boolean b = db.putCell(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id,
-		// formatNodeId, ConstantsHBase.FAMILY_INFO,
-		// ConstantsHBase.QUALIFIER_NODE, ft_id + "," + nodeName);
-		// HBaseFormatDataDao.updateFormatData(cs_id, ft_id,
-		// sourceDataId,formatNodeId, formatNodeId,mateFieldDatas);
-		if (mateFieldDatas != null && !mateFieldDatas.isEmpty()) {
-			HBaseFormatDataDao.insertFormatDataMeta(cs_id, ft_id, sourceDataId, formatNodeId, mateFieldDatas);
-		}
+		HBaseFormatDataDao.insertFormatDataMeta(cs_id, ft_id, sourceDataId, formatNodeId, mateFieldDatas);
 		if (b) {
 			return formatNodeId;
 		} else {

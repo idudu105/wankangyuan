@@ -333,73 +333,29 @@
 	<script type="text/javascript">
 	
 
-	var cs_id=$("#cs_id").val();
-	var searchId="${searchId}";
-	var searchWord="";
-	var desc_asc="ASC";
-	var oldCondition=$("#oldCondition").html();
-	var page="${page}";
-	var ft_id = $('#ft_id').val();
-	var nodeName = $("#dataNodeTextArea").val();
-	var sourceDataId = $("#sourceDataId").val();
-	var formatNodeId = $("#formatNodeId").val();
-	
+	var cs_id="${cs_id}";//采集源id
+	var searchId="${searchId}";//操作字段id
+	var searchWord="";//搜索词
+	var desc_asc="${desc_asc}";//排序
+	var oldCondition=$("#oldCondition").html();//累加筛选条件
+	var page="${page}";//页码
+	var ft_id = $('#ft_id').val();//类型id
+	var nodeName = $("#dataNodeTextArea").val();//结点名
+	var sourceDataId = $("#sourceDataId").val();//源数据id
+	var formatNodeId = $("#formatNodeId").val();//结点id
+	//更换采集源，刷新页面
+	//选择待操作字段
 	$('.prodaclmRzTt2').click(function(){
 		searchId = $(this).attr('id');
 	})
-	
-		
-
-	function shaixuan(){
-		var afuxuanK=document.querySelectorAll('.BTSXcli2li');
-        var chooseDatasArr = [];
-        for(var i=0;i<afuxuanK.length;i++){
-        	if(afuxuanK[i].querySelectorAll('.BTSXcli2liI')[0].checked){
-        		chooseDatasArr.push(afuxuanK[i].querySelectorAll('.BTSXcli2liT')[0].innerHTML);
-        	}
-        }
-        var chooseDatas=chooseDatasArr.join(",");
-    	window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
-			+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
-			+"&searchId="+searchId+
-    		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition
-    		+"&chooseDatas="+chooseDatas;
-	}
-	var oBTSXcliI1=document.querySelectorAll('.BTSXcliI')[0];
-	var oBTSXcliI2=document.querySelectorAll('.BTSXcliI')[1];
-	oBTSXcliI1.onclick=function(){
-		desc_asc="ASC";
-	    window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
-			+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
-			+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
-	}
-
-	oBTSXcliI2.onclick=function(){
-		desc_asc="DESC";
-	    window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
-			+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
-			+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
-	}
-	function updown(sc){
-		desc_asc=sc;
-	    window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
-			+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
-			+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
-	}
-	
-	function chongzhi(){
-		$('#oldCondition').html('');
-		oldCondition="";
-	}	
-	
-	
+	//过滤
 	$('.BTSXcliGLK').keypress(function(e){
 		var that = $(this);
 		searchWord=that.val();
 		if (e.keyCode == 13) {
 			$.ajax({
 				type:"post",
-				url:"/wankangyuan/formatData/getSourceFieldDatas",
+				url:"/wankangyuan/formatData/getFieldDatas",
 				async:true,
 				data:{
 					type:2,
@@ -426,7 +382,51 @@
 			});
 		}
 	})
+	//排序
+	var oBTSXcliI1=document.querySelectorAll('.BTSXcliI')[0];
+	var oBTSXcliI2=document.querySelectorAll('.BTSXcliI')[1];
+	oBTSXcliI1.onclick=function(){
+		desc_asc="ASC";
+	    window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+			+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+			+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
+	}
+
+	oBTSXcliI2.onclick=function(){
+		desc_asc="DESC";
+	    window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+			+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+			+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
+	}
+	function updown(sc){
+		desc_asc=sc;
+	    window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+			+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+			+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
+	}
+	//重置，清空累加筛选条件
+	function chongzhi(){
+		$('#oldCondition').html('');
+		oldCondition="";
+	}	
+	//数据筛选，支持模糊查询
+	function shaixuan(){
+		var afuxuanK=document.querySelectorAll('.BTSXcli2li');
+        var chooseDatasArr = [];
+        for(var i=0;i<afuxuanK.length;i++){
+        	if(afuxuanK[i].querySelectorAll('.BTSXcli2liI')[0].checked){
+        		chooseDatasArr.push(afuxuanK[i].querySelectorAll('.BTSXcli2liT')[0].innerHTML);
+        	}
+        }
+        var chooseDatas=chooseDatasArr.join(",");
+    	window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+			+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+			+"&searchId="+searchId+ "&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition
+    		+"&chooseDatas="+chooseDatas;
+	}
 	
+	
+	//分页
     $('#box').paging({
     	initPageNo: ${page}, // 初始页码
     	totalPages: Math.ceil(${total}/${rows}), //总页数
@@ -442,7 +442,8 @@
     		var sourceDataId = $("#sourceDataId").val();
     		if(page!=${page}){
     			window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
-    				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId+"&page="+page+"&strip=${rows}"
+    				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+    				+"&page="+page+"&strip=${rows}"
     				+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
     			
     		}
@@ -485,10 +486,8 @@
 	    			success : function(data){
 	    				if(data.result == true){
 	    					alert(data.message);
-	    					window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
-	    	    				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
-	    	    				+"&searchId="+searchId+
-	    	    	    		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
+	    					window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="+cs_id
+	    	    				+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
 	    				}else{
 	    					alert(data.message);
 	    				}
@@ -534,7 +533,7 @@
 	    		});  
 			}
 		});
-    	
+    	//新增数据
     	$("#addFormatDataSubmit").click(function (){
     		var type = $("#type").val();
     		if(type == "add"){
@@ -563,7 +562,9 @@
             			alert(data.message);
             			//刷新页面
             			window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
-            				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+            				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+            				+"&page="+page+"&strip=${rows}"
+            				+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
             		}else{
             			alert(data.message);
             		}
@@ -616,8 +617,9 @@
 	    	        			alert(data.message);
 	    	        			// 刷新页面
 	    	        			window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
-	    	        				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId+"&searchId="+searchId+
-	    	        	    		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
+	    	        				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+	    	        				+"&page="+page+"&strip=${rows}"
+	    	        				+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
 	    	        		}else{
 	    	        			alert(data.message);
 	    	        		}
@@ -631,7 +633,7 @@
     		
     		
     	});
-    	
+    	//移除数据
     	$(".clmRsb_remove").click(function (){
     		var afuxuanK=document.querySelectorAll('.fx4');
             var afuxuan=[];
@@ -663,7 +665,9 @@
             			alert(data.message);
             			//刷新页面
             			window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
-            				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId+"&searchId="+searchId+
+            				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+            				+"&page="+page+"&strip=${rows}"
+            				+"&searchId="+searchId+
             	    		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
             		}else{
             			alert(data.message);
@@ -674,7 +678,7 @@
             	}
             });
     	});
-    	
+    	//移除结点
     	$(".daclLb_del").click(function (){
     		
     		var afuxuanK=document.querySelectorAll('.fuxuanK42');
@@ -710,7 +714,9 @@
         				if(data.result == true){
         					alert(data.message);
         					window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
-                				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId+"&searchId="+searchId+
+                				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+                				+"&page="+page+"&strip=${rows}"
+                				+"&searchId="+searchId+
                 	    		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
         				}else{
         					alert(data.message);
@@ -722,13 +728,14 @@
         		});	
             }
     	});
-    	
+    	//查看结点数据
     	function dataNodeClick(formatNodeId , ft_id){
     		var cs_id = $('#cs_id').val();
     		var sourceDataId = $("#sourceDataId").val();
     		window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
     				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
     	}
+    	//meta数据修改
     	function meta_input_submit(formatDataId){
     		
     		var cs_id = $("#cs_id").val();
@@ -753,7 +760,9 @@
             			alert(data.message);
             			//刷新页面
             			window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
-            				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId+"&searchId="+searchId+
+            				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+            				+"&page="+page+"&strip=${rows}"
+            				+"&searchId="+searchId+
             	    		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
             		}else{
             			alert(data.message);
@@ -764,7 +773,7 @@
             	}
             });
     	}
-    	
+    	//导出结点
     	$(".app_expexport_node").click(function (){
     		var afuxuanK=document.querySelectorAll('.fuxuanK42');
             var afuxuan=[];
@@ -790,10 +799,13 @@
             var cs_id = $('#cs_id').val();
     		var ft_id = ft_ids.join(",");
     		var formatNodeId = formatNodeIds.join(",");
-           	window.location.href="/wankangyuan/export/formatNode?cs_id="+cs_id+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
+           	window.location.href="/wankangyuan/export/formatNode?cs_id="+cs_id+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+			+"&page="+page+"&strip=${rows}"
+           	+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord
+			+"&oldCondition="+oldCondition;;
            	
     	});
-    	
+    	//导出类型
     	$(".app_expexport_type").click(function (){
     		
     		var afuxuanK=document.querySelectorAll('.fuxuanK41');
@@ -818,7 +830,9 @@
             var cs_id = $('#cs_id').val();
     		var sourceDataId = $("#sourceDataId").val();
     		var ft_id = ft_ids.join(",");
-           	window.location.href="/wankangyuan/export/formatType?cs_id="+cs_id+"&sourceDataId="+sourceDataId+"&ft_id="+ft_id;
+           	window.location.href="/wankangyuan/export/formatType?cs_id="+cs_id+"&sourceDataId="+sourceDataId+"&ft_id="+ft_id
+			+"&page="+page+"&strip=${rows}"
+			+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;;
     	
     	});
     	
@@ -856,7 +870,9 @@
 	            	}else{
 	            		
 	            		window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
-	            				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId+"&searchId="+searchId+
+	            				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+	            				+"&page="+page+"&strip=${rows}"
+	            				+"&searchId="+searchId+
 	            	    		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
 	            	}
 	            },

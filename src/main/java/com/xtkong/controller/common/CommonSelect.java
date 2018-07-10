@@ -172,14 +172,14 @@ public class CommonSelect {
 		if (projectid != null && !projectid.isEmpty()) {
 			select += " (";
 			for (String pid : projectid) {
-				List<String> sourceDataIds = projectDataService.select(Integer.valueOf(pid)); // 源数据字段
+				/*List<String> sourceDataIds = projectDataService.select(Integer.valueOf(pid)); // 源数据字段
 				if (sourceDataIds != null && !sourceDataIds.isEmpty()) {
 					select = " (";
 					for (String sourceDataId : sourceDataIds) {
 						select += "ID= '" + sourceDataId + "' OR ";
 					}
 					select = select.substring(0, select.lastIndexOf("OR"));
-				}
+				}*/
 				select += " \"" + ConstantsHBase.QUALIFIER_PROJECT + "\"= '" + pid + "' OR ";
 			}
 			select = select.substring(0, select.lastIndexOf("OR")) + ") AND ";
@@ -204,6 +204,9 @@ public class CommonSelect {
 				.toString();
 	}
 
+	
+	
+//	----------------------------------------------------------------------------------
 	/**
 	 * 
 	 * @param userid

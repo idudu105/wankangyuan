@@ -420,7 +420,7 @@ public class HBaseSourceDataDao {
 				put.addColumn(Bytes.toBytes(family), Bytes.toBytes(ConstantsHBase.QUALIFIER_PUBLIC),
 						Bytes.toBytes(ConstantsHBase.VALUE_PUBLIC_FALSE));
 				put.addColumn(Bytes.toBytes(family), Bytes.toBytes(ConstantsHBase.QUALIFIER_ADD),
-						Bytes.toBytes(ConstantsHBase.VALUE_PUBLIC_TRUE));
+						Bytes.toBytes(ConstantsHBase.VALUE_ADD_TRUE));
 				for (SourceField sourceField : sourceFields) {
 					put.addColumn(Bytes.toBytes(family), Bytes.toBytes(String.valueOf(sourceField.getCsf_id())), result
 							.getValue(Bytes.toBytes(family), Bytes.toBytes(String.valueOf(sourceField.getCsf_id()))));
@@ -681,6 +681,16 @@ public class HBaseSourceDataDao {
 		return true;
 	}
 
+	public static boolean removeSourceDatas(String cs_id, String uid, List<String> sourceDataIds) {
+		HBaseDB db = HBaseDB.getInstance();
+		for (String sourceDataId : sourceDataIds) {
+			if (!db.checkAndDelete(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, sourceDataId,
+					ConstantsHBase.FAMILY_INFO, ConstantsHBase.QUALIFIER_ADD, ConstantsHBase.VALUE_ADD_TRUE)) {
+				return false;
+			}
+		}
+		return true;
+	}
 	/**
 	 * 
 	 * @param cs_id

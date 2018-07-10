@@ -282,22 +282,23 @@
 
 	<script type="text/javascript">
 
-	var cs_id=$('#source_Select').val();
-	var searchId="${searchId}";
-	var searchWord="";
-	var desc_asc="${desc_asc}";
-	var oldCondition=$("#oldCondition").html();
-	var page="${page}";
+	var cs_id=$('#source_Select').val();//采集源id
+	var searchId="${searchId}";//操作字段id
+	var searchWord="";//搜索词
+	var desc_asc="${desc_asc}";//排序
+	var oldCondition=$("#oldCondition").html();//累加筛选条件
+	var page="${page}";//页码
+	//更换采集源，刷新页面
 	$("#source_Select").change(function(){
 		cs_id = $("#source_Select").val();
 			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id;
 	
 	});
-
+	//选择待操作字段
 	$('.PJListli').click(function(){
 		searchId = $(this).attr('id');
 	})
-	
+	//过滤
 	$('.BTSXcliGLK').keypress(function(e){
 		var that = $(this);
 		searchWord=that.val();
@@ -329,18 +330,18 @@
 			});
 		}
 	})
-	
+	//排序
 	function updown(sc){
 		desc_asc=sc;
 	    window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id+"&searchId="+searchId+
 	    		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
 	}
-	
+	//重置，清空累加筛选条件
 	function chongzhi(){
 		$('#oldCondition').html('');
 		oldCondition="";
 	}	
-
+	//数据筛选，支持模糊查询
 	function shaixuan(){
 		var afuxuanK=document.querySelectorAll('.BTSXcli2li');
         var chooseDatasArr = [];
@@ -353,7 +354,7 @@
     	window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id+"&searchId="+
 		searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&chooseDatas="+chooseDatas+"&oldCondition="+oldCondition;
 	}
-	
+	//批量删除
     	$("#deleteSourceDatas").click(function (){    			
     			var afuxuanK=document.querySelectorAll('.fuxuanK2');
                 var afuxuan=[];
@@ -405,7 +406,7 @@
     		window.location.href="/wankangyuan/sourceData/getSourceDataById?cs_id="+cs_id+"&sourceDataId="+sourceDataId+"&type=2";
     	}
     	
-    	
+    	//批量公开 
     	$(".pro_open").click(function (){
     		
     		var afuxuanK=document.querySelectorAll('.fuxuanK2');
@@ -449,7 +450,7 @@
             
     	});
     	
-    	
+    	//批量取消公开
     	$(".pro_canopen").click(function (){
     		
     		var afuxuanK=document.querySelectorAll('.fuxuanK2');
@@ -467,7 +468,7 @@
             }
             
             if(ids == ""){
-            	alert("请勾选待公开的选项！");
+            	alert("请勾选不公开的选项！");
             	return;
             }
             var cs_id = $("#source_Select").val();
@@ -492,12 +493,12 @@
     		});
             
     	});
-    	
+    	//导出模版
     	$("#downloadExcelMode").click(function (){
     		var cs_id = $("#source_Select").val();
     		window.location.href="/wankangyuan/export/sourceDataModel?cs_id="+cs_id;
     	});
-    	
+    	//批量导出
     	$(".pro_export").click(function (){
     		var cs_id = $("#source_Select").val();
     		var afuxuanK=document.querySelectorAll('.fuxuanK2');
@@ -520,7 +521,7 @@
             window.location.href="/wankangyuan/export/sourceData?cs_id="+cs_id+"&sourceDataIds="+sourceDataIds;
             
     	});
-    	
+    	//批量导入
     	function upFile(){
     		var cs_id = $("#source_Select").val();
     		var file = document.getElementById("inportMf").files[0];
@@ -597,6 +598,7 @@
             });
     		
     	});
+    	//分页
     	$('#box').paging({
     		initPageNo: ${page}, // 初始页码
     		totalPages: Math.ceil(${total}/${rows}), //总页数

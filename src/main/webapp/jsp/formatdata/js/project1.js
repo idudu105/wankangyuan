@@ -164,7 +164,10 @@ function project1(){
 
 // 点击表头的排序筛选功能
     var oPJK=document.querySelectorAll('.PJK')[0];// 项目框
-    var oBTSX=document.querySelectorAll('.BTSX')[0];// 项目表头筛选框
+    if(document.querySelectorAll('.BTSX')[0]){
+    	var oBTSX=document.querySelectorAll('.BTSX')[0];// 项目表头筛选框
+    }
+    
     var oPJList=document.querySelectorAll('.PJList')[0];// 项目表头栏
     var aPJListli=oPJList.querySelectorAll('.PJListli');// 项目表头
 
@@ -192,15 +195,18 @@ function project1(){
             }
         })(i)
     }
-}
+    window.onclick=function(){
+        // console.log(1);
+    	
+    	oBTSX.style.display="none";
+    	
+    }
+    document.onclick=function(){
+        // console.log(1);
+    	
+    	oBTSX.style.display="none";
+    }
 
-window.onclick=function(){
-    // console.log(1);
-    oBTSX.style.display="none";
-}
-document.onclick=function(){
-    // console.log(1);
-    oBTSX.style.display="none";
 }
 // 项目切换
 function project2(){

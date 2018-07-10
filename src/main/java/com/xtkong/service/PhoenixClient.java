@@ -140,6 +140,8 @@ public class PhoenixClient {
 		records.put("head", head);
 		records.put("data", datas);
 		map.put("records", records);
+		HbaseTest.println(phoenixSQL);
+
 		try {
 			Connection conn = PhoenixClient.getConnection();
 			if (conn == null) {
@@ -399,7 +401,6 @@ public class PhoenixClient {
 	 * @return 成功信息，数据，分页
 	 */
 	public static Map<String, Map<String, Object>> select(String phoenixSQL) {
-		HbaseTest.println(phoenixSQL);
 		return executeQuery(phoenixSQL);
 	}
 
@@ -823,7 +824,7 @@ public class PhoenixClient {
 //		result = commonSelect(
 //				" SELECT * FROM \"SOURCE_75\"  WHERE \"USER\"= '1'  AND  ( \"INFO\".\"118\"='Ad533' OR \"INFO\".\"118\"='Ad534' OR \"INFO\".\"118\"='Ad535' OR \"INFO\".\"118\"='Ad536' OR \"INFO\".\"118\"='Ad537' OR \"INFO\".\"118\"='Ad538' OR \"INFO\".\"118\"='Ad539' OR \"INFO\".\"118\"='Ad540' OR \"INFO\".\"118\"='Ad541' OR \"INFO\".\"118\"='Ad542' OR \"INFO\".\"118\"='Ad543' OR \"INFO\".\"118\"='Ad544' OR \"INFO\".\"118\"='Ad545' OR \"INFO\".\"118\"='Ad546' OR \"INFO\".\"118\"='Ad547' OR \"INFO\".\"118\"='Ad548' OR \"INFO\".\"118\"='Ad549' )  ",
 //				1, 10);
-		result=select("SELECT DISTINCT \"97\" FROM \"FORMAT_75_56\" WHERE FORMATNODEID='1_75_63_56_1' order by \"97\" ");
+		result=select("SELECT * FROM \"SOURCE_75\"  WHERE   \"INFO\".\"USER\"='45'  ");
 		System.out.println("\n" + new Gson().toJson(result).toString() + "\n");
 		// System.out.println(new Gson().toJson(selectPage(" SELECT * FROM
 		// source_60", currPage, pageSize)).toString());

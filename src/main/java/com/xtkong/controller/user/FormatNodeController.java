@@ -108,18 +108,19 @@ public class FormatNodeController {
 	 * @param type
 	 * @param page
 	 * @param strip
+	 * @param searchWord 
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/getFormatNodeById")
 	public String getFormatNodeById(HttpSession httpSession, String cs_id, String sourceDataId, String ft_id,
 			String formatNodeId, String type, Integer page, Integer strip, Integer searchId, String desc_asc,
-			String chooseDatas, String oldCondition) {
+			String chooseDatas, String oldCondition, String searchWord) {
 		if (page == null) {
 			page = 1;
 		}
 		if (strip == null) {
-			strip = 10;
+			strip = 12;
 		}
 
 		List<FormatType> formatTypeFolders = new ArrayList<>();
@@ -154,93 +155,107 @@ public class FormatNodeController {
 			// httpSession.setAttribute("sourceDataId", sourceDataId);
 
 			String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
-			List<String> mateQualifiers = new ArrayList<>();
 			Map<String, String> conditionEqual = new HashMap<>();
 			Map<String, String> conditionLike = new HashMap<>();
 			String condition = null;
-			for (FormatField formatField : meta) {
-				mateQualifiers.add(String.valueOf(formatField.getFf_id()));
-			}
+
 			conditionEqual.put(ConstantsHBase.QUALIFIER_FORMATNODEID, formatNodeId);
-			condition = " \"" + tableName + "\".\"ID\"='" + formatNodeId + "'";
-			String matephoenixSQL = PhoenixClient.getPhoenixSQL(tableName, mateQualifiers, conditionEqual,
-					conditionLike, condition, 1, 1);
-			Map<String, Map<String, Object>> metaDatas = PhoenixClient.select(matephoenixSQL);
-			// select(tableName, mateQualifiers,
-			// conditionEqual, conditionLike,condition, 1, 1);
+			if (!meta.isEmpty()) {
+				List<String> mateQualifiers = new ArrayList<>();
+				for (FormatField formatField : meta) {
+					mateQualifiers.add(String.valueOf(formatField.getFf_id()));
+				}
+				condition = " \"" + tableName + "\".\"ID\"='" + formatNodeId + "'";
+				String matephoenixSQL = PhoenixClient.getPhoenixSQL(tableName, mateQualifiers, conditionEqual,
+						conditionLike, condition, 1, 1);
+				Map<String, Map<String, Object>> metaDatas = PhoenixClient.select(matephoenixSQL);
+				// select(tableName, mateQualifiers,
+				// conditionEqual, conditionLike,condition, 1, 1);
+				String metaMsg = String.valueOf((metaDatas.get("msg")).get("msg"));
+				List<List<String>> metaDataList = new ArrayList<>();
+				for (int j = 0; j < 6; j++) {
+					metaMsg = String.valueOf((metaDatas.get("msg")).get("msg"));
+					if (metaMsg.equals("success")) {
+						metaDataList = (List<List<String>>) metaDatas.get("records").get("data");
+						break;
+					} else {
+						PhoenixClient.undefined(metaMsg, tableName, mateQualifiers, conditionEqual, conditionLike);
+						metaDatas = PhoenixClient.select(matephoenixSQL);
+					}
+				}
+				int i = 0;
+				for (FormatField formatField : meta) {
+					List<String> formatData = new ArrayList<>();
+					formatData.add(String.valueOf(formatField.getFf_id()));
+					formatData.add(formatField.getFf_name());
+					try {
+						formatData.add(metaDataList.get(0).get(++i));
+					} catch (Exception e) {
+						formatData.add("");
+					}
+					metaDataListTemp.add(formatData);
+				}
+			}
+			if (!data.isEmpty()) {
+				condition = null;
 
-			List<String> dataQualifiers = new ArrayList<>();
-			for (FormatField formatField : data) {
-				dataQualifiers.add(String.valueOf(formatField.getFf_id()));
-			}
-			// 筛选
-			if (searchId != null && chooseDatas != null && !chooseDatas.trim().isEmpty()) {
-				oldCondition = " ( ";
-				for (String csfChooseData : chooseDatas.split(",")) {
-					oldCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId) + "\"='"
-							+ csfChooseData + "' OR ";
+				List<String> dataQualifiers = new ArrayList<>();
+				for (FormatField formatField : data) {
+					dataQualifiers.add(String.valueOf(formatField.getFf_id()));
 				}
-				if (oldCondition.trim().endsWith("OR")) {
-					oldCondition = oldCondition.substring(0, oldCondition.lastIndexOf("OR")) + " ) ";
+				// 筛选
+				if (searchId != null && chooseDatas != null && !chooseDatas.trim().isEmpty()) {
+					if (searchWord == null) {
+						searchWord = "";
+					}
+					conditionLike.put(String.valueOf(searchId), searchWord);
+					oldCondition = " ( ";
+					for (String csfChooseData : chooseDatas.split(",")) {
+						oldCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId) + "\"='"
+								+ csfChooseData + "' OR ";
+					}
+					if (oldCondition.trim().endsWith("OR")) {
+						oldCondition = oldCondition.substring(0, oldCondition.lastIndexOf("OR")) + " ) ";
+					}
 				}
-			}
-			if (oldCondition == null || oldCondition.trim().isEmpty()) {
-				condition = " \"" + tableName + "\".\"ID\"!='" + formatNodeId + "' ";
-			} else {
-				condition = " \"" + tableName + "\".\"ID\"!='" + formatNodeId + "' AND " + oldCondition;
-			}
-			// conditionEqual.remove("ID");
-			String dataphoenixSQL = PhoenixClient.getPhoenixSQL(tableName, dataQualifiers, conditionEqual,
-					conditionLike, condition, null, null);
-			dataCount = PhoenixClient.count(dataphoenixSQL);
-			// 排序
-			condition = null;
-			if (searchId != null) {
-				switch (desc_asc) {
-				case "DESC":
-					condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId)) + " DESC ";
-					break;
-				case "ASC":
-					condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId)) + " ASC ";
-					break;
+				if (oldCondition == null || oldCondition.trim().isEmpty()) {
+					condition = " \"" + tableName + "\".\"ID\"!='" + formatNodeId + "' ";
+				} else {
+					condition = " \"" + tableName + "\".\"ID\"!='" + formatNodeId + "' AND " + oldCondition;
 				}
-			}
-			dataphoenixSQL = PhoenixClient.getPhoenixSQL(dataphoenixSQL, condition, page, strip);
-			Map<String, Map<String, Object>> dataDatas = PhoenixClient.select(dataphoenixSQL);
-			// PhoenixClient.select(tableName, dataQualifiers, conditionEqual,
-			// conditionLike, condition, page, strip);
-			String metaMsg = String.valueOf((metaDatas.get("msg")).get("msg"));
-			String dataMsg = String.valueOf((dataDatas.get("msg")).get("msg"));
-			List<List<String>> metaDataList = new ArrayList<>();
-			for (int j = 0; j < 6; j++) {
-				metaMsg = String.valueOf((metaDatas.get("msg")).get("msg"));
-				dataMsg = String.valueOf((dataDatas.get("msg")).get("msg"));
-				if ((metaMsg.equals("success")) && (dataMsg.equals("success"))) {
-					metaDataList = (List<List<String>>) metaDatas.get("records").get("data");
-					dataDataLists = (List<List<String>>) dataDatas.get("records").get("data");
-					break;
+				// conditionEqual.remove("ID");
+				String dataphoenixSQL = PhoenixClient.getPhoenixSQL(tableName, dataQualifiers, conditionEqual,
+						conditionLike, condition, null, null);
+				dataCount = PhoenixClient.count(dataphoenixSQL);
+				// 排序
+				condition = null;
+				if (searchId != null) {
+					switch (desc_asc) {
+					case "DESC":
+						condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId))
+								+ " DESC ";
+						break;
+					case "ASC":
+						condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId)) + " ASC ";
+						break;
+					}
 				}
-				if (!(metaMsg.equals("success"))) {
-					PhoenixClient.undefined(metaMsg, tableName, mateQualifiers, conditionEqual, conditionLike);
-					metaDatas = PhoenixClient.select(matephoenixSQL);
+				dataphoenixSQL = PhoenixClient.getPhoenixSQL(dataphoenixSQL, condition, page, strip);
+				Map<String, Map<String, Object>> dataDatas = PhoenixClient.select(dataphoenixSQL);
+				// PhoenixClient.select(tableName, dataQualifiers,
+				// conditionEqual,
+				// conditionLike, condition, page, strip);
+				String dataMsg = String.valueOf((dataDatas.get("msg")).get("msg"));
+				for (int j = 0; j < 6; j++) {
+					dataMsg = String.valueOf((dataDatas.get("msg")).get("msg"));
+					if (dataMsg.equals("success")) {
+						dataDataLists = (List<List<String>>) dataDatas.get("records").get("data");
+						break;
+					} else {
+						PhoenixClient.undefined(dataMsg, tableName, dataQualifiers, conditionEqual, conditionLike);
+						dataDatas = PhoenixClient.select(dataphoenixSQL);
+					}
 				}
-				if (!(dataMsg.equals("success"))) {
-					PhoenixClient.undefined(dataMsg, tableName, dataQualifiers, conditionEqual, conditionLike);
-					dataDatas = PhoenixClient.select(dataphoenixSQL);
-				}
-			}
-
-			int i = 0;
-			for (FormatField formatField : meta) {
-				List<String> formatData = new ArrayList<>();
-				formatData.add(String.valueOf(formatField.getFf_id()));
-				formatData.add(formatField.getFf_name());
-				try {
-					formatData.add(metaDataList.get(0).get(++i));
-				} catch (Exception e) {
-					formatData.add("");
-				}
-				metaDataListTemp.add(formatData);
 			}
 		}
 		httpSession.setAttribute("formatTypeFolders", formatTypeFolders);
@@ -255,7 +270,7 @@ public class FormatNodeController {
 		httpSession.setAttribute("searchId", searchId);
 		httpSession.setAttribute("desc_asc", desc_asc);
 		httpSession.setAttribute("oldCondition", oldCondition);
-		
+		httpSession.setAttribute("cs_id", cs_id);
 
 		switch (type) {
 		case "1":

@@ -54,11 +54,12 @@ public class FormatDataController {
 	public Map<String, Object> insertFormatData(String cs_id, String ft_id, String sourceDataId, String formatNodeId,
 			String formatFieldDatas) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		
-		Map<String, String> fieldDatas=new Gson().fromJson(formatFieldDatas, new TypeToken<Map<String, String>>() {
+
+		Map<String, String> fieldDatas = new Gson().fromJson(formatFieldDatas, new TypeToken<Map<String, String>>() {
 		}.getType());
-		
-		List<FormatField> formatFields=formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id), ConstantsHBase.IS_meta_true);
+
+		List<FormatField> formatFields = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
+				ConstantsHBase.IS_meta_true);
 		List<List<String>> metaDatas = HBaseFormatDataDao.getFormatDataMetas(cs_id, ft_id, formatNodeId, formatFields);
 		for (List<String> list : metaDatas) {
 			try {
@@ -67,7 +68,7 @@ public class FormatDataController {
 				continue;
 			}
 		}
-		if (HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId,fieldDatas)!=null) {
+		if (HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId, fieldDatas) != null) {
 			map.put("result", true);
 			map.put("message", "新增成功");
 		} else {
@@ -110,6 +111,59 @@ public class FormatDataController {
 			map.put("result", false);
 			map.put("message", "更新失败");
 		}
+		return map;
+	}
+
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/getFormatDataById")
+	@ResponseBody
+	public Map<String, Object> getFormatDataById(Integer cs_id, Integer ft_id, String formatNodeId,
+			String formatDataId) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		List<FormatField> data = formatFieldService.getFormatFieldsIs_meta(Integer.valueOf(ft_id),
+				ConstantsHBase.IS_meta_false);
+		String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+		List<String> qualifiers = new ArrayList<>();
+		Map<String, String> conditionEqual = new HashMap<>();
+		Map<String, String> conditionLike = new HashMap<>();
+		String condition = null;
+
+		conditionEqual.put(ConstantsHBase.QUALIFIER_FORMATNODEID, formatNodeId);
+		for (FormatField formatField : data) {
+			qualifiers.add(String.valueOf(formatField.getFf_id()));
+		}
+		condition = "ID='" + formatDataId + "'";
+
+		String phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike, condition,
+				null, null);
+		Map<String, Map<String, Object>> dataDatas = PhoenixClient.select(phoenixSQL);
+		List<List<String>> dataDataListTemp = new ArrayList<>();
+		List<List<String>> dataDataLists = new ArrayList<>();
+		String dataMsg = String.valueOf((dataDatas.get("msg")).get("msg"));
+		for (int j = 0; j < 6; j++) {
+			dataMsg = String.valueOf((dataDatas.get("msg")).get("msg"));
+			if (dataMsg.equals("success")) {
+				dataDataLists = (List<List<String>>) dataDatas.get("records").get("data");
+				break;
+			} else {
+				PhoenixClient.undefined(dataMsg, tableName, qualifiers, conditionEqual, conditionLike);
+				dataDatas = PhoenixClient.select(phoenixSQL);
+			}
+		}
+		int i = 0;
+		for (FormatField formatField : data) {
+			List<String> formatData = new ArrayList<>();
+			formatData.add(String.valueOf(formatField.getFf_id()));
+			formatData.add(formatField.getFf_name());
+			try {
+				formatData.add(dataDataLists.get(0).get(++i));
+			} catch (Exception e) {
+				formatData.add("");
+			}
+			dataDataListTemp.add(formatData);
+		}
+		map.put("dataData", dataDataListTemp);
 		return map;
 	}
 
@@ -211,9 +265,9 @@ public class FormatDataController {
 	}
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/getSourceFieldDatas")
+	@RequestMapping("/getFieldDatas")
 	@ResponseBody
-	public Map<String, Object> getSourceFieldDatas(HttpServletRequest request, HttpSession httpSession, String type,
+	public Map<String, Object> getFieldDatas(HttpServletRequest request, HttpSession httpSession, String type,
 			Integer cs_id, Integer ft_id, String formatNodeId, Integer searchId, String searchWord,
 			String odlCondition) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -243,8 +297,9 @@ public class FormatDataController {
 			} else {
 				condition = " \"" + tableName + "\".\"ID\"!='" + formatNodeId + "' AND " + odlCondition;
 			}
-//			phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike, condition,
-//					null, null);
+			// phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers,
+			// conditionEqual, conditionLike, condition,
+			// null, null);
 			if (condition == null || condition.trim().isEmpty()) {
 				phoenixSQL = "SELECT DISTINCT " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId))
 						+ " FROM \"" + tableName + "\"  WHERE  "

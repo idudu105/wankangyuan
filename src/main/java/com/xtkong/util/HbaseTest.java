@@ -64,23 +64,23 @@ public class HbaseTest {
 	private static PrintWriter pWriter;
 	
 	
-//	static{
-//		try {
-////			pWriter = new PrintWriter(("记录.txt"));
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-////	}
+	static{
+		try {
+			pWriter = new PrintWriter(("E:/Users/admin/Desktop/CC/新建文件夹/记录.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public static void toJson(Object object) {
-//		pWriter.println(object);
-//		pWriter.println(new Gson().toJson(object).toString());
-//		pWriter.println();
-//		pWriter.flush();
+		pWriter.println(object);
+		pWriter.println(new Gson().toJson(object).toString());
+		pWriter.println();
+		pWriter.flush();
 	}
 	public static void println(Object object) {
-//		pWriter.println(object);
-//		pWriter.flush();
+		pWriter.println(object);
+		pWriter.flush();
 	}
 	
 	@Before

@@ -149,7 +149,7 @@
 						<div class="shaixuanZK">
 							<c:forEach items="${data}" var="dataTemp">
 								<div class="shaixuanZKli">
-									<div class="shaixuanZKliT"id="${dataTemp.ff_id}">${dataTemp.ff_name }</div>
+									<div class="shaixuanZKliT">${dataTemp.ff_name }</div>
 									<div class="shaixuanZKliI active"></div>
 								</div>
 							</c:forEach>
@@ -161,7 +161,7 @@
 									<label for="check4_0"></label>
 								</div>
 								<c:forEach items="${data}" var="dataTemp">
-									<div class="prodaclmRzTt2">${dataTemp.ff_name }</div>
+									<div class="prodaclmRzTt2" id="${dataTemp.ff_id}">${dataTemp.ff_name }</div>
 								</c:forEach>
 							</div>
 							<div class="prodaclmRzB">
@@ -182,10 +182,35 @@
 										</c:forEach>
 									</div>
 								</c:forEach>
+								<div class="pageK" id="box"></div>							
+							</div>
+						</div>
+						
+						<div class="BTSX2">
+							<div class="BTSXc">
+								<div class="BTSXcli">
+									<div class="BTSXcliT">排序：</div>
+							<img src="/wankangyuan/static/img/sort_up.png" alt=""
+								class="BTSXcliI"  /> <img
+								src="/wankangyuan/static/img/sort_down.png" alt=""
+								class="BTSXcliI"  />
+									<input type="text" class="BTSXcliIpd" style="display: none;" />
+								</div>
+								<div class="BTSXcli">
+									<div class="BTSXcliT">过滤：</div>
+									<input type="text" class="BTSXcliGLK" />
+								</div>
+								<div class="BTSXcli">
+									<div class="BTSXcliT">值筛选：</div>
+								</div>
+								<div class="BTSXcli2"></div>
+								<div class="BTSXcli3">
+									<div class="BTSXcli3BT BTSXcli3BTent" onclick="shaixuan()">筛选</div>
+									<div class="BTSXcli3BT BTSXcli3BTent" onclick="chongzhi()">重置</div>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="pageK" id="box"></div>
 				</div>
 			</div>
             
@@ -202,12 +227,109 @@
                 </a>
                 <div class="botT">Copyright @2018天津万康源科技有限公司</div>
             </div>
+			<div id="oldCondition" style="display: none;">${oldCondition}</div>
         </div>
     </div>
     
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
     <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
     <script type="text/javascript">
+    var cs_id= $('#cs_id').val();//采集源id
+	var searchId="${searchId}";//操作字段id
+	var searchWord="";//搜索词
+	var desc_asc="${desc_asc}";//排序
+	var oldCondition=$("#oldCondition").html();//累加筛选条件
+	var page="${page}";//页码
+	var ft_id = $('#ft_id').val();//类型id
+	var nodeName = $("#dataNodeTextArea").val();//结点名
+	var sourceDataId = $("#sourceDataId").val();//源数据id
+	var formatNodeId = $("#formatNodeId").val();//结点id
+	var p_id = ${project.id};//项目id
+	var searchFirstWord= $("#formatNodeId").val();
+	//选择待操作字段
+	$('.prodaclmRzTt2').click(function(){
+		searchId = $(this).attr('id');
+	})
+	//过滤
+	$('.BTSXcliGLK').keypress(function(e){
+		var that = $(this);
+		searchWord=that.val();
+		if (e.keyCode == 13) {
+			$.ajax({
+				type:"post",
+				url:"/wankangyuan/formatData/getFieldDatas",
+				async:true,
+				data:{
+					type:4,
+					cs_id:$("#cs_id").val(),
+					ft_id:ft_id,
+					formatNodeId:formatNodeId,
+					searchId:searchId,
+					searchWord:searchWord,
+            		oldCondition:oldCondition,
+            		p_id:p_id
+				},
+				success:function(res){
+					if (res.result) {
+						var htmlStr = '';
+						var data = res.ffDatas;
+						for (var i in data) {
+							htmlStr += '<div class="BTSXcli2li">'
+									+		'<input type="checkbox" class="BTSXcli2liI" />'
+									+		'<div class="BTSXcli2liT">' + data[i] + '</div>'
+									+	'</div>';
+						}
+						$('.BTSXcli2').html(htmlStr);
+					}
+				}
+			});
+		}
+	})
+	//排序
+	var oBTSXcliI1=document.querySelectorAll('.BTSXcliI')[0];
+	var oBTSXcliI2=document.querySelectorAll('.BTSXcliI')[1];
+	oBTSXcliI1.onclick=function(){
+		desc_asc="ASC";
+	    window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+			+cs_id+"&sourceDataId="+sourceDataId+"&type=4&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+			+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
+	}
+
+	oBTSXcliI2.onclick=function(){
+		desc_asc="DESC";
+	    window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+			+cs_id+"&sourceDataId="+sourceDataId+"&type=4&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+			+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
+	}
+	function updown(sc){
+		desc_asc=sc;
+	    window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+			+cs_id+"&sourceDataId="+sourceDataId+"&type=4&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+			+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
+	}
+	//重置，清空累加筛选条件
+	function chongzhi(){
+		$('#oldCondition').html('');
+		oldCondition="";
+	}	
+	//数据筛选，支持模糊查询
+	function shaixuan(){
+		var afuxuanK=document.querySelectorAll('.BTSXcli2li');
+        var chooseDatasArr = [];
+        for(var i=0;i<afuxuanK.length;i++){
+        	if(afuxuanK[i].querySelectorAll('.BTSXcli2liI')[0].checked){
+        		chooseDatasArr.push(afuxuanK[i].querySelectorAll('.BTSXcli2liT')[0].innerHTML);
+        	}
+        }
+        var chooseDatas=chooseDatasArr.join(",");
+    	window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
+			+cs_id+"&sourceDataId="+sourceDataId+"&type=4&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+			+"&page="+page+"&strip=${rows}"
+			+"&searchId="+searchId+ "&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition
+    		+"&chooseDatas="+chooseDatas;
+	}
+	
+	
     $('#box').paging({
     	initPageNo: ${page}, // 初始页码
     	totalPages: Math.ceil(${total}/${rows}), //总页数
@@ -223,7 +345,10 @@
     		var sourceDataId = $("#sourceDataId").val();
     		if(page!=${page}){
     			window.location.href="/wankangyuan/formatNode/getFormatNodeById?type=4&cs_id="
-					+cs_id+"&sourceDataId="+sourceDataId+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId+"&page="+page+"&strip=${rows}";
+					+cs_id+"&sourceDataId="+sourceDataId+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+					+"&page="+page+"&strip=${rows}"
+					+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord
+    				+"&oldCondition="+oldCondition;
     		}
     	}
     });
@@ -233,7 +358,74 @@
 			window.location.href="/wankangyuan/formatNode/getFormatNodeById?type=4&cs_id="
 					+cs_id+"&sourceDataId="+sourceDataId+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
 		}
-	
+		var aprodaclmRzTt2=document.querySelectorAll('.prodaclmRzTt2');
+        var oPJK=document.querySelectorAll('.PJK')[0];//项目框
+        var oBTSX=document.querySelectorAll('.BTSX2')[0];//项目表头筛选框
+
+        //点击设置排序筛选框
+        for(var i=0;i<aprodaclmRzTt2.length;i++){
+            (function(j){
+                aprodaclmRzTt2[j].onclick=function(){
+                    // if(BTSXpd==j){
+                    //     oBTSX.style.display="none";
+                    //     BTSXpd=-1;
+                    // }else{
+                        oBTSX.style.display="block";
+                        // BTSXpd=j;
+                    // }
+                    var BTSXleft=aprodaclmRzTt2[j].offsetLeft;
+                    // oBTSX.name=aprodaclmRzTt2[j].innerHTML;
+                    if(document.querySelectorAll('.BTSXpd')[0]){
+                        var oBTSXpd=document.querySelectorAll('.BTSXpd')[0];//项目表头筛选框判断
+                        oBTSXpd.value=aprodaclmRzTt2[j].title;
+                        console.log(oBTSXpd.value);
+                    }
+                    
+                    
+                    console.log(BTSXleft);
+                    if(BTSXleft>1118){
+                        BTSXleft=1118;
+                    }
+                    oBTSX.style.left=BTSXleft-130+'px'; 
+                    event.stopPropagation();
+                }
+            })(i)
+        }
+        window.onclick=function(){
+            console.log(1);
+            oBTSX.style.display="none";
+        }
+        oBTSX.onclick=function(){
+            event.stopPropagation();
+        }
+        var aBTSXcliI=oBTSX.querySelectorAll('.BTSXcliI');//筛选框排序箭头
+        var oBTSXcliIpd=document.querySelectorAll('.BTSXcliIpd')[0];//筛选框选择判断
+        for(var i=0;i<aBTSXcliI.length;i++){
+            (function(index){
+                aBTSXcliI[index].onclick=function(){
+                    for(var j=0;j<aBTSXcliI.length;j++){
+                        aBTSXcliI[j].style.color="#666";
+                    }
+                    aBTSXcliI[index].style.color="#5ca0e5";
+                    oBTSXcliIpd.value=index+1;
+                    console.log(oBTSXcliIpd.value);
+                }
+            })(i)
+        }
+
+        var oBTSXcli3BTres=document.querySelectorAll('.BTSXcli3BTres')[0];//重置按钮
+        var aBTSXcli2liC=document.querySelectorAll('.BTSXcli2liC');//复选框
+        var oBTSXcliGLK=document.querySelectorAll('.BTSXcliGLK')[0];//过滤框
+
+        oBTSXcli3BTres.onclick=function(){
+            for(var j=0;j<aBTSXcliI.length;j++){
+                aBTSXcliI[j].style.color="#666";
+            }
+            oBTSXcliGLK.value="";
+            for(var i=0;i<aBTSXcli2liC.length;i++){
+                aBTSXcli2liC[i].checked=false;
+            }
+        }
 	</script>
 	
 </body>

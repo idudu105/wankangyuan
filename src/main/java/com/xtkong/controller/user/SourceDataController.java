@@ -27,6 +27,7 @@ import com.xtkong.service.FormatTypeService;
 import com.xtkong.service.PhoenixClient;
 import com.xtkong.service.SourceFieldService;
 import com.xtkong.service.SourceService;
+import com.xtkong.service.UserDataService;
 import com.xtkong.util.ConstantsHBase;
 
 @Controller
@@ -43,6 +44,8 @@ public class SourceDataController {
 	FormatFieldService formatFieldService;
 	@Autowired
 	ProjectService projectService;
+	@Autowired
+	UserDataService userDataService;
 
 	/**
 	 * 首次进入 格式数据页面
@@ -256,8 +259,9 @@ public class SourceDataController {
 					searchFirstWord = new String("");
 				}
 				conditionEqual.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
-				if (!source.getSourceFields().isEmpty()) {
-					conditionLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()), searchFirstWord);
+				List<SourceField> csfs = sourceFieldService.getSourceFields(cs_id);
+				if (csfs!=null&&!csfs.isEmpty()) {
+					conditionLike.put(String.valueOf(csfs.get(0).getCsf_id()), searchFirstWord);
 				}
 				break;
 			}
@@ -455,12 +459,20 @@ public class SourceDataController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		User user = (User) request.getAttribute("user");
 		Integer uid = user.getId();
+//		List<String> sourceDataIdList = new ArrayList<>();
+		for (String sourceDataId : sourceDataIds.split(",")) {
+//			if (!sourceDataId.startsWith(uid+"_")) {
+				userDataService.delete(uid, sourceDataId, Integer.valueOf(cs_id));
+//				sourceDataIdList.add(sourceDataId);
+//			}
+		}
+
 		if (HBaseSourceDataDao.removeSourceDatas(cs_id, String.valueOf(uid), sourceDataIds)) {
 			map.put("result", true);
-			map.put("message", "删除成功");
+			map.put("message", "移出成功");
 		} else {
 			map.put("result", false);
-			map.put("message", "删除失败");
+			map.put("message", "移出失败");
 		}
 		return map;
 	}
@@ -498,8 +510,18 @@ public class SourceDataController {
 	public Map<String, Object> addMySource(HttpServletRequest request, String cs_id, String sourceDataIds) {
 		User user = (User) request.getAttribute("user");
 		Integer uid = user.getId();
+
+		List<String> old = userDataService.select(uid, Integer.valueOf(cs_id));
+		List<String> sourceDataIdList = new ArrayList<>();
+		for (String sourceDataId : sourceDataIds.split(",")) {
+			if ((!old.contains(sourceDataId)) && (!sourceDataId.startsWith(uid + "_" + cs_id + "_"))) {
+				sourceDataIdList.add(sourceDataId);
+				userDataService.insert(uid, sourceDataId, Integer.valueOf(cs_id));
+			}
+		}
+
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (HBaseSourceDataDao.addMySource(cs_id, String.valueOf(uid), sourceDataIds,
+		if (HBaseSourceDataDao.addMySource(cs_id, String.valueOf(uid), sourceDataIdList,
 				sourceFieldService.getSourceFields(Integer.valueOf(cs_id)))) {
 			map.put("result", true);
 			map.put("message", "添加成功");

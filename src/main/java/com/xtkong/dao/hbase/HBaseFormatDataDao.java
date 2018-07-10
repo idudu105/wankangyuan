@@ -95,9 +95,11 @@ public class HBaseFormatDataDao {
 		String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
 		String rowKey = formatNodeId;
 		Put put = new Put(Bytes.toBytes(rowKey));
-		for (Entry<String, String> formatFieldData : formatFieldDatas.entrySet()) {
-			put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(formatFieldData.getKey()),
-					Bytes.toBytes(formatFieldData.getValue()));
+		if (formatFieldDatas != null) {
+			for (Entry<String, String> formatFieldData : formatFieldDatas.entrySet()) {
+				put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(formatFieldData.getKey()),
+						Bytes.toBytes(formatFieldData.getValue()));
+			}
 		}
 		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(ConstantsHBase.QUALIFIER_SOURCEDATAID),
 				Bytes.toBytes(sourceDataId));

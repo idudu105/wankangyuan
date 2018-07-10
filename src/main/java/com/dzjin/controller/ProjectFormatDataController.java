@@ -61,14 +61,22 @@ public class ProjectFormatDataController {
 		Integer uid = user.getId();
 		Map<String, Object> map = new HashMap<>();
 
-		String[] source_data_id = sourceDataIds.split(",");
+		/*String[] source_data_id = sourceDataIds.split(",");
+		for (int i = 0; i < source_data_id.length; i++) {			
+			projectDataService.insert(new ProjectDataRelation(p_id, source_data_id[i]));
+		}*/
 
 //		Map<String, String> sourceFieldDatas = new HashMap<>();
 //		sourceFieldDatas.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
-		for (int i = 0; i < source_data_id.length; i++) {
-			projectDataService.insert(new ProjectDataRelation(p_id, source_data_id[i]));
-		}
-		boolean result=HBaseSourceDataDao.addProject(String.valueOf(p_id), String.valueOf(cs_id), String.valueOf(uid), sourceDataIds,
+		List<String> old = projectDataService.select(p_id);
+		List<String> sourceDataIdList = new ArrayList<>();
+		for (String sourceDataId : sourceDataIds.split(",")) {
+			if (!old.contains(sourceDataId)) {
+				sourceDataIdList.add(sourceDataId);
+				projectDataService.insert(new ProjectDataRelation(p_id, sourceDataId));
+			}
+		}		
+		boolean result=HBaseSourceDataDao.addProject(String.valueOf(p_id), String.valueOf(cs_id), String.valueOf(uid), sourceDataIdList,
 				sourceFieldService.getSourceFields(cs_id));
 		/*
 		 * if(num == source_data_id.length){ map.put("result", true);

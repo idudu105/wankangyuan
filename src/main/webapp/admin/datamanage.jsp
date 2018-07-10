@@ -93,24 +93,19 @@
 				<!-- start: Header Menu -->
 				<div class="nav-no-collapse header-nav">
 					<ul class="nav pull-right">
-                    <!-- start: User Dropdown -->
-                    <li class="dropdown">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="http://themifycloud.com/demos/templates/janux/table.html#">
-                            <i class="halflings-icon white user"></i>用户名
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="dropdown-menu-title">
-                                <span>账户设置</span>
-                            </li>
-                            <li>
-                                <a href="/wankangyuan/admin/logout">
-                                    <i class="halflings-icon off"></i>退出系统
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <!-- end: User Dropdown -->
+						<!-- start: User Dropdown -->
+						<li class="dropdown"><a class="btn dropdown-toggle"
+							data-toggle="dropdown"
+							href="http://themifycloud.com/demos/templates/janux/table.html#">
+								<i class="halflings-icon white user"></i>用户名 <span class="caret"></span>
+						</a>
+							<ul class="dropdown-menu">
+								<li class="dropdown-menu-title"><span>账户设置</span></li>
+								<li><a href="/wankangyuan/admin/logout"> <i
+										class="halflings-icon off"></i>退出系统
+								</a></li>
+							</ul></li>
+						<!-- end: User Dropdown -->
 					</ul>
 				</div>
 				<!-- end: Header Menu -->
