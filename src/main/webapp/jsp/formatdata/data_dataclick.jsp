@@ -201,8 +201,10 @@
 												</div>
 											</c:if>
 											<c:if test="${status.index != 0 }">
-												<div class="prodaclmRzTt3 prodaclmRzTtsj3">${dataDataTempTemp}</div>
-											</c:if>
+												<%-- <div class="prodaclmRzTt3 prodaclmRzTtsj3">${dataDataTempTemp}</div>
+											 --%>
+											  <div class="PJliCli2"><span>${dataDataTempTemp}</span></div>
+											 </c:if>
 										</c:forEach>
 									</div>
 								</c:forEach>

@@ -133,7 +133,7 @@
 						</div>
 					</div>
 					<div class="pro_menu pro_rem" id="removeSourceDatas">移出</div>
-					<div class="pro_menu pro_export">导出</div>
+					<!-- <div class="pro_menu pro_export">导出</div> -->
 					<!-- 展示数据源列表 ， 需要为select 的option 的onclick设置事件监听-->
 					<select id="source_Select" class="pro_menusel">
 						<c:forEach items="${sources}" var="sourcel">
@@ -191,16 +191,16 @@
 										</div>
 									</c:if>
 
-									<c:if test="${status.index==1}">
+									<c:if test="${status.index!=0}">
 										<div class="PJliCli2">
 											<a href="#" onclick="datainHref('${sourceData[0]}')"> <span>${sourceDataField}</span>
 											</a>
 										</div>
 									</c:if>
 
-									<c:if test="${status.index!=0 && status.index!=1}">
+									<%-- <c:if test="${status.index!=0 && status.index!=1}">
 										<div class="PJliCli2">${sourceDataField}</div>
-									</c:if>
+									</c:if> --%>
 
 								</c:forEach>
 							</div>
@@ -434,7 +434,7 @@
 	        });
 		});
 	  	
-	  	//导出源数据
+	  /* 	//导出源数据
 		$(".pro_export").click(function (){
     		var cs_id = $("#source_Select").val();
     		var afuxuanK=document.querySelectorAll('.fuxuanK2');
@@ -453,7 +453,7 @@
             	return;
             }
             window.location.href="/wankangyuan/export/sourceData?cs_id="+cs_id+"&sourceDataIds="+sourceDataIds;    
-    	});
+    	}); */
 	  	
 	  	
     	//进入到详情页

@@ -125,12 +125,12 @@
 								class="shaixuanBTi" />
 						</div>
 					</div>
-					<div class="pro_menu pro_addK">
+					<!-- <div class="pro_menu pro_addK">
 						<div class="pro_addk">
 							<div class="pro_addT">添加至项目</div>
 							<div class="pro_addI"></div>
 						</div>
-					</div>
+					</div> -->
 					<div class="pro_menu pro_open">公开</div>
 					<div class="pro_menu pro_canopen">取消公开</div>
 					<div class="pro_menu pro_inport">导入</div>
@@ -218,7 +218,7 @@
 											<label for="check${sourceDataField}"></label>
 										</div>
 									</c:if>
-									<c:if test="${status.index==1}">
+									<%-- <c:if test="${status.index==1}">
 										<div class="PJliCli2">
 											<a href="#" onclick="datainHref('${sourceData[0]}')"> <span>${sourceDataField}</span>
 											</a>
@@ -226,6 +226,12 @@
 									</c:if>
 									<c:if test="${status.index!=0 && status.index!=1}">
 										<div class="PJliCli2">${sourceDataField}</div>
+									</c:if> --%>
+									<c:if test="${status.index!=0}">
+										<div class="PJliCli2">
+											<a href="#" onclick="datainHref('${sourceData[0]}')"> <span>${sourceDataField}</span>
+											</a>
+										</div>
 									</c:if>
 								</c:forEach>
 							</div>
@@ -549,7 +555,7 @@
 	            }
 	        });
     	}
-    	
+    	/* 
     	//将格式数据添加到项目
     	$(".pro_addli").click(function (){
     		
@@ -597,7 +603,7 @@
             	
             });
     		
-    	});
+    	}); */
     	//分页
     	$('#box').paging({
     		initPageNo: ${page}, // 初始页码

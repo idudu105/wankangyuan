@@ -200,16 +200,16 @@
 										</div>
 									</c:if>
 
-									<c:if test="${status.index==1}">
+									<c:if test="${status.index!=0}">
 										<div class="PJliCli2">
 											<a href="#" onclick="datainHref('${sourceData[0]}')"> <span>${sourceDataField}</span>
 											</a>
 										</div>
 									</c:if>
-
+<%-- 
 									<c:if test="${status.index!=0 && status.index!=1}">
 										<div class="PJliCli2">${sourceDataField}</div>
-									</c:if>
+									</c:if> --%>
 
 								</c:forEach>
 							</div>

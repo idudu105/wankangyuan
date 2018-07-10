@@ -21,8 +21,8 @@ public class UserDataService {
 		return userDataDao.select(uid);
 	}
 	
-	public List<String> select(Integer uid, Integer cs_id){
-		return userDataDao.select(uid, cs_id);	
+	public List<String> selects(Integer uid, Integer cs_id){
+		return userDataDao.selects(uid, cs_id);	
 	}
 
 	public int delete( Integer uid,String dataid, Integer cs_id){

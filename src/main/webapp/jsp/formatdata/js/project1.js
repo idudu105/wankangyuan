@@ -177,13 +177,13 @@ function project1(){
     for(var i=0;i<aPJListli.length;i++){
         (function(j){
             aPJListli[j].onclick=function(){
-                if(BTSXpd==j){
-                    oBTSX.style.display="none";
-                    BTSXpd=-1;
-                }else{
+//                if(BTSXpd==j){
+//                    oBTSX.style.display="none";
+//                    BTSXpd=-1;
+//                }else{
                     oBTSX.style.display="block";
-                    BTSXpd=j;
-                }
+//                    BTSXpd=j;
+//                }
                 var BTSXleft=aPJListli[j].offsetLeft;
                 oBTSX.name=aPJListli[j].innerHTML;
                 console.log(oBTSX.name);
@@ -192,8 +192,12 @@ function project1(){
                     BTSXleft=1118;
                 }
                 oBTSX.style.left=BTSXleft-20+'px'; 
+                event.stopPropagation();
             }
         })(i)
+    }
+    oBTSX.onclick=function(){
+    	event.stopPropagation();
     }
     window.onclick=function(){
         // console.log(1);

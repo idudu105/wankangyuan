@@ -40,6 +40,13 @@ public class TableDescribeInHBase {
 	@Autowired
 	private UserService userService;
 
+	/**
+	 * 获取项目id
+	 * 
+	 * @param projectName
+	 *            项目名
+	 * @return
+	 */
 	@RequestMapping("/getProjectId")
 	@ResponseBody
 	public Map<String, Object> getProjectId(String projectName) {
@@ -49,6 +56,13 @@ public class TableDescribeInHBase {
 		return map;
 	}
 
+	/**
+	 * 获取用户id
+	 * 
+	 * @param userName
+	 *            用户名
+	 * @return
+	 */
 	@RequestMapping("/getUserId")
 	@ResponseBody
 	public Map<String, Object> getUserId(String userName) {
@@ -59,6 +73,12 @@ public class TableDescribeInHBase {
 		return map;
 	}
 
+	/**
+	 * 获取表信息
+	 * 
+	 * @param jsonStr
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getTableDescribeInHBase")
 	@ResponseBody
@@ -106,6 +126,13 @@ public class TableDescribeInHBase {
 		return map;
 	}
 
+	/**
+	 * 获取采集源
+	 * 
+	 * @param cs_name
+	 * @param columns
+	 * @return
+	 */
 	private Map<String, Object> getSourceDescribe(String cs_name, List<String> columns) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Integer cs_id = sourceService.getSourceId(cs_name);
@@ -128,6 +155,14 @@ public class TableDescribeInHBase {
 
 	}
 
+	/**
+	 * 获取类型
+	 * 
+	 * @param cs_name
+	 * @param ft_name
+	 * @param columns
+	 * @return
+	 */
 	private Map<String, Object> getTypeDescribe(String cs_name, String ft_name, List<String> columns) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Integer cs_id = sourceService.getSourceId(cs_name);

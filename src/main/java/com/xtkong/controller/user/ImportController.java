@@ -1,7 +1,5 @@
 package com.xtkong.controller.user;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -48,9 +46,16 @@ public class ImportController {
 	@Autowired
 	FormatFieldService formatFieldService;
 
+	/**
+	 * 导入采集源数据
+	 * 
+	 * @param file
+	 * @param cs_id
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value = "/sourceData")
 	@ResponseBody
-
 	public Map<String, Object> sourceData(@RequestParam(value = "file", required = false) MultipartFile file,
 			String cs_id, HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -146,6 +151,16 @@ public class ImportController {
 		return map;
 	}
 
+	/**
+	 * 导入格式数据
+	 * 
+	 * @param file
+	 * @param cs_id
+	 * @param ft_id
+	 * @param sourceDataId
+	 * @param formatNodeId
+	 * @return
+	 */
 	@RequestMapping(value = "/formatData")
 	@ResponseBody
 	public Map<String, Object> formatData(@RequestParam(value = "file", required = false) MultipartFile file,
@@ -218,6 +233,12 @@ public class ImportController {
 		return map;
 	}
 
+	/**
+	 * 数据类型转换
+	 * 
+	 * @param cell
+	 * @return
+	 */
 	@SuppressWarnings("deprecation")
 	private String getStringCellValue(HSSFCell cell) {
 		String cellValue = "";
@@ -257,33 +278,6 @@ public class ImportController {
 		}
 
 		return cellValue;
-	}
-
-	public static void main(String[] args) {
-		File f = new File("E:\\Users\\admin\\Desktop\\formatDataModel.xls");
-		ImportController importController = new ImportController();
-		try {
-			FileInputStream is = new FileInputStream(f);
-			HSSFWorkbook wbs = new HSSFWorkbook(is);
-			HSSFSheet childSheet = wbs.getSheetAt(0);
-			// System.out.println(childSheet.getPhysicalNumberOfRows());
-			System.out.println("有行数" + childSheet.getLastRowNum());
-			for (int j = 0; j < childSheet.getPhysicalNumberOfRows(); j++) {
-				HSSFRow row = childSheet.getRow(j);
-				// System.out.println(row.getPhysicalNumberOfCells());
-				// System.out.println("有列数" + row.getLastCellNum());
-				if (null != row) {
-					for (int k = 0; k < row.getLastCellNum(); k++) {
-						HSSFCell cell = row.getCell(k);
-						System.out.print(cell.toString() + ":" + importController.getStringCellValue(cell) + "  ");
-					}
-				}
-				System.out.println();
-			}
-			wbs.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 }
