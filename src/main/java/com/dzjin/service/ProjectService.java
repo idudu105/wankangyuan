@@ -104,6 +104,11 @@ public class ProjectService {
 		return result;
 	}
 	
+	/**
+	 * 选择我的项目
+	 * @param user_id
+	 * @return
+	 */
 	public List<Project> selectMyProject(Integer user_id){
 		return projectDao.selectMyProject(user_id);
 
@@ -126,15 +131,16 @@ public class ProjectService {
 			
 			//判断项目用户是否已经绑定关系
 			if(null == projectDao.getProjectUserByPidAndUid(projectUser)){
-				//未绑定关系，添加用户为项目成员
-				projectUser.setLinkman_id(user_id);
-				ProjectCustomRole projectCustomRole = 
-						projectCustomRoleService.getProjectCustomRoleByRolename("项目成员", Integer.valueOf(ids[i]));
-				if(projectCustomRole != null){
-					projectUser.setRole_id(projectCustomRole.getId());//项目成员角色
-				}else{
-					return false;
-				}
+//				//未绑定关系，添加用户为项目成员
+//				projectUser.setLinkman_id(user_id);
+//				ProjectCustomRole projectCustomRole = 
+//						projectCustomRoleService.getProjectCustomRoleByRolename("项目成员", Integer.valueOf(ids[i]));
+//				if(projectCustomRole != null){
+//					projectUser.setRole_id(projectCustomRole.getId());//项目成员角色
+//				}else{
+//					return false;
+//				}
+				projectUser.setRole_id(0);//也就是没有角色，不是项目成员
 				projectUser.setBind_date_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 				if(projectUserService.insertProjectUser(projectUser) != 1){
 					result = false;

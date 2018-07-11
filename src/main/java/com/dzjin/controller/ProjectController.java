@@ -170,7 +170,7 @@ public class ProjectController {
 		User user = (User)request.getAttribute("user");
 		ProjectUser projectUser = projectUserService.getProjectUser(project.getId(), user.getId());
 		List<ProjectAuthority> projectAuthorities = null;
-		if(projectUser == null){
+		if(projectUser == null || projectUser.getRole_id() == 0){
 			//用户记录为空，说明是是访问者，需要查询当前项目自定义的访问者权限
 			ProjectCustomRole projectCustomRole = 
 					projectCustomRoleService.getProjectCustomRoleByRolename("访问者" , project.getId());

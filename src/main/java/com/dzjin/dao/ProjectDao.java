@@ -102,7 +102,7 @@ public interface ProjectDao {
 	@Select("select count(*) from project_app_task where project_id=#{id}")
 	public int countProjectAppTask(@Param("id")Integer id);
 	
-	@Select("select count(*) from project_user where project_id=#{id}")
+	@Select("select count(*) from project_user where project_id=#{id} and role_id!=0")
 	public int countProjectUser(@Param("id")Integer id);
 	
 	

@@ -781,8 +781,10 @@
             	+'<div class="col-sm-12">'
             	+'<div class="input-group">';
             for(var i=0 ; i<roles.length ; i++){
-            	content += '&nbsp;&nbsp;&nbsp;&nbsp;<input name="roleRadio" class="roleRadio" type="radio" style="zoom:150%" value='
-            		+roles[i].id+'>&nbsp;&nbsp;<label>'+roles[i].value+'</label><br>' 
+            	if(roles[i].value != "创建者"){
+            		content += '&nbsp;&nbsp;&nbsp;&nbsp;<input name="roleRadio" class="roleRadio" type="radio" style="zoom:150%" value='
+                		+roles[i].id+'>&nbsp;&nbsp;<label>'+roles[i].value+'</label><br>' 
+            	}	
             }
             content += '</div></div></div>';                 
             
