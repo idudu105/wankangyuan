@@ -99,7 +99,7 @@ public class CommonSelect {
 				if (select.containsKey("condition")) {
 					condition = select.get("condition");
 				}
-			}else{
+			} else {
 				msg.put("msg", "查询语句缺失！");
 				return new Gson().toJson(msg).toString();
 			}
@@ -113,7 +113,7 @@ public class CommonSelect {
 				conditionLike = (Map<String, String>) gsonMap.get("conditionLike");
 			}
 			if (gsonMap.containsKey("page")) {
-				Map<String, Double>page=(Map<String, Double>) gsonMap.get("page");
+				Map<String, Double> page = (Map<String, Double>) gsonMap.get("page");
 				if (page.containsKey("currPage")) {
 					currPage = page.get("currPage").intValue();
 				}
@@ -154,8 +154,8 @@ public class CommonSelect {
 	@ResponseBody
 	public String commonSelect(List<String> userid, List<String> projectid, String select, Boolean isAddWhere,
 			String selectContdation, Integer currPage, Integer pageSize) {
-		if(isAddWhere==null){
-			isAddWhere=false;
+		if (isAddWhere == null) {
+			isAddWhere = false;
 		}
 		if (isAddWhere) {
 			select += " WHERE ";
@@ -172,14 +172,14 @@ public class CommonSelect {
 		if (projectid != null && !projectid.isEmpty()) {
 			select += " (";
 			for (String pid : projectid) {
-				/*List<String> sourceDataIds = projectDataService.select(Integer.valueOf(pid)); // 源数据字段
-				if (sourceDataIds != null && !sourceDataIds.isEmpty()) {
-					select = " (";
-					for (String sourceDataId : sourceDataIds) {
-						select += "ID= '" + sourceDataId + "' OR ";
-					}
-					select = select.substring(0, select.lastIndexOf("OR"));
-				}*/
+				/*
+				 * List<String> sourceDataIds =
+				 * projectDataService.select(Integer.valueOf(pid)); // 源数据字段 if
+				 * (sourceDataIds != null && !sourceDataIds.isEmpty()) { select
+				 * = " ("; for (String sourceDataId : sourceDataIds) { select +=
+				 * "ID= '" + sourceDataId + "' OR "; } select =
+				 * select.substring(0, select.lastIndexOf("OR")); }
+				 */
 				select += " \"" + ConstantsHBase.QUALIFIER_PROJECT + "\"= '" + pid + "' OR ";
 			}
 			select = select.substring(0, select.lastIndexOf("OR")) + ") AND ";
@@ -199,14 +199,10 @@ public class CommonSelect {
 		if (pageSize == null) {
 			pageSize = 0;
 		}
-		return new Gson()
-				.toJson(PhoenixClient.commonSelect(select, currPage, pageSize))
-				.toString();
+		return new Gson().toJson(PhoenixClient.commonSelect(select, currPage, pageSize)).toString();
 	}
 
-	
-	
-//	----------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------
 	/**
 	 * 
 	 * @param userid
@@ -264,7 +260,7 @@ public class CommonSelect {
 			select = select.substring(0, select.lastIndexOf("AND"));
 		}
 		if (currPage == null) {
-			currPage =0;
+			currPage = 0;
 		}
 		if (pageSize == null) {
 			pageSize = 0;
@@ -339,6 +335,13 @@ public class CommonSelect {
 
 	}
 
+	/**
+	 * 
+	 * @param tableName
+	 * @param scan
+	 * @param qualifiers
+	 * @return
+	 */
 	@RequestMapping("/commonHBaseScan")
 	@ResponseBody
 	public List<List<String>> commonHBaseScan(String tableName, Scan scan, List<String> qualifiers) {

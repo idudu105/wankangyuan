@@ -114,6 +114,15 @@ public class FormatDataController {
 		return map;
 	}
 
+	/**
+	 * 获取某条格式结果的数据
+	 * 
+	 * @param cs_id
+	 * @param ft_id
+	 * @param formatNodeId
+	 * @param formatDataId
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/getFormatDataById")
 	@ResponseBody
@@ -264,6 +273,21 @@ public class FormatDataController {
 		return map;
 	}
 
+	/**
+	 * 获取某字段的数据
+	 * 
+	 * @param request
+	 * @param httpSession
+	 * @param type
+	 * @param cs_id
+	 * @param ft_id
+	 * @param formatNodeId
+	 * @param searchId
+	 *            字段id
+	 * @param searchWord
+	 * @param odlCondition
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/getFieldDatas")
 	@ResponseBody

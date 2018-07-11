@@ -31,11 +31,21 @@ public class DataManageController {
 	 * 说明：首次进入格式数据管理页面，默认显示第一个数据源所有内容； 返回：所有采集源基础信息，第一个采集源字段、采集源所有格式类型
 	 * 
 	 * @param httpSession
+	 * @param cs_id
+	 *            源
+	 * @param csf_ids
+	 *            源字段
+	 * @param ft_id
+	 *            类型
+	 * @param ft_ids
+	 * @param ff_id
+	 *            类型字段
+	 * @param ff_ids
 	 * @return 采集源基础信息、采集源字段、采集源所有格式类型
 	 */
 	@RequestMapping(value = "/formatdata")
-	public String formatData(HttpSession httpSession, Integer cs_id, String csf_ids, Integer ft_id,
-			String ft_ids, Integer ff_id, String ff_ids) {
+	public String formatData(HttpSession httpSession, Integer cs_id, String csf_ids, Integer ft_id, String ft_ids,
+			Integer ff_id, String ff_ids) {
 		List<Source> sources = sourceService.getSourcesForAdmin();
 		Source source = new Source();
 		int i = 0;

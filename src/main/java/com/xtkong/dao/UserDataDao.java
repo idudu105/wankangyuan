@@ -18,7 +18,7 @@ public interface UserDataDao {
 	
 
 	@Select("select dataid from user_data_relation where uid=#{uid} and cs_id=#{cs_id}")
-	public List<String> select(@Param("uid") Integer uid,@Param("cs_id") Integer cs_id);
+	public List<String> selects(@Param("uid") Integer uid,@Param("cs_id") Integer cs_id);
 	
 
 	@Delete("delete from user_data_relation where  uid=#{uid} and  dataid=#{dataid} and cs_id=#{cs_id}")

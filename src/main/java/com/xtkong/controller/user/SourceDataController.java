@@ -63,6 +63,7 @@ public class SourceDataController {
 	}
 
 	/**
+	 * 获取源数据
 	 * 
 	 * @param request
 	 * @param httpSession
@@ -117,7 +118,20 @@ public class SourceDataController {
 			// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
 			switch (type) {
 			case "1":
-				conditionEqual.put(ConstantsHBase.QUALIFIER_USER, String.valueOf(user.getId()));
+				// conditionEqual.put(ConstantsHBase.QUALIFIER_CREATE,
+				// String.valueOf(user.getId()));
+				condition = PhoenixClient.getSQLFamilyColumn(ConstantsHBase.QUALIFIER_CREATE) + "='"
+						+ String.valueOf(user.getId()) + "' ";
+				List<String> sourceDataIds = userDataService.selects(user.getId(), cs_id);
+				if (!sourceDataIds.isEmpty()) {
+					condition += " OR (";
+					for (String sourceDataId : sourceDataIds) {
+						condition += "ID='" + sourceDataId + "' OR ";
+					}
+					if (condition.trim().endsWith("OR")) {
+						condition = condition.substring(0, condition.lastIndexOf("OR")) + " ) ";
+					}
+				}
 				break;
 			case "2":
 				SourceField publicStatus = new SourceField();
@@ -156,8 +170,15 @@ public class SourceDataController {
 				}
 			}
 			// if (csfCondition != null&& !csfCondition.trim().isEmpty()) {
-			condition = oldCondition;
+			// condition = oldCondition;
 			// }
+			if (oldCondition != null && !oldCondition.trim().isEmpty()) {
+				if (type.equals("1")) {
+					condition = condition + " AND " + oldCondition;
+				} else {
+					condition = oldCondition;
+				}
+			}
 
 			String phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers, conditionEqual, conditionLike,
 					condition, null, null);
@@ -221,6 +242,20 @@ public class SourceDataController {
 
 	}
 
+	/**
+	 * 获取某字段数据
+	 * 
+	 * @param request
+	 * @param type
+	 * @param cs_id
+	 * @param searchId
+	 *            字段id
+	 * @param searchWord
+	 * @param oldCondition
+	 * @param p_id
+	 * @param searchFirstWord
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/getSourceFieldDatas")
 	@ResponseBody
@@ -260,7 +295,7 @@ public class SourceDataController {
 				}
 				conditionEqual.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
 				List<SourceField> csfs = sourceFieldService.getSourceFields(cs_id);
-				if (csfs!=null&&!csfs.isEmpty()) {
+				if (csfs != null && !csfs.isEmpty()) {
 					conditionLike.put(String.valueOf(csfs.get(0).getCsf_id()), searchFirstWord);
 				}
 				break;
@@ -453,30 +488,13 @@ public class SourceDataController {
 		return map;
 	}
 
-	@RequestMapping("/removeSourceDatas")
-	@ResponseBody
-	public Map<String, Object> removeSourceDatas(HttpServletRequest request, String cs_id, String sourceDataIds) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		User user = (User) request.getAttribute("user");
-		Integer uid = user.getId();
-//		List<String> sourceDataIdList = new ArrayList<>();
-		for (String sourceDataId : sourceDataIds.split(",")) {
-//			if (!sourceDataId.startsWith(uid+"_")) {
-				userDataService.delete(uid, sourceDataId, Integer.valueOf(cs_id));
-//				sourceDataIdList.add(sourceDataId);
-//			}
-		}
-
-		if (HBaseSourceDataDao.removeSourceDatas(cs_id, String.valueOf(uid), sourceDataIds)) {
-			map.put("result", true);
-			map.put("message", "移出成功");
-		} else {
-			map.put("result", false);
-			map.put("message", "移出失败");
-		}
-		return map;
-	}
-
+	/**
+	 * 公开
+	 * 
+	 * @param cs_id
+	 * @param sourceDataIds
+	 * @return
+	 */
 	@RequestMapping("/open")
 	@ResponseBody
 	public Map<String, Object> open(String cs_id, String sourceDataIds) {
@@ -491,6 +509,13 @@ public class SourceDataController {
 		return map;
 	}
 
+	/**
+	 * 取消公开
+	 * 
+	 * @param cs_id
+	 * @param sourceDataIds
+	 * @return
+	 */
 	@RequestMapping("/notOpen")
 	@ResponseBody
 	public Map<String, Object> notOpen(String cs_id, String sourceDataIds) {
@@ -505,24 +530,37 @@ public class SourceDataController {
 		return map;
 	}
 
+	/**
+	 * 添加到“我的”
+	 * 
+	 * @param request
+	 * @param cs_id
+	 * @param sourceDataIds
+	 * @return
+	 */
 	@RequestMapping("/addMySource")
 	@ResponseBody
 	public Map<String, Object> addMySource(HttpServletRequest request, String cs_id, String sourceDataIds) {
 		User user = (User) request.getAttribute("user");
 		Integer uid = user.getId();
 
-		List<String> old = userDataService.select(uid, Integer.valueOf(cs_id));
-		List<String> sourceDataIdList = new ArrayList<>();
+		List<String> old = userDataService.selects(uid, Integer.valueOf(cs_id));
+		boolean b = true;
+		// List<String> sourceDataIdList = new ArrayList<>();
 		for (String sourceDataId : sourceDataIds.split(",")) {
 			if ((!old.contains(sourceDataId)) && (!sourceDataId.startsWith(uid + "_" + cs_id + "_"))) {
-				sourceDataIdList.add(sourceDataId);
-				userDataService.insert(uid, sourceDataId, Integer.valueOf(cs_id));
+				// sourceDataIdList.add(sourceDataId);
+				if (userDataService.insert(uid, sourceDataId, Integer.valueOf(cs_id)) != 1) {
+					b = false;
+				}
 			}
 		}
 
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (HBaseSourceDataDao.addMySource(cs_id, String.valueOf(uid), sourceDataIdList,
-				sourceFieldService.getSourceFields(Integer.valueOf(cs_id)))) {
+		// if (HBaseSourceDataDao.addMySource(cs_id, String.valueOf(uid),
+		// sourceDataIdList,
+		// sourceFieldService.getSourceFields(Integer.valueOf(cs_id)))) {
+		if (b) {
 			map.put("result", true);
 			map.put("message", "添加成功");
 		} else {
@@ -532,4 +570,40 @@ public class SourceDataController {
 		return map;
 	}
 
+	/**
+	 * 移出
+	 * 
+	 * @param request
+	 * @param cs_id
+	 * @param sourceDataIds
+	 * @return
+	 */
+	@RequestMapping("/removeSourceDatas")
+	@ResponseBody
+	public Map<String, Object> removeSourceDatas(HttpServletRequest request, String cs_id, String sourceDataIds) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		User user = (User) request.getAttribute("user");
+		Integer uid = user.getId();
+		boolean b = true;
+		// List<String> sourceDataIdList = new ArrayList<>();
+		for (String sourceDataId : sourceDataIds.split(",")) {
+			// if (!sourceDataId.startsWith(uid+"_")) {
+			if (userDataService.delete(uid, sourceDataId, Integer.valueOf(cs_id)) != 1) {
+				b = false;
+			}
+			// sourceDataIdList.add(sourceDataId);
+			// }
+		}
+
+		// if (HBaseSourceDataDao.removeSourceDatas(cs_id, String.valueOf(uid),
+		// sourceDataIds)) {
+		if (b) {
+			map.put("result", true);
+			map.put("message", "移出成功");
+		} else {
+			map.put("result", false);
+			map.put("message", "移出失败");
+		}
+		return map;
+	}
 }
