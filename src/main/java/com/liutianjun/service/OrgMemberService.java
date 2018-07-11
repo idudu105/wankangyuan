@@ -22,7 +22,7 @@ public interface OrgMemberService {
 	List<Integer> findMyGroupIds();
 	
 	//查找组内成员
-	List<OrgMember> findOrgMembersByName(String username);
+	List<OrgMember> findGroupMembersByName(String username, Integer groupId);
 	
 	
 }

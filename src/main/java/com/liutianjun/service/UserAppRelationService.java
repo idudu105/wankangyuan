@@ -31,6 +31,9 @@ public interface UserAppRelationService {
 	
 	//查找用户的应用集合
 	Map<String,Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId,String orderByClause, String field, String[] option);
+	
+	//查找我的应用
+	List<UserAppRelation> findMine(Integer userId);
 
 	//查找字段列表
 	List<UserAppRelation> findFileList(String field, String content, Integer userId);

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liutianjun.pojo.Application;
 import com.liutianjun.pojo.User;
 import com.liutianjun.service.ApplicationService;
+import com.liutianjun.service.UserAppRelationService;
 import com.liutianjun.service.UserService;
 
 /**
@@ -42,6 +43,9 @@ public class ApplicationController {
 	
 	@Autowired
 	private ProjectService projectService;
+	
+	@Autowired
+	private UserAppRelationService userAppRelationService;
 	
 	@Autowired
 	private UserService userService;
@@ -290,8 +294,10 @@ public class ApplicationController {
 			@PathVariable String index,
 			RedirectAttributes attributes) {
 		String username = (String)SecurityUtils.getSubject().getPrincipal();
+		User user = userService.selectByUsername(username);
 		record.setCreator(username);
 		int i = applicationService.insert(record);
+		userAppRelationService.addToMineByIds(user.getId(), new Integer[] {record.getId()});
 		String msg = "创建失败";
 		if(i>0) {
 			msg = "创建成功";

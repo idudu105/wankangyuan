@@ -55,20 +55,22 @@ public class OrgMemberServiceImpl implements OrgMemberService {
 		for (Integer userid : userIds) {
 			if(0 == findOrgMember(groupId, userid)) {
 				user = userDao.selectByPrimaryKey(userid);
-				orgMember = new OrgMember();
-				orgMember.setCreateTime(new Date());
-				orgMember.setEmail(user.getEmail());
-				orgMember.setGroupId(groupId);
-				orgMember.setHeadimg(user.getHeadimg());
-				orgMember.setUserId(userid);
-				orgMember.setUsername(user.getUsername());
-				orgMember.setOrgId(organization.getRootId());
-				if(user.getUsername().equals(organization.getCreator())) {
-					orgMember.setOrgRole("管理员");
-				}else {
-					orgMember.setOrgRole("成员");
+				if(null != user) {
+					orgMember = new OrgMember();
+					orgMember.setCreateTime(new Date());
+					orgMember.setEmail(user.getEmail());
+					orgMember.setGroupId(groupId);
+					orgMember.setHeadimg(user.getHeadimg());
+					orgMember.setUserId(userid);
+					orgMember.setUsername(user.getUsername());
+					orgMember.setOrgId(organization.getRootId());
+					if(user.getUsername().equals(organization.getCreator())) {
+						orgMember.setOrgRole("管理员");
+					}else {
+						orgMember.setOrgRole("成员");
+					}
+					i += orgMemberDao.insertSelective(orgMember);
 				}
-				i += orgMemberDao.insertSelective(orgMember);
 			}
 		}
 		return i;
@@ -128,14 +130,15 @@ public class OrgMemberServiceImpl implements OrgMemberService {
 	 * @return
 	 */
 	@Override
-	public List<OrgMember> findOrgMembersByName(String username) {
+	public List<OrgMember> findGroupMembersByName(String username,Integer groupId) {
 		OrgMemberQuery example = new OrgMemberQuery();
 		example.setDistinct(true);
 		example.setFields("user_id,username,headimg,email");
 		Criteria criteria = example.createCriteria();
 		criteria.andUsernameLike("%"+username+"%");
-		List<Integer> MyGroupIds = findMyGroupIds();
-		criteria.andOrgIdIn(MyGroupIds);
+		criteria.andGroupIdEqualTo(groupId);
+		//List<Integer> MyGroupIds = findMyGroupIds();
+		//criteria.andOrgIdIn(MyGroupIds);
 		return orgMemberDao.selectByExample(example);
 	}
 

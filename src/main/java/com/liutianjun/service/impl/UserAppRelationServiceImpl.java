@@ -62,6 +62,48 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 		}
 		return i;
 	}
+	
+	/**
+	 * 更新应用到我的
+	 * @Title: copyApplicationtoMine 
+	 * @param userId
+	 * @param userAppRelation 
+	 * void
+	 */
+	private void copyApplicationtoMine(Integer userId) {
+		List<UserAppRelation> list = findMine(userId);
+		if(list != null && list.size() > 0) {
+			for (UserAppRelation userAppRelation : list) {
+				Application application = applicationService.selectByPrimaryKey(userAppRelation.getAppId());
+				if(application != null) {
+					userAppRelation.setAppName(application.getAppName());
+					userAppRelation.setAppType(application.getAppType());
+					userAppRelation.setIsAsync(application.getIsAsync());
+					userAppRelation.setKeywords(application.getKeywords());
+					userAppRelation.setAppOverview(application.getAppIntro());
+					userAppRelationDao.updateByPrimaryKey(userAppRelation);
+				}else {
+					userAppRelationDao.deleteByPrimaryKey(userAppRelation.getAppId());
+				}
+			}
+		}
+		
+	}
+	
+	/**
+	 * 查找我的应用
+	 * <p>Title: findMine</p>  
+	 * <p>Description: </p>  
+	 * @param userId
+	 * @return
+	 */
+	@Override
+	public List<UserAppRelation> findMine(Integer userId) {
+		UserAppRelationQuery example = new UserAppRelationQuery();
+		Criteria criteria = example.createCriteria();
+		criteria.andUserIdEqualTo(userId);
+		return userAppRelationDao.selectByExample(example);
+	}
 
 	/**
 	 * 根据主键删除
@@ -123,6 +165,7 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	 */
 	@Override
 	public Map<String,Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId, String orderByClause,String field, String[] option) {
+		copyApplicationtoMine(userId);
 		Map<String,Object> map = new HashMap<>();
 		//根据用户名查询关系表
 	    UserAppRelationQuery example = new UserAppRelationQuery();

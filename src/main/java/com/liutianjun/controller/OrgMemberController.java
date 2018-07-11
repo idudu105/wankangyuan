@@ -87,16 +87,16 @@ public class OrgMemberController {
 	
 	/**
 	 * 查询组内成员
-	 * @Title: findOrgMembersByname 
+	 * @Title: findGroupMembersByname 
 	 * @param username
 	 * @return 
 	 * String
 	 */
-	@RequestMapping(value="/findOrgMembersByname",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/findGroupMembersByname",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
 	@ResponseBody
-	public String findOrgMembersByname(String username) {
+	public String findGroupMembersByname(String username, Integer groupId) {
 		try {
-			List<OrgMember> list = orgMemberService.findOrgMembersByName(username);
+			List<OrgMember> list = orgMemberService.findGroupMembersByName(username, groupId);
 			ObjectMapper objectMapper = new ObjectMapper();
 			String jsonOrgUserList = objectMapper.writeValueAsString(list);
 			
@@ -126,7 +126,7 @@ public class OrgMemberController {
 			resultMap.put("message", "您不是组织结构创建者，不能移除成员!");
 			return resultMap;
 		}
-		if(1 == orgMemberService.removeOrgMembers(orgIds)) {
+		if(orgIds.length == orgMemberService.removeOrgMembers(orgIds)) {
 	    	resultMap.put("status", 200);
 			resultMap.put("message", "移除成功!");
 	    }

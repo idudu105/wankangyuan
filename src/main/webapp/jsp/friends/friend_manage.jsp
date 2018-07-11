@@ -267,7 +267,7 @@
                         <div class="search_3 active">
                             <div class="searchC">
                                 <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="searchCi" data-bind="click:getOrgers" />
-                                <input id="orgMemberSearch" type="text" class="searchCt"  placeholder="组内成员" data-bind="event: { keyup: searchOrgers}" />
+                                <input id="groupMemberSearch" type="text" class="searchCt"  placeholder="组内成员" data-bind="event: { keyup: searchOrgers}" />
                             </div>
                         </div>
                         <div class="friendMTrb friend_qunfa">群发消息</div>
@@ -702,8 +702,11 @@ function ViewModel() {
     }
     
     self.getOrgers = function() {
+    	if(null == $('#groupId').val() || '' == $('#groupId').val()) {
+            return layer.msg("请选择组!",function(){}),!1;
+        }
     	self.orgers.removeAll();
-    	$.get("/wankangyuan/orgMember/findOrgMembersByname",{username:$("#orgMemberSearch").val()},function(data){
+    	$.get("/wankangyuan/orgMember/findGroupMembersByname",{username:$("#groupMemberSearch").val(),groupId:$('#groupId').val()},function(data){
     		var list = JSON.parse(data);
             for (var i in list){
                 //根据好友列表判断状态
@@ -776,9 +779,9 @@ function ViewModel() {
     //self.showOrgMember();
     
     //发送好友申请
-    self.sendFriendRequest = function(user) {
+    self.sendFriendRequest = function(org) {
     	var load = layer.load();
-        $.post("/wankangyuan/message/sendFriendRequest",{userId:user.id} ,function(result){
+        $.post("/wankangyuan/message/sendFriendRequest",{userId:org.userId} ,function(result){
             layer.close(load);
             if(result && result.status!= 200){
                 return layer.msg(result.message,function(){}),!1;
