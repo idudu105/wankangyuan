@@ -435,7 +435,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="prof_lbRmULt">
 			                            
 						        <div class="allK">
-			                        
+			                        <div class="quanxuanK">
+			                            <input type="checkbox" class="input_check" id="check0">
+			                            <label for="check0"></label>
+			                        </div>
 			                        <div class="allT">选择</div>
 			                    </div>
 
@@ -502,6 +505,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script type="text/javascript" src="/wankangyuan/static/js/jquery.min.js"></script>
     <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
     <!-- <script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script> -->
+    <script type="text/javascript" src="/wankangyuan/jsp/project/js/project1.js"></script>
     <script type="text/javascript">
     
 	   /* $('#box').paging({
@@ -687,6 +691,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            							'</div>');
        						}
        					}
+       					project0();
        				}else{
        					layer.msg(data.message);
        				}
@@ -695,9 +700,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        				layer.msg("联网失败");
        			}
        		});  
-     			
-      			
-      			
+	
       		}
        	});
    	   
@@ -752,6 +755,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         							'</div>');
     						}
     					}
+       					project0();
     				}else{
     					layer.msg(data.message);
     				}

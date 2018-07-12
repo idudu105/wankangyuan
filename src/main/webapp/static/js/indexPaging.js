@@ -33,13 +33,13 @@
             }
             that.options.jump ? jumpDom = '<input type="text" placeholder="1" class="jump-text" id="jumpText"><button type="button" class="jump-button" id="jumpBtn">跳转</button>' : jumpDom = '';
             content = 
-            	'<button class="pageLR" id="prePage"><img src="./static/img/pageL.png" class="pageLRi" alt="" /></button>' +
+            	'<button class="pageLR" id="prePage"><img src="/wankangyuan/static/img/pageL.png" class="pageLRi" alt="" /></button>' +
             	//'<div  style="height: 40px; float: left; overflow: hidden;width:' + wrapLength + 'px">' +
                 '<ul id="pageSelect" style="transition:all; display:inline;' + that.options.slideSpeed + 'ms">' +
                 ulDom +
                 '</ul>' +
                 //'</div>' +
-                '<button class="pageLR" id="nextPage"><img src="./static/img/pageR.png" class="pageLRi" alt="" /></button>' ;
+                '<button class="pageLR" id="nextPage"><img src="/wankangyuan/static/img/pageR.png" class="pageLRi" alt="" /></button>' ;
             that.el.html(content);
         },
         bindEvents: function() {

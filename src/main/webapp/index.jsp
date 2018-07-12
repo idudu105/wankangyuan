@@ -20,6 +20,71 @@
 <script type="text/javascript">
     window.onload=function(){
         index();
+        
+        
+        var osearchI2=document.querySelectorAll('.searchI2')[0];//外置搜索按钮
+        var osearchK=document.querySelectorAll('.searchK')[0];//搜索框
+        var osearchI=osearchK.querySelectorAll('.searchI')[0];//搜索按钮
+        var osearchX=osearchK.querySelectorAll('.searchX')[0];//搜索关闭
+        var osearchP=osearchK.querySelectorAll('.searchP')[0];//搜索输入栏
+
+    	//搜索框
+        osearchI2.onclick=function(){
+            osearchK.style.display="block";
+            osearchI2.style.display="none";
+            //osearchP.value="";
+        }
+        osearchX.onclick=function(){
+            osearchK.style.display="none";
+            osearchI2.style.display="block";
+        }
+        
+      	//banner
+        var oxiangmuRMzKC=document.querySelectorAll('.xiangmuRMzKC')[0];//长图
+        var axiangmuRMi=oxiangmuRMzKC.querySelectorAll('.xiangmuRMi');//图
+        if(axiangmuRMi.length > 0){
+        	var DWlength=oxiangmuRMzKC.querySelectorAll('.xiangmuRMz')[0].offsetWidth;//取单位图宽度
+
+            var oxiangmuRMB=document.querySelectorAll('.xiangmuRMB')[0];//按钮框
+            var axiangmuRMb=oxiangmuRMB.querySelectorAll('.xiangmuRMb');//按钮
+
+            var oxiangmuRMt=document.querySelectorAll('.xiangmuRMt')[0];//按钮框上面的文字
+            var xiangmuRMtCC=axiangmuRMi[0].name;//按钮框文字存储
+
+            oxiangmuRMt.innerHTML=axiangmuRMi[0].name;
+
+            var yiruPD=0;//移入判断
+
+            for(var i=0;i<axiangmuRMb.length;i++){
+                (function(index){
+                    axiangmuRMb[index].onmouseenter=function(){
+                        xiangmuRMtCC=oxiangmuRMt.innerHTML;
+                        oxiangmuRMt.innerHTML=axiangmuRMi[index].name;
+                        yiruPD=1;
+                        
+                        axiangmuRMb[index].onclick=function(){
+                            for(var j=0;j<axiangmuRMb.length;j++){
+                                axiangmuRMb[j].className="xiangmuRMb";
+                            }
+                            axiangmuRMb[index].className="xiangmuRMb active";
+                            oxiangmuRMt.innerHTML=axiangmuRMi[index].name;
+
+                            oxiangmuRMzKC.style.left=-DWlength*index+"px";
+
+                            xiangmuRMtCC=axiangmuRMi[index].name;
+                        }
+
+                        axiangmuRMb[index].onmouseout=function(){
+                            if(yiruPD==1){
+                                oxiangmuRMt.innerHTML=xiangmuRMtCC;
+                                yiruPD=0;
+                            }
+                        }
+                    }
+                })(i)
+            }
+        }
+        
     }
 </script>
 <body>
@@ -35,7 +100,7 @@
                 <div class="searchK">
                     <img src="/wankangyuan/static/img/search.png" alt="" class="searchI" />
                     <img src="/wankangyuan/static/img/close2.png" alt="" class="searchX" />
-                    <input type="text" class="searchP" placeholder="搜索平台公开项目"  />
+                    <input type="text" class="searchP" placeholder="搜索平台公开项目" value="${homepageSearchWord }" />
                 </div>
             </div>
             <div class="xiangmu">
@@ -44,9 +109,9 @@
                         <div class="xiangmuLC">平台项目</div>
                     </div>
                     <div class="xiangmuLM">
-                    	<c:forEach items="${showProjects }" var="showProjectTemp">
-                    		<div class="xiangmuLMz">
-	                            <div class="xiangmuLMzT">${showProjectTemp.p_name}</div>
+                    	<c:forEach items="${showProjects }" var="showProjectTemp" varStatus="status">
+                    		<div class="xiangmuLMz <c:if test="${status.index == 0}">active</c:if>" >
+	                            <div class="xiangmuLMzT" id="${showProjectTemp.id}">${showProjectTemp.p_name}</div>
 	                            <div class="xiangmuLMzM">${showProjectTemp.introduction}</div>
 	                        </div>
                     	</c:forEach>
@@ -56,26 +121,35 @@
 	                </div>
                 </div>
                 <div class="xiangmuR">
-                    <div class="xiangmuRT">13例结直肠癌病人的基因表达模式研究</div>
+                    <div class="xiangmuRT" id="show_p_name">${showProjects[0].p_name}</div>
                     <div class="xiangmuRM">
                         <div class="xiangmuRMzK">
-                            <div class="xiangmuRMzKC">
-                                <div class="xiangmuRMz">
-                                    <img src="/wankangyuan/static/img/prodetail1_1.png" name="25例糖尿病患者的基因表达模式研究1" alt="" class="xiangmuRMi" />
-                                </div>
-                                <div class="xiangmuRMz">
-                                    <img src="/wankangyuan/static/img/prodetail1_2.png" name="25例糖尿病患者的基因表达模式研究2" alt="" class="xiangmuRMi" />
-                                </div>
-                                <div class="xiangmuRMz">
-                                    <img src="/wankangyuan/static/img/prodetail1_3.png" name="25例糖尿病患者的基因表达模式研究3" alt="" class="xiangmuRMi" />
-                                </div>
+                            <div class="xiangmuRMzKC" id="xiangmuRMzKC">
+                            	<c:forEach items="${showProjects[0].projectAppTasks}" var="pAppTask" varStatus="status">
+		                			<div class="xiangmuRMz">
+				                        <iframe src="${pAppTask.result_address }" name="${pAppTask.taskName }" class="xiangmuRMi" ></iframe>
+				                    </div>
+			                	</c:forEach>
                             </div>
                         </div>
-                        <div class="xiangmuRMt">25例糖尿病患者的基因表达模式研究</div>
-                        <div class="xiangmuRMB">
-                            <div class="xiangmuRMb active"></div>
-                            <div class="xiangmuRMb"></div>
-                            <div class="xiangmuRMb"></div>
+                        
+                        <c:if test="${showProjects[0] != null && showProjects[0].projectAppTasks[0] != null}">
+                        	<div class="xiangmuRMt" id="xiangmuRMt">${showProjects[0].projectAppTasks[0].taskName}</div>
+                        </c:if>
+                        <c:if test="${showProjects[0] == null|| showProjects[0].projectAppTasks[0] == null}">
+                        	<div class="xiangmuRMt" id="xiangmuRMt"></div>
+                        </c:if>
+                        
+                        <div class="xiangmuRMB" id="xiangmuRMB">
+                        	<c:forEach items="${showProjects[0].projectAppTasks}" var="pAppTask" varStatus="status">
+		                		<c:if test="${status.index == 0}">
+		                			<div class="xiangmuRMb active"></div>
+		                		</c:if>
+		                		<c:if test="${status.index != 0}">
+		                			<div class="xiangmuRMb"></div>
+		                		</c:if>
+		                	</c:forEach>
+                            
                         </div>
                     </div>
                 </div>
@@ -112,7 +186,11 @@
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/indexPaging.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
+<script type="text/javascript" src="/wankangyuan/static/js/project1.js"></script>
+
 <script type="text/javascript">
+
 	$('#box').paging({
 	    initPageNo: ${page}, // 初始页码
 	    totalPages: Math.ceil(${total}/${rows}), //总页数
@@ -122,11 +200,131 @@
 	    callback: function(page) { // 回调函数
 	        console.log(page);
 	        if(page!=${page}){
-	            window.location.href="/wankangyuan/adminProject/selectShowProject?page="+page;
-	           
+	        	var searchWord = $(".searchP").val();
+	            window.location.href="/wankangyuan/homepage/selectShowProject?page="+page+"&searchWord="+searchWord;
 	        }
 	    }
 	});
+	
+	//单击左侧的项目
+	$(".xiangmuLMzT").click(function (){
+		var p_name = this.innerHTML;
+		$.ajax({
+			url:"/wankangyuan/homepage/selectOpenAppTasksByProjectId",
+			type:"post",
+			data:{
+				p_id:this.id
+			},
+			dataType:"json",
+			success : function(data){
+				var show_p_name = document.getElementById("show_p_name");
+				show_p_name.innerHTML=p_name;
+				
+				//更新应用运行结果名称
+				document.getElementById("xiangmuRMt").innerHTML = "";
+				
+				//应用结果链接显示div
+				var xiangmuRMzKC = document.getElementById("xiangmuRMzKC");
+				var xiangmuRMzKC_html = "";
+				
+			   	//应用链接切换小logo         
+			    var xiangmuRMB = document.getElementById("xiangmuRMB");
+               	var xiangmuRMB_html = "";
+               	
+               	
+				
+				if(data.result == true){
+
+					//切换右侧的展示窗口
+					for(var index in data.message){
+						if(index == 0){
+							
+							document.getElementById("xiangmuRMt").innerHTML = data.message[index].taskName;
+							
+							xiangmuRMzKC_html += '<div class="xiangmuRMz">';
+							xiangmuRMzKC_html += '<iframe src="'+data.message[index].result_address
+													+'" name="'+data.message[index].taskName+'" class="xiangmuRMi" ></iframe>';
+							xiangmuRMzKC_html += '</div>';
+							
+							xiangmuRMB_html += '<div class="xiangmuRMb active"></div>';
+						}else{
+							xiangmuRMzKC_html += '<div class="xiangmuRMz">';
+							xiangmuRMzKC_html += '<iframe src="'+data.message[index].result_address
+													+'" name="'+data.message[index].taskName+'" class="xiangmuRMi" ></iframe>';
+							xiangmuRMzKC_html += '</div>';
+							
+							xiangmuRMB_html += '<div class="xiangmuRMb"></div>';
+						}
+					}
+					
+					//显示
+					xiangmuRMzKC.innerHTML=xiangmuRMzKC_html;
+					xiangmuRMB.innerHTML=xiangmuRMB_html;
+					
+					//banner
+				    var oxiangmuRMzKC=document.querySelectorAll('.xiangmuRMzKC')[0];//长图
+				    var axiangmuRMi=oxiangmuRMzKC.querySelectorAll('.xiangmuRMi');//图
+				    var DWlength=oxiangmuRMzKC.querySelectorAll('.xiangmuRMz')[0].offsetWidth;//取单位图宽度
+
+				    var oxiangmuRMB=document.querySelectorAll('.xiangmuRMB')[0];//按钮框
+				    var axiangmuRMb=oxiangmuRMB.querySelectorAll('.xiangmuRMb');//按钮
+
+				    var oxiangmuRMt=document.querySelectorAll('.xiangmuRMt')[0];//按钮框上面的文字
+				    var xiangmuRMtCC=axiangmuRMi[0].name;//按钮框文字存储
+
+				    oxiangmuRMt.innerHTML=axiangmuRMi[0].name;
+
+				    var yiruPD=0;//移入判断
+
+				    for(var i=0;i<axiangmuRMb.length;i++){
+				        (function(index){
+				            axiangmuRMb[index].onmouseenter=function(){
+				                xiangmuRMtCC=oxiangmuRMt.innerHTML;
+				                oxiangmuRMt.innerHTML=axiangmuRMi[index].name;
+				                yiruPD=1;
+				                
+				                axiangmuRMb[index].onclick=function(){
+				                    for(var j=0;j<axiangmuRMb.length;j++){
+				                        axiangmuRMb[j].className="xiangmuRMb";
+				                    }
+				                    axiangmuRMb[index].className="xiangmuRMb active";
+				                    oxiangmuRMt.innerHTML=axiangmuRMi[index].name;
+
+				                    oxiangmuRMzKC.style.left=-DWlength*index+"px";
+
+				                    xiangmuRMtCC=axiangmuRMi[index].name;
+				                }
+
+				                axiangmuRMb[index].onmouseout=function(){
+				                    if(yiruPD==1){
+				                        oxiangmuRMt.innerHTML=xiangmuRMtCC;
+				                        yiruPD=0;
+				                    }
+				                }
+				            }
+				        })(i)
+				    }
+
+				}else{
+					layer.msg(data.message);
+					//显示
+					xiangmuRMzKC.innerHTML=xiangmuRMzKC_html;
+					xiangmuRMB.innerHTML=xiangmuRMB_html;
+				}
+			},
+			error : function(){
+				layer.msg("联网失败");
+			}
+		});
+	});
+	
+	$(".searchP").bind("keypress" , function(event){
+		if(event.keyCode == 13){
+			window.location.href="/wankangyuan/homepage/selectShowProject?searchWord="+this.value;	
+		}
+	});
+	
+	
 </script>
 
 </body>

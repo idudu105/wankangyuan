@@ -1,6 +1,8 @@
 package com.dzjin.model;
 
-	/**
+import java.util.List;
+
+/**
 	* 表名：project 项目基础信息表
 	* 作者：dzjin
 	* 联系方式：dzjin5678@163.com
@@ -29,7 +31,15 @@ public class Project {
 	private Integer appResultNum;
 	private Integer memberNum;
 	
+	private List<ProjectAppTask> projectAppTasks = null;
 	
+	
+	public List<ProjectAppTask> getProjectAppTasks() {
+		return projectAppTasks;
+	}
+	public void setProjectAppTasks(List<ProjectAppTask> projectAppTasks) {
+		this.projectAppTasks = projectAppTasks;
+	}
 	public String getCreatorName() {
 		return creatorName;
 	}
