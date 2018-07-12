@@ -32,7 +32,7 @@ public interface ApplicationService {
 	Map<String,Object> findAll();
 
 	//列出所有公共应用带分页
-	Map<String,Object> findAllPublic(Integer page, Integer rows, String appName, String appType);
+	/*Map<String,Object> findAllPublic(Integer page, Integer rows, String appName, String appType);*/
 	
 	//查找自己创建的应用
 	Map<String, Object> findCreate(Integer page, Integer rows, String appName, String appType, String creator,

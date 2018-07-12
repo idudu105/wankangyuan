@@ -119,7 +119,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * @param appName
 	 * @return
 	 */
-	@Override
+	/*@Override
 	public Map<String,Object> findAllPublic(Integer page, Integer rows, String appName, String appType) {
 		ApplicationQuery example = new ApplicationQuery();
 		Criteria criteria = example.createCriteria();
@@ -139,7 +139,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 		map.put("list", list);
 		map.put("total", total);
 		return map;
-	}
+	}*/
 	
 	/**
 	 * 查找公共的应用
@@ -237,6 +237,16 @@ public class ApplicationServiceImpl implements ApplicationService {
 	    			}
 	    			if("异步".equals(optionList.get(0))) {
 	    				criteria.andIsAsyncEqualTo(1);
+	    			}
+	    		}
+	    	}else if (field.equals("isDisplay")) {
+	    		List<String> optionList = Arrays.asList(option);
+	    		if(optionList.size() == 1) {
+	    			if("公开".equals(optionList.get(0))) {
+	    				criteria.andIsDisplayEqualTo(1);
+	    			}
+	    			if("私有".equals(optionList.get(0))) {
+	    				criteria.andIsDisplayEqualTo(0);
 	    			}
 	    		}
 	    	}else if (field.equals("keywords")) {

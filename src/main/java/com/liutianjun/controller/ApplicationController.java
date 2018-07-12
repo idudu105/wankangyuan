@@ -238,7 +238,7 @@ public class ApplicationController {
 		List<Application> typeList = applicationService.findPublicFieldList(field,content);
 		typeList.remove(null);
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.setSerializationInclusion(Include.NON_EMPTY);
+		mapper.setSerializationInclusion(Include.NON_NULL);
 		mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
 		return mapper.writeValueAsString(typeList);
 	}

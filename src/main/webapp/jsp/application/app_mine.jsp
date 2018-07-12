@@ -353,6 +353,9 @@ function ViewModel() {
 			        }
 			    }
 			});
+			if($("#check0").attr('checked')){
+                $(".input_check").attr("checked",true);
+            }
 		});
 	}
 	//初始化列表

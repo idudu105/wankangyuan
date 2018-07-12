@@ -390,6 +390,7 @@ function ViewModel() {
 	var self = this;
 	var page,rows,total,appName,appType,orderName,orderDir,field,option;
 	self.appList = ko.observableArray();
+	self.appCart = ko.observableArray();
 	self.showAppList = function() {
         
 		$.getJSON("/wankangyuan/application/getCreate",{
@@ -419,14 +420,49 @@ function ViewModel() {
 			    slideSpeed: 600, // 缓动速度。单位毫秒
 			    jump: true, //是否支持跳转
 			    callback: function(page_) { // 回调函数
-			        console.log(page_);
+			        //console.log(page_);
 			        if(page_!=page){
 			           page = page_;
 			           self.showAppList();
 			        }
 			    }
 			});
+			 $.getJSON("/wankangyuan/application/getCreate",{
+	            page:1,
+	            rows:1000,
+	            appName:self.appName,
+	            appType:self.appType,
+	            orderName:self.orderName,
+	            orderDir:self.orderDir,
+	            field:$(".BTSXpd").val(),
+	            option:self.option
+	            },function(data){
+	            self.appCart.removeAll();
+	            for (var i in data.list){
+	                self.appCart.push(data.list[i].id);
+	            }
+	            //console.log(self.appCart);
+	            if($("#check0").attr('checked')){
+	                $(".input_check").each(function(){
+	                    var index = $.inArray(Number($(this).val()),self.appCart());
+	                    if(index >= 0){
+	                        $(this).attr("checked",true);
+	                    }
+	                })
+	            }else{
+	            	/* $(".input_check").each(function(){
+                        //console.log($(this).val());
+                        //console.log(self.appCart()[index]);
+                        var index = $.inArray(Number($(this).val()),self.appCart());
+                        if(index >= 0){
+                            $(this).attr("checked",true);
+                        }
+                    }) */
+	            }
+	        }); 
 		});
+		
+		
 	}
 	//初始化列表
 	self.showAppList();

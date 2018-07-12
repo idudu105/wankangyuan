@@ -160,8 +160,8 @@
                         <form id="getUserByNameForm">
                         <div class="cyaddKT2">
                             <input name="isOrg" type="hidden" value="0">
-                            <input name="username" type="text" class="cyaddKT2p" placeholder="输入要搜索的用户名" />
-                            <input type="button" class="cyaddKT2b" value="搜索" data-bind="click:getMyFriends" />
+                            <input id="addOrgerInput" name="username" type="text" class="cyaddKT2p" placeholder="输入要搜索的用户名" />
+                            <input type="button" class="cyaddKT2b" value="搜索" data-bind="click:getFriendsToOrg" />
                         </div>
                         </form>
                         <form id="addOrgMembersForm">
@@ -840,6 +840,18 @@ function ViewModel() {
         });
     }
     self.getMyFriends();
+    
+    self.getFriendsToOrg = function() {
+        self.friends.removeAll();
+        $.get("/wankangyuan/friends/getMyFriends",{friendName:$("#addOrgerInput").val()},function(data){
+            myfriends = JSON.parse(data);
+            for (var i in myfriends){
+                self.friends.push(myfriends[i]);
+                
+            }
+            friendmanage_quanxuan();
+        });
+    }
     
     //移除好友
     self.removeMyFriends = function() {

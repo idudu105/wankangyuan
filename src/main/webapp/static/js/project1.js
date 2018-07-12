@@ -19,7 +19,7 @@ function project0(){
 	
     var obox=document.querySelectorAll('.box')[0];
     obox.style.minHeight=window.screen.availHeight-200+'px';
-    console.log(document.body.clientWidth);
+    //console.log(document.body.clientWidth);
 
 // 全选框和复选框的动作
     if(document.querySelectorAll('.quanxuanK')[0]){
@@ -31,10 +31,10 @@ function project0(){
 
         if(document.querySelectorAll('.fuxuanK2')[0]){
             afuxuanK=document.querySelectorAll('.fuxuanK2');
-            console.log("k2");
+            //console.log("k2");
         }else if(document.querySelectorAll('.fuxuanK3')[0]){
             afuxuanK=document.querySelectorAll('.fuxuanK3');
-            console.log("k3");
+            //console.log("k3");
         }
 
         if(afuxuanK[0]){
@@ -50,7 +50,7 @@ function project0(){
                     afuxuan[i].checked=1;
                 }
             }else{
-                console.log(2);
+                //console.log(2);
                 for(var i=0;i<afuxuanK.length;i++){
                     afuxuan[i].checked=0;
                 }
@@ -67,9 +67,9 @@ function project0(){
                             if(afuxuan[j].checked){
                                 fuxuanPD++;
                             }
-                            console.log(afuxuan[j].checked);
+                            //console.log(afuxuan[j].checked);
                         }
-                        console.log(fuxuanPD);
+                        //console.log(fuxuanPD);
                         if(fuxuanPD==afuxuanK.length){
                             oquanxuan.checked=1;
                         }else if(fuxuanPD!=afuxuanK.length){
@@ -81,7 +81,7 @@ function project0(){
         }
         
     }else{
-        console.log(222);
+        //console.log(222);
     }
 }
 
@@ -116,7 +116,7 @@ function project1(){
     var oPJul=document.querySelectorAll('.PJul')[0];//项目栏
     var aPJli=oPJul.querySelectorAll('.PJli');//每一条项目
 
-    console.log(aPJli);
+    //console.log(aPJli);
     
 
     //初始化筛选按钮判断

@@ -239,7 +239,7 @@
                             <div class="BTSXcliT">值筛选：</div>
                         </div>
                         <div class="BTSXcli2" data-bind="foreach:{data:fieldList,as:'field'}">
-                            <div class="BTSXcli2li">
+                            <div class="BTSXcli2li" data-bind="if:eval('field.'+$('.BTSXpd').val()) != '' " >
                                 <input name="option" type="checkbox" class="BTSXcli2liC" data-bind="value:eval('field.'+$('.BTSXpd').val())" />
                                 <div class="BTSXcli2liT" data-bind="text:eval('field.'+$('.BTSXpd').val())"></div>
                             </div>
@@ -343,6 +343,9 @@ function ViewModel() {
 			        }
 			    }
 			});
+			if($("#check0").attr('checked')){
+                $(".input_check").attr("checked",true);
+            }
 		});
 	}
 	//初始化列表
@@ -406,7 +409,7 @@ function ViewModel() {
                     }
                   }
                 }
-                self.fieldList.push(data[i]);
+            	self.fieldList.push(data[i]);
             }
         });
 	}
