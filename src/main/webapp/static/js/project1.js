@@ -1502,68 +1502,68 @@ function data_dataclick(){
 
 //首页
 function index(){
-    var osearchI2=document.querySelectorAll('.searchI2')[0];//外置搜索按钮
-    var osearchK=document.querySelectorAll('.searchK')[0];//搜索框
-    var osearchI=osearchK.querySelectorAll('.searchI')[0];//搜索按钮
-    var osearchX=osearchK.querySelectorAll('.searchX')[0];//搜索关闭
-    var osearchP=osearchK.querySelectorAll('.searchP')[0];//搜索输入栏
-
-    
-//搜索框
-    osearchI2.onclick=function(){
-        osearchK.style.display="block";
-        osearchI2.style.display="none";
-        osearchP.value="";
-    }
-
-    osearchX.onclick=function(){
-        osearchK.style.display="none";
-        osearchI2.style.display="block";
-    }
-    
-//banner
-    var oxiangmuRMzKC=document.querySelectorAll('.xiangmuRMzKC')[0];//长图
-    var axiangmuRMi=oxiangmuRMzKC.querySelectorAll('.xiangmuRMi');//图
-    var DWlength=oxiangmuRMzKC.querySelectorAll('.xiangmuRMz')[0].offsetWidth;//取单位图宽度
-
-    var oxiangmuRMB=document.querySelectorAll('.xiangmuRMB')[0];//按钮框
-    var axiangmuRMb=oxiangmuRMB.querySelectorAll('.xiangmuRMb');//按钮
-
-    var oxiangmuRMt=document.querySelectorAll('.xiangmuRMt')[0];//按钮框上面的文字
-    var xiangmuRMtCC=axiangmuRMi[0].name;//按钮框文字存储
-
-    oxiangmuRMt.innerHTML=axiangmuRMi[0].name;
-
-    var yiruPD=0;//移入判断
-
-    for(var i=0;i<axiangmuRMb.length;i++){
-        (function(index){
-            axiangmuRMb[index].onmouseenter=function(){
-                xiangmuRMtCC=oxiangmuRMt.innerHTML;
-                oxiangmuRMt.innerHTML=axiangmuRMi[index].name;
-                yiruPD=1;
-                
-                axiangmuRMb[index].onclick=function(){
-                    for(var j=0;j<axiangmuRMb.length;j++){
-                        axiangmuRMb[j].className="xiangmuRMb";
-                    }
-                    axiangmuRMb[index].className="xiangmuRMb active";
-                    oxiangmuRMt.innerHTML=axiangmuRMi[index].name;
-
-                    oxiangmuRMzKC.style.left=-DWlength*index+"px";
-
-                    xiangmuRMtCC=axiangmuRMi[index].name;
-                }
-
-                axiangmuRMb[index].onmouseout=function(){
-                    if(yiruPD==1){
-                        oxiangmuRMt.innerHTML=xiangmuRMtCC;
-                        yiruPD=0;
-                    }
-                }
-            }
-        })(i)
-    }
+//    var osearchI2=document.querySelectorAll('.searchI2')[0];//外置搜索按钮
+//    var osearchK=document.querySelectorAll('.searchK')[0];//搜索框
+//    var osearchI=osearchK.querySelectorAll('.searchI')[0];//搜索按钮
+//    var osearchX=osearchK.querySelectorAll('.searchX')[0];//搜索关闭
+//    var osearchP=osearchK.querySelectorAll('.searchP')[0];//搜索输入栏
+//
+//    
+////搜索框
+//    osearchI2.onclick=function(){
+//        osearchK.style.display="block";
+//        osearchI2.style.display="none";
+//        osearchP.value="";
+//    }
+//
+//    osearchX.onclick=function(){
+//        osearchK.style.display="none";
+//        osearchI2.style.display="block";
+//    }
+//    
+////banner
+//    var oxiangmuRMzKC=document.querySelectorAll('.xiangmuRMzKC')[0];//长图
+//    var axiangmuRMi=oxiangmuRMzKC.querySelectorAll('.xiangmuRMi');//图
+//    var DWlength=oxiangmuRMzKC.querySelectorAll('.xiangmuRMz')[0].offsetWidth;//取单位图宽度
+//
+//    var oxiangmuRMB=document.querySelectorAll('.xiangmuRMB')[0];//按钮框
+//    var axiangmuRMb=oxiangmuRMB.querySelectorAll('.xiangmuRMb');//按钮
+//
+//    var oxiangmuRMt=document.querySelectorAll('.xiangmuRMt')[0];//按钮框上面的文字
+//    var xiangmuRMtCC=axiangmuRMi[0].name;//按钮框文字存储
+//
+//    oxiangmuRMt.innerHTML=axiangmuRMi[0].name;
+//
+//    var yiruPD=0;//移入判断
+//
+//    for(var i=0;i<axiangmuRMb.length;i++){
+//        (function(index){
+//            axiangmuRMb[index].onmouseenter=function(){
+//                xiangmuRMtCC=oxiangmuRMt.innerHTML;
+//                oxiangmuRMt.innerHTML=axiangmuRMi[index].name;
+//                yiruPD=1;
+//                
+//                axiangmuRMb[index].onclick=function(){
+//                    for(var j=0;j<axiangmuRMb.length;j++){
+//                        axiangmuRMb[j].className="xiangmuRMb";
+//                    }
+//                    axiangmuRMb[index].className="xiangmuRMb active";
+//                    oxiangmuRMt.innerHTML=axiangmuRMi[index].name;
+//
+//                    oxiangmuRMzKC.style.left=-DWlength*index+"px";
+//
+//                    xiangmuRMtCC=axiangmuRMi[index].name;
+//                }
+//
+//                axiangmuRMb[index].onmouseout=function(){
+//                    if(yiruPD==1){
+//                        oxiangmuRMt.innerHTML=xiangmuRMtCC;
+//                        yiruPD=0;
+//                    }
+//                }
+//            }
+//        })(i)
+//    }
 
 //左侧项目列表
     var axiangmuLMz=document.querySelectorAll('.xiangmuLMz');//多个项目
