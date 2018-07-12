@@ -204,7 +204,10 @@
                             <div class="PJliCli apptime">
                                 <fmt:formatDate type="date" value="${app.createTime }" />
                             </div>
-                            <div class="PJliCli appopen">${app.isDisplay }</div>
+                            <div class="PJliCli appopen">
+                            	<c:if test="${app.isDisplay eq 0}">私有</c:if>
+	                            <c:if test="${app.isDisplay eq 1}">公开</c:if>
+	                        </div>
                             <div class="PJliCli PJyibu">${app.isAsync}
 	                            <c:if test="${app.isAsync eq 0}">同步</c:if>
 	                            <c:if test="${app.isAsync eq 1}">异步</c:if>
@@ -218,7 +221,7 @@
                 </c:forEach>
                 </div>
 
-                <div class="BTSX">
+                <!-- <div class="BTSX">
                     <div class="BTSXc">
                         <div class="BTSXcli">
                             <div class="BTSXcliT">排序：</div>
@@ -259,7 +262,7 @@
                             <div class="BTSXcli3BT BTSXcli3BTres">重置</div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <div class="pageK" id="box"></div>

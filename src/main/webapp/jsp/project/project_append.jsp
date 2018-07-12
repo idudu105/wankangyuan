@@ -285,7 +285,7 @@
                 	</c:forEach>
                 </div>
 
-                <div class="BTSX">
+                <!-- <div class="BTSX">
                     <div class="BTSXc">
                         <div class="BTSXcli">
                             <div class="BTSXcliT">排序：</div>
@@ -326,7 +326,7 @@
                             <div class="BTSXcli3BT BTSXcli3BTres">重置</div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <div class="pageK" id="box"></div>

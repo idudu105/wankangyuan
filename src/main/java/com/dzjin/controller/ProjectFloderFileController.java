@@ -81,10 +81,37 @@ public class ProjectFloderFileController {
 		}
 		project.setFileNum(num);
 		session.setAttribute("project", project);
-		
-		
-		
+
 		return "/jsp/project/project_file.jsp";
+	}
+	
+	/**
+	 * 根据父文件夹的ID获取子文件夹
+	 * @param session
+	 * @param request
+	 * @param parent_id
+	 * @return
+	 */
+	@RequestMapping("/getChildFloderByParentFloderId")
+	@ResponseBody
+	public Map<String, Object> getChildFloderByParentFloderId(
+			HttpSession session , HttpServletRequest request , Integer parent_id){
+		Map<String, Object> map = new HashMap<>();
+		
+		List<ProjectFloder> projectFloders = projectFloderService.selectChildFloderByParentFloderId(parent_id);
+		if(projectFloders.size()>0){
+			map.put("result", true);
+			Map<Integer, Object> result = new HashMap<Integer, Object>();
+			Iterator<ProjectFloder> iterator = projectFloders.iterator();
+			while(iterator.hasNext()){
+				ProjectFloder projectFloder = (ProjectFloder)iterator.next();
+				result.put(projectFloder.getId(), projectFloder.getFloder_name());
+			}
+			map.put("msg", projectFloders);
+		}else{
+			map.put("result", false);
+		}
+		return map;
 	}
 	
 	/**

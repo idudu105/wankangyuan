@@ -170,7 +170,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 	</c:forEach>   
                 </div>
 
-                <div class="BTSX">
+                <!-- <div class="BTSX">
                     <div class="BTSXc">
                         <div class="BTSXcli">
                             <div class="BTSXcliT">排序：</div>
@@ -211,7 +211,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="BTSXcli3BT BTSXcli3BTres">重置</div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             

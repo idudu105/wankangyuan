@@ -20,7 +20,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript">
     window.onload=function(){
         project0();
-        pro_data();
+
+        //以下是文件的相关操作
         
         var oprof_lbLtRtup=document.querySelectorAll('.prof_lbLtRtup')[0];//文件上传按钮
         var ofileaddK=document.querySelectorAll('.fileaddK')[0]//文件上传框
@@ -72,73 +73,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             }
         }
 
-        var aPJliB1Lt=document.querySelectorAll('.PJliB1Lt');
-        var aPJliB2Lt=document.querySelectorAll('.PJliB2Lt');
-        var awenjian=[];
-        for(var i=0;i<aPJliB1Lt.length;i++){
-            awenjian.push(aPJliB1Lt[i]);
-        }
-        for(var i=0;i<aPJliB2Lt.length;i++){
-            awenjian.push(aPJliB2Lt[i]);
-        }
+        
 
-        //文件树文字点击变蓝
-        for(var i=0;i<awenjian.length;i++){
-            (function(index){
-                awenjian[index].onclick=function(){
-                    for(var j=0;j<awenjian.length;j++){
-                        awenjian[j].style.color="#666";
-                    }
-                    awenjian[index].style.color="#5ca0e5";
-                    //将floderID更新一下并进行网络请求
-                    floder_id = awenjian[index].id;
-                    var id = awenjian[index].id;
-            		//进行网络请求显示右面的文件夹
-            		$.ajax({
-            			url:"/wankangyuan/projectFloderFile/selectFilesByFloderId",
-            			type:"post",
-            			data:{
-            				floder_id:id
-            			},
-            			dataType:"json",
-            			success : function(data){
-            				if(data.result == true){
-            					//这个地方直接更新右面的文件列表
-            					var filesList = $("#filesList");
-            					filesList.empty();
-            					for(var index in data.projectFiles){
-            						if(data.projectFiles[index].id != null){
-            							
-            						
-	            						filesList.append(
-	            							'<div class="prof_lbRmULmLI">'+
-	        	                                '<div class="fuxuanK2">'+
-	        	                                	'<input type="checkbox" class="input_check" id="check'+data.projectFiles[index].id
-	        	                                		+'" name="'+data.projectFiles[index].file_location+'" value="'+data.projectFiles[index].id+'">'+
-	        	                                	'<label for="check'+data.projectFiles[index].id+'"></label>'+
-	    	    	                           	'</div>'+
-	    	                                    '<div class="prof_lbRmULmli prof_lbRmULt2">'+data.projectFiles[index].file_name+'</div>'+
-	    	                                    '<div class="prof_lbRmULmli prof_lbRmULt3">'+data.projectFiles[index].file_type+'</div>'+
-	    	                                    '<div class="prof_lbRmULmli prof_lbRmULt4">'+data.projectFiles[index].file_size+'</div>'+
-	    	                                    '<div class="prof_lbRmULmli prof_lbRmULt5">'+data.projectFiles[index].create_datetime+'</div>'+
-	    	                                    '<div class="prof_lbRmULmli prof_lbRmULt6">'+data.projectFiles[index].username+'</div>'+
-	    	                                    '<a style="color:#33B7FF" href="'+data.fileDownloadLocation+data.projectFiles[index].file_location+'" download="'+data.projectFiles[index].file_name+'">下载</a>'+
-	            							'</div>');
-            						}
-            					}
-            				}else{
-            					layer.msg(data.message);
-            				}
-            			},
-            			error : function(){
-            				layer.msg("联网失败");
-            			}
-            		});  
-                }
-            })(i)
-        }
-
-    //文件树添加根/叶、修改、删除
+    	//文件树添加根/叶、修改、删除
         var oprof_lbLtRaddg=document.querySelectorAll('.prof_lbLtRaddg')[0];//添加根按钮
         var oprof_lbLtRaddy=document.querySelectorAll('.prof_lbLtRaddy')[0];//添加叶按钮
         var oprof_lbLtRtch=document.querySelectorAll('.prof_lbLtRtch')[0];//修改按钮
@@ -411,50 +348,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="prodainmL2">
                                	<c:forEach items="${projectFloders}" var="projectFloder">
                                		<div class="PJliB1" >
-                                	<div class="PJliB1L">
-                                        <div class="PJliB2Lic"></div>
-                                        <div class="PJliB1Lt" id="${projectFloder.id}">${projectFloder.floder_name}</div>
-                                        <div class="PJliBLi PJliBLi2" ></div>
-                                    </div>
-                                    <div class="PJliBR">
-	                                    <c:if test="${projectFloder.projectFloders != null }">
-	                                    	<c:forEach items="${projectFloder.projectFloders}" var="projectFloder1">
-			                                    <div class="PJliB2">
-		                                            <div class="PJliB2L" >
-		                                                <div class="PJliB2Lic" ></div>
-		                                                <div class="PJliB1Lt" id="${projectFloder1.id}">${projectFloder1.floder_name}</div>
-		                                                <div class="PJliBLi PJliBLi2" ></div>
-		                                            </div>
-						                            <div class="PJliBR">
-					                                    <c:if test="${projectFloder1.projectFloders != null }">
-					                                    	<c:forEach items="${projectFloder1.projectFloders}" var="projectFloder2">
-							                                    <div class="PJliB2">
-						                                            <div class="PJliB2L" >
-						                                                <div class="PJliB2Lic" ></div>
-						                                                <div class="PJliB1Lt" id="${projectFloder2.id}">${projectFloder2.floder_name}</div>
-						                                                <div class="PJliBLi PJliBLi2" ></div>
-						                                            </div>
-																	<div class="PJliBR">
-																		<c:if test="${projectFloder2.projectFloders != null }">
-																		<c:forEach items="${projectFloder2.projectFloders}" var="projectFloder3">
-																			<div class="PJliB2">
-																			    <div class="PJliB2L">
-																		           	<div class="PJliB2Lic" ></div>
-																		           	<div class="PJliB1Lt" id="${projectFloder3.id}">${projectFloder3.floder_name}</div>
-																				   	<div class="PJliBLi PJliBLi2" ></div>
-																			    </div>
-																			</div>
-																		</c:forEach>
-																		</c:if>
-																	</div>  
-						                                        </div>
-					                                    	</c:forEach>
-					                                    </c:if>
-				                                    </div>
-		                                        </div>
-	                                    	</c:forEach>
-	                                    </c:if>
-                                    </div>
+	                                	<div class="PJliB1L">
+	                                        <div class="PJliB2Lic"></div>
+	                                        <div class="PJliB1Lt" id="floder${projectFloder.id}" onclick="clickFloder(${projectFloder.id})">${projectFloder.floder_name}</div>
+	                                        <div class="PJliBLi PJliBLi1" id="show${projectFloder.id}" onclick="clickShow(${projectFloder.id})"></div>
+	                                    </div>
+	                                    <div class="PJliBR"></div>
+	
                                     </div>
                                	</c:forEach>
                             </div>
@@ -800,6 +700,118 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       			
       		}
        	});
+   	   
+   	   	//单击文件夹，改变文件夹的颜色，并网络请求文件夹的中所包含的文件
+		function clickFloder(id){
+			
+			var aPJliB1Lt=document.querySelectorAll('.PJliB1Lt');
+			var awenjian=[];
+			for(var i=0;i<aPJliB1Lt.length;i++){
+			    awenjian.push(aPJliB1Lt[i]);
+			}
+			var aPJliB2Lt=document.querySelectorAll('.PJliB2Lt');
+			for(var i=0;i<aPJliB2Lt.length;i++){
+			    awenjian.push(aPJliB2Lt[i]);
+			}
+			for(var j=0;j<awenjian.length;j++){
+			    awenjian[j].style.color="#666";
+			}
+			document.getElementById("floder"+id).style.color="#5ca0e5";
+			
+			
+			floder_id = id;
+    		//进行网络请求显示右面的文件夹
+    		$.ajax({
+    			url:"/wankangyuan/projectFloderFile/selectFilesByFloderId",
+    			type:"post",
+    			data:{
+    				floder_id:id
+    			},
+    			dataType:"json",
+    			success : function(data){
+    				if(data.result == true){
+    					//这个地方直接更新右面的文件列表
+    					var filesList = $("#filesList");
+    					filesList.empty();
+    					for(var index in data.projectFiles){
+    						if(data.projectFiles[index].id != null){
+    							
+        						filesList.append(
+        							'<div class="prof_lbRmULmLI">'+
+    	                                '<div class="fuxuanK2">'+
+    	                                	'<input type="checkbox" class="input_check" id="check'+data.projectFiles[index].id
+    	                                		+'" name="'+data.projectFiles[index].file_location+'" value="'+data.projectFiles[index].id+'">'+
+    	                                	'<label for="check'+data.projectFiles[index].id+'"></label>'+
+	    	                           	'</div>'+
+	                                    '<div class="prof_lbRmULmli prof_lbRmULt2">'+data.projectFiles[index].file_name+'</div>'+
+	                                    '<div class="prof_lbRmULmli prof_lbRmULt3">'+data.projectFiles[index].file_type+'</div>'+
+	                                    '<div class="prof_lbRmULmli prof_lbRmULt4">'+data.projectFiles[index].file_size+'</div>'+
+	                                    '<div class="prof_lbRmULmli prof_lbRmULt5">'+data.projectFiles[index].create_datetime+'</div>'+
+	                                    '<div class="prof_lbRmULmli prof_lbRmULt6">'+data.projectFiles[index].username+'</div>'+
+	                                    '<a style="color:#33B7FF" href="'+data.fileDownloadLocation+data.projectFiles[index].file_location+'" download="'+data.projectFiles[index].file_name+'">下载</a>'+
+        							'</div>');
+    						}
+    					}
+    				}else{
+    					layer.msg(data.message);
+    				}
+    			},
+    			error : function(){
+    				layer.msg("联网失败");
+    			}
+    		});
+		}
+   	   	
+   	   	//点击文件夹加减号
+   	   	function clickShow(id){
+   	   		var temp = document.getElementById("show"+id);
+	   	   	if(temp.className.indexOf("PJliBLi2")!=-1){
+	   	   		temp.className="PJliBLi PJliBLi1";
+	            var ofufu=temp.parentNode.parentNode;
+	            var ozizi=ofufu.querySelectorAll('.PJliBR')[0];
+	            ozizi.style.display="none";
+ 	            
+	        }else if(temp.className.indexOf("PJliBLi1")){
+	        	//网络请求子文件夹并填充子文件夹块
+	        	$.ajax({
+	        		url:"/wankangyuan/projectFloderFile/getChildFloderByParentFloderId",
+	        		type:"post",
+	        		data:{
+	        			parent_id:id
+	        		},
+	        		dataType:"json",
+	        		success : function(data){
+	        			if(data.result == true){
+	        				
+	        				var content = "";
+	        				for(var index in data.msg){
+	        					
+	        					if(data.msg[index].id != null){
+	        						var PJliB2Content = '<div class="PJliB2">';
+	            					PJliB2Content += '<div class="PJliB2L" >';
+	                					PJliB2Content += '<div class="PJliB2Lic" ></div>';
+	                					PJliB2Content += '<div class="PJliB2Lt" id="floder'+data.msg[index].id+'" onclick="clickFloder('+data.msg[index].id+')">'+data.msg[index].floder_name+'</div>';
+	                					PJliB2Content += '<div class="PJliBLi PJliBLi1" id="show'+data.msg[index].id+'" onclick="clickShow('+data.msg[index].id+')"></div>';
+	            					PJliB2Content += '</div>';
+	            					PJliB2Content += '<div class="PJliBR"></div>';
+	            					PJliB2Content += '</div>';
+	            					content += PJliB2Content;
+	        					}
+	        				}
+	
+	        				temp.className="PJliBLi PJliBLi2";
+	                        var ofufu=temp.parentNode.parentNode;
+	                        var ozizi=ofufu.querySelectorAll('.PJliBR')[0];
+	                        ozizi.innerHTML=content;
+	                        ozizi.style.display="inline-block";
+	        			}
+	        		},
+	        		error : function(){
+	        			layer.msg("联网失败");
+	        		}
+	        	});
+	        }
+   	   	}
     	
     </script>
     

@@ -24,6 +24,16 @@ public class ProjectFloderService {
 		List<ProjectFloder> projectFloders = projectFloderDao.selectProjectFloderByProjectId(p_id);
 		return projectFloders;
 	}
+	
+	/**
+	 * 查询某个文件夹下的子文件
+	 * @param parent_id
+	 * @return
+	 */
+	public List<ProjectFloder> selectChildFloderByParentFloderId(Integer parent_id){
+		List<ProjectFloder> projectFloders = projectFloderDao.selectProjectFloderByParentId(parent_id);
+		return projectFloders;
+	}
 
 	/**
 	 * 查询一个项目下的文件夹
