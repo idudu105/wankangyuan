@@ -195,27 +195,6 @@
                     <div class="friendMMl">
                         <div class="friendMMlT">
                             <div class="friendMMlTT">
-                                <%-- <c:forEach items="${orgList }" var="org" varStatus="status">
-                                <c:if test="${org.parentId eq 0 }">
-                                <div class="friendMMlTTz <c:if test='${status.count eq 1}'>active</c:if>" name="${org.id }"><!-- 每个组织结构 -->
-                                    <div class="friendMMlTTzT">
-                                        <span class="fri_name">${org.organizationName }</span>
-                                        <div class="friendMMlTTzTi"></div>
-                                        <img src="<%=request.getContextPath()%>/static/img/shenhe1.png" alt="" class="friendMMlTTzTi2" />
-                                    </div>
-                                    <div class="friendMMlTTzB">
-                                    <c:forEach items="${orgList }" var="group">
-                                    <c:if test="${org.id eq group.parentId }">
-                                        <div class="friendMMlTTzBz" name="${group.id }">
-                                            <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
-                                            <div class="friendMMlTTzBzt" data-bind="click:function(data, event){showOrgers(${group.id}) }">${group.organizationName }</div>
-                                        </div>
-                                    </c:if>    
-                                    </c:forEach>
-                                    </div>
-                                </div>
-                                </c:if>
-                                </c:forEach> --%>
                               <div data-bind="foreach: orgList">
                                 <div class="friendMMlTTz" data-bind="attr:{name: id}" ><!-- 每个组织结构 -->
                                     <div class="friendMMlTTzT">
@@ -228,6 +207,12 @@
                                 </div>
                               </div>
                             </div>
+                            <div class="friendMMlTB">
+                                <a href="javascript:;" class="friendMMlTBa">
+                                    <span data-bind="click:getMyFriends">我的好友（</span><span data-bind="text:friends().length"></span><span>）</span>
+                                </a>
+                            </div>
+                            
                         </div>
                     </div>
                     
@@ -241,7 +226,7 @@
                                 <th class="yonghuming">用户名</th>
                                 <th class="youxiang">邮箱</th>
                             </tr>
-	                        <tbody id="ko_friend" data-bind="foreach: orgers">
+	                        <tbody id="ko_orgers" data-bind="foreach:orgers">
 		                        <tr class="">
 		                            <td class="xuanze">
 		                                <div class="fuxuanK2 fuxuanK40">
@@ -256,6 +241,21 @@
 		                            <td class="youxiang"><span data-bind="text: email"></span></td>
 		                        </tr>
 	                    	</tbody>
+	                    	<tbody id="ko_friends" data-bind="foreach:friends" style="display:none;">
+	                            <tr class="" >
+	                                <td class="xuanze">
+	                                    <div class="fuxuanK2 fuxuanK40">
+	                                        <input name="ids" type="checkbox" class="input_check" data-bind="value: friendId,attr:{id:'check2_'+($index()+1)}">
+	                                        <label data-bind="attr:{for:'check2_'+($index()+1)}"></label>
+	                                    </div>
+	                                </td>
+	                                <td class="touxiangk">
+	                                	<img data-bind="attr:{src:friendHeadimg}" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="touxiangi" />
+	                                </td>
+	                                <td class="yonghuming"><span data-bind="text: friendName"></span></td>
+	                                <td class="youxiang"><span data-bind="text: friendEmail"></span></td>
+	                            </tr>
+                        	</tbody>
                     	</table>
                     	<input type="button" class="QXGLkB QXGLkB_chengyuan" value="添加" />
                         
@@ -492,30 +492,6 @@
 	            }
 	        }
 	    });
-		
-      	/* //定义ViewModel
-        function ViewModel() {
-            var self = this;
-            //当前组织ID
-            var centOrgId;
-            var centUser = '${user.username}';
-            //组内成员
-            self.orgers = ko.observableArray(); //添加动态监视数组对象
-            //显示组内成员
-            self.showOrgers = function(id){
-            	centOrgId=id;
-            	self.orgers.removeAll();
-            	$.get("/wankangyuan/projectMember/getUserByOrg",{organizationId:id},function(data){
-                    var list = JSON.parse(data);
-                    for (var i in list){
-                    	self.orgers.push(list[i]);
-                    }
-                });
-            }
-        }
-        var vm = new ViewModel();
-        ko.applyBindings(vm); */
-        
         
         //添加人员到项目中
         $(".QXGLkB_chengyuan").click(function (){
@@ -903,6 +879,8 @@ function ViewModel() {
                 self.orgers.push(list[i]);
                 
             }
+            document.getElementById("ko_orgers").style.display="";
+            document.getElementById("ko_friends").style.display="none";
             friendmanage_quanxuan();
         });
     }
@@ -924,6 +902,8 @@ function ViewModel() {
                 }
                 self.orgers.push(list[i]);
             }
+            document.getElementById("ko_orgers").style.display="";
+            document.getElementById("ko_friends").style.display="none";
             friendmanage_quanxuan();
         });
     }
@@ -1033,12 +1013,13 @@ function ViewModel() {
     var myfriends;
     self.getMyFriends = function() {
         self.friends.removeAll();
-        $.get("/wankangyuan/friends/getMyFriends",{friendName:$("#myFriendSearch").val()},function(data){
+        $.get("/wankangyuan/friends/getMyFriends",{},function(data){
             myfriends = JSON.parse(data);
             for (var i in myfriends){
                 self.friends.push(myfriends[i]);
-                
             }
+            document.getElementById("ko_orgers").style.display="none";
+            document.getElementById("ko_friends").style.display="";
             friendmanage_quanxuan();
         });
     }
