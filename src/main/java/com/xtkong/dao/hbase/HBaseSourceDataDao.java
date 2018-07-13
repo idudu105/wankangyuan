@@ -28,7 +28,6 @@ import com.xtkong.model.SourceField;
 import com.xtkong.service.PhoenixClient;
 import com.xtkong.util.ConstantsHBase;
 import com.xtkong.util.HBaseDB;
-import com.xtkong.util.HbaseTest;
 
 public class HBaseSourceDataDao {
 
@@ -452,7 +451,6 @@ public class HBaseSourceDataDao {
 								}
 								formatNodeId = HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName,
 										formatFieldDatas);
-								HbaseTest.println(formatNodeId);
 							}
 							if (formatNodeId != null) {
 								records = PhoenixClient.select("SELECT * FROM \"" + tableStr + "\" WHERE ID!='"
@@ -552,7 +550,6 @@ public class HBaseSourceDataDao {
 								}
 								formatNodeId = HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName,
 										formatFieldDatas);
-								HbaseTest.println(formatNodeId);
 							}
 							if (formatNodeId != null) {
 								records = PhoenixClient.select("SELECT * FROM \"" + tableStr + "\" WHERE ID!='"

@@ -22,7 +22,6 @@ import java.util.concurrent.TimeoutException;
 
 import com.google.gson.Gson;
 import com.xtkong.util.ConstantsHBase;
-import com.xtkong.util.HbaseTest;
 
 /**
  * 利用Phoenix访问Hbase
@@ -140,7 +139,6 @@ public class PhoenixClient {
 		records.put("head", head);
 		records.put("data", datas);
 		map.put("records", records);
-		HbaseTest.println(phoenixSQL);
 
 		try {
 			Connection conn = PhoenixClient.getConnection();
@@ -180,7 +178,6 @@ public class PhoenixClient {
 
 			msg.put("msg", "success");
 			map.put("msg", msg);
-			HbaseTest.toJson(map);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			msg.put("msg", "SQL执行出错：" + e.getMessage());
@@ -333,7 +330,7 @@ public class PhoenixClient {
 			Map<String, String> conditionLike, String condition, Integer page, Integer strip) {
 		String phoenixSQL = " ";
 		if ((tableName != null) && (qualifiers != null) && (!qualifiers.isEmpty())) {
-			phoenixSQL = "SELECT ID ";
+			phoenixSQL = "SELECT ID";
 			for (String qualifier : qualifiers) {
 				phoenixSQL += ",\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + qualifier + "\"";
 			}
@@ -824,7 +821,7 @@ public class PhoenixClient {
 //		result = commonSelect(
 //				" SELECT * FROM \"SOURCE_75\"  WHERE \"USER\"= '1'  AND  ( \"INFO\".\"118\"='Ad533' OR \"INFO\".\"118\"='Ad534' OR \"INFO\".\"118\"='Ad535' OR \"INFO\".\"118\"='Ad536' OR \"INFO\".\"118\"='Ad537' OR \"INFO\".\"118\"='Ad538' OR \"INFO\".\"118\"='Ad539' OR \"INFO\".\"118\"='Ad540' OR \"INFO\".\"118\"='Ad541' OR \"INFO\".\"118\"='Ad542' OR \"INFO\".\"118\"='Ad543' OR \"INFO\".\"118\"='Ad544' OR \"INFO\".\"118\"='Ad545' OR \"INFO\".\"118\"='Ad546' OR \"INFO\".\"118\"='Ad547' OR \"INFO\".\"118\"='Ad548' OR \"INFO\".\"118\"='Ad549' )  ",
 //				1, 10);
-		result=select("SELECT * FROM \"SOURCE_75\"  WHERE   \"INFO\".\"USER\"='45'  ");
+		result=select("SELECT * FROM \"FORMAT_75_56\"  WHERE   \"INFO\".\"97\" IS NULL  ");
 		System.out.println("\n" + new Gson().toJson(result).toString() + "\n");
 		// System.out.println(new Gson().toJson(selectPage(" SELECT * FROM
 		// source_60", currPage, pageSize)).toString());
