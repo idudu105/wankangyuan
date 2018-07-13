@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2018-04-23 11:25:49
 * @Last Modified by:   Marte
-* @Last Modified time: 2018-07-11 14:51:16
+* @Last Modified time: 2018-07-13 16:45:25
 */
 
 *{
@@ -495,6 +495,11 @@ input{
     background:#ffffff;
     width:130px;
     text-align: left;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    word-wrap: break-word;
 }
 .shaixuanZKliI{
     float:right;
@@ -593,6 +598,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
     width:150px;
 }
 .PJname{
@@ -698,6 +704,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
 }
 .PJliCli2.dataage,.PJListli.dataage{
     width:160px;
@@ -951,6 +958,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
     min-height: 1px;
 }
 .PJedit{
@@ -971,6 +979,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
     min-height: 1px;
     width:150px;
 }
@@ -1165,6 +1174,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
     width:90px;
     text-align: left;
 }
@@ -1718,6 +1728,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
 }
 .prof_lbRmULt3{
     width:125px;
@@ -2050,6 +2061,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
 }
 .prodaclmRzTtnr{
     width:400px;
@@ -2057,6 +2069,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
 }
 .prodaclmRzB{
     height:160px;
@@ -2078,6 +2091,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
 }
 .prodaclmRzTtnr2{
     line-height: 33px;
@@ -2105,6 +2119,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
 }
 .prodaclmRsxK{
     margin-bottom:26px;
@@ -2186,6 +2201,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
 }
 .prodaclmRzTt2{
     font-size:16px;
@@ -2197,6 +2213,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
 }
 .prodaclmRzTt3{
     font-size:16px;
@@ -2208,6 +2225,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
 }
 .clmReditK{
     position:absolute;
@@ -2407,6 +2425,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
 }
 .proreM{
     width:max-content;
@@ -2436,7 +2455,9 @@ input{
     /*display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
+    word-wrap: break-word;
     overflow: hidden;*/
+
     color:#666;
 }
 /*.proreMli.active{
@@ -2580,6 +2601,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
 }
 .addMtzsize{
     width:125px;
@@ -3550,6 +3572,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
     cursor:pointer;
     color:#5ca0e5;
 }
@@ -4357,6 +4380,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
 }
 .userMRMtabB{
     margin:20px auto;
@@ -5352,6 +5376,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
 }
 .messMKztTtime{
     width:240px;
@@ -5360,6 +5385,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
 }
 .messMKztB{
     width:800px;
@@ -5367,6 +5393,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
 }
 .messMKzb{
     font-size:18px;
@@ -5569,6 +5596,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
 }
 .messsendMRMztTr{
     float:right;
@@ -5577,6 +5605,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
 }
 .messsendMRMztB{
     width:300px;
@@ -5585,6 +5614,7 @@ input{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    word-wrap: break-word;
     cursor:pointer;
 }
 .messsendMRMztB:hover{

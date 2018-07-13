@@ -3029,6 +3029,10 @@ ul.messagesList li span.date {
     text-align: center;
     cursor:pointer;
 }
+.box_xxtabz.active{
+    background:#eee;
+}
+
 .box_addxxtabz{
     width:40px;
     height:40px;
@@ -3041,6 +3045,7 @@ ul.messagesList li span.date {
     text-align: center;
     cursor:pointer;
 }
+
 
 .box_xx2tab{
     overflow:auto;

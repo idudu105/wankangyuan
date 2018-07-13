@@ -17,17 +17,23 @@ $(document).ready(function(){
 
     var obox_xytab=odatacollec.querySelectorAll('.box_xytab')[0];
     var abox_xytabz=obox_xytab.querySelectorAll('.box_xytabz');
-    /*
+    
     for(var i=0;i<abox_xxtabz.length;i++){
         (function(index){
-            abox_xxtabz[index].onclick=function(){
+            /*abox_xxtabz[index].onclick=function(){
                 for(var j=0;j<abox_xytabz.length;j++){
-                    abox_xytabz[j].className="box_xytabz";
+                	abox_xxtabz[j].className="box_xxtabz";
                 }
-                abox_xytabz[index].className="box_xytabz active";
-            }
+                abox_xxtabz[index].className="box_xxtabz active";
+            }*/
+            $(abox_xxtabz[index]).click(function(){
+            	for(var j=0;j<abox_xytabz.length;j++){
+                	abox_xxtabz[j].className="box_xxtabz";
+                }
+                abox_xxtabz[index].className="box_xxtabz active";
+            })
         })(i)
-    }*/
+    }
 
     // 新增数据采集源
     var obox_addxxtabz=odatacollec.querySelectorAll('.box_addxxtabz')[0];//新增数据采集源按钮
