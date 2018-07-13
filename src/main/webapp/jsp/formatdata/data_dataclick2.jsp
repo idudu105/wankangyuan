@@ -96,6 +96,7 @@
 							style="display: none;" /> <input id="sourceDataId"
 							value="${sourceDataId}" style="display: none;" />
 					</div>
+					<div class="app_expexport app_expexport_data">导出数据</div>
 					<div class="app_expexport app_expexport_node">导出结点</div>
 					<div class="app_expexport app_expexport_type">导出格式类型</div>
 				</div>
@@ -243,9 +244,11 @@
 											<c:if test="${status.index != 0 }">
 												<%-- <div class="prodaclmRzTt3 prodaclmRzTtsj3">${dataDataTempTemp}</div>
 											 --%>
-											 <div class="PJliCli2"><span>${dataDataTempTemp}</span></div>
-											 
-											 </c:if>
+												<div class="PJliCli2">
+													<span>${dataDataTempTemp}</span>
+												</div>
+
+											</c:if>
 										</c:forEach>
 									</div>
 								</c:forEach>
@@ -256,11 +259,11 @@
 							<div class="BTSXc">
 								<div class="BTSXcli">
 									<div class="BTSXcliT">排序：</div>
-							<img src="/wankangyuan/static/img/sort_up.png" alt=""
-								class="BTSXcliI"  /> <img
-								src="/wankangyuan/static/img/sort_down.png" alt=""
-								class="BTSXcliI"  />
-									<input type="text" class="BTSXcliIpd" style="display: none;" />
+									<img src="/wankangyuan/static/img/sort_up.png" alt=""
+										class="BTSXcliI" /> <img
+										src="/wankangyuan/static/img/sort_down.png" alt=""
+										class="BTSXcliI" /> <input type="text" class="BTSXcliIpd"
+										style="display: none;" />
 								</div>
 								<div class="BTSXcli">
 									<div class="BTSXcliT">过滤：</div>
@@ -269,7 +272,12 @@
 								<div class="BTSXcli">
 									<div class="BTSXcliT">值筛选：</div>
 								</div>
-								<div class="BTSXcli2"></div>
+								<div class="BTSXcli2">
+									<div class="BTSXcli2li">
+										<input type="checkbox" class="BTSXcli2liI" />
+										<div class="BTSXcli2liT">空值</div>
+									</div>
+								</div>
 								<div class="BTSXcli3">
 									<div class="BTSXcli3BT BTSXcli3BTent" onclick="shaixuan()">筛选</div>
 									<div class="BTSXcli3BT BTSXcli3BTent" onclick="chongzhi()">重置</div>
@@ -371,7 +379,13 @@
 				},
 				success:function(res){
 					if (res.result) {
-						var htmlStr = '';
+						var htmlStr =  '<div class="BTSXcli2li">'
+											+'<input type="checkbox" class="BTSXcli2liI" />'
+											+'<div class="BTSXcli2liT">空值</div>'
+										+'</div>'
+										+'<div class="BTSXcli2li">'
+										+	'<input type="checkbox" class="BTSXcli2liI"  style="display: none;"/>'
+										+'</div>';
 						var data = res.ffDatas;
 						for (var i in data) {
 							htmlStr += '<div class="BTSXcli2li">'
@@ -411,6 +425,18 @@
 	function chongzhi(){
 		$('#oldCondition').html('');
 		oldCondition="";
+		$.ajax({
+			type:"post",
+			url:"/wankangyuan/sourceData/reset",
+			async:true,
+			data:{					
+			},
+			success:function(data){
+				if (data.result) {
+					alert(data.message);
+				}
+			}
+		});
 	}	
 	//数据筛选，支持模糊查询
 	function shaixuan(){
@@ -776,6 +802,33 @@
             	}
             });
     	}
+    	//导出数据
+    	$(".app_expexport_data").click(function (){
+
+            var cs_id = $("#cs_id").val();
+    		var ft_id = $("#ft_id").val();
+    		var formatNodeId = $("#formatNodeId").val();
+    		var sourceDataId = $("#sourceDataId").val();
+    		var afuxuanK=document.querySelectorAll('.fx4');
+            var afuxuan=[];
+            for(var i=0;i<afuxuanK.length;i++){
+                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+            }
+            var formatDataIds = [];
+            for(var i=0;i<afuxuanK.length;i++){
+            	if(afuxuan[i].checked){
+            		formatDataIds.push(afuxuan[i].name);
+            	}
+            }
+            if(formatDataIds == ""){
+          	   alert("请选择待导出数据！");
+          	   return;
+             }
+              //刷新页面
+            window.location.href="/wankangyuan/export/formatData?cs_id="
+            				+cs_id+"&ft_id="+ft_id+"&formatDataIds="+formatDataIds;
+           	
+    	});
     	//导出结点
     	$(".app_expexport_node").click(function (){
     		var afuxuanK=document.querySelectorAll('.fuxuanK42');

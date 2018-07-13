@@ -150,7 +150,7 @@
 				<div class="shaixuanZK">
 					<c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
 						<div class="shaixuanZKli">
-							<div class="shaixuanZKliT" >${sourceFieldTemp.csf_name}</div>
+							<div class="shaixuanZKliT">${sourceFieldTemp.csf_name}</div>
 							<div class="shaixuanZKliI active"></div>
 						</div>
 					</c:forEach>
@@ -201,12 +201,13 @@
 									</c:if>
 
 									<c:if test="${status.index!=0}">
-										<div class="PJliCli2">
-											<a href="#" onclick="datainHref('${sourceData[0]}')"> <span>${sourceDataField}</span>
-											</a>
-										</div>
+										<a href="#" onclick="datainHref('${sourceData[0]}')">
+											<div class="PJliCli2">
+												<span>${sourceDataField}</span>
+											</div>
+										</a>
 									</c:if>
-<%-- 
+									<%-- 
 									<c:if test="${status.index!=0 && status.index!=1}">
 										<div class="PJliCli2">${sourceDataField}</div>
 									</c:if> --%>
@@ -225,7 +226,7 @@
 						<div class="BTSXcli">
 							<div class="BTSXcliT">排序：</div>
 							<img src="/wankangyuan/static/img/sort_up.png" alt=""
-								class="BTSXcliI"  /> <img
+								class="BTSXcliI" /> <img
 								src="/wankangyuan/static/img/sort_down.png" alt=""
 								class="BTSXcliI" />
 						</div>
@@ -236,7 +237,12 @@
 						<div class="BTSXcli">
 							<div class="BTSXcliT">值筛选：</div>
 						</div>
-								 <div class="BTSXcli2"></div>
+						<div class="BTSXcli2">
+							<div class="BTSXcli2li">
+								<input type="checkbox" class="BTSXcli2liI" />
+								<div class="BTSXcli2liT">空值</div>
+							</div>
+						</div>
 						<div class="BTSXcli3">
 							<div class="BTSXcli3BT BTSXcli3BTent" onclick="shaixuan()">筛选</div>
 							<div class="BTSXcli3BT BTSXcli3BTres" onclick="chongzhi()">重置</div>
@@ -301,7 +307,13 @@
 				},
 				success:function(res){
 					if (res.result) {
-						var htmlStr = '';
+						var htmlStr = '<div class="BTSXcli2li">'
+										+'<input type="checkbox" class="BTSXcli2liI" />'
+										+'<div class="BTSXcli2liT">空值</div>'
+									+'</div>'
+									+'<div class="BTSXcli2li">'
+									+	'<input type="checkbox" class="BTSXcli2liI"  style="display: none;"/>'
+									+'</div>';
 						var data = res.csfDatas;
 						for (var i in data) {
 							htmlStr += '<div class="BTSXcli2li">'
@@ -334,10 +346,24 @@
 	    		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
 	}
 	
+
+	//重置，清空累加筛选条件
 	function chongzhi(){
 		$('#oldCondition').html('');
 		oldCondition="";
-	}		
+		$.ajax({
+			type:"post",
+			url:"/wankangyuan/sourceData/reset",
+			async:true,
+			data:{					
+			},
+			success:function(data){
+				if (data.result) {
+					alert(data.message);
+				}
+			}
+		});
+	}			
 
 	function shaixuan(){
 		var afuxuanK=document.querySelectorAll('.BTSXcli2li');

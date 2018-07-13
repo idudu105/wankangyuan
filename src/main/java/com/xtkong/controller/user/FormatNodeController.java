@@ -119,7 +119,7 @@ public class FormatNodeController {
 	@RequestMapping("/getFormatNodeById")
 	public String getFormatNodeById(HttpSession httpSession, String cs_id, String sourceDataId, String ft_id,
 			String formatNodeId, String type, Integer page, Integer strip, Integer searchId, String desc_asc,
-			String chooseDatas, String oldCondition, String searchWord) {
+			String chooseDatas, String oldCond8ition, String searchWord) {
 		if (page == null) {
 			page = 1;
 		}
@@ -132,6 +132,7 @@ public class FormatNodeController {
 		List<FormatField> data = new ArrayList<>();
 		List<List<String>> dataDataLists = new ArrayList<>();
 		Integer dataCount = 0;
+		String oldCondition = null;
 		if (cs_id != null && ft_id != null && sourceDataId != null && formatNodeId != null) {
 
 			HashMap<String, FormatType> formatTypeMap = new HashMap<>();
@@ -207,7 +208,68 @@ public class FormatNodeController {
 				for (FormatField formatField : data) {
 					dataQualifiers.add(String.valueOf(formatField.getFf_id()));
 				}
+				if ((type.equals((String) httpSession.getAttribute("oldSourceType")))
+						&& (formatNodeId.equals((String) httpSession.getAttribute("formatNodeId")))
+						&&(sourceDataId.equals((String)httpSession.getAttribute("sourceDataId")))) {
+					oldCondition = (String) httpSession.getAttribute("oldCondition");
+				}
 				// 筛选
+				if (searchId != null) {
+					if (oldCondition == null) {
+						oldCondition = " ";
+					} else if (oldCondition.trim().isEmpty()) {
+						oldCondition = " ";
+					} else {
+						oldCondition += " AND ";
+					}
+					boolean isnull = false;
+					if (chooseDatas != null && !chooseDatas.trim().isEmpty()) {
+						oldCondition += "( ";
+						for (String csfChooseData : chooseDatas.split(",")) {
+							if (csfChooseData.equals("空值")) {
+								oldCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId)
+										+ "\" IS NULL OR ";
+								isnull = true;
+							} else {
+								oldCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId)
+										+ "\"='" + csfChooseData + "' OR ";
+							}
+						}
+						if (oldCondition.trim().endsWith("OR")) {
+							oldCondition = oldCondition.substring(0, oldCondition.lastIndexOf("OR")) + " ) AND ";
+						}
+					}
+					if (searchWord != null && !isnull) {
+						oldCondition += "(\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId)
+								+ "\" LIKE '%" + searchWord + "%') ";
+					}
+					if (oldCondition.trim().endsWith("AND")) {
+						oldCondition = oldCondition.substring(0, oldCondition.lastIndexOf("AND"));
+					}
+					
+					
+				/*	oldCondition = "( ";
+					if (chooseDatas != null && !chooseDatas.trim().isEmpty()) {
+						for (String csfChooseData : chooseDatas.split(",")) {
+							oldCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId) + "\"='"
+									+ csfChooseData + "' OR ";
+						}
+					}
+					if (searchWord != null) {
+						if (searchWord.equals("空值")) {
+							oldCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId)
+									+ "\" IS NULL ";
+						} else {
+							oldCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId) + "\" LIKE '%"
+									+ searchWord + "%' OR ";
+						}
+					}
+					if (oldCondition.trim().endsWith("OR")) {
+						oldCondition = oldCondition.substring(0, oldCondition.lastIndexOf("OR")) + " )";
+					} else {
+						oldCondition = null;
+					}*/
+				}/*
 				if (searchId != null && chooseDatas != null && !chooseDatas.trim().isEmpty()) {
 					if (searchWord == null) {
 						searchWord = "";
@@ -221,7 +283,7 @@ public class FormatNodeController {
 					if (oldCondition.trim().endsWith("OR")) {
 						oldCondition = oldCondition.substring(0, oldCondition.lastIndexOf("OR")) + " ) ";
 					}
-				}
+				}*/
 				if (oldCondition == null || oldCondition.trim().isEmpty()) {
 					condition = " \"" + tableName + "\".\"ID\"!='" + formatNodeId + "' ";
 				} else {
@@ -275,6 +337,8 @@ public class FormatNodeController {
 		httpSession.setAttribute("desc_asc", desc_asc);
 		httpSession.setAttribute("oldCondition", oldCondition);
 		httpSession.setAttribute("cs_id", cs_id);
+		httpSession.setAttribute("oldSourceType", type);
+		
 
 		switch (type) {
 		case "1":

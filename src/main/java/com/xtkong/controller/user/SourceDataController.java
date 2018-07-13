@@ -86,8 +86,9 @@ public class SourceDataController {
 	@RequestMapping("/getSourceDatas")
 	public String getSourceDatas(HttpServletRequest request, HttpSession httpSession, String type, Integer cs_id,
 			Integer page, Integer strip, Integer searchId, String desc_asc, String searchWord, String chooseDatas,
-			String oldCondition, Integer p_id, String searchFirstWord) {
+			String oldCond8ition, Integer p_id, String searchFirstWord) {
 		User user = (User) request.getAttribute("user");
+
 		if (page == null) {
 			page = 1;
 		}
@@ -99,6 +100,7 @@ public class SourceDataController {
 		List<List<String>> sourceDatas = new ArrayList<>();
 		Integer total = 0;
 		Source source = null;
+		String oldCondition = null;
 		if (!sources.isEmpty()) {
 			if (cs_id == null) {
 				cs_id = sourceService.getSourcesForUserLimit(1).get(0).getCs_id();
@@ -154,19 +156,41 @@ public class SourceDataController {
 				}
 				break;
 			}
-			if (searchWord != null && searchId != null) {
-				// searchWord = "";
-				conditionLike.put(String.valueOf(searchId), searchWord);
+
+			if ((type.equals((String) httpSession.getAttribute("oldSourceType")))
+					&& (cs_id.equals((Integer) httpSession.getAttribute("thiscs_id")))) {
+				oldCondition = (String) httpSession.getAttribute("oldCondition");
+				// } else {
+				// reset(httpSession);
 			}
+
 			// 筛选
-			if (searchId != null && chooseDatas != null && !chooseDatas.trim().isEmpty()) {
-				oldCondition = " ( ";
-				for (String csfChooseData : chooseDatas.split(",")) {
-					oldCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId) + "\"='"
-							+ csfChooseData + "' OR ";
+			// oldCondition = (String) httpSession.getAttribute("oldCondition");
+			if (searchId != null) {
+				if (oldCondition == null) {
+					oldCondition = " ";
+				} else if (oldCondition.trim().isEmpty()) {
+					oldCondition = " ";
+				} else {
+					oldCondition += " AND ";
 				}
-				if (oldCondition.trim().endsWith("OR")) {
-					oldCondition = oldCondition.substring(0, oldCondition.lastIndexOf("OR")) + " ) ";
+				if (chooseDatas != null && !chooseDatas.trim().isEmpty()) {
+					oldCondition += "( ";
+					for (String csfChooseData : chooseDatas.split(",")) {
+						if (csfChooseData.equals("空值")) {
+							oldCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId)
+									+ "\" IS NULL OR ";
+						} else {
+							oldCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId)
+									+ "\"='" + csfChooseData + "' OR ";
+						}
+					}
+					if (oldCondition.trim().endsWith("OR")) {
+						oldCondition = oldCondition.substring(0, oldCondition.lastIndexOf("OR")) + " ) ";
+					}
+				} else if (searchWord != null) {
+					oldCondition += "(\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId)
+							+ "\" LIKE '%" + searchWord + "%') ";
 				}
 			}
 			// if (csfCondition != null&& !csfCondition.trim().isEmpty()) {
@@ -221,7 +245,8 @@ public class SourceDataController {
 			httpSession.setAttribute("searchId", searchId);
 			httpSession.setAttribute("desc_asc", desc_asc);
 			httpSession.setAttribute("oldCondition", oldCondition);
-			httpSession.setAttribute("searchWord", searchFirstWord);
+			httpSession.setAttribute("oldSourceType", type);
+			httpSession.setAttribute("searchFirstWord", searchFirstWord);
 		}
 		switch (type) {
 		case "1":
@@ -242,6 +267,17 @@ public class SourceDataController {
 
 	}
 
+	@RequestMapping("/reset")
+	@ResponseBody
+	public Map<String, Object> reset(HttpSession httpSession) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		httpSession.setAttribute("oldCondition", null);
+		map.put("result", true);
+		map.put("message", "重置成功");
+		return map;
+
+	}
+
 	/**
 	 * 获取某字段数据
 	 * 
@@ -259,8 +295,9 @@ public class SourceDataController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/getSourceFieldDatas")
 	@ResponseBody
-	public Map<String, Object> getSourceFieldDatas(HttpServletRequest request, String type, Integer cs_id,
-			Integer searchId, String searchWord, String oldCondition, Integer p_id, String searchFirstWord) {
+	public Map<String, Object> getSourceFieldDatas(HttpServletRequest request, HttpSession httpSession, String type,
+			Integer cs_id, Integer searchId, String searchWord, String oldCondition, Integer p_id,
+			String searchFirstWord) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (cs_id == null || searchId == null || type == null) {
 			map.put("result", false);
@@ -275,7 +312,7 @@ public class SourceDataController {
 			List<String> qualifiers = new ArrayList<>();
 			Map<String, String> conditionEqual = new HashMap<>();
 			Map<String, String> conditionLike = new HashMap<>();
-			String condition = oldCondition;
+			String condition = (String) httpSession.getAttribute("oldCondition");
 			String phoenixSQL = null;
 
 			qualifiers.add(String.valueOf(searchId));
@@ -478,6 +515,17 @@ public class SourceDataController {
 	@ResponseBody
 	public Map<String, Object> deleteSourceDatas(String cs_id, String sourceDataIds) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		// List<String> sourceDataIdList = new ArrayList<>();
+		for (String sourceDataId : sourceDataIds.split(",")) {
+			// if (!sourceDataId.startsWith(uid+"_")) {
+			try {
+				userDataService.deleteid(sourceDataId, Integer.valueOf(cs_id));
+			} catch (Exception e) {
+				continue;
+			}
+			// sourceDataIdList.add(sourceDataId);
+			// }
+		}
 		if (HBaseSourceDataDao.deleteSourceDatas(cs_id, sourceDataIds)) {
 			map.put("result", true);
 			map.put("message", "删除成功");
@@ -588,8 +636,12 @@ public class SourceDataController {
 		// List<String> sourceDataIdList = new ArrayList<>();
 		for (String sourceDataId : sourceDataIds.split(",")) {
 			// if (!sourceDataId.startsWith(uid+"_")) {
-			if (userDataService.delete(uid, sourceDataId, Integer.valueOf(cs_id)) != 1) {
-				b = false;
+			try {
+				if (userDataService.delete(uid, sourceDataId, Integer.valueOf(cs_id)) != 1) {
+					b = false;
+				}
+			} catch (Exception e) {
+				continue;
 			}
 			// sourceDataIdList.add(sourceDataId);
 			// }

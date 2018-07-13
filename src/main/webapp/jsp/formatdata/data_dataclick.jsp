@@ -176,7 +176,7 @@
 								</div>
 							</c:forEach>
 						</div>
-						
+
 						<div class="prodaclmRsjK">
 							<div class="prodaclmRzT">
 								<div class="quanxuanK fxK1">
@@ -203,8 +203,10 @@
 											<c:if test="${status.index != 0 }">
 												<%-- <div class="prodaclmRzTt3 prodaclmRzTtsj3">${dataDataTempTemp}</div>
 											 --%>
-											  <div class="PJliCli2"><span>${dataDataTempTemp}</span></div>
-											 </c:if>
+												<div class="PJliCli2">
+													<span>${dataDataTempTemp}</span>
+												</div>
+											</c:if>
 										</c:forEach>
 									</div>
 								</c:forEach>
@@ -229,7 +231,12 @@
 								<div class="BTSXcli">
 									<div class="BTSXcliT">值筛选：</div>
 								</div>
-								<div class="BTSXcli2"></div>
+								<div class="BTSXcli2">
+									<div class="BTSXcli2li">
+										<input type="checkbox" class="BTSXcli2liI" />
+										<div class="BTSXcli2liT">空值</div>
+									</div>
+								</div>
 								<div class="BTSXcli3">
 									<div class="BTSXcli3BT BTSXcli3BTent" onclick="shaixuan()">筛选</div>
 									<div class="BTSXcli3BT BTSXcli3BTent" onclick="chongzhi()">重置</div>
@@ -259,7 +266,7 @@
 		src="/wankangyuan/static/js/jquery.min.js"></script>
 
 	<script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
-s
+	s
 	<script type="text/javascript">
     var cs_id="${cs_id}";//采集源id
 	var searchId="${searchId}";//操作字段id
@@ -296,7 +303,13 @@ s
 				},
 				success:function(res){
 					if (res.result) {
-						var htmlStr = '';
+						var htmlStr =  '<div class="BTSXcli2li">'
+										+'<input type="checkbox" class="BTSXcli2liI" />'
+										+'<div class="BTSXcli2liT">空值</div>'
+									+'</div>'
+									+'<div class="BTSXcli2li">'
+									+	'<input type="checkbox" class="BTSXcli2liI"  style="display: none;"/>'
+									+'</div>';
 						var data = res.ffDatas;
 						for (var i in data) {
 							htmlStr += '<div class="BTSXcli2li">'
@@ -336,6 +349,18 @@ s
 	function chongzhi(){
 		$('#oldCondition').html('');
 		oldCondition="";
+		$.ajax({
+			type:"post",
+			url:"/wankangyuan/sourceData/reset",
+			async:true,
+			data:{					
+			},
+			success:function(data){
+				if (data.result) {
+					alert(data.message);
+				}
+			}
+		});
 	}	
 	//数据筛选，支持模糊查询
 	function shaixuan(){

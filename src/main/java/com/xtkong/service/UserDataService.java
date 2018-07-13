@@ -12,20 +12,24 @@ import com.xtkong.model.UserData;
 public class UserDataService {
 	@Autowired
 	UserDataDao userDataDao;
-	
-	public int insert( Integer uid,String dataid, Integer cs_id){
+
+	public int insert(Integer uid, String dataid, Integer cs_id) {
 		return userDataDao.insert(uid, dataid, cs_id);
 	}
 
-	public List<UserData> select(Integer uid){
+	public List<UserData> select(Integer uid) {
 		return userDataDao.select(uid);
 	}
-	
-	public List<String> selects(Integer uid, Integer cs_id){
-		return userDataDao.selects(uid, cs_id);	
+
+	public List<String> selects(Integer uid, Integer cs_id) {
+		return userDataDao.selects(uid, cs_id);
 	}
 
-	public int delete( Integer uid,String dataid, Integer cs_id){
+	public int delete(Integer uid, String dataid, Integer cs_id) {
 		return userDataDao.delete(uid, dataid, cs_id);
+	}
+
+	public int deleteid(String dataid, Integer cs_id) {
+		return userDataDao.deleteid(dataid, cs_id);
 	}
 }

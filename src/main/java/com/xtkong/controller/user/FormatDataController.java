@@ -293,7 +293,7 @@ public class FormatDataController {
 	@ResponseBody
 	public Map<String, Object> getFieldDatas(HttpServletRequest request, HttpSession httpSession, String type,
 			Integer cs_id, Integer ft_id, String formatNodeId, Integer searchId, String searchWord,
-			String odlCondition) {
+			String odlCond8ition) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (type == null || cs_id == null || ft_id == null || formatNodeId == null || searchId == null) {
 			map.put("result", false);
@@ -316,6 +316,7 @@ public class FormatDataController {
 				searchWord = "";
 			}
 			conditionLike.put(String.valueOf(searchId), searchWord);
+			String odlCondition=(String) httpSession.getAttribute("oldCondition");
 			if (odlCondition == null || odlCondition.trim().isEmpty()) {
 				condition = " \"" + tableName + "\".\"ID\"!='" + formatNodeId + "' ";
 			} else {

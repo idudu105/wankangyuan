@@ -180,14 +180,12 @@ public class HBaseFormatDataDao {
 			}
 			Result[] results = table.get(gets);
 			for (Result result : results) {
+				List<String> formatData = new ArrayList<>();
 				for (FormatField formatField : formatFields) {
-					List<String> formatData = new ArrayList<>();
-					formatData.add(String.valueOf(formatField.getFf_id()));
-					formatData.add(formatField.getFf_name());
 					formatData.add(Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
 							Bytes.toBytes(String.valueOf(formatField.getFf_id())))));
-					formatDatas.add(formatData);
 				}
+				formatDatas.add(formatData);
 			}
 			table.close();
 		} catch (IOException e) {
