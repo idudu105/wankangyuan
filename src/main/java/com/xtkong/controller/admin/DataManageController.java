@@ -74,9 +74,12 @@ public class DataManageController {
 					break;
 				}
 			}
+			if(i>=sources.size()){
+				i=0;
+			}
 			source = sources.get(i);
-			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
-			source.setFormatTypes(formatTypeService.getFormatTypes(cs_id));
+			source.setSourceFields(sourceFieldService.getSourceFieldsForAdmin(cs_id));
+			source.setFormatTypes(formatTypeService.getFormatTypesForAdmin(cs_id));
 			if ((ft_id == null) && (!source.getFormatTypes().isEmpty())) {
 				ft_id = source.getFormatTypes().get(0).getFt_id();
 			}

@@ -119,7 +119,7 @@ public class FormatNodeController {
 	@RequestMapping("/getFormatNodeById")
 	public String getFormatNodeById(HttpSession httpSession, String cs_id, String sourceDataId, String ft_id,
 			String formatNodeId, String type, Integer page, Integer strip, Integer searchId, String desc_asc,
-			String chooseDatas, String oldCond8ition, String searchWord) {
+			String chooseDatas, String oldCond8ition, String searchWord, String searchFirstWord, String fieldIds) {
 		if (page == null) {
 			page = 1;
 		}
@@ -212,6 +212,32 @@ public class FormatNodeController {
 						&& (formatNodeId.equals((String) httpSession.getAttribute("formatNodeId")))
 						&&(sourceDataId.equals((String)httpSession.getAttribute("sourceDataId")))) {
 					oldCondition = (String) httpSession.getAttribute("oldCondition");
+				}
+
+				// 头筛选
+				if (searchFirstWord != null && !searchFirstWord.trim().isEmpty()) {
+					if (oldCondition == null) {
+						oldCondition = " ";
+					} else if (oldCondition.trim().isEmpty()) {
+						oldCondition = " ";
+					} else {
+						oldCondition += " AND ";
+					}
+					if (fieldIds != null && !fieldIds.trim().isEmpty()) {
+						Map<String, String> like = new HashMap<>();
+						for (String fieldId : fieldIds.split(",")) {
+							if (dataQualifiers.contains(fieldId)) {
+								like.put(fieldId, searchFirstWord);
+							}
+						}
+						oldCondition += PhoenixClient.getSQLConditionLikes(tableName, like, "OR");
+					} else if (!data.isEmpty()) {
+						Map<String, String> like = new HashMap<>();
+						for (String qualifier :dataQualifiers) {
+							like.put(qualifier, searchFirstWord);
+						}
+						oldCondition += PhoenixClient.getSQLConditionLikes(tableName, like, "OR");
+					}
 				}
 				// 筛选
 				if (searchId != null) {

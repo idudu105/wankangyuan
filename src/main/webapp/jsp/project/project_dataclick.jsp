@@ -158,6 +158,13 @@
 					<br>
 					<div class="prodaclmRz2">
 						<div class="prodaclmRsxK">
+							<div class="search">
+								<div class="searchC">
+									<img src="/wankangyuan/static/img/search.png" alt=""
+										class="searchCi" /> <input type="text" class="searchCt"
+										placeholder="搜索数据" value="${searchFirstWord}" />
+								</div>
+							</div>
 							<div class="prodaclmRsx">
 								<div class="prodaclmRsxT">筛选</div>
 								<img src="/wankangyuan/static/img/sanjiao_blue.png" alt=""
@@ -271,7 +278,16 @@
 	//选择待操作字段
 	$('.prodaclmRzTt2').click(function(){
 		searchId = $(this).attr('id');
-	})
+	});
+	//全搜索
+    $(".searchCt").bind("keypress" , function(event){
+		if(event.keyCode == 13){
+			chongzhi();
+			window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="+cs_id
+					+"&sourceDataId="+sourceDataId+"&type=4&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+					+"&searchFirstWord="+this.value;
+		}
+	});
 	//过滤
 	$('.BTSXcliGLK').keypress(function(e){
 		var that = $(this);
@@ -346,9 +362,9 @@
 			data:{					
 			},
 			success:function(data){
-				if (data.result) {
+				/* if (data.result) {
 					alert(data.message);
-				}
+				} */
 			}
 		});
 	}	

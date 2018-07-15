@@ -195,13 +195,13 @@
 									class="prodaclmRsxI" />
 							</div>
 
-							<div class="prodaclmRss" style="display: none;">
+							<!-- <div class="prodaclmRss" style="display: none;">
 								<div class="prodaclmRssC">
 									<img src="/wankangyuan/static/img/search.png" alt=""
 										class="searchCi" /> <input type="text" class="searchCt"
 										placeholder="搜索项目" />
 								</div>
-							</div>
+							</div> -->
 
 							<div class="prodaclmRsB">
 								<div class="prodaclmRsb clmRsb_inport">导入</div>
@@ -209,7 +209,16 @@
 								<div class="prodaclmRsb clmRsb_modify">修改</div>
 								<div class="prodaclmRsb clmRsb_add">添加</div>
 							</div>
+							
+							<div class="search">
+								<div class="searchC">
+									<img src="/wankangyuan/static/img/search.png" alt=""
+										class="searchCi" /> <input type="text" class="searchCt"
+										placeholder="搜索数据" value="${searchFirstWord}" />
+								</div>
+							</div>
 						</div>
+						
 						<div class="shaixuanZK">
 							<c:forEach items="${data}" var="dataTemp">
 								<div class="shaixuanZKli">
@@ -358,7 +367,16 @@
 	//选择待操作字段
 	$('.prodaclmRzTt2').click(function(){
 		searchId = $(this).attr('id');
-	})
+	});
+	//全搜索
+    $(".searchCt").bind("keypress" , function(event){
+		if(event.keyCode == 13){
+			chongzhi();
+			window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="+cs_id
+					+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+					+"&searchFirstWord="+this.value;
+		}
+	});
 	//过滤
 	$('.BTSXcliGLK').keypress(function(e){
 		var that = $(this);
@@ -432,9 +450,9 @@
 			data:{					
 			},
 			success:function(data){
-				if (data.result) {
+				/* if (data.result) {
 					alert(data.message);
-				}
+				} */
 			}
 		});
 	}	
@@ -844,21 +862,23 @@
             		ft_ids.push(afuxuan[i].value);
             	}
             }
-            if(ft_ids.length > 1 || formatNodeIds.length > 1){
+           /*  if(ft_ids.length > 1 || formatNodeIds.length > 1){
             	alert("最多选择一个结点！");
             	return;
-            }
+            } */
+            
             if(ft_ids == "" || formatNodeIds == ""){
          	   alert("请选择待导出数据的结点！");
          	   return;
             }
+            if(ft_ids.length != formatNodeIds.length ){
+            	alert("最多选择一个类型！");
+            	return;
+            } 
             var cs_id = $('#cs_id').val();
     		var ft_id = ft_ids.join(",");
-    		var formatNodeId = formatNodeIds.join(",");
-           	window.location.href="/wankangyuan/export/formatNode?cs_id="+cs_id+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId
-			+"&page="+page+"&strip=${rows}"
-           	+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord
-			+"&oldCondition="+oldCondition;;
+    	//	var formatNodeId = formatNodeIds.join(",");
+           	window.location.href="/wankangyuan/export/formatNode?cs_id="+cs_id+"&ft_ids="+ft_id+"&formatNodeIds="+formatNodeIds.join(",");
            	
     	});
     	//导出类型

@@ -18,11 +18,20 @@ public class SourceField {
 	private int create_uid; // 创建人
 	private String update_datetime; // 更新时间
 	private int update_uid; // 更新人
+	private boolean is_view;// 是否显示到前端 0不显示；1显示
 
 	private String creator; // 创建人
 	private String updater; // 更新人
 
 
+
+	public boolean isIs_view() {
+		return is_view;
+	}
+
+	public void setIs_view(boolean is_view) {
+		this.is_view = is_view;
+	}
 
 	public String getCreator() {
 		return creator;

@@ -122,6 +122,17 @@
 
 				</div>
 			</div>
+			<div class="top2C">
+				<div class="search">
+					<div class="searchC">
+						<img src="/wankangyuan/static/img/search.png" alt=""
+							class="searchCi" /> <input type="text" class="searchCt"
+							placeholder="搜索数据" value="${searchFirstWord}" />
+					</div>
+				</div>
+			</div>
+
+
 			<div class="shaixuan">
 				<div class="shaixuanC">
 
@@ -165,13 +176,6 @@
 							</c:if>
 						</c:forEach>
 					</select>
-					<div class="search2">
-						<div class="search2C">
-							<img src="/wankangyuan/static/img/search.png" alt=""
-								class="search2Ci" /> <input type="text" class="search2Ct"
-								placeholder="搜索数据" />
-						</div>
-					</div>
 				</div>
 				<div class="shaixuanZK">
 					<c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
@@ -297,8 +301,16 @@
 	//选择待操作字段
 	$('.PJListli').click(function(){
 		searchId = $(this).attr('id');
-	})
-	
+	});
+	//全搜索
+    $(".searchCt").bind("keypress" , function(event){
+		if(event.keyCode == 13){
+			chongzhi();
+			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=4&cs_id="
+					+cs_id+"&p_id="+p_id+"&searchFirstWord="+this.value;
+			
+		}
+	});
 	//过滤
 	$('.BTSXcliGLK').keypress(function(e){
 		var that = $(this);
@@ -358,9 +370,9 @@
 			data:{					
 			},
 			success:function(data){
-				if (data.result) {
+				/* if (data.result) {
 					alert(data.message);
-				}
+				} */
 			}
 		});
 	}		

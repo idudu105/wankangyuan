@@ -11,13 +11,14 @@ import org.apache.ibatis.annotations.Update;
 import com.xtkong.model.SourceField;
 
 public interface SourceFieldDao {
-	@Insert("insert into collection_source_field(csf_name,cs_id,type,check_rule,enumerated,not_null,description,error_msg,create_datetime,create_uid,update_datetime,update_uid) "
-			+ "values(#{csf_name},#{cs_id},#{type},#{check_rule},#{enumerated},#{not_null},#{description},#{error_msg},#{create_datetime},#{create_uid},#{update_datetime},#{update_uid})")
+	@Insert("insert into collection_source_field(csf_name,cs_id,type,check_rule,enumerated,not_null,description,error_msg,create_datetime,create_uid,update_datetime,update_uid,is_view) "
+			+ "values(#{csf_name},#{cs_id},#{type},#{check_rule},#{enumerated},#{not_null},#{description},#{error_msg},#{create_datetime},#{create_uid},#{update_datetime},#{update_uid},#{is_view})")
 	public int insertSourceField(SourceField sourceField);
 
-	@Update("update collection_source_field "
-			+ "set csf_name=#{csf_name} , type=#{type} , check_rule=#{check_rule}, enumerated=#{enumerated}, not_null=#{not_null}, description=#{description},error_msg=#{error_msg},update_datetime=#{update_datetime},update_uid=#{update_uid}  "
-			+ "where csf_id=#{csf_id}")
+	@Update("update collection_source_field " + "set csf_name=#{csf_name} , type=#{type} , check_rule=#{check_rule},"
+			+ " enumerated=#{enumerated}, not_null=#{not_null}, description=#{description},"
+			+ "error_msg=#{error_msg},update_datetime=#{update_datetime},update_uid=#{update_uid},"
+			+ "is_view=#{is_view}  " + "where csf_id=#{csf_id}")
 	public int updateSourceField(SourceField sourceField);
 
 	/**
@@ -27,11 +28,14 @@ public interface SourceFieldDao {
 	 *            采集源
 	 * @return 采集源字段列表
 	 */
-	@Select("select * from view_collection_source_field where cs_id=#{cs_id} order by csf_id ")
+	@Select("select * from view_collection_source_field where cs_id=#{cs_id} and  is_view=1 order by csf_id ")
 	public List<SourceField> getSourceFields(@Param("cs_id") int cs_id);
-	
+
+	@Select("select * from view_collection_source_field where cs_id=#{cs_id} order by csf_id ")
+	public List<SourceField> getSourceFieldsForAdmin(@Param("cs_id") int cs_id);
+
 	@Select("select csf_id from collection_source_field where cs_id=#{cs_id} and csf_name=#{csf_name} ORDER BY csf_id ASC LIMIT 1 ")
-	public Integer getSourceFieldId(@Param("cs_id") int cs_id,@Param("csf_name") String csf_name);
+	public Integer getSourceFieldId(@Param("cs_id") int cs_id, @Param("csf_name") String csf_name);
 
 	@Select("select * from view_collection_source_field where csf_id=#{csf_id}")
 	public SourceField getSourceField(Integer csf_id);

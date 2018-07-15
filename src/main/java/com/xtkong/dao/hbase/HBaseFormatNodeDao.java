@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
@@ -190,7 +192,9 @@ public class HBaseFormatNodeDao {
 					// Bytes.toBytes(ConstantsHBase.QUALIFIER_NODE))).split(",");
 					try {
 						// 添加行键formatNodeId、不显示，节点名、显示
-						formatTypeMap.get(ft_id).getFormatDataNodes().put(Bytes.toString(result.getRow()), nodeName);
+						if (formatTypeMap.containsKey(ft_id)) {
+							formatTypeMap.get(ft_id).getFormatDataNodes().put(Bytes.toString(result.getRow()), nodeName);
+						}
 					} catch (NumberFormatException e) {
 						continue;
 					}
@@ -289,5 +293,29 @@ public class HBaseFormatNodeDao {
 
 	public static void deleteFormatNodeTable(String cs_id) {
 		HBaseDB.getInstance().deleteTable(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id);
+	}
+
+	public static List<String> getFormatNodeById(String cs_id, String ft_id, String formatNodeId) {
+		List<String> formatNode = new ArrayList<>();
+		try {
+			HBaseDB db = HBaseDB.getInstance();
+			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id);
+			Get get = new Get(Bytes.toBytes(formatNodeId));
+			Result result = table.get(get);
+			if (!result.isEmpty()) {
+				// 获取formatNodeId,ft_id,节点名
+				String rowkey = Bytes.toString(result.getRow());
+				String nodeName = Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+						Bytes.toBytes(ConstantsHBase.QUALIFIER_NODENAME)));
+				formatNode.add(rowkey);
+				formatNode.add(ft_id);
+				formatNode.add(nodeName);
+			}
+			table.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return formatNode;
 	}
 }

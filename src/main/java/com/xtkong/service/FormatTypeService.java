@@ -28,11 +28,12 @@ public class FormatTypeService {
 	 * @return 格式类型列表
 	 */
 	public List<FormatType> getFormatTypes(Integer cs_id) {
-
 		return formatTypeDao.getFormatTypes(cs_id);
 	}
+	public List<FormatType> getFormatTypesForAdmin(Integer cs_id) {
+		return formatTypeDao.getFormatTypesForAdmin(cs_id);
+	}
 	public FormatType getFormatType(Integer ft_id) {
-
 		return formatTypeDao.getFormatType(ft_id);
 	}
 
@@ -40,9 +41,11 @@ public class FormatTypeService {
 
 		return formatTypeDao.getFormatType_cs_id(ft_id);
 	}
-	public Integer getFormatTypeId( Integer cs_id, String ft_name){
+
+	public Integer getFormatTypeId(Integer cs_id, String ft_name) {
 		return formatTypeDao.getFormatTypeId(cs_id, ft_name);
 	}
+
 	public int deleteFormatType(Integer ft_id) {
 		return formatTypeDao.deleteFormatType(ft_id);
 	}

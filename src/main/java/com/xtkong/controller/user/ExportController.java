@@ -154,7 +154,7 @@ public class ExportController {
 	}
 
 	/**
-	 * 导出某结点数据
+	 * 导出结点数据
 	 * 
 	 * @param response
 	 * @param cs_id
@@ -162,20 +162,35 @@ public class ExportController {
 	 * @param formatNodeId
 	 */
 	@RequestMapping("/formatNode")
-	public void formatNode(HttpServletResponse response, String cs_id, String ft_id, String formatNodeId) {
+	public void formatNode(HttpServletResponse response, String cs_id, String ft_ids, String formatNodeIds) {
 		response.setContentType("application/vnd.ms-excel");
 
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFCellStyle style = workbook.createCellStyle();
 		style.setAlignment(HorizontalAlignment.CENTER);
+		HSSFSheet sheet;
+		String[] formatNodeIdsStr=formatNodeIds.split(",");
+		String[] ft_idsStr=ft_ids.split(",");
+		
+		for (int i = 0; i < ft_idsStr.length; i++) {
+			// meta数据
+			String ft_id=ft_idsStr[i];
+			String formatNodeId= formatNodeIdsStr[i];
+			FormatType formatType = formatTypeService.getFormatType(Integer.valueOf(ft_id));
+			List<String> formatNode=HBaseFormatNodeDao.getFormatNodeById(cs_id, ft_id, formatNodeId);
+			String nodeName="";
+			try {
+				nodeName=formatNode.get(2);
+			} catch (Exception e) {			
+				nodeName=""+i;
+			}
+			sheet = workbook.createSheet(formatType.getFt_name()+"_"+nodeName+"_"+"公共数据");
+			sheet = sheetFormatDatas(sheet, style, cs_id, ft_id, formatNodeId, ConstantsHBase.IS_meta_true);
 
-		// meta数据
-		HSSFSheet sheet = workbook.createSheet("公共数据");
-		sheet = sheetFormatDatas(sheet, style, cs_id, ft_id, formatNodeId, ConstantsHBase.IS_meta_true);
-
-		// data数据
-		sheet = workbook.createSheet("专属数据");
-		sheet = sheetFormatDatas(sheet, style, cs_id, ft_id, formatNodeId, ConstantsHBase.IS_meta_false);
+			// data数据
+			sheet = workbook.createSheet(formatType.getFt_name()+"_"+nodeName+"_"+"专属数据");
+			sheet = sheetFormatDatas(sheet, style, cs_id, ft_id, formatNodeId, ConstantsHBase.IS_meta_false);
+		}
 		try {
 			OutputStream output = response.getOutputStream();
 			workbook.write(output);

@@ -315,6 +315,13 @@
 											<option value="true" checked="checked">是</option>
 											<option value="false">否</option>
 										</select>
+									</div>									
+									<div class="addbiaoxli">
+										<div class="addbiaoxlit">状态：</div>
+										<select name="csfield_add_is_view" id="csfield_add_is_view">
+											<option value="true">显示</option>
+											<option value="false">隐藏</option>
+										</select>
 									</div>
 									<div class="addbiaoxli">
 										<div class="addbiaoxlit">字段描述信息：</div>
@@ -375,6 +382,13 @@
 										<select name="edit_not_null" id="edit_not_null">
 											<option value="true" checked="checked">是</option>
 											<option value="false">否</option>
+										</select>
+									</div>									
+									<div class="addbiaoxli">
+										<div class="addbiaoxlit">状态：</div>
+										<select name="csfield_edit_is_view" id="csfield_edit_is_view">
+											<option value="true">显示</option>
+											<option value="false">隐藏</option>
 										</select>
 									</div>
 									<div class="addbiaoxli">
@@ -538,7 +552,15 @@
 												</div>
 												<div class="encoMz">
 													<div class="encoMzt">类型:</div>
-													<input type="text" class="encoMzp" id="add_ff_type" />
+													<!-- <input type="text" class="encoMzp" id="add_ff_type" /> 
+													 -->
+													<select name="type" id="add_ff_type">
+														<option value="字符" checked="checked">字符</option>
+														<option value="数值">数值</option>
+														<option value="日期">日期</option>
+														<option value="图片">图片</option>
+														<option value="文件">文件</option>
+													</select>
 												</div>
 												<div class="encoMz">
 													<div class="encoMzt">校验规则:</div>
@@ -603,7 +625,15 @@
 												</div>
 												<div class="encoMz">
 													<div class="encoMzt">类型:</div>
-													<input type="text" class="encoMzp" id="edit_ff_type" />
+													<!-- <input type="text" class="encoMzp" id="edit_ff_type" /> 
+													 -->
+													<select name="type" id="edit_ff_type">
+														<option value="字符" checked="checked">字符</option>
+														<option value="数值">数值</option>
+														<option value="日期">日期</option>
+														<option value="图片">图片</option>
+														<option value="文件">文件</option>
+													</select>
 												</div>
 												<div class="encoMz">
 													<div class="encoMzt">校验规则:</div>

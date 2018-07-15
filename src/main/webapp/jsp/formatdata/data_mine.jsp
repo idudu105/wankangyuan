@@ -84,12 +84,20 @@
 
 			<div class="top2">
 				<div class="top2C">
-					<a href="/wankangyuan/sourceData/getSourceDatas?type=1"><div
-							class="top2Cli top2CliYJ">我的</div></a> <a
-						href="/wankangyuan/sourceData/getSourceDatas?type=2"><div
-							class="top2Cli">我创建的</div></a> <a
-						href="/wankangyuan/sourceData/getSourceDatas?type=3"><div
-							class="top2Cli">公共</div></a>
+					<a href="/wankangyuan/sourceData/getSourceDatas?type=1">
+						<div class="top2Cli top2CliYJ">我的</div>
+					</a> <a href="/wankangyuan/sourceData/getSourceDatas?type=2">
+						<div class="top2Cli">我创建的</div>
+					</a> <a href="/wankangyuan/sourceData/getSourceDatas?type=3">
+						<div class="top2Cli">公共</div>
+					</a>
+					<div class="search">
+						<div class="searchC">
+							<img src="/wankangyuan/static/img/search.png" alt=""
+								class="searchCi" /> <input type="text" class="searchCt"
+								placeholder="搜索数据" value="${searchFirstWord}" />
+						</div>
+					</div>
 					<!--
                     <div class="search">
                         <div class="searchC">
@@ -278,7 +286,16 @@
 
 	$('.PJListli').click(function(){
 		searchId = $(this).attr('id');
-	})
+	});
+	//全搜索
+    $(".searchCt").bind("keypress" , function(event){
+		if(event.keyCode == 13){
+			chongzhi();
+			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=1&cs_id="
+					+cs_id+"&searchFirstWord="+this.value;
+			
+		}
+	});
 	
 	$('.BTSXcliGLK').keypress(function(e){
 		var that = $(this);
@@ -321,13 +338,13 @@
 	var oBTSXcliI1=document.querySelectorAll('.BTSXcliI')[0];
 	var oBTSXcliI2=document.querySelectorAll('.BTSXcliI')[1];
 	oBTSXcliI1.onclick=function(){
-		desc_asc="ASC";console.log(12222222);
+		desc_asc="ASC";
 		window.location.href="/wankangyuan/sourceData/getSourceDatas?type=1&cs_id="+cs_id+"&searchId="+searchId+
 		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
 	}
 
 	oBTSXcliI2.onclick=function(){
-		desc_asc="DESC";console.log(22);
+		desc_asc="DESC";
 		window.location.href="/wankangyuan/sourceData/getSourceDatas?type=1&cs_id="+cs_id+"&searchId="+searchId+
 		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
 	}
@@ -349,9 +366,9 @@
 			data:{					
 			},
 			success:function(data){
-				if (data.result) {
+				/* if (data.result) {
 					alert(data.message);
-				}
+				} */
 			}
 		});
 	}		

@@ -42,8 +42,8 @@ public class SourceController {
 		sourceService.insertSource(source);
 		Integer cs_id = sourceService.getSourceId(source.getCs_name());
 		// source.setCs_id(cs_id);
-		// source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
-		// source.setFormatTypes(formatTypeService.getFormatTypes(cs_id));
+		// source.setSourceFields(sourceFieldService.getSourceFieldsForAdmin(cs_id));
+		// source.setFormatTypes(formatTypeService.getFormatTypesForAdmin(cs_id));
 
 		HBaseSourceDataDao.createSourceDataTable(String.valueOf(cs_id));
 		List<String> sourceQualifiers = new ArrayList<>();
@@ -80,8 +80,8 @@ public class SourceController {
 
 		Source source = sourceService.getSourceByCs_id(cs_id);
 		if (source != null) {
-			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
-			source.setFormatTypes(formatTypeService.getFormatTypes(cs_id));
+			source.setSourceFields(sourceFieldService.getSourceFieldsForAdmin(cs_id));
+			source.setFormatTypes(formatTypeService.getFormatTypesForAdmin(cs_id));
 			map.put("result", true);
 			map.put("source", source);
 		} else {

@@ -31,7 +31,9 @@ public class SourceFieldService {
 	public List<SourceField> getSourceFields(int cs_id) {
 		return sourceFieldDao.getSourceFields(cs_id);
 	}
-	
+	public List<SourceField> getSourceFieldsForAdmin(int cs_id) {
+		return sourceFieldDao.getSourceFieldsForAdmin(cs_id);
+	}
 	public Integer getSourceFieldId(int cs_id,String csf_name){
 		return sourceFieldDao.getSourceFieldId(cs_id, csf_name);
 	}

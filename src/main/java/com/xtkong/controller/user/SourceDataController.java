@@ -59,7 +59,8 @@ public class SourceDataController {
 	public String firstIn(HttpServletRequest request, HttpSession httpSession, String type, Integer page,
 			Integer strip) {
 
-		return getSourceDatas(request, httpSession, type, null, page, strip, null, null, null, null, null, null, null);
+		return getSourceDatas(request, httpSession, type, null, page, strip, null, null, null, null, null, null, null,
+				null);
 	}
 
 	/**
@@ -86,7 +87,7 @@ public class SourceDataController {
 	@RequestMapping("/getSourceDatas")
 	public String getSourceDatas(HttpServletRequest request, HttpSession httpSession, String type, Integer cs_id,
 			Integer page, Integer strip, Integer searchId, String desc_asc, String searchWord, String chooseDatas,
-			String oldCond8ition, Integer p_id, String searchFirstWord) {
+			String oldCond8ition, Integer p_id, String searchFirstWord, String fieldIds) {
 		User user = (User) request.getAttribute("user");
 
 		if (page == null) {
@@ -147,13 +148,7 @@ public class SourceDataController {
 				conditionEqual.put(ConstantsHBase.QUALIFIER_PUBLIC, String.valueOf(ConstantsHBase.VALUE_PUBLIC_TRUE));
 				break;
 			case "4":
-				if (searchFirstWord == null) {
-					searchFirstWord = new String("");
-				}
 				conditionEqual.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
-				if (!source.getSourceFields().isEmpty()) {
-					conditionLike.put(String.valueOf(source.getSourceFields().get(0).getCsf_id()), searchFirstWord);
-				}
 				break;
 			}
 
@@ -164,6 +159,31 @@ public class SourceDataController {
 				// reset(httpSession);
 			}
 
+			// 头筛选
+			if (searchFirstWord != null && !searchFirstWord.trim().isEmpty()) {
+				if (oldCondition == null) {
+					oldCondition = " ";
+				} else if (oldCondition.trim().isEmpty()) {
+					oldCondition = " ";
+				} else {
+					oldCondition += " AND ";
+				}
+				if (fieldIds != null && !fieldIds.trim().isEmpty()) {
+					Map<String, String> like = new HashMap<>();
+					for (String fieldId : fieldIds.split(",")) {
+						if (qualifiers.contains(fieldId)) {
+							like.put(fieldId, searchFirstWord);
+						}
+					}
+					oldCondition += PhoenixClient.getSQLConditionLikes(tableName, like, "OR");
+				} else if (!source.getSourceFields().isEmpty()) {
+					Map<String, String> like = new HashMap<>();
+					for (String qualifier :qualifiers) {
+						like.put(qualifier, searchFirstWord);
+					}
+					oldCondition += PhoenixClient.getSQLConditionLikes(tableName, like, "OR");
+				}
+			}
 			// 筛选
 			// oldCondition = (String) httpSession.getAttribute("oldCondition");
 			if (searchId != null) {

@@ -162,6 +162,13 @@
 					<br>
 					<div class="prodaclmRz2">
 						<div class="prodaclmRsxK">
+							<div class="search">
+								<div class="searchC">
+									<img src="/wankangyuan/static/img/search.png" alt=""
+										class="searchCi" /> <input type="text" class="searchCt"
+										placeholder="搜索数据" value="${searchFirstWord}" />
+								</div>
+							</div>
 							<div class="prodaclmRsx">
 								<div class="prodaclmRsxT">筛选</div>
 								<img src="/wankangyuan/static/img/sanjiao_blue.png" alt=""
@@ -282,7 +289,16 @@
 	//选择待操作字段
 	$('.prodaclmRzTt2').click(function(){
 		searchId = $(this).attr('id');
-	})
+	});
+	//全搜索
+    $(".searchCt").bind("keypress" , function(event){
+		if(event.keyCode == 13){
+			chongzhi();
+			window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="+cs_id
+					+"&sourceDataId="+sourceDataId+"&type=1&ft_id="+ft_id+"&formatNodeId="+formatNodeId
+					+"&searchFirstWord="+this.value;
+		}
+	});
 	//过滤
 	$('.BTSXcliGLK').keypress(function(e){
 		var that = $(this);
@@ -356,9 +372,9 @@
 			data:{					
 			},
 			success:function(data){
-				if (data.result) {
+				/* if (data.result) {
 					alert(data.message);
-				}
+				} */
 			}
 		});
 	}	
@@ -506,7 +522,7 @@
             })(i)
         }
         window.onclick=function(){
-            console.log(1);
+        //    console.log(1);
             oBTSX2.style.display="none";
         }
         oBTSX2.onclick=function(){
@@ -531,7 +547,7 @@
         var aBTSXcli2liC=document.querySelectorAll('.BTSXcli2liC');//复选框
         var oBTSXcliGLK=document.querySelectorAll('.BTSXcliGLK')[0];//过滤框
 
-        oBTSXcli3BTres.onclick=function(){
+      /*   oBTSXcli3BTres.onclick=function(){
             for(var j=0;j<aBTSXcliI.length;j++){
                 aBTSXcliI[j].style.color="#666";
             }
@@ -539,7 +555,7 @@
             for(var i=0;i<aBTSXcli2liC.length;i++){
                 aBTSXcli2liC[i].checked=false;
             }
-        }
+        } */
     </script>
 </body>
 </html>

@@ -83,20 +83,20 @@
 			</div>
 			<div class="top2">
 				<div class="top2C">
-					<a href="/wankangyuan/sourceData/getSourceDatas?type=1"><div
-							class="top2Cli">我的</div></a> <a
-						href="/wankangyuan/sourceData/getSourceDatas?type=2"><div
-							class="top2Cli top2CliYJ">我创建的</div></a> <a
-						href="/wankangyuan/sourceData/getSourceDatas?type=3"><div
-							class="top2Cli">公共</div></a>
-					<!--
-                    <div class="search">
-                        <div class="searchC">
-                            <img src="/wankangyuan/static/img/search.png" alt="" class="searchCi" />
-                            <input type="text" class="searchCt"  placeholder="搜索项目" />
-                        </div>
-                    </div>
-                    -->
+					<a href="/wankangyuan/sourceData/getSourceDatas?type=1">
+						<div class="top2Cli">我的</div>
+					</a> <a href="/wankangyuan/sourceData/getSourceDatas?type=2">
+						<div class="top2Cli top2CliYJ">我创建的</div>
+					</a> <a href="/wankangyuan/sourceData/getSourceDatas?type=3">
+						<div class="top2Cli">公共</div>
+					</a>
+					<div class="search">
+						<div class="searchC">
+							<img src="/wankangyuan/static/img/search.png" alt=""
+								class="searchCi" /> <input type="text" class="searchCt"
+								placeholder="搜索数据" value="${searchFirstWord}" />
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="shaixuan">
@@ -201,7 +201,13 @@
 						<div class="allT">全选</div>
 					</div>
 					<c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
-						<div class="PJListli" id="${sourceFieldTemp.csf_id}">${sourceFieldTemp.csf_name}</div>
+						<c:if test="${sourceFieldTemp.csf_id!=0}">
+							<div class="PJListli" id="${sourceFieldTemp.csf_id}">${sourceFieldTemp.csf_name}</div>
+						</c:if>
+						<c:if test="${sourceFieldTemp.csf_id==0}">
+							<div class="PJListli" id="PUBLIC">${sourceFieldTemp.csf_name}</div>
+						</c:if>
+
 					</c:forEach>
 				</div>
 				<div class="PJListline"></div>
@@ -300,6 +306,7 @@
 	var desc_asc="${desc_asc}";//排序
 	var oldCondition=$("#oldCondition").html();//累加筛选条件
 	var page="${page}";//页码
+	var searchFirstWord = $(".searchCt").val();
 	//更换采集源，刷新页面
 	$("#source_Select").change(function(){
 		cs_id = $("#source_Select").val();
@@ -309,7 +316,16 @@
 	//选择待操作字段
 	$('.PJListli').click(function(){
 		searchId = $(this).attr('id');
-	})
+	});
+	//全搜索
+    $(".searchCt").bind("keypress" , function(event){
+		if(event.keyCode == 13){
+			chongzhi();
+			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="
+					+cs_id+"&searchFirstWord="+this.value;
+			
+		}
+	});
 	//过滤
 	$('.BTSXcliGLK').keypress(function(e){
 		var that = $(this);
@@ -365,9 +381,9 @@
 			data:{					
 			},
 			success:function(data){
-				if (data.result) {
+				/* if (data.result) {
 					alert(data.message);
-				}
+				} */
 			}
 		});
 	}	

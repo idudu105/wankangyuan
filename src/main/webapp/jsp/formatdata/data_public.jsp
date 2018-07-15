@@ -85,12 +85,20 @@
 
 			<div class="top2">
 				<div class="top2C">
-					<a href="/wankangyuan/sourceData/firstIn?type=1"><div
-							class="top2Cli">我的</div></a> <a
-						href="/wankangyuan/sourceData/firstIn?type=2"><div
-							class="top2Cli">我创建的</div></a> <a
-						href="/wankangyuan/sourceData/firstIn?type=3"><div
-							class="top2Cli top2CliYJ">公共</div></a>
+					<a href="/wankangyuan/sourceData/firstIn?type=1">
+						<div class="top2Cli">我的</div>
+					</a> <a href="/wankangyuan/sourceData/firstIn?type=2">
+						<div class="top2Cli">我创建的</div>
+					</a> <a href="/wankangyuan/sourceData/firstIn?type=3">
+						<div class="top2Cli top2CliYJ">公共</div>
+					</a>
+					<div class="search">
+						<div class="searchC">
+							<img src="/wankangyuan/static/img/search.png" alt=""
+								class="searchCi" /> <input type="text" class="searchCt"
+								placeholder="搜索数据" value="${searchFirstWord}" />
+						</div>
+					</div>
 					<!--
                     <div class="search">
                         <div class="searchC">
@@ -288,8 +296,16 @@
 
 	$('.PJListli').click(function(){
 		searchId = $(this).attr('id');
-	})
-	
+	})	;
+	//全搜索
+    $(".searchCt").bind("keypress" , function(event){
+		if(event.keyCode == 13){
+			chongzhi();
+			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=3&cs_id="
+					+cs_id+"&searchFirstWord="+this.value;
+			
+		}
+	});
 	$('.BTSXcliGLK').keypress(function(e){
 		var that = $(this);
 		searchWord=that.val();
@@ -358,9 +374,9 @@
 			data:{					
 			},
 			success:function(data){
-				if (data.result) {
+				/* if (data.result) {
 					alert(data.message);
-				}
+				} */
 			}
 		});
 	}			

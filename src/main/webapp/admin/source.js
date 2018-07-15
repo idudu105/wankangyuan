@@ -40,6 +40,7 @@ $(".box_xxtabz").click(function(){
    				str+='<th class="biaotouth">校验规则</th>';
    				str+='<th class="biaotouth">是否可枚举</th>';
    				str+='<th class="biaotouth">是否必填</th>';
+   				str+='<th class="biaotouth">状态</th>';
    				str+='<th class="biaotouth">字段描述信息</th>';
    				str+='<th class="biaotouth">错误信息提示</th>';
    				str+='<th class="biaotouth">创建时间</th>';
@@ -62,6 +63,11 @@ $(".box_xxtabz").click(function(){
 					}
 					
 					if(sourceFields[i].enumerated == false){
+						str+='<th class="biaoxiangth" id="enumerated'+sourceFields[i].not_null+'">否</th>';
+					}else{
+						str+='<th class="biaoxiangth" id="enumerated'+sourceFields[i].not_null+'">是</th>';
+					}
+					if(sourceFields[i].is_view == false){
 						str+='<th class="biaoxiangth" id="enumerated'+sourceFields[i].not_null+'">否</th>';
 					}else{
 						str+='<th class="biaoxiangth" id="enumerated'+sourceFields[i].not_null+'">是</th>';
@@ -212,6 +218,7 @@ $("#insertSourceFieldSubmit").click(function (){
 			not_null:insertSourceFieldForm.not_null.value,
 			description:insertSourceFieldForm.description.value,
 			error_msg:insertSourceFieldForm.error_msg.value,
+			is_view:insertSourceFieldForm.csfield_add_is_view.value,
 			uid:'1'
 		},
 		success : function(data){
@@ -243,12 +250,13 @@ $("#updateSourceFieldSubmit").click(function (){
 			not_null:updateSourceFieldForm.edit_not_null.value,
 			description:updateSourceFieldForm.edit_description.value,
 			error_msg:updateSourceFieldForm.edit_error_msg.value,
+			is_view:updateSourceFieldForm.csfield_edit_is_view.value,
 			uid:'1'
 		},
 		success : function(data){
 			if(data.result == true){
 				alert("数据源字段更新成功！");
-				window.location.href="/wankangyuan/admin/formatdata?cs_id="+updateSourceFieldForm.edit_csf_id.value;
+				window.location.href="/wankangyuan/admin/formatdata?csf_id="+updateSourceFieldForm.edit_csf_id.value;
 			}else{
 				alert(data.message);
 			}

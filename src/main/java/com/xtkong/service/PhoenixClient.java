@@ -29,7 +29,6 @@ import com.xtkong.util.ConstantsHBase;
  */
 public class PhoenixClient {
 
-	
 	/**
 	 * 利用静态块的方式初始化Driver，防止Tomcat加载不到（有时候比较诡异）
 	 */
@@ -160,9 +159,9 @@ public class PhoenixClient {
 			while (set.next()) {
 				List<String> data = new ArrayList<>();
 				for (int i = 0, len = head.size(); i < len; i++) {
-					String value=set.getString(head.get(i));
+					String value = set.getString(head.get(i));
 					if (value == null) {
-						value="";
+						value = "";
 					}
 					data.add(value);
 				}
@@ -272,7 +271,7 @@ public class PhoenixClient {
 	 * @return
 	 */
 	public static String getSQLConditionEquals(String tableName, Map<String, String> conditionEqual, String type) {
-		String phoenixSQL = " ";
+		String phoenixSQL = " (";
 		if ((conditionEqual != null) && (!conditionEqual.isEmpty())) {
 			for (Entry<String, String> eqlual : conditionEqual.entrySet()) {
 				phoenixSQL += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + eqlual.getKey() + "\"='" + eqlual.getValue()
@@ -280,7 +279,9 @@ public class PhoenixClient {
 			}
 		}
 		if (phoenixSQL.trim().endsWith(type)) {
-			phoenixSQL = phoenixSQL.substring(0, phoenixSQL.lastIndexOf(type));
+			phoenixSQL = phoenixSQL.substring(0, phoenixSQL.lastIndexOf(type)) + ") ";
+		} else if (phoenixSQL.trim().endsWith("(")) {
+			phoenixSQL = " ";
 		}
 		return phoenixSQL;
 	}
@@ -294,7 +295,7 @@ public class PhoenixClient {
 	 * @return
 	 */
 	public static String getSQLConditionLikes(String tableName, Map<String, String> conditionLike, String type) {
-		String phoenixSQL = " ";
+		String phoenixSQL = " (";
 		if ((conditionLike != null) && (!conditionLike.isEmpty())) {
 			for (Entry<String, String> like : conditionLike.entrySet()) {
 				phoenixSQL += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + like.getKey() + "\" like '%"
@@ -302,7 +303,9 @@ public class PhoenixClient {
 			}
 		}
 		if (phoenixSQL.trim().endsWith(type)) {
-			phoenixSQL = phoenixSQL.substring(0, phoenixSQL.lastIndexOf(type));
+			phoenixSQL = phoenixSQL.substring(0, phoenixSQL.lastIndexOf(type)) + ") ";
+		} else if (phoenixSQL.trim().endsWith("(")) {
+			phoenixSQL = " ";
 		}
 		return phoenixSQL;
 	}
@@ -334,7 +337,7 @@ public class PhoenixClient {
 			for (String qualifier : qualifiers) {
 				phoenixSQL += ",\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + qualifier + "\"";
 			}
-		}else {
+		} else {
 			return phoenixSQL;
 		}
 		phoenixSQL += " FROM \"" + tableName + "\"  WHERE  ";
@@ -818,10 +821,19 @@ public class PhoenixClient {
 		// whereLike, page, strip);
 		// }
 		// }
-//		result = commonSelect(
-//				" SELECT * FROM \"SOURCE_75\"  WHERE \"USER\"= '1'  AND  ( \"INFO\".\"118\"='Ad533' OR \"INFO\".\"118\"='Ad534' OR \"INFO\".\"118\"='Ad535' OR \"INFO\".\"118\"='Ad536' OR \"INFO\".\"118\"='Ad537' OR \"INFO\".\"118\"='Ad538' OR \"INFO\".\"118\"='Ad539' OR \"INFO\".\"118\"='Ad540' OR \"INFO\".\"118\"='Ad541' OR \"INFO\".\"118\"='Ad542' OR \"INFO\".\"118\"='Ad543' OR \"INFO\".\"118\"='Ad544' OR \"INFO\".\"118\"='Ad545' OR \"INFO\".\"118\"='Ad546' OR \"INFO\".\"118\"='Ad547' OR \"INFO\".\"118\"='Ad548' OR \"INFO\".\"118\"='Ad549' )  ",
-//				1, 10);
-		result=select("SELECT * FROM \"FORMAT_75_56\"  WHERE   \"INFO\".\"97\" IS NULL  ");
+		// result = commonSelect(
+		// " SELECT * FROM \"SOURCE_75\" WHERE \"USER\"= '1' AND (
+		// \"INFO\".\"118\"='Ad533' OR \"INFO\".\"118\"='Ad534' OR
+		// \"INFO\".\"118\"='Ad535' OR \"INFO\".\"118\"='Ad536' OR
+		// \"INFO\".\"118\"='Ad537' OR \"INFO\".\"118\"='Ad538' OR
+		// \"INFO\".\"118\"='Ad539' OR \"INFO\".\"118\"='Ad540' OR
+		// \"INFO\".\"118\"='Ad541' OR \"INFO\".\"118\"='Ad542' OR
+		// \"INFO\".\"118\"='Ad543' OR \"INFO\".\"118\"='Ad544' OR
+		// \"INFO\".\"118\"='Ad545' OR \"INFO\".\"118\"='Ad546' OR
+		// \"INFO\".\"118\"='Ad547' OR \"INFO\".\"118\"='Ad548' OR
+		// \"INFO\".\"118\"='Ad549' ) ",
+		// 1, 10);
+		result = select("SELECT * FROM \"FORMAT_75_56\"  WHERE   \"INFO\".\"97\" IS NULL  ");
 		System.out.println("\n" + new Gson().toJson(result).toString() + "\n");
 		// System.out.println(new Gson().toJson(selectPage(" SELECT * FROM
 		// source_60", currPage, pageSize)).toString());
