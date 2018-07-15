@@ -120,13 +120,7 @@
                         </a>
                     </div>
                     <div class="jiangeline"></div>
-                    <div class="shaixuanBT">
-                        <div class="shaixuanBTt">筛选</div>
-                        <div class="shaixuanBTiK">
-                            <img src="/wankangyuan/static/img/sanjiao_blue.png" alt="" class="shaixuanBTi" />
-                        </div>
-                    </div>
-                    <div class="jiangeline"></div>
+                   
                     <div class="allK">
                         <div class="quanxuanK">
                             <input type="checkbox" class="input_check" id="check0">

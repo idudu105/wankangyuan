@@ -20,9 +20,183 @@
 <script type="text/javascript">
     window.onload=function(){
         project0();
-        project1();
+        
+     // 筛选菜单框显示隐藏
+        var oshaixuanBT=document.querySelectorAll('.shaixuanBT')[0];//获取筛选下拉按钮
+        var oshaixuanZK=document.querySelectorAll('.shaixuanZK')[0];//获取筛选菜单
+        var shaixuanPD=0;
+
+        oshaixuanBT.onclick=function(event){
+            if(shaixuanPD==0){
+                oshaixuanZK.className="shaixuanZK active";
+                shaixuanPD=1;
+            }else{
+                oshaixuanZK.className="shaixuanZK";
+                shaixuanPD=0;
+            }
+            // event.stopPropagation();
+            // console.log(1);
+        }
+        // document.onclick=function(){
+        //     oshaixuanZK.className="shaixuanZK";
+        // }
+
+    //筛选按钮显示隐藏选项
+        var oshaixuanZK=document.querySelectorAll('.shaixuanZK')[0];//获取筛选菜单
+        var ashaixuanZKliI=document.querySelectorAll('.shaixuanZKliI');//获取所有筛选按钮
+        var oPJList=document.querySelectorAll('.PJList')[0];//项目表头栏
+        var aPJListli=oPJList.querySelectorAll('.PJListli1');//项目表头
+        var oPJul=document.querySelectorAll('.PJul')[0];//项目栏
+        var aPJli=oPJul.querySelectorAll('.PJli');//每一条项目
+
+        //console.log(aPJli);
+        
+
+        //初始化筛选按钮判断
+        var shaixuanBTPD=new Array();
+        for(var i=0;i<ashaixuanZKliI.length;i++){
+            shaixuanBTPD[i]=1;
+        }
+
+
+
+        for(var i=0;i<ashaixuanZKliI.length;i++){
+            (function(j){
+                ashaixuanZKliI[j].onclick=function(){
+                    if(shaixuanBTPD[j]==0){
+                        ashaixuanZKliI[j].className="shaixuanZKliI active";
+                        aPJListli[j].style.display="block";
+                        for(var o=0;o<aPJli.length;o++){
+                            if(aPJli[o].querySelectorAll('.PJliCli2')[0]){
+                                var aPJliCli=aPJli[o].querySelectorAll('.PJliCli2');//格式数据表项
+                                aPJliCli[j].style.display="-webkit-box";
+                            }else if(aPJli[o].querySelectorAll('.PJliCli')[0]){
+                                var aPJliCli=aPJli[o].querySelectorAll('.PJliCli');//项目表项
+                                aPJliCli[j].style.display="-webkit-box";
+                            }
+                        }
+                        shaixuanBTPD[j]=1;
+                    }else{
+                        ashaixuanZKliI[j].className="shaixuanZKliI";
+                        aPJListli[j].style.display="none";
+                        for(var o=0;o<aPJli.length;o++){
+                            if(aPJli[o].querySelectorAll('.PJliCli2')[0]){
+                                var aPJliCli=aPJli[o].querySelectorAll('.PJliCli2');//格式数据表项
+                                aPJliCli[j].style.display="none";
+                            }else if(aPJli[o].querySelectorAll('.PJliCli')[0]){
+                                var aPJliCli=aPJli[o].querySelectorAll('.PJliCli');//项目表项
+                                aPJliCli[j].style.display="none";
+                            }
+                            
+                        }
+                        // aPJliCli[j].style.display="none";
+                        shaixuanBTPD[j]=0;
+                    }
+                    
+                }
+            })(i)
+        }
+
+    //项目表头和项目分割线宽度
+        var oPJList=document.querySelectorAll('.PJList')[0];//项目表头
+        var oPJListline=document.querySelectorAll('.PJListline')[0];//分割线
+
+        oPJListline.style.width=oPJList.offsetWidth*0.98+"px";
+        // console.log(oPJListline.offsetWidth);
+
+      //点击表头的排序筛选功能
+        var oPJK=document.querySelectorAll('.PJK')[0];//项目框
+        var oBTSX=document.querySelectorAll('.BTSX')[0];//项目表头筛选框
+        // var oBTSXpd=document.querySelectorAll('.BTSXpd')[0];//项目表头筛选框判断
+
+        var oPJList=document.querySelectorAll('.PJList')[0];//项目表头栏
+        var aPJListli=oPJList.querySelectorAll('.PJListli1');//项目表头
+
+        // var BTSXpd=-1;//项目表头筛选框判断
+
+        //点击设置排序筛选框
+        for(var i=0;i<aPJListli.length;i++){
+            (function(j){
+                aPJListli[j].onclick=function(){
+                    // if(BTSXpd==j){
+                    //     oBTSX.style.display="none";
+                    //     BTSXpd=-1;
+                    // }else{
+                        oBTSX.style.display="block";
+                        // BTSXpd=j;
+                    // }
+                    var BTSXleft=aPJListli[j].offsetLeft;
+                    // oBTSX.name=aPJListli[j].innerHTML;
+                    if(document.querySelectorAll('.BTSXpd')[0]){
+                        var oBTSXpd=document.querySelectorAll('.BTSXpd')[0];//项目表头筛选框判断
+                        oBTSXpd.value=$(aPJListli[j]).attr('name');
+                        console.log($(aPJListli[j]).attr('name'));
+                        console.log(oBTSXpd.value);
+                    }
+                    
+                    
+                    console.log(BTSXleft);
+                    if(BTSXleft>1118){
+                        BTSXleft=1118;
+                    }
+                    oBTSX.style.left=BTSXleft-20+'px'; 
+                    event.stopPropagation();
+                }
+            })(i)
+        }
+        // $(document).click(function(){
+        //     console.log(1);
+        // })
+        
+        window.onclick=function(){
+            //console.log(1);
+            oBTSX.style.display="none";
+        }
+        document.onclick=function(){
+            //console.log(1);
+            oBTSX.style.display="none";
+        }
+        oBTSX.onclick=function(){
+            event.stopPropagation();
+        }
+        
+        var aBTSXcliI=oBTSX.querySelectorAll('.BTSXcliI');//筛选框排序箭头
+        var oBTSXcliIpd=document.querySelectorAll('.BTSXcliIpd')[0];//筛选框选择判断
+        for(var i=0;i<aBTSXcliI.length;i++){
+            (function(index){
+                aBTSXcliI[index].onclick=function(){
+                    for(var j=0;j<aBTSXcliI.length;j++){
+                        aBTSXcliI[j].style.color="#666";
+                    }
+                    aBTSXcliI[index].style.color="#5ca0e5";
+//                    oBTSXcliIpd.value=index+1;
+//                    console.log(oBTSXcliIpd.value);
+                }
+            })(i)
+        }
+
+        var oBTSXcli3BTres=document.querySelectorAll('.BTSXcli3BTres')[0];//重置按钮
+        var aBTSXcli2liC=document.querySelectorAll('.BTSXcli2liC');//复选框
+        var oBTSXcliGLK=document.querySelectorAll('.BTSXcliGLK')[0];//过滤框
+
+        oBTSXcli3BTres.onclick=function(){
+            for(var j=0;j<aBTSXcliI.length;j++){
+                aBTSXcliI[j].style.color="#666";
+            }
+            oBTSXcliGLK.value="";
+            for(var i=0;i<aBTSXcli2liC.length;i++){
+                aBTSXcli2liC[i].checked=false;
+            }
+        }
+
         pro_member();
         friend_manage();
+        
+        var columnName = document.querySelectorAll(".BTSX")[0].id;
+        if(columnName!=null && columnName!=""){
+        	//需要点击对应的头部
+        	document.getElementById(columnName).click();
+        }
     }
 </script>
 <body>
@@ -106,7 +280,7 @@
             </div>
             <div class="shaixuan">
                 <div class="shaixuanC">
-                    <!-- 
+                    
                     <div class="listZT">
                         <a href="/wankangyuan/jsp/project/project_member2.jsp">
                             <div class="listZTli listZT1 active">
@@ -124,7 +298,7 @@
                     </div>
                     
                     <div class="jiangeline"></div>
-                     -->
+                    
                     <div class="shaixuanBT">
                         <div class="shaixuanBTt">筛选</div>
                         <div class="shaixuanBTiK">
@@ -262,6 +436,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="PJK">
                 <div class="QXGLk">
                     <div class="QXGLkT">
@@ -364,12 +539,12 @@
                         </div>
                         <div class="allT">全选</div>
                     </div>
-                    <div class="PJListli memname">名称</div>
-                    <div class="PJListli memrole">角色</div>
-                    <div class="PJListli memcontact">联系人</div>
-                    <div class="PJListli memintime">进组时间</div>
-                    <div class="PJListli memupfile">上传文件</div>
-                    <div class="PJListli memtopic">发表/回复话题</div>
+                    <div class="PJListli PJListli1 memname" id="username">名称</div>
+                    <div class="PJListli PJListli1 memrole" id="rolename">角色</div>
+                    <div class="PJListli PJListli1 memcontact" id="linkman">联系人</div>
+                    <div class="PJListli PJListli1 memintime" id="bind_date_time">进组时间</div>
+                    <div class="PJListli memupfile" >上传文件</div>
+                    <div class="PJListli memtopic" >发表/回复话题</div>
                 </div>
                 <div class="PJListline"></div>
                 <div class="PJul">
@@ -406,48 +581,39 @@
                 	</c:forEach> 
                 </div>
 
-                <!-- <div class="BTSX">
+                <!-- 筛选框 -->
+                <div class="BTSX" id="${queryCondition.columnName}">
+                	<input id="isFilter" value="${queryCondition.isFilter}" style="display:none;"/>
                     <div class="BTSXc">
                         <div class="BTSXcli">
+                        	<input type="text" id="sort" style="display:none;" value="${queryCondition.order}"/>
                             <div class="BTSXcliT">排序：</div>
-                            <img src="/wankangyuan/static/img/sort_up.png" alt="" class="BTSXcliI" />
-                            <img src="/wankangyuan/static/img/sort_down.png" alt="" class="BTSXcliI" />
+                            <div class="BTSXcliI" id="sort_asc" <c:if test="${queryCondition.order != null && queryCondition.order == 'asc' }">style="color:#5ca0e5;"</c:if>>↑</div>
+                            <div class="BTSXcliI" id="sort_desc" <c:if test="${queryCondition.order != null && queryCondition.order == 'desc' }">style="color:#5ca0e5;"</c:if>>↓</div>
                         </div>
                         <div class="BTSXcli">
                             <div class="BTSXcliT">过滤：</div>
-                            <input type="text" class="BTSXcliGLK" />
+                            <input type="text" class="BTSXcliGLK" value="${queryCondition.filter}"/>
+                            <button id="guolv">过滤</button>
                         </div>
                         <div class="BTSXcli">
                             <div class="BTSXcliT">值筛选：</div>
+                            <input id="values" style="display:none;" value="${queryCondition.values}"/>
                         </div>
-                        <div class="BTSXcli2">
-                            <div class="BTSXcli2li">
-                                <div class="BTSXcli2liI"></div>
-                                <div class="BTSXcli2liT">项目编号1</div>
-                            </div>
-                            <div class="BTSXcli2li">
-                                <div class="BTSXcli2liI"></div>
-                                <div class="BTSXcli2liT">项目编号1</div>
-                            </div>
-                            <div class="BTSXcli2li">
-                                <div class="BTSXcli2liI"></div>
-                                <div class="BTSXcli2liT">项目编号1</div>
-                            </div>
-                            <div class="BTSXcli2li">
-                                <div class="BTSXcli2liI"></div>
-                                <div class="BTSXcli2liT">项目编号1</div>
-                            </div>
-                            <div class="BTSXcli2li">
-                                <div class="BTSXcli2liI"></div>
-                                <div class="BTSXcli2liT">项目编号1</div>
-                            </div>
+                        <div class="BTSXcli2" id="BTSXcli2">
+                        	<c:forEach items="${queryCondition.strings}" var="queryConditionTemp">
+                        		<div class="BTSXcli2li">
+	                                <input type="checkbox" class="BTSXcli2liC" name="${queryConditionTemp}"/>
+	                                <div class="BTSXcli2liT">${queryConditionTemp}</div>
+	                            </div>
+                        	 </c:forEach>
                         </div>
                         <div class="BTSXcli3">
                             <div class="BTSXcli3BT BTSXcli3BTent">筛选</div>
-                            <div class="BTSXcli3BT BTSXcli3BTres">重置</div>
+                            <div class="BTSXcli3BT BTSXcli3BTres">重置</div> 
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
 
             <div class="pageK" id="box"></div>
@@ -488,7 +654,12 @@
 	            console.log(page);
 	            if(page!=${page}){
 	            	var searchWord = $(".search2Ct").val();
-	                window.location.href="/wankangyuan/projectMember/selectProjectMember?page="+page+"&strip=${rows}";
+	            	
+	            	if($("#isFilter").val() == "true"){
+                		shaixuan(page);
+                	}else{
+                		window.location.href="/wankangyuan/projectMember/selectProjectMember?page="+page+"&searchWord="+searchWord;
+                	}              
 	            }
 	        }
 	    });
@@ -813,6 +984,120 @@
         		}
         	});
         });
+        
+        
+        
+      //点击项目标题栏
+    	$(".PJListli1").click(function (){
+    		document.querySelectorAll(".BTSX")[0].id=this.id;//更新筛选框的筛选字段为当前点击的字段名
+   			filter();//然后自动执行过滤，筛选出十个数值
+    	});
+
+    	//过滤框绑定enter事件
+    	$(".BTSXcliGLK").bind("keypress" , function(event){
+    		if(event.keyCode == 13){
+    			//过滤
+    			filter();
+    		}
+    	});
+    	//点击过滤按钮
+    	$("#guolv").click(function (){
+    		//过滤
+    		filter();
+    	});
+    	//过滤指定的字段，根据过滤条件获取指定字段的前十个值
+    	function filter(){
+    		var filter = $(".BTSXcliGLK").val();//过滤条件
+    		var values = $("#values").val();//上次筛选操作中选中的值
+    		var vals = values.split(",");//数组形式
+    		var columnName = document.querySelectorAll(".BTSX")[0].id;//筛选字段名
+    		$.ajax({
+    			url:"/wankangyuan/projectMemberFilter/selectProjectMemberDistinctColumnValue",
+    			type:"post",
+    			data:{
+    				columnName:columnName,
+    				filter:filter
+    			},
+    			dataType:"json",
+    			success : function(data){
+    				if(data.result == true){
+    					var BTSXcli2 = document.getElementById("BTSXcli2");//填充筛选值
+    					var BTSXcli2_html = "";
+    					for(var index in data.message){
+    						if(index < 10){
+    							BTSXcli2_html+='<div class="BTSXcli2li">';
+    							if(vals.indexOf(data.message[index]) != -1){//如果筛选值在之前的筛选中被勾选了，再次选中它
+    								BTSXcli2_html+='<input type="checkbox" class="BTSXcli2liC" name="'+data.message[index]+'" checked/>';
+    							}else{
+    								BTSXcli2_html+='<input type="checkbox" class="BTSXcli2liC" name="'+data.message[index]+'"/>';
+    							}
+        						
+        						BTSXcli2_html+='<div class="BTSXcli2liT">'+data.message[index]+'</div>';
+        						BTSXcli2_html+='</div>';
+    						}
+    					}
+    					BTSXcli2.innerHTML=BTSXcli2_html;
+    				}else{
+    					layer.msg(data.message);
+    				}
+    			},
+    			error : function(){
+    				layer.msg("联网失败");
+    			}
+    		});
+    	}
+    	
+    	//重置按钮
+    	$(".BTSXcli3BTres").click(function(){
+    		//重置排序栏
+    		document.getElementById("sort").value="";
+    		document.getElementById("sort_desc").style.color="#666";
+    		document.getElementById("sort_asc").style.color="#666"
+    		//重新过滤条件
+    		$(".BTSXcliGLK").val("");
+    		//重置值筛选
+    		document.getElementById("BTSXcli2").innerHTML="";
+    		//设置重置后退出筛选状态，执行一般的筛选操作
+    		$("#isFilter").val("false");
+    	});
+    	
+    	//点击筛选按钮
+    	$(".BTSXcli3BTent").click(function(){
+    		shaixuan(1);//1代表第一页
+    	});
+    	//降序排列
+    	$("#sort_desc").click(function(){
+    		document.getElementById("sort").value="desc";
+    		shaixuan(1);//1代表第一页
+    	});
+    	//升序排列
+    	$("#sort_asc").click(function(){
+    		document.getElementById("sort").value="asc";
+    		shaixuan(1);//1代表第一页
+    	});
+    	//点击筛选按钮，请求筛选接口
+    	function shaixuan(page){
+    		var filter = $(".BTSXcliGLK").val();//过滤条件
+    		var searchWord = $(".search2Ct").val();//搜索条件
+    		var columnName = document.querySelectorAll(".BTSX")[0].id;//字段名
+    		var order = document.getElementById("sort").value;//排序方式
+
+    		var BTSXcli2liC=document.querySelectorAll('.BTSXcli2liC');
+            var values = [];
+            for(var i=0;i<BTSXcli2liC.length;i++){
+            	if(BTSXcli2liC[i].checked){
+            		values.push(BTSXcli2liC[i].name);
+            	}
+            }
+            values = values.join(",");//勾选的值
+            
+            $("#isFilter").val("true");//设置当前为筛选状态
+    		
+    		window.location.href="/wankangyuan/projectMemberFilter/selectProjectMemberByFilterCondition?page="+page+"&searchWord="
+				+searchWord+"&columnName="+columnName+"&order="+order+"&filter="+filter+"&values="+values+"&isFilter=true";
+    		
+    	}
+        
 
 	</script>
 

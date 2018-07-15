@@ -265,7 +265,7 @@ public class ProjectController {
 	 * @param httpSession
 	 * @param page
 	 * @param strip
-	 * @param searchWord 查询过滤条件
+	 * @param searchWord 搜索条件
 	 * @return
 	 */
 	@RequestMapping("/selectPublicProject")
@@ -283,6 +283,8 @@ public class ProjectController {
 			//更新关键字
 			httpSession.setAttribute("projectSearchWord", searchWord);
 		}
+		httpSession.setAttribute("projectQueryCondition", null);
+		
 		Map<String, Object> map = new HashMap<String , Object>();
 		map = projectService.selectPublicProject(page, strip , searchWord);
 		httpSession.setAttribute("projects", map.get("list"));
@@ -304,7 +306,7 @@ public class ProjectController {
 	 * @param creator
 	 * @param page
 	 * @param strip
-	 * @param searchWord 查询条件
+	 * @param searchWord 搜索条件
 	 * @return
 	 */
 	@RequestMapping("/selectCreatedProject")
@@ -323,6 +325,8 @@ public class ProjectController {
 			//更新关键字
 			httpSession.setAttribute("projectSearchWord", searchWord);
 		}
+		httpSession.setAttribute("projectQueryCondition", null);
+		
 		Map<String, Object> map = new HashMap<String , Object>();
 		User user = (User)request.getAttribute("user");
 		map = projectService.selectCreatedProject(user.getId() , page , strip ,searchWord);
@@ -344,7 +348,7 @@ public class ProjectController {
 	 * @param user_id
 	 * @param page
 	 * @param strip
-	 * @param searchWord 查询条件
+	 * @param searchWord 搜索条件
 	 * @return
 	 */
 	@RequestMapping("/selectMyProject")
@@ -363,6 +367,8 @@ public class ProjectController {
 			//更新关键字
 			httpSession.setAttribute("projectSearchWord", searchWord);
 		}
+		httpSession.setAttribute("projectQueryCondition", null);
+		
 		User user = (User)request.getAttribute("user");
 		Map<String, Object> map = new HashMap<String , Object>();
 		map = projectService.selectMyProject(user.getId(), page, strip , searchWord);

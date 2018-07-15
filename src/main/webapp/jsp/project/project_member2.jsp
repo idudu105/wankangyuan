@@ -129,21 +129,37 @@
                         </div>
                         <div class="allT">全选</div>
                     </div>
+                    
                     <c:if test="${authoritys['62'] == true }">
                     	<div class="pro_menu pro_mandel">删除成员</div>
                     </c:if>
+                    <c:if test="${authoritys['62'] != true }">
+                    	<div class="pro_menu pro_mandel" style="display:none;">删除成员</div>
+                    </c:if>
+                    
                     <c:if test="${authoritys['61'] == true }">
                     	<div class="pro_menu pro_manGL">权限管理</div>
+                    	<div class="pro_menu role_change">更改角色</div>
                     </c:if>
+                    <c:if test="${authoritys['61'] != true }">
+                    	<div class="pro_menu pro_manGL" style="display:none;">权限管理</div>
+                    	<div class="pro_menu role_change" style="display:none;">更改角色</div>
+                    </c:if>
+                    
                     <c:if test="${authoritys['60'] == true }">
                     	<div class="pro_menu pro_manadd">添加成员</div>
                     </c:if>
+                    <c:if test="${authoritys['60'] != true }">
+                    	<div class="pro_menu pro_manadd" style="display:none;">添加成员</div>
+                    </c:if>
+                    
                     <div class="search2">
                         <div class="search2C">
                             <img src="/wankangyuan/static/img/search.png" alt="" class="search2Ci" />
                             <input type="text" class="search2Ct"  placeholder="搜索成员" value="${searchWord}"/>
                         </div>
                     </div>
+                    
                 </div>
                 <div class="shaixuanZK">
                     <div class="shaixuanZKli">
@@ -174,33 +190,12 @@
             </div>
                 
             <div class="memaddK">
-            <div class="memaddKx"></div>
-            <div class="memaddM">
-                <div class="friendMMl">
-                    <div class="friendMMlT">
-                        <div class="friendMMlTT">
-                            <%-- <c:forEach items="${orgList }" var="org" varStatus="status">
-                            <c:if test="${org.parentId eq 0 }">
-                            <div class="friendMMlTTz <c:if test='${status.count eq 1}'>active</c:if>" name="${org.id }"><!-- 每个组织结构 -->
-                                <div class="friendMMlTTzT">
-                                    <span class="fri_name">${org.organizationName }</span>
-                                    <div class="friendMMlTTzTi"></div>
-                                    <img src="<%=request.getContextPath()%>/static/img/shenhe1.png" alt="" class="friendMMlTTzTi2" />
-                                </div>
-                                <div class="friendMMlTTzB">
-                                <c:forEach items="${orgList }" var="group">
-                                <c:if test="${org.id eq group.parentId }">
-                                    <div class="friendMMlTTzBz" name="${group.id }">
-                                        <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
-                                        <div class="friendMMlTTzBzt" data-bind="click:function(data, event){showOrgers(${group.id}) }">${group.organizationName }</div>
-                                    </div>
-                                </c:if>    
-                                </c:forEach>
-                                </div>
-                            </div>
-                            </c:if>
-                            </c:forEach> --%>
-                            <div data-bind="foreach: orgList">
+                <div class="memaddKx"></div>
+                <div class="memaddM">
+                    <div class="friendMMl">
+                        <div class="friendMMlT">
+                            <div class="friendMMlTT">
+                              <div data-bind="foreach: orgList">
                                 <div class="friendMMlTTz" data-bind="attr:{name: id}" ><!-- 每个组织结构 -->
                                     <div class="friendMMlTTzT">
                                         <span class="fri_name" data-bind="text: organizationName"></span>
@@ -211,78 +206,158 @@
                                     </div>
                                 </div>
                               </div>
+                            </div>
+                            <div class="friendMMlTB">
+                                <a href="javascript:;" class="friendMMlTBa">
+                                    <span data-bind="click:getMyFriends">我的好友（</span><span data-bind="text:friends().length"></span><span>）</span>
+                                </a>
+                            </div>
+                            
                         </div>
                     </div>
-                </div>
-                
-                <div class="mimaddMr">
-                	<table class="friMMrtab">
-                 	<tr class="biaotou">
-                            <th class="xuanze">
-                                选择
-                            </th>
-                            <th class="touxiangk">头像</th>
-                            <th class="yonghuming">用户名</th>
-                            <th class="youxiang">邮箱</th>
-                        </tr>
-                     <tbody id="ko_friend" data-bind="foreach: orgers">
-                      <tr class="">
-                          <td class="xuanze">
-                              <div class="fuxuanK2 fuxuanK40">
-                                  <input name="orgerIds" type="checkbox" class="input_check" data-bind="value: id,attr:{id:'check1_'+($index()+1)}">
-                                  <label data-bind="attr:{for:'check1_'+($index()+1)}"></label>
-                              </div>
-                          </td>
-                          <td class="touxiangk">
-                              <img data-bind="attr:{src:headimg}" alt="" class="touxiangi" />
-                          </td>
-                          <td class="yonghuming"><span data-bind="text: username"></span></td>
-                          <td class="youxiang"><span data-bind="text: email"></span></td>
-                      </tr>
-                 	</tbody>
-                	</table>
-                	<input type="button" class="QXGLkB QXGLkB_chengyuan" value="添加" />
                     
+                    <div class="mimaddMr">
+                    	<table class="friMMrtab">
+	                    	<tr class="biaotou">
+                                <th class="xuanze">
+                                    选择
+                                </th>
+                                <th class="touxiangk">头像</th>
+                                <th class="yonghuming">用户名</th>
+                                <th class="youxiang">邮箱</th>
+                            </tr>
+	                        <tbody id="ko_orgers" data-bind="foreach:orgers">
+		                        <tr class="">
+		                            <td class="xuanze">
+		                                <div class="fuxuanK2 fuxuanK40">
+		                                    <input name="orgerIds" type="checkbox" class="input_check" data-bind="value: userId,attr:{id:'check1_'+($index()+1)}">
+		                                    <label data-bind="attr:{for:'check1_'+($index()+1)}"></label>
+		                                </div>
+		                            </td>
+		                            <td class="touxiangk">
+		                                <img data-bind="attr:{src:headimg}" alt="" class="touxiangi" />
+		                            </td>
+		                            <td class="yonghuming"><span data-bind="text: username"></span></td>
+		                            <td class="youxiang"><span data-bind="text: email"></span></td>
+		                        </tr>
+	                    	</tbody>
+	                    	<tbody id="ko_friends" data-bind="foreach:friends" style="display:none;">
+	                            <tr class="" >
+	                                <td class="xuanze">
+	                                    <div class="fuxuanK2 fuxuanK40">
+	                                        <input name="ids" type="checkbox" class="input_check" data-bind="value: friendId,attr:{id:'check2_'+($index()+1)}">
+	                                        <label data-bind="attr:{for:'check2_'+($index()+1)}"></label>
+	                                    </div>
+	                                </td>
+	                                <td class="touxiangk">
+	                                	<img data-bind="attr:{src:friendHeadimg}" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="touxiangi" />
+	                                </td>
+	                                <td class="yonghuming"><span data-bind="text: friendName"></span></td>
+	                                <td class="youxiang"><span data-bind="text: friendEmail"></span></td>
+	                            </tr>
+                        	</tbody>
+                    	</table>
+                    	<input type="button" class="QXGLkB QXGLkB_chengyuan" value="添加" />
+                        
+                    </div>
                 </div>
             </div>
-        </div>
             
         <div class="PJK2">
             <div class="QXGLk">
-                <div class="QXGLkT">
-                    <div class="QXGLkTl">权限管理</div>
-                    <div class="QXGLkTr"></div>
-                </div>
-                <div class="QXGLkM">
-                    
-                    <div class="QXGLkMr">
-                        
-                        <div class="QXGLkMrz">
-                        	<c:forEach items="${projectRoles}" var="projectRole" varStatus="status">
-                        		<c:if test="${projectRole.id != 1 }">
-	                        		<div class="QXGLkMrzM">
-		                                 <div class="QXGLkMrzMz">
-		                                     <div class="fuxuanK2 fuxuanK30">
-		                                     	<c:if test="${status.index == 0 }">
-		                                     		<input name="idssss" type="checkbox" checked class="input_check" id="check${projectRole.id }" value="${projectRole.id }">
-		                                     	</c:if>
-		                                     	<c:if test="${status.index != 0 }">
-		                                     		<input name="idssss" type="checkbox" class="input_check" id="check${projectRole.id }" value="${projectRole.id }">
-		                                     	</c:if>
-		                                		<label for="check${projectRole.id }"></label>
-		                            			</div>
-		                                     <div class="QXGLkMrzMzt">${projectRole.role_name }</div>
-		                                 </div>
-		                            </div>
-                        		</c:if>
-	                        	
-                        	</c:forEach>
-                        </div>
-                       
+                    <div class="QXGLkT">
+                        <div class="QXGLkTl">权限管理</div>
+                        <div class="QXGLkTr"></div>
                     </div>
+                    <div class="QXGLkM">
+                        <div class="QXGLkMl">
+                            <div class="QXGLkMlt">创建角色</div>
+                            <div class="QXGLkMlm">
+                            	<c:forEach items="${projectCustomRoles }" var="projectCustomRoleTemp">
+                            		<div class="QXGLkMlz">
+                            			<input id="${projectCustomRoleTemp.id}" class="QXGLkMlzt1" style="display:none;" value="${projectCustomRoleTemp.rolename}"/>
+	                                    <div class="QXGLkMlzt" onclick="clickCustomRole(${projectCustomRoleTemp.id},'${projectCustomRoleTemp.rolename}')">
+	                                    	${projectCustomRoleTemp.rolename }
+	                                    </div>
+	                                    <div class="QXGLkMlzi" onclick="deleteCustomRole(${projectCustomRoleTemp.id},'${projectCustomRoleTemp.rolename}')"></div>
+	                                </div>
+                            	</c:forEach>
+                            </div>
+                        </div>
+                        <div class="QXGLkMr">
+                            <div class="QXGLkMrz">
+                                <div class="QXGLkMrzT">详情</div>
+                                <div class="QXGLkMrzM">
+                                	<input name="11" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>浏览详情</label>&nbsp;&nbsp;
+                                	<input name="10" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>保存简介</label>&nbsp;&nbsp;
+                                </div>
+                            </div>
+                            <div class="QXGLkMrz">
+                                <div class="QXGLkMrzT">文件</div>
+                                <div class="QXGLkMrzM">
+                                	<input name="27" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>浏览文件</label>&nbsp;&nbsp;
+                                	<input name="20" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>添加根</label>&nbsp;&nbsp;
+                                	<input name="21" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>添加页</label>&nbsp;&nbsp;
+                                	<input name="22" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>上传文件</label>&nbsp;&nbsp;<br>
+                                	<input name="23" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>修改名称</label>&nbsp;&nbsp;
+                                	<input name="24" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>删除文件夹</label>&nbsp;&nbsp;
+                                	<input name="25" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>删除文件</label>&nbsp;&nbsp;
+                                	<input name="26" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>下载文件</label>&nbsp;&nbsp;
+                                </div>
+                            </div>
+                            <div class="QXGLkMrz">
+                                <div class="QXGLkMrzT">格式数据</div>
+                                <div class="QXGLkMrzM">
+                                	<input name="31" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>浏览格式数据</label>&nbsp;&nbsp;
+                                	<input name="30" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>移除格式数据</label>&nbsp;&nbsp;
+                                </div>
+                            </div>
+                            <div class="QXGLkMrz">
+                                <div class="QXGLkMrzT">应用</div>
+                                <div class="QXGLkMrzM">
+                                	<input name="42" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>浏览应用</label>&nbsp;&nbsp;
+                                	<input name="40" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>运行应用</label>&nbsp;&nbsp;
+                                	<input name="41" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>移除应用</label>&nbsp;&nbsp;
+                                </div>
+                            </div>
+                            <div class="QXGLkMrz">
+                                <div class="QXGLkMrzT">应用结果</div>
+                                <div class="QXGLkMrzM">
+                                	<input name="57" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>浏览结果</label>&nbsp;&nbsp;
+                                	<input name="50" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>重新运行</label>&nbsp;&nbsp;
+                                	<input name="51" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>发布结果</label>&nbsp;&nbsp;
+                                	<input name="52" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>取消发布</label>&nbsp;&nbsp;<br>
+                                	<input name="53" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>移除结果</label>&nbsp;&nbsp;
+                                	<input name="54" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>查看结果</label>&nbsp;&nbsp;
+                                	<input name="55" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>查看参数</label>&nbsp;&nbsp;
+                                	<input name="56" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>查看结果文件</label>&nbsp;&nbsp;   
+                                </div>
+                            </div>
+                            <div class="QXGLkMrz">
+                                <div class="QXGLkMrzT">文件</div>
+                                <div class="QXGLkMrzM">
+	                                <input name="63" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>浏览成员</label>&nbsp;&nbsp;
+	                                <input name="60" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>添加成员</label>&nbsp;&nbsp;
+	                                <input name="61" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>权限管理</label>&nbsp;&nbsp;
+	                                <input name="62" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>移除成员</label>&nbsp;&nbsp;
+                                </div>
+                            </div>
+                            <div class="QXGLkMrz">
+                                <div class="QXGLkMrzT">主题</div>
+                                <div class="QXGLkMrzM">
+                                    <input name="74" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>浏览主题</label>&nbsp;&nbsp;
+                                    <input name="70" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>创建主题</label>&nbsp;&nbsp;
+                                    <input name="72" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>回复主题</label>&nbsp;&nbsp;
+                                    <br>
+                                    <input name="71" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>删除主题</label>&nbsp;&nbsp;
+                                    <input name="73" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>删除主题回复</label>&nbsp;&nbsp;
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="button" class="QXGLkB QXGLkB_quanxian" value="提交" />
                 </div>
-                <input type="button" class="QXGLkB QXGLkB_quanxian" value="提交" />
-            </div>
+                
             
             <c:forEach items="${projectMembers}" var="projectMemberTemp">
                  
@@ -368,30 +443,6 @@
 	            }
 	        }
 	    });
-		
-      	/* //定义ViewModel
-        function ViewModel() {
-      		
-            var self = this;
-            //当前组织ID
-            var centOrgId;
-            var centUser = '${user.username}';
-            //组内成员
-            self.orgers = ko.observableArray(); //添加动态监视数组对象
-            //显示组内成员
-            self.showOrgers = function(id){
-            	centOrgId=id;
-            	self.orgers.removeAll();
-            	$.get("/wankangyuan/projectMember/getUserByOrg",{organizationId:id},function(data){
-                    var list = JSON.parse(data);
-                    for (var i in list){
-                    	self.orgers.push(list[i]);
-                    }
-                });
-            }
-        }
-        var vm = new ViewModel();
-        ko.applyBindings(vm); */
         
         
         //添加人员到项目中
@@ -408,7 +459,7 @@
             	}
             }
             if(ids == ""){
-            	alert("请勾选用户！");
+            	layer.msg("请勾选用户");
             	return;
             }
 
@@ -421,13 +472,13 @@
             	dataType:"json",
             	success : function(data){
             		if(data.result == true){
-            			alert(data.message);
+            			layer.msg(data.message);
             			var searchWord = $(".search2Ct").val();
             			window.location.href="/wankangyuan/projectMember/selectProjectMember?type=2&searchWord="+searchWord;
             		}
             	},
             	error : function(){
-            		alert("联网失败");
+            		layer.msg("联网失败");
             	}
             });
 
@@ -447,7 +498,7 @@
             	}
             }
             if(ids == ""){
-            	alert("请勾选项目成员！");
+            	layer.msg("请勾选项目成员");
             	return;
             }
             
@@ -460,20 +511,176 @@
             	dataType:"json",
             	success : function(data){
             		if(data.result == true){
-            			alert(data.message);
+            			layer.msg(data.message);
             			var searchWord = $(".search2Ct").val();
             			window.location.href="/wankangyuan/projectMember/selectProjectMember?type=2&searchWord="+searchWord;
             		}
             	},
             	error : function(){
-            		alert("联网失败");
+            		layer.msg("联网失败");
             	}
             });
         });
         
+        var role_id = 0;
+        var role_name = 'rolename';
+        
         //权限赋予提交按钮
         $(".QXGLkB_quanxian").click(function (){
+        	if(role_id == 0){
+        		layer.msg("请选择角色");
+        		return;
+        	}
+        	if(role_name == '创建者'){
+        		layer.msg("创建者为系统默认角色，不能修改权限列表");
+        		return;
+        	}
         	//获取准备赋予权限的项目成员
+        	var authoritys=document.querySelectorAll('.authority');
+        	var ids=[];
+            for(var i=0;i<authoritys.length;i++){
+            	if(authoritys[i].checked){
+            		ids.push(authoritys[i].name);
+            	}
+            }
+        	$.ajax({
+        		url:"/wankangyuan/projectMember/updateProjectCustomRole",
+        		type:"post",
+        		data:{
+        			authorities:ids.join(","),
+        			id:role_id
+        		},
+        		dataType:"json",
+        		success : function(data){
+        			if(data.result == true){
+        				layer.msg(data.message);
+        				var searchWord = $(".search2Ct").val();
+            			window.location.href="/wankangyuan/projectMember/selectProjectMember?type=2&searchWord="+searchWord;
+        			}else{
+        				layer.msg(data.message);
+        			}
+        		},
+        		error : function(){
+        			layer.msg("联网失败");
+        		}
+        	}); 	
+        });
+        
+        //搜索项目
+        $(".search2Ct").bind("keypress" , function(event){
+        	if(event.keyCode == 13){
+        		var searchWord = this.value;
+            	window.location.href="/wankangyuan/projectMember/selectProjectMember?type=2&searchWord="+searchWord;
+        	}
+        });
+        
+      	//请求自定义角色的权限列表
+        function clickCustomRole(id , rolename){
+        	$.ajax({
+        		url:"/wankangyuan/projectMember/getProjectCustomRoleAuthorities",
+        		type:"post",
+        		data:{
+        			id:id
+        		},
+        		dataType:"json",
+        		success : function(data){
+        			$('.QXGLkMrz').find('input[class=authority]').attr("checked", false);  
+        			for(var i in data){
+        				$('.QXGLkMrz').find('input[name='+data[i]+']').attr("checked", true);  
+        			}
+        			role_id = id;
+        			role_name = rolename;
+        		},
+        		error : function(){
+        			layer.msg("联网失败");
+        		}
+        	});
+        }
+        
+        //移除项目自定义角色
+        function deleteCustomRole(id , rolename){
+        	if(rolename == "创建者" || rolename == "项目成员" || rolename == "访问者"){
+        		layer.msg("项目默认角色不能移除");
+        		return;
+        	}
+        	layer.confirm('请确认移除角色？',{
+        		btn:['确认','取消'],
+        		icon:2
+        	},function(){
+        		$.ajax({
+        			url:"/wankangyuan/projectMember/deleteProjectCustomRole",
+        			type:"post",
+        			data:{
+        				id:id
+        			},
+        			dataType:"json",
+        			success : function(data){
+        				if(data.result == true){
+        					layer.msg(data.message);
+        					var searchWord = $(".search2Ct").val();
+                			window.location.href="/wankangyuan/projectMember/selectProjectMember?type=2&searchWord="+searchWord;
+        				}else{
+        					layer.msg(data.message);
+        				}
+        			},
+        			error : function(){
+        				layer.msg("联网失败");
+        			}
+        		});
+        	},function(){
+        		return;
+        	});
+        }
+        
+        //点击创建角色按钮，弹出创建角色对话框
+        $(".QXGLkMlt").click(function(){
+        	layer.open({
+        		id:1,
+        		type: 1,
+        		title:'创建角色',
+        		skin:'layui-layer-rim',
+        		area:['450px', 'auto'],
+        		content: ' <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+        			+'<div class="col-sm-12">'
+        			+'<div class="input-group">'
+        			+'<span class="input-group-addon">&nbsp;&nbsp;&nbsp;名称:&nbsp;&nbsp;&nbsp;</span>'
+        			+'<input id="newRolename" type="text" class="" placeholder="请输入角色名称">'
+        			+'</div>'
+        			+'</div>'
+	       			+'</div>',
+        		btn:['提交','取消'],
+        		btn1: function (index,layero) {
+        			var rolename = $("#newRolename").val();
+        			if(rolename == "创建者"  || rolename == "项目成员" || rolename == "访问者"){
+        				layer.msg("该角色为系统配置角色，不能新建");
+        				return;
+        			}
+        			$.ajax({
+        				url:"/wankangyuan/projectMember/insertProjectCustomRole",
+        				type:"post",
+        				data:{
+        					rolename:rolename
+        				},
+        				dataType:"json",
+        				success : function(data){
+        					layer.msg(data.message);
+        					var searchWord = $(".search2Ct").val();
+                			window.location.href="/wankangyuan/projectMember/selectProjectMember?type=2&searchWord="+searchWord;
+        				},
+        				error : function(){
+        					layer.msg("联网失败");
+        				}
+        			});
+        		},
+        		btn2:function (index,layero) {
+        			 layer.close(index);
+        		}
+        	});
+        });
+        
+        //更新成员权限
+        $(".role_change").click(function (){
+        	//选择项目成员
         	var afuxuanK=document.querySelectorAll('.fuxuanK20');
         	var afuxuan=[];
             for(var i=0;i<afuxuanK.length;i++){
@@ -486,61 +693,85 @@
             	}
             }
             if(ids == ""){
-            	alert("请勾选用户！");
+            	layer.msg("请勾选成员");
             	return;
             }
             if(ids.length > 1){
-            	alert("一次最多只能修改一位用户的权限！");
+            	layer.msg("一次只能修改一位成员的角色");
             	return;
             }
-            var project_user_id = ids.join(",");
+            if(ids == 0){
+            	layer.msg("请勾选成员");
+            	return;
+            }
+            //初始化项目内角色列表
+            var roles = document.querySelectorAll('.QXGLkMlzt1');
+            var content ='';
+            content += ' <div class="row" style="width:420px ; margin-left:7px; margin-top:10px;">'
+            	+'<div class="col-sm-12">'
+            	+'<div class="input-group">';
+            for(var i=0 ; i<roles.length ; i++){
+            	if(roles[i].value != "创建者"){
+            		content += '&nbsp;&nbsp;&nbsp;&nbsp;<input name="roleRadio" class="roleRadio" type="radio" style="zoom:150%" value='
+                		+roles[i].id+'>&nbsp;&nbsp;<label>'+roles[i].value+'</label><br>' 
+            	}	
+            }
+            content += '</div></div></div>';                 
             
-        	//获取准备赋予的权限ID
-            var afuxuanK=document.querySelectorAll('.fuxuanK30');
-        	var afuxuan=[];
-            for(var i=0;i<afuxuanK.length;i++){
-                afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
-            }
-            var role_ids = [];
-            for(var i=0;i<afuxuanK.length;i++){
-            	if(afuxuan[i].checked){
-            		role_ids.push(afuxuan[i].value);
-            	}
-            }
-            var role_id = role_ids.join(",");
-        	
-        	$.ajax({
-        		url:"/wankangyuan/projectMember/updateProjectUserRole",
-        		type:"post",
-        		data:{
-        			id:project_user_id,
-        			role_id:role_id
+            //打开更新权限弹出框
+            layer.open({
+        		id:1,
+        		type: 1,
+        		title:'更改角色',
+        		skin:'layui-layer-rim',
+        		area:['450px', 'auto'],
+        		content: content,
+        		btn:['提交','取消'],
+        		btn1: function (index,layero) {
+        			var customRoleId = 0;
+        			var roles=document.querySelectorAll('.roleRadio');
+                    for(var i=0;i<roles.length;i++){
+                    	if(roles[i].checked){
+                    		customRoleId = roles[i].value;
+                    	}
+                    }
+                    if(customRoleId == 0){
+                    	layer.msg("请选择项目成员角色");
+                    	return;
+                    }
+                    //网络请求更换成员角色
+                    $.ajax({
+						url:"/wankangyuan/projectMember/updateProjectUserRole",
+						type:"post",
+						data:{
+							id:ids.join(","),
+							role_id:customRoleId
+						},
+						dataType:"json",
+						success : function(data){
+							if(data.result == true){
+								layer.msg(data.message);
+								var searchWord = $(".search2Ct").val();
+	                			window.location.href="/wankangyuan/projectMember/selectProjectMember?type=2&searchWord="+searchWord;
+							}else{
+								layer.msg(data.message);
+							}
+						},
+						error : function(){
+							layer.msg("联网失败");
+						}
+					});
         		},
-        		dataType:"json",
-        		success : function(data){
-        			if(data.result == true){
-        				alert(data.message);
-        				var searchWord = $(".search2Ct").val();
-            			window.location.href="/wankangyuan/projectMember/selectProjectMember?type=2&searchWord="+searchWord;
-        			}else{
-        				alert(data.message);
-        			}
-        		},
-        		error : function(){
-        			alert("联网失败");
+        		btn2:function (index,layero) {
+        			 layer.close(index);
         		}
-        	});        	
+        	});
         });
         
-        //搜索项目
-        $(".search2Ct").bind("keypress" , function(event){
-        	if(event.keyCode == 13){
-        		var searchWord = this.value;
-            	window.location.href="/wankangyuan/projectMember/selectProjectMember?type=2&searchWord="+searchWord;
-        	}
-        });
 
 	</script>
+	
+
 <!--菜单项模板-->
 <script id="orgTmpl" type="text/html">
 <!-- ko if:groupList.length -->
@@ -604,6 +835,8 @@ function ViewModel() {
                 self.orgers.push(list[i]);
                 
             }
+            document.getElementById("ko_orgers").style.display="";
+            document.getElementById("ko_friends").style.display="none";
             friendmanage_quanxuan();
         });
     }
@@ -625,6 +858,8 @@ function ViewModel() {
                 }
                 self.orgers.push(list[i]);
             }
+            document.getElementById("ko_orgers").style.display="";
+            document.getElementById("ko_friends").style.display="none";
             friendmanage_quanxuan();
         });
     }
@@ -734,12 +969,13 @@ function ViewModel() {
     var myfriends;
     self.getMyFriends = function() {
         self.friends.removeAll();
-        $.get("/wankangyuan/friends/getMyFriends",{friendName:$("#myFriendSearch").val()},function(data){
+        $.get("/wankangyuan/friends/getMyFriends",{},function(data){
             myfriends = JSON.parse(data);
             for (var i in myfriends){
                 self.friends.push(myfriends[i]);
-                
             }
+            document.getElementById("ko_orgers").style.display="none";
+            document.getElementById("ko_friends").style.display="";
             friendmanage_quanxuan();
         });
     }
@@ -800,7 +1036,8 @@ function ViewModel() {
 }
 var vm = new ViewModel();
 ko.applyBindings(vm);
-</script>  
+</script>
+
     
 </body>
 </html>

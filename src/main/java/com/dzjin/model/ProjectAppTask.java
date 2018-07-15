@@ -40,7 +40,7 @@ public class ProjectAppTask {
 	//发布状态
 	private String isRelease;
 	//异步/即时
-	private String isSync;
+	private String is_async;
 	//结果地址
 	private String result_address;
 	
@@ -74,11 +74,11 @@ public class ProjectAppTask {
 	public void setIsRelease(String isRelease) {
 		this.isRelease = isRelease;
 	}
-	public String getIsSync() {
-		return isSync;
+	public String getIs_async() {
+		return is_async;
 	}
-	public void setIsSync(String isSync) {
-		this.isSync = isSync;
+	public void setIs_async(String is_async) {
+		this.is_async = is_async;
 	}
 	public String getId() {
 		return id;

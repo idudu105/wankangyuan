@@ -65,6 +65,8 @@ public class ProjectAppController {
 		}else{
 			httpSession.setAttribute("projectAppSearchWord", searchWord);
 		}
+		httpSession.setAttribute("queryCondition", null);//设置筛选条件
+		
 		Map<String, Object> map = projectAppService.selectProjectApp(p_id, page, strip , searchWord);
 		httpSession.setAttribute("projectApplications", map.get("list"));
 		httpSession.setAttribute("page", page);

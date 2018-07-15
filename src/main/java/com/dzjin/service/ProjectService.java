@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.dzjin.dao.ProjectDao;
 import com.dzjin.model.Project;
-import com.dzjin.model.ProjectCustomRole;
 import com.dzjin.model.ProjectUser;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -131,15 +130,6 @@ public class ProjectService {
 			
 			//判断项目用户是否已经绑定关系
 			if(null == projectDao.getProjectUserByPidAndUid(projectUser)){
-//				//未绑定关系，添加用户为项目成员
-//				projectUser.setLinkman_id(user_id);
-//				ProjectCustomRole projectCustomRole = 
-//						projectCustomRoleService.getProjectCustomRoleByRolename("项目成员", Integer.valueOf(ids[i]));
-//				if(projectCustomRole != null){
-//					projectUser.setRole_id(projectCustomRole.getId());//项目成员角色
-//				}else{
-//					return false;
-//				}
 				projectUser.setRole_id(0);//也就是没有角色，不是项目成员
 				projectUser.setBind_date_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 				if(projectUserService.insertProjectUser(projectUser) != 1){
@@ -150,6 +140,12 @@ public class ProjectService {
 		return result;
 	}
 	
+	/**
+	 * 更新项目公开状态
+	 * @param idStrings
+	 * @param is_open
+	 * @return
+	 */
 	public boolean updateProjectOpenState(String idStrings , Integer is_open){
 		String[] ids = idStrings.split(",");
 		boolean result = true;
@@ -161,6 +157,11 @@ public class ProjectService {
 		return result;
 	}
 	
+	/**
+	 * 删除项目
+	 * @param idStrings
+	 * @return
+	 */
 	public boolean deleteProjects(String idStrings){
 		String[] ids = idStrings.split(",");
 		boolean result = true;
@@ -172,6 +173,12 @@ public class ProjectService {
 		return result;
 	}
 	
+	/**
+	 * 退出项目
+	 * @param idStrings
+	 * @param user_id
+	 * @return
+	 */
 	public boolean exits(String idStrings , Integer user_id){
 		String[] ids = idStrings.split(",");
 		boolean result = true;
@@ -190,7 +197,7 @@ public class ProjectService {
 		}
 		return result;
 	}
-
+	
 	public Integer getProjectId(String projectName) {
 		return projectDao.getProjectId(projectName);
 	}

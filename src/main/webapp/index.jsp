@@ -84,10 +84,16 @@
                 })(i)
             }
         }
-        
+
     }
 </script>
 <body>
+	
+	<c:if test="${showProjects==null}">
+		<script type="text/javascript">
+			window.location.href="/wankangyuan/homepage/selectShowProject";
+		</script>
+	</c:if>
 
     <div class="Box">
         <div class="box">

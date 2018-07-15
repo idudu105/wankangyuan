@@ -78,6 +78,7 @@ public class ProjectMemberController {
 		}else{
 			httpSession.setAttribute("searchWord", searchWord);
 		}
+		httpSession.setAttribute("queryCondition", null);//设置筛选条件
 		
 		//组织结构列表，可能需要修改
 		List<Organization> orgList = organizationService.findOrgList(-1);

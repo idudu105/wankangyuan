@@ -68,6 +68,7 @@ public class ProjectAppTaskController {
 		}else{
 			httpSession.setAttribute("projectAppTaskSearchWord", searchWord);
 		}
+		httpSession.setAttribute("queryCondition", null);//取消设置筛选条件
 		User user = (User)request.getAttribute("user");
 		Project project = (Project) httpSession.getAttribute("project");
 		Map<String , Object> map = projectAppTaskService.selectProjectAppTask(page, strip, project.getId(),searchWord , user);

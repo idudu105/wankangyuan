@@ -39,7 +39,7 @@ public interface ProjectAppTaskDao {
 			+ "where id=#{id}")
 	public int updateProjectAppTask(ProjectAppTask projectAppTask);
 	
-	@Select("select project_app_task.*,application.app_name "
+	@Select("select project_app_task.*,application.app_name , application.is_async "
 			+ "from project_app_task , application "
 			+ "where project_id=#{project_id} and "
 			+ "application.id = project_app_task.app_id and "

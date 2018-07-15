@@ -84,7 +84,7 @@ public interface ProjectDao {
 	@Delete("delete from project where id=#{id}")
 	public int deleteProject(@Param("id")Integer id);
 	
-	@Delete("delete from project_user where project_id=#{project_id} and user_id=#{user_id}")
+	@Delete("delete from project_user where project_id=#{project_id} and user_id=#{user_id} and role_id=0")
 	public int deleteProjectUser(ProjectUser projectUser);
 	
 	@Select("select id from project where p_name=#{p_name} ORDER BY id ASC LIMIT 1")
@@ -105,6 +105,4 @@ public interface ProjectDao {
 	@Select("select count(*) from project_user where project_id=#{id} and role_id!=0")
 	public int countProjectUser(@Param("id")Integer id);
 	
-	
-
 }
