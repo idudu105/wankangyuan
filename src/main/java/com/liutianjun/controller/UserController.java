@@ -528,17 +528,17 @@ public class UserController {
 		//检查用户名
 		if(null != userService.selectByUsername(user.getUsername())){
 			attributes.addFlashAttribute("msg", "用户名已经存在!");
-			return "redirect:/viewUserManage";
+			return "redirect:/admin/viewUserManage";
 		}
 		//检查邮箱
 		if(null != userService.selectByEmail(user.getEmail())){
 			attributes.addFlashAttribute("msg", "Email已经存在!");
-			return "redirect:/viewUserManage";
+			return "redirect:/admin/viewUserManage";
 		}
 		//检查手机号
 		if(null != userService.selectByPhone(user.getPhone())){
 			attributes.addFlashAttribute("msg", "手机号已经存在!");
-			return "redirect:/viewUserManage";
+			return "redirect:/admin/viewUserManage";
 		}
 		//设置默认密码为手机号
 		user.setPassword(user.getPhone());

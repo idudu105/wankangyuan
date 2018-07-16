@@ -173,7 +173,7 @@
                                     <th class="youxiang">邮箱</th>
                                     <th class="caozuo">操作</th>
                                 </tr>
-                                <tbody data-bind="foreach: friends">
+                                <tbody data-bind="foreach: friends2">
                                 <tr class="biaoxiang" >
                                     <th class="touxiang"><img data-bind="attr:{src: friendHeadimg}" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="touxiangi" /></th>
                                     <th class="yonghuming" data-bind="text: friendName"></th>
@@ -841,12 +841,15 @@ function ViewModel() {
     }
     self.getMyFriends();
     
+    //组织成员候选
+    self.friends2 = ko.observableArray();
+    var myfriends2;
     self.getFriendsToOrg = function() {
-        self.friends.removeAll();
+        self.friends2.removeAll();
         $.get("/wankangyuan/friends/getMyFriends",{friendName:$("#addOrgerInput").val()},function(data){
-            myfriends = JSON.parse(data);
-            for (var i in myfriends){
-                self.friends.push(myfriends[i]);
+            myfriends2 = JSON.parse(data);
+            for (var i in myfriends2){
+                self.friends2.push(myfriends2[i]);
                 
             }
             friendmanage_quanxuan();

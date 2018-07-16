@@ -168,7 +168,8 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	 * @return
 	 */
 	@Override
-	public Map<String,Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId, String orderByClause,String field, String[] option) {
+	public Map<String,Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId, String orderByClause, 
+			String[] appNameOption, String[] creatorOption, String[] isAsyncOption, String[] keywordsOption, String[] appIntroOption, String[] createTimeOption) {
 		copyApplicationtoMine(userId);
 		Map<String,Object> map = new HashMap<>();
 		//根据用户名查询关系表
@@ -181,49 +182,52 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	    if(StringUtils.isNotBlank(appType)) {
 	    	criteria.andAppTypeEqualTo(appType);
 	    }
-	    if(null != field && null != option && option.length > 0) {
-	    	if(field.equals("appName")) {
-	    		criteria.andAppNameIn(Arrays.asList(option));
-	    	}else if (field.equals("creator")) {
-	    		criteria.andCreatorIn(Arrays.asList(option));
-	    	}else if (field.equals("isAsync")) {
-	    		List<String> optionList = Arrays.asList(option);
-	    		if(optionList.size() == 1) {
-	    			if("同步".equals(optionList.get(0))) {
-	    				criteria.andIsAsyncEqualTo(0);
-	    			} 
-	    			if("异步".equals(optionList.get(0))) {
-	    				criteria.andIsAsyncEqualTo(1);
-	    			}
-	    		}
-	    	}else if (field.equals("keywords")) {
-	    		criteria.andKeywordsIn(Arrays.asList(option));
-	    	}else if (field.equals("appOverview")) {
-	    		criteria.andAppOverviewIn(Arrays.asList(option));
-	    	}else if (field.equals("createTime")) {
-	    		if(option.length == 2) {
-	    			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	    			Date date1;
-	    			Date date2;
-	    			try {
-	    				date1 = simpleDateFormat.parse(option[0].toString());
-	    				date2 = simpleDateFormat.parse(option[1].toString());
-	    				Calendar cal = Calendar.getInstance();
-	    				if(date1.before(date2)) {
-	    					cal.setTime(date2);
-	    					cal.add(Calendar.DATE, 1);
-	    					criteria.andCreateTimeBetween(date1, cal.getTime());
-	    				}else {
-	    					cal.setTime(date1);
-	    					cal.add(Calendar.DATE, 1);
-	    					criteria.andCreateTimeBetween(date2, cal.getTime());
-	    				}
-	    			} catch (ParseException e) {
-	    				e.printStackTrace();
-	    			}
-	    		}
-	    	}
-	    }
+    	if(null != appNameOption && appNameOption.length > 0) {
+    		criteria.andAppNameIn(Arrays.asList(appNameOption));
+    	}
+    	if (null != creatorOption && creatorOption.length > 0) {
+    		criteria.andCreatorIn(Arrays.asList(creatorOption));
+    	}
+    	if (null != isAsyncOption && isAsyncOption.length > 0) {
+    		List<String> optionList = Arrays.asList(isAsyncOption);
+    		if(optionList.size() == 1) {
+    			if("同步".equals(optionList.get(0))) {
+    				criteria.andIsAsyncEqualTo(0);
+    			} 
+    			if("异步".equals(optionList.get(0))) {
+    				criteria.andIsAsyncEqualTo(1);
+    			}
+    		}
+    	}
+    	if (null != keywordsOption && keywordsOption.length > 0) {
+    		criteria.andKeywordsIn(Arrays.asList(keywordsOption));
+    	}
+    	if (null != appIntroOption && appIntroOption.length > 0) {
+    		criteria.andAppOverviewIn(Arrays.asList(appIntroOption));
+    	}
+    	if (null != createTimeOption && createTimeOption.length > 0) {
+    		if(createTimeOption.length == 2) {
+    			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    			Date date1;
+    			Date date2;
+    			try {
+    				date1 = simpleDateFormat.parse(createTimeOption[0].toString());
+    				date2 = simpleDateFormat.parse(createTimeOption[1].toString());
+    				Calendar cal = Calendar.getInstance();
+    				if(date1.before(date2)) {
+    					cal.setTime(date2);
+    					cal.add(Calendar.DATE, 1);
+    					criteria.andCreateTimeBetween(date1, cal.getTime());
+    				}else {
+    					cal.setTime(date1);
+    					cal.add(Calendar.DATE, 1);
+    					criteria.andCreateTimeBetween(date2, cal.getTime());
+    				}
+    			} catch (ParseException e) {
+    				e.printStackTrace();
+    			}
+    		}
+    	}
 	    
 	    int total = userAppRelationDao.countByExample(example);
 	    example.setOrderByClause(orderByClause);
@@ -269,8 +273,6 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 		
 	    example.setFields(field);
 	    example.setDistinct(true);
-	    example.setPageNo(1);
-	    example.setPageSize(10);
 		return userAppRelationDao.selectByExample(example);
 	}
 

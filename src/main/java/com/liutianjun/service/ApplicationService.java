@@ -36,12 +36,15 @@ public interface ApplicationService {
 	
 	//查找自己创建的应用
 	Map<String, Object> findCreate(Integer page, Integer rows, String appName, String appType, String creator,
-			String orderByClause, String field, String[] option);
+			String orderByClause, String[] appNameOption, String[] creatorOption, String[] isAsyncOption, String[] keywordsOption,
+			String[] appIntroOption, String[] createTimeOption, String[] isDisplayOption);
 	
 	//查找公共的应用
+	/*Map<String, Object> findPublic(Integer page, Integer rows, String appName, String appType, String orderByClause,
+			String field, String[] option);*/
 	Map<String, Object> findPublic(Integer page, Integer rows, String appName, String appType, String orderByClause,
-			String field, String[] option);
-
+			String[] appNameOption, String[] creatorOption, String[] isAsyncOption, String[] keywordsOption,
+			String[] appIntroOption, String[] createTimeOption);
 	//设置应用状态
 	int setStatus(Integer cmd, Integer[] ids);
 	
@@ -68,7 +71,6 @@ public interface ApplicationService {
 
 	//查询公共的的应用类别列表
 	List<String> findPublicAppTypeList();
-
 
 
 }

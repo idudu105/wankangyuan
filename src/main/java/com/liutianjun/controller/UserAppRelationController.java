@@ -110,14 +110,23 @@ public class UserAppRelationController {
             @RequestParam(value="appType",required=false)String appType,
             @RequestParam(value="orderName",defaultValue="ID")String orderName,
             @RequestParam(value="orderDir",defaultValue="DESC")String orderDir,
-            @RequestParam(value="field",required=false)String field,
-            @RequestParam(value="option",required=false)String[] option) throws Exception {
+            /*@RequestParam(value="field",required=false)String field,
+            @RequestParam(value="option",required=false)String[] option*/
+            @RequestParam(value="appNameOption",required=false)String[] appNameOption,
+            @RequestParam(value="creatorOption",required=false)String[] creatorOption,
+            @RequestParam(value="isAsyncOption",required=false)String[] isAsyncOption,
+            @RequestParam(value="keywordsOption",required=false)String[] keywordsOption,
+            @RequestParam(value="appIntroOption",required=false)String[] appIntroOption,
+            @RequestParam(value="createTimeOption",required=false)String[] createTimeOption) throws Exception {
 		
 		//获取用户名
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 	    //获取用户
 	    User user = userService.selectByUsername(username);
-		Map<String, Object> map = userAppRelationService.findMine(page,rows,appName,appType,user.getId(),orderName +" "+ orderDir,field,option);
+		
+	    //Map<String, Object> map = userAppRelationService.findMine(page,rows,appName,appType,user.getId(),orderName +" "+ orderDir,field,option);
+	    Map<String, Object> map = userAppRelationService.findMine(page,rows,appName,appType,user.getId(),
+	    		orderName +" "+ orderDir,appNameOption,creatorOption,isAsyncOption,keywordsOption,appIntroOption,createTimeOption);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setDateFormat(new SimpleDateFormat("YYYY-MM-dd"));
 		return mapper.writeValueAsString(map);

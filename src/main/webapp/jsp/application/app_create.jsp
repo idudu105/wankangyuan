@@ -194,7 +194,7 @@
                 <div class="PJList">
                     <div class="allK">
                         <div class="quanxuanK">
-                            <input type="checkbox" class="input_check" id="check0">
+                            <input type="checkbox" class="input_check" id="check0" >
                             <label for="check0"></label>
                         </div>
                         <div class="allT">全选</div>
@@ -389,6 +389,7 @@ function to_delete(){
 function ViewModel() {
 	var self = this;
 	var page,rows,total,appName,appType,orderName,orderDir,field,option;
+	var appNameOption,creatorOption,isAsyncOption,keywordsOption,appIntroOption,createTimeOption,isDisplayOption;
 	self.appList = ko.observableArray();
 	self.appCart = ko.observableArray();
 	self.showAppList = function() {
@@ -399,8 +400,15 @@ function ViewModel() {
 			appType:self.appType,
 			orderName:self.orderName,
 			orderDir:self.orderDir,
-			field:$(".BTSXpd").val(),
-			option:self.option
+			/* field:$(".BTSXpd").val(),
+			option:self.option */
+			appNameOption:self.appNameOption,
+            creatorOption:self.creatorOption,
+            isAsyncOption:self.isAsyncOption,
+            keywordsOption:self.keywordsOption,
+            appIntroOption:self.appIntroOption,
+            createTimeOption:self.createTimeOption,
+            isDisplayOption:self.isDisplayOption
 			},function(data){
 			page = data.page;
 			rows = data.rows;
@@ -427,30 +435,31 @@ function ViewModel() {
 			        }
 			    }
 			});
-			 $.getJSON("/wankangyuan/application/getCreate",{
-	            page:1,
-	            rows:1000,
-	            appName:self.appName,
-	            appType:self.appType,
-	            orderName:self.orderName,
-	            orderDir:self.orderDir,
-	            field:$(".BTSXpd").val(),
-	            option:self.option
-	            },function(data){
-	            self.appCart.removeAll();
-	            for (var i in data.list){
-	                self.appCart.push(data.list[i].id);
-	            }
-	            //console.log(self.appCart);
-	            if($("#check0").attr('checked')){
-	                $(".input_check").each(function(){
-	                    var index = $.inArray(Number($(this).val()),self.appCart());
-	                    if(index >= 0){
-	                        $(this).attr("checked",true);
-	                    }
-	                })
-	            }else{
-	            	/* $(".input_check").each(function(){
+			
+			$.getJSON("/wankangyuan/application/getCreate",{
+                page:1,
+                rows:1000,
+                appName:self.appName,
+                appType:self.appType,
+                orderName:self.orderName,
+                orderDir:self.orderDir,
+                field:$(".BTSXpd").val(),
+                option:self.option
+                },function(data){
+                self.appCart.removeAll();
+                for (var i in data.list){
+                    self.appCart.push(data.list[i].id);
+                }
+                //console.log(self.appCart);
+                if($("#check0").attr('checked')){
+                    $(".input_check").each(function(){
+                        var index = $.inArray(Number($(this).val()),self.appCart());
+                        if(index >= 0){
+                            $(this).attr("checked",true);
+                        }
+                    })
+                }else{
+                    /* $(".input_check").each(function(){
                         //console.log($(this).val());
                         //console.log(self.appCart()[index]);
                         var index = $.inArray(Number($(this).val()),self.appCart());
@@ -458,12 +467,25 @@ function ViewModel() {
                             $(this).attr("checked",true);
                         }
                     }) */
-	            }
-	        }); 
+                }
+                
+            });
 		});
-		
-		
 	}
+	
+	//边缘弹出
+    /* layer.open({
+      type: 1
+      ,offset: 'lt' //具体配置参考：offset参数项
+      ,content: '<div style="padding: 20px 80px;" data-bind="text:appCart().length"></div>'
+      ,btn: '关闭全部'
+      ,btnAlign: 'c' //按钮居中
+      ,shade: 0 //不显示遮罩
+      ,yes: function(){
+        layer.closeAll();
+      }
+    }); */
+	
 	//初始化列表
 	self.showAppList();
 	
@@ -486,7 +508,23 @@ function ViewModel() {
 			arr[i]=$(this).val(); 
 		});  
         self.option = arr.join(",");
-        self.appName = "";
+        //self.appName = "";
+        self.field = $(".BTSXpd").val()
+        if(self.field == "appName"){
+            self.appNameOption = arr.join(",");
+        }else if(self.field == "creator"){
+            self.creatorOption = arr.join(",");
+        }else if(self.field == "isAsync"){
+            self.isAsyncOption = arr.join(",");
+        }else if(self.field == "keywords"){
+            self.keywordsOption = arr.join(",");
+        }else if(self.field == "appIntro"){
+            self.appIntroOption = arr.join(",");
+        }else if(self.field == "createTime"){
+            self.createTimeOption = arr.join(",");
+        }else if(self.field == "isDisplay"){
+        	self.isDisplayOption = arr.join(",");
+        }
         page = 1;
         self.showAppList();
 	}

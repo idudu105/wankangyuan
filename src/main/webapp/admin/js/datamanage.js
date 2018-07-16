@@ -27,7 +27,7 @@ $(document).ready(function(){
                 abox_xxtabz[index].className="box_xxtabz active";
             }*/
             $(abox_xxtabz[index]).click(function(){
-            	for(var j=0;j<abox_xytabz.length;j++){
+            	for(var j=0;j<abox_xxtabz.length;j++){
                 	abox_xxtabz[j].className="box_xxtabz";
                 }
                 abox_xxtabz[index].className="box_xxtabz active";

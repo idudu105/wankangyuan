@@ -30,7 +30,8 @@ public interface UserAppRelationService {
 	int removeFromMineByIds(Integer userId,Integer[] ids);
 	
 	//查找用户的应用集合
-	Map<String,Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId,String orderByClause, String field, String[] option);
+	//Map<String,Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId,String orderByClause, String field, String[] option);
+	Map<String,Object> findMine(Integer page, Integer rows, String appName, String appType, Integer userId, String orderByClause, String[] appNameOption, String[] creatorOption, String[] isAsyncOption, String[] keywordsOption, String[] appIntroOption, String[] createTimeOption);
 	
 	//查找我的应用
 	List<UserAppRelation> findMine(Integer userId);

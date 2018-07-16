@@ -125,12 +125,20 @@ public class ApplicationController {
             @RequestParam(value="appType",required=false)String appType,
             @RequestParam(value="orderName",defaultValue="ID")String orderName,
             @RequestParam(value="orderDir",defaultValue="DESC")String orderDir,
-            @RequestParam(value="field",required=false)String field,
-            @RequestParam(value="option",required=false)String[] option) throws Exception {
+            /*@RequestParam(value="field",required=false)String field,
+            @RequestParam(value="option",required=false)String[] option*/
+            @RequestParam(value="appNameOption",required=false)String[] appNameOption,
+            @RequestParam(value="creatorOption",required=false)String[] creatorOption,
+            @RequestParam(value="isAsyncOption",required=false)String[] isAsyncOption,
+            @RequestParam(value="keywordsOption",required=false)String[] keywordsOption,
+            @RequestParam(value="appIntroOption",required=false)String[] appIntroOption,
+            @RequestParam(value="createTimeOption",required=false)String[] createTimeOption,
+            @RequestParam(value="isDisplayOption",required=false)String[] isDisplayOption) throws Exception {
 		
 		//获取用户名
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
-		Map<String, Object> map = applicationService.findCreate(page,rows,appName,appType,username,orderName +" "+ orderDir,field,option);
+		Map<String, Object> map = applicationService.findCreate(page,rows,appName,appType,username,orderName +" "+ orderDir,
+				appNameOption,creatorOption,isAsyncOption,keywordsOption,appIntroOption,createTimeOption,isDisplayOption);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
 		return mapper.writeValueAsString(map);
@@ -213,10 +221,17 @@ public class ApplicationController {
             @RequestParam(value="appType",required=false)String appType,
             @RequestParam(value="orderName",defaultValue="ID")String orderName,
             @RequestParam(value="orderDir",defaultValue="DESC")String orderDir,
-            @RequestParam(value="field",required=false)String field,
-            @RequestParam(value="option",required=false)String[] option) throws Exception {
+            /*@RequestParam(value="field",required=false)String field,
+            @RequestParam(value="option",required=false)String[] option*/
+            @RequestParam(value="appNameOption",required=false)String[] appNameOption,
+            @RequestParam(value="creatorOption",required=false)String[] creatorOption,
+            @RequestParam(value="isAsyncOption",required=false)String[] isAsyncOption,
+            @RequestParam(value="keywordsOption",required=false)String[] keywordsOption,
+            @RequestParam(value="appIntroOption",required=false)String[] appIntroOption,
+            @RequestParam(value="createTimeOption",required=false)String[] createTimeOption) throws Exception {
 		
-		Map<String, Object> map = applicationService.findPublic(page,rows,appName,appType,orderName +" "+ orderDir,field,option);
+		Map<String, Object> map = applicationService.findPublic(page,rows,appName,appType,orderName +" "+ orderDir,
+				appNameOption,creatorOption,isAsyncOption,keywordsOption,appIntroOption,createTimeOption);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
 		return mapper.writeValueAsString(map);
@@ -317,9 +332,15 @@ public class ApplicationController {
 	@RequiresPermissions("application:view")
 	@RequestMapping(value="/explain",method=RequestMethod.GET)
 	public String showExplain(Integer id, Model model) {
+		String username = (String)SecurityUtils.getSubject().getPrincipal();
 		Application application = applicationService.findPublicByid(id);
 		if(null == application) {
-			model.addAttribute("msg", "应用未公开，或已被删除");
+			Application application2 = applicationService.selectByPrimaryKey(id);
+			if(null != application2 && application2.getCreator().equals(username)) {
+				application = application2;
+			}else {
+				model.addAttribute("msg", "应用未公开，或已被删除");
+			}
 		}
 		model.addAttribute("application", application);
 		return "jsp/application/app_explain.jsp";

@@ -1140,10 +1140,11 @@ input{
 
 .BTSXcli2{
     overflow:auto;
+    height:100px;
 }
 .BTSXcli2li{
     width:120px;
-    margin-right:25px;
+    margin-right:10px;
     height:20px;
     /*vertical-align: middle;*/
     float:left;
@@ -3715,13 +3716,18 @@ input{
 }
 .adddataMlit{
     float:left;
-    width:120px;
+    width:200px;
     /*font-family:PingFangSC-Medium;*/
     font-weight: 700;
     font-size:18px;
     color:#696969;
     line-height: 35px;
-    /*text-align: left;*/
+    text-align: left;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    word-wrap: break-word;
 }
 .adddataMliT{
     float:left;

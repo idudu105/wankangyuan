@@ -307,6 +307,7 @@ function addToMine(){
 function ViewModel() {
 	var self = this;
 	var page,rows,total,appName,appType,orderName,orderDir,field,option;
+	var appNameOption,creatorOption,isAsyncOption,keywordsOption,appIntroOption,createTimeOption;
 	self.appList = ko.observableArray();
 	self.showAppList = function() {
         
@@ -316,8 +317,14 @@ function ViewModel() {
 			appType:self.appType,
 			orderName:self.orderName,
 			orderDir:self.orderDir,
-			field:$(".BTSXpd").val(),
-			option:self.option
+			/* field:$(".BTSXpd").val(),
+			option:self.option */
+			appNameOption:self.appNameOption,
+            creatorOption:self.creatorOption,
+            isAsyncOption:self.isAsyncOption,
+            keywordsOption:self.keywordsOption,
+            appIntroOption:self.appIntroOption,
+            createTimeOption:self.createTimeOption
 			},function(data){
 			page = data.page;
 			rows = data.rows;
@@ -370,7 +377,22 @@ function ViewModel() {
 			arr[i]=$(this).val(); 
 		});  
         self.option = arr.join(",");
-        self.appName = "";
+        //self.appName = "";
+        self.field = $(".BTSXpd").val()
+        if(self.field == "appName"){
+        	self.appNameOption = arr.join(",");
+        }else if(self.field == "creator"){
+        	self.creatorOption = arr.join(",");
+        }else if(self.field == "isAsync"){
+            self.isAsyncOption = arr.join(",");
+        }else if(self.field == "keywords"){
+            self.keywordsOption = arr.join(",");
+        }else if(self.field == "appIntro"){
+            self.appIntroOption = arr.join(",");
+        }else if(self.field == "createTime"){
+            self.createTimeOption = arr.join(",");
+        }
+        
         page = 1;
         self.showAppList();
 	}
