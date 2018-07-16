@@ -440,7 +440,7 @@
     					var BTSXcli2 = document.getElementById("BTSXcli2");//填充筛选值
     					var BTSXcli2_html = "";
     					for(var index in data.message){
-    						if(index < 10){
+    						//if(index < 10){
     							BTSXcli2_html+='<div class="BTSXcli2li">';
     							if(vals.indexOf(data.message[index]) != -1){//如果筛选值在之前的筛选中被勾选了，再次选中它
     								BTSXcli2_html+='<input type="checkbox" class="BTSXcli2liC" name="'+data.message[index]+'" checked/>';
@@ -450,7 +450,7 @@
         						
         						BTSXcli2_html+='<div class="BTSXcli2liT">'+data.message[index]+'</div>';
         						BTSXcli2_html+='</div>';
-    						}
+    						//}
     					}
     					BTSXcli2.innerHTML=BTSXcli2_html;
     				}else{

@@ -206,12 +206,18 @@ public class ProjectMemberController {
 	 */
 	@RequestMapping("/deleteProjectMembers")
 	@ResponseBody
-	public Map<String, Object> deleteProjectMembers(String ids){
+	public Map<String, Object> deleteProjectMembers(
+			HttpSession httpSession , HttpServletRequest request , String ids){
 		String[]idString = ids.split(",");
 		int num = 0;
+		User user = (User)request.getAttribute("user");
+		Project project = (Project)httpSession.getAttribute("project");
 		for(int i = 0 ;i<idString.length;i++){
-			if(projectUserService.deleteProjectUser(Integer.valueOf(idString[i])) == 1){
-				num++;
+			ProjectUser projectUser = projectUserService.getProjectUser(project.getId(), user.getId());
+			if(projectUser != null && projectUser.getUser_id()!=user.getId()){
+				if(projectUserService.deleteProjectUser(Integer.valueOf(idString[i])) == 1){
+					num++;
+				}
 			}
 		}
 		Map<String, Object> map = new HashMap<>();

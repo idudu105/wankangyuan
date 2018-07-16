@@ -75,7 +75,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
             <div class="top2">
                 <div class="top2C">
-                    <a href="javascript:;"><div class="top2Cli top2CliYJ">我的</div></a>
+                    <a href="/wankangyuan/project/selectMyProject?user_id=1"><div class="top2Cli top2CliYJ">我的</div></a>
                     <a href="/wankangyuan/project/selectCreatedProject?creator=1"><div class="top2Cli">我创建的</div></a>
                     <a href="/wankangyuan/project/selectPublicProject"><div class="top2Cli">公共</div></a>
                     <div class="search">
@@ -351,7 +351,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					var BTSXcli2 = document.getElementById("BTSXcli2");//填充筛选值
     					var BTSXcli2_html = "";
     					for(var index in data.message){
-    						if(index < 10){
+    						//if(index < 10){
     							BTSXcli2_html+='<div class="BTSXcli2li">';
     							if(vals.indexOf(data.message[index]) != -1){//如果筛选值在之前的筛选中被勾选了，再次选中它
     								BTSXcli2_html+='<input type="checkbox" class="BTSXcli2liC" name="'+data.message[index]+'" checked/>';
@@ -361,7 +361,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         						
         						BTSXcli2_html+='<div class="BTSXcli2liT">'+data.message[index]+'</div>';
         						BTSXcli2_html+='</div>';
-    						}
+    						//}
     					}
     					BTSXcli2.innerHTML=BTSXcli2_html;
     				}else{
