@@ -1,7 +1,11 @@
 package com.liutianjun.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -196,6 +200,28 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	    		criteria.andKeywordsIn(Arrays.asList(option));
 	    	}else if (field.equals("appOverview")) {
 	    		criteria.andAppOverviewIn(Arrays.asList(option));
+	    	}else if (field.equals("createTime")) {
+	    		if(option.length == 2) {
+	    			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    			Date date1;
+	    			Date date2;
+	    			try {
+	    				date1 = simpleDateFormat.parse(option[0].toString());
+	    				date2 = simpleDateFormat.parse(option[1].toString());
+	    				Calendar cal = Calendar.getInstance();
+	    				if(date1.before(date2)) {
+	    					cal.setTime(date2);
+	    					cal.add(Calendar.DATE, 1);
+	    					criteria.andCreateTimeBetween(date1, cal.getTime());
+	    				}else {
+	    					cal.setTime(date1);
+	    					cal.add(Calendar.DATE, 1);
+	    					criteria.andCreateTimeBetween(date2, cal.getTime());
+	    				}
+	    			} catch (ParseException e) {
+	    				e.printStackTrace();
+	    			}
+	    		}
 	    	}
 	    }
 	    
