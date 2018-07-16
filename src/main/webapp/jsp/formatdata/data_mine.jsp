@@ -232,6 +232,7 @@
 						<div class="BTSXcli">
 							<div class="BTSXcliT">过滤：</div>
 							<input type="text" class="BTSXcliGLK" />
+							 <button id="guolv">过滤</button>
 						</div>
 						<div class="BTSXcli">
 							<div class="BTSXcliT">值筛选：</div>
@@ -290,50 +291,57 @@
 	//全搜索
     $(".searchCt").bind("keypress" , function(event){
 		if(event.keyCode == 13){
-			chongzhi();
+			reset();
 			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=1&cs_id="
 					+cs_id+"&searchFirstWord="+this.value;
 			
 		}
 	});
-	
-	$('.BTSXcliGLK').keypress(function(e){
-		var that = $(this);
-		searchWord=that.val();
+  //点击过滤按钮
+	$("#guolv").click(function (){
+		//过滤
+		filter();
+	});
+
+	$('.BTSXcliGLK').keypress(function(e){		
 		if (e.keyCode == 13) {
-			$.ajax({
-				type:"post",
-				url:"/wankangyuan/sourceData/getSourceFieldDatas",
-				async:true,
-				data:{
-					type:1,
-					cs_id:$('#source_Select').val(),
-					searchId:searchId,
-					searchWord:searchWord,
-            		oldCondition:oldCondition
-				},
-				success:function(res){
-					if (res.result) {
-						var htmlStr =  '<div class="BTSXcli2li">'
-										+'<input type="checkbox" class="BTSXcli2liI" />'
-										+'<div class="BTSXcli2liT">空值</div>'
-									+'</div>'
-									+'<div class="BTSXcli2li">'
-									+	'<input type="checkbox" class="BTSXcli2liI"  style="display: none;"/>'
-									+'</div>';
-						var data = res.csfDatas;
-						for (var i in data) {
-							htmlStr += '<div class="BTSXcli2li">'
-									+		'<input type="checkbox" class="BTSXcli2liI" />'
-									+		'<div class="BTSXcli2liT">' + data[i] + '</div>'
-									+	'</div>';
-						}
-						$('.BTSXcli2').html(htmlStr);
-					}
-				}
-			});
+			filter();
 		}
 	})
+	function filter(){
+		searchWord=$(".BTSXcliGLK").val();//过滤条件
+		$.ajax({
+			type:"post",
+			url:"/wankangyuan/sourceData/getSourceFieldDatas",
+			async:true,
+			data:{
+				type:1,
+				cs_id:$('#source_Select').val(),
+				searchId:searchId,
+				searchWord:searchWord,
+        		oldCondition:oldCondition
+			},
+			success:function(res){
+				if (res.result) {
+					var htmlStr =  '<div class="BTSXcli2li">'
+									+'<input type="checkbox" class="BTSXcli2liI" />'
+									+'<div class="BTSXcli2liT">空值</div>'
+								+'</div>'
+								+'<div class="BTSXcli2li">'
+								+	'<input type="checkbox" class="BTSXcli2liI"  style="display: none;"/>'
+								+'</div>';
+					var data = res.csfDatas;
+					for (var i in data) {
+						htmlStr += '<div class="BTSXcli2li">'
+								+		'<input type="checkbox" class="BTSXcli2liI" />'
+								+		'<div class="BTSXcli2liT">' + data[i] + '</div>'
+								+	'</div>';
+					}
+					$('.BTSXcli2').html(htmlStr);
+				}
+			}
+		});
+	};
 	
 	var oBTSXcliI1=document.querySelectorAll('.BTSXcliI')[0];
 	var oBTSXcliI2=document.querySelectorAll('.BTSXcliI')[1];
@@ -353,10 +361,13 @@
 	    window.location.href="/wankangyuan/sourceData/getSourceDatas?type=1&cs_id="+cs_id+"&searchId="+searchId+
 	    		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
 	}
-	
 
 	//重置，清空累加筛选条件
 	function chongzhi(){
+		reset();
+		shaixuan();
+	}		
+	function reset(){
 		$('#oldCondition').html('');
 		oldCondition="";
 		$.ajax({
@@ -371,7 +382,8 @@
 				} */
 			}
 		});
-	}		
+		
+	}
 
 	function shaixuan(){
 		var afuxuanK=document.querySelectorAll('.BTSXcli2li');

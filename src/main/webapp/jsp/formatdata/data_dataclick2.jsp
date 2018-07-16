@@ -277,6 +277,7 @@
 								<div class="BTSXcli">
 									<div class="BTSXcliT">过滤：</div>
 									<input type="text" class="BTSXcliGLK" />
+							 <button id="guolv">过滤</button>
 								</div>
 								<div class="BTSXcli">
 									<div class="BTSXcliT">值筛选：</div>
@@ -371,52 +372,60 @@
 	//全搜索
     $(".searchCt").bind("keypress" , function(event){
 		if(event.keyCode == 13){
-			chongzhi();
+			reset();
 			window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="+cs_id
 					+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
 					+"&searchFirstWord="+this.value;
 		}
 	});
-	//过滤
-	$('.BTSXcliGLK').keypress(function(e){
-		var that = $(this);
-		searchWord=that.val();
-		if (e.keyCode == 13) {
-			$.ajax({
-				type:"post",
-				url:"/wankangyuan/formatData/getFieldDatas",
-				async:true,
-				data:{
-					type:2,
-					cs_id:$("#cs_id").val(),
-					ft_id:ft_id,
-					formatNodeId:formatNodeId,
-					searchId:searchId,
-					searchWord:searchWord,
-            		oldCondition:oldCondition
-				},
-				success:function(res){
-					if (res.result) {
-						var htmlStr =  '<div class="BTSXcli2li">'
-											+'<input type="checkbox" class="BTSXcli2liI" />'
-											+'<div class="BTSXcli2liT">空值</div>'
-										+'</div>'
-										+'<div class="BTSXcli2li">'
-										+	'<input type="checkbox" class="BTSXcli2liI"  style="display: none;"/>'
-										+'</div>';
-						var data = res.ffDatas;
-						for (var i in data) {
-							htmlStr += '<div class="BTSXcli2li">'
-									+		'<input type="checkbox" class="BTSXcli2liI" />'
-									+		'<div class="BTSXcli2liT">' + data[i] + '</div>'
-									+	'</div>';
-						}
-						$('.BTSXcli2').html(htmlStr);
+
+    //点击过滤按钮
+  	$("#guolv").click(function (){
+  		//过滤
+  		filter();
+  	});
+
+  	$('.BTSXcliGLK').keypress(function(e){		
+  		if (e.keyCode == 13) {
+  			filter();
+  		}
+  	})
+  	function filter(){
+  		searchWord=$(".BTSXcliGLK").val();//过滤条件
+		$.ajax({
+			type:"post",
+			url:"/wankangyuan/formatData/getFieldDatas",
+			async:true,
+			data:{
+				type:2,
+				cs_id:$("#cs_id").val(),
+				ft_id:ft_id,
+				formatNodeId:formatNodeId,
+				searchId:searchId,
+				searchWord:searchWord,
+        		oldCondition:oldCondition
+			},
+			success:function(res){
+				if (res.result) {
+					var htmlStr =  '<div class="BTSXcli2li">'
+										+'<input type="checkbox" class="BTSXcli2liI" />'
+										+'<div class="BTSXcli2liT">空值</div>'
+									+'</div>'
+									+'<div class="BTSXcli2li">'
+									+	'<input type="checkbox" class="BTSXcli2liI"  style="display: none;"/>'
+									+'</div>';
+					var data = res.ffDatas;
+					for (var i in data) {
+						htmlStr += '<div class="BTSXcli2li">'
+								+		'<input type="checkbox" class="BTSXcli2liI" />'
+								+		'<div class="BTSXcli2liT">' + data[i] + '</div>'
+								+	'</div>';
 					}
+					$('.BTSXcli2').html(htmlStr);
 				}
-			});
-		}
-	})
+			}
+		});
+  	};
 	//排序
 	var oBTSXcliI1=document.querySelectorAll('.BTSXcliI')[0];
 	var oBTSXcliI2=document.querySelectorAll('.BTSXcliI')[1];
@@ -441,6 +450,10 @@
 	}
 	//重置，清空累加筛选条件
 	function chongzhi(){
+		reset();
+		shaixuan();
+	}		
+	function reset(){
 		$('#oldCondition').html('');
 		oldCondition="";
 		$.ajax({
@@ -455,7 +468,8 @@
 				} */
 			}
 		});
-	}	
+		
+	}
 	//数据筛选，支持模糊查询
 	function shaixuan(){
 		var afuxuanK=document.querySelectorAll('.BTSXcli2li');
@@ -998,7 +1012,7 @@
         oBTSX.onclick=function(){
             event.stopPropagation();
         }
-        var aBTSXcliI=oBTSX.querySelectorAll('.BTSXcliI');//筛选框排序箭头
+      /*   var aBTSXcliI=oBTSX.querySelectorAll('.BTSXcliI');//筛选框排序箭头
         var oBTSXcliIpd=document.querySelectorAll('.BTSXcliIpd')[0];//筛选框选择判断
         for(var i=0;i<aBTSXcliI.length;i++){
             (function(index){
@@ -1008,16 +1022,15 @@
                     }
                     aBTSXcliI[index].style.color="#5ca0e5";
                     oBTSXcliIpd.value=index+1;
-                    console.log(oBTSXcliIpd.value);
                 }
             })(i)
-        }
+        } */
 
         var oBTSXcli3BTres=document.querySelectorAll('.BTSXcli3BTres')[0];//重置按钮
         var aBTSXcli2liC=document.querySelectorAll('.BTSXcli2liC');//复选框
         var oBTSXcliGLK=document.querySelectorAll('.BTSXcliGLK')[0];//过滤框
 
-        oBTSXcli3BTres.onclick=function(){
+       /*  oBTSXcli3BTres.onclick=function(){
             for(var j=0;j<aBTSXcliI.length;j++){
                 aBTSXcliI[j].style.color="#666";
             }
@@ -1025,7 +1038,7 @@
             for(var i=0;i<aBTSXcli2liC.length;i++){
                 aBTSXcli2liC[i].checked=false;
             }
-        }	
+        }	 */
     </script>
 
 

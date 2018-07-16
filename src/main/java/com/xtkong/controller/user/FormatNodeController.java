@@ -119,7 +119,7 @@ public class FormatNodeController {
 	@RequestMapping("/getFormatNodeById")
 	public String getFormatNodeById(HttpSession httpSession, String cs_id, String sourceDataId, String ft_id,
 			String formatNodeId, String type, Integer page, Integer strip, Integer searchId, String desc_asc,
-			String chooseDatas, String oldCond8ition, String searchWord, String searchFirstWord, String fieldIds) {
+			String chooseDatas, String oldConditionNode8, String searchWord, String searchFirstWord, String fieldIds) {
 		if (page == null) {
 			page = 1;
 		}
@@ -321,7 +321,7 @@ public class FormatNodeController {
 				dataCount = PhoenixClient.count(dataphoenixSQL);
 				// 排序
 				condition = null;
-				if (searchId != null) {
+			/*	if (searchId != null) {
 					switch (desc_asc) {
 					case "DESC":
 						condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId))
@@ -330,6 +330,39 @@ public class FormatNodeController {
 					case "ASC":
 						condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId)) + " ASC ";
 						break;
+					}
+				}*/
+				try {
+					switch (desc_asc) {
+					case "DESC":
+						break;
+					case "ASC":
+						break;
+					default:
+						desc_asc = (String) httpSession.getAttribute("desc_asc");
+					}
+					if (desc_asc == null) {
+						desc_asc = "ASC";
+					}
+					switch (desc_asc) {
+					case "DESC":
+						break;
+					case "ASC":
+						break;
+					default:
+						desc_asc = "ASC";
+					}
+				} catch (Exception e) {
+					desc_asc = "ASC";
+				}
+				if (searchId != null) {
+					condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId)) + " " + desc_asc
+							+ " ";
+				} else {
+					Integer id = (Integer) httpSession.getAttribute("searchId");
+					if (dataQualifiers.contains(String.valueOf(id))) {
+						condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(id)) + " " + desc_asc
+								+ " ";
 					}
 				}
 				dataphoenixSQL = PhoenixClient.getPhoenixSQL(dataphoenixSQL, condition, page, strip);

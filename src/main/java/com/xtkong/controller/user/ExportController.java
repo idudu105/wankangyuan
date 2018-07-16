@@ -169,26 +169,26 @@ public class ExportController {
 		HSSFCellStyle style = workbook.createCellStyle();
 		style.setAlignment(HorizontalAlignment.CENTER);
 		HSSFSheet sheet;
-		String[] formatNodeIdsStr=formatNodeIds.split(",");
-		String[] ft_idsStr=ft_ids.split(",");
-		
+		String[] formatNodeIdsStr = formatNodeIds.split(",");
+		String[] ft_idsStr = ft_ids.split(",");
+
 		for (int i = 0; i < ft_idsStr.length; i++) {
 			// meta数据
-			String ft_id=ft_idsStr[i];
-			String formatNodeId= formatNodeIdsStr[i];
+			String ft_id = ft_idsStr[i];
+			String formatNodeId = formatNodeIdsStr[i];
 			FormatType formatType = formatTypeService.getFormatType(Integer.valueOf(ft_id));
-			List<String> formatNode=HBaseFormatNodeDao.getFormatNodeById(cs_id, ft_id, formatNodeId);
-			String nodeName="";
+			List<String> formatNode = HBaseFormatNodeDao.getFormatNodeById(cs_id, ft_id, formatNodeId);
+			String nodeName = "";
 			try {
-				nodeName=formatNode.get(2);
-			} catch (Exception e) {			
-				nodeName=""+i;
+				nodeName = formatNode.get(2);
+			} catch (Exception e) {
+				nodeName = "" + i;
 			}
-			sheet = workbook.createSheet(formatType.getFt_name()+"_"+nodeName+"_"+"公共数据");
+			sheet = workbook.createSheet(formatType.getFt_name() + "_" + nodeName + "_" + "公共数据");
 			sheet = sheetFormatDatas(sheet, style, cs_id, ft_id, formatNodeId, ConstantsHBase.IS_meta_true);
 
 			// data数据
-			sheet = workbook.createSheet(formatType.getFt_name()+"_"+nodeName+"_"+"专属数据");
+			sheet = workbook.createSheet(formatType.getFt_name() + "_" + nodeName + "_" + "专属数据");
 			sheet = sheetFormatDatas(sheet, style, cs_id, ft_id, formatNodeId, ConstantsHBase.IS_meta_false);
 		}
 		try {
@@ -295,6 +295,9 @@ public class ExportController {
 			// 写入各条记录，每条记录对应Excel中的一行
 			List<List<String>> sourceDatas = HBaseSourceDataDao.getSourceDatasByIds(cs_id, sourceDataIds,
 					source.getSourceFields());
+			if (sourceDatas.isEmpty()) {
+				return sheet;
+			}
 			for (int iRow = 0; iRow < sourceDatas.size(); iRow++) {
 				row = sheet.createRow((short) iRow + 1);
 				for (int j = 0; j < source.getSourceFields().size(); j++) {
@@ -338,7 +341,9 @@ public class ExportController {
 
 		List<List<String>> formatDatas = HBaseFormatDataDao.getFormatDataByIds(cs_id, ft_id, formatDataIds,
 				formatFields);
-
+		if (formatDatas.isEmpty()) {
+			return sheet;
+		}
 		// 写入各条记录，每条记录对应Excel中的一行
 
 		for (int iRow = 0; iRow < formatDatas.size(); iRow++) {
@@ -370,7 +375,9 @@ public class ExportController {
 		}
 
 		List<List<String>> formatDatas = HBaseFormatDataDao.getFormatDatas(cs_id, ft_id, formatNodeId, formatFields);
-
+		if (formatDatas == null || formatDatas.isEmpty()) {
+			return sheet;
+		}
 		// 写入各条记录，每条记录对应Excel中的一行
 		if (isMeta.equals(ConstantsHBase.IS_meta_true)) {
 			row = sheet.createRow((short) 1);

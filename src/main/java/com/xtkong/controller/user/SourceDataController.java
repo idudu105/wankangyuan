@@ -178,7 +178,7 @@ public class SourceDataController {
 					oldCondition += PhoenixClient.getSQLConditionLikes(tableName, like, "OR");
 				} else if (!source.getSourceFields().isEmpty()) {
 					Map<String, String> like = new HashMap<>();
-					for (String qualifier :qualifiers) {
+					for (String qualifier : qualifiers) {
 						like.put(qualifier, searchFirstWord);
 					}
 					oldCondition += PhoenixClient.getSQLConditionLikes(tableName, like, "OR");
@@ -212,6 +212,9 @@ public class SourceDataController {
 					oldCondition += "(\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId)
 							+ "\" LIKE '%" + searchWord + "%') ";
 				}
+				if (oldCondition.trim().endsWith("AND")) {
+					oldCondition = oldCondition.substring(0, oldCondition.lastIndexOf("AND"));
+				}
 			}
 			// if (csfCondition != null&& !csfCondition.trim().isEmpty()) {
 			// condition = oldCondition;
@@ -230,14 +233,38 @@ public class SourceDataController {
 
 			// 排序
 			condition = null;
-			if (searchId != null) {
+
+			try {
 				switch (desc_asc) {
 				case "DESC":
-					condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId)) + " DESC ";
 					break;
 				case "ASC":
-					condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId)) + " ASC ";
 					break;
+				default:
+					desc_asc = (String) httpSession.getAttribute("desc_asc");
+				}
+				if (desc_asc == null) {
+					desc_asc = "ASC";
+				}
+				switch (desc_asc) {
+				case "DESC":
+					break;
+				case "ASC":
+					break;
+				default:
+					desc_asc = "ASC";
+				}
+			} catch (Exception e) {
+				desc_asc = "ASC";
+			}
+			if (searchId != null) {
+				condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId)) + " " + desc_asc
+						+ " ";
+			} else {
+				Integer id = (Integer) httpSession.getAttribute("searchId");
+				if (qualifiers.contains(String.valueOf(id))) {
+					condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(id)) + " " + desc_asc
+							+ " ";
 				}
 			}
 			phoenixSQL = PhoenixClient.getPhoenixSQL(phoenixSQL, condition, page, strip);
