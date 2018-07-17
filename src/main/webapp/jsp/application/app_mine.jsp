@@ -388,22 +388,27 @@ function ViewModel() {
 		arr = [];
 		$("input[name='option']:checked").each(function(i){  
 			arr[i]=$(this).val(); 
-		});  
+		});
+		if(arr.length == 0){
+            $("input[name='option']").each(function(i){  
+                arr[i]=$(this).val(); 
+            });
+        }
         self.option = arr.join(",");
         //self.appName = "";
         self.field = $(".BTSXpd").val();
         if(self.field == "appName"){
-            self.appNameOption = arr.join(",");
+            self.appNameOption = self.option;
         }else if(self.field == "creator"){
-            self.creatorOption = arr.join(",");
+            self.creatorOption = self.option;
         }else if(self.field == "isAsync"){
-            self.isAsyncOption = arr.join(",");
+            self.isAsyncOption = self.option;
         }else if(self.field == "keywords"){
-            self.keywordsOption = arr.join(",");
+            self.keywordsOption = self.option;
         }else if(self.field == "appOverview"){
-            self.appIntroOption = arr.join(",");
+            self.appIntroOption = self.option;
         }else if(self.field == "createTime"){
-            self.createTimeOption = arr.join(",");
+            self.createTimeOption = self.option;
         }
         page = 1;
         self.showAppList();
