@@ -62,15 +62,15 @@ $(".box_xxtabz").click(function(){
 						str+='<th class="biaoxiangth" id="enumerated'+sourceFields[i].csf_id+'">是</th>';
 					}
 					
-					if(sourceFields[i].enumerated == false){
-						str+='<th class="biaoxiangth" id="enumerated'+sourceFields[i].not_null+'">否</th>';
+					if(sourceFields[i].not_null == false){
+						str+='<th class="biaoxiangth" id="not_null'+sourceFields[i].csf_id+'">否</th>';
 					}else{
-						str+='<th class="biaoxiangth" id="enumerated'+sourceFields[i].not_null+'">是</th>';
+						str+='<th class="biaoxiangth" id="not_null'+sourceFields[i].csf_id+'">是</th>';
 					}
 					if(sourceFields[i].is_view == false){
-						str+='<th class="biaoxiangth" id="enumerated'+sourceFields[i].not_null+'">否</th>';
+						str+='<th class="biaoxiangth" id="is_view'+sourceFields[i].csf_id+'">隐藏</th>';
 					}else{
-						str+='<th class="biaoxiangth" id="enumerated'+sourceFields[i].not_null+'">是</th>';
+						str+='<th class="biaoxiangth" id="is_view'+sourceFields[i].csf_id+'">显示</th>';
 					}
 					str+='<th class="biaoxiangth" id="description'+sourceFields[i].csf_id+'">'+sourceFields[i].description+'</th>';
 					

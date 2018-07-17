@@ -60,7 +60,7 @@ public class SourceDataController {
 			Integer strip) {
 
 		return getSourceDatas(request, httpSession, type, null, page, strip, null, null, null, null, null, null, null,
-				null);
+				null,null);
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class SourceDataController {
 	@RequestMapping("/getSourceDatas")
 	public String getSourceDatas(HttpServletRequest request, HttpSession httpSession, String type, Integer cs_id,
 			Integer page, Integer strip, Integer searchId, String desc_asc, String searchWord, String chooseDatas,
-			String oldCond8ition, Integer p_id, String searchFirstWord, String fieldIds) {
+			String oldCond8ition, Integer p_id, String searchFirstWord, String fieldIds, String likeSearch) {
 		User user = (User) request.getAttribute("user");
 
 		if (page == null) {
@@ -208,7 +208,7 @@ public class SourceDataController {
 					if (oldCondition.trim().endsWith("OR")) {
 						oldCondition = oldCondition.substring(0, oldCondition.lastIndexOf("OR")) + " ) ";
 					}
-				} else if (searchWord != null) {
+				} else if (likeSearch!=null&&likeSearch.equals("1") && searchWord != null) {
 					oldCondition += "(\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId)
 							+ "\" LIKE '%" + searchWord + "%') ";
 				}

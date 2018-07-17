@@ -209,24 +209,27 @@
 								<div class="prodaclmRsb clmRsb_modify">修改</div>
 								<div class="prodaclmRsb clmRsb_add">添加</div>
 							</div>
-							
+
 							<div class="search">
 								<div class="searchC">
 									<img src="/wankangyuan/static/img/search.png" alt=""
 										class="searchCi" /> <input type="text" class="searchCt"
-										placeholder="搜索数据" value="${searchFirstWord}" />
+										placeholder="搜索数据" value="${searchFirstWordNode}" />
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="shaixuanZK">
-							<c:forEach items="${data}" var="dataTemp">
-								<div class="shaixuanZKli">
-									<div class="shaixuanZKliT">${dataTemp.ff_name }</div>
-									<div class="shaixuanZKliI active"></div>
-								</div>
-							</c:forEach>
+							<div class="shaixuanZKC">
+								<c:forEach items="${data}" var="dataTemp">
+									<div class="shaixuanZKli">
+										<div class="shaixuanZKliI active"></div>
+										<div class="shaixuanZKliT">${dataTemp.ff_name }</div>
+									</div>
+								</c:forEach>
+							</div>
 						</div>
+
 						<div class="prodaclmRsjK">
 							<div class="prodaclmRzT">
 								<div class="quanxuanK fxK1">
@@ -238,7 +241,6 @@
 								</c:forEach>
 							</div>
 							<div class="prodaclmRzB">
-
 								<c:forEach items="${dataDatas}" var="dataDataTemp">
 									<div class="prodaclmRzBz">
 										<c:forEach items="${dataDataTemp}" var="dataDataTempTemp"
@@ -277,7 +279,7 @@
 								<div class="BTSXcli">
 									<div class="BTSXcliT">过滤：</div>
 									<input type="text" class="BTSXcliGLK" />
-							 <button id="guolv">过滤</button>
+									<button id="guolv">过滤</button>
 								</div>
 								<div class="BTSXcli">
 									<div class="BTSXcliT">值筛选：</div>
@@ -482,7 +484,8 @@
         var chooseDatas=chooseDatasArr.join(",");
     	window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
 			+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
-			+"&searchId="+searchId+ "&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition
+			+"&searchId="+searchId+"&likeSearch=1"
+			+ "&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition
     		+"&chooseDatas="+chooseDatas;
 	}
 	

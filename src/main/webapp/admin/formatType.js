@@ -162,9 +162,9 @@ function enter(id){
 					}
 					
 					if(formatFields[i].is_view == false){
-						str+='<th class="biaoxiangth" id="ff_is_view'+formatFields[i].ff_id+'">否</th>';
+						str+='<th class="biaoxiangth" id="ff_is_view'+formatFields[i].ff_id+'">隐藏</th>';
 					}else{
-						str+='<th class="biaoxiangth" id="ff_is_view'+formatFields[i].ff_id+'">是</th>';
+						str+='<th class="biaoxiangth" id="ff_is_view'+formatFields[i].ff_id+'">显示</th>';
 					}
 					
 					str += '<th class="biaoxiangth" id="ff_description'+formatFields[i].ff_id+'">'+formatFields[i].description+'</th>';

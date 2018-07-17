@@ -162,7 +162,7 @@
 								<div class="searchC">
 									<img src="/wankangyuan/static/img/search.png" alt=""
 										class="searchCi" /> <input type="text" class="searchCt"
-										placeholder="搜索数据" value="${searchFirstWord}" />
+										placeholder="搜索数据" value="${searchFirstWordNode}" />
 								</div>
 							</div>
 							<div class="prodaclmRsx">
@@ -172,12 +172,14 @@
 							</div>
 						</div>
 						<div class="shaixuanZK">
-							<c:forEach items="${data}" var="dataTemp">
-								<div class="shaixuanZKli">
-									<div class="shaixuanZKliT">${dataTemp.ff_name }</div>
-									<div class="shaixuanZKliI active"></div>
-								</div>
-							</c:forEach>
+							<div class="shaixuanZKC">
+								<c:forEach items="${data}" var="dataTemp">
+									<div class="shaixuanZKli">
+										<div class="shaixuanZKliI active"></div>
+										<div class="shaixuanZKliT">${dataTemp.ff_name }</div>
+									</div>
+								</c:forEach>
+							</div>
 						</div>
 						<div class="prodaclmRsjK">
 							<div class="prodaclmRzT">
@@ -275,7 +277,7 @@
 	var sourceDataId = $("#sourceDataId").val();//源数据id
 	var formatNodeId = $("#formatNodeId").val();//结点id
 	var p_id = ${project.id};//项目id
-	var searchFirstWord= $("#formatNodeId").val();
+	var searchFirstWord= $("#searchFirstWordNode").val();
 	//选择待操作字段
 	$('.prodaclmRzTt2').click(function(){
 		searchId = $(this).attr('id');

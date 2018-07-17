@@ -166,7 +166,7 @@
 								<div class="searchC">
 									<img src="/wankangyuan/static/img/search.png" alt=""
 										class="searchCi" /> <input type="text" class="searchCt"
-										placeholder="搜索数据" value="${searchFirstWord}" />
+										placeholder="搜索数据" value="${searchFirstWordNode}" />
 								</div>
 							</div>
 							<div class="prodaclmRsx">
@@ -176,12 +176,14 @@
 							</div>
 						</div>
 						<div class="shaixuanZK">
-							<c:forEach items="${data}" var="dataTemp">
-								<div class="shaixuanZKli">
-									<div class="shaixuanZKliT">${dataTemp.ff_name }</div>
-									<div class="shaixuanZKliI active"></div>
-								</div>
-							</c:forEach>
+							<div class="shaixuanZKC">
+								<c:forEach items="${data}" var="dataTemp">
+									<div class="shaixuanZKli">
+										<div class="shaixuanZKliI active"></div>
+										<div class="shaixuanZKliT">${dataTemp.ff_name }</div>
+									</div>
+								</c:forEach>
+							</div>
 						</div>
 
 						<div class="prodaclmRsjK">
@@ -404,7 +406,8 @@
         var chooseDatas=chooseDatasArr.join(",");
     	window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
 			+cs_id+"&sourceDataId="+sourceDataId+"&type=1&ft_id="+ft_id+"&formatNodeId="+formatNodeId
-			+"&searchId="+searchId+ "&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition
+			+"&searchId="+searchId+ "&desc_asc="+desc_asc+"&likeSearch="+1
+			+"&searchWord="+searchWord+"&oldCondition="+oldCondition
     		+"&chooseDatas="+chooseDatas;
 	}
 	

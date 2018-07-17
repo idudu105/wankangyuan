@@ -113,13 +113,15 @@ public class FormatNodeController {
 	 * @param chooseDatas
 	 * @param oldCondition
 	 * @param searchWord
+	 * @param likeSearch
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/getFormatNodeById")
 	public String getFormatNodeById(HttpSession httpSession, String cs_id, String sourceDataId, String ft_id,
 			String formatNodeId, String type, Integer page, Integer strip, Integer searchId, String desc_asc,
-			String chooseDatas, String oldConditionNode8, String searchWord, String searchFirstWord, String fieldIds) {
+			String chooseDatas, String oldConditionNode8, String searchWord, String searchFirstWord, String fieldIds,
+			String likeSearch) {
 		if (page == null) {
 			page = 1;
 		}
@@ -210,7 +212,7 @@ public class FormatNodeController {
 				}
 				if ((type.equals((String) httpSession.getAttribute("oldSourceType")))
 						&& (formatNodeId.equals((String) httpSession.getAttribute("formatNodeId")))
-						&&(sourceDataId.equals((String)httpSession.getAttribute("sourceDataId")))) {
+						&& (sourceDataId.equals((String) httpSession.getAttribute("sourceDataId")))) {
 					oldCondition = (String) httpSession.getAttribute("oldCondition");
 				}
 
@@ -233,7 +235,7 @@ public class FormatNodeController {
 						oldCondition += PhoenixClient.getSQLConditionLikes(tableName, like, "OR");
 					} else if (!data.isEmpty()) {
 						Map<String, String> like = new HashMap<>();
-						for (String qualifier :dataQualifiers) {
+						for (String qualifier : dataQualifiers) {
 							like.put(qualifier, searchFirstWord);
 						}
 						oldCondition += PhoenixClient.getSQLConditionLikes(tableName, like, "OR");
@@ -265,51 +267,44 @@ public class FormatNodeController {
 							oldCondition = oldCondition.substring(0, oldCondition.lastIndexOf("OR")) + " ) AND ";
 						}
 					}
-					if (searchWord != null && !isnull) {
+					if (likeSearch != null && likeSearch.equals("1") && searchWord != null && !isnull) {
 						oldCondition += "(\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId)
 								+ "\" LIKE '%" + searchWord + "%') ";
 					}
 					if (oldCondition.trim().endsWith("AND")) {
 						oldCondition = oldCondition.substring(0, oldCondition.lastIndexOf("AND"));
 					}
-					
-					
-				/*	oldCondition = "( ";
-					if (chooseDatas != null && !chooseDatas.trim().isEmpty()) {
-						for (String csfChooseData : chooseDatas.split(",")) {
-							oldCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId) + "\"='"
-									+ csfChooseData + "' OR ";
-						}
-					}
-					if (searchWord != null) {
-						if (searchWord.equals("空值")) {
-							oldCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId)
-									+ "\" IS NULL ";
-						} else {
-							oldCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId) + "\" LIKE '%"
-									+ searchWord + "%' OR ";
-						}
-					}
-					if (oldCondition.trim().endsWith("OR")) {
-						oldCondition = oldCondition.substring(0, oldCondition.lastIndexOf("OR")) + " )";
-					} else {
-						oldCondition = null;
-					}*/
-				}/*
-				if (searchId != null && chooseDatas != null && !chooseDatas.trim().isEmpty()) {
-					if (searchWord == null) {
-						searchWord = "";
-					}
-					conditionLike.put(String.valueOf(searchId), searchWord);
-					oldCondition = " ( ";
-					for (String csfChooseData : chooseDatas.split(",")) {
-						oldCondition += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId) + "\"='"
-								+ csfChooseData + "' OR ";
-					}
-					if (oldCondition.trim().endsWith("OR")) {
-						oldCondition = oldCondition.substring(0, oldCondition.lastIndexOf("OR")) + " ) ";
-					}
-				}*/
+
+					/*
+					 * oldCondition = "( "; if (chooseDatas != null &&
+					 * !chooseDatas.trim().isEmpty()) { for (String
+					 * csfChooseData : chooseDatas.split(",")) { oldCondition +=
+					 * "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" +
+					 * String.valueOf(searchId) + "\"='" + csfChooseData +
+					 * "' OR "; } } if (searchWord != null) { if
+					 * (searchWord.equals("空值")) { oldCondition += "\"" +
+					 * ConstantsHBase.FAMILY_INFO + "\".\"" +
+					 * String.valueOf(searchId) + "\" IS NULL "; } else {
+					 * oldCondition += "\"" + ConstantsHBase.FAMILY_INFO +
+					 * "\".\"" + String.valueOf(searchId) + "\" LIKE '%" +
+					 * searchWord + "%' OR "; } } if
+					 * (oldCondition.trim().endsWith("OR")) { oldCondition =
+					 * oldCondition.substring(0, oldCondition.lastIndexOf("OR"))
+					 * + " )"; } else { oldCondition = null; }
+					 */
+				} /*
+					 * if (searchId != null && chooseDatas != null &&
+					 * !chooseDatas.trim().isEmpty()) { if (searchWord == null)
+					 * { searchWord = ""; }
+					 * conditionLike.put(String.valueOf(searchId), searchWord);
+					 * oldCondition = " ( "; for (String csfChooseData :
+					 * chooseDatas.split(",")) { oldCondition += "\"" +
+					 * ConstantsHBase.FAMILY_INFO + "\".\"" +
+					 * String.valueOf(searchId) + "\"='" + csfChooseData +
+					 * "' OR "; } if (oldCondition.trim().endsWith("OR")) {
+					 * oldCondition = oldCondition.substring(0,
+					 * oldCondition.lastIndexOf("OR")) + " ) "; } }
+					 */
 				if (oldCondition == null || oldCondition.trim().isEmpty()) {
 					condition = " \"" + tableName + "\".\"ID\"!='" + formatNodeId + "' ";
 				} else {
@@ -321,17 +316,14 @@ public class FormatNodeController {
 				dataCount = PhoenixClient.count(dataphoenixSQL);
 				// 排序
 				condition = null;
-			/*	if (searchId != null) {
-					switch (desc_asc) {
-					case "DESC":
-						condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId))
-								+ " DESC ";
-						break;
-					case "ASC":
-						condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId)) + " ASC ";
-						break;
-					}
-				}*/
+				/*
+				 * if (searchId != null) { switch (desc_asc) { case "DESC":
+				 * condition = " ORDER BY " +
+				 * PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId)) +
+				 * " DESC "; break; case "ASC": condition = " ORDER BY " +
+				 * PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId)) +
+				 * " ASC "; break; } }
+				 */
 				try {
 					switch (desc_asc) {
 					case "DESC":
@@ -356,8 +348,8 @@ public class FormatNodeController {
 					desc_asc = "ASC";
 				}
 				if (searchId != null) {
-					condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId)) + " " + desc_asc
-							+ " ";
+					condition = " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId)) + " "
+							+ desc_asc + " ";
 				} else {
 					Integer id = (Integer) httpSession.getAttribute("searchId");
 					if (dataQualifiers.contains(String.valueOf(id))) {
@@ -397,7 +389,7 @@ public class FormatNodeController {
 		httpSession.setAttribute("oldCondition", oldCondition);
 		httpSession.setAttribute("cs_id", cs_id);
 		httpSession.setAttribute("oldSourceType", type);
-		
+		httpSession.setAttribute("searchFirstWordNode", searchFirstWord);
 
 		switch (type) {
 		case "1":

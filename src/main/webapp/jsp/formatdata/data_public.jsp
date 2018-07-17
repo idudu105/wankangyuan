@@ -156,12 +156,14 @@
 					<div class="pro_addli">项目5</div>
 				</div>
 				<div class="shaixuanZK">
-					<c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
-						<div class="shaixuanZKli">
-							<div class="shaixuanZKliT">${sourceFieldTemp.csf_name}</div>
-							<div class="shaixuanZKliI active"></div>
-						</div>
-					</c:forEach>
+					<div class="shaixuanZKC">
+						<c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
+							<div class="shaixuanZKli">
+								<div class="shaixuanZKliI active"></div>
+								<div class="shaixuanZKliT">${sourceFieldTemp.csf_name}</div>
+							</div>
+						</c:forEach>
+					</div>
 				</div>
 			</div>
 			<div class="PJK">
@@ -241,7 +243,7 @@
 						<div class="BTSXcli">
 							<div class="BTSXcliT">过滤：</div>
 							<input type="text" class="BTSXcliGLK" />
-							 <button id="guolv">过滤</button>
+							<button id="guolv">过滤</button>
 						</div>
 						<div class="BTSXcli">
 							<div class="BTSXcliT">值筛选：</div>
@@ -405,7 +407,8 @@
         }
         var chooseDatas=chooseDatasArr.join(",");
     	window.location.href="/wankangyuan/sourceData/getSourceDatas?type=3&cs_id="+cs_id+"&searchId="+
-		searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&chooseDatas="+chooseDatas+"&oldCondition="+oldCondition;
+		searchId+"&desc_asc="+desc_asc+"&likeSearch="+1
+		+"&searchWord="+searchWord+"&chooseDatas="+chooseDatas+"&oldCondition="+oldCondition;
 	}
 	
 	

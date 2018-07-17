@@ -223,8 +223,8 @@
 										<div class="addboxlit">状态（是否显示）：</div>
 										<div class="addboxliR">
 											<select name="is_view">
-												<option value="true">是</option>
-												<option value="false">否</option>
+												<option value="true">显示</option>
+												<option value="false">隐藏</option>
 											</select>
 										</div>
 									</div>
@@ -246,8 +246,8 @@
 									<div class="addboxlit">状态（是否显示）：</div>
 									<div class="addboxliR">
 										<select name="edit_cs_is_view" id="edit_cs_is_view">
-											<option value="true">是</option>
-											<option value="false">否</option>
+											<option value="true">显示</option>
+											<option value="false">隐藏</option>
 										</select>
 									</div>
 								</div>
@@ -542,8 +542,8 @@
 												<div class="encoMz">
 													<div class="encoMzt">metainfo:</div>
 													<select class="encoMzp" id="add_ff_is_meta">
-														<option value="true">是</option>
 														<option value="false">否</option>
+														<option value="true">是</option>
 													</select>
 												</div>
 												<div class="encoMz">
@@ -583,8 +583,8 @@
 												<div class="encoMz">
 													<div class="encoMzt">显示:</div>
 													<select class="encoMzp" id="add_ff_is_view">
-														<option value="true">是</option>
-														<option value="false">否</option>
+														<option value="true">显示</option>
+														<option value="false">隐藏</option>
 													</select>
 												</div>
 												<div class="encoMz">
@@ -615,8 +615,8 @@
 												<div class="encoMz">
 													<div class="encoMzt">metainfo:</div>
 													<select class="encoMzp" id="edit_ff_is_meta">
-														<option value="true">是</option>
 														<option value="false">否</option>
+														<option value="true">是</option>
 													</select>
 												</div>
 												<div class="encoMz">
@@ -656,8 +656,8 @@
 												<div class="encoMz">
 													<div class="encoMzt">显示:</div>
 													<select class="encoMzp" id="edit_ff_is_view">
-														<option value="true">是</option>
-														<option value="false">否</option>
+														<option value="true">显示</option>
+														<option value="false">隐藏</option>
 													</select>
 												</div>
 												<div class="encoMz">
