@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -76,7 +77,8 @@ public class CustomFormAuthenticationFilter extends FormAuthenticationFilter {
         //更新登录时间
     	user.setLastLoginTime(new Date());
     	userService.updateByPrimaryKey(user);
-		
+    	HttpServletRequest req = (HttpServletRequest) request;
+    	req.getSession().setAttribute("user", user);
 		//清理原先的地址
 		WebUtils.getAndClearSavedRequest(request);
 		//根据前后台登录页判断成功跳转页

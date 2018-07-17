@@ -535,3 +535,59 @@ textarea{
     margin-top:7.5px;
     background:#fff;
 }
+
+.touxiangK{
+    width:54px;
+    height:54px;
+    float:right;
+    margin-right:20px;
+    margin-top:13px;
+    position:relative;
+}
+.touxiang{
+    width:54px;
+    height:54px;
+    border-radius: 50%;
+    cursor:pointer;
+}
+.userbutK{
+    position:absolute;
+    right:0px;
+    top:55px;
+    width:125px;
+    height:160px;
+    background:url(../img/userbutK.png) no-repeat;
+    z-index: 5000;
+    display:none;
+    padding-top:12px;
+}
+.touxiangK:hover .userbutK{
+    display:block;
+}
+.userbut{
+    padding:9px 0;
+    font-size:18px;
+    color:#64a5e7;
+    font-weight: 700;
+    text-align: center;
+    position:relative;
+    width:max-content;
+    margin:0 auto;
+}
+.userbutline{
+    width:80px;
+    height:1px;
+    background:#dadada;
+    margin:5px auto;
+}
+
+
+.nicheng{
+    float:right;
+    margin-right:15px;
+    margin-top:26px;
+    font-size:18px;
+    color:#16579b;
+    /*cursor:pointer;*/
+    font-weight: 700;
+}

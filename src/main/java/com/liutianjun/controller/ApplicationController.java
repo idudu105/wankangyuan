@@ -377,8 +377,13 @@ public class ApplicationController {
 	@RequiresPermissions("application:update")
 	@RequestMapping(value="/updateForm{index}",method=RequestMethod.GET)
 	public String viewUpdateForm(Integer id, Model model, @PathVariable String index) {
+		String username = (String)SecurityUtils.getSubject().getPrincipal();
 		Application application = applicationService.selectByPrimaryKey(id);
-		model.addAttribute("application", application);
+		if(null != application && application.getCreator().equals(username)) {
+			model.addAttribute("application", application);
+		}else {
+			model.addAttribute("msg", "对不起，您没有权限");
+		}
 		
 		model.addAttribute("index", index);
 		return "jsp/application/app_explain2.jsp";
@@ -398,9 +403,13 @@ public class ApplicationController {
 	public String update(Application record, 
 			RedirectAttributes attributes,
 			@PathVariable String index) {
+		String username = (String)SecurityUtils.getSubject().getPrincipal();
 		String msg = "操作失败";
-		if(0 < applicationService.updateByPrimaryKey(record)) {
-			msg = "更新成功";
+		Application application = applicationService.selectByPrimaryKey(record.getId());
+		if(null != application && application.getCreator().equals(username)) {
+			if(0 < applicationService.updateByPrimaryKey(record)) {
+				msg = "更新成功";
+			}
 		}
 		attributes.addFlashAttribute("msg", msg);
 		return "redirect:/application/viewCreate"+index;

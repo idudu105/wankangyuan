@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -100,8 +101,35 @@
             <div class="top">
                 <h1><img src="/wankangyuan/static/img/newlogo2.png" class="logo" height="70" width="218" alt="" /></h1>
                 <a href="/wankangyuan/admin/login" target="_blank"><div class="link">链接</div></a>
+                <shiro:guest>
                 <a href="/wankangyuan/register"><div class="register">注册</div></a>
                 <a href="/wankangyuan/login"><div class="login">登录</div></a>
+                </shiro:guest>
+                <shiro:authenticated>
+                <div class="touxiangK">
+                    <a href=" ">
+                        <img src="${user.headimg }" onerror='this.src="/wankangyuan/static/img/head.jpg"' class="touxiang" />
+                    </a>
+                    <div class="userbutK">
+                        <a href="/wankangyuan/userInfo">
+                            <div class="userbut">用户信息</div>
+                        </a>
+                        <a href="/wankangyuan/message/viewMessage">
+                            <div class="userbut">系统消息
+                            <c:if test="${systemMSG }">
+                                <img src="<%=request.getContextPath()%>/static/img/redpoint.png" height="11" width="11" alt="" class="redpoint2" />
+                            </c:if>
+                            </div>
+                        </a>
+                        <div class="userbutline"></div>
+                        <a href="/wankangyuan/logout">
+                            <div class="userbut">退出登录</div>
+                        </a>
+                    </div>
+                </div>
+                <div class="nicheng"><shiro:principal/></div>
+                </shiro:authenticated>
+                
                 <img src="/wankangyuan/static/img/search.png" alt="" class="searchI2" />
                 <div class="searchK">
                     <img src="/wankangyuan/static/img/search.png" alt="" class="searchI" />
@@ -109,6 +137,7 @@
                     <input type="text" class="searchP" placeholder="搜索平台公开项目" value="${homepageSearchWord }" />
                 </div>
             </div>
+            
             <div class="xiangmu">
                 <div class="xiangmuL">
                     <div class="xiangmuLT">
