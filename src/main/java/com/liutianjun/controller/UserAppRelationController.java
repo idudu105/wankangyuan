@@ -161,11 +161,20 @@ public class UserAppRelationController {
 	 */
 	@RequestMapping(value="/getMyAppFieldList",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
 	@ResponseBody
-	public String getMyAppFiledList(String field,String content) throws Exception {
+	public String getMyAppFiledList(String field,String content,
+			@RequestParam(value="appName",required=false)String appName,
+            @RequestParam(value="appType",required=false)String appType,
+			@RequestParam(value="appNameOption",required=false)String[] appNameOption,
+            @RequestParam(value="creatorOption",required=false)String[] creatorOption,
+            @RequestParam(value="isAsyncOption",required=false)String[] isAsyncOption,
+            @RequestParam(value="keywordsOption",required=false)String[] keywordsOption,
+            @RequestParam(value="appIntroOption",required=false)String[] appIntroOption,
+            @RequestParam(value="createTimeOption",required=false)String[] createTimeOption) throws Exception {
 		String username = (String)SecurityUtils.getSubject().getPrincipal();
         User user = userService.selectByUsername(username);
 		//获取应用筛选列表
-		List<UserAppRelation> typeList = userAppRelationService.findFileList(field,content,user.getId());
+		List<UserAppRelation> typeList = userAppRelationService.findFileList(field,content,user.getId(),appName,appType,
+				appNameOption,creatorOption,isAsyncOption,keywordsOption,appIntroOption,createTimeOption);
 		typeList.remove(null);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_EMPTY);

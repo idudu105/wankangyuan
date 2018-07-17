@@ -37,7 +37,9 @@ public interface UserAppRelationService {
 	List<UserAppRelation> findMine(Integer userId);
 
 	//查找字段列表
-	List<UserAppRelation> findFileList(String field, String content, Integer userId);
+	List<UserAppRelation> findFileList(String field, String content, Integer userId, String appName, String appType, 
+			String[] appNameOption, String[] creatorOption, String[] isAsyncOption, String[] keywordsOption, 
+			String[] appIntroOption, String[] createTimeOption);
 
 	//查询我的应用类别列表
 	List<String> findMyTypeList(Integer userId);

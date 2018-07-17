@@ -145,7 +145,7 @@ public class ApplicationController {
 	}
 	
 	/**
-	 * 获取我的应用的字段列表
+	 * 获取我创建的应用的字段列表
 	 * <p>Title: getAppFiledList</p>  
 	 * <p>Description: </p>  
 	 * @param field
@@ -155,10 +155,20 @@ public class ApplicationController {
 	 */
 	@RequestMapping(value="/getMyAppFieldList",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
 	@ResponseBody
-	public String getMyAppFiledList(String field,String content) throws Exception {
+	public String getMyAppFiledList(String field,String content,
+			@RequestParam(value="appName",required=false)String appName,
+            @RequestParam(value="appType",required=false)String appType,
+			@RequestParam(value="appNameOption",required=false)String[] appNameOption,
+            @RequestParam(value="creatorOption",required=false)String[] creatorOption,
+            @RequestParam(value="isAsyncOption",required=false)String[] isAsyncOption,
+            @RequestParam(value="keywordsOption",required=false)String[] keywordsOption,
+            @RequestParam(value="appIntroOption",required=false)String[] appIntroOption,
+            @RequestParam(value="createTimeOption",required=false)String[] createTimeOption,
+            @RequestParam(value="isDisplayOption",required=false)String[] isDisplayOption) throws Exception {
 		String username = (String)SecurityUtils.getSubject().getPrincipal();
 		//获取应用筛选列表
-		List<Application> typeList = applicationService.findFieldList(field,content,username);
+		List<Application> typeList = applicationService.findFieldList(field,content,username,appName,appType,
+				appNameOption,creatorOption,isAsyncOption,keywordsOption,appIntroOption,createTimeOption,isDisplayOption);
 		typeList.remove(null);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_EMPTY);
@@ -167,7 +177,7 @@ public class ApplicationController {
 	}
 	
 	/**
-	 * 获取我的应用类别列表
+	 * 获取我创建的应用类别列表
 	 * <p>Title: getMyAppTypeList</p>  
 	 * <p>Description: </p>  
 	 * @return
@@ -248,9 +258,18 @@ public class ApplicationController {
 	 */
 	@RequestMapping(value="/getPublicAppFieldList",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
 	@ResponseBody
-	public String getPublicAppFiledList(String field,String content) throws Exception {
+	public String getPublicAppFiledList(String field,String content,
+			@RequestParam(value="appName",required=false)String appName,
+            @RequestParam(value="appType",required=false)String appType,
+			@RequestParam(value="appNameOption",required=false)String[] appNameOption,
+            @RequestParam(value="creatorOption",required=false)String[] creatorOption,
+            @RequestParam(value="isAsyncOption",required=false)String[] isAsyncOption,
+            @RequestParam(value="keywordsOption",required=false)String[] keywordsOption,
+            @RequestParam(value="appIntroOption",required=false)String[] appIntroOption,
+            @RequestParam(value="createTimeOption",required=false)String[] createTimeOption) throws Exception {
 		//获取应用筛选列表
-		List<Application> typeList = applicationService.findPublicFieldList(field,content);
+		List<Application> typeList = applicationService.findPublicFieldList(field,content,appName,appType,
+				appNameOption,creatorOption,isAsyncOption,keywordsOption,appIntroOption,createTimeOption);
 		typeList.remove(null);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);

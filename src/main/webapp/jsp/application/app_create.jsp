@@ -133,34 +133,36 @@
                     </div> -->
                 </div>
                 <div class="shaixuanZK">
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">应用名称</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">创建人</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">创建时间</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">是否公开</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">异步/同步</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">关键字</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">应用描述</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
+	                <div class="shaixuanZKC">
+	                    <div class="shaixuanZKli">
+	                        <div class="shaixuanZKliI active"></div>
+	                        <div class="shaixuanZKliT">应用名称</div>
+	                    </div>
+	                    <div class="shaixuanZKli">
+	                        <div class="shaixuanZKliI active"></div>
+	                        <div class="shaixuanZKliT">创建人</div>
+	                    </div>
+	                    <div class="shaixuanZKli">
+	                        <div class="shaixuanZKliI active"></div>
+	                        <div class="shaixuanZKliT">创建时间</div>
+	                    </div>
+	                    <div class="shaixuanZKli">
+	                        <div class="shaixuanZKliI active"></div>
+	                        <div class="shaixuanZKliT">是否公开</div>
+	                    </div>
+	                    <div class="shaixuanZKli">
+	                        <div class="shaixuanZKliI active"></div>
+	                        <div class="shaixuanZKliT">异步/同步</div>
+	                    </div>
+	                    <div class="shaixuanZKli">
+	                        <div class="shaixuanZKliI active"></div>
+	                        <div class="shaixuanZKliT">关键字</div>
+	                    </div>
+	                    <div class="shaixuanZKli">
+	                        <div class="shaixuanZKliI active"></div>
+	                        <div class="shaixuanZKliT">应用描述</div>
+	                    </div>
+	                </div>
                 </div>
                 <div class="app_typeul" data-bind="foreach:{data:appTypeList, as:'appType'}">
                 	<div class="app_typeli" data-bind="text:appType,click:$root.filtrateAppType"></div>
@@ -266,7 +268,8 @@
                         </div>
                         <div class="BTSXcli3">
                             <div class="BTSXcli3BT BTSXcli3BTent" data-bind="click:filterSearchAppList">筛选</div>
-                            <div class="BTSXcli3BT BTSXcli3BTres" data-bind="click:$root.fieldList.removeAll();">重置</div>
+                            <!-- <div class="BTSXcli3BT BTSXcli3BTres" data-bind="click:$root.fieldList.removeAll();">重置</div> -->
+                            <div class="BTSXcli3BT BTSXcli3BTres" data-bind="click:resetFilter">重置</div>
                         </div>
                     </div>
                 </div>
@@ -509,7 +512,7 @@ function ViewModel() {
 		});  
         self.option = arr.join(",");
         //self.appName = "";
-        self.field = $(".BTSXpd").val()
+        self.field = $(".BTSXpd").val();
         if(self.field == "appName"){
             self.appNameOption = arr.join(",");
         }else if(self.field == "creator"){
@@ -528,6 +531,19 @@ function ViewModel() {
         page = 1;
         self.showAppList();
 	}
+	//重置筛选
+	self.resetFilter = function() {
+        self.appNameOption = "";
+        self.creatorOption = "";
+        self.isAsyncOption = "";
+        self.keywordsOption = "";
+        self.appIntroOption = "";
+        self.createTimeOption = "";
+        self.isDisplayOption = "";
+        page = 1;
+        self.showAppList();
+	}
+	
 	//排序搜索
 	self.orderAppList = function(order) {
 		self.orderName = $(".BTSXpd").attr("order");
@@ -538,7 +554,19 @@ function ViewModel() {
 	self.fieldList = ko.observableArray();
 	self.searchField = function() {
 		self.fieldList.removeAll();
-		$.getJSON("/wankangyuan/application/getMyAppFieldList",{field:$(".BTSXpd").attr("order"),content:$(".BTSXcliGLK").val()},function(data){
+		$.getJSON("/wankangyuan/application/getMyAppFieldList",{
+			field:$(".BTSXpd").attr("order"),
+			content:$(".BTSXcliGLK").val(),
+			appName:self.appName,
+            appType:self.appType,
+            appNameOption:self.appNameOption,
+            creatorOption:self.creatorOption,
+            isAsyncOption:self.isAsyncOption,
+            keywordsOption:self.keywordsOption,
+            appIntroOption:self.appIntroOption,
+            createTimeOption:self.createTimeOption,
+            isDisplayOption:self.isDisplayOption
+			},function(data){
             for (var i=0;i<data.length;i++){
             	if($(".BTSXpd").attr("order") == "is_async"){
 					if(data[i].isAsync == '0') {

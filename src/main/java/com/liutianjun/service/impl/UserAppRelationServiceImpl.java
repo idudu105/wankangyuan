@@ -250,7 +250,9 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	 * @return
 	 */
 	@Override
-	public List<UserAppRelation> findFileList(String field, String content, Integer userId) {
+	public List<UserAppRelation> findFileList(String field, String content, Integer userId, String appName, String appType, 
+			String[] appNameOption, String[] creatorOption, String[] isAsyncOption, String[] keywordsOption, 
+			String[] appIntroOption, String[] createTimeOption) {
 		UserAppRelationQuery example = new UserAppRelationQuery();
 		Criteria criteria = example.createCriteria();
 		criteria.andUserIdEqualTo(userId);
@@ -270,6 +272,58 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 		}else if (field.equals("app_overview")) {
 			criteria.andAppOverviewLike("%"+content+"%");
 		}
+		if(StringUtils.isNotBlank(appName)) {
+			criteria.andAppNameLike("%"+appName+"%");
+		}
+		if(StringUtils.isNotBlank(appType)) {
+			criteria.andAppTypeEqualTo(appType);
+		}
+		if(null != appNameOption && appNameOption.length > 0) {
+    		criteria.andAppNameIn(Arrays.asList(appNameOption));
+    	}
+    	if(null != creatorOption && creatorOption.length > 0) {
+    		criteria.andCreatorIn(Arrays.asList(creatorOption));
+    	}
+    	if(null != isAsyncOption && isAsyncOption.length > 0) {
+    		List<String> optionList = Arrays.asList(isAsyncOption);
+    		if(optionList.size() == 1) {
+    			if("同步".equals(optionList.get(0))) {
+    				criteria.andIsAsyncEqualTo(0);
+    			} 
+    			if("异步".equals(optionList.get(0))) {
+    				criteria.andIsAsyncEqualTo(1);
+    			}
+    		}
+    	}
+    	if(null != keywordsOption && keywordsOption.length > 0) {
+    		criteria.andKeywordsIn(Arrays.asList(keywordsOption));
+    	}
+    	if(null != appIntroOption && appIntroOption.length > 0) {
+    		criteria.andAppOverviewIn(Arrays.asList(appIntroOption));
+    	}
+    	if(null != createTimeOption && createTimeOption.length > 0) {
+    		if(createTimeOption.length == 2) {
+    			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    			Date date1;
+    			Date date2;
+    			try {
+    				date1 = simpleDateFormat.parse(createTimeOption[0].toString());
+    				date2 = simpleDateFormat.parse(createTimeOption[1].toString());
+    				Calendar cal = Calendar.getInstance();
+    				if(date1.before(date2)) {
+    					cal.setTime(date2);
+    					cal.add(Calendar.DATE, 1);
+    					criteria.andCreateTimeBetween(date1, cal.getTime());
+    				}else {
+    					cal.setTime(date1);
+    					cal.add(Calendar.DATE, 1);
+    					criteria.andCreateTimeBetween(date2, cal.getTime());
+    				}
+    			} catch (ParseException e) {
+    				e.printStackTrace();
+    			}
+    		}
+    	}
 		
 	    example.setFields(field);
 	    example.setDistinct(true);

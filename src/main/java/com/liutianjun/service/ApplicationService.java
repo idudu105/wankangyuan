@@ -61,10 +61,14 @@ public interface ApplicationService {
 	List<String> findTypeList();
 
 	//查找应用字段列表
-	List<Application> findFieldList(String field, String content, String username);
+	List<Application> findFieldList(String field, String content, String username, String appName, String appType, 
+			String[] appNameOption, String[] creatorOption, String[] isAsyncOption, String[] keywordsOption, 
+			String[] appIntroOption, String[] createTimeOption, String[] isDisplayOption);
 	
 	//查询公共的字段列表
-	List<Application> findPublicFieldList(String field, String content);
+	List<Application> findPublicFieldList(String field, String content, String appName, String appType, 
+			String[] appNameOption, String[] creatorOption, String[] isAsyncOption, String[] keywordsOption, 
+			String[] appIntroOption, String[] createTimeOption);
 
 	//查询我创建的应用类别列表
 	List<String> findAppTypeList(String username);
