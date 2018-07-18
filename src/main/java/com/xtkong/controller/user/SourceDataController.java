@@ -680,12 +680,15 @@ public class SourceDataController {
 		User user = (User) request.getAttribute("user");
 		Integer uid = user.getId();
 		boolean b = true;
+		List<String> old = userDataService.selects(uid, Integer.valueOf(cs_id));
 		// List<String> sourceDataIdList = new ArrayList<>();
 		for (String sourceDataId : sourceDataIds.split(",")) {
 			// if (!sourceDataId.startsWith(uid+"_")) {
 			try {
-				if (userDataService.delete(uid, sourceDataId, Integer.valueOf(cs_id)) != 1) {
-					b = false;
+				if (old.contains(sourceDataId)) {
+					if (userDataService.delete(uid, sourceDataId, Integer.valueOf(cs_id)) != 1) {
+						b = false;
+					}					
 				}
 			} catch (Exception e) {
 				continue;

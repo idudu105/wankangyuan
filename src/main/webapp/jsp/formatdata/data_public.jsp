@@ -255,7 +255,7 @@
 							</div>
 						</div>
 						<div class="BTSXcli3">
-							<div class="BTSXcli3BT BTSXcli3BTent" onclick="shaixuan()">筛选</div>
+							<div class="BTSXcli3BT BTSXcli3BTent" onclick="shaixuan(1)">筛选</div>
 							<div class="BTSXcli3BT BTSXcli3BTres" onclick="chongzhi()">重置</div>
 						</div>
 					</div>
@@ -377,7 +377,7 @@
 	//重置，清空累加筛选条件
 	function chongzhi(){
 		reset();
-		shaixuan();
+		shaixuan(0);
 	}		
 	function reset(){
 		$('#oldCondition').html('');
@@ -397,7 +397,7 @@
 		
 	}		
 
-	function shaixuan(){
+	function shaixuan(likeSearch){
 		var afuxuanK=document.querySelectorAll('.BTSXcli2li');
         var chooseDatasArr = [];
         for(var i=0;i<afuxuanK.length;i++){

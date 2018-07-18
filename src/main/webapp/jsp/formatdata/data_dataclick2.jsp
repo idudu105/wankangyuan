@@ -291,7 +291,7 @@
 									</div>
 								</div>
 								<div class="BTSXcli3">
-									<div class="BTSXcli3BT BTSXcli3BTent" onclick="shaixuan()">筛选</div>
+									<div class="BTSXcli3BT BTSXcli3BTent" onclick="shaixuan(1)">筛选</div>
 									<div class="BTSXcli3BT BTSXcli3BTent" onclick="chongzhi()">重置</div>
 								</div>
 							</div>
@@ -453,7 +453,7 @@
 	//重置，清空累加筛选条件
 	function chongzhi(){
 		reset();
-		shaixuan();
+		shaixuan(0);
 	}		
 	function reset(){
 		$('#oldCondition').html('');
@@ -473,7 +473,7 @@
 		
 	}
 	//数据筛选，支持模糊查询
-	function shaixuan(){
+	function shaixuan(likeSearch){
 		var afuxuanK=document.querySelectorAll('.BTSXcli2li');
         var chooseDatasArr = [];
         for(var i=0;i<afuxuanK.length;i++){
@@ -484,7 +484,7 @@
         var chooseDatas=chooseDatasArr.join(",");
     	window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
 			+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
-			+"&searchId="+searchId+"&likeSearch=1"
+			+"&searchId="+searchId+"&likeSearch="+likeSearch
 			+ "&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition
     		+"&chooseDatas="+chooseDatas;
 	}
