@@ -16,7 +16,8 @@ $("#insertFormatTypeSubmit").click(function (){
 		success : function(data){
 			if(data.result == true){
 				alert(data.message);
-				window.location.href="/wankangyuan/admin/formatdata?cs_id="+insertFormatTypeForm.format_add_cs_id.value;
+				//window.location.href="/wankangyuan/admin/formatdata?cs_id="+insertFormatTypeForm.format_add_cs_id.value;
+				huoqu();
 			}else{
 				alert(data.message);
 			}
@@ -45,7 +46,8 @@ $("#updateFormatTypeFormSubmit").click(function (){
 		success:function(data){
 			if(data.result == true){
 				alert("格式数据类型更新成功！");
-				window.location.href="/wankangyuan/admin/formatdata?ft_id="+updateFormatTypeForm.edit_ft_id.value;
+				//window.location.href="/wankangyuan/admin/formatdata?ft_id="+updateFormatTypeForm.edit_ft_id.value;
+				huoqu();
 			}else{
 				alert(data.message);
 			}
@@ -79,7 +81,8 @@ $("#deleteFormatTypeSubmit").click(function (){
 			if(data.result == true){
 				//进行删除成功后的跳页处理
 				alert(data.message);
-				window.location.href="/wankangyuan/admin/formatdata?ft_ids="+ft_ids;
+				//window.location.href="/wankangyuan/admin/formatdata?ft_ids="+ft_ids;
+				huoqu();
 
 			}else{
 				alert(data.message);
@@ -186,6 +189,8 @@ function enter(id){
 			}else{
 				alert(data.message);
 			}
+			
+			
 		},
 		error : function(){
 			alert("联网失败");

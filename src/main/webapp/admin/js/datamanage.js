@@ -801,17 +801,19 @@ $(document).ready(function(){
     console.log(oquanxuan4);
     console.log(axuanz4);
 
-    oquanxuan4.onchange=function(){
-        if(oquanxuan4.checked){
-            for(var i=0;i<axuanz4.length;i++){
-                axuanz4[i].checked=1;
-            }
-        }else{
-            // console.log(2);
-            for(var i=0;i<axuanz4.length;i++){
-                axuanz4[i].checked=0;
-            }
-        }
+    if(oquanxuan4){
+	    oquanxuan4.onchange=function(){
+	        if(oquanxuan4.checked){
+	            for(var i=0;i<axuanz4.length;i++){
+	                axuanz4[i].checked=1;
+	            }
+	        }else{
+	            // console.log(2);
+	            for(var i=0;i<axuanz4.length;i++){
+	                axuanz4[i].checked=0;
+	            }
+	        }
+	    }
     }
 
     for(var i=0;i<axuanz4.length;i++){
