@@ -1,6 +1,7 @@
 package com.liutianjun.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,8 @@ import com.liutianjun.service.UserService;
 @Controller
 @RequestMapping("/application")
 public class ApplicationController {
-
+	
+	protected Map<String, Object> resultMap = new HashMap<String, Object>();
 	@Autowired
 	private ApplicationService applicationService;
 	
@@ -303,16 +305,17 @@ public class ApplicationController {
 	 */
 	@RequiresPermissions("application:update")
 	@RequestMapping(value="/setStatus{index}",method=RequestMethod.POST)
-	public String setStatus(Integer cmd,Integer[] ids,
-			@PathVariable String index,
-			RedirectAttributes attributes) {
-		int i = applicationService.setStatus(cmd, ids);
-		String msg = "操作失败";
-		if(i > 0) {
-			msg = "操作成功";
+	@ResponseBody
+	public Map<String,Object> setStatus(Integer cmd,Integer[] ids,
+			@PathVariable String index) {
+		resultMap.put("status", 400);
+		resultMap.put("message", "操作失败!");
+		if(0 < applicationService.setStatus(cmd, ids)) {
+			resultMap.put("status", 200);
+			resultMap.put("message", "操作成功!");
 		}
-		attributes.addFlashAttribute("msg", msg);
-		return "redirect:/application/viewCreate"+index;
+		
+		return resultMap;
 	}
 	
 	/**
@@ -426,17 +429,17 @@ public class ApplicationController {
 	 */
 	@RequiresPermissions("application:delete")
 	@RequestMapping(value="/delete{index}",method=RequestMethod.POST)
-	public String delete(Integer[] ids, 
-			@PathVariable String index,
-			RedirectAttributes attributes) {
-		
-		int i = applicationService.deleteByIds(ids);
-		String msg = "操作失败";
-		if(i>0) {
-			msg = "删除成功";
+	@ResponseBody
+	public Map<String,Object> delete(Integer[] ids, 
+			@PathVariable String index) {
+		resultMap.put("status", 400);
+		resultMap.put("message", "操作失败!");
+			
+		if(0 < applicationService.deleteByIds(ids)) {
+			resultMap.put("status", 200);
+			resultMap.put("message", "操作成功!");
 		}
-		attributes.addFlashAttribute("msg", msg);
-		return "redirect:/application/viewCreate"+index;
+		return resultMap;
 	}
 	
 }

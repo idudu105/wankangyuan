@@ -9,8 +9,10 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.liutianjun.pojo.OrgMember;
@@ -59,7 +61,7 @@ public class OrganizationController {
 		//获取用户名
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 	    record.setCreator(username);
-		if(1 == organizationService.addNewOrg(record) && 1 == messageService.sendAddNewOrgRequest(1, record)) {
+		if(1 == organizationService.addNewOrg(record)) {
 			resultMap.put("status", 200);
 			resultMap.put("message", "已提交申请，请等待审核!");
 		}
@@ -186,6 +188,49 @@ public class OrganizationController {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String jsonOrgList = objectMapper.writeValueAsString(orgList);
 		return jsonOrgList;
+	}
+	
+	/**
+	 * 组织机构
+	 * @Title: viewOrgList 
+	 * @param page
+	 * @param rows
+	 * @param organizationName
+	 * @return 
+	 * String
+	 */
+	@RequestMapping(value = "/viewOrgList",method=RequestMethod.GET)
+	public String viewOrgList(@RequestParam(value="page", defaultValue="1")Integer page, 
+            @RequestParam(value="rows", defaultValue="10")Integer rows,
+            @RequestParam(value="organizationName",required=false) String organizationName,Model model) {
+		Map<String, Object> map = organizationService.findOrgList(page, rows, organizationName);
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("total", map.get("total"));
+		model.addAttribute("page", page);
+		model.addAttribute("rows", rows);
+		model.addAttribute("organizationName", organizationName);
+		return "/admin/orgmanage.jsp";
+	}
+	
+	/**
+	 * 处理添加组织机构请求
+	 * @Title: dealOrgRequest 
+	 * @param id
+	 * @param cmd
+	 * @return 
+	 * Map<String,Object>
+	 */
+	@RequestMapping(value = "/dealOrgRequest",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> dealOrgRequest(Integer[] ids,Integer cmd){
+		resultMap.put("status", 400);
+		resultMap.put("message", "操作失败!");
+		if(0 < organizationService.dealAddOrgRequest(ids, cmd)) {
+			resultMap.put("status", 200);
+			resultMap.put("message", "操作成功!");
+		}
+		
+		return resultMap;
 	}
 	
 }

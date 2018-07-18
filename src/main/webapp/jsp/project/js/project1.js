@@ -781,7 +781,6 @@ function friend_manage(){
         (function(index){
             var ofriendMMlTTzT=afriendMMlTTz[index].querySelectorAll('.friendMMlTTzT')[0];
             ofriendMMlTTzT.onclick=function(){
-                ofriendMMlTTzT.appendChild(ozhizhen);//插入指针
 
                 //console.log("添加组预存框"+ozzsyKpd.value);
 
@@ -810,14 +809,7 @@ function friend_manage(){
         })(i)
     }
 
-//组点击效果
-    for(var i=0;i<afriendMMlTTzBz.length;i++){
-        (function(index){
-            afriendMMlTTzBz[index].onclick=function(){
-                afriendMMlTTzBz[index].appendChild(ozhizhen);//插入指针图片
-            }
-        })(i)
-    }
+
 
 //特殊组的点击效果（该组内有包含组的时候）
     var teshuzuPD=[];
@@ -829,8 +821,6 @@ function friend_manage(){
     for(var i=0;i<afriendMMlTTzBz2.length;i++){
         (function(index){
             afriendMMlTTzBz2Tk[index].onclick=function(){
-                afriendMMlTTzBz2Tk[index].appendChild(ozhizhen);//插入指针图片
-
                 if(teshuzuPD[index]==0){
                     afriendMMlTTzBz2[index].className="friendMMlTTzBz2 active";
                     afriendMMlTTzBz2Mk[index].style.display="block";

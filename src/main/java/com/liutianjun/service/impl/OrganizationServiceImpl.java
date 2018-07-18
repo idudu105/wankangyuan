@@ -1,8 +1,11 @@
 package com.liutianjun.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,21 +153,13 @@ public class OrganizationServiceImpl implements OrganizationService {
 	 * @return
 	 */
 	@Override
-	public int dealAddOrgRequest(Integer id, Integer cmd) {
-		//同意请求，则更新记录状态
-		if(1 == cmd) {
-			OrganizationQuery example = new OrganizationQuery();
-			Criteria criteria = example.createCriteria();
-			criteria.andIdEqualTo(id);
-			Organization organization = new Organization();
-			organization.setStatus(1);
-			return organizationDao.updateByExampleSelective(organization, example);
-		}
-		//拒绝请求，则删除记录
-		if(0 == cmd) {
-			return organizationDao.deleteByPrimaryKey(id);
-		}
-		return 0;
+	public int dealAddOrgRequest(Integer[] ids, Integer cmd) {
+		OrganizationQuery example = new OrganizationQuery();
+		Criteria criteria = example.createCriteria();
+		criteria.andIdIn(Arrays.asList(ids));
+		Organization organization = new Organization();
+		organization.setStatus(cmd);
+		return organizationDao.updateByExampleSelective(organization, example);
 	}
 
 	/**
@@ -199,6 +194,33 @@ public class OrganizationServiceImpl implements OrganizationService {
 			}
 		}
 		return list;
+	}
+
+	/**
+	 * 查询组织机构
+	 * <p>Title: findOrgList</p>  
+	 * <p>Description: </p>  
+	 * @param page
+	 * @param rows
+	 * @param organizationName
+	 * @return
+	 */
+	@Override
+	public Map<String, Object> findOrgList(Integer page, Integer rows, String organizationName) {
+		OrganizationQuery example = new OrganizationQuery();
+		Criteria criteria = example.createCriteria();
+		if(null != organizationName && organizationName.trim() != "") {
+			criteria.andOrganizationNameLike("%"+organizationName+"%");
+		}
+		criteria.andParentIdEqualTo(0);
+		int total = organizationDao.countByExample(example);
+		example.setPageNo(page);
+		example.setPageSize(rows);
+		List<Organization> list = organizationDao.selectByExample(example);
+		Map<String,Object> map = new HashMap<>();
+		map.put("list", list);
+		map.put("total", total);
+		return map;
 	}
 	
 	

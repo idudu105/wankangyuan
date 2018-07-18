@@ -153,6 +153,12 @@
 	                            <span class="hidden-tablet"> 项目内角色管理</span>
 	                        </a>
 	                    </li>
+	                    <li>
+                            <a href="/wankangyuan/organization/viewOrgList">
+                                <!-- <i class="icon-bar-chart"></i> -->
+                                <span class="hidden-tablet"> 组织机构审批</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>

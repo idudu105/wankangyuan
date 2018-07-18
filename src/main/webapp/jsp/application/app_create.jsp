@@ -120,9 +120,12 @@
                         </div>
                     </div>
 
-                    <div class="pro_menu pro_del" onclick="to_delete()">删除</div>
-                    <div class="pro_menu pro_open" onclick="to_public()">公开</div>
-                    <div class="pro_menu pro_disopen" onclick="to_private()">取消公开</div>
+                    <!-- <div class="pro_menu pro_del" onclick="to_delete()">删除</div> -->
+                    <div class="pro_menu pro_del" data-bind="click:to_delete">删除</div>
+                    <!-- <div class="pro_menu pro_open" onclick="to_public()">公开</div> -->
+                    <div class="pro_menu pro_open" data-bind="click:to_public">公开</div>
+                    <!-- <div class="pro_menu pro_disopen" onclick="to_private()">取消公开</div> -->
+                    <div class="pro_menu pro_disopen" data-bind="click:to_private" >取消公开</div>
                     <div class="pro_menu pro_createapp">+创建应用</div>
                     <!-- <div class="pro_menu pro_run">运行</div> -->
                     <!-- <div class="search2">
@@ -169,7 +172,8 @@
                 </div>
                 <div class="pro_addul">
                 <c:forEach items="${projectList}" var="project">
-                    <div class="pro_addli" onclick="addToProjrct(${project.id})" >${project.p_name }</div>
+                    <%-- <div class="pro_addli" onclick="addToProjrct(${project.id})" >${project.p_name }</div> --%>
+                    <div class="pro_addli" data-bind="click:function(){addToProjrct(${project.id})}" >${project.p_name }</div>
                 </c:forEach>
                 </div>
             </div>
@@ -196,7 +200,7 @@
                 <div class="PJList">
                     <div class="allK">
                         <div class="quanxuanK">
-                            <input type="checkbox" class="input_check" id="check0" >
+                            <input type="checkbox" class="input_check" id="check0" data-bind="click: checkAll" >
                             <label for="check0"></label>
                         </div>
                         <div class="allT">全选</div>
@@ -216,7 +220,7 @@
                     <div class="PJli">
                         <div class="PJliC">
                             <div class="fuxuanK2">
-                                <input name="ids" type="checkbox" class="input_check" data-bind="value: id,attr:{id:'check'+($index()+1)}">
+                                <input name="ids" type="checkbox" class="input_check" data-bind="value: id,attr:{id:'check'+($index()+1)},event: { change: $root.checkOne}">
                                 <label data-bind="attr:{for:'check'+($index()+1)}"></label>
                             </div>
                             <a data-bind="attr:{href:'/wankangyuan/application/updateForm?id='+id}">
@@ -238,9 +242,9 @@
                         <div class="PJliline"></div>
                     </div>
                 </div>
-                <input id="pub_but" type="submit" name="cmd" value="1" style="display:none">
+                <!-- <input id="pub_but" type="submit" name="cmd" value="1" style="display:none"> -->
                 <input id="pri_but" type="submit" name="cmd" value="0" style="display:none">
-                <input id="projectId" name="projectId" type="hidden" disabled="disabled">
+                <!-- <input id="projectId" name="projectId" type="hidden" disabled="disabled"> -->
                 </form>
                 </div>
 
@@ -306,87 +310,6 @@
 </c:if>
 
 <script type="text/javascript">
-function filtrateAppType(appType){
-    $("input[name='appType']").val(appType);
-    $("#filterFrom").submit();
-}
-function addToProjrct(projectId){
-    var ids = $("input[name='ids']");
-    var checkNum = 0;
-    for (var i = 0; i < ids.length; i++) {
-        if (ids[i].checked) {
-            checkNum++;
-        }
-    }
-    if (checkNum == 0) {
-        layer.msg("请至少选中一个");
-    } else {
-        layer.confirm('请确认是否添加?',{
-          btn: ['确认','取消'], //按钮
-          icon: 2
-        }, function(){
-            $("#appList").attr('action',"/wankangyuan/ProjectAppRelation/addToProject");
-            $("#projectId").removeAttr("disabled");
-            $("#projectId").val(projectId);
-            $("#appList").submit();
-          
-        }, function(){
-            return;
-        });
-    }
-}
-function to_public(){
-    
-    var ids = $("input[name='ids']");
-    var checkNum = 0;
-    for (var i = 0; i < ids.length; i++) {
-        if (ids[i].checked) {
-            checkNum++;
-        }
-    }
-    if (checkNum == 0) {
-        layer.msg("请至少选中一个");
-    } else {
-        $("#pub_but").click();
-    }
-}
-function to_private(){
-    var ids = $("input[name='ids']");
-    var checkNum = 0;
-    for (var i = 0; i < ids.length; i++) {
-        if (ids[i].checked) {
-            checkNum++;
-        }
-    }
-    if (checkNum == 0) {
-        layer.msg("请至少选中一个");
-    } else {
-        $("#pri_but").click();
-    }
-}
-function to_delete(){
-    var ids = $("input[name='ids']");
-    var checkNum = 0;
-    for (var i = 0; i < ids.length; i++) {
-        if (ids[i].checked) {
-            checkNum++;
-        }
-    }
-    if (checkNum == 0) {
-        layer.msg("请至少选中一个");
-    } else {
-        layer.confirm('删除不能撤销，请确认是否删除?',{
-          btn: ['确认','取消'], //按钮
-          icon: 2
-        }, function(){
-            $("#appList").attr('action',"/wankangyuan/application/delete");
-            $("#appList").submit();
-          
-        }, function(){
-            return;
-        });
-    }
-}
 
 //定义ViewModel
 function ViewModel() {
@@ -394,6 +317,7 @@ function ViewModel() {
 	var page,rows,total,appName,appType,orderName,orderDir,field,option;
 	var appNameOption,creatorOption,isAsyncOption,keywordsOption,appIntroOption,createTimeOption,isDisplayOption;
 	self.appList = ko.observableArray();
+	self.appCentAll = ko.observableArray();
 	self.appCart = ko.observableArray();
 	self.showAppList = function() {
         
@@ -438,49 +362,69 @@ function ViewModel() {
 			        }
 			    }
 			});
-			
 			$.getJSON("/wankangyuan/application/getCreate",{
                 page:1,
                 rows:1000,
                 appName:self.appName,
                 appType:self.appType,
-                orderName:self.orderName,
-                orderDir:self.orderDir,
-                field:$(".BTSXpd").val(),
-                option:self.option
+                appNameOption:self.appNameOption,
+                creatorOption:self.creatorOption,
+                isAsyncOption:self.isAsyncOption,
+                keywordsOption:self.keywordsOption,
+                appIntroOption:self.appIntroOption,
+                createTimeOption:self.createTimeOption,
+                isDisplayOption:self.isDisplayOption
                 },function(data){
-                self.appCart.removeAll();
+                self.appCentAll.removeAll();
                 for (var i in data.list){
-                    self.appCart.push(data.list[i].id);
+                    self.appCentAll.push(data.list[i].id);
                 }
-                //console.log(self.appCart);
-                if($("#check0").attr('checked')){
-                    $(".input_check").each(function(){
-                        var index = $.inArray(Number($(this).val()),self.appCart());
-                        if(index >= 0){
-                            $(this).attr("checked",true);
-                        }
-                    })
-                }else{
-                    /* $(".input_check").each(function(){
-                        //console.log($(this).val());
-                        //console.log(self.appCart()[index]);
-                        var index = $.inArray(Number($(this).val()),self.appCart());
-                        if(index >= 0){
-                            $(this).attr("checked",true);
-                        }
-                    }) */
-                }
-                
+	            $(".input_check").each(function(){
+	                var index = $.inArray(Number($(this).val()),self.appCart());
+	                if(index >= 0){
+	                    $(this).attr("checked",true);
+	                }
+	            })
             });
+			
+			
 		});
+	}
+	//全选
+	self.checkAll = function(){
+		if($("#check0").attr('checked')){
+	        self.appCart.removeAll();
+	        for (var i in self.appCentAll()){
+	            self.appCart.push(self.appCentAll()[i]);
+	        }
+		}else{
+			self.appCart.removeAll();
+		}
+		return true;
+	}
+	//复选
+	self.checkOne = function(option){
+		//console.log(option.id);
+		var index = $.inArray(Number(option.id),self.appCart());
+        if(index >= 0){
+        	self.appCart.remove(option.id);
+        }else{
+        	self.appCart.push(option.id);
+        }
+        
+        if(self.appCentAll().length == self.appCart().length){
+        	$("#check0").attr('checked',true);
+        }else{
+        	$("#check0").attr('checked',false);
+        }
 	}
 	
 	//边缘弹出
     /* layer.open({
       type: 1
-      ,offset: 'lt' //具体配置参考：offset参数项
-      ,content: '<div style="padding: 20px 80px;" data-bind="text:appCart().length"></div>'
+      ,offset: 'lb' //具体配置参考：offset参数项
+      ,content: '总计<div style="padding: 20px 80px;" data-bind="text:appCentAll().length"></div>'+
+      '购物车<div style="padding: 20px 80px;" data-bind="text:appCart().length"></div>'
       ,btn: '关闭全部'
       ,btnAlign: 'c' //按钮居中
       ,shade: 0 //不显示遮罩
@@ -489,12 +433,142 @@ function ViewModel() {
       }
     }); */
 	
+	//添加到项目
+	self.addToProjrct = function(projectId){
+	    if (self.appCart().length == 0) {
+	        layer.msg("请至少选中一个");
+	    } else {
+	        layer.confirm('请确认是否添加?',{
+	          btn: ['确认','取消'], //按钮
+	          icon: 2
+	        }, function(){
+	            $.ajax({
+	                type: "POST", 
+	                url: "/wankangyuan/ProjectAppRelation/addToProject",
+	                data: {projectId:projectId, ids:self.appCart().join(",")}, //可选参数
+	                dataType: "json",
+	                success: function(result){
+                        layer.msg(result.message, {
+                            anim: 0,
+                            end: function (index) {
+                                window.location.href="/wankangyuan/project/selectMyProject";
+                            }
+                        });
+	                },
+	                error:function(result){
+                        layer.msg(result.message, {
+                            anim: 0,
+                            end: function (index) {
+                            	window.location.reload();
+                            }
+                        });
+	                }
+	            });
+	            
+	        }, function(){
+	            return;
+	        });
+	    }
+	}
+	
+	self.to_public = function(){
+	    if (self.appCart().length == 0) {
+	        layer.msg("请至少选中一个");
+	    } else {
+	        //$("#pub_but").click();
+	        $.ajax({
+                type: "POST", 
+                url: "/wankangyuan/application/setStatus",
+                data: {cmd:1, ids:self.appCart().join(",")}, //可选参数
+                dataType: "json",
+                success: function(result){
+                    layer.msg(result.message, {
+                        anim: 0,
+                        end: function (index) {
+                        	window.location.reload();
+                        }
+                    });
+                },
+                error:function(result){
+                    layer.msg(result.message, {
+                        anim: 0,
+                        end: function (index) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            });
+	    }
+	}
+	
+	self.to_private = function(){
+        if (self.appCart().length == 0) {
+            layer.msg("请至少选中一个");
+        } else {
+            //$("#pub_but").click();
+            $.ajax({
+                type: "POST", 
+                url: "/wankangyuan/application/setStatus",
+                data: {cmd:0, ids:self.appCart().join(",")}, //可选参数
+                dataType: "json",
+                success: function(result){
+                    layer.msg(result.message, {
+                        anim: 0,
+                        end: function (index) {
+                            window.location.reload();
+                        }
+                    });
+                },
+                error:function(result){
+                    layer.msg(result.message, {
+                        anim: 0,
+                        end: function (index) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            });
+        }
+    }
+	
+	self.to_delete = function(){
+		if (self.appCart().length == 0) {
+            layer.msg("请至少选中一个");
+        } else {
+            //$("#pub_but").click();
+            $.ajax({
+                type: "POST", 
+                url: "/wankangyuan/application/delete",
+                data: {ids:self.appCart().join(",")}, //可选参数
+                dataType: "json",
+                success: function(result){
+                    layer.msg(result.message, {
+                        anim: 0,
+                        end: function (index) {
+                            window.location.reload();
+                        }
+                    });
+                },
+                error:function(result){
+                    layer.msg(result.message, {
+                        anim: 0,
+                        end: function (index) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            });
+        }
+	}
+	
 	//初始化列表
 	self.showAppList();
 	
 	//点击搜索
 	self.searchAppList = function() {
 		page = 1;
+		self.appCart.removeAll();
+        $("#check0").attr('checked',false);
 		self.appName = $("input[name='appName']").val();
 		self.showAppList();
 	}
@@ -534,6 +608,8 @@ function ViewModel() {
         	self.isDisplayOption = self.option;
         }
         page = 1;
+        self.appCart.removeAll();
+        $("#check0").attr('checked',false);
         self.showAppList();
 	}
 	//重置筛选
@@ -546,6 +622,8 @@ function ViewModel() {
         self.createTimeOption = "";
         self.isDisplayOption = "";
         page = 1;
+        self.appCart.removeAll();
+        $("#check0").attr('checked',false);
         self.showAppList();
 	}
 	

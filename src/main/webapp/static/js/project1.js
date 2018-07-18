@@ -58,7 +58,7 @@ function project0(){
         }
 
 
-        if(afuxuanK[0]){
+        /*if(afuxuanK[0]){
             for(var i=0;i<afuxuanK.length;i++){
                 (function(index){
                     afuxuanK[i].onchange=function(){
@@ -78,7 +78,7 @@ function project0(){
                     }
                 })(i)
             }
-        }
+        }*/
         
     }else{
         //console.log(222);
@@ -197,12 +197,9 @@ function project1(){
                 if(document.querySelectorAll('.BTSXpd')[0]){
                     var oBTSXpd=document.querySelectorAll('.BTSXpd')[0];//项目表头筛选框判断
                     oBTSXpd.value=$(aPJListli[j]).attr('name');
-                    console.log($(aPJListli[j]).attr('name'));
-                    console.log(oBTSXpd.value);
                 }
                 
                 
-                console.log(BTSXleft);
                 if(BTSXleft>1118){
                     BTSXleft=1118;
                 }

@@ -1,6 +1,7 @@
 package com.liutianjun.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +34,8 @@ import com.liutianjun.service.UserService;
 @Controller
 @RequestMapping("/userAppRelation")
 public class UserAppRelationController {
+	
+	protected Map<String, Object> resultMap = new HashMap<String, Object>();
 
 	@Autowired
 	private UserAppRelationService userAppRelationService;
@@ -49,18 +52,18 @@ public class UserAppRelationController {
 	 * String
 	 */
 	@RequestMapping(value="/addToMine{index}",method=RequestMethod.POST)
-	public String addToMine(Integer[] ids,
-			@PathVariable String index,
-			RedirectAttributes attributes) {
+	@ResponseBody
+	public Map<String,Object> addToMine(Integer[] ids,
+			@PathVariable String index) {
+		resultMap.put("status", 400);
+		resultMap.put("message", "操作失败!");
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
 	    User user = userService.selectByUsername(username);
-	    String msg = "操作失败";
-		int i = userAppRelationService.addToMineByIds(user.getId(), ids);
-		if(i>0) {
-			msg = "添加成功";
+		if(0 < userAppRelationService.addToMineByIds(user.getId(), ids)) {
+			resultMap.put("status", 200);
+			resultMap.put("message", "操作成功!");
 		}
-		attributes.addFlashAttribute("msg", msg);
-		return "redirect:/application/viewMine"+index;
+		return resultMap;
 	}
 	
 	/**
@@ -72,19 +75,19 @@ public class UserAppRelationController {
 	 * String
 	 */
 	@RequestMapping(value="/removeFromMine{index}",method=RequestMethod.POST)
-	public String removeFromMine(Integer[] ids,
-			@PathVariable String index,
-			RedirectAttributes attributes) {
+	@ResponseBody
+	public Map<String,Object> removeFromMine(Integer[] ids,
+			@PathVariable String index) {
+		resultMap.put("status", 400);
+		resultMap.put("message", "操作失败!");
 	    String username = (String)SecurityUtils.getSubject().getPrincipal();
         User user = userService.selectByUsername(username);
 		
-		String msg = "操作失败";
-		int i = userAppRelationService.removeFromMineByIds(user.getId(), ids);
-		if(i>0) {
-			msg = "移除成功";
+		if(0 < userAppRelationService.removeFromMineByIds(user.getId(), ids)) {
+			resultMap.put("status", 200);
+			resultMap.put("message", "操作成功!");
 		}
-		attributes.addFlashAttribute("msg", msg);
-		return "redirect:/application/viewMine"+index;
+		return resultMap;
 	}
 	
 	/**

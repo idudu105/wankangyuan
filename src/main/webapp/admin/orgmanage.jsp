@@ -11,7 +11,7 @@
 
     <!-- start: Meta -->
 
-    <title>菜单管理</title>
+    <title>组织机构审批</title>
     <meta name="description" content="Bootstrap Metro Dashboard">
     <meta name="author" content="Dennis Ji">
     <meta name="keyword" content="Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
@@ -28,8 +28,6 @@
     <link id="base-style-responsive" href="<%=request.getContextPath()%>/admin/css/style-responsive.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
     <!-- end: CSS -->
-
-
 
 
     <!-- start: Favicon -->
@@ -58,7 +56,13 @@
             text-align: left;
         }
     </style>
-    
+    <style type="text/css">
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0;
+    }
+    </style>
 </head>
 
 <body style="cursor: auto;">
@@ -179,7 +183,7 @@
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
-                    <a href="/wankangyuan/admin/viewResourceManage">菜单管理</a>
+                    <a href="/wankangyuan/organization/viewOrgList">组织机构审批</a>
                 </li>
             </ul>
 
@@ -189,7 +193,7 @@
                     <div class="box-header" data-original-title="">
                         <h2>
                             <i class="halflings-icon white user"></i>
-                            <span class="break"></span>菜单
+                            <span class="break"></span>组织机构审批
                         </h2>
                     </div>
                     <div class="box-content">
@@ -200,13 +204,12 @@
                                     <div class="tableedit">
                                         <div class="tableeditz2">
                                         <form method="get">
-                                            <input name="name" value="${name }" type="text" class="tableeditz2p" placeholder="搜索" />
+                                            <input name="organizationName" type="text" value="${organizationName }" class="tableeditz2p" placeholder="组织机构" />
                                             <input type="submit" class="tableeditz2b" value="搜索" />
                                         </form>
                                         </div>
-                                        <div class="tableeditz tableeditzadd">新增</div>
-                                        <div class="tableeditz tableeditzedit">编辑</div>
-                                        <div class="tableeditz tableeditzdis">删除</div>
+                                        <div class="tableeditz tableeditzpass" onclick="dealOrgRequest(1)">通过</div>
+                                        <div class="tableeditz tableeditzdeny" onclick="dealOrgRequest(0)">禁用</div>
                                     </div>
                                     <div class="tablebox">
                                         <table class="biaoge table-bordered">
@@ -215,33 +218,31 @@
                                                     <th class="biaotouth">
                                                         <input type="checkbox" class="quanxuan">全选
                                                     </th>
-                                                    <th class="biaotouth">菜单编号</th>
-                                                    <th class="biaotouth">菜单名称</th>
-                                                    <th class="biaotouth">菜单URL</th>
-                                                    <th class="biaotouth">菜单权限</th>
-                                                    <th class="biaotouth">状态</th>
-                                                    <th class="biaotouth">上级菜单</th>
+                                                    <th class="biaotouth">编号</th>
+                                                    <th class="biaotouth">名称</th>
+                                                    <th class="biaotouth">真实姓名</th>
+                                                    <th class="biaotouth">创建者</th>
+                                                    <th class="biaotouth">手机号</th>
+                                                    <th class="biaotouth">单位信息</th>
                                                     <th class="biaotouth">创建时间</th>
-                                                    <th class="biaotouth">更新时间</th>
+                                                    <th class="biaotouth">状态</th>
                                                 </tr>
                                             </div>
                                             <div class="biaoxiang">
-                                            <c:forEach items="${list }" var="resource">
+                                            <c:forEach items="${list }" var="org" varStatus="orgList">
                                                 <tr role="row" class="trbx">
-                                                    <th class="biaoxiangth"><input name="ids" type="checkbox" class="xuanze" value=${resource.id } ></th>
-                                                    <th class="biaoxiangth">${resource.id }</th>
-                                                    <th class="biaoxiangth">${resource.name }</th>
-                                                    <th class="biaoxiangth">${resource.url }</th>
-                                                    <th class="biaoxiangth">${resource.permission }</th>
+                                                    <th class="biaoxiangth"><input id="check${orgList.count }" type="checkbox" name="ids" class="xuanze" value="${org.id }"></th>
+                                                    <th class="biaoxiangth">${org.id }</th>
+                                                    <th class="biaoxiangth">${org.organizationName }</th>
+                                                    <th class="biaoxiangth">${org.realName }</th>
+                                                    <th class="biaoxiangth">${org.creator }</th>
+                                                    <th class="biaoxiangth">${org.phone }</th>
+                                                    <th class="biaoxiangth">${org.unitInfo }</th>
+                                                    <th class="biaoxiangth"><fmt:formatDate type="both" value="${org.createTime }" /></th>
                                                     <th class="biaoxiangth">
-                                                        <c:if test="${'0' eq resource.available }">不可用</c:if>
-                                                        <c:if test="${'1' eq resource.available }">可用</c:if>
+                                                        <c:if test="${'0' eq org.status }">禁用</c:if>
+                                                        <c:if test="${'1' eq org.status }">正常</c:if>
                                                     </th>
-                                                    <th class="biaoxiangth">
-                                                    ${zhangfn:resourceName(resource.parentId)}
-                                                    </th>
-                                                    <th class="biaoxiangth"><fmt:formatDate type="both" value="${resource.createTime }" /></th>
-                                                    <th class="biaoxiangth"><fmt:formatDate type="both" value="${resource.updateTime }" /></th>
                                                 </tr>
                                             </c:forEach>
                                             </div>
@@ -255,96 +256,6 @@
                         </div>
 
 
-                        <!-- 新增菜单start -->
-                        <div class="user_addboxK">
-                        <form action="insertResource" method="post">
-                            <div class="addbiaoxT">
-                                <div class="addbiaoxTt">添加菜单</div>
-                                <div class="addbiaoxTx"></div>
-                            </div>  
-                            <div class="addbiaoxli">
-                                <div class="addbiaoxlit">菜单名称：</div>
-                                <input name="name" type="text" class="addbiaoxlik" required="required" />
-                            </div>
-                            <div class="addbiaoxli">
-                                <div class="addbiaoxlit">菜单URL：</div>
-                                <input name="url" type="text" class="addbiaoxlik" />
-                            </div>
-                            <div class="addbiaoxli">
-                                <div class="addbiaoxlit">状态：</div>
-                                <select name="available" id="">
-                                    <option value="0">不可用</option>
-                                    <option value="1">可用</option>
-                                </select>
-                            </div>
-                            <div class="addbiaoxli">
-                                <div class="addbiaoxlit">上级菜单：</div>
-                                <select name="parentId" id="">
-                                    <option value="11">项目管理</option>
-                                    <option value="21">格式数据管理</option>
-                                    <option value="31">应用管理</option>
-                                    <option value="41">组织管理</option>
-                                </select>
-                            </div>
-                            <div class="addboxB">
-                                <input type="submit" value="提交" class="addboxBb" />
-                            </div>
-                        </form>
-                        </div>
-                        <!-- 新增角色end -->
-
-                        <!-- 修改菜单start -->
-                        <div class="user_editboxK">
-                        <form action="updateResource" method="post">
-                            <input id="id" name="id" type="hidden" >
-                            <div class="addbiaoxT">
-                                <div class="addbiaoxTt">编辑菜单</div>
-                                <div class="addbiaoxTx"></div>
-                            </div>  
-                            <div class="addbiaoxli">
-                                <div class="addbiaoxlit">菜单名称：</div>
-                                <input id="name" name="name" type="text" class="addbiaoxlik" />
-                            </div>
-                            <div class="addbiaoxli">
-                                <div class="addbiaoxlit">菜单URL：</div>
-                                <input id="url" name="url" type="text" class="addbiaoxlik" />
-                            </div>
-                            <div class="addbiaoxli">
-                                <div class="addbiaoxlit">状态：</div>
-                                <select id="available" name="available">
-                                    <option value="0">不可用</option>
-                                    <option value="1">可用</option>
-                                </select>
-                            </div>
-                            <div class="addbiaoxli">
-                                <div class="addbiaoxlit">上级菜单：</div>
-                                <select id="parentId" name="parentId" >
-                                    <option value="11">项目管理</option>
-                                    <option value="21">格式数据管理</option>
-                                    <option value="31">应用管理</option>
-                                    <option value="41">组织管理</option>
-                                </select>
-                            </div>
-                            <div class="addboxB">
-                                <input type="submit" value="提交" class="addboxBb" />
-                            </div>
-                        </form>
-                        </div>
-                        <!-- 修改菜单end -->
-
-                        <!-- 删除菜单start -->
-                        <div class="user_disboxK">
-                            <div class="addbiaoxT">
-                                <div class="addbiaoxTt">通知</div>
-                                <div class="addbiaoxTx"></div>
-                            </div>
-                            <div class="delbiaoxM">您确认删除选中的菜单吗?（删除后的菜单无法恢复，请谨慎操作！）</div>
-                            <div class="addbiaoxB">
-                                <input type="button" value="确认" class="addbiaoxBb" onclick="deleteByIds()" />
-                                <input type="button" value="取消" class="addbiaoxBb2" />
-                            </div>
-                        </div>
-                        <!-- 删除菜单end -->
 
                     </div>
                 </div>
@@ -436,23 +347,59 @@
 
 <script src="<%=request.getContextPath()%>/admin/js/custom.js"></script>
 
-
-
-<!-- <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script> -->
-<script type="text/javascript" src="<%=request.getContextPath()%>/admin/js/jquery.cookie.js"></script>
-
-<script type="text/javascript" src="<%=request.getContextPath()%>/admin/js/menumanage.js"></script>
 <!-- end: JavaScript-->
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/layer/layer.js"></script>
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/paging.js"></script>
+
 <c:if test="${not empty msg}">
-    <script type="text/javascript">
-    layer.msg("${msg}");
-    </script>
+ <script type="text/javascript">
+ layer.msg("${msg}");
+ </script>
 </c:if>
 <script type="text/javascript">
+
+
+function dealOrgRequest(cmd){
+    var obj = $("input[name='ids']");
+    var checkNum = 0;
+    var id;
+    for (var i = 0; i < obj.length; i++) {
+        if (obj[i].checked) {
+            checkNum++;
+        }
+    }
+    arr = [];
+    for (var i = 0; i < obj.length; i++) {
+        if (obj[i].checked) {
+            arr.push(Number(obj[i].value));
+        }
+    }
+    
+    if (checkNum == 0) {
+        layer.msg("请至少选中一个",function(){});
+    } else {
+    	
+        $.post("/wankangyuan/organization/dealOrgRequest",{
+            ids:arr.join(","),
+            cmd:Number(cmd)
+        },function(result){
+        	if(result && result.status!= 200){
+                return layer.msg(result.message,function(){}),!1;
+            }else{
+                layer.msg(result.message, {
+                    anim: 0,
+                    end: function (index) {
+                        window.location.reload();
+                    }
+                });
+            }
+        },"json");
+ 
+    }
+}
+
 
 $('#box').paging({
     initPageNo: ${page}, // 初始页码
@@ -463,95 +410,11 @@ $('#box').paging({
     callback: function(page) { // 回调函数
         console.log(page);
         if(page!=${page}){
-            window.location.href="/wankangyuan/admin/viewResourceManage?page="+page+"&rows=${rows}&name=${name}";
+            window.location.href="/wankangyuan/organization/viewOrgList?page="+page+"&rows=${rows}&organizationName=${organizationName}";
            
         }
     }
 });
-
-//编辑按钮
-$('.tableeditzedit').click(function(){
-    var ids = $("input[name='ids']");
-    var checkNum = 0;
-    for (var i = 0; i < ids.length; i++) {
-        if (ids[i].checked) {
-            checkNum++;
-        }
-    }
-    if (checkNum != 1) {
-        layer.msg("请选中一个",function(){});
-    } else {
-        $.get("/wankangyuan/admin/getResourceInfo",{
-            id : $("input[name='ids']:checked").val()
-        },function(resource){
-            $("#id").val(resource.id);
-            $("#name").val(resource.name);
-            $("#url").val(resource.url);
-            
-            $("#available option[value='"+resource.available+"']").attr("selected","selected");
-            $("#parentId option[value='"+resource.parentId+"']").attr("selected","selected");
-            
-           },"json");
-          $('.user_editboxK').show();
-          
-    }
-    
-});
-
-//删除按钮显示
-$('.tableeditzdis').click(function(){
-    var ids = $("input[name='ids']");
-    var checkNum = 0;
-    for (var i = 0; i < ids.length; i++) {
-        if (ids[i].checked) {
-            checkNum++;
-        }
-    }
-    if (checkNum == 0) {
-        layer.msg("请至少选中一个",function(){});
-    } else {
-          $('.user_disboxK').show();
-          
-    }
-    
-});
-
-//删除
-function deleteByIds() {
-    var obj=$("input[name='ids']");  
-    arr = [];
-    for (var i = 0; i < obj.length; i++) {
-        if (obj[i].checked) {
-            arr.push(obj[i].value);
-        }
-    }
-    
-    var load = layer.load();
-    $.ajax({
-        async : true,
-        traditional: true,
-        type : 'POST',
-        data : {
-            ids:arr
-        },
-        url : "/wankangyuan/admin/deleteResourcesByIds",// 请求的action路径
-        error : function(result) {// 请求失败处理函数
-            layer.close(load);
-            return layer.msg(result.message,function(){}),!1;
-        },
-        success : function(result) {
-            layer.close(load);
-            layer.msg(result.message, {
-                anim: 0,
-                end: function (index) {
-                    window.location.reload();
-                }
-            });
-        }   
-    });
-}
-
-
 
 </script>
 </body>

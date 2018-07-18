@@ -1,9 +1,13 @@
 package com.liutianjun.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.liutianjun.service.ProjectAppRelationService;
 
@@ -20,6 +24,7 @@ import com.liutianjun.service.ProjectAppRelationService;
 @RequestMapping("/ProjectAppRelation")
 public class ProjectAppRelationController {
 
+	protected Map<String, Object> resultMap = new HashMap<String, Object>();
 	@Autowired
 	private ProjectAppRelationService projectAppRelationService;
 	
@@ -32,10 +37,15 @@ public class ProjectAppRelationController {
 	 * String
 	 */
 	@RequestMapping(value="/addToProject",method=RequestMethod.POST)
-	public String addToProject(Integer projectId,Integer[] ids) {
-		projectAppRelationService.insert(projectId, ids);
-		
-		return "redirect:/project/selectMyProject";
+	@ResponseBody
+	public Map<String,Object> addToProject(Integer projectId,Integer[] ids) {
+		resultMap.put("status", 400);
+		resultMap.put("message", "添加失败!");
+		if(0 < projectAppRelationService.insert(projectId, ids)) {
+			resultMap.put("status", 200);
+			resultMap.put("message", "添加成功!");
+		}
+		return resultMap;
 	}
 	
 	

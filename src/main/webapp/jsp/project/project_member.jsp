@@ -198,6 +198,185 @@
         	document.getElementById(columnName).click();
         }
     }
+    
+  //好友管理页面
+    function friend_manage(){
+        var ofriendMMlTT=document.querySelectorAll('.friendMMlTT')[0];//除我的好友外
+        var afriendMMlTTz=ofriendMMlTT.querySelectorAll('.friendMMlTTz');//每个组织结构
+        var afriendMMlTTzBz=document.querySelectorAll('.friendMMlTTzBz');//每个组织结构内的组
+
+        var ofriendMMlTBa=document.querySelectorAll('.friendMMlTBa')[0];//我的好友按钮
+
+        var ozzsyKpd=document.querySelectorAll('.zzsyKpd')[0];//添加组框内置预存框
+        var ozzsy_editKpd=document.querySelectorAll('.zzsy_editKpd')[0];//修改组框内置预存框
+        var ozzsy_delKpd=document.querySelectorAll('.zzsy_delKpd')[0];//删除组框内置预存框
+        
+
+        var afriendMMrz=document.querySelectorAll('.friendMMrz');//右侧成员框和好友框
+
+        var ofriend_qunfa=document.querySelectorAll('.friend_qunfa')[0];//群发消息按钮
+        var ofriend_yichuzu=document.querySelectorAll('.friend_yichuzu')[0];//从组中移除按钮
+        var ofriend_yichuhy=document.querySelectorAll('.friend_yichuhy')[0];//移除好友按钮
+
+        var osearch_2=document.querySelectorAll('.search_2')[0];//上方按钮栏搜索栏
+        var osearch_3=document.querySelectorAll('.search_3')[0];//上方按钮栏搜索栏
+
+
+        var ozhizhen=document.createElement('img');//指针图片
+        ozhizhen.className="zhizhen";
+        ozhizhen.src="../static/img/zhizhen2.png";
+
+        var panduanjicunqi=0;
+        
+        var afriendMMlTTzBz2=document.querySelectorAll('.friendMMlTTzBz2');
+        var afriendMMlTTzBz2Tk=document.querySelectorAll('.friendMMlTTzBz2Tk');
+        var afriendMMlTTzBz2Mk=document.querySelectorAll('.friendMMlTTzBz2Mk');
+
+        var zuzhi_PD=[];
+        for(var i=0;i<afriendMMlTTz.length;i++){
+            zuzhi_PD.push(0);
+        }
+
+    //console.log(afriendMMlTTz.length);
+    //组织结构点击效果
+        for(var i=0;i<afriendMMlTTz.length;i++){
+            (function(index){
+                var ofriendMMlTTzT=afriendMMlTTz[index].querySelectorAll('.friendMMlTTzT')[0];
+                ofriendMMlTTzT.onclick=function(){
+                    if(ozzsyKpd){
+                        ozzsyKpd.value=ofriendMMlTTzT.parentNode.getAttribute("name");
+                    }
+                    
+                    //console.log("添加组预存框"+ozzsyKpd.value);
+
+                    // console.log(zuzhi_PD[index]);
+                    if(zuzhi_PD[index]==0){
+                        panduanjicunqi=0;
+                    }else if(zuzhi_PD[index]==1){
+                        panduanjicunqi=1;
+                    }
+                    // console.log(panduanjicunqi);
+
+                    for(var j=0;j<afriendMMlTTz.length;j++){
+                        afriendMMlTTz[j].className="friendMMlTTz";
+                        zuzhi_PD[j]=0;
+                    }
+
+                    if(panduanjicunqi==0){
+                        afriendMMlTTz[index].className="friendMMlTTz active";
+                        zuzhi_PD[index]=1;
+                    }else if(panduanjicunqi==1){
+                        afriendMMlTTz[index].className="friendMMlTTz active2";
+                        zuzhi_PD[index]=0;
+                    }
+
+                }
+            })(i)
+        }
+
+    //组点击效果
+        for(var i=0;i<afriendMMlTTzBz.length;i++){
+            (function(index){
+                afriendMMlTTzBz[index].onclick=function(){
+                    if(ozzsyKpd){
+                        ozzsyKpd.value=afriendMMlTTzBz[index].getAttribute("name");
+                    }
+                    
+                    //console.log("添加组预存框"+ozzsyKpd.value);
+
+
+                    for(var j=0;j<afriendMMlTTzBz.length;j++){
+                        afriendMMlTTzBz[j].style.color="#666";
+                    }
+                    ofriendMMlTBa.className="friendMMlTBa";
+                    afriendMMlTTzBz[index].style.color="#5ca0e5";
+
+                    //组修改框内置预存框的写入
+                    if(ozzsy_editKpd){
+                        ozzsy_editKpd.value=afriendMMlTTzBz[index].getAttribute("name");
+                    }
+                    
+                    // console.log("修改组预存框"+ozzsy_editKpd.value);
+
+                    //组删除框内置预存框的写入
+                    //if(ozzsy_delKpd){
+                    //    ozzsy_delKpd.value=afriendMMlTTzBz[index].getAttribute("name");
+                    //}
+                    
+                    // console.log("删除组预存框"+ozzsy_delKpd.value);
+                    
+                    
+                  //搜索栏的显示
+                    osearch_2.className="search_2 ";
+                    osearch_3.className="search_3 active";
+                }
+            })(i)
+        }
+
+    //特殊组的点击效果（该组内有包含组的时候）
+        var teshuzuPD=[];
+        for(var i=0;i<afriendMMlTTzBz2.length;i++){
+            teshuzuPD.push(0);
+        }
+        // console.log(teshuzuPD);
+        
+        for(var i=0;i<afriendMMlTTzBz2.length;i++){
+            (function(index){
+                afriendMMlTTzBz2Tk[index].onclick=function(){
+                    if(ozzsyKpd){
+                        ozzsyKpd.value=afriendMMlTTzBz2Tk[index].parentNode.getAttribute("name");
+                    }
+                    
+                    //console.log("添加组预存框"+ozzsyKpd.value);
+
+                    //组修改框内置预存框的写入
+                    if(ozzsy_editKpd){
+                        ozzsy_editKpd.value=afriendMMlTTzBz2Tk[index].parentNode.getAttribute("name");
+                    }
+                    
+                    // console.log("修改组预存框"+ozzsy_editKpd.value);
+
+                    //组删除框内置预存框的写入
+                    if(ozzsy_delKpd){
+                        ozzsy_delKpd.value=afriendMMlTTzBz2Tk[index].parentNode.getAttribute("name");
+                    }
+                    
+                    // console.log("删除组预存框"+ozzsy_delKpd.value);
+
+                    if(teshuzuPD[index]==0){
+                        afriendMMlTTzBz2[index].className="friendMMlTTzBz2 active";
+                        afriendMMlTTzBz2Mk[index].style.display="block";
+                        teshuzuPD[index]=1;
+
+                    }else if(teshuzuPD[index]==1){
+                        afriendMMlTTzBz2[index].className="friendMMlTTzBz2";
+                        afriendMMlTTzBz2Mk[index].style.display="none";
+                        teshuzuPD[index]=0;
+                    }
+                    
+                }
+            })(i)
+        }
+        
+        
+    // 我的好友点击效果
+        ofriendMMlTBa.onclick=function(){
+            for(var j=0;j<afriendMMlTTzBz.length;j++){
+                afriendMMlTTzBz[j].style.color="#666";
+            }
+            ofriendMMlTBa.className="friendMMlTBa active";
+
+            //搜索栏的显示
+            osearch_2.className="search_2 active";
+            osearch_3.className="search_3";
+        }
+
+
+
+        
+    }
+
+    
 </script>
 <body>
     <div class="Box">
@@ -391,6 +570,20 @@
                     </div>
                     
                     <div class="mimaddMr">
+                    <input id="groupId" type="hidden" name="groupId">
+                        <div class="search_2 active">
+                            <div class="searchC">
+                                <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="searchCi" data-bind="click:getMyFriends" />
+                                <input id="myFriendSearch" name="friendName" type="text" class="searchCt"  placeholder="搜索" data-bind="event: { keyup: searchMyFriends}" />
+                            </div>
+                        </div>
+                        <div class="search_3">
+                            <div class="searchC">
+                                <img src="<%=request.getContextPath()%>/static/img/search.png" alt="" class="searchCi" data-bind="click:getOrgers" />
+                                <input id="orgMemberSearch" type="text" class="searchCt"  placeholder="组内成员" data-bind="event: { keyup: searchOrgers}" />
+                            </div>
+                        </div>
+                        
                     	<table class="friMMrtab">
 	                    	<tr class="biaotou">
                                 <th class="xuanze">
@@ -409,7 +602,7 @@
 		                                </div>
 		                            </td>
 		                            <td class="touxiangk">
-		                                <img data-bind="attr:{src:headimg}" alt="" class="touxiangi" />
+		                                <img data-bind="attr:{src:headimg}" onerror='this.src="/wankangyuan/static/img/head.jpg"' alt="" class="touxiangi" />
 		                            </td>
 		                            <td class="yonghuming"><span data-bind="text: username"></span></td>
 		                            <td class="youxiang"><span data-bind="text: email"></span></td>
@@ -1142,6 +1335,8 @@ function ViewModel() {
     self.orgers = ko.observableArray(); //添加动态监视数组对象
     //显示组内成员
     self.showOrgers = function(id){
+    	/* $(".search_2").removeClass("active");
+    	$(".search_3").addClass("active"); */
         $("#groupId").val(id);
         centOrgId=id;
         self.orgers.removeAll();
@@ -1171,8 +1366,11 @@ function ViewModel() {
     }
     
     self.getOrgers = function() {
+    	if(null == $('#groupId').val() || '' == $('#groupId').val()) {
+            return layer.msg("请选择组!",function(){}),!1;
+        }
         self.orgers.removeAll();
-        $.get("/wankangyuan/orgMember/findOrgMembersByname",{username:$("#orgMemberSearch").val()},function(data){
+        $.get("/wankangyuan/orgMember/findGroupMembersByname",{username:$("#orgMemberSearch").val(),groupId:$('#groupId').val()},function(data){
             var list = JSON.parse(data);
             for (var i in list){
                 //根据好友列表判断状态
@@ -1297,8 +1495,10 @@ function ViewModel() {
     self.friends = ko.observableArray();
     var myfriends;
     self.getMyFriends = function() {
+    	/* $(".search_3").removeClass("active");
+        $(".search_2").addClass("active"); */
         self.friends.removeAll();
-        $.get("/wankangyuan/friends/getMyFriends",{},function(data){
+        $.get("/wankangyuan/friends/getMyFriends",{friendName:$("#myFriendSearch").val()},function(data){
             myfriends = JSON.parse(data);
             for (var i in myfriends){
                 self.friends.push(myfriends[i]);
@@ -1309,6 +1509,7 @@ function ViewModel() {
         });
     }
     self.getMyFriends();
+    
     
     //移除好友
     self.removeMyFriends = function() {
@@ -1359,6 +1560,11 @@ function ViewModel() {
             }
             friend_manage();
         });
+    }
+    self.searchOrgers = function(data, event) {
+        if(event.keyCode == "13") {  
+            self.getOrgers();
+        }  
     }
     
     self.getOrgList();

@@ -105,7 +105,7 @@
                     <div class="jiangeline"></div>
                     <div class="allK">
                         <div class="quanxuanK">
-                            <input type="checkbox" class="input_check" id="check0">
+                            <input type="checkbox" class="input_check" id="check0" data-bind="click: checkAll" >
                             <label for="check0"></label>
                         </div>
                         <div class="allT">全选</div>
@@ -116,7 +116,7 @@
                             <div class="app_typeI"></div>
                         </div>
                     </div>
-                    <div class="pro_menu app_addtomine" onclick="addToMine()" >添加至我的</div>
+                    <div class="pro_menu app_addtomine" data-bind="click:addToMine" >添加至我的</div>
                     
                 </div>
                 <div class="app_typeul" data-bind="foreach:{data:appTypeList, as:'appType'}">
@@ -138,7 +138,7 @@
 	                        <div class="PJK2litopT2" data-bind="text:appName"></div>
 	                        <!-- <div class="PJK2litopI"></div> -->
 	                        <div class="fuxuanK3">
-	                            <input name="ids" type="checkbox" class="input_check" data-bind="value: id,attr:{id:'check'+($index()+1)}">
+	                            <input name="ids" type="checkbox" class="input_check" data-bind="value: id,attr:{id:'check'+($index()+1)},event: { change: $root.checkOne}">
 	                            <label data-bind="attr:{for:'check'+($index()+1)}"></label>
 	                        </div>
 	                    </div>
@@ -196,21 +196,14 @@
     </script>
 </c:if>
 <script type="text/javascript">
-/* function filtrateAppType(appType){
-    $("input[name='appType']").val(appType);
-    $("#filterFrom").submit();
-} */
-
-function addToMine(){
-    $("#appList").attr('action',"/wankangyuan/userAppRelation/addToMine2");
-    $("#appList").submit();
-}
 
 //定义ViewModel
 function ViewModel() {
 	var self = this;
 	var page,rows,total,appName,appType,orderName,orderDir,field,option;
 	self.appList = ko.observableArray();
+	self.appCentAll = ko.observableArray();
+    self.appCart = ko.observableArray();
 	self.showAppList = function() {
         
 		$.getJSON("/wankangyuan/application/getPublic",{
@@ -219,8 +212,6 @@ function ViewModel() {
 			appType:self.appType,
 			orderName:self.orderName,
 			orderDir:self.orderDir,
-			field:$(".BTSXpd").val(),
-			option:self.option
 			},function(data){
 			page = data.page;
 			rows = data.rows;
@@ -239,21 +230,115 @@ function ViewModel() {
 			    slideSpeed: 600, // 缓动速度。单位毫秒
 			    jump: true, //是否支持跳转
 			    callback: function(page_) { // 回调函数
-			        console.log(page_);
 			        if(page_!=page){
 			           page = page_;
 			           self.showAppList();
 			        }
 			    }
 			});
+			$.getJSON("/wankangyuan/application/getPublic",{
+				page:1,
+                rows:1000,
+	            appName:self.appName,
+	            appType:self.appType,
+	            orderName:self.orderName,
+	            orderDir:self.orderDir,
+	            },function(data){
+	            	self.appCentAll.removeAll();
+	                for (var i in data.list){
+	                    self.appCentAll.push(data.list[i].id);
+	                }
+	                $(".input_check").each(function(){
+	                    var index = $.inArray(Number($(this).val()),self.appCart());
+	                    if(index >= 0){
+	                        $(this).attr("checked",true);
+	                    }
+	                });
+	            });
+			
 		});
 	}
+	
+	//全选
+    self.checkAll = function(){
+        if($("#check0").attr('checked')){
+            self.appCart.removeAll();
+            for (var i in self.appCentAll()){
+                self.appCart.push(self.appCentAll()[i]);
+            }
+        }else{
+            self.appCart.removeAll();
+        }
+        return true;
+    }
+    //复选
+    self.checkOne = function(option){
+        //console.log(option.id);
+        var index = $.inArray(Number(option.id),self.appCart());
+        if(index >= 0){
+            self.appCart.remove(option.id);
+        }else{
+            self.appCart.push(option.id);
+        }
+        
+        if(self.appCentAll().length == self.appCart().length){
+            $("#check0").attr('checked',true);
+        }else{
+            $("#check0").attr('checked',false);
+        }
+    }
+    
+    self.addToMine = function() {
+        if (self.appCart().length == 0) {
+            return layer.msg("请至少选中一个",function(){}),!1;
+        } else {
+            $.ajax({
+                type: "POST", 
+                url: "/wankangyuan/userAppRelation/addToMine",
+                data: {ids:self.appCart().join(",")}, //可选参数
+                dataType: "json",
+                success: function(result){
+                    layer.msg(result.message, {
+                        anim: 0,
+                        end: function (index) {
+                            window.location.reload();
+                        }
+                    });
+                },
+                error:function(result){
+                    layer.msg(result.message, {
+                        anim: 0,
+                        end: function (index) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            });
+        }
+    }
+    
+    //边缘弹出
+    /* layer.open({
+      type: 1
+      ,offset: 'lb' //具体配置参考：offset参数项
+      ,content: '总计<div style="padding: 20px 80px;" data-bind="text:appCentAll().length"></div>'+
+      '购物车<div style="padding: 20px 80px;" data-bind="text:appCart().length"></div>'
+      ,btn: '关闭全部'
+      ,btnAlign: 'c' //按钮居中
+      ,shade: 0 //不显示遮罩
+      ,yes: function(){
+        layer.closeAll();
+      }
+    }); */
+    
 	//初始化列表
 	self.showAppList();
 	
 	//点击搜索
 	self.searchAppList = function() {
 		page = 1;
+		self.appCart.removeAll();
+        $("#check0").attr('checked',false);
 		self.appName = $("input[name='appName']").val();
 		self.showAppList();
 	}
