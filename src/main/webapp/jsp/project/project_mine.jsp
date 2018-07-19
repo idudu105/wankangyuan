@@ -11,7 +11,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Document</title>
+    <title>我的项目</title>
 </head>
 <link rel="stylesheet" type="text/css" href="/wankangyuan/static/css/project1.css" />
 <script type="text/javascript" src="/wankangyuan/static/js/project1.js"></script>
@@ -106,30 +106,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="pro_menu pro_exit" onclick="exit()">退出</div>
                 </div>
                 <div class="shaixuanZK">
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">项目名称</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">项目编号</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">创建者</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">创建时间</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">关键字</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
-                    <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">公开状态</div>
-                        <div class="shaixuanZKliI active"></div>
-                    </div>
+	                <div class="shaixuanZKC">
+	                    <div class="shaixuanZKli">
+	                        <div class="shaixuanZKliI active"></div>
+	                        <div class="shaixuanZKliT">项目名称</div>
+	                    </div>
+	                    <div class="shaixuanZKli">
+	                        <div class="shaixuanZKliI active"></div>
+	                        <div class="shaixuanZKliT">项目编号</div>
+	                    </div>
+	                    <div class="shaixuanZKli">
+	                        <div class="shaixuanZKliI active"></div>
+	                        <div class="shaixuanZKliT">创建者</div>
+	                    </div>
+	                    <div class="shaixuanZKli">
+	                        <div class="shaixuanZKliI active"></div>
+	                        <div class="shaixuanZKliT">创建时间</div>
+	                    </div>
+	                    <div class="shaixuanZKli">
+	                        <div class="shaixuanZKliI active"></div>
+	                        <div class="shaixuanZKliT">关键字</div>
+	                    </div>
+	                    <div class="shaixuanZKli">
+	                        <div class="shaixuanZKliI active"></div>
+	                        <div class="shaixuanZKliT">公开状态</div>
+	                    </div>
+		            </div>
                 </div>
             </div>
             <div class="PJK">
