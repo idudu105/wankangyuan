@@ -709,7 +709,6 @@ input{
     -webkit-line-clamp: 1;
     overflow: hidden;
     word-wrap: break-word;
-    line-height:46px;
 }
 .PJliCli2.dataage,.PJListli.dataage{
     width:160px;
