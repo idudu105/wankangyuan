@@ -1252,6 +1252,7 @@
     		document.getElementById("BTSXcli2").innerHTML="";
     		//设置重置后退出筛选状态，执行一般的筛选操作
     		$("#isFilter").val("false");
+    		window.location.href="/wankangyuan/projectMember/selectProjectMember";
     	});
     	
     	//点击筛选按钮
