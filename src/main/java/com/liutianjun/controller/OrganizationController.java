@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.liutianjun.pojo.OrgMember;
 import com.liutianjun.pojo.Organization;
-import com.liutianjun.service.MessageService;
 import com.liutianjun.service.OrgMemberService;
 import com.liutianjun.service.OrganizationService;
 
@@ -38,9 +37,6 @@ public class OrganizationController {
 	
 	@Autowired
 	private OrganizationService organizationService;
-	
-	@Autowired
-	private MessageService messageService;
 	
 	@Autowired
 	private OrgMemberService orgMemberService;

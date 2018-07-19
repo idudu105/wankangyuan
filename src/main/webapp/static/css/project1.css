@@ -709,6 +709,7 @@ input{
     -webkit-line-clamp: 1;
     overflow: hidden;
     word-wrap: break-word;
+    line-height:46px;
 }
 .PJliCli2.dataage,.PJListli.dataage{
     width:160px;
@@ -1242,6 +1243,7 @@ input{
     font-size:14px;
     line-height: 31px;
     cursor:pointer;
+    text-align:center;
 }
 .pageNUM.active{
     background:#16579b;
