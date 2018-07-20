@@ -5068,6 +5068,13 @@ input{
 .friend_yichuhy{
     display:none;
 }
+.friendMTrs{
+	display:inline-block;
+    vertical-align: middle;
+    width:90px;
+    font-size:16px;
+    margin:0 15px;
+}
 
 .friendMM{
     /*overflow:auto;*/

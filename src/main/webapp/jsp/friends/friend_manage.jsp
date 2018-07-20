@@ -270,6 +270,13 @@
                                 <input id="groupMemberSearch" type="text" class="searchCt"  placeholder="组内成员" data-bind="event: { keyup: searchOrgers}" />
                             </div>
                         </div>
+                        <div class="friendMTrs">
+                            <select id="orgRole" name="orgRole">
+                                <option value="">无</option>
+                                <option value="管理员">管理员</option>
+                                <option value="成员">成员</option>
+                            </select>
+                        </div>
                         <div class="friendMTrb friend_qunfa">群发消息</div>
                         <div class="friendMTrb friend_yichuzu">从组中移除</div>
                         <div class="friendMTrb friend_yichuhy">移除好友</div>
@@ -706,7 +713,11 @@ function ViewModel() {
             return layer.msg("请选择组!",function(){}),!1;
         }
     	self.orgers.removeAll();
-    	$.get("/wankangyuan/orgMember/findGroupMembersByname",{username:$("#groupMemberSearch").val(),groupId:$('#groupId').val()},function(data){
+    	$.get("/wankangyuan/orgMember/findGroupMembersByname",{
+    		username:$("#groupMemberSearch").val(),
+    		groupId:$('#groupId').val(),
+    		orgRole:$('#orgRole').val()
+    		},function(data){
     		var list = JSON.parse(data);
             for (var i in list){
                 //根据好友列表判断状态

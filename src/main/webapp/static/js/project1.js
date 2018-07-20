@@ -1871,6 +1871,7 @@ function friend_manage(){
     var ofriend_qunfa=document.querySelectorAll('.friend_qunfa')[0];//群发消息按钮
     var ofriend_yichuzu=document.querySelectorAll('.friend_yichuzu')[0];//从组中移除按钮
     var ofriend_yichuhy=document.querySelectorAll('.friend_yichuhy')[0];//移除好友按钮
+    var ofriendMTrs=document.querySelectorAll('.friendMTrs')[0];//组织机构筛选
 
     var osearch_2=document.querySelectorAll('.search_2')[0];//上方按钮栏搜索栏
     var osearch_3=document.querySelectorAll('.search_3')[0];//上方按钮栏搜索栏
@@ -1968,6 +1969,8 @@ function friend_manage(){
                 ofriend_qunfa.style.display="none";
                 ofriend_yichuzu.style.display="inline-block";
                 ofriend_yichuhy.style.display="none";
+                ofriendMTrs.style.display="inline-block";
+                
 
                 osearch_2.className="search_2";
                 osearch_3.className="search_3 active";
@@ -2040,6 +2043,7 @@ function friend_manage(){
         ofriend_qunfa.style.display="inline-block";
         ofriend_yichuzu.style.display="none";
         ofriend_yichuhy.style.display="inline-block";
+        ofriendMTrs.style.display="none";
 
         //搜索栏的显示
         osearch_2.className="search_2 active";

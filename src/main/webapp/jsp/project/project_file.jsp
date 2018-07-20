@@ -687,7 +687,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    	                                    '<div class="prof_lbRmULmli prof_lbRmULt4">'+data.projectFiles[index].file_size+'</div>'+
    	                                    '<div class="prof_lbRmULmli prof_lbRmULt5">'+data.projectFiles[index].create_datetime+'</div>'+
    	                                    '<div class="prof_lbRmULmli prof_lbRmULt6">'+data.projectFiles[index].username+'</div>'+
+   	                                 <c:if test="${authoritys['26'] == true }">
    	                                    '<a style="color:#33B7FF" href="'+data.fileDownloadLocation+data.projectFiles[index].file_location+'" download="'+data.projectFiles[index].file_name+'">下载</a>'+
+   	                                 </c:if>
            							'</div>');
        						}
        					}
@@ -751,7 +753,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                                    '<div class="prof_lbRmULmli prof_lbRmULt4">'+data.projectFiles[index].file_size+'</div>'+
 	                                    '<div class="prof_lbRmULmli prof_lbRmULt5">'+data.projectFiles[index].create_datetime+'</div>'+
 	                                    '<div class="prof_lbRmULmli prof_lbRmULt6">'+data.projectFiles[index].username+'</div>'+
+	                                    <c:if test="${authoritys['26'] == true }">
 	                                    '<a style="color:#33B7FF" href="'+data.fileDownloadLocation+data.projectFiles[index].file_location+'" download="'+data.projectFiles[index].file_name+'">下载</a>'+
+	                                    </c:if>
         							'</div>');
     						}
     					}

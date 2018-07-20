@@ -130,13 +130,16 @@ public class OrgMemberServiceImpl implements OrgMemberService {
 	 * @return
 	 */
 	@Override
-	public List<OrgMember> findGroupMembersByName(String username,Integer groupId) {
+	public List<OrgMember> findGroupMembersByName(String username,Integer groupId,String orgRole) {
 		OrgMemberQuery example = new OrgMemberQuery();
 		example.setDistinct(true);
-		example.setFields("user_id,username,headimg,email");
+		example.setFields("user_id,username,headimg,email,org_Role");
 		Criteria criteria = example.createCriteria();
 		criteria.andUsernameLike("%"+username+"%");
 		criteria.andGroupIdEqualTo(groupId);
+		if(null != orgRole && orgRole != "") {
+			criteria.andOrgRoleEqualTo(orgRole);
+		}
 		//List<Integer> MyGroupIds = findMyGroupIds();
 		//criteria.andOrgIdIn(MyGroupIds);
 		return orgMemberDao.selectByExample(example);

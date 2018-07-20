@@ -94,9 +94,9 @@ public class OrgMemberController {
 	 */
 	@RequestMapping(value="/findGroupMembersByname",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
 	@ResponseBody
-	public String findGroupMembersByname(String username, Integer groupId) {
+	public String findGroupMembersByname(String username, Integer groupId,String orgRole) {
 		try {
-			List<OrgMember> list = orgMemberService.findGroupMembersByName(username, groupId);
+			List<OrgMember> list = orgMemberService.findGroupMembersByName(username, groupId, orgRole);
 			ObjectMapper objectMapper = new ObjectMapper();
 			String jsonOrgUserList = objectMapper.writeValueAsString(list);
 			
