@@ -49,9 +49,10 @@ public class SourceController {
 		List<String> sourceQualifiers = new ArrayList<>();
 		sourceQualifiers.add(ConstantsHBase.QUALIFIER_PROJECT);
 		sourceQualifiers.add(ConstantsHBase.QUALIFIER_CREATE);
-		sourceQualifiers.add(ConstantsHBase.QUALIFIER_USER);
+//		sourceQualifiers.add(ConstantsHBase.QUALIFIER_USER);
 		sourceQualifiers.add(ConstantsHBase.QUALIFIER_PUBLIC);
-		sourceQualifiers.add(ConstantsHBase.QUALIFIER_ADD);
+//		sourceQualifiers.add(ConstantsHBase.QUALIFIER_ADD);
+		sourceQualifiers.add(ConstantsHBase.QUALIFIER_SOURCEDATAID);//old
 		PhoenixClient.createView(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, sourceQualifiers);
 
 		HBaseFormatNodeDao.createFormatNodeTable(String.valueOf(cs_id));

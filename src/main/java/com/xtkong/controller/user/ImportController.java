@@ -1,5 +1,7 @@
 package com.xtkong.controller.user;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -73,7 +75,7 @@ public class ImportController {
 			}
 			if (file.getSize() > 1024 * 1024) {
 				map.put("result", false);
-				map.put("message", "文件不能超过10M");
+				map.put("message", "文件不能超过1M");
 				return map;
 			}
 
@@ -174,7 +176,7 @@ public class ImportController {
 			}
 			if (file.getSize() > 1024 * 1024) {
 				map.put("result", false);
-				map.put("message", "文件不能超过10M");
+				map.put("message", "文件不能超过1M");
 				return map;
 			}
 
@@ -243,7 +245,7 @@ public class ImportController {
 	private String getStringCellValue(HSSFCell cell) {
 		String cellValue = "";
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		DecimalFormat decimalFormat = new DecimalFormat("#.#");
+		DecimalFormat decimalFormat = new DecimalFormat("#.#######################################");
 		if (cell == null) {
 			return cellValue;
 		}
@@ -255,6 +257,8 @@ public class ImportController {
 				cellValue = simpleDateFormat.format(date);
 			} else {
 				cellValue = decimalFormat.format((cell.getNumericCellValue()));
+//				double t = cell.getNumericCellValue();
+//				cellValue = String.valueOf(cell.getNumericCellValue());
 			}
 			break;
 		case HSSFCell.CELL_TYPE_STRING: // 字符串
@@ -280,4 +284,35 @@ public class ImportController {
 		return cellValue;
 	}
 
+	public static void main(String[] args) {
+		File f = new File("E:\\Users\\admin\\Desktop\\sourceDataModel.xls");
+		ImportController importController = new ImportController();
+		try {
+			FileInputStream is = new FileInputStream(f);
+			HSSFWorkbook wbs = new HSSFWorkbook(is);
+			HSSFSheet childSheet = wbs.getSheetAt(0);
+			// System.out.println(childSheet.getPhysicalNumberOfRows());
+			System.out.println("有行数" + childSheet.getLastRowNum());
+			for (int j = 0; j < childSheet.getPhysicalNumberOfRows(); j++) {
+				HSSFRow row = childSheet.getRow(j);
+				// System.out.println(row.getPhysicalNumberOfCells());
+				// System.out.println("有列数" + row.getLastCellNum());
+				System.out.print(j + "--\t");
+				if (null != row) {
+					for (int k = 0; k < row.getLastCellNum(); k++) {
+						HSSFCell cell = row.getCell(k);
+						if (cell != null) {
+							System.out.print(cell.toString() + ":" + importController.getStringCellValue(cell) + ",\t");
+						} else {
+							System.out.print("---:---,\t");
+						}
+					}
+				}
+				System.out.println();
+			}
+			wbs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

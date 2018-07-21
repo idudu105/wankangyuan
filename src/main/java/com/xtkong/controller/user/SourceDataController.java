@@ -103,9 +103,15 @@ public class SourceDataController {
 		Source source = null;
 		String oldCondition = null;
 		if (!sources.isEmpty()) {
+			if ((type.equals((String) httpSession.getAttribute("oldSourceType")))
+					&& (cs_id.equals((Integer) httpSession.getAttribute("thiscs_id")))) {
+				oldCondition = (String) httpSession.getAttribute("oldCondition");
+			}
 			if (cs_id == null) {
 				cs_id = sourceService.getSourcesForUserLimit(1).get(0).getCs_id();
+				oldCondition=null;
 			}
+			
 			source = sourceService.getSourceByCs_id(cs_id);
 			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
 
@@ -152,12 +158,7 @@ public class SourceDataController {
 				break;
 			}
 
-			if ((type.equals((String) httpSession.getAttribute("oldSourceType")))
-					&& (cs_id.equals((Integer) httpSession.getAttribute("thiscs_id")))) {
-				oldCondition = (String) httpSession.getAttribute("oldCondition");
-				// } else {
-				// reset(httpSession);
-			}
+			
 
 			// 头筛选
 			if (searchFirstWord != null && !searchFirstWord.trim().isEmpty()) {

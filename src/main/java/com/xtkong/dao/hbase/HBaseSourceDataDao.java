@@ -82,6 +82,14 @@ public class HBaseSourceDataDao {
 		return null;
 	}
 
+	/**
+	 * sourcedata获取通用
+	 * 
+	 * @param tableName
+	 * @param scan
+	 * @param sourceFields
+	 * @return
+	 */
 	public static List<List<String>> getSourceDatas(String tableName, Scan scan, List<SourceField> sourceFields) {
 		List<List<String>> sourceDatas = new ArrayList<List<String>>();
 		try {
@@ -425,7 +433,8 @@ public class HBaseSourceDataDao {
 							.getValue(Bytes.toBytes(family), Bytes.toBytes(String.valueOf(sourceField.getCsf_id()))));
 				}
 				if (db.putRow(tableName, put)) {
-					List<List<String>> formatNodes = HBaseFormatNodeDao.getFormatNodes(cs_id, oldSourceDataId);
+					List<List<String>> formatNodes = HBaseFormatNodeDao.getFormatNodesBySourceDataId(cs_id,
+							oldSourceDataId);
 					for (List<String> formatNode : formatNodes) {
 						String oldFormatNodeId = formatNode.get(0);
 						String ft_id = formatNode.get(1);
@@ -509,6 +518,7 @@ public class HBaseSourceDataDao {
 			}
 			// 存放批量操作的结果
 			Result[] results = table.get(gets);
+			Boolean b = true;
 			for (Result result : results) {
 				Long count = db.getNewId(ConstantsHBase.TABLE_GID, uid + "_" + cs_id, ConstantsHBase.FAMILY_GID_GID,
 						ConstantsHBase.QUALIFIER_GID_GID_GID);
@@ -518,13 +528,17 @@ public class HBaseSourceDataDao {
 						Bytes.toBytes(ConstantsHBase.VALUE_PUBLIC_FALSE));
 				put.addColumn(Bytes.toBytes(family), Bytes.toBytes(ConstantsHBase.QUALIFIER_PROJECT),
 						Bytes.toBytes(String.valueOf(p_id)));
+				String oldSourceDataId = Bytes.toString(result.getRow());
+				put.addColumn(Bytes.toBytes(family), Bytes.toBytes(ConstantsHBase.QUALIFIER_SOURCEDATAID),
+						Bytes.toBytes(String.valueOf(oldSourceDataId)));
 				for (SourceField sourceField : sourceFields) {
 					put.addColumn(Bytes.toBytes(family), Bytes.toBytes(String.valueOf(sourceField.getCsf_id())), result
 							.getValue(Bytes.toBytes(family), Bytes.toBytes(String.valueOf(sourceField.getCsf_id()))));
 				}
 				if (db.putRow(tableName, put)) {
-					String oldSourceDataId = Bytes.toString(result.getRow());
-					List<List<String>> formatNodes = HBaseFormatNodeDao.getFormatNodes(cs_id, oldSourceDataId);
+					// String oldSourceDataId = Bytes.toString(result.getRow());
+					List<List<String>> formatNodes = HBaseFormatNodeDao.getFormatNodesBySourceDataId(cs_id,
+							oldSourceDataId);
 					for (List<String> formatNode : formatNodes) {
 						String oldFormatNodeId = formatNode.get(0);
 						String ft_id = formatNode.get(1);
@@ -575,17 +589,25 @@ public class HBaseSourceDataDao {
 						}
 					}
 				} else {
-					return false;
+					b = false;
 				}
 			}
 			table.close();
-			return true;
+			return b;
 		} catch (Exception e) {
 			return false;
 		}
 	}
 
-	public static String getSourceDataId(String tableName, Scan scan) {
+	
+	/**
+	 * 获取行键
+	 * 
+	 * @param tableName
+	 * @param scan
+	 * @return
+	 */
+	private static String getSourceDataId(String tableName, Scan scan) {
 		String sourceDataId = null;
 		try {
 			HBaseDB db = HBaseDB.getInstance();
@@ -609,7 +631,7 @@ public class HBaseSourceDataDao {
 	}
 
 	/**
-	 * 列值过滤行键
+	 * 前缀、列值过滤行键
 	 * 
 	 * @param uid
 	 * @param cs_id
@@ -620,7 +642,7 @@ public class HBaseSourceDataDao {
 
 		String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
 		Scan scan = new Scan();
-		scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
+		// scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
 		// 前缀uid+"_"+source+"_"过滤
 		Filter filter1 = new PrefixFilter(Bytes.toBytes(uid + "_" + cs_id + "_"));
 		FilterList filterList = new FilterList(Operator.MUST_PASS_ALL, filter1);
@@ -633,6 +655,30 @@ public class HBaseSourceDataDao {
 		return getSourceDataId(tableName, scan);
 	}
 
+	/**
+	 * 列值过滤
+	 * 
+	 * @param cs_id
+	 * @param oldSourceDataId
+	 * @param p_id
+	 * @return
+	 */
+	public static String getSourceDataIdIncludeNULL(String cs_id, Map<String, String> sourceFieldDatas) {
+		String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
+		Scan scan = new Scan();
+		FilterList filterList = new FilterList(Operator.MUST_PASS_ALL);
+		for (Entry<String, String> sourceFieldData : sourceFieldDatas.entrySet()) {
+			filterList.addFilter(new SingleColumnValueFilter(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+					Bytes.toBytes(sourceFieldData.getKey()), CompareOp.EQUAL,
+					new BinaryComparator(Bytes.toBytes(sourceFieldData.getValue()))));
+		}
+		scan.setFilter(filterList);
+		return getSourceDataId(tableName, scan);
+	}
+	
+	
+	
+	
 	// ---------------------------------
 	public static List<List<String>> getSourceDatasByIds(String cs_id, List<String> sourceDataIds,
 			List<SourceField> sourceFields) {

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dzjin.service.ProjectDataService;
 import com.dzjin.service.ProjectService;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -35,8 +34,6 @@ import com.xtkong.util.HBaseDB;
 @RequestMapping("/common")
 public class CommonSelect {
 
-	@Autowired
-	ProjectDataService projectDataService;
 
 	@Autowired
 	SourceService sourceService;

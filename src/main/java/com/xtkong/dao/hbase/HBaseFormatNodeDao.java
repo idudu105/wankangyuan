@@ -113,7 +113,7 @@ public class HBaseFormatNodeDao {
 		return formatNodeId;
 	}
 
-	public static FormatType getFormatNodes(String cs_id, String sourceDataId, String ft_id) {
+	public static FormatType getFormatNodesByType(String cs_id, String sourceDataId, String ft_id) {
 		FormatType formatType = new FormatType();
 		try {
 			HBaseDB db = HBaseDB.getInstance();
@@ -193,7 +193,8 @@ public class HBaseFormatNodeDao {
 					try {
 						// 添加行键formatNodeId、不显示，节点名、显示
 						if (formatTypeMap.containsKey(ft_id)) {
-							formatTypeMap.get(ft_id).getFormatDataNodes().put(Bytes.toString(result.getRow()), nodeName);
+							formatTypeMap.get(ft_id).getFormatDataNodes().put(Bytes.toString(result.getRow()),
+									nodeName);
 						}
 					} catch (NumberFormatException e) {
 						continue;
@@ -212,13 +213,40 @@ public class HBaseFormatNodeDao {
 		return formatTypeFolders;
 	}
 
+	public static List<String> getFormatNodeById(String cs_id, String formatNodeId) {
+		List<String> formatNode = new ArrayList<>();
+		try {
+			HBaseDB db = HBaseDB.getInstance();
+			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id);
+			Get get = new Get(Bytes.toBytes(formatNodeId));
+			Result result = table.get(get);
+			if (!result.isEmpty()) {
+				// 获取formatNodeId,ft_id,节点名
+				String rowkey = Bytes.toString(result.getRow());
+				String ft_id = Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+						Bytes.toBytes(ConstantsHBase.QUALIFIER_FORMATTYPE)));
+				String nodeName = Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+						Bytes.toBytes(ConstantsHBase.QUALIFIER_NODENAME)));
+				formatNode.add(rowkey);
+				formatNode.add(ft_id);
+				formatNode.add(nodeName);
+			}
+			table.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return formatNode;
+	}
+
 	/**
+	 * 通过源id获取结点信息
 	 * 
 	 * @param cs_id
 	 * @param sourceDataId
 	 * @return formatNodeId,ft_id,nodeName
 	 */
-	public static List<List<String>> getFormatNodes(String cs_id, String sourceDataId) {
+	public static List<List<String>> getFormatNodesBySourceDataId(String cs_id, String sourceDataId) {
 		List<List<String>> formatNodes = new ArrayList<>();
 		try {
 			HBaseDB db = HBaseDB.getInstance();
@@ -251,6 +279,101 @@ public class HBaseFormatNodeDao {
 			table.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return formatNodes;
+	}
+
+	/**
+	 * 通过源id及数据类型获取结点信息
+	 * 
+	 * @param cs_id
+	 * @param sourceDataId
+	 * @param ft_ids
+	 * @return
+	 */
+	public static List<List<String>> getFormatNodesByTypes(String cs_id, String sourceDataId, List<String> ft_ids) {
+		List<List<String>> formatNodes = new ArrayList<>();
+		try {
+			HBaseDB db = HBaseDB.getInstance();
+			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id);
+			Scan scan = new Scan();
+			scan.addFamily(Bytes.toBytes(ConstantsHBase.FAMILY_INFO));
+
+			FilterList filterList = new FilterList(Operator.MUST_PASS_ONE);
+			for (String ft_id : ft_ids) {
+				FilterList filter = new FilterList(Operator.MUST_PASS_ALL);
+				filter.addFilter(new PrefixFilter(Bytes.toBytes(sourceDataId + "_" + ft_id + "_")));
+				filter.addFilter(new SingleColumnValueFilter(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+						Bytes.toBytes(ConstantsHBase.QUALIFIER_FORMATTYPE), CompareOp.EQUAL,
+						new BinaryComparator(Bytes.toBytes(ft_id))));
+				filterList.addFilter(filter);
+			}
+			scan.setFilter(filterList);
+			ResultScanner resultScanner = table.getScanner(scan);
+			Iterator<Result> iterator = resultScanner.iterator();
+			while (iterator.hasNext()) {
+				Result result = iterator.next();
+				if (!result.isEmpty()) {
+					List<String> formatNode = new ArrayList<>();
+					// 获取formatNodeId,ft_id,节点名
+					String rowkey = Bytes.toString(result.getRow());
+					String ft_id = Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+							Bytes.toBytes(ConstantsHBase.QUALIFIER_FORMATTYPE)));
+					String nodeName = Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+							Bytes.toBytes(ConstantsHBase.QUALIFIER_NODENAME)));
+					formatNode.add(rowkey);
+					formatNode.add(ft_id);
+					formatNode.add(nodeName);
+					formatNodes.add(formatNode);
+				}
+			}
+			resultScanner.close();
+			table.close();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return formatNodes;
+
+	}
+
+	/**
+	 * 通过结点id获取结点信息
+	 * 
+	 * @param cs_id
+	 * @param sourceDataId
+	 * @param ft_ids
+	 * @return
+	 */
+	public static List<List<String>> getFormatNodesByIds(String cs_id,List<String> formatNodeIds) {
+		List<List<String>> formatNodes = new ArrayList<>();
+		try {
+			HBaseDB db = HBaseDB.getInstance();
+			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id);
+			List<Get> gets = new ArrayList<Get>();
+			for (String formatNodeId : formatNodeIds) {
+				gets.add(new Get(Bytes.toBytes(formatNodeId)));
+			}
+			Result[] results = table.get(gets);
+			for (Result result : results) {
+				if (!result.isEmpty()) {
+					List<String> formatNode = new ArrayList<>();
+					// 获取formatNodeId,ft_id,节点名
+					String rowkey = Bytes.toString(result.getRow());
+					String ft_id = Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+							Bytes.toBytes(ConstantsHBase.QUALIFIER_FORMATTYPE)));
+					String nodeName = Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+							Bytes.toBytes(ConstantsHBase.QUALIFIER_NODENAME)));
+					formatNode.add(rowkey);
+					formatNode.add(ft_id);
+					formatNode.add(nodeName);
+					formatNodes.add(formatNode);
+				}
+			}
+			table.close();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return formatNodes;
@@ -295,27 +418,4 @@ public class HBaseFormatNodeDao {
 		HBaseDB.getInstance().deleteTable(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id);
 	}
 
-	public static List<String> getFormatNodeById(String cs_id, String ft_id, String formatNodeId) {
-		List<String> formatNode = new ArrayList<>();
-		try {
-			HBaseDB db = HBaseDB.getInstance();
-			Table table = db.getTable(ConstantsHBase.TABLE_PREFIX_NODE_ + cs_id);
-			Get get = new Get(Bytes.toBytes(formatNodeId));
-			Result result = table.get(get);
-			if (!result.isEmpty()) {
-				// 获取formatNodeId,ft_id,节点名
-				String rowkey = Bytes.toString(result.getRow());
-				String nodeName = Bytes.toString(result.getValue(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-						Bytes.toBytes(ConstantsHBase.QUALIFIER_NODENAME)));
-				formatNode.add(rowkey);
-				formatNode.add(ft_id);
-				formatNode.add(nodeName);
-			}
-			table.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return formatNode;
-	}
 }

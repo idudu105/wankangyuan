@@ -21,10 +21,12 @@
 <script type="text/javascript">
     window.onload=function(){
         project0();
-        // project1();
+        project1();
+        pro_dataLB();
+        pro_data();
+        data_mine()
         // pro_mine();
         // pro_dataLB();
-        pro_data();
         pro_dataclick();
         //data_dataclick();
     }
@@ -95,10 +97,25 @@
 							style="display: none;" /> <input id="sourceDataId"
 							value="${sourceDataId}" style="display: none;" />
 					</div>
+
+					<div class="data_to_proK">
+						<div class="pro_menu pro_addK">
+							<div class="pro_addk">
+								<div class="pro_addT">添加结点至项目</div>
+							</div>
+						</div>
+					</div>
+					
+						
 					<div class="app_expexport app_expexport_node">导出结点</div>
 					<div class="app_expexport app_expexport_type">导出格式类型</div>
 				</div>
 			</div>
+			<div class="pro_addul">
+							<c:forEach items="${projects}" var="projectTemp">
+								<div class="pro_addli" id="${projectTemp.id }">${projectTemp.p_name}</div>
+							</c:forEach>
+						</div>
 			<div class="prodainm">
 				<div class="prodainmL">
 					<div class="PJliBK">

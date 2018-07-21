@@ -32,7 +32,7 @@ public class ConstantsHBase {
 	// node
 	public static final String QUALIFIER_FORMATTYPE = "FORMATTYPE";// 结点格式类型
 	public static final String QUALIFIER_NODENAME = "NODENAME";// 结点名
-	// format,node
+	// source,format,node
 	public static final String QUALIFIER_SOURCEDATAID = "SOURCEDATAID";// 源数据id
 	// format
 	public static final String QUALIFIER_FORMATNODEID = "FORMATNODEID";// 结点id

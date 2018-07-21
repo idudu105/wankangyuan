@@ -172,7 +172,7 @@ public class FormatNodeController {
 				for (FormatField formatField : meta) {
 					mateQualifiers.add(String.valueOf(formatField.getFf_id()));
 				}
-				condition = " \"" + tableName + "\".\"ID\"='" + formatNodeId + "'";
+//				condition = " \"" + tableName + "\".\"ID\"='" + formatNodeId + "'";
 				String matephoenixSQL = PhoenixClient.getPhoenixSQL(tableName, mateQualifiers, conditionEqual,
 						conditionLike, condition, 1, 1);
 				Map<String, Map<String, Object>> metaDatas = PhoenixClient.select(matephoenixSQL);
@@ -397,7 +397,7 @@ public class FormatNodeController {
 		case "2":
 			return "redirect:/jsp/formatdata/data_dataclick2.jsp";
 		case "3":
-			return "redirect:/jsp/formatdata/data_dataclick.jsp";
+			return "redirect:/jsp/formatdata/data_dataclick3.jsp";
 		case "4":
 			return "redirect:/jsp/project/project_dataclick.jsp";
 		}
@@ -409,6 +409,7 @@ public class FormatNodeController {
 		// }
 	}
 
+	
 	/**
 	 * 编辑数据节点
 	 * 

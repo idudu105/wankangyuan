@@ -125,7 +125,7 @@ public class ExportController {
 		HSSFCellStyle style = workbook.createCellStyle();
 		style.setAlignment(HorizontalAlignment.CENTER);
 		HSSFSheet sheet;
-		FormatType formatType = HBaseFormatNodeDao.getFormatNodes(cs_id, sourceDataId, ft_id);
+		FormatType formatType = HBaseFormatNodeDao.getFormatNodesByType(cs_id, sourceDataId, ft_id);
 		String formatNodeId;
 		String formatNodeName;
 		for (Entry<String, String> formatNode : formatType.getFormatDataNodes().entrySet()) {
@@ -177,7 +177,7 @@ public class ExportController {
 			String ft_id = ft_idsStr[i];
 			String formatNodeId = formatNodeIdsStr[i];
 			FormatType formatType = formatTypeService.getFormatType(Integer.valueOf(ft_id));
-			List<String> formatNode = HBaseFormatNodeDao.getFormatNodeById(cs_id, ft_id, formatNodeId);
+			List<String> formatNode = HBaseFormatNodeDao.getFormatNodeById(cs_id, formatNodeId);
 			String nodeName = "";
 			try {
 				nodeName = formatNode.get(2);

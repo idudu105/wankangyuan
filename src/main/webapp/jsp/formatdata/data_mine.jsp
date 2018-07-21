@@ -98,14 +98,6 @@
 								placeholder="搜索数据" value="${searchFirstWord}" />
 						</div>
 					</div>
-					<!--
-                    <div class="search">
-                        <div class="searchC">
-                            <img src="/wankangyuan/static/img/search.png" alt="" class="searchCi" />
-                            <input type="text" class="searchCt"  placeholder="搜索项目" />
-                        </div>
-                    </div>
-                    -->
 				</div>
 			</div>
 			<div class="shaixuan">
@@ -453,7 +445,7 @@
 		$(".pro_addli").click(function (){
 			
 			var p_id = this.id;
-			var cs_id = $("#source_Select").val();
+			//var cs_id = $("#source_Select").val();
 			var afuxuanK=document.querySelectorAll('.fuxuanK2');
 	        var afuxuan=[];
 	        for(var i=0;i<afuxuanK.length;i++){
