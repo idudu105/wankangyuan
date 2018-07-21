@@ -3938,7 +3938,22 @@ input{
     vertical-align: middle;
 }
 
-
+.data_to_proK{
+    margin-top:36px;
+    float:left;
+}
+.data_to_pro{
+    width:100px;
+    height:26px;
+    border:none;
+    font-size: 16px;
+    float: left;
+    cursor:pointer;
+    margin:0 20px;
+    background:#16579b;
+    color:#fff;
+    line-height:26px;
+}
 .appexpGJZK{
     float:left;
     width:350px;
