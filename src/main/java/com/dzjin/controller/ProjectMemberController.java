@@ -214,7 +214,7 @@ public class ProjectMemberController {
 		Project project = (Project)httpSession.getAttribute("project");
 		for(int i = 0 ;i<idString.length;i++){
 			ProjectUser projectUser = projectUserService.getProjectUser(project.getId(), user.getId());
-			if(projectUser != null && projectUser.getUser_id()!=user.getId()){
+			if(projectUser != null && projectUser.getUser_id()!=Integer.valueOf(idString[i])){
 				if(projectUserService.deleteProjectUser(Integer.valueOf(idString[i])) == 1){
 					num++;
 				}

@@ -42,6 +42,7 @@
         var ofriend_qunfa=document.querySelectorAll('.friend_qunfa')[0];//群发消息按钮
         var ofriend_yichuzu=document.querySelectorAll('.friend_yichuzu')[0];//从组中移除按钮
         var ofriend_yichuhy=document.querySelectorAll('.friend_yichuhy')[0];//移除好友按钮
+        var ofriendMTrs=document.querySelectorAll('.friendMTrs')[0];//组织机构筛选
 
         var osearch_2=document.querySelectorAll('.search_2')[0];//上方按钮栏搜索栏
         var osearch_3=document.querySelectorAll('.search_3')[0];//上方按钮栏搜索栏
@@ -134,6 +135,7 @@
                   //搜索栏的显示
                     osearch_2.className="search_2 ";
                     osearch_3.className="search_3 active";
+                    ofriendMTrs.style.display="inline-block";
                 }
             })(i)
         }
@@ -194,9 +196,72 @@
             //搜索栏的显示
             osearch_2.className="search_2 active";
             osearch_3.className="search_3";
+            ofriendMTrs.style.display="none";
         }
 
+      //右侧多选
+        //console.log(afriendMMrz.length);
+          for(var i=0;i<afriendMMrz.length;i++){
+              (function(index){
+                  $(afriendMMrz[index]).css('display','block');
+                  var oquanxuanK=afriendMMrz[index].querySelectorAll('.quanxuanK')[0];
+                  var oquanxuan=oquanxuanK.querySelectorAll('.input_check')[0];
 
+                  var afuxuan=[];
+                  var afuxuanK=[];
+
+                  if(afriendMMrz[index].querySelectorAll('.fuxuanK2')[0]){
+                      afuxuanK=afriendMMrz[index].querySelectorAll('.fuxuanK2');
+                      //console.log("k2");
+                  }else if(afriendMMrz[index].querySelectorAll('.fuxuanK3')[0]){
+                      afuxuanK=afriendMMrz[index].querySelectorAll('.fuxuanK3');
+                      //console.log("k3");
+                  }
+
+                  if(afuxuanK[0]){
+                      for(var i=0;i<afuxuanK.length;i++){
+                          afuxuan.push(afuxuanK[i].querySelectorAll('.input_check')[0]);
+                      }
+                  }
+                  
+
+                  oquanxuanK.onchange=function(){
+                      if(oquanxuan.checked){
+                          for(var i=0;i<afuxuanK.length;i++){
+                              afuxuan[i].checked=1;
+                          }
+                      }else{
+                          console.log(2);
+                          for(var i=0;i<afuxuanK.length;i++){
+                              afuxuan[i].checked=0;
+                          }
+                      }
+                  }
+
+
+                  if(afuxuanK[0]){
+                      for(var i=0;i<afuxuanK.length;i++){
+                          (function(index){
+                              afuxuanK[i].onchange=function(){
+                                  var fuxuanPD=0;
+                                  for(var j=0;j<afuxuanK.length;j++){
+                                      if(afuxuan[j].checked){
+                                          fuxuanPD++;
+                                      }
+                                      console.log(afuxuan[j].checked);
+                                  }
+                                  console.log(fuxuanPD);
+                                  if(fuxuanPD==afuxuanK.length){
+                                      oquanxuan.checked=1;
+                                  }else if(fuxuanPD!=afuxuanK.length){
+                                      oquanxuan.checked=0;
+                                  }
+                              }
+                          })(i)
+                      }
+                  }
+              })(i)
+          }
 
         
     }
@@ -409,15 +474,26 @@
                                 <input id="orgMemberSearch" type="text" class="searchCt"  placeholder="组内成员" data-bind="event: { keyup: searchOrgers}" />
                             </div>
                         </div>
-                    
+                        <div class="friendMTrs" style="display:none;">
+                            <select id="orgRole" name="orgRole">
+                                <option value="">无</option>
+                                <option value="管理员">管理员</option>
+                                <option value="成员">成员</option>
+                            </select>
+                        </div>
+                        <div class="friendMMrz">
                     	<table class="friMMrtab">
 	                    	<tr class="biaotou">
                                 <th class="xuanze">
-                                    选择
+                                    <div class="quanxuanK">
+                                       <input type="checkbox" class="input_check" id="check1_0">
+                                       <label for="check1_0"></label>
+                                   </div>全选
                                 </th>
                                 <th class="touxiangk">头像</th>
                                 <th class="yonghuming">用户名</th>
                                 <th class="youxiang">邮箱</th>
+                                <th class="juese">角色</th>
                             </tr>
 	                        <tbody id="ko_orgers" data-bind="foreach:orgers">
 		                        <tr class="">
@@ -432,6 +508,7 @@
 		                            </td>
 		                            <td class="yonghuming"><span data-bind="text: username"></span></td>
 		                            <td class="youxiang"><span data-bind="text: email"></span></td>
+		                            <td class="juese"><span data-bind="text: orgRole"></span></td>
 		                        </tr>
 	                    	</tbody>
 	                    	<tbody id="ko_friends" data-bind="foreach:friends" style="display:none;">
@@ -447,9 +524,11 @@
 	                                </td>
 	                                <td class="yonghuming"><span data-bind="text: friendName"></span></td>
 	                                <td class="youxiang"><span data-bind="text: friendEmail"></span></td>
+	                                <td class="juese"><span data-bind="text: friendRolename"></span></td>
 	                            </tr>
                         	</tbody>
                     	</table>
+                    	</div>
                     	<input type="button" class="QXGLkB QXGLkB_chengyuan" value="添加" />
                         
                     </div>
@@ -1039,7 +1118,11 @@ function ViewModel() {
             return layer.msg("请选择组!",function(){}),!1;
         }
         self.orgers.removeAll();
-        $.get("/wankangyuan/orgMember/findGroupMembersByname",{username:$("#orgMemberSearch").val(),groupId:$('#groupId').val()},function(data){
+        $.get("/wankangyuan/orgMember/findGroupMembersByname",{
+        	username:$("#orgMemberSearch").val(),
+        	groupId:$('#groupId').val(),
+        	orgRole:$('#orgRole').val()
+        	},function(data){
             var list = JSON.parse(data);
             for (var i in list){
                 //根据好友列表判断状态

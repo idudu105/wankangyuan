@@ -497,6 +497,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					+user_id+"&searchWord="+this.value;
     		}
     	});
+    	$(".searchCi").click(function(){
+            var user_id=${user.id};
+            window.location.href="/wankangyuan/project/selectCreatedProject?creator="
+                +user_id+"&searchWord="+$(".searchCt").val();
+        });
     	
     	//点击项目标题栏
     	$(".PJListli").click(function (){

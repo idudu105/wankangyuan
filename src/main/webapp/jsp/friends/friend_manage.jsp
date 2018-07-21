@@ -270,7 +270,7 @@
                                 <input id="groupMemberSearch" type="text" class="searchCt"  placeholder="组内成员" data-bind="event: { keyup: searchOrgers}" />
                             </div>
                         </div>
-                        <div class="friendMTrs">
+                        <div class="friendMTrs" style="display:none;">
                             <select id="orgRole" name="orgRole">
                                 <option value="">无</option>
                                 <option value="管理员">管理员</option>
