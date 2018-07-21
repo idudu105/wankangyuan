@@ -60,7 +60,7 @@ public class SourceDataController {
 			Integer strip) {
 
 		return getSourceDatas(request, httpSession, type, null, page, strip, null, null, null, null, null, null, null,
-				null,null);
+				null, null);
 	}
 
 	/**
@@ -103,15 +103,18 @@ public class SourceDataController {
 		Source source = null;
 		String oldCondition = null;
 		if (!sources.isEmpty()) {
-			if ((type.equals((String) httpSession.getAttribute("oldSourceType")))
-					&& (cs_id.equals((Integer) httpSession.getAttribute("thiscs_id")))) {
-				oldCondition = (String) httpSession.getAttribute("oldCondition");
+			try {
+				if ((type.equals((String) httpSession.getAttribute("oldSourceType")))
+						&& (cs_id.equals((Integer) httpSession.getAttribute("thiscs_id")))) {
+					oldCondition = (String) httpSession.getAttribute("oldCondition");
+				}
+			} catch (Exception e1) {
 			}
 			if (cs_id == null) {
 				cs_id = sourceService.getSourcesForUserLimit(1).get(0).getCs_id();
-				oldCondition=null;
+				oldCondition = null;
 			}
-			
+
 			source = sourceService.getSourceByCs_id(cs_id);
 			source.setSourceFields(sourceFieldService.getSourceFields(cs_id));
 
@@ -129,7 +132,7 @@ public class SourceDataController {
 			case "1":
 				// conditionEqual.put(ConstantsHBase.QUALIFIER_CREATE,
 				// String.valueOf(user.getId()));
-				condition = PhoenixClient.getSQLFamilyColumn(ConstantsHBase.QUALIFIER_CREATE) + "='"
+				condition = "(" + PhoenixClient.getSQLFamilyColumn(ConstantsHBase.QUALIFIER_CREATE) + "='"
 						+ String.valueOf(user.getId()) + "' ";
 				List<String> sourceDataIds = userDataService.selects(user.getId(), cs_id);
 				if (!sourceDataIds.isEmpty()) {
@@ -141,6 +144,7 @@ public class SourceDataController {
 						condition = condition.substring(0, condition.lastIndexOf("OR")) + " ) ";
 					}
 				}
+				condition += ")";
 				break;
 			case "2":
 				SourceField publicStatus = new SourceField();
@@ -157,8 +161,6 @@ public class SourceDataController {
 				conditionEqual.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
 				break;
 			}
-
-			
 
 			// 头筛选
 			if (searchFirstWord != null && !searchFirstWord.trim().isEmpty()) {
@@ -209,7 +211,7 @@ public class SourceDataController {
 					if (oldCondition.trim().endsWith("OR")) {
 						oldCondition = oldCondition.substring(0, oldCondition.lastIndexOf("OR")) + " ) ";
 					}
-				} else if (likeSearch!=null&&likeSearch.equals("1") && searchWord != null) {
+				} else if (likeSearch != null && likeSearch.equals("1") && searchWord != null) {
 					oldCondition += "(\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + String.valueOf(searchId)
 							+ "\" LIKE '%" + searchWord + "%') ";
 				}
@@ -689,7 +691,7 @@ public class SourceDataController {
 				if (old.contains(sourceDataId)) {
 					if (userDataService.delete(uid, sourceDataId, Integer.valueOf(cs_id)) != 1) {
 						b = false;
-					}					
+					}
 				}
 			} catch (Exception e) {
 				continue;

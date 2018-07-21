@@ -105,17 +105,17 @@
 							</div>
 						</div>
 					</div>
-					
-						
+
+
 					<div class="app_expexport app_expexport_node">导出结点</div>
 					<div class="app_expexport app_expexport_type">导出格式类型</div>
 				</div>
 			</div>
 			<div class="pro_addul">
-							<c:forEach items="${projects}" var="projectTemp">
-								<div class="pro_addli" id="${projectTemp.id }">${projectTemp.p_name}</div>
-							</c:forEach>
-						</div>
+				<c:forEach items="${projects}" var="projectTemp">
+					<div class="pro_addli" id="${projectTemp.id }">${projectTemp.p_name}</div>
+				</c:forEach>
+			</div>
 			<div class="prodainm">
 				<div class="prodainmL">
 					<div class="PJliBK">
@@ -177,8 +177,20 @@
 						</div>
 					</div>
 					<br>
+
+					<div class="pro_addul">
+						<c:forEach items="${projects}" var="projectTemp">
+							<div class="pro_addli" id="${projectTemp.id }">${projectTemp.p_name}</div>
+						</c:forEach>
+					</div>
 					<div class="prodaclmRz2">
 						<div class="prodaclmRsxK">
+							<div class="pro_menu pro_addK">
+								<div class="pro_addk">
+									<div class="pro_addT">添加至项目</div>
+									<div class="pro_addI"></div>
+								</div>
+							</div>
 							<div class="search">
 								<div class="searchC">
 									<img src="/wankangyuan/static/img/search.png" alt=""
@@ -186,6 +198,7 @@
 										placeholder="搜索数据" value="${searchFirstWordNode}" />
 								</div>
 							</div>
+
 							<div class="prodaclmRsx">
 								<div class="prodaclmRsxT">筛选</div>
 								<img src="/wankangyuan/static/img/sanjiao_blue.png" alt=""

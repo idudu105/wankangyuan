@@ -422,7 +422,7 @@
 									<div class="addbiaoxTt">通知</div>
 									<div class="addbiaoxTx"></div>
 								</div>
-								<div class="delbiaoxM">确认删除选中的metainfo项吗?（该操作无法恢复，请谨慎操作！）</div>
+								<div class="delbiaoxM">确认删除选中的字段吗?（该操作无法恢复，请谨慎操作！）</div>
 								<div class="addbiaoxB">
 									<input type="button" value="确认" class="addbiaoxBb"
 										id="deleteSourceFieldSubmit" /> <input type="button"

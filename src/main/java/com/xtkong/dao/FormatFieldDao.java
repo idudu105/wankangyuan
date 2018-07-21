@@ -28,7 +28,7 @@ public interface FormatFieldDao {
 	 *            格式类别
 	 * @return 格式字段列表
 	 */
-	@Select("select * from format_field where ft_id=#{ft_id} order by ff_id ")
+	@Select("select * from view_format_field where ft_id=#{ft_id} order by ff_id ")
 	public List<FormatField> getFormatFieldsForAdmin(@Param("ft_id") Integer ft_id);
 
 	@Select("select * from format_field where ft_id=#{ft_id} and is_view=1 order by ff_id ")

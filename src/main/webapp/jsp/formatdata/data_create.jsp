@@ -93,7 +93,7 @@
 					<div class="search">
 						<div class="searchC">
 							<img src="/wankangyuan/static/img/search.png" alt=""
-								class="searchCi" /> <input type="text" class="searchCt"
+								class="searchCi" onclick="searchFirst()"/> <input type="text" class="searchCt"
 								placeholder="搜索数据" value="${searchFirstWord}" />
 						</div>
 					</div>
@@ -174,7 +174,7 @@
 					<div class="inportM">
 						<div class="inportMt">请把相关数据按照分类准确输入到EXCEL表格模板中，上传数据后，表格会自动配置相关内容。</div>
 						<a href="#" class="inportMz inportMd" id="downloadExcelMode">下载EXCEL模板</a>
-						<div class="inportMz inportMu">上传数据</div>
+					<!-- 	<div class="inportMz inportMu">上传数据</div> -->
 						<input type="file" class="inportMf" id="inportMf"
 							onchange="upFile()" />
 					</div>
@@ -320,12 +320,17 @@
 		searchId = $(this).attr('id');
 	});
 	//全搜索
+	function searchFirst(){
+		reset();
+		searchFirstWord=$(".searchCt").val();
+		window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="
+				+cs_id+"&searchFirstWord="+searchFirstWord;
+	}
     $(".searchCt").bind("keypress" , function(event){
 		if(event.keyCode == 13){
 			reset();
 			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="
-					+cs_id+"&searchFirstWord="+this.value;
-			
+					+cs_id+"&searchFirstWord="+this.value;			
 		}
 	});
 
@@ -593,17 +598,17 @@
 	            url: '/wankangyuan/import/sourceData?cs_id='+cs_id,
 	            type: 'POST',
 	            data: formdata,
-	            async: false,
+				async:true,
 	            cache: false,
 	            contentType: false,
 	            processData: false,
 	            success: function (data) {
 	            	if(data.result == false){
 	            		alert(data.message)
-	            	}else{
+	            	/* }else{
 	        			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=2&cs_id="+cs_id+"&searchId="+searchId+
 	        				    		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition
-	        				    		+"&page="+page+"&strip=${rows}";
+	        				    		+"&page="+page+"&strip=${rows}"; */
 	            	}
 	            },
 	            error: function () {

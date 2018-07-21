@@ -73,9 +73,9 @@ public class ImportController {
 				map.put("message", "文件上传失败");
 				return map;
 			}
-			if (file.getSize() > 1024 * 1024) {
+			if (file.getSize() > 1024 * 1024*10) {
 				map.put("result", false);
-				map.put("message", "文件不能超过1M");
+				map.put("message", "文件不能超过8M");
 				return map;
 			}
 
@@ -174,9 +174,9 @@ public class ImportController {
 				map.put("message", "文件上传失败");
 				return map;
 			}
-			if (file.getSize() > 1024 * 1024) {
+			if (file.getSize() > 1024 * 1024*10) {
 				map.put("result", false);
-				map.put("message", "文件不能超过1M");
+				map.put("message", "文件不能超过8M");
 				return map;
 			}
 

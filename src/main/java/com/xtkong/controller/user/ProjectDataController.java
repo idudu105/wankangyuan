@@ -74,7 +74,7 @@ public class ProjectDataController {
 		List<SourceField> sourceFields = sourceFieldService.getSourceFields(Integer.valueOf(cs_id));
 		for (String sourceDataId : sourceDataIds.split(",")) {
 			if (projectDataService.insert(Integer.valueOf(p_id), sourceDataId, Integer.valueOf(cs_id)) == 1) {
-				if (HBaseProjectDataDao.addProjectPartSource(p_id, cs_id, String.valueOf(uid), sourceDataId,
+				if (HBaseProjectDataDao.addProjectWholeSource(p_id, cs_id, String.valueOf(uid), sourceDataId,
 						sourceFields) != null) {
 					count++;
 				}
@@ -90,9 +90,9 @@ public class ProjectDataController {
 		} else {
 			map.put("result", false);
 			map.put("message", "成功添加" + count + "条，剩余" + (sum - count) + "条关系添加失败！");
-			map.put("count", count);
-			map.put("sum", sum);
 		}
+		map.put("count", count);
+		map.put("sum", sum);
 
 		return map;
 	}
@@ -109,6 +109,7 @@ public class ProjectDataController {
 		// String.valueOf(" "));
 		for (int i = 0; i < source_data_id.length; i++) {
 			projectDataService.remove(p_id, source_data_id[i], Integer.valueOf(cs_id));
+			
 			// HBaseSourceDataDao.updateSourceData(cs_id, source_data_id[i],
 			// sourceFieldDatas);
 		}
@@ -215,9 +216,9 @@ public class ProjectDataController {
 		} else {
 			map.put("result", false);
 			map.put("message", "成功添加" + count + "条，剩余" + (sum - count) + "条关系添加失败！");
-			map.put("count", count);
-			map.put("sum", sum);
 		}
+		map.put("count", count);
+		map.put("sum", sum);
 
 		return map;
 	}
@@ -267,9 +268,9 @@ public class ProjectDataController {
 		} else {
 			map.put("result", false);
 			map.put("message", "成功添加" + count + "条，剩余" + (sum - count) + "条关系添加失败！");
-			map.put("count", count);
-			map.put("sum", sum);
 		}
+		map.put("count", count);
+		map.put("sum", sum);
 		return map;
 	}
 
@@ -328,9 +329,9 @@ public class ProjectDataController {
 		} else {
 			map.put("result", false);
 			map.put("message", "成功添加" + count + "条，剩余" + (sum - count) + "条关系添加失败！");
-			map.put("count", count);
-			map.put("sum", sum);
 		}
+		map.put("count", count);
+		map.put("sum", sum);
 		return map;
 	}
 

@@ -21,6 +21,25 @@ public class FormatField {
 	private String update_datetime; // 更新时间
 	private int update_uid; // 更新人
 
+	private String updater;// 更新人
+	private String creator;// 创建人
+	
+	public void setUpdater(String updater) {
+		this.updater = updater;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+
+	public String getUpdater() {
+		return updater;
+	}
+
+	public String getCreator() {
+		return creator;
+	}
+
 	public int getFf_id() {
 		return ff_id;
 	}

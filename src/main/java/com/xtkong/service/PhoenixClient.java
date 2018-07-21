@@ -22,6 +22,7 @@ import java.util.concurrent.TimeoutException;
 
 import com.google.gson.Gson;
 import com.xtkong.util.ConstantsHBase;
+import com.xtkong.util.HbaseTest;
 
 /**
  * 利用Phoenix访问Hbase
@@ -138,7 +139,7 @@ public class PhoenixClient {
 		records.put("head", head);
 		records.put("data", datas);
 		map.put("records", records);
-
+HbaseTest.println(phoenixSQL);
 		try {
 			Connection conn = PhoenixClient.getConnection();
 			if (conn == null) {
@@ -179,10 +180,11 @@ public class PhoenixClient {
 			map.put("msg", msg);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			msg.put("msg", "SQL执行出错：" + e.getMessage());
+			msg.put("msg", "SQL执行出错：\n SQL:  " + phoenixSQL + "\n异常信息:  " + e.getMessage());
 			map.put("msg", msg);
 			return map;
 		}
+		HbaseTest.println(map);
 		return map;
 	}
 
@@ -833,7 +835,18 @@ public class PhoenixClient {
 		// \"INFO\".\"118\"='Ad547' OR \"INFO\".\"118\"='Ad548' OR
 		// \"INFO\".\"118\"='Ad549' ) ",
 		// 1, 10);
-		result = select("SELECT * FROM \"FORMAT_75_56\"  WHERE   \"INFO\".\"97\" IS NULL  ");
+		/*result = select("SELECT \"ID\",\"SOURCEDATAID\",\"FORMATNODEID\",\"97\",\"98\","
+				+ "\"99\",\"100\",\"116\" FROM \"FORMAT_75_56\"  WHERE   \"INFO\".\"97\" IS NULL"
+				+ " ORDER BY ID ASC");*/
+		alterViewAddColumn("SOURCE_72", "SOURCEDATAID");
+		/*result = select("SELECT * FROM \"SOURCE_72\"  WHERE   \"INFO\".\"SOURCEDATAID\"='1_72_13'"
+				+ " ");*/
+		Map<String, String> conditionEqual = new HashMap<>();
+//		conditionEqual.put(ConstantsHBase.QUALIFIER_SOURCEDATAID, "1_72_7");
+		conditionEqual.put(ConstantsHBase.QUALIFIER_PROJECT, "118");
+	 phoenixSQL = PhoenixClient.getPhoenixSQL("SELECT ID FROM \"" + "SOURCE_72" + "\" WHERE "
+				+ PhoenixClient.getSQLConditionEquals(tableName, conditionEqual, "AND"), null, null, null);
+	result=select(phoenixSQL);
 		System.out.println("\n" + new Gson().toJson(result).toString() + "\n");
 		// System.out.println(new Gson().toJson(selectPage(" SELECT * FROM
 		// source_60", currPage, pageSize)).toString());

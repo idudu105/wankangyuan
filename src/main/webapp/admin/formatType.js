@@ -173,9 +173,9 @@ function enter(id){
 					str += '<th class="biaoxiangth" id="ff_description'+formatFields[i].ff_id+'">'+formatFields[i].description+'</th>';
 					str += '<th class="biaoxiangth" id="ff_error_msg'+formatFields[i].ff_id+'">'+formatFields[i].error_msg+'</th>';
 					str += '<th class="biaoxiangth">'+formatFields[i].create_datetime+'</th>';
-					str += '<th class="biaoxiangth">'+formatFields[i].create_uid+'</th>';
+					str += '<th class="biaoxiangth">'+formatFields[i].creator+'</th>';
 					str += '<th class="biaoxiangth">'+formatFields[i].update_datetime+'</th>';
-					str += '<th class="biaoxiangth">'+formatFields[i].update_uid+'</th>';
+					str += '<th class="biaoxiangth">'+formatFields[i].updater+'</th>';
 					str += '</tr>';
 				}
 				

@@ -325,7 +325,7 @@
 							<div class="inportMt">请把相关数据按照分类准确输入到EXCEL表格模板中，上传数据后，表格会自动配置相关内容。</div>
 
 							<a href="#" class="inportMz inportMd">下载EXCEL模板</a>
-							<div class="inportMz inportMu">上传数据</div>
+							<!-- <div class="inportMz inportMu">上传数据</div> -->
 							<input type="file" class="inportMf" id="inportMf"
 								onchange="upFile()" />
 						</div>
@@ -953,20 +953,20 @@
 	            url: '/wankangyuan/import/formatData?cs_id='+cs_id+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId,
 	            type: 'POST',
 	            data: formdata,
-	            async: false,
+				async:true,
 	            cache: false,
 	            contentType: false,
 	            processData: false,
 	            success: function (data) {
 	            	if(data.result == false){
 	            		alert(data.message)
-	            	}else{
+	            	/* }else{
 	            		
 	            		window.location.href="/wankangyuan/formatNode/getFormatNodeById?cs_id="
 	            				+cs_id+"&sourceDataId="+sourceDataId+"&type=2&ft_id="+ft_id+"&formatNodeId="+formatNodeId
 	            				+"&page="+page+"&strip=${rows}"
 	            				+"&searchId="+searchId+
-	            	    		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition;
+	            	    		"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&oldCondition="+oldCondition; */
 	            	}
 	            },
 	            error: function () {

@@ -194,6 +194,110 @@ public class HBaseProjectDataDao {
 	 * @param p_id
 	 * @param cs_id
 	 * @param uid
+	 * @param sourceDataId
+	 * @param sourceFields
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static String addProjectWholeSource(String p_id, String cs_id, String uid, String sourceDataId,
+			List<SourceField> sourceFields) {
+		try {
+			HBaseDB db = HBaseDB.getInstance();
+			String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
+			String family = ConstantsHBase.FAMILY_INFO;
+			Table table = db.getTable(tableName);
+			Get get = new Get(Bytes.toBytes(sourceDataId));
+			// 存放批量操作的结果
+			Result result = table.get(get);
+			Long count = db.getNewId(ConstantsHBase.TABLE_GID, uid + "_" + cs_id, ConstantsHBase.FAMILY_GID_GID,
+					ConstantsHBase.QUALIFIER_GID_GID_GID);
+			String psourceDataId = uid + "_" + cs_id + "_" + count;
+			Put put = new Put(Bytes.toBytes(sourceDataId));
+			put.addColumn(Bytes.toBytes(family), Bytes.toBytes(ConstantsHBase.QUALIFIER_PUBLIC),
+					Bytes.toBytes(ConstantsHBase.VALUE_PUBLIC_FALSE));
+			put.addColumn(Bytes.toBytes(family), Bytes.toBytes(ConstantsHBase.QUALIFIER_PROJECT),
+					Bytes.toBytes(String.valueOf(p_id)));
+
+			String oldSourceDataId = Bytes.toString(result.getRow());
+			put.addColumn(Bytes.toBytes(family), Bytes.toBytes(ConstantsHBase.QUALIFIER_SOURCEDATAID),
+					Bytes.toBytes(String.valueOf(oldSourceDataId)));
+			for (SourceField sourceField : sourceFields) {
+				put.addColumn(Bytes.toBytes(family), Bytes.toBytes(String.valueOf(sourceField.getCsf_id())),
+						result.getValue(Bytes.toBytes(family), Bytes.toBytes(String.valueOf(sourceField.getCsf_id()))));
+			}
+			table.close();
+			if (db.putRow(tableName, put)) {
+
+				List<List<String>> formatNodes = HBaseFormatNodeDao.getFormatNodesBySourceDataId(cs_id,
+						oldSourceDataId);
+				for (List<String> formatNode : formatNodes) {
+					String oldFormatNodeId = formatNode.get(0);
+					String ft_id = formatNode.get(1);
+					String nodeName = formatNode.get(2);
+					if (oldFormatNodeId != null) {
+						String tableStr = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+						Map<String, Map<String, Object>> records = PhoenixClient
+								.select("SELECT *  FROM \"" + tableStr + "\" WHERE ID='" + oldFormatNodeId + "'");
+						List<String> head = (List<String>) records.get("records").get("head");
+						List<List<String>> datas = (List<List<String>>) records.get("records").get("data");
+
+						String formatNodeId = null;
+						for (List<String> data : datas) {
+							Map<String, String> formatFieldDatas = new HashMap<>();
+							for (int i = 0; i < head.size(); i++) {
+								if (!head.get(i).equals("ID")) {
+									try {
+										formatFieldDatas.put(head.get(i), data.get(i));
+									} catch (Exception e) {
+										continue;
+									}
+								}
+							}
+							formatNodeId = HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName,
+									formatFieldDatas);
+						}
+						if (formatNodeId != null) {
+							records = PhoenixClient.select("SELECT * FROM \"" + tableStr + "\" WHERE ID!='"
+									+ oldFormatNodeId + "' AND " + "\"" + ConstantsHBase.FAMILY_INFO + "\".\""
+									+ ConstantsHBase.QUALIFIER_FORMATNODEID + "\"='" + oldFormatNodeId + "'  ");
+							head = (List<String>) records.get("records").get("head");
+							datas = (List<List<String>>) records.get("records").get("data");
+							for (List<String> data : datas) {
+								Map<String, String> formatFieldDatas = new HashMap<>();
+								for (int i = 0; i < head.size(); i++) {
+									if (!head.get(i).equals("ID")) {
+										try {
+											formatFieldDatas.put(head.get(i), data.get(i));
+										} catch (Exception e) {
+											continue;
+										}
+									}
+								}
+								HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId,
+										formatFieldDatas);
+							}
+						}
+					}
+				}
+			
+				
+				
+				
+			} else {
+				return null;
+			}
+			return psourceDataId;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	/**
+	 * 添加源数据及其所有下层数据
+	 * 
+	 * @param p_id
+	 * @param cs_id
+	 * @param uid
 	 * @param sourceDataIds
 	 * @param sourceFields
 	 * @return

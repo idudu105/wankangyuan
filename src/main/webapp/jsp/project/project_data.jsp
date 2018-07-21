@@ -126,7 +126,7 @@
 				<div class="search">
 					<div class="searchC">
 						<img src="/wankangyuan/static/img/search.png" alt=""
-							class="searchCi" /> <input type="text" class="searchCt"
+							class="searchCi"  onclick="searchFirst()"/> <input type="text" class="searchCt"
 							placeholder="搜索数据" value="${searchFirstWord}" />
 					</div>
 				</div>
@@ -295,6 +295,7 @@
 	var oldCondition=$("#oldCondition").html();//累加筛选条件
 	var page="${page}";//页码
 	var p_id = ${project.id};//项目id
+	var searchFirstWord=$(".searchCt").val();
 	//更换采集源，刷新页面
 	$("#source_Select").change(function(){
 		cs_id = $("#source_Select").val();
@@ -306,6 +307,12 @@
 		searchId = $(this).attr('id');
 	});
 	//全搜索
+	function searchFirst(){
+		reset();
+		searchFirstWord=$(".searchCt").val();
+		window.location.href="/wankangyuan/sourceData/getSourceDatas?type=4&cs_id="
+				+cs_id+"&searchFirstWord="+searchFirstWord;
+	}
     $(".searchCt").bind("keypress" , function(event){
 		if(event.keyCode == 13){
 			reset();
