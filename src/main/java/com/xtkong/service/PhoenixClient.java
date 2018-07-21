@@ -22,7 +22,6 @@ import java.util.concurrent.TimeoutException;
 
 import com.google.gson.Gson;
 import com.xtkong.util.ConstantsHBase;
-import com.xtkong.util.HbaseTest;
 
 /**
  * 利用Phoenix访问Hbase
@@ -139,7 +138,6 @@ public class PhoenixClient {
 		records.put("head", head);
 		records.put("data", datas);
 		map.put("records", records);
-HbaseTest.println(phoenixSQL);
 		try {
 			Connection conn = PhoenixClient.getConnection();
 			if (conn == null) {
@@ -184,7 +182,6 @@ HbaseTest.println(phoenixSQL);
 			map.put("msg", msg);
 			return map;
 		}
-		HbaseTest.println(map);
 		return map;
 	}
 
