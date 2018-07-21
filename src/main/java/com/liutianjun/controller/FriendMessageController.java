@@ -110,7 +110,7 @@ public class FriendMessageController {
 	    //获取用户
 	    User user = userService.selectByUsername(username);
 	    Boolean isFriend = false;
-		List<Friends> friendsList = friendsService.findAllMyFriends(user.getId(), null);
+		List<Friends> friendsList = friendsService.findAllMyFriends(user.getId(), null,null);
 		for (Friends friends : friendsList) {
 			if(objId == friends.getFriendId()) {
 				isFriend = true;

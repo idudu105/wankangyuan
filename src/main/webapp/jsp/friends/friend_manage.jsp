@@ -277,6 +277,11 @@
                                 <option value="成员">成员</option>
                             </select>
                         </div>
+                        <div class="friendMTrss" style="display:none;">
+                            <select id="sysRoles" name="sysRoles" data-bind="foreach:sysRoles">
+                                <option data-bind="text:description,value:description"></option>
+                            </select>
+                        </div>
                         <div class="friendMTrb friend_qunfa">群发消息</div>
                         <div class="friendMTrb friend_yichuzu">从组中移除</div>
                         <div class="friendMTrb friend_yichuhy">移除好友</div>
@@ -328,27 +333,6 @@
                     <div class="friendMMl">
                         <div class="friendMMlT"><!-- 除添加好友外 -->
                             <div class="friendMMlTT"><!-- 除我的好友外 -->
-                                <%-- <c:forEach items="${orgList }" var="org" varStatus="status">
-                                <c:if test="${org.parentId eq 0 }">
-                                <div class="friendMMlTTz" name="${org.id }"><!-- 每个组织结构 -->
-                                    <div class="friendMMlTTzT">
-                                        <span class="fri_name">${org.organizationName }</span>
-                                        <div class="friendMMlTTzTi"></div>
-                                        <img src="<%=request.getContextPath()%>/static/img/shenhe1.png" alt="" class="friendMMlTTzTi2" />
-                                    </div>
-                                    <div class="friendMMlTTzB">
-                                    <c:forEach items="${orgList }" var="group">
-                                    <c:if test="${org.id eq group.parentId }">
-                                        <div class="friendMMlTTzBz" name="${group.id }">
-                                            <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
-                                            <div class="friendMMlTTzBzt" data-bind="click:function(data, event){showOrgers(${group.id}) }">${group.organizationName }</div>
-                                        </div>
-                                    </c:if>    
-                                    </c:forEach>
-                                    </div>
-                                </div>
-                                </c:if>
-                                </c:forEach> --%>
                               <div data-bind="foreach: orgList">
                                 <div class="friendMMlTTz" data-bind="attr:{name: id}" ><!-- 每个组织结构 -->
                                     <div class="friendMMlTTzT">
@@ -826,9 +810,19 @@ function ViewModel() {
     
     //角色列表
     var roles;
+    self.sysRoles = ko.observableArray();
     self.getRoles = function() {
+    	self.sysRoles.removeAll();
         $.get("/wankangyuan/role/getRoleList",{},function(data){
             roles = JSON.parse(data);
+            roles[0].description = "无";
+            self.sysRoles.push(roles[0]);
+            roles = JSON.parse(data);
+            for (var i in roles){
+                self.sysRoles.push(roles[i]);
+                
+            }
+            friendmanage_quanxuan();
         });
     }
     //初始化角色信息
@@ -841,7 +835,10 @@ function ViewModel() {
     var myfriends;
     self.getMyFriends = function() {
     	self.friends.removeAll();
-    	$.get("/wankangyuan/friends/getMyFriends",{friendName:$("#myFriendSearch").val()},function(data){
+    	$.get("/wankangyuan/friends/getMyFriends",{
+    		friendName:$("#myFriendSearch").val(),
+    		sysRoles:$('#sysRoles').val()
+    		},function(data){
     		myfriends = JSON.parse(data);
     		for (var i in myfriends){
                 self.friends.push(myfriends[i]);

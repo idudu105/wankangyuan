@@ -114,13 +114,16 @@ public class FriendsServiceImpl implements FriendsService {
 	 * @return
 	 */
 	@Override
-	public List<Friends> findAllMyFriends(Integer userId,String friendName) {
+	public List<Friends> findAllMyFriends(Integer userId,String friendName,String sysRoles) {
 		insert(userId, userId);
 		FriendsQuery example = new FriendsQuery();
 		Criteria criteria = example.createCriteria();
 		criteria.andUserIdEqualTo(userId);
 		if(null != friendName) {
 			criteria.andFriendNameLike("%"+friendName+"%");
+		}
+		if(null != sysRoles && !"无".equals(sysRoles)) {
+			criteria.andFriendRolenameEqualTo(sysRoles);
 		}
 		return friendsDao.selectByExample(example);
 	}
@@ -134,7 +137,7 @@ public class FriendsServiceImpl implements FriendsService {
 	 */
 	@Override
 	public int updateFriendsInfo(Integer userId) {
-		List<Friends> list = findAllMyFriends(userId, null);
+		List<Friends> list = findAllMyFriends(userId, null, null);
 		int i = 0;
 		if(null != list && list.size() > 0) {
 			for (Friends friends : list) {
@@ -176,13 +179,13 @@ public class FriendsServiceImpl implements FriendsService {
 	 */
 	@Override
 	public int toBeFriend(Integer userId, Integer objId) {
-		List<Friends> userFriends = findAllMyFriends(userId, "");
+		List<Friends> userFriends = findAllMyFriends(userId, "",null);
 		for (Friends friends : userFriends) {
 			if(friends.getFriendId() == objId) {
 				friendsDao.deleteByPrimaryKey(friends.getId());
 			}
 		}
-		List<Friends> objFriends = findAllMyFriends(objId, "");
+		List<Friends> objFriends = findAllMyFriends(objId, "",null);
 		for (Friends friends : objFriends) {
 			if(friends.getFriendId() == userId) {
 				friendsDao.deleteByPrimaryKey(friends.getId());

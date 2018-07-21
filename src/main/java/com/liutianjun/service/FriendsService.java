@@ -13,7 +13,7 @@ public interface FriendsService {
 	int deleteByUserIdAndFriendsId(Integer userId,Integer[] friendsIds);
 	
 	//查询我的好友列表
-	List<Friends> findAllMyFriends(Integer userId,String friendName);
+	List<Friends> findAllMyFriends(Integer userId,String friendName, String sysRoles);
 	
 	//更新我的好友信息
 	int updateFriendsInfo(Integer userId);

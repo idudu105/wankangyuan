@@ -64,13 +64,13 @@ public class FriendsController {
 	 */
 	@RequestMapping(value="/getMyFriends",method=RequestMethod.GET, produces="text/html;charset=UTF-8")
 	@ResponseBody
-	public String getMyFriends(String friendName) {
+	public String getMyFriends(String friendName,String sysRoles) {
 		try {
 			//获取用户名
 		    String username = (String)SecurityUtils.getSubject().getPrincipal();
 		    //获取用户
 		    User user = userService.selectByUsername(username);
-			List<Friends> list = friendsService.findAllMyFriends(user.getId(),friendName);
+			List<Friends> list = friendsService.findAllMyFriends(user.getId(),friendName,sysRoles);
 			
 			ObjectMapper objectMapper = new ObjectMapper();
 			String jsonmyfriendsList = objectMapper.writeValueAsString(list);

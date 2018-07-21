@@ -3723,7 +3723,7 @@ input{
 }
 .adddataMlit{
     float:left;
-    width:200px;
+    width:450px;
     /*font-family:PingFangSC-Medium;*/
     font-weight: 700;
     font-size:18px;
@@ -3737,7 +3737,7 @@ input{
     word-wrap: break-word;
 }
 .adddataMliT{
-    float:left;
+    float:right;
     border:1px solid #999999;
     border-radius:4px;
     width:296px;

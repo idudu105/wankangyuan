@@ -392,7 +392,7 @@ public class UserServiceImpl implements UserService {
 		    User user = selectByUsername(name);
 		    //获取好友id列表
 		    List<Integer> friendIdList = new ArrayList<>();
-		    List<Friends> friendsList = friendsService.findAllMyFriends(user.getId(),username);
+		    List<Friends> friendsList = friendsService.findAllMyFriends(user.getId(),username,null);
 		    for (Friends friends : friendsList) {
 		    	friendIdList.add(friends.getFriendId());
 			}

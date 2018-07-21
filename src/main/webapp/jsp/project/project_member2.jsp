@@ -43,6 +43,7 @@
         var ofriend_yichuzu=document.querySelectorAll('.friend_yichuzu')[0];//从组中移除按钮
         var ofriend_yichuhy=document.querySelectorAll('.friend_yichuhy')[0];//移除好友按钮
         var ofriendMTrs=document.querySelectorAll('.friendMTrs')[0];//组织机构筛选
+        var ofriendMTrss=document.querySelectorAll('.friendMTrss')[0];//好友角色筛选
 
         var osearch_2=document.querySelectorAll('.search_2')[0];//上方按钮栏搜索栏
         var osearch_3=document.querySelectorAll('.search_3')[0];//上方按钮栏搜索栏
@@ -136,6 +137,7 @@
                     osearch_2.className="search_2 ";
                     osearch_3.className="search_3 active";
                     ofriendMTrs.style.display="inline-block";
+                    ofriendMTrss.style.display="none";
                 }
             })(i)
         }
@@ -197,6 +199,7 @@
             osearch_2.className="search_2 active";
             osearch_3.className="search_3";
             ofriendMTrs.style.display="none";
+            ofriendMTrss.style.display="inline-block";
         }
 
       //右侧多选
@@ -479,6 +482,11 @@
                                 <option value="">无</option>
                                 <option value="管理员">管理员</option>
                                 <option value="成员">成员</option>
+                            </select>
+                        </div>
+                        <div class="friendMTrss" style="display:none;">
+                            <select id="sysRoles" name="sysRoles" data-bind="foreach:sysRoles">
+                                <option data-bind="text:description,value:description"></option>
                             </select>
                         </div>
                         <div class="friendMMrz">
@@ -1233,9 +1241,19 @@ function ViewModel() {
     
     //角色列表
     var roles;
+    self.sysRoles = ko.observableArray();
     self.getRoles = function() {
+        self.sysRoles.removeAll();
         $.get("/wankangyuan/role/getRoleList",{},function(data){
             roles = JSON.parse(data);
+            roles[0].description = "无";
+            self.sysRoles.push(roles[0]);
+            roles = JSON.parse(data);
+            for (var i in roles){
+                self.sysRoles.push(roles[i]);
+                
+            }
+            //friendmanage_quanxuan();
         });
     }
     //初始化角色信息
@@ -1248,7 +1266,10 @@ function ViewModel() {
     var myfriends;
     self.getMyFriends = function() {
         self.friends.removeAll();
-        $.get("/wankangyuan/friends/getMyFriends",{friendName:$("#myFriendSearch").val()},function(data){
+        $.get("/wankangyuan/friends/getMyFriends",{
+        	friendName:$("#myFriendSearch").val(),
+        	sysRoles:$('#sysRoles').val()
+        	},function(data){
             myfriends = JSON.parse(data);
             for (var i in myfriends){
                 self.friends.push(myfriends[i]);

@@ -1872,6 +1872,7 @@ function friend_manage(){
     var ofriend_yichuzu=document.querySelectorAll('.friend_yichuzu')[0];//从组中移除按钮
     var ofriend_yichuhy=document.querySelectorAll('.friend_yichuhy')[0];//移除好友按钮
     var ofriendMTrs=document.querySelectorAll('.friendMTrs')[0];//组织机构筛选
+    var ofriendMTrss=document.querySelectorAll('.friendMTrss')[0];//好友角色筛选
 
     var osearch_2=document.querySelectorAll('.search_2')[0];//上方按钮栏搜索栏
     var osearch_3=document.querySelectorAll('.search_3')[0];//上方按钮栏搜索栏
@@ -1970,6 +1971,7 @@ function friend_manage(){
                 ofriend_yichuzu.style.display="inline-block";
                 ofriend_yichuhy.style.display="none";
                 ofriendMTrs.style.display="inline-block";
+                ofriendMTrss.style.display="none";
                 
 
                 osearch_2.className="search_2";
@@ -2044,6 +2046,7 @@ function friend_manage(){
         ofriend_yichuzu.style.display="none";
         ofriend_yichuhy.style.display="inline-block";
         ofriendMTrs.style.display="none";
+        ofriendMTrss.style.display="inline-block";
 
         //搜索栏的显示
         osearch_2.className="search_2 active";
@@ -2302,12 +2305,12 @@ function friendmanage_quanxuan(){
 
             if(afriendMMrz[index].querySelectorAll('.fuxuanK2')[0]){
                 afuxuanK=afriendMMrz[index].querySelectorAll('.fuxuanK2');
-                console.log("k2");
+                //console.log("k2");
             }else if(afriendMMrz[index].querySelectorAll('.fuxuanK3')[0]){
                 afuxuanK=afriendMMrz[index].querySelectorAll('.fuxuanK3');
-                console.log("k3");
+                //console.log("k3");
             }else{
-                console.log("无");
+                //console.log("无");
             }
 
             if(afuxuanK[0]){

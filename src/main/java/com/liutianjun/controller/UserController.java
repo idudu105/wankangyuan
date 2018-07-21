@@ -707,7 +707,7 @@ public class UserController {
 			//获取我的好友
 			String me = (String)SecurityUtils.getSubject().getPrincipal();
 			User user = userService.selectByUsername(me);
-			List<Friends> myFriendsList = friendsService.findAllMyFriends(user.getId(), null);
+			List<Friends> myFriendsList = friendsService.findAllMyFriends(user.getId(), null,null);
 			
 			//排除已加好友
 			if(null != userList && userList.size()>0 && null != myFriendsList && myFriendsList.size()>0) {
