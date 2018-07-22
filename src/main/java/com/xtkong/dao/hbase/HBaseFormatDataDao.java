@@ -29,6 +29,7 @@ import org.apache.hadoop.hbase.filter.FilterList.Operator;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import com.xtkong.model.FormatField;
+import com.xtkong.service.PhoenixClient;
 import com.xtkong.util.ConstantsHBase;
 import com.xtkong.util.HBaseDB;
 
@@ -130,6 +131,33 @@ public class HBaseFormatDataDao {
 			formatDataId = rowkeys.get(0);
 		}
 		return formatDataId;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<String> getFormatDataIds(String cs_id, String ft_id, String oldFormatNodeId) {
+		List<String> formatDataIds = new ArrayList<>();
+		try {
+				String tableStr = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+				Map<String, Map<String, Object>> records = PhoenixClient.select("SELECT * FROM \"" + tableStr
+						+ "\" WHERE ID!='" + oldFormatNodeId + "' AND " + "\"" + ConstantsHBase.FAMILY_INFO + "\".\""
+						+ ConstantsHBase.QUALIFIER_FORMATNODEID + "\"='" + oldFormatNodeId + "' ");
+				List<String> head = (List<String>) records.get("records").get("head");
+				List<List<String>> datas = (List<List<String>>) records.get("records").get("data");
+				for (List<String> data : datas) {
+					for (int i = 0; i < head.size(); i++) {
+						try {
+							if (head.get(i).equals("ID")) {
+								formatDataIds.add(data.get(i));
+							}
+						} catch (Exception e) {
+							continue;
+						}
+					}
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		return formatDataIds;
 	}
 
 	/**

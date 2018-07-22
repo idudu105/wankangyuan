@@ -278,25 +278,24 @@ public class ProjectDataController {
 						} else {
 							String pFormatNodeId = projectNodeService.selectPNoId(Integer.valueOf(p_id), nodeId,
 									Integer.valueOf(cs_id), Integer.valueOf(ft_id));
-						
 							if (pFormatNodeId != null) {
-//								for (String nodedataId : nodedataIds) {
-//									if (projectNodeDataService.insert(Integer.valueOf(p_id), nodedataId, Integer.valueOf(cs_id),
-//											Integer.valueOf(ft_id), pSourceDataId) == 1) {
-//										String pDataId = HBaseProjectDataDao.addProjectByData(cs_id, pSourceDataId, ft_id,
-//												pFormatNodeId, nodedataId);
-//										if (pDataId != null) {
+								List<String> formatDataIds = HBaseFormatDataDao.getFormatDataIds(cs_id, ft_id, nodeId);
+								if (formatDataIds != null && !formatDataIds.isEmpty()) {
+									for (String nodedataId : formatDataIds) {
+										if (projectNodeDataService.insert(Integer.valueOf(p_id), nodedataId,
+												Integer.valueOf(cs_id), Integer.valueOf(ft_id), pSourceDataId) == 1) {
+											String pDataId = HBaseProjectDataDao.addProjectByData(cs_id, pSourceDataId,
+													ft_id, pFormatNodeId, nodedataId);
+											if (pDataId != null) {
+//												count++;
+											}
+										} else {
 //											count++;
-//										}
-//									} else {
-										count++;
-//									}
-//								}
-							}				
-							
-							
-							
-//							count++;
+										}
+									}
+								}
+							}
+							 count++;
 						}
 					} catch (Exception e) {
 						continue;
@@ -344,7 +343,6 @@ public class ProjectDataController {
 								nodeName);
 						projectNodeService.updadaPNodeId(Integer.valueOf(p_id), nodeId, Integer.valueOf(cs_id),
 								Integer.valueOf(ft_id), pFormatNodeId);
-						count++;
 					} else {
 						pFormatNodeId = projectNodeService.selectPNoId(Integer.valueOf(p_id), nodeId,
 								Integer.valueOf(cs_id), Integer.valueOf(ft_id));
