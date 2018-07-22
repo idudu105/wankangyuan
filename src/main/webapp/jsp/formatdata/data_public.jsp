@@ -23,11 +23,17 @@
     window.onload=function(){
         project0();
         project1();
+        pro_dataLB();
+        pro_data();
+        data_mine()
+      /*   
+        project0();
+        project1();
         // pro_mine();
         pro_dataLB();
         pro_data();
         // data_mine();
-        // data_create();
+        // data_create(); */
     }
 </script>
 <body>
@@ -83,6 +89,19 @@
 				</a>
 			</div>
 
+					<div class="pro_menu pro_addK">
+						<div class="pro_addk">
+							<div class="pro_addT">添加至项目</div>
+							<div class="pro_addI"></div>
+						</div>
+					</div>
+					<div class="pro_addul">
+					<c:forEach items="${projects}" var="projectTemp">
+						<div class="pro_addli" id="${projectTemp.id }">${projectTemp.p_name}</div>
+					</c:forEach>
+					<div class="pro_addli">项目4</div>
+					<div class="pro_addli">项目5</div>
+				</div>
 			<div class="top2">
 				<div class="top2C">
 					<a href="/wankangyuan/sourceData/firstIn?type=1">
@@ -95,8 +114,8 @@
 					<div class="search">
 						<div class="searchC">
 							<img src="/wankangyuan/static/img/search.png" alt=""
-								class="searchCi"  onclick="searchFirst()"/> <input type="text" class="searchCt"
-								placeholder="搜索数据" value="${searchFirstWord}" />
+								class="searchCi" onclick="searchFirst()" /> <input type="text"
+								class="searchCt" placeholder="搜索数据" value="${searchFirstWord}" />
 						</div>
 					</div>
 					<!--
@@ -109,6 +128,7 @@
                     -->
 				</div>
 			</div>
+			
 			<div class="shaixuan">
 				<div class="shaixuanC">
 					<div class="listZT">
@@ -135,7 +155,6 @@
 								class="shaixuanBTi" />
 						</div>
 					</div>
-
 					<div class="pro_menu">添加至我的</div>
 					<select id="source_Select" class="pro_menusel">
 						<c:forEach items="${sources}" var="source">
@@ -148,13 +167,8 @@
 						</c:forEach>
 					</select>
 				</div>
-				<div class="pro_addul">
-					<div class="pro_addli">项目1</div>
-					<div class="pro_addli">项目2</div>
-					<div class="pro_addli">项目3</div>
-					<div class="pro_addli">项目4</div>
-					<div class="pro_addli">项目5</div>
-				</div>
+				
+				
 				<div class="shaixuanZK">
 					<div class="shaixuanZKC">
 						<c:forEach items="${source.sourceFields}" var="sourceFieldTemp">

@@ -174,7 +174,7 @@
 					<div class="inportM">
 						<div class="inportMt">请把相关数据按照分类准确输入到EXCEL表格模板中，上传数据后，表格会自动配置相关内容。</div>
 						<a href="#" class="inportMz inportMd" id="downloadExcelMode">下载EXCEL模板</a>
-					<!-- 	<div class="inportMz inportMu">上传数据</div> -->
+						<div class="inportMz inportMu" style="display: none;">上传数据</div> 
 						<input type="file" class="inportMf" id="inportMf"
 							onchange="upFile()" />
 					</div>

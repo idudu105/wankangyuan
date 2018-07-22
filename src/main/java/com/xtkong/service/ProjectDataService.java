@@ -22,6 +22,14 @@ public class ProjectDataService {
 
 	}
 
+	public int updataPDataId(Integer p_id, String sourceDataId, Integer cs_id, String pSourceDataId) {
+		return projectDataDao.updataPDataId(p_id, sourceDataId, cs_id, pSourceDataId);
+	}
+
+	public String selectPDataId(Integer p_id, String sourceDataId, Integer cs_id) {
+		return projectDataDao.selectPDataId(p_id, sourceDataId, cs_id);
+	}
+	
 	public List<String> select(Integer p_id, Integer cs_id) {
 		return projectDataDao.select(p_id, cs_id);
 	}

@@ -106,13 +106,15 @@ public class HBaseProjectDataDao {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static String addProjectWholeNode(String cs_id, String pSourceDataId, String oldFormatNodeId, String ft_id,
+	public static List<String> addProjectWholeNode(String cs_id, String pSourceDataId, String oldFormatNodeId, String ft_id,
 			String nodeName) {
+		List<String> idStrings = new ArrayList<>();
 		String pFormatNodeId = null;
 		try {
 			pFormatNodeId = HBaseProjectDataDao.addProjectPartNode(cs_id, pSourceDataId, oldFormatNodeId, ft_id,
 					nodeName);
 			if (pFormatNodeId != null) {
+				idStrings.add(pFormatNodeId);
 				String tableStr = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
 				Map<String, Map<String, Object>> records = PhoenixClient.select("SELECT * FROM \"" + tableStr
 						+ "\" WHERE ID!='" + oldFormatNodeId + "' AND " + "\"" + ConstantsHBase.FAMILY_INFO + "\".\""
@@ -122,23 +124,23 @@ public class HBaseProjectDataDao {
 				for (List<String> data : datas) {
 					Map<String, String> formatFieldDatas = new HashMap<>();
 					for (int i = 0; i < head.size(); i++) {
-						if (!head.get(i).equals("ID")) {
-							try {
+						try {
+							if (head.get(i).equals("ID")) {
+								idStrings.add(data.get(i));
+							} else {
 								formatFieldDatas.put(head.get(i), data.get(i));
-							} catch (Exception e) {
-								continue;
 							}
+						} catch (Exception e) {
+							continue;
 						}
 					}
 					HBaseFormatDataDao.insertFormatData(cs_id, ft_id, pSourceDataId, pFormatNodeId, formatFieldDatas);
 				}
 			}
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
-		return pFormatNodeId;
+		return idStrings;
 	}
 
 	/**
@@ -164,7 +166,7 @@ public class HBaseProjectDataDao {
 			Long count = db.getNewId(ConstantsHBase.TABLE_GID, uid + "_" + cs_id, ConstantsHBase.FAMILY_GID_GID,
 					ConstantsHBase.QUALIFIER_GID_GID_GID);
 			String psourceDataId = uid + "_" + cs_id + "_" + count;
-			Put put = new Put(Bytes.toBytes(sourceDataId));
+			Put put = new Put(Bytes.toBytes(psourceDataId));
 			put.addColumn(Bytes.toBytes(family), Bytes.toBytes(ConstantsHBase.QUALIFIER_PUBLIC),
 					Bytes.toBytes(ConstantsHBase.VALUE_PUBLIC_FALSE));
 			put.addColumn(Bytes.toBytes(family), Bytes.toBytes(ConstantsHBase.QUALIFIER_PROJECT),
@@ -212,7 +214,7 @@ public class HBaseProjectDataDao {
 			Long count = db.getNewId(ConstantsHBase.TABLE_GID, uid + "_" + cs_id, ConstantsHBase.FAMILY_GID_GID,
 					ConstantsHBase.QUALIFIER_GID_GID_GID);
 			String psourceDataId = uid + "_" + cs_id + "_" + count;
-			Put put = new Put(Bytes.toBytes(sourceDataId));
+			Put put = new Put(Bytes.toBytes(psourceDataId));
 			put.addColumn(Bytes.toBytes(family), Bytes.toBytes(ConstantsHBase.QUALIFIER_PUBLIC),
 					Bytes.toBytes(ConstantsHBase.VALUE_PUBLIC_FALSE));
 			put.addColumn(Bytes.toBytes(family), Bytes.toBytes(ConstantsHBase.QUALIFIER_PROJECT),
@@ -253,7 +255,7 @@ public class HBaseProjectDataDao {
 									}
 								}
 							}
-							formatNodeId = HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName,
+							formatNodeId = HBaseFormatNodeDao.insertFormatNode(cs_id, psourceDataId, ft_id, nodeName,
 									formatFieldDatas);
 						}
 						if (formatNodeId != null) {
@@ -273,16 +275,13 @@ public class HBaseProjectDataDao {
 										}
 									}
 								}
-								HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId,
+								HBaseFormatDataDao.insertFormatData(cs_id, ft_id, psourceDataId, formatNodeId,
 										formatFieldDatas);
 							}
 						}
 					}
 				}
-			
-				
-				
-				
+
 			} else {
 				return null;
 			}
@@ -320,8 +319,8 @@ public class HBaseProjectDataDao {
 			for (Result result : results) {
 				Long count = db.getNewId(ConstantsHBase.TABLE_GID, uid + "_" + cs_id, ConstantsHBase.FAMILY_GID_GID,
 						ConstantsHBase.QUALIFIER_GID_GID_GID);
-				String sourceDataId = uid + "_" + cs_id + "_" + count;
-				Put put = new Put(Bytes.toBytes(sourceDataId));
+				String psourceDataId = uid + "_" + cs_id + "_" + count;
+				Put put = new Put(Bytes.toBytes(psourceDataId));
 				put.addColumn(Bytes.toBytes(family), Bytes.toBytes(ConstantsHBase.QUALIFIER_PUBLIC),
 						Bytes.toBytes(ConstantsHBase.VALUE_PUBLIC_FALSE));
 				put.addColumn(Bytes.toBytes(family), Bytes.toBytes(ConstantsHBase.QUALIFIER_PROJECT),
@@ -361,8 +360,8 @@ public class HBaseProjectDataDao {
 										}
 									}
 								}
-								formatNodeId = HBaseFormatNodeDao.insertFormatNode(cs_id, sourceDataId, ft_id, nodeName,
-										formatFieldDatas);
+								formatNodeId = HBaseFormatNodeDao.insertFormatNode(cs_id, psourceDataId, ft_id,
+										nodeName, formatFieldDatas);
 							}
 							if (formatNodeId != null) {
 								records = PhoenixClient.select("SELECT * FROM \"" + tableStr + "\" WHERE ID!='"
@@ -381,7 +380,7 @@ public class HBaseProjectDataDao {
 											}
 										}
 									}
-									HBaseFormatDataDao.insertFormatData(cs_id, ft_id, sourceDataId, formatNodeId,
+									HBaseFormatDataDao.insertFormatData(cs_id, ft_id, psourceDataId, formatNodeId,
 											formatFieldDatas);
 								}
 							}
