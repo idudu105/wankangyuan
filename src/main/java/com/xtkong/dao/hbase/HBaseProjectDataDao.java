@@ -16,6 +16,37 @@ import com.xtkong.util.ConstantsHBase;
 import com.xtkong.util.HBaseDB;
 
 public class HBaseProjectDataDao {
+
+	@SuppressWarnings("unchecked")
+	public static String updateProjectNodeDatas(String cs_id, String oldFormatNodeId, String ft_id,
+			String formatNodeId) {
+		String pFormatNodeId = null;
+		try {
+			String tableStr = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
+			Map<String, Map<String, Object>> records = PhoenixClient
+					.select("SELECT * FROM \"" + tableStr + "\" WHERE ID='" + oldFormatNodeId + "'");
+			List<String> head = (List<String>) records.get("records").get("head");
+			List<List<String>> datas = (List<List<String>>) records.get("records").get("data");
+
+			for (List<String> data : datas) {
+				Map<String, String> formatFieldDatas = new HashMap<>();
+				for (int i = 0; i < head.size(); i++) {
+					if (!head.get(i).equals("ID")) {
+						try {
+							formatFieldDatas.put(head.get(i), data.get(i));
+						} catch (Exception e) {
+							continue;
+						}
+					}
+				}
+				HBaseFormatDataDao.updateFormatDatas(cs_id, ft_id, formatNodeId, formatFieldDatas);
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		return pFormatNodeId;
+	}
+
 	/**
 	 * 添加分析数据
 	 * 
@@ -55,7 +86,7 @@ public class HBaseProjectDataDao {
 	}
 
 	/**
-	 * 添加结点及结点下所有数据
+	 * 添加结点
 	 * 
 	 * @param cs_id
 	 * @param pSourceDataId
@@ -106,8 +137,8 @@ public class HBaseProjectDataDao {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<String> addProjectWholeNode(String cs_id, String pSourceDataId, String oldFormatNodeId, String ft_id,
-			String nodeName) {
+	public static List<String> addProjectWholeNode(String cs_id, String pSourceDataId, String oldFormatNodeId,
+			String ft_id, String nodeName) {
 		List<String> idStrings = new ArrayList<>();
 		String pFormatNodeId = null;
 		try {
