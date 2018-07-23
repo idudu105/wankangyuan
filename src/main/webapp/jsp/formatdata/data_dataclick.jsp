@@ -13,6 +13,66 @@
 <head>
 <meta charset="UTF-8" />
 <title>Document</title>
+<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			/*
+			  * 外面盒子样式---自己定义
+			  */
+			
+			.page_div {
+				margin-top: 20px;
+				margin-bottom: 20px;
+				font-size: 15px;
+				font-family: "microsoft yahei";
+				color: #666666;
+				margin-right: 10px;
+				padding-left: 20px;
+				box-sizing: border-box;
+			}
+			/*
+			 * 页数按钮样式
+			 */
+			.page_div a {
+				min-width: 30px;
+				height: 28px;
+				border: 1px solid #dce0e0!important;
+				text-align: center;
+				margin: 0 4px;
+				cursor: pointer;
+				line-height: 28px;
+				color: #666666;
+				font-size: 13px;
+				display: inline-block;
+			}
+			#firstPage,
+			#lastPage {
+				width: 50px;
+				color: #0073A9;
+				border: 1px solid #0073A9!important;
+			}
+			#prePage,
+			#nextPage {
+				width: 70px;
+				color: #0073A9;
+				border: 1px solid #0073A9!important;
+			}
+			.page_div .current {
+				background-color: #0073A9;
+				border-color: #0073A9;
+				color: #FFFFFF;
+			}
+			.totalPages {
+				margin: 0 10px;
+			}
+			.totalPages span,
+			.totalSize span {
+				color: #0073A9;
+				margin: 0 5px;
+			}
+		</style>
 </head>
 <link rel="stylesheet" type="text/css"
 	href="/wankangyuan/static/css/project1.css" />
@@ -306,7 +366,6 @@
 		src="/wankangyuan/static/js/jquery.min.js"></script>
 
 	<script type="text/javascript" src="/wankangyuan/static/js/paging.js"></script>
-	s
 	<script type="text/javascript">
     var cs_id="${cs_id}";//采集源id
 	var searchId="${searchId}";//操作字段id
@@ -318,6 +377,13 @@
 	var nodeName = $("#dataNodeTextArea").val();//结点名
 	var sourceDataId = $("#sourceDataId").val();//源数据id
 	var formatNodeId = $("#formatNodeId").val();//结点id
+	
+	var fanhui='check1_'+formatNodeId;
+    var fanhuiID=document.getElementById(fanhui);
+    var IDparent1=fanhuiID.parentNode;
+    var IDparent2=IDparent1.parentNode;
+    var owenben=IDparent2.querySelectorAll('.PJliB2Lt')[0];
+    owenben.style.color="#16579b";
 	//更换采集源，刷新页面
 	//选择待操作字段
 	$('.prodaclmRzTt2').click(function(){
@@ -450,7 +516,7 @@
     	slideSpeed: 600, // 缓动速度。单位毫秒
     	jump: true, //是否支持跳转
     	callback: function(page) { // 回调函数
-    		console.log(page);
+    		//console.log(page);
     		var user_id=${user.id};
     		var cs_id = $("#cs_id").val();
     		var ft_id = $("#ft_id").val();

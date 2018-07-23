@@ -288,6 +288,12 @@
 	var nodeName = $("#dataNodeTextArea").val();//结点名
 	var sourceDataId = $("#sourceDataId").val();//源数据id
 	var formatNodeId = $("#formatNodeId").val();//结点id
+	var fanhui='check1_'+formatNodeId;
+    var fanhuiID=document.getElementById(fanhui);
+    var IDparent1=fanhuiID.parentNode;
+    var IDparent2=IDparent1.parentNode;
+    var owenben=IDparent2.querySelectorAll('.PJliB2Lt')[0];
+    owenben.style.color="#16579b";
 	//更换采集源，刷新页面
 	//选择待操作字段
 	$('.prodaclmRzTt2').click(function(){

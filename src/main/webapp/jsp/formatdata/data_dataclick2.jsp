@@ -325,11 +325,11 @@
 							<div class="inportMt">请把相关数据按照分类准确输入到EXCEL表格模板中，上传数据后，表格会自动配置相关内容。</div>
 
 							<a href="#" class="inportMz inportMd">下载EXCEL模板</a>
-							<div class="inportMz inportMu" style="display: none;">上传数据</div>
+							<div class="inportMz inportMu" >上传数据</div>
 							<input type="file" class="inportMf" id="inportMf"
 								onchange="upFile()" />
 						</div>
-						<input type="button" class="inportB" value="提交" />
+						<input type="button" class="inportB" value="提交" style="display: none;"/>
 					</div>
 
 				</div>
@@ -366,6 +366,12 @@
 	var nodeName = $("#dataNodeTextArea").val();//结点名
 	var sourceDataId = $("#sourceDataId").val();//源数据id
 	var formatNodeId = $("#formatNodeId").val();//结点id
+	var fanhui='check1_'+formatNodeId;
+    var fanhuiID=document.getElementById(fanhui);
+    var IDparent1=fanhuiID.parentNode;
+    var IDparent2=IDparent1.parentNode;
+    var owenben=IDparent2.querySelectorAll('.PJliB2Lt')[0];
+    owenben.style.color="#16579b";
 	//更换采集源，刷新页面
 	//选择待操作字段
 	$('.prodaclmRzTt2').click(function(){
@@ -692,13 +698,17 @@
 	    	        		alert("联网失败");
 	    	        	}
 	    	        });  
-	            }}
-    		 
-    		
+	            }
+	       }
+    	    		
     		
     	});
     	//移除数据
     	$(".clmRsb_remove").click(function (){
+    		
+    		var con1=confirm("确定删除选中项吗？");
+            if(con1){
+                //确认删除的动作            
     		var afuxuanK=document.querySelectorAll('.fx4');
             var afuxuan=[];
             for(var i=0;i<afuxuanK.length;i++){
@@ -741,6 +751,9 @@
             		alert("联网失败");
             	}
             });
+            }else{
+                //点击取消的动作
+            }
     	});
     	//移除结点
     	$(".daclLb_del").click(function (){
@@ -762,7 +775,9 @@
             }else if(ids.length > 1){
             	alert("最多选择一个结点！")
             }else{
-            	var cs_id = $("#cs_id").val();
+            	var con1=confirm("确定删除选中项吗？");
+                if(con1){
+              	var cs_id = $("#cs_id").val();
         		var ft_id = $("#ft_id").val();
         		var formatNodeId = $("#formatNodeId").val();
         		var sourceDataId = $("#sourceDataId").val();
@@ -790,6 +805,9 @@
         				alert("联网失败");
         			}
         		});	
+                }else{
+                    //点击取消的动作
+                }
             }
     	});
     	//查看结点数据
@@ -1009,7 +1027,7 @@
             })(i)
         }
         window.onclick=function(){
-            console.log(1);
+        //   console.log(1);
             oBTSX.style.display="none";
         }
         oBTSX.onclick=function(){

@@ -278,6 +278,12 @@
 	var formatNodeId = $("#formatNodeId").val();//结点id
 	var p_id = ${project.id};//项目id
 	var searchFirstWord= $("#searchFirstWordNode").val();
+	var fanhui='check1_'+formatNodeId;
+    var fanhuiID=document.getElementById(fanhui);
+    var IDparent1=fanhuiID.parentNode;
+    var IDparent2=IDparent1.parentNode;
+    var owenben=IDparent2.querySelectorAll('.PJliB2Lt')[0];
+    owenben.style.color="#16579b";
 	//选择待操作字段
 	$('.prodaclmRzTt2').click(function(){
 		searchId = $(this).attr('id');
