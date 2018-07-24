@@ -69,7 +69,7 @@ public class SourceDataController {
 	 * @param request
 	 * @param httpSession
 	 * @param type
-	 *            "1":我的 "2":我创建的 "3":公开"4":项目
+	 *            "1":我的 "2":我创建的 "3":公开"4":项目"5":项目数据
 	 * @param cs_id
 	 * @param page
 	 * @param strip
@@ -158,6 +158,7 @@ public class SourceDataController {
 				conditionEqual.put(ConstantsHBase.QUALIFIER_PUBLIC, String.valueOf(ConstantsHBase.VALUE_PUBLIC_TRUE));
 				break;
 			case "4":
+			case "5":
 				conditionEqual.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
 				break;
 			}

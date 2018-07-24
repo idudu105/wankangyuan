@@ -43,8 +43,6 @@ public class HBaseDB {
 		configuration.set("hbase.master.info.port", ConstantsHBase.HBASE_MASTER_INFO_PORT);
 		try {
 			connection = ConnectionFactory.createConnection(configuration);
-			HBaseDB.getInstance().createTable(ConstantsHBase.TABLE_GID, new String[] { ConstantsHBase.FAMILY_GID_GID },
-					1);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -119,14 +117,7 @@ public class HBaseDB {
 		try {
 			Admin admin = connection.getAdmin();
 			TableName tableNameObject = TableName.valueOf(tableName);
-			while (true) {
-				if (admin.tableExists(tableNameObject)) {
-					table = connection.getTable(tableNameObject);
-					break;
-				} else {
-					createTable(tableName, new String[] { ConstantsHBase.FAMILY_INFO }, 1);
-				}
-			}
+			table = connection.getTable(tableNameObject);
 			admin.close();
 		} catch (Exception e) {
 			e.printStackTrace();
