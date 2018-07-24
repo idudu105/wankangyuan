@@ -89,7 +89,7 @@
                     </c:if>
                     
                     <c:if test="${authoritys['31'] == true }">
-                    	<a href="/wankangyuan/projectFormatData/getSourceDatas?p_id=${project.id}"><div class="top2Ctr">格式数据</div></a>
+                    	<a href="/wankangyuan//sourceData/getSourceDatas?type=4&p_id=${project.id}"><div class="top2Ctr">格式数据</div></a>
                     </c:if>
                     
                     <c:if test="${authoritys['27'] == true }">

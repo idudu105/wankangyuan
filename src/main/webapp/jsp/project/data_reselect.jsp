@@ -148,7 +148,7 @@
 	    $("#source_Select").change(function(){
 			var cs_id = $("#source_Select").val();
 			var p_id = ${p_id};
-			window.location.href="/wankangyuan/projectFormatData/getAllSourceDatas?cs_id="+cs_id+"&p_id="+p_id;
+			window.location.href="/wankangyuan/sourceData/getSourceDatas?type=5&cs_id="+cs_id+"&p_id="+p_id;
 		});
     	//提交勾选的数据
     	$("#submit_data").click(function (){
