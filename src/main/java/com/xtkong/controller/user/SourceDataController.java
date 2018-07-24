@@ -311,6 +311,8 @@ public class SourceDataController {
 			return "redirect:/jsp/formatdata/data_public.jsp";
 		case "4":
 			return "redirect:/jsp/project/project_data.jsp";
+		case "5":
+			return "/jsp/project/data_reselect.jsp";
 		default:
 			return "redirect:/jsp/formatdata/data_public.jsp";
 		}
