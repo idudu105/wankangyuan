@@ -471,6 +471,7 @@
 	        $.ajax({
 	        	url:"/wankangyuan/projectFormatData/insert",
 	        	type:"post",
+				async:true,
 	        	data:{
 	        		p_id:p_id,
 	        		sourceDataIds:sourceDataIds.join(","),

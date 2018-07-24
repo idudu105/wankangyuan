@@ -95,8 +95,8 @@
 							style="display: none;" /> <input id="sourceDataId"
 							value="${sourceDataId}" style="display: none;" />
 					</div>
-					<div class="app_expexport app_expexport_node">导出结点</div>
-					<div class="app_expexport app_expexport_type">导出格式类型</div>
+					<div class="app_expexport app_expexport_node" style="display: none;">导出结点</div>
+					<div class="app_expexport app_expexport_type" style="display: none;">导出格式类型</div>
 				</div>
 			</div>
 			<div class="prodainm">

@@ -25,6 +25,9 @@
                 jumpDom = '',
                 content = '',
                 liWidth = 60, // li的宽度
+//                pageIndex = that.options.pageNo,
+//                pageNo=that.options.initPageNo || 1,
+//                totalCount=that.options.totalCount || 0, // 条目总数
                 totalPages = that.options.totalPages, // 总页数
                 wrapLength = 0;
             totalPages > 5 ? wrapLength = 5 * liWidth : wrapLength = totalPages * liWidth;
@@ -33,13 +36,18 @@
             }
             that.options.jump ? jumpDom = '<input type="text" placeholder="1" class="jump-text" id="jumpText"><button type="button" class="jump-button" id="jumpBtn">跳转</button>' : jumpDom = '';
             content = 
-            	'<button class="pageLR" id="prePage"><img src="/wankangyuan/static/img/pageL.png" class="pageLRi" alt="" /></button>' +
+            	'<li class="pageNUM " id="firstPage">首页</li>'+
+            	'<button class="pageNUM" id="prePage"><img src="/wankangyuan/static/img/pageL.png" class="pageLRi" alt="" /></button>' +
             	//'<div  style="height: 40px; float: left; overflow: hidden;width:' + wrapLength + 'px">' +
                 '<ul id="pageSelect" style="transition:all; display:inline;' + that.options.slideSpeed + 'ms">' +
                 ulDom +
                 '</ul>' +
                 //'</div>' +
-                '<button class="pageLR" id="nextPage"><img src="/wankangyuan/static/img/pageR.png" class="pageLRi" alt="" /></button>' ;
+                '<button class="pageNUM" id="nextPage"><img src="/wankangyuan/static/img/pageR.png" class="pageLRi" alt="" /></button>' +
+                '<li class="pageNUM " id="lastPage">尾页</li>'+
+    			'<span class="totalPages"> 共<span>'+totalPages+'</span>页 </span>'
+//    			+'<span class="totalCount"> 第<span>'+pageIndex+'</span>页 </span>'
+    			;
             that.el.html(content);
         },
         bindEvents: function() {

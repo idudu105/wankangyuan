@@ -13,66 +13,6 @@
 <head>
 <meta charset="UTF-8" />
 <title>Document</title>
-<style>
-			* {
-				padding: 0;
-				margin: 0;
-			}
-			/*
-			  * 外面盒子样式---自己定义
-			  */
-			
-			.page_div {
-				margin-top: 20px;
-				margin-bottom: 20px;
-				font-size: 15px;
-				font-family: "microsoft yahei";
-				color: #666666;
-				margin-right: 10px;
-				padding-left: 20px;
-				box-sizing: border-box;
-			}
-			/*
-			 * 页数按钮样式
-			 */
-			.page_div a {
-				min-width: 30px;
-				height: 28px;
-				border: 1px solid #dce0e0!important;
-				text-align: center;
-				margin: 0 4px;
-				cursor: pointer;
-				line-height: 28px;
-				color: #666666;
-				font-size: 13px;
-				display: inline-block;
-			}
-			#firstPage,
-			#lastPage {
-				width: 50px;
-				color: #0073A9;
-				border: 1px solid #0073A9!important;
-			}
-			#prePage,
-			#nextPage {
-				width: 70px;
-				color: #0073A9;
-				border: 1px solid #0073A9!important;
-			}
-			.page_div .current {
-				background-color: #0073A9;
-				border-color: #0073A9;
-				color: #FFFFFF;
-			}
-			.totalPages {
-				margin: 0 10px;
-			}
-			.totalPages span,
-			.totalSize span {
-				color: #0073A9;
-				margin: 0 5px;
-			}
-		</style>
 </head>
 <link rel="stylesheet" type="text/css"
 	href="/wankangyuan/static/css/project1.css" />
@@ -167,8 +107,8 @@
 					</div>
 
 
-					<div class="app_expexport app_expexport_node">导出结点</div>
-					<div class="app_expexport app_expexport_type">导出格式类型</div>
+					<div class="app_expexport app_expexport_node"  style="display: none;">导出结点</div>
+					<div class="app_expexport app_expexport_type"  style="display: none;">导出格式类型</div>
 				</div>
 			</div>
 			<div class="pro_addul">
@@ -539,7 +479,7 @@
 					+cs_id+"&sourceDataId="+sourceDataId+"&type="+type+"&ft_id="+ft_id+"&formatNodeId="+formatNodeId;
 		}
 	    
-	    $(".app_expexport_node").click(function (){
+	   /*  $(".app_expexport_node").click(function (){
     		var afuxuanK=document.querySelectorAll('.fuxuanK42');
             var afuxuan=[];
             for(var i=0;i<afuxuanK.length;i++){
@@ -569,9 +509,9 @@
            	+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord
 			+"&oldCondition="+oldCondition;;
            	
-    	});
+    	}); */
     	
-    	$(".app_expexport_type").click(function (){
+    	/* $(".app_expexport_type").click(function (){
     		
     		var afuxuanK=document.querySelectorAll('.fuxuanK41');
             var afuxuan=[];
@@ -600,7 +540,7 @@
            	+"&searchId="+searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord
 			+"&oldCondition="+oldCondition;;
     	
-    	});
+    	}); */
     	var aprodaclmRzTt2=document.querySelectorAll('.prodaclmRzTt2');
         var oPJK=document.querySelectorAll('.PJK')[0];//项目框
         var oBTSX2=document.querySelectorAll('.BTSX2')[0];//项目表头筛选框
