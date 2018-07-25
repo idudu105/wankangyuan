@@ -39,6 +39,18 @@ public interface ProjectDao {
 			+ "where project.creator=user.id and is_open=1 and p_name like '%${searchWord}%' order by id desc")
 	public List<Project> selectPublicProject(@Param("searchWord")String searchWord);
 	
+	
+	/**
+	 * 选取公共项目
+	 * @return	公共项目列表
+	 */
+	@Select("select project.* , user.username as creatorName "
+			+ "from project,user "
+			+ "where project.creator=user.id and is_open=1 and p_name like '%${searchWord}%' "
+			+ "${sql}"
+			+ "order by id desc")
+	public List<Project> selectPublicProject1(@Param("searchWord")String searchWord, @Param("sql")String sql);
+	
 	/**
 	 * 选取我创建的项目
 	 * @return	我创建的项目列表
@@ -47,6 +59,16 @@ public interface ProjectDao {
 			+ "from project,user "
 			+ "where project.creator=user.id and creator=#{creator} and p_name like '%${searchWord}%' order by id desc") 
 	public List<Project> selectCreatedProject(@Param("creator")Integer creator , @Param("searchWord")String searchWord);
+	/**
+	 * 选取我创建的项目
+	 * @return	我创建的项目列表
+	 */
+	@Select("select project.* , user.username as creatorName "
+			+ "from project,user "
+			+ "where project.creator=user.id and creator=#{creator} and p_name like '%${searchWord}%'"
+			+ "${sql}"
+			+ " order by id desc") 
+	public List<Project> selectCreatedProject1(@Param("creator")Integer creator , @Param("searchWord")String searchWord, @Param("sql")String sql);
 	
 	/**
 	 * 选取我加入的项目
@@ -59,6 +81,20 @@ public interface ProjectDao {
 			+ "and project.p_name like '%${searchWord}%' "
 			+ "order by project.id desc")
 	public List<Project> selectMyProject1(@Param("user_id")Integer user_id , @Param("searchWord")String searchWord);
+	
+	/**
+	 * 选取我加入的项目
+	 * @return	我加入的项目列表
+	 */
+	@Select("select project.*,user.username as creatorName from project , project_user,user "
+			+ "where project.id=project_user.project_id "
+			+ "and project.creator=user.id "
+			+ "and project_user.user_id=#{user_id} "
+			+ "and project.p_name like '%${searchWord}%' "
+			+ "${sql}"
+			+ "order by project.id desc")
+	public List<Project> selectMyProject2(@Param("user_id")Integer user_id , @Param("searchWord")String searchWord, @Param("sql")String sql);
+	
 	
 	/**
 	 * 选取我加入的项目，用于下拉列表中，因此此处不用进行搜索，直接查询，同时也不需要进行分页，直接全部拉取出来。

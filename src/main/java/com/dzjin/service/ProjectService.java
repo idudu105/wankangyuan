@@ -76,6 +76,15 @@ public class ProjectService {
 	}
 	
 	/**
+	 * 选取公共项目
+	 * @return	公共项目列表
+	 */
+	public List<Project> selectPublicProject1(String searchWord, String sql){
+		List<Project> projects = projectDao.selectPublicProject1(searchWord, sql);
+		return projects;
+	}
+	
+	/**
 	 * 选取我创建的项目
 	 * @return	我创建的项目列表
 	 */
@@ -90,6 +99,15 @@ public class ProjectService {
 	}
 	
 	/**
+	 * 选取我创建的项目
+	 * @return	我创建的项目列表
+	 */
+	public List<Project> selectCreatedProject1(Integer creator , String searchWord, String sql){
+		List<Project> projects = projectDao.selectCreatedProject1(creator , searchWord, sql);
+		return projects;
+	}
+	
+	/**
 	 * 选取我加入的项目
 	 * @return	我加入的项目列表
 	 */
@@ -101,6 +119,15 @@ public class ProjectService {
 		result.put("total", pageInfo.getTotal());
 		result.put("list", projects);
 		return result;
+	}
+	
+	/**
+	 * 选取我加入的项目
+	 * @return	我加入的项目列表
+	 */
+	public List<Project> selectMyProject2(Integer user_id ,  String searchWord, String sql){
+		List<Project> projects = projectDao.selectMyProject2(user_id , searchWord, sql);
+		return projects;
 	}
 	
 	/**

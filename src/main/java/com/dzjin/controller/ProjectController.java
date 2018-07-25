@@ -269,7 +269,7 @@ public class ProjectController {
 	 * @return
 	 */
 	@RequestMapping("/selectPublicProject")
-	public String selectPublicProject(HttpSession httpSession ,  Integer page , Integer strip, String searchWord , Integer type){		
+	public String selectPublicProject(HttpSession httpSession ,  Integer page , Integer strip, String searchWord , Integer type, String allValue){		
 		if(page == null){
 			page = 1;
 		}
@@ -291,6 +291,7 @@ public class ProjectController {
 		httpSession.setAttribute("total", map.get("total"));
 		httpSession.setAttribute("page", page);
 		httpSession.setAttribute("rows", strip);
+		httpSession.setAttribute("allValue", allValue);
 		
 		if(type == null || type == 1){
 			return "/jsp/project/project_public.jsp";
@@ -311,7 +312,7 @@ public class ProjectController {
 	 */
 	@RequestMapping("/selectCreatedProject")
 	public String selectCreatedProject(HttpSession httpSession , HttpServletRequest request ,
-			Integer page , Integer strip , String searchWord , Integer type){
+			Integer page , Integer strip , String searchWord , Integer type, String allValue){
 		if(page == null){
 			page = 1;
 		}
@@ -334,6 +335,7 @@ public class ProjectController {
 		httpSession.setAttribute("total", map.get("total"));
 		httpSession.setAttribute("page", page);
 		httpSession.setAttribute("rows", strip);
+		httpSession.setAttribute("allValue", allValue);
 		if(type == null || type == 1){
 			return "/jsp/project/project_create.jsp";
 		}else{
@@ -353,7 +355,7 @@ public class ProjectController {
 	 */
 	@RequestMapping("/selectMyProject")
 	public String selectMyProject(HttpSession httpSession , HttpServletRequest request , 
-			Integer page , Integer strip, String searchWord , Integer type){
+			Integer page , Integer strip, String searchWord , Integer type, String allValue){
 		if(page == null){
 			page = 1;
 		}
@@ -376,6 +378,7 @@ public class ProjectController {
 		httpSession.setAttribute("total", map.get("total"));
 		httpSession.setAttribute("page", page);
 		httpSession.setAttribute("rows", strip);
+		httpSession.setAttribute("allValue", allValue);
 		if(type == null || type == 1){
 			return "/jsp/project/project_mine.jsp";
 		}else{
@@ -407,6 +410,41 @@ public class ProjectController {
 	}
 	
 	/**
+	 * 将公共项目添加到我的项目
+	 * @param session
+	 * @param request
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping("/addPublicProjectToMine1")
+	@ResponseBody
+	public Map<String, Object> addPublicProjectToMine1(HttpSession session , HttpServletRequest request , String ids,String searchWord,String allValue, String noChangId){
+		User user = (User)request.getAttribute("user");
+		Map<String, Object> map = new HashMap<>();
+		String projecIds="";
+		if(allValue != null && !allValue.equals("")){//全部
+			String sql="";
+			if(noChangId != null && !noChangId.equals("")){
+				sql += " and project.id not in("+noChangId+")";
+			}
+			List<Project> dataList = projectService.selectPublicProject1(searchWord, sql);
+			for(Project project:dataList){
+				projecIds += project.getId()+",";
+				projecIds.substring(0, projecIds.length()-1);
+			}
+		}else{
+			projecIds=ids;
+		}
+		if(projectService.addPublicProjectToMine(projecIds, user.getId())){
+			map.put("result", true);
+		}else{
+			map.put("result", false);
+			map.put("message", "部分项目添加至我的项目失败！");
+		}
+		return map;
+	}
+	
+	/**
 	 * 改变项目的公开状态
 	 * @param ids
 	 * @param type	0代表取消公开，1代表公开
@@ -417,6 +455,41 @@ public class ProjectController {
 	public Map<String, Object> updateProjectOpenState(String ids , Integer is_open){
 		Map<String, Object> map = new HashMap<>();
 		if(projectService.updateProjectOpenState(ids, is_open)){
+			map.put("result", true);
+		}else{
+			map.put("result", false);
+			map.put("message", "部分项目更新公开状态失败");
+		}
+		return map;
+	}
+	
+	/**
+	 * 改变项目的公开状态
+	 * @param ids
+	 * @param type	0代表取消公开，1代表公开
+	 * @return	
+	 */
+	@RequestMapping("/updateProjectOpenState1")
+	@ResponseBody
+	public Map<String, Object> updateProjectOpenState1(HttpServletRequest request, String ids , Integer is_open, String searchWord, String allValue, String noChangId){
+		Map<String, Object> map = new HashMap<>();
+		
+		String projecIds="";
+		if(allValue != null && !allValue.equals("")){//全部
+			User user = (User)request.getAttribute("user");
+			String sql="";
+			if(noChangId != null && !noChangId.equals("")){
+				sql += " and project.id not in("+noChangId+")";
+			}
+			List<Project> dataList = projectService.selectCreatedProject1(user.getId() ,searchWord, sql);
+			for(Project project:dataList){
+				projecIds += project.getId()+",";
+				projecIds.substring(0, projecIds.length()-1);
+			}
+		}else{
+			projecIds=ids;
+		}
+		if(projectService.updateProjectOpenState(projecIds, is_open)){
 			map.put("result", true);
 		}else{
 			map.put("result", false);
@@ -444,6 +517,40 @@ public class ProjectController {
 	}
 	
 	/**
+	 * 批量删除项目
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping("/deleteProjects1")
+	@ResponseBody
+	public Map<String, Object> deleteProjects1(HttpServletRequest request, String ids , String searchWord, String allValue, String noChangId){
+		Map<String, Object> map = new HashMap<>();
+		String projecIds="";
+		if(allValue != null && !allValue.equals("")){//全部
+			User user = (User)request.getAttribute("user");
+			String sql="";
+			if(noChangId != null && !noChangId.equals("")){
+				sql += " and project.id not in("+noChangId+")";
+			}
+			List<Project> dataList = projectService.selectCreatedProject1(user.getId() ,searchWord, sql);
+			for(Project project:dataList){
+				projecIds += project.getId()+",";
+				projecIds.substring(0, projecIds.length()-1);
+			}
+		}else{
+			projecIds=ids;
+		}
+
+		if(projectService.deleteProjects(projecIds)){
+			map.put("result", true);
+		}else{
+			map.put("result", false);
+			map.put("message", "部分项目删除失败");
+		}
+		return map;
+	}
+	
+	/**
 	 * 退出项目
 	 * @param ids
 	 * @return
@@ -454,6 +561,40 @@ public class ProjectController {
 		Map<String, Object> map = new HashMap<>();
 		User user = (User)request.getAttribute("user");
 		if(projectService.exits(ids, user.getId())){
+			map.put("result", true);
+		}else{
+			map.put("result", false);
+			map.put("message", "部分项目退出失败");
+		}
+		return map;
+	}	
+	
+	/**
+	 * 退出项目
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping("/exit2")
+	@ResponseBody
+	public Map<String, Object> exit2(String ids , HttpServletRequest request, String searchWord, String allValue, String noChangId){
+		Map<String, Object> map = new HashMap<>();
+		String projecIds="";
+		User user = (User)request.getAttribute("user");
+		
+		if(allValue != null && !allValue.equals("")){//全部
+			String sql="";
+			if(noChangId != null && !noChangId.equals("")){
+				sql += " and project.id not in("+noChangId+")";
+			}
+			List<Project> dataList = projectService.selectMyProject2(user.getId(), searchWord, sql);
+			for(Project project:dataList){
+				projecIds += project.getId()+",";
+				projecIds.substring(0, projecIds.length()-1);
+			}
+		}else{
+			projecIds=ids;
+		}
+		if(projectService.exits(projecIds, user.getId())){
 			map.put("result", true);
 		}else{
 			map.put("result", false);

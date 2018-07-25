@@ -69,9 +69,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
             <div class="top2">
                 <div class="top2C">
-                    <a href="/wankangyuan/project/selectMyProject?user_id=1"><div class="top2Cli">我的</div></a>
-                    <a href="/wankangyuan/project/selectCreatedProject?creator=1"><div class="top2Cli">我创建的</div></a>
-                    <a href="javascript:;"><div class="top2Cli top2CliYJ">公共</div></a>
+                    <a href="/wankangyuan/project/selectMyProject?user_id=1" onclick="remove()"><div class="top2Cli">我的</div></a>
+                    <a href="/wankangyuan/project/selectCreatedProject?creator=1" onclick="remove()"><div class="top2Cli">我创建的</div></a>
+                    <a href="javascript:;"><div class="top2Cli top2CliYJ" onclick="remove()">公共</div></a>
                     <div class="search">
                         <div class="searchC">
                             <img src="/wankangyuan/static/img/search.png" alt="" class="searchCi" />
@@ -98,6 +98,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <label for="check0"></label>
                         </div>
                         <div class="allT">全选</div>
+                        <input type="hidden" id="all_value" value=${allValue}>
                     </div>
                     <div class="pro_menu pro_addtomy" onclick="addToMine()">添加至我的</div>
                 </div>
@@ -111,7 +112,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                            <div class="PJK2litopT">${project.p_name}</div>
 	                        </a>
 	                        <div class="fuxuanK3">
-	                                <input type="checkbox" class="input_check" id="check${project.id}" value="${project.id}">
+	                                <input type="checkbox" class="input_check input_checks" name="projectCheck" id="check${project.id}" value="${project.id}">
 	                                <label for="check${project.id}"></label>
 	                        </div>
 	                    </div>
@@ -152,6 +153,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
 	  	//添加到我的项目中
 		function addToMine(){
+			var searchWord = $(".searchCt").val();//搜索条件
+			var allChang = "";
+    		if (sessionStorage.allChang){
+    			allChang = sessionStorage.allChang;
+			 }
+    		var noChangId = "";
+    		if (sessionStorage.noChangId){
+    			noChangId = sessionStorage.noChangId;
+			 }
 			
 			var afuxuanK=document.querySelectorAll('.fuxuanK2');
 	        var afuxuan=[];
@@ -174,10 +184,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        },function(){
 	        	//添加到我的项目中
 	            $.ajax({
-	            	url:"/wankangyuan/project/addPublicProjectToMine",
+	            	url:"/wankangyuan/project/addPublicProjectToMine1",
 	            	type:"post",
 	            	data:{
-	            		ids:ids.join(",")
+	            		ids:ids.join(","),
+                		searchWord : searchWord,
+                		allValue : allChang,
+                		noChangId : noChangId
 	            	},
 	            	dataType:"json",
 	            	success : function(data){
@@ -249,7 +262,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 console.log(page);
                 if(page!=${page}){
                 	var searchWord = $(".searchCt").val();
-                    window.location.href="/wankangyuan/project/selectPublicProject?type=2&page="+page+"&strip=${rows}&searchWord="+searchWord;
+                    window.location.href="/wankangyuan/project/selectPublicProject?type=2&page="+page+"&strip=${rows}&searchWord="+searchWord+"&allValue="+$("#all_value").val();
                 }
             }
         });
@@ -261,8 +274,83 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         			
         		}
         	});
-    	
-    	
+        	$("#check0").click(function(){
+        		if($("#check0").is(":checked")){
+        			$("#all_value").val("all");
+        			sessionStorage.setItem("noChangId",'');
+        			sessionStorage.setItem("allChang",'true');
+        		}else{
+        			$("#all_value").val("");
+        			sessionStorage.setItem("changId",'');
+        			sessionStorage.setItem("allChang",'false');
+        		}
+        	});
+        	
+        	 $(function() {
+        		 var arrs = []
+        		 var narrs = []
+        		var allValue = $("#all_value").val();
+        		 if(sessionStorage.allChang == 'true'){
+        			 $("#check0").attr("checked",true);
+        			 $(".input_checks").each(function () {
+        				 $(this).attr('checked',true)    			 
+    	    			 if (sessionStorage.noChangId){
+    						 if (sessionStorage.noChangId.indexOf(',') != -1) {
+    							 narrs = sessionStorage.noChangId.split(',')
+    							 var _this = $(this)
+    	    	    			 $.each(narrs,function (i) {
+    	    	    				 if(_this.val() == narrs[i]) {
+    	    	    					  _this.attr('checked',false)
+    	    	    				 }
+    	    	    			 })
+    						 } else {
+    							 if($(this).val() == sessionStorage.noChangId) {
+    								 $(this).attr('checked',false)
+    							}
+    						 }
+    						 
+    		    			 
+    					 }
+        			 
+        		 })
+        		 }
+        		 
+        		 
+        	})
+        	// 筛选是否选中
+        	$(".input_checks").each(function () {
+        		 $(this).click(function () {
+        			 var id = $(this).val()
+            		 var bol = false
+            		 // 当前元素id
+            		 var snarr = [] // session 中未选
+         			 var narr = [] // 未选中
+        			 // 更改选中状态
+            			$(".input_checks").each(function () {
+            				 if (sessionStorage.noChangId){
+            					 snarr = sessionStorage.noChangId.split(',')
+            				 }
+            				 if (sessionStorage.changId){
+                    			 sarr = sessionStorage.changId.split(',')
+            				 }
+            			 if($(this).attr('checked') == 'checked') {
+            				// 选中时从未选中列表删除此元素
+                			 if (snarr.indexOf(id) != -1) {
+                				 snarr.splice(snarr.indexOf(id),1)
+                			 }
+            			 } else{
+            				 narr.push($(this).val())
+            			 }
+            			})
+    	       			 //设置未选中
+    	       			 var snarrs = Array.from(new Set(snarr.concat(narr)))
+    	       			 sessionStorage.setItem("noChangId",snarrs.toString());
+        		 })
+        	 })
+    	 function remove(){
+    		 sessionStorage.setItem("noChangId",'');
+    		 sessionStorage.setItem("allChang",'false');
+    	 }
     	
     </script>
 
