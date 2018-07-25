@@ -118,7 +118,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                            <div class="PJK2litopT">${project.p_name}</div>
 	                        </a>
 	                        <div class="fuxuanK3">
-	                                <input type="checkbox" class="input_check" name="projectCheck input_checks" id="check${project.id}" value="${project.id}">
+	                                <input type="checkbox" class="input_check input_checks" name="projectCheck" id="check${project.id}" value="${project.id}">
 	                                <label for="check${project.id}"></label>
 	                        </div>
 	                    </div>

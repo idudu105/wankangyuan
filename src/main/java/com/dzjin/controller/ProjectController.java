@@ -422,7 +422,7 @@ public class ProjectController {
 		User user = (User)request.getAttribute("user");
 		Map<String, Object> map = new HashMap<>();
 		String projecIds="";
-		if(allValue != null && !allValue.equals("")){//全部
+		if(allValue != null && !allValue.equals("") && allValue.equals("true")){//全部
 			String sql="";
 			if(noChangId != null && !noChangId.equals("")){
 				sql += " and project.id not in("+noChangId+")";
@@ -475,7 +475,7 @@ public class ProjectController {
 		Map<String, Object> map = new HashMap<>();
 		
 		String projecIds="";
-		if(allValue != null && !allValue.equals("")){//全部
+		if(allValue != null && !allValue.equals("") && allValue.equals("true")){//全部
 			User user = (User)request.getAttribute("user");
 			String sql="";
 			if(noChangId != null && !noChangId.equals("")){
@@ -526,7 +526,7 @@ public class ProjectController {
 	public Map<String, Object> deleteProjects1(HttpServletRequest request, String ids , String searchWord, String allValue, String noChangId){
 		Map<String, Object> map = new HashMap<>();
 		String projecIds="";
-		if(allValue != null && !allValue.equals("")){//全部
+		if(allValue != null && !allValue.equals("") && allValue.equals("true")){//全部
 			User user = (User)request.getAttribute("user");
 			String sql="";
 			if(noChangId != null && !noChangId.equals("")){
@@ -581,7 +581,7 @@ public class ProjectController {
 		String projecIds="";
 		User user = (User)request.getAttribute("user");
 		
-		if(allValue != null && !allValue.equals("")){//全部
+		if(allValue != null && !allValue.equals("") && allValue.equals("true")){//全部
 			String sql="";
 			if(noChangId != null && !noChangId.equals("")){
 				sql += " and project.id not in("+noChangId+")";
