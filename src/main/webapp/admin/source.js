@@ -146,7 +146,7 @@ function huoqu(){
    			}
    		},
    		error : function(){
-   			alert("联网失败");
+   			alert("网络异常，请稍后重试！");
    		}
    		
    	});
@@ -175,7 +175,7 @@ $("#editSourceSubmit").click(function (){
 			}
 		},
 		error : function(){
-			alert("联网失败");
+			alert("网络异常，请稍后重试！");
 		}
 		
 	});
@@ -201,7 +201,7 @@ $("#deleteSourceSubmit").click(function (){
 			}
 		},
 		error : function(){
-			alert("联网失败");
+			alert("网络异常，请稍后重试！");
 		}
 		
 	});
@@ -236,7 +236,7 @@ $("#insertSourceFieldSubmit").click(function (){
 			}
 		},
 		error : function(){
-			alert("联网失败");
+			alert("网络异常，请稍后重试！");
 		}
 	});		
 });
@@ -270,7 +270,7 @@ $("#updateSourceFieldSubmit").click(function (){
 			}
 		},
 		error : function(){
-			alert("联网失败");
+			alert("网络异常，请稍后重试！");
 		}
 	});
 	
@@ -307,7 +307,7 @@ $("#deleteSourceFieldSubmit").click(function (){
 			}
 		},
 		error : function(){
-			alert("联网失败");
+			alert("网络异常，请稍后重试！");
 		}	
 	});
 });

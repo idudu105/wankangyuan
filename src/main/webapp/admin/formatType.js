@@ -23,7 +23,7 @@ $("#insertFormatTypeSubmit").click(function (){
 			}
 		},
 		error : function(){
-			alert("联网失败");
+			alert("网络异常，请稍后重试！");
 		}
 	});		
 });
@@ -53,7 +53,7 @@ $("#updateFormatTypeFormSubmit").click(function (){
 			}
 		},
 		error:function(){
-			alert("联网失败");
+			alert("网络异常，请稍后重试！");
 		}
 	});
 });
@@ -89,7 +89,7 @@ $("#deleteFormatTypeSubmit").click(function (){
 			}
 		},
 		error : function(){
-			alert("联网失败");
+			alert("网络异常，请稍后重试！");
 		}	
 	});
 });
@@ -193,7 +193,7 @@ function enter(id){
 			
 		},
 		error : function(){
-			alert("联网失败");
+			alert("网络异常，请稍后重试！");
 		}
 	});
 }

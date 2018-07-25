@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -174,9 +175,9 @@
 					<div class="inportM">
 						<div class="inportMt">请把相关数据按照分类准确输入到EXCEL表格模板中，上传数据后，表格会自动配置相关内容。</div>
 						<a href="#" class="inportMz inportMd" id="downloadExcelMode">下载EXCEL模板</a>
-						<div class="inportMz inportMu" style="display: none;">上传数据</div> 
+						<div class="inportMz inportMu" >上传数据</div> 
 						<input type="file" class="inportMf" id="inportMf"
-							onchange="upFile()" />
+							onchange="upFile()"  style="display: none;"/>
 					</div>
 				</div>
 
@@ -459,7 +460,7 @@
                     		}
                     	},
                     	error : function(){
-                    		alert("联网失败");
+                    		alert("网络异常，请稍后重试！");
                     	}
                     });
         		}else{
@@ -510,7 +511,7 @@
         				    		+"&page="+page+"&strip=${rows}";
     			},
     			error : function(){
-    				alert("联网失败");
+    				alert("网络异常，请稍后重试！");
     			}
     			
     		});
@@ -554,7 +555,7 @@
         				    		+"&page="+page+"&strip=${rows}";
     			},
     			error : function(){
-    				alert("联网失败");
+    				alert("网络异常，请稍后重试！");
     			}
     			
     		});
@@ -612,9 +613,10 @@
 	            	}
 	            },
 	            error: function () {
-	            	alert("联网失败");
+	            	alert("网络异常，请稍后重试！");
 	            }
 	        });
+    		alert("数据导入中，您可先进行其他操作！");
     	}
     	/* 
     	//将格式数据添加到项目
@@ -659,7 +661,7 @@
             		}
             	},
             	error : function(){
-            		alert("联网失败");
+            		alert("网络异常，请稍后重试！");
             	}
             	
             });

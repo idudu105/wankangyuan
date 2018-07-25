@@ -41,7 +41,7 @@ $("#addFormatFieldSubmit").click(function (){
 			}
 		},
 		error : function(){
-			alert("联网失败");
+			alert("网络异常，请稍后重试！");
 		}
 		
 	});
@@ -88,7 +88,7 @@ $("#editFormatFieldSubmit").click(function(){
 			}
 		},
 		error : function(){
-			alert("联网失败");
+			alert("网络异常，请稍后重试！");
 		}
 		
 	});
@@ -143,7 +143,7 @@ $("#deleteFormatFieldsSubmit").click(function (){
 			}
 		},
 		error : function(){
-			alert("联网失败");
+			alert("网络异常，请稍后重试！");
 		}	
 	});
 });

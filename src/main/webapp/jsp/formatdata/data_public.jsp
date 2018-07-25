@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -470,7 +471,7 @@
         				searchId+"&desc_asc="+desc_asc+"&searchWord="+searchWord+"&chooseDatas="+chooseDatas+"&oldCondition="+oldCondition+"&page="+page+"&strip=${rows}";
         			},
         			error : function(){
-        				alert("联网失败");
+        				alert("网络异常，请稍后重试！");
         			}
         			
         		});

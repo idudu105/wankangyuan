@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -563,7 +564,7 @@
 	    				}
 	    			},
 	    			error : function(){
-	    				alert("联网失败");
+	    				alert("网络异常，请稍后重试！");
 	    			}	
 	    		});   
 			}else if(type == "add"){
@@ -598,7 +599,7 @@
 	    				}
 	    			},
 	    			error : function(){
-	    				alert("联网失败");
+	    				alert("网络异常，请稍后重试！");
 	    			}
 	    		});  
 			}
@@ -640,7 +641,7 @@
             		}
             	},
             	error : function(){
-            		alert("联网失败");
+            		alert("网络异常，请稍后重试！");
             	}
             });
     		}else if(type == "edit"){ 
@@ -695,7 +696,7 @@
 	    	        		}
 	    	        	},
 	    	        	error : function(){
-	    	        		alert("联网失败");
+	    	        		alert("网络异常，请稍后重试！");
 	    	        	}
 	    	        });  
 	            }
@@ -748,7 +749,7 @@
             		}
             	},
             	error : function(){
-            		alert("联网失败");
+            		alert("网络异常，请稍后重试！");
             	}
             });
             }else{
@@ -802,7 +803,7 @@
         				}
         			},
         			error : function(){
-        				alert("联网失败");
+        				alert("网络异常，请稍后重试！");
         			}
         		});	
                 }else{
@@ -851,7 +852,7 @@
             		}
             	},
             	error : function(){
-            		alert("联网失败");
+            		alert("网络异常，请稍后重试！");
             	}
             });
     	}
@@ -988,9 +989,10 @@
 	            	}
 	            },
 	            error: function () {
-	            	alert("联网失败");
+	            	alert("网络异常，请稍后重试！");
 	            }
 	        });
+    		alert("数据导入中，您可先进行其他操作！");
     	}
 
     	var aprodaclmRzTt2=document.querySelectorAll('.prodaclmRzTt2');
