@@ -100,7 +100,7 @@
 							value="${sourceDataId}" style="display: none;" />
 					</div>
 
-					<div class="data_to_proK">
+					<div class="data_to_proK" style="display: none;">
 						<div class="pro_menu pro_addK">
 							<div class="pro_addk">
 								<div class="pro_addT">添加结点至项目</div>
@@ -187,7 +187,7 @@
 					</div>
 					<div class="prodaclmRz2">
 						<div class="prodaclmRsxK">
-							<div class="pro_menu pro_addK">
+							<div class="pro_menu pro_addK"  style="display: none;">
 								<div class="pro_addk">
 									<div class="pro_addT">添加至项目</div>
 									<div class="pro_addI"></div>

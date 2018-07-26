@@ -18,8 +18,8 @@ public class FormatType {
 	private String update_datetime;// 更新时间
 	private boolean is_view;// 状态
 
-	private String updater;// 更新人
-	private String creator;// 创建人
+	private String updater="";// 更新人
+	private String creator="";// 创建人
 
 	private List<FormatType> formatTypeFolders;
 

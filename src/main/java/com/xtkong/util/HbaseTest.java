@@ -79,16 +79,20 @@ public class HbaseTest {
 				try {
 					pWriter = new PrintWriter(ConstantsHBase.class.getClassLoader()+"/记录2.txt");
 				} catch (Exception e1) {
-					pWriter = new PrintWriter(ConstantsHBase.class+"/记录3.txt");
+					try {
+						pWriter = new PrintWriter(ConstantsHBase.class+"/记录3.txt");
+					} catch (Exception e2) {
+						try {
+							pWriter = new PrintWriter("C:/记录.txt");
+						} catch (Exception e3) {
+							// TODO Auto-generated catch block
+							e3.printStackTrace();
+						}
+					}
 				}
 			}
 		} catch (FileNotFoundException e) {
-			try {
-				pWriter = new PrintWriter("C:/记录.txt");
-			} catch (FileNotFoundException e1) {
-				// TODO 自动生成的 catch 块
-				e1.printStackTrace();
-			}
+			
 		}
 	}
 	public static void toJson(Object object) {

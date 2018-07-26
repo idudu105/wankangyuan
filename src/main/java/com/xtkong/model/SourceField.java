@@ -20,8 +20,8 @@ public class SourceField {
 	private int update_uid; // 更新人
 	private boolean is_view;// 是否显示到前端 0不显示；1显示
 
-	private String creator; // 创建人
-	private String updater; // 更新人
+	private String creator=""; // 创建人
+	private String updater=""; // 更新人
 
 
 

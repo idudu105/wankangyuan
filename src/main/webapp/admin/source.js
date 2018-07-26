@@ -230,8 +230,10 @@ $("#insertSourceFieldSubmit").click(function (){
 		success : function(data){
 			if(data.result == true){
 				//window.location.href="/wankangyuan/admin/formatdata?cs_id="+insertSourceFieldForm.cs_id.value;
-				alert("1234");
-				insertSourceFieldForm.csf_name.value="1234";
+				insertSourceFieldForm.csf_name.value="";
+				insertSourceFieldForm.check_rule.value="";
+				insertSourceFieldForm.description.value="";
+				insertSourceFieldForm.error_msg.value="";
 				huoqu();
 			}else{
 				alert(data.message);

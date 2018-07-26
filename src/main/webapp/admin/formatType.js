@@ -17,6 +17,8 @@ $("#insertFormatTypeSubmit").click(function (){
 			if(data.result == true){
 				alert(data.message);
 				//window.location.href="/wankangyuan/admin/formatdata?cs_id="+insertFormatTypeForm.format_add_cs_id.value;
+				insertFormatTypeForm.format_add_ft_name.value="";
+				insertFormatTypeForm.format_add_floder.value="";
 				huoqu();
 			}else{
 				alert(data.message);

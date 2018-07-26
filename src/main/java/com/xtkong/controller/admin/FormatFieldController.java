@@ -37,7 +37,7 @@ public class FormatFieldController {
 	 */
 	@RequestMapping("/insertFormatField")
 	@ResponseBody
-	public Map<String, Object> insertFormatField(HttpServletRequest request,FormatField formatField, Integer cs_id) {
+	public Map<String, Object> insertFormatField(HttpServletRequest request, FormatField formatField, Integer cs_id) {
 		User user = (User) request.getAttribute("user");
 		Integer uid = user.getId();
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -47,9 +47,10 @@ public class FormatFieldController {
 		formatField.setCreate_uid(uid);
 
 		if (1 == formatFieldService.insertFormatField(formatField)) {
-			PhoenixClient.alterViewAddColumn(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + formatField.getFt_id(),
-					 String.valueOf(
-							formatFieldService.getFormatField_ff_id(formatField.getFt_id(), formatField.getFf_name())));
+			String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + formatField.getFt_id();
+			Integer ff_id = formatFieldService.getFormatField_ff_id(formatField.getFt_id(), formatField.getFf_name());
+			String qualifier = String.valueOf(ff_id);
+			PhoenixClient.alterViewAddColumn(tableName, qualifier);
 			map.put("result", true);
 			map.put("message", "新增成功");
 		} else {
@@ -69,7 +70,7 @@ public class FormatFieldController {
 	 */
 	@RequestMapping("/updateFormatField")
 	@ResponseBody
-	public Map<String, Object> updateFormatField(HttpServletRequest request,FormatField formatField) {
+	public Map<String, Object> updateFormatField(HttpServletRequest request, FormatField formatField) {
 		User user = (User) request.getAttribute("user");
 		Integer uid = user.getId();
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -102,13 +103,17 @@ public class FormatFieldController {
 		String[] ff_idStrs = ff_ids.split(",");
 		int i = 0;
 		List<String> qualifiers = new ArrayList<>();
+		String ft_id = null;
 		for (String ff_id : ff_idStrs) {
 			if (1 == formatFieldService.deleteFormatField(Integer.valueOf(ff_id))) {
+				if (ft_id == null) {
+					ft_id = String.valueOf(formatFieldService.getFormatField_ft_id(Integer.valueOf(ff_id)));
+				}
 				qualifiers.add(ff_id);
 				i++;
 			}
 		}
-		String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
+		String tableName = ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id;
 		PhoenixClient.alterViewDropColumns(tableName, qualifiers);
 		if (i == ff_idStrs.length) {
 			map.put("result", true);

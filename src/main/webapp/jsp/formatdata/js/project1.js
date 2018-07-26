@@ -181,13 +181,13 @@ function project1(){
     for(var i=0;i<aPJListli.length;i++){
         (function(j){
             aPJListli[j].onclick=function(){
-//                if(BTSXpd==j){
-//                    oBTSX.style.display="none";
-//                    BTSXpd=-1;
-//                }else{
+// if(BTSXpd==j){
+// oBTSX.style.display="none";
+// BTSXpd=-1;
+// }else{
                     oBTSX.style.display="block";
-//                    BTSXpd=j;
-//                }
+// BTSXpd=j;
+// }
                 var BTSXleft=aPJListli[j].offsetLeft;
                 oBTSX.name=aPJListli[j].innerHTML;
                 console.log(oBTSX.name);
@@ -256,16 +256,16 @@ function pro_create(){
 
 }
 var aprodaclmRzTt2=document.querySelectorAll('.prodaclmRzTt2');
-var oPJK=document.querySelectorAll('.PJK')[0];//项目框
-var oBTSX=document.querySelectorAll('.BTSX')[0];//项目表头筛选框
+var oPJK=document.querySelectorAll('.PJK')[0];// 项目框
+var oBTSX=document.querySelectorAll('.BTSX')[0];// 项目表头筛选框
 console.log(oBTSX);
-//点击设置排序筛选框
+// 点击设置排序筛选框
 for(var i=0;i<aprodaclmRzTt2.length;i++){
     (function(j){
         aprodaclmRzTt2[j].onclick=function(){
             // if(BTSXpd==j){
-            //     oBTSX.style.display="none";
-            //     BTSXpd=-1;
+            // oBTSX.style.display="none";
+            // BTSXpd=-1;
             // }else{
         		console.log(111);
                 oBTSX.style.display="block";
@@ -274,7 +274,7 @@ for(var i=0;i<aprodaclmRzTt2.length;i++){
             var BTSXleft=aprodaclmRzTt2[j].offsetLeft;
             // oBTSX.name=aprodaclmRzTt2[j].innerHTML;
             if(document.querySelectorAll('.BTSXpd')[0]){
-                var oBTSXpd=document.querySelectorAll('.BTSXpd')[0];//项目表头筛选框判断
+                var oBTSXpd=document.querySelectorAll('.BTSXpd')[0];// 项目表头筛选框判断
                 oBTSXpd.value=aprodaclmRzTt2[j].title;
                 console.log(oBTSXpd.value);
             }
@@ -289,44 +289,44 @@ for(var i=0;i<aprodaclmRzTt2.length;i++){
         }
     })(i)
 }
-//window.onclick=function(){
-//    console.log(1222);
-//    oBTSX.style.display="none";
-//}
+// window.onclick=function(){
+// console.log(1222);
+// oBTSX.style.display="none";
+// }
 
 
-//oBTSX.onclick=function(){
-//    event.stopPropagation();
-//}
+// oBTSX.onclick=function(){
+// event.stopPropagation();
+// }
 
-//var aBTSXcliI=oBTSX.querySelectorAll('.BTSXcliI');//筛选框排序箭头
-//var oBTSXcliIpd=document.querySelectorAll('.BTSXcliIpd')[0];//筛选框选择判断
-//for(var i=0;i<aBTSXcliI.length;i++){
-//    (function(index){
-//        aBTSXcliI[index].onclick=function(){
-//            for(var j=0;j<aBTSXcliI.length;j++){
-//                aBTSXcliI[j].style.color="#666";
-//            }
-//            aBTSXcliI[index].style.color="#5ca0e5";
-//            oBTSXcliIpd.value=index+1;
-//            console.log(oBTSXcliIpd.value);
-//        }
-//    })(i)
-//}
+// var aBTSXcliI=oBTSX.querySelectorAll('.BTSXcliI');//筛选框排序箭头
+// var oBTSXcliIpd=document.querySelectorAll('.BTSXcliIpd')[0];//筛选框选择判断
+// for(var i=0;i<aBTSXcliI.length;i++){
+// (function(index){
+// aBTSXcliI[index].onclick=function(){
+// for(var j=0;j<aBTSXcliI.length;j++){
+// aBTSXcliI[j].style.color="#666";
+// }
+// aBTSXcliI[index].style.color="#5ca0e5";
+// oBTSXcliIpd.value=index+1;
+// console.log(oBTSXcliIpd.value);
+// }
+// })(i)
+// }
 //
-//var oBTSXcli3BTres=document.querySelectorAll('.BTSXcli3BTres')[0];//重置按钮
-//var aBTSXcli2liC=document.querySelectorAll('.BTSXcli2liC');//复选框
-//var oBTSXcliGLK=document.querySelectorAll('.BTSXcliGLK')[0];//过滤框
+// var oBTSXcli3BTres=document.querySelectorAll('.BTSXcli3BTres')[0];//重置按钮
+// var aBTSXcli2liC=document.querySelectorAll('.BTSXcli2liC');//复选框
+// var oBTSXcliGLK=document.querySelectorAll('.BTSXcliGLK')[0];//过滤框
 //
-//oBTSXcli3BTres.onclick=function(){
-//    for(var j=0;j<aBTSXcliI.length;j++){
-//        aBTSXcliI[j].style.color="#666";
-//    }
-//    oBTSXcliGLK.value="";
-//    for(var i=0;i<aBTSXcli2liC.length;i++){
-//        aBTSXcli2liC[i].checked=false;
-//    }
-//}
+// oBTSXcli3BTres.onclick=function(){
+// for(var j=0;j<aBTSXcliI.length;j++){
+// aBTSXcliI[j].style.color="#666";
+// }
+// oBTSXcliGLK.value="";
+// for(var i=0;i<aBTSXcli2liC.length;i++){
+// aBTSXcli2liC[i].checked=false;
+// }
+// }
 // 创建页面1
 function pro_create1(){
 
@@ -1630,14 +1630,14 @@ function data_dataclick(){
         oclmReditK.style.display="block";
     }
     oclmRsb_modify.onclick=function(){
-    	console.log(fuxuanPD2);
+//    	console.log(fuxuanPD2);
     	if(fuxuanPD2==1){
 	    	document.querySelectorAll('.type')[0].value = "edit";
 	        oclmReditK.style.display="block";
 	        var oprodaclmRz2=document.querySelectorAll('.prodaclmRz2')[0];
 	        var oprodaclmRzB=oprodaclmRz2.querySelectorAll('.prodaclmRzB')[0];
 	        var aprodaclmRzBz=oprodaclmRz2.querySelectorAll('.prodaclmRzBz');
-	        var oxuanzhong=null;
+	        var oxuanzhong="";
 	        for(var i=0;i<aprodaclmRzBz.length;i++){
 	            var oinput_check=aprodaclmRzBz[i].querySelectorAll('.input_check')[0];
 	            if(oinput_check.checked){
@@ -1645,15 +1645,20 @@ function data_dataclick(){
 	            }
 	        }
 	        var aPJliCli2=oxuanzhong.querySelectorAll('.PJliCli2');
-	//        var oclmReditK1=document.querySelectorAll('.clmReditK')[0];
+	// var oclmReditK1=document.querySelectorAll('.clmReditK')[0];
 	        var oclmReditM=oclmReditK.querySelectorAll('.clmReditM')[0];
 	        var aclmReditMzp=oclmReditM.querySelectorAll('.clmReditMzp');
-//	        console.log(aclmReditMzp1);
+// console.log(aclmReditMzp1);
 	        for(var i=0;i<aPJliCli2.length;i++){
 	            var ospan=aPJliCli2[i].getElementsByTagName('span')[0];
 	            console.log(aPJliCli2[i]);
 	            aclmReditMzp[i].value=ospan.innerHTML;
 	        }
+    	}else if(fuxuanPD2==0){
+    		alert("请勾选一条数据");
+    	}else{
+    		alert("只能勾选一条数据！");
+    		fuxuanPD2=0;
     	}
     }
 
