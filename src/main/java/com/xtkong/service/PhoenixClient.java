@@ -22,6 +22,7 @@ import java.util.concurrent.TimeoutException;
 
 import com.google.gson.Gson;
 import com.xtkong.util.ConstantsHBase;
+import com.xtkong.util.HbaseTest;
 
 /**
  * 利用Phoenix访问Hbase
@@ -145,7 +146,7 @@ public class PhoenixClient {
 				map.put("msg", msg);
 				return map;
 			}
-
+HbaseTest.println(phoenixSQL);
 			PreparedStatement stmt = conn.prepareStatement(phoenixSQL);
 			ResultSet set = stmt.executeQuery(phoenixSQL);
 			// 查询出来的列是不固定的，所以这里通过遍历的方式获取列名
@@ -176,6 +177,7 @@ public class PhoenixClient {
 
 			msg.put("msg", "success");
 			map.put("msg", msg);
+			HbaseTest.println(map);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			msg.put("msg", "SQL执行出错：\n SQL:  " + phoenixSQL + "\n异常信息:  " + e.getMessage());
@@ -362,7 +364,61 @@ public class PhoenixClient {
 		}
 		return phoenixSQL;
 	}
+	
+	public static String getSQLQualifiers(String tableName,  List<String> qualifiers) {
+		String phoenixSQL = " ";
+		if ((qualifiers != null) && (!qualifiers.isEmpty())) {
+			for (String qualifier : qualifiers) {
+				phoenixSQL += "\"" + ConstantsHBase.FAMILY_INFO + "\".\"" + qualifier + "\",";
+			}
+		} else {
+			return phoenixSQL;
+		}
+		if (phoenixSQL.trim().endsWith(",")) {
+			phoenixSQL = phoenixSQL.substring(0, phoenixSQL.lastIndexOf(","))+" ";
+		}
+		return phoenixSQL;
+	}
 
+	public static String getPhoenixSQL(String tableName,String select, List<String> qualifiers, Map<String, String> conditionEqual,
+			Map<String, String> conditionLike, String condition, Integer page, Integer strip) {
+		String phoenixSQL = " ";
+		if (select==null||select.trim().isEmpty()) {
+			return "";
+		} else {	
+			phoenixSQL=select;
+		}
+		if (tableName == null||tableName.trim().isEmpty())  {
+			return "";
+		} else {
+			String phoenixSQLQualifiers = getSQLQualifiers(tableName, qualifiers);
+			if (!phoenixSQLQualifiers.trim().isEmpty()) {
+				phoenixSQL += phoenixSQLQualifiers;
+			}
+		}
+		phoenixSQL += " FROM \"" + tableName + "\"  WHERE  ";
+		String phoenixSQLConditionEqualsAND = getSQLConditionEquals(tableName, conditionEqual, "AND");
+		if (!phoenixSQLConditionEqualsAND.equals(" ")) {
+			phoenixSQL += phoenixSQLConditionEqualsAND + " AND ";
+		}
+		String phoenixSQLConditionLikesAND = getSQLConditionLikes(tableName, conditionLike, "AND");
+		if (!phoenixSQLConditionLikesAND.equals(" ")) {
+			phoenixSQL += phoenixSQLConditionLikesAND + " AND ";
+		}
+		if (condition != null) {
+			phoenixSQL += condition;
+		}
+		if (phoenixSQL.trim().endsWith("WHERE")) {
+			phoenixSQL = phoenixSQL.substring(0, phoenixSQL.lastIndexOf("WHERE"));
+		}
+		if (phoenixSQL.trim().endsWith("AND")) {
+			phoenixSQL = phoenixSQL.substring(0, phoenixSQL.lastIndexOf("AND"));
+		}
+		if ((page != null) && (strip != null) && (page > 0) && (strip > 0)) {
+			phoenixSQL += " LIMIT " + strip + " OFFSET " + strip * (page - 1);
+		}
+		return phoenixSQL;
+	}
 	/**
 	 * 构造phoenixSQL,phoenixSQL+(..)condition+page+strip
 	 * 

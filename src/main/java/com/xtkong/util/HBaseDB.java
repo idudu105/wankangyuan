@@ -67,7 +67,6 @@ public class HBaseDB {
 			Admin admin = connection.getAdmin();
 			TableName tableNameObject = TableName.valueOf(tableName);
 			if (admin.tableExists(tableNameObject)) {
-				System.out.println("表：" + tableName + "已存在");
 			} else {
 				HTableDescriptor tableDescriptor = new HTableDescriptor(tableNameObject);
 				for (String columnFamily : columnFamilies) {
@@ -75,11 +74,9 @@ public class HBaseDB {
 					tableDescriptor.addFamily(new HColumnDescriptor(columnFamily).setMaxVersions(version));
 				}
 				admin.createTable(tableDescriptor);
-				System.out.println("创建表：" + tableName);
 			}
 			admin.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -96,13 +93,10 @@ public class HBaseDB {
 			if (admin.tableExists(tableNameObject)) {
 				admin.disableTable(tableNameObject);
 				admin.deleteTable(tableNameObject);
-				System.out.println("删除表：" + tableName);
 			} else {
-				System.out.println("表：" + tableName + "不存在");
 			}
 			admin.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -120,7 +114,6 @@ public class HBaseDB {
 			table = connection.getTable(tableNameObject);
 			admin.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return table;
 	}
@@ -144,9 +137,7 @@ public class HBaseDB {
 			id = table.incrementColumnValue(Bytes.toBytes(rowKey), Bytes.toBytes(family), Bytes.toBytes(qualifier), 1);
 			table.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
-		System.out.println(id);
 		return id;
 	}
 
@@ -177,7 +168,6 @@ public class HBaseDB {
 			table.close();
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
 			return false;
 		}
 
@@ -190,7 +180,6 @@ public class HBaseDB {
 			table.close();
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
 			return false;
 		}
 	}
@@ -202,7 +191,6 @@ public class HBaseDB {
 			table.close();
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
 			return false;
 		}
 	}
@@ -256,7 +244,6 @@ public class HBaseDB {
 			resultScanner.close();
 			table.close();
 		} catch (IOException e) {
-			e.printStackTrace();
 		}
 
 		return rowkey;
@@ -296,7 +283,6 @@ public class HBaseDB {
 			resultScanner.close();
 			table.close();
 		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		return quelifierValues;
 	}
@@ -317,7 +303,6 @@ public class HBaseDB {
 			table.close();
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
 			return false;
 		}
 	}

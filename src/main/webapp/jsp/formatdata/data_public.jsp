@@ -481,6 +481,7 @@
     	//进入到详情页
     	function datainHref(sourceDataId){
     		var cs_id = $("#source_Select").val();
+    		reset();
     		window.location.href="/wankangyuan/sourceData/getSourceDataById?cs_id="+cs_id+"&sourceDataId="+sourceDataId+"&type=3";
     	}
     	$('#box').paging({

@@ -335,19 +335,38 @@ public class SourceDataController {
 		}
 		Source source = sourceService.getSourceByCs_id(cs_id);
 		if (source != null) {
+			try {
+				if ((type.equals((String) httpSession.getAttribute("oldSourceType")))
+						&& (cs_id.equals((Integer) httpSession.getAttribute("thiscs_id")))) {
+					oldCondition = (String) httpSession.getAttribute("oldCondition");
+				}
+			} catch (Exception e1) {
+			}
 			User user = (User) request.getAttribute("user");
 			Map<String, Map<String, Object>> result = new HashMap<>();
 			String tableName = ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id;
 			List<String> qualifiers = new ArrayList<>();
 			Map<String, String> conditionEqual = new HashMap<>();
 			Map<String, String> conditionLike = new HashMap<>();
-			String condition = (String) httpSession.getAttribute("oldCondition");
+			String condition ="";
 			String phoenixSQL = null;
 
 			qualifiers.add(String.valueOf(searchId));
 			switch (type) {
 			case "1":
-				conditionEqual.put(ConstantsHBase.QUALIFIER_USER, String.valueOf(user.getId()));
+				condition = "(" + PhoenixClient.getSQLFamilyColumn(ConstantsHBase.QUALIFIER_CREATE) + "='"
+						+ String.valueOf(user.getId()) + "' ";
+				List<String> sourceDataIds = userDataService.selects(user.getId(), cs_id);
+				if (!sourceDataIds.isEmpty()) {
+					condition += " OR (";
+					for (String sourceDataId : sourceDataIds) {
+						condition += "ID='" + sourceDataId + "' OR ";
+					}
+					if (condition.trim().endsWith("OR")) {
+						condition = condition.substring(0, condition.lastIndexOf("OR")) + " ) ";
+					}
+				}
+				condition += ")";
 				break;
 			case "2":
 				conditionEqual.put(ConstantsHBase.QUALIFIER_CREATE, String.valueOf(user.getId()));
@@ -370,26 +389,36 @@ public class SourceDataController {
 				searchWord = "";
 			}
 			conditionLike.put(String.valueOf(searchId), searchWord);
-
+			if (oldCondition != null && !oldCondition.trim().isEmpty()) {
+				if (type.equals("1")) {
+					condition = condition + " AND " + oldCondition;
+				} else {
+					condition = oldCondition;
+				}
+			}
 			// phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, qualifiers,
 			// conditionEqual, conditionLike, condition,
 			// null, null);
 			// phoenixSQL = "SELECT DISTINCT
 			// "+phoenixSQL.substring(phoenixSQL.indexOf("SELECT ID ,"));
-			if (condition == null || condition.trim().isEmpty()) {
-				phoenixSQL = "SELECT DISTINCT " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId))
-						+ " FROM \"" + tableName + "\"  WHERE  "
-						+ PhoenixClient.getSQLConditionEquals(tableName, conditionEqual, "AND") + " AND "
-						+ PhoenixClient.getSQLConditionLikes(tableName, conditionLike, "AND") + " ORDER BY "
-						+ PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId));
-
-			} else {
-				phoenixSQL = "SELECT DISTINCT " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId))
-						+ " FROM \"" + tableName + "\"  WHERE  "
-						+ PhoenixClient.getSQLConditionEquals(tableName, conditionEqual, "AND") + " AND "
-						+ PhoenixClient.getSQLConditionLikes(tableName, conditionLike, "AND") + " AND " + condition
-						+ " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId));
-			}
+			
+			String select= "SELECT DISTINCT " ;
+			phoenixSQL=PhoenixClient.getPhoenixSQL(tableName, select, qualifiers, conditionEqual, conditionLike, condition, null, null)+ " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId));;
+			
+//			if (condition == null || condition.trim().isEmpty()) {
+//				phoenixSQL = "SELECT DISTINCT " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId))
+//						+ " FROM \"" + tableName + "\"  WHERE  "
+//						+ PhoenixClient.getSQLConditionEquals(tableName, conditionEqual, "AND") + " AND "
+//						+ PhoenixClient.getSQLConditionLikes(tableName, conditionLike, "AND") + " ORDER BY "
+//						+ PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId));
+//
+//			} else {
+//				phoenixSQL = "SELECT DISTINCT " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId))
+//						+ " FROM \"" + tableName + "\"  WHERE  "
+//						+ PhoenixClient.getSQLConditionEquals(tableName, conditionEqual, "AND") + " AND "
+//						+ PhoenixClient.getSQLConditionLikes(tableName, conditionLike, "AND") + " AND " + condition
+//						+ " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId));
+//			}
 			result = PhoenixClient.select(phoenixSQL);
 
 			List<String> csfDatas = new ArrayList<>();
