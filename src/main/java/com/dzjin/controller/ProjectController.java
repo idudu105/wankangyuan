@@ -293,6 +293,13 @@ public class ProjectController {
 		httpSession.setAttribute("rows", strip);
 		httpSession.setAttribute("allValue", allValue);
 		
+		httpSession.setAttribute("pName", "");
+		httpSession.setAttribute("pNumber", "");
+		httpSession.setAttribute("pCreator", "");
+		httpSession.setAttribute("createDatetime", "");
+		httpSession.setAttribute("keyWords", "");
+		httpSession.setAttribute("isOpen", "");
+		
 		if(type == null || type == 1){
 			return "/jsp/project/project_public.jsp";
 		}else{
@@ -336,6 +343,13 @@ public class ProjectController {
 		httpSession.setAttribute("page", page);
 		httpSession.setAttribute("rows", strip);
 		httpSession.setAttribute("allValue", allValue);
+		
+		httpSession.setAttribute("pName", "");
+		httpSession.setAttribute("pNumber", "");
+		httpSession.setAttribute("pCreator", "");
+		httpSession.setAttribute("createDatetime", "");
+		httpSession.setAttribute("keyWords", "");
+		httpSession.setAttribute("isOpen", "");
 		if(type == null || type == 1){
 			return "/jsp/project/project_create.jsp";
 		}else{
@@ -379,6 +393,13 @@ public class ProjectController {
 		httpSession.setAttribute("page", page);
 		httpSession.setAttribute("rows", strip);
 		httpSession.setAttribute("allValue", allValue);
+		
+		httpSession.setAttribute("pName", "");
+		httpSession.setAttribute("pNumber", "");
+		httpSession.setAttribute("creator", "");
+		httpSession.setAttribute("createDatetime", "");
+		httpSession.setAttribute("keyWords", "");
+		httpSession.setAttribute("isOpen", "");
 		if(type == null || type == 1){
 			return "/jsp/project/project_mine.jsp";
 		}else{
@@ -418,7 +439,9 @@ public class ProjectController {
 	 */
 	@RequestMapping("/addPublicProjectToMine1")
 	@ResponseBody
-	public Map<String, Object> addPublicProjectToMine1(HttpSession session , HttpServletRequest request , String ids,String searchWord,String allValue, String noChangId){
+	public Map<String, Object> addPublicProjectToMine1(HttpSession session , HttpServletRequest request , String ids,String searchWord,String allValue, String noChangId,
+			String pName, String pNumber, String pCreator, 
+			String createDatetime, String keyWords, String isOpen){
 		User user = (User)request.getAttribute("user");
 		Map<String, Object> map = new HashMap<>();
 		String projecIds="";
@@ -426,6 +449,137 @@ public class ProjectController {
 			String sql="";
 			if(noChangId != null && !noChangId.equals("")){
 				sql += " and project.id not in("+noChangId+")";
+			}
+			
+			if(pName != null && !pName.equals("")){
+				if(pName.indexOf(",")>-1){
+					sql += "and (";
+					String[] pname = pName.split(",");
+					for(int i=0;i<pname.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "p_name"+"='"+String.valueOf(pname[i])+"'";
+							if(i != pname.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and p_name in('"+pName+"')";
+				}
+				
+			}
+			
+			if(pNumber != null && !pNumber.equals("")){
+				if(pNumber.indexOf(",")>-1){
+					sql += "and (";
+					String[] pnumber = pNumber.split(",");
+					for(int i=0;i<pnumber.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "p_number"+"='"+String.valueOf(pnumber[i])+"'";
+							if(i != pnumber.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and p_number in('"+pNumber+"')";
+				}
+				
+			}
+			
+			if(pCreator != null && !pCreator.equals("")){
+				if(pCreator.indexOf(",")>-1){
+					sql += "and (";
+					String[] create = pCreator.split(",");
+					for(int i=0;i<create.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "username"+"='"+String.valueOf(create[i])+"'";
+							if(i != create.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and username in('"+pCreator+"')";
+				}
+				
+			}
+			
+			if(createDatetime != null && !createDatetime.equals("")){
+				if(createDatetime.indexOf(",")>-1){
+					sql += "and (";
+					String[] createdatetime = createDatetime.split(",");
+					for(int i=0;i<createdatetime.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "create_datetime"+"='"+String.valueOf(createdatetime[i])+"'";
+							if(i != createdatetime.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and create_datetime in('"+createDatetime+"')";
+				}
+				
+			}
+			
+			if(keyWords != null && !keyWords.equals("")){
+				if(keyWords.indexOf(",")>-1){
+					sql += "and (";
+					String[] keywords = keyWords.split(",");
+					for(int i=0;i<keywords.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "key_words"+"='"+String.valueOf(keywords[i])+"'";
+							if(i != keywords.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and key_words in('"+keyWords+"')";
+				}
+				
+			}
+			
+			if(isOpen != null && !isOpen.equals("")){
+				if(isOpen.indexOf(",")>-1){
+					sql += "and (";
+					String[] isopen = isOpen.split(",");
+					for(int i=0;i<isopen.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						if(String.valueOf(isopen[i]).equals("已公开")){
+							sql += "is_open=1";
+							if(i != isopen.length-1){
+								sql += " or ";	
+							}
+						}
+						if(String.valueOf(isopen[i]).equals("未公开")){
+							sql += "is_open=1";
+							if(i != isopen.length-1){
+								sql += " or ";	
+							}
+						}
+					}
+					sql += ")";
+				}else{
+					if(isOpen.equals("已公开")){
+						isOpen = "1";
+					}else if(isOpen.equals("未公开")){
+						isOpen = "0";
+					}
+					sql += " and is_open ="+isOpen;
+				}
+				
 			}
 			List<Project> dataList = projectService.selectPublicProject1(searchWord, sql);
 			for(Project project:dataList){
@@ -471,7 +625,9 @@ public class ProjectController {
 	 */
 	@RequestMapping("/updateProjectOpenState1")
 	@ResponseBody
-	public Map<String, Object> updateProjectOpenState1(HttpServletRequest request, String ids , Integer is_open, String searchWord, String allValue, String noChangId){
+	public Map<String, Object> updateProjectOpenState1(HttpServletRequest request, String ids , Integer is_open, String searchWord, String allValue, String noChangId,
+			String pName, String pNumber, String pCreator, 
+			String createDatetime, String keyWords, String isOpen){
 		Map<String, Object> map = new HashMap<>();
 		
 		String projecIds="";
@@ -481,6 +637,136 @@ public class ProjectController {
 			if(noChangId != null && !noChangId.equals("")){
 				sql += " and project.id not in("+noChangId+")";
 			}
+			if(pName != null && !pName.equals("")){
+				if(pName.indexOf(",")>-1){
+					sql += "and (";
+					String[] pname = pName.split(",");
+					for(int i=0;i<pname.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "p_name"+"='"+String.valueOf(pname[i])+"'";
+							if(i != pname.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and p_name in('"+pName+"')";
+				}
+				
+			}
+			
+			if(pNumber != null && !pNumber.equals("")){
+				if(pNumber.indexOf(",")>-1){
+					sql += "and (";
+					String[] pnumber = pNumber.split(",");
+					for(int i=0;i<pnumber.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "p_number"+"='"+String.valueOf(pnumber[i])+"'";
+							if(i != pnumber.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and p_number in('"+pNumber+"')";
+				}
+				
+			}
+			
+			if(pCreator != null && !pCreator.equals("")){
+				if(pCreator.indexOf(",")>-1){
+					sql += "and (";
+					String[] create = pCreator.split(",");
+					for(int i=0;i<create.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "username"+"='"+String.valueOf(create[i])+"'";
+							if(i != create.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and username in('"+pCreator+"')";
+				}
+				
+			}
+			
+			if(createDatetime != null && !createDatetime.equals("")){
+				if(createDatetime.indexOf(",")>-1){
+					sql += "and (";
+					String[] createdatetime = createDatetime.split(",");
+					for(int i=0;i<createdatetime.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "create_datetime"+"='"+String.valueOf(createdatetime[i])+"'";
+							if(i != createdatetime.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and create_datetime in('"+createDatetime+"')";
+				}
+				
+			}
+			
+			if(keyWords != null && !keyWords.equals("")){
+				if(keyWords.indexOf(",")>-1){
+					sql += "and (";
+					String[] keywords = keyWords.split(",");
+					for(int i=0;i<keywords.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "key_words"+"='"+String.valueOf(keywords[i])+"'";
+							if(i != keywords.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and key_words in('"+keyWords+"')";
+				}
+				
+			}
+			
+			if(isOpen != null && !isOpen.equals("")){
+				if(isOpen.indexOf(",")>-1){
+					sql += "and (";
+					String[] isopen = isOpen.split(",");
+					for(int i=0;i<isopen.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						if(String.valueOf(isopen[i]).equals("已公开")){
+							sql += "is_open=1";
+							if(i != isopen.length-1){
+								sql += " or ";	
+							}
+						}
+						if(String.valueOf(isopen[i]).equals("未公开")){
+							sql += "is_open=1";
+							if(i != isopen.length-1){
+								sql += " or ";	
+							}
+						}
+					}
+					sql += ")";
+				}else{
+					if(isOpen.equals("已公开")){
+						isOpen = "1";
+					}else if(isOpen.equals("未公开")){
+						isOpen = "0";
+					}
+					sql += " and is_open ="+isOpen;
+				}
+				
+			}
 			List<Project> dataList = projectService.selectCreatedProject1(user.getId() ,searchWord, sql);
 			for(Project project:dataList){
 				projecIds += project.getId()+",";
@@ -489,6 +775,7 @@ public class ProjectController {
 		}else{
 			projecIds=ids;
 		}
+
 		if(projectService.updateProjectOpenState(projecIds, is_open)){
 			map.put("result", true);
 		}else{
@@ -523,7 +810,9 @@ public class ProjectController {
 	 */
 	@RequestMapping("/deleteProjects1")
 	@ResponseBody
-	public Map<String, Object> deleteProjects1(HttpServletRequest request, String ids , String searchWord, String allValue, String noChangId){
+	public Map<String, Object> deleteProjects1(HttpServletRequest request, String ids , String searchWord, String allValue, String noChangId
+			, String pName, String pNumber, String pCreator, 
+			String createDatetime, String keyWords, String isOpen){
 		Map<String, Object> map = new HashMap<>();
 		String projecIds="";
 		if(allValue != null && !allValue.equals("") && allValue.equals("true")){//全部
@@ -531,6 +820,137 @@ public class ProjectController {
 			String sql="";
 			if(noChangId != null && !noChangId.equals("")){
 				sql += " and project.id not in("+noChangId+")";
+			}
+			
+			if(pName != null && !pName.equals("")){
+				if(pName.indexOf(",")>-1){
+					sql += "and (";
+					String[] pname = pName.split(",");
+					for(int i=0;i<pname.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "p_name"+"='"+String.valueOf(pname[i])+"'";
+							if(i != pname.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and p_name in('"+pName+"')";
+				}
+				
+			}
+			
+			if(pNumber != null && !pNumber.equals("")){
+				if(pNumber.indexOf(",")>-1){
+					sql += "and (";
+					String[] pnumber = pNumber.split(",");
+					for(int i=0;i<pnumber.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "p_number"+"='"+String.valueOf(pnumber[i])+"'";
+							if(i != pnumber.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and p_number in('"+pNumber+"')";
+				}
+				
+			}
+			
+			if(pCreator != null && !pCreator.equals("")){
+				if(pCreator.indexOf(",")>-1){
+					sql += "and (";
+					String[] create = pCreator.split(",");
+					for(int i=0;i<create.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "username"+"='"+String.valueOf(create[i])+"'";
+							if(i != create.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and username in('"+pCreator+"')";
+				}
+				
+			}
+			
+			if(createDatetime != null && !createDatetime.equals("")){
+				if(createDatetime.indexOf(",")>-1){
+					sql += "and (";
+					String[] createdatetime = createDatetime.split(",");
+					for(int i=0;i<createdatetime.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "create_datetime"+"='"+String.valueOf(createdatetime[i])+"'";
+							if(i != createdatetime.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and create_datetime in('"+createDatetime+"')";
+				}
+				
+			}
+			
+			if(keyWords != null && !keyWords.equals("")){
+				if(keyWords.indexOf(",")>-1){
+					sql += "and (";
+					String[] keywords = keyWords.split(",");
+					for(int i=0;i<keywords.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "key_words"+"='"+String.valueOf(keywords[i])+"'";
+							if(i != keywords.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and key_words in('"+keyWords+"')";
+				}
+				
+			}
+			
+			if(isOpen != null && !isOpen.equals("")){
+				if(isOpen.indexOf(",")>-1){
+					sql += "and (";
+					String[] isopen = isOpen.split(",");
+					for(int i=0;i<isopen.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						if(String.valueOf(isopen[i]).equals("已公开")){
+							sql += "is_open=1";
+							if(i != isopen.length-1){
+								sql += " or ";	
+							}
+						}
+						if(String.valueOf(isopen[i]).equals("未公开")){
+							sql += "is_open=1";
+							if(i != isopen.length-1){
+								sql += " or ";	
+							}
+						}
+					}
+					sql += ")";
+				}else{
+					if(isOpen.equals("已公开")){
+						isOpen = "1";
+					}else if(isOpen.equals("未公开")){
+						isOpen = "0";
+					}
+					sql += " and is_open ="+isOpen;
+				}
+				
 			}
 			List<Project> dataList = projectService.selectCreatedProject1(user.getId() ,searchWord, sql);
 			for(Project project:dataList){
@@ -576,7 +996,9 @@ public class ProjectController {
 	 */
 	@RequestMapping("/exit2")
 	@ResponseBody
-	public Map<String, Object> exit2(String ids , HttpServletRequest request, String searchWord, String allValue, String noChangId){
+	public Map<String, Object> exit2(String ids , HttpServletRequest request, String searchWord, 
+			String allValue, String noChangId, String pName, String pNumber, String pCreator, 
+			String createDatetime, String keyWords, String isOpen){
 		Map<String, Object> map = new HashMap<>();
 		String projecIds="";
 		User user = (User)request.getAttribute("user");
@@ -586,6 +1008,138 @@ public class ProjectController {
 			if(noChangId != null && !noChangId.equals("")){
 				sql += " and project.id not in("+noChangId+")";
 			}
+			
+			if(pName != null && !pName.equals("")){
+				if(pName.indexOf(",")>-1){
+					sql += "and (";
+					String[] pname = pName.split(",");
+					for(int i=0;i<pname.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "p_name"+"='"+String.valueOf(pname[i])+"'";
+							if(i != pname.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and p_name in('"+pName+"')";
+				}
+				
+			}
+			
+			if(pNumber != null && !pNumber.equals("")){
+				if(pNumber.indexOf(",")>-1){
+					sql += "and (";
+					String[] pnumber = pNumber.split(",");
+					for(int i=0;i<pnumber.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "p_number"+"='"+String.valueOf(pnumber[i])+"'";
+							if(i != pnumber.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and p_number in('"+pNumber+"')";
+				}
+				
+			}
+			
+			if(pCreator != null && !pCreator.equals("")){
+				if(pCreator.indexOf(",")>-1){
+					sql += "and (";
+					String[] create = pCreator.split(",");
+					for(int i=0;i<create.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "username"+"='"+String.valueOf(create[i])+"'";
+							if(i != create.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and username in('"+pCreator+"')";
+				}
+				
+			}
+			
+			if(createDatetime != null && !createDatetime.equals("")){
+				if(createDatetime.indexOf(",")>-1){
+					sql += "and (";
+					String[] createdatetime = createDatetime.split(",");
+					for(int i=0;i<createdatetime.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "create_datetime"+"='"+String.valueOf(createdatetime[i])+"'";
+							if(i != createdatetime.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and create_datetime in('"+createDatetime+"')";
+				}
+				
+			}
+			
+			if(keyWords != null && !keyWords.equals("")){
+				if(keyWords.indexOf(",")>-1){
+					sql += "and (";
+					String[] keywords = keyWords.split(",");
+					for(int i=0;i<keywords.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+							//其他字段不需要进行转换
+							sql += "key_words"+"='"+String.valueOf(keywords[i])+"'";
+							if(i != keywords.length-1){
+								sql += " or ";	
+							}
+						
+					}
+					sql += ")";
+				}else{
+					sql += " and key_words in('"+keyWords+"')";
+				}
+				
+			}
+			
+			if(isOpen != null && !isOpen.equals("")){
+				if(isOpen.indexOf(",")>-1){
+					sql += "and (";
+					String[] isopen = isOpen.split(",");
+					for(int i=0;i<isopen.length;i++){
+						//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						if(String.valueOf(isopen[i]).equals("已公开")){
+							sql += "is_open=1";
+							if(i != isopen.length-1){
+								sql += " or ";	
+							}
+						}
+						if(String.valueOf(isopen[i]).equals("未公开")){
+							sql += "is_open=1";
+							if(i != isopen.length-1){
+								sql += " or ";	
+							}
+						}
+					}
+					sql += ")";
+				}else{
+					if(isOpen.equals("已公开")){
+						isOpen = "1";
+					}else if(isOpen.equals("未公开")){
+						isOpen = "0";
+					}
+					sql += " and is_open ="+isOpen;
+				}
+				
+			}			
+			
 			List<Project> dataList = projectService.selectMyProject2(user.getId(), searchWord, sql);
 			for(Project project:dataList){
 				projecIds += project.getId()+",";
@@ -602,5 +1156,6 @@ public class ProjectController {
 		}
 		return map;
 	}	
+	
 	
 }

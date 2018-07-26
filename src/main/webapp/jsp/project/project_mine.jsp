@@ -181,9 +181,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 	</c:forEach>
  
                 </div>
-
                 <!-- 筛选框 -->
                 <div class="BTSX" id="${projectQueryCondition.columnName}">
+                	<input type="hidden" id="pName" value="${pName}"/>
+                	<input type="hidden" id="pNumber" value="${pNumber}"/>
+                	<input type="hidden" id="pCreator" value="${pCreator}"/>
+                	<input type="hidden" id="createDatetime" value="${createDatetime}"/>
+                	<input type="hidden" id="keyWords" value="${keyWords}"/>
+                	<input type="hidden" id="isOpen" value="${isOpen}"/>
+                	
+                	
                 	<input id="isFilter" value="${projectQueryCondition.isFilter}" style="display:none;"/>
                     <div class="BTSXc">
                         <div class="BTSXcli">
@@ -250,6 +257,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			noChangId = sessionStorage.noChangId;
 			 }
     		
+    		var pName = $("#pName").val();
+            var pNumber = $("#pNumber").val();
+            var pCreator = $("#pCreator").val();
+            var createDatetime = $("#createDatetime").val();
+            var keyWords = $("#keyWords").val();
+            var isOpen = $("#isOpen").val();
+    		
     		
     		var afuxuanK=document.querySelectorAll('.fuxuanK2');
             var afuxuan=[];
@@ -278,7 +292,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 		ids:ids.join(","),
                 		searchWord : searchWord,
                 		allValue : allChang,
-                		noChangId : noChangId
+                		noChangId : noChangId,
+                		pName : pName,
+                		pNumber : pNumber,
+                		pCreator : pCreator,
+                		createDatetime : createDatetime,
+                		keyWords : keyWords,
+                		isOpen : isOpen
                 	},
                 	dataType:"json",
                 	success : function(data){
@@ -406,6 +426,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		document.getElementById("BTSXcli2").innerHTML="";
     		//设置重置后退出筛选状态，执行一般的筛选操作
     		$("#isFilter").val("false");
+    		
+           	$("#pName").val("");
+           	$("#pNumber").val("");
+           	$("#pCreator").val("");
+           	$("#createDatetime").val("");
+           	$("#keyWords").val("");
+           	$("#isOpen").val("");
+           	
     		window.location.href="/wankangyuan/project/selectMyProject?user_id=1";
     	});
     	
@@ -438,11 +466,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	}
             }
             values = values.join(",");//勾选的值
+           
+            if(columnName == "p_name"){
+            	$("#pName").val(values);
+            }else if(columnName == "p_number"){
+            	$("#pNumber").val(values);
+            }else if(columnName == "creator"){
+            	$("#pCreator").val(values);
+            }else if(columnName == "create_datetime"){
+            	$("#createDatetime").val(values);
+            }else if(columnName == "key_words"){
+            	$("#keyWords").val(values);
+            }else if(columnName == "is_open"){
+            	$("#isOpen").val(values);
+            }
+            
+            var pName = $("#pName").val();
+            var pNumber = $("#pNumber").val();
+            var pCreator = $("#pCreator").val();
+            var createDatetime = $("#createDatetime").val();
+            var keyWords = $("#keyWords").val();
+            var isOpen = $("#isOpen").val();
+            
+            
             
             $("#isFilter").val("true");//设置当前为筛选状态
             
-            window.location.href="/wankangyuan/projectFilter/selectMineProjectByFilterCondition?page="+page+"&searchWord="
-			+searchWord+"&columnName="+columnName+"&order="+order+"&filter="+filter+"&values="+values+"&isFilter=true";
+            window.location.href="/wankangyuan/projectFilter/selectMineProjectByFilterCondition1?page="+page+"&searchWord="
+			+searchWord+"&columnName="+columnName+"&order="+order+"&filter="+filter+"&values="+values+"&isFilter=true"
+			+"&pName="+pName+"&pNumber="+pNumber+"&pCreator="+pCreator+"&createDatetime="+createDatetime+"&keyWords="+keyWords+"&isOpen="+isOpen;
     		
     	}
     	

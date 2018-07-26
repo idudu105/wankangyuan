@@ -93,12 +93,21 @@ public interface ProjectFilterDao {
 	@SelectProvider(type=ProjectSqlBuilder.class , method="buildSelectCreatedProjectByFilterCondition") 
 	public List<Project> selectCreatedProjectByFilterCondition(Map<String, Object> map);
 	
+	@Select("${sql}")
+	public List<Project> selectCreatedProjectByFilterCondition1(@Param("sql")String sql);
+	
 	@SelectProvider(type=ProjectSqlBuilder.class , method="buildSelectMineProjectByFilterCondition") 
 	public List<Project> selectMineProjectByFilterCondition(Map<String, Object> map);
+	
+	@Select("${sql}")
+	public List<Project> selectMineProjectByFilterCondition1(@Param("sql")String sql);
 
 	
 	@SelectProvider(type=ProjectSqlBuilder.class , method="buildSelectPublicProjectByFilterCondition") 
 	public List<Project> selectPublicProjectByFilterCondition(Map<String, Object> map);
+	
+	@Select("${sql}")
+	public List<Project> selectPublicProjectByFilterCondition1(@Param("sql")String sql);
 
 
 

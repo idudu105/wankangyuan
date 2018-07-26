@@ -86,6 +86,63 @@ public class ProjectFilterController {
 	}
 	
 	/**
+	 * 查询我创建的项目
+	 * @param httpSession
+	 * @param creator
+	 * @param page
+	 * @param strip
+	 * @param searchWord 查询条件
+	 * @return
+	 */
+	@RequestMapping("/selectCreatedProjectByFilterCondition1")
+	public String selectCreatedProject1(HttpSession httpSession , HttpServletRequest request ,
+			Integer page , Integer strip , String searchWord , Integer type , 
+			QueryCondition projectQueryCondition, String pName, String pNumber, String pCreator,
+			String createDatetime, String keyWords, String isOpen){
+		if(page == null){
+			page = 1;
+		}
+		if(strip == null){
+			strip = 12;
+		}
+		if(searchWord == null){
+			searchWord = new String("");
+			httpSession.setAttribute("projectSearchWord", null);
+		}else{
+			//更新关键字
+			httpSession.setAttribute("projectSearchWord", searchWord);
+		}
+		if(projectQueryCondition == null){
+			projectQueryCondition = new QueryCondition();
+		}
+		projectQueryCondition.setStrings(projectQueryCondition.getValues());//将筛选值的字符串形式切割成list形式，便于操作
+		httpSession.setAttribute("projectQueryCondition", projectQueryCondition);//设置筛选条件
+
+		//不需要筛选，直接查询
+		Map<String, Object> map = new HashMap<String , Object>();
+		User user = (User)request.getAttribute("user");
+		map = projectFilterService.selectCreatedProjectByFilterCondition1(user.getId(), page, strip, searchWord, projectQueryCondition, pName, pNumber, pCreator,
+				createDatetime, keyWords, isOpen);
+		httpSession.setAttribute("projects", map.get("list"));
+		httpSession.setAttribute("total", map.get("total"));
+		httpSession.setAttribute("page", page);
+		httpSession.setAttribute("rows", strip);
+		
+		httpSession.setAttribute("pName", pName);
+		httpSession.setAttribute("pNumber", pNumber);
+		httpSession.setAttribute("pCreator", pCreator);
+		httpSession.setAttribute("createDatetime", createDatetime);
+		httpSession.setAttribute("keyWords", keyWords);
+		httpSession.setAttribute("isOpen", isOpen);
+	
+		if(type == null || type == 1){
+			return "/jsp/project/project_create.jsp";
+		}else{
+			return "/jsp/project/project_create2.jsp";
+		}
+	}
+	
+	/**
 	 * 根据筛选条件查询我的项目
 	 * @param httpSession
 	 * @param request
@@ -135,6 +192,66 @@ public class ProjectFilterController {
 	}
 	
 	/**
+	 * 根据筛选条件查询我的项目
+	 * @param httpSession
+	 * @param request
+	 * @param page
+	 * @param strip
+	 * @param searchWord
+	 * @param type
+	 * @param projectQueryCondition
+	 * @return
+	 */
+	@RequestMapping("/selectMineProjectByFilterCondition1")
+	public String selectMyProject1(HttpSession httpSession , HttpServletRequest request , 
+			Integer page , Integer strip, String searchWord , Integer type , 
+			QueryCondition projectQueryCondition, String pName, String pNumber, String pCreator,
+			String createDatetime, String keyWords, String isOpen){
+		
+		if(page == null){
+			page = 1;
+		}
+		if(strip == null){
+			strip = 12;
+		}
+		if(searchWord == null){
+			searchWord = new String("");
+			httpSession.setAttribute("projectSearchWord", null);
+		}else{
+			//更新关键字
+			httpSession.setAttribute("projectSearchWord", searchWord);
+		}
+		if(projectQueryCondition == null){
+			projectQueryCondition = new QueryCondition();
+		}
+		projectQueryCondition.setStrings(projectQueryCondition.getValues());//将筛选值的字符串形式切割成list形式，便于操作
+		httpSession.setAttribute("projectQueryCondition", projectQueryCondition);//设置筛选条件
+		
+		User user = (User)request.getAttribute("user");
+		Map<String, Object> map = new HashMap<String , Object>();
+		map = projectFilterService.selectMineProjectByFilterCondition1(user.getId(), page, strip, searchWord, projectQueryCondition, pName, pNumber, pCreator,
+				createDatetime, keyWords, isOpen);
+		httpSession.setAttribute("projects", map.get("list"));
+		httpSession.setAttribute("total", map.get("total"));
+		httpSession.setAttribute("page", page);
+		httpSession.setAttribute("rows", strip);
+		
+		httpSession.setAttribute("pName", pName);
+		httpSession.setAttribute("pNumber", pNumber);
+		httpSession.setAttribute("pCreator", pCreator);
+		httpSession.setAttribute("createDatetime", createDatetime);
+		httpSession.setAttribute("keyWords", keyWords);
+		httpSession.setAttribute("isOpen", isOpen);
+		
+		if(type == null || type == 1){
+			return "/jsp/project/project_mine.jsp";
+		}else{
+			return "/jsp/project/project_mine2.jsp";
+		}
+		
+	}
+	
+	/**
 	 * 根据筛选条件查询公开的项目
 	 * @param httpSession
 	 * @param page
@@ -172,6 +289,62 @@ public class ProjectFilterController {
 		httpSession.setAttribute("total", map.get("total"));
 		httpSession.setAttribute("page", page);
 		httpSession.setAttribute("rows", strip);
+		
+		if(type == null || type == 1){
+			return "/jsp/project/project_public.jsp";
+		}else{
+			return "/jsp/project/project_public2.jsp";
+		}
+		
+	}
+	
+	/**
+	 * 根据筛选条件查询公开的项目
+	 * @param httpSession
+	 * @param page
+	 * @param strip
+	 * @param searchWord
+	 * @param type
+	 * @param projectQueryCondition
+	 * @return
+	 */
+	@RequestMapping("/selectPublicProjectByFilterCondition1")
+	public String selectPublicProject1(HttpSession httpSession ,  Integer page , Integer strip, 
+			String searchWord , Integer type , QueryCondition projectQueryCondition, String pName, String pNumber, String pCreator,
+			String createDatetime, String keyWords, String isOpen){		
+		if(page == null){
+			page = 1;
+		}
+		if(strip == null){
+			strip = 12;
+		}
+		if(searchWord == null){
+			searchWord = new String("");
+			httpSession.setAttribute("projectSearchWord", null);
+		}else{
+			//更新关键字
+			httpSession.setAttribute("projectSearchWord", searchWord);
+		}
+		if(projectQueryCondition == null){
+			projectQueryCondition = new QueryCondition();
+		}
+		projectQueryCondition.setStrings(projectQueryCondition.getValues());//将筛选值的字符串形式切割成list形式，便于操作
+		httpSession.setAttribute("projectQueryCondition", projectQueryCondition);//设置筛选条件
+		
+		Map<String, Object> map = new HashMap<String , Object>();
+		map = projectFilterService.selectPublicProjectByFilterCondition1(page, strip, searchWord, projectQueryCondition, pName, pNumber, pCreator,
+				createDatetime, keyWords, isOpen);
+		httpSession.setAttribute("projects", map.get("list"));
+		httpSession.setAttribute("total", map.get("total"));
+		httpSession.setAttribute("page", page);
+		httpSession.setAttribute("rows", strip);
+		
+		httpSession.setAttribute("pName", pName);
+		httpSession.setAttribute("pNumber", pNumber);
+		httpSession.setAttribute("pCreator", pCreator);
+		httpSession.setAttribute("createDatetime", createDatetime);
+		httpSession.setAttribute("keyWords", keyWords);
+		httpSession.setAttribute("isOpen", isOpen);
 		
 		if(type == null || type == 1){
 			return "/jsp/project/project_public.jsp";

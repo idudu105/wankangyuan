@@ -83,7 +83,12 @@ public class HbaseTest {
 				}
 			}
 		} catch (FileNotFoundException e) {
-			pWriter = new PrintWriter("C:/记录.txt");
+			try {
+				pWriter = new PrintWriter("C:/记录.txt");
+			} catch (FileNotFoundException e1) {
+				// TODO 自动生成的 catch 块
+				e1.printStackTrace();
+			}
 		}
 	}
 	public static void toJson(Object object) {
