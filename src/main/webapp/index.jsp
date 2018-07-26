@@ -127,7 +127,9 @@
                         </a>
                     </div>
                 </div>
+                <a href="/wankangyuan/project/selectMyProject">
                 <div class="nicheng"><shiro:principal/></div>
+                </a>
                 </shiro:authenticated>
                 
                 <img src="/wankangyuan/static/img/search.png" alt="" class="searchI2" />

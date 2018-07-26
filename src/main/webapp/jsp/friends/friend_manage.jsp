@@ -271,14 +271,14 @@
                             </div>
                         </div>
                         <div class="friendMTrs" style="display:none;">
-                            <select id="orgRole" name="orgRole">
+                            <select id="orgRole" name="orgRole" data-bind="event: { change:getOrgers }">
                                 <option value="">无</option>
                                 <option value="管理员">管理员</option>
                                 <option value="成员">成员</option>
                             </select>
                         </div>
                         <div class="friendMTrss" style="display:none;">
-                            <select id="sysRoles" name="sysRoles" data-bind="foreach:sysRoles">
+                            <select id="sysRoles" name="sysRoles" data-bind="foreach:sysRoles,event: { change:getMyFriends }">
                                 <option data-bind="text:description,value:description"></option>
                             </select>
                         </div>
@@ -336,7 +336,7 @@
                               <div data-bind="foreach: orgList">
                                 <div class="friendMMlTTz" data-bind="attr:{name: id}" ><!-- 每个组织结构 -->
                                     <div class="friendMMlTTzT">
-                                        <span class="fri_name" data-bind="text: organizationName"></span>
+                                        <span class="fri_name" data-bind="text: organizationName,click:$root.removeAllOrgers"></span>
                                         <div class="friendMMlTTzTi"></div>
                                     </div>
                                     <div class="friendMMlTTzB">
@@ -464,7 +464,7 @@
 <script id="orgTmpl" type="text/html">
 <!-- ko if:groupList.length -->
 <div class="friendMMlTTzBz2" data-bind="attr:{name: id}" data-bind="text: organizationName">
-    <div class="friendMMlTTzBz2Tk">
+    <div class="friendMMlTTzBz2Tk" data-bind="click:$root.removeAllOrgers">
         <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
         <div class="friendMMlTTzBzt" data-bind="text: organizationName"></div>
         <div class="friendMMlTTzTi"></div>
@@ -719,6 +719,10 @@ function ViewModel() {
             friendmanage_quanxuan();
     	});
     }
+    self.removeAllOrgers = function(){
+    	$('#groupId').val("");
+    	self.orgers.removeAll();
+    }
     
     self.searchOrgers = function(data, event) {
         if(event.keyCode == "13") {  
@@ -862,6 +866,12 @@ function ViewModel() {
             }
             friendmanage_quanxuan();
         });
+    }
+    
+    self.searchFriendsToOrg = function(data, event) {
+    	if(event.keyCode == "13") {  
+            self.getFriendsToOrg();
+        }  
     }
     
     //移除好友

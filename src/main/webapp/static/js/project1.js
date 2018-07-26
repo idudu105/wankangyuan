@@ -1926,6 +1926,20 @@ function friend_manage(){
                     afriendMMlTTz[index].className="friendMMlTTz active2";
                     zuzhi_PD[index]=0;
                 }
+                
+                
+                afriendMMrz[0].className="friendMMrz active";
+                afriendMMrz[1].className="friendMMrz";
+
+                ofriend_qunfa.style.display="none";
+                ofriend_yichuzu.style.display="inline-block";
+                ofriend_yichuhy.style.display="none";
+                ofriendMTrs.style.display="inline-block";
+                ofriendMTrss.style.display="none";
+                
+
+                osearch_2.className="search_2";
+                osearch_3.className="search_3 active";
 
             }
         })(i)
@@ -2021,6 +2035,19 @@ function friend_manage(){
                     afriendMMlTTzBz2Mk[index].style.display="none";
                     teshuzuPD[index]=0;
                 }
+                
+                afriendMMrz[0].className="friendMMrz active";
+                afriendMMrz[1].className="friendMMrz";
+
+                ofriend_qunfa.style.display="none";
+                ofriend_yichuzu.style.display="inline-block";
+                ofriend_yichuhy.style.display="none";
+                ofriendMTrs.style.display="inline-block";
+                ofriendMTrss.style.display="none";
+                
+
+                osearch_2.className="search_2";
+                osearch_3.className="search_3 active";
                 
             }
         })(i)

@@ -478,14 +478,14 @@
                             </div>
                         </div>
                         <div class="friendMTrs" style="display:none;">
-                            <select id="orgRole" name="orgRole">
+                            <select id="orgRole" name="orgRole" data-bind="event: { change:getOrgers }">
                                 <option value="">无</option>
                                 <option value="管理员">管理员</option>
                                 <option value="成员">成员</option>
                             </select>
                         </div>
                         <div class="friendMTrss" style="display:none;">
-                            <select id="sysRoles" name="sysRoles" data-bind="foreach:sysRoles">
+                            <select id="sysRoles" name="sysRoles" data-bind="foreach:sysRoles,event: { change:getMyFriends }">
                                 <option data-bind="text:description,value:description"></option>
                             </select>
                         </div>
