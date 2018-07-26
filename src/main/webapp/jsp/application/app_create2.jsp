@@ -151,11 +151,11 @@
                     <form action="/wankangyuan/application/create2" method="post">
                         <div class="adddataM">
                             <div class="adddataMli">
-                                <div class="adddataMlit">应用名称：</div>
+                                <div class="adddataMlit2">应用名称：</div>
                                 <input name="appName" type="text" class="adddataMliTT adddataMliT" />
                             </div>
                             <div class="adddataMli">
-                                <div class="adddataMlit">应用描述：</div>
+                                <div class="adddataMlit2">应用描述：</div>
                                 <textarea name="appIntro" class="adddataMliTT adddataMliT3" ></textarea>
                             </div>
                         </div>

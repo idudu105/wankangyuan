@@ -1586,12 +1586,12 @@ function data_dataclick(){
             }
         }
     }
-
+    var fuxuanPD2=0;
     if(afuxuanK2[0]){
         for(var i=0;i<afuxuanK2.length;i++){
             (function(index){
                 afuxuanK2[i].onchange=function(){
-                    var fuxuanPD2=0;
+                    fuxuanPD2=0;
                     for(var j=0;j<afuxuanK2.length;j++){
                         if(afuxuan2[j].checked){
                             fuxuanPD2++;
@@ -1630,28 +1630,31 @@ function data_dataclick(){
         oclmReditK.style.display="block";
     }
     oclmRsb_modify.onclick=function(){
-    	document.querySelectorAll('.type')[0].value = "edit";
-        oclmReditK.style.display="block";
-        var oprodaclmRz2=document.querySelectorAll('.prodaclmRz2')[0];
-        var oprodaclmRzB=oprodaclmRz2.querySelectorAll('.prodaclmRzB')[0];
-        var aprodaclmRzBz=oprodaclmRz2.querySelectorAll('.prodaclmRzBz');
-        var oxuanzhong=null;
-        for(var i=0;i<aprodaclmRzBz.length;i++){
-            var oinput_check=aprodaclmRzBz[i].querySelectorAll('.input_check')[0];
-            if(oinput_check.checked){
-                oxuanzhong=aprodaclmRzBz[i];
-            }
-        }
-        var aPJliCli2=oxuanzhong.querySelectorAll('.PJliCli2');
-//        var oclmReditK1=document.querySelectorAll('.clmReditK')[0];
-        var oclmReditM=oclmReditK.querySelectorAll('.clmReditM')[0];
-        var aclmReditMzp=oclmReditM.querySelectorAll('.clmReditMzp');
-        console.log(aclmReditMzp1);
-        for(var i=0;i<aPJliCli2.length;i++){
-            var ospan=aPJliCli2[i].getElementsByTagName('span')[0];
-            console.log(aPJliCli2[i]);
-            aclmReditMzp[i].value=ospan.innerHTML;
-        }
+    	console.log(fuxuanPD2);
+    	if(fuxuanPD2==1){
+	    	document.querySelectorAll('.type')[0].value = "edit";
+	        oclmReditK.style.display="block";
+	        var oprodaclmRz2=document.querySelectorAll('.prodaclmRz2')[0];
+	        var oprodaclmRzB=oprodaclmRz2.querySelectorAll('.prodaclmRzB')[0];
+	        var aprodaclmRzBz=oprodaclmRz2.querySelectorAll('.prodaclmRzBz');
+	        var oxuanzhong=null;
+	        for(var i=0;i<aprodaclmRzBz.length;i++){
+	            var oinput_check=aprodaclmRzBz[i].querySelectorAll('.input_check')[0];
+	            if(oinput_check.checked){
+	                oxuanzhong=aprodaclmRzBz[i];
+	            }
+	        }
+	        var aPJliCli2=oxuanzhong.querySelectorAll('.PJliCli2');
+	//        var oclmReditK1=document.querySelectorAll('.clmReditK')[0];
+	        var oclmReditM=oclmReditK.querySelectorAll('.clmReditM')[0];
+	        var aclmReditMzp=oclmReditM.querySelectorAll('.clmReditMzp');
+//	        console.log(aclmReditMzp1);
+	        for(var i=0;i<aPJliCli2.length;i++){
+	            var ospan=aPJliCli2[i].getElementsByTagName('span')[0];
+	            console.log(aPJliCli2[i]);
+	            aclmReditMzp[i].value=ospan.innerHTML;
+	        }
+    	}
     }
 
     oclmReditTx.onclick=function(){

@@ -538,6 +538,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		function upFile(){
 			//获取附件内容
 			var formData = new FormData($("#uploadForm")[0]);
+			
 			//上传附件
 			$.ajax({
 	            url: '/wankangyuan/projectFloderFile/upload' ,
@@ -550,6 +551,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            success: function (data) {
 	                if(data.result == true){
 	                	var fileUploadList = $("#fileUploadList");
+	                	$("#uploadFile").val("");
 	                	fileUploadList.append(
 	                		'<div class="fileaddMm" id=\"'+data.id+'\">'+
 	                            '<img src="/wankangyuan/static/img/file.png" height="20" width="16" alt="" class="fileaddMi" />'+

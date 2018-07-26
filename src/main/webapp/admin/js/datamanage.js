@@ -150,8 +150,16 @@ $(document).ready(function(){
                 if(oaddbiaoxPD==0){
                     oaddbiaoxK.style.display="block";
                     oaddbiaoxPD=1;
+
+                    var aaddbiaoxlik=oaddbiaoxK.querySelectorAll('.addbiaoxlik');
+                    var aselect=oaddbiaoxK.querySelectorAll('select');
+
+                    
                     for(var j=0;j<aaddbiaoxlik.length;j++){
                         aaddbiaoxlik[j].value="";
+                    }
+                    for(var j=0;j<aselect.length;j++){
+                        aselect[j].options[0].selected = true;
                     }
                 }
             }
@@ -373,6 +381,17 @@ $(document).ready(function(){
                 if(oaddbiaoxPD_==0){
                     oaddbiaoxK_.style.display="block";
                     oaddbiaoxPD_=1;
+
+                    var aaddbiaoxlik=oaddbiaoxK_.querySelectorAll('.addbiaoxlik');
+                    var aselect=oaddbiaoxK_.querySelectorAll('select');
+
+                    
+                    for(var j=0;j<aaddbiaoxlik.length;j++){
+                        aaddbiaoxlik[j].value="";
+                    }
+                    for(var j=0;j<aselect.length;j++){
+                        aselect[j].options[0].selected = true;
+                    }
                 }
             }
         })(i)

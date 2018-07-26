@@ -34,7 +34,7 @@ public interface ProjectCustomRoleDao {
 	@Delete("delete from project_custom_role where id=#{id}")
 	public int deleteprojectCustomRole(@Param("id")Integer id);
 	
-	@Select("select project_custom_role.id,project_custom_role.rolename,project_custom_role.p_id"
+	@Select("select project_custom_role.id,project_custom_role.rolename,project_custom_role.p_id,project_custom_role.authorities"
 			+ " from project_custom_role where p_id=#{p_id}")
 	public List<ProjectCustomRole> selectProjectCustomRoleByPId(@Param("p_id")Integer p_id);
 	

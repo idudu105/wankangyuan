@@ -278,13 +278,13 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 		if(StringUtils.isNotBlank(appType)) {
 			criteria.andAppTypeEqualTo(appType);
 		}
-		if(null != appNameOption && appNameOption.length > 0) {
+		if(null != appNameOption && appNameOption.length > 0 && !field.equals("app_name")) {
     		criteria.andAppNameIn(Arrays.asList(appNameOption));
     	}
-    	if(null != creatorOption && creatorOption.length > 0) {
+    	if(null != creatorOption && creatorOption.length > 0 && !field.equals("creator")) {
     		criteria.andCreatorIn(Arrays.asList(creatorOption));
     	}
-    	if(null != isAsyncOption && isAsyncOption.length > 0) {
+    	if(null != isAsyncOption && isAsyncOption.length > 0 && !field.equals("is_async")) {
     		List<String> optionList = Arrays.asList(isAsyncOption);
     		if(optionList.size() == 1) {
     			if("同步".equals(optionList.get(0))) {
@@ -295,13 +295,13 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
     			}
     		}
     	}
-    	if(null != keywordsOption && keywordsOption.length > 0) {
+    	if(null != keywordsOption && keywordsOption.length > 0 && !field.equals("keywords")) {
     		criteria.andKeywordsIn(Arrays.asList(keywordsOption));
     	}
-    	if(null != appIntroOption && appIntroOption.length > 0) {
+    	if(null != appIntroOption && appIntroOption.length > 0 && !field.equals("app_overview")) {
     		criteria.andAppOverviewIn(Arrays.asList(appIntroOption));
     	}
-    	if(null != createTimeOption && createTimeOption.length > 0) {
+    	if(null != createTimeOption && createTimeOption.length > 0 && !field.equals("create_time")) {
     		if(createTimeOption.length == 2) {
     			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     			Date date1;

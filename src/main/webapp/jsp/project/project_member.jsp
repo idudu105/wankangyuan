@@ -771,6 +771,7 @@
                             <div class="QXGLkMrz">
                                 <div class="QXGLkMrzT">应用</div>
                                 <div class="QXGLkMrzM">
+                                	<input name="43" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>添加应用</label>&nbsp;&nbsp;
                                 	<input name="42" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>浏览应用</label>&nbsp;&nbsp;
                                 	<input name="40" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>运行应用</label>&nbsp;&nbsp;
                                 	<input name="41" type="checkbox" class="authority" style="zoom:150%"/>&nbsp;<label>移除应用</label>&nbsp;&nbsp;

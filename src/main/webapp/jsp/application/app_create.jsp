@@ -186,11 +186,11 @@
                     <form action="/wankangyuan/application/create" method="post">
                         <div class="adddataM">
                             <div class="adddataMli">
-                                <div class="adddataMlit">应用名称：</div>
+                                <div class="adddataMlit2">应用名称：</div>
                                 <input name="appName" type="text" class="adddataMliTT adddataMliT" required="required" />
                             </div>
                             <div class="adddataMli">
-                                <div class="adddataMlit">应用描述：</div>
+                                <div class="adddataMlit2">应用描述：</div>
                                 <textarea name="appIntro" class="adddataMliTT adddataMliT3" ></textarea>
                             </div>
                         </div>
@@ -451,7 +451,11 @@ function ViewModel() {
                         layer.msg(result.message, {
                             anim: 0,
                             end: function (index) {
-                                window.location.href="/wankangyuan/project/selectMyProject";
+                            	if(result.status == '200'){
+	                                window.location.href="/wankangyuan/project/selectMyProject";
+                            	}else{
+                            		window.location.reload();
+                            	}
                             }
                         });
 	                },

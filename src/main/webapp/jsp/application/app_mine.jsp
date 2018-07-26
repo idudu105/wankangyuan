@@ -383,7 +383,11 @@ function ViewModel() {
                         layer.msg(result.message, {
                             anim: 0,
                             end: function (index) {
-                                window.location.href="/wankangyuan/project/selectMyProject";
+                            	if(result.status == '200'){
+                                    window.location.href="/wankangyuan/project/selectMyProject";
+                                }else{
+                                    window.location.reload();
+                                }
                             }
                         });
                     },

@@ -1334,7 +1334,13 @@ input{
     font-size:18px;
     color:#666666;
     float:left;
-    margin-left:64px;
+    /*margin-left:64px;*/
+    width:270px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    word-wrap: break-word;
 }
 .cre_PJKmidK{
     background:#ffffff;
@@ -1662,6 +1668,7 @@ input{
     padding:15px;
     margin-top:20px;
     position:relative;
+    overflow:auto;
 }
 .prof_lbRmT{
     width:100%;
@@ -1746,7 +1753,7 @@ input{
     width:137px;
 }
 .prof_lbRmULt6{
-    width:134px;
+    width:120px;
 }
 
 
@@ -3736,8 +3743,23 @@ input{
     overflow: hidden;
     word-wrap: break-word;
 }
+.adddataMlit2{
+    float:left;
+    width:200px;
+    /*font-family:PingFangSC-Medium;*/
+    font-weight: 700;
+    font-size:18px;
+    color:#696969;
+    line-height: 35px;
+    text-align: right;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    word-wrap: break-word;
+}
 .adddataMliT{
-    float:right;
+    float:left;
     border:1px solid #999999;
     border-radius:4px;
     width:296px;
