@@ -68,45 +68,39 @@ public class HbaseTest {
 	@Autowired
 	FormatFieldService formatFieldService;
 	private static PrintWriter pWriter;
-	
-	
-	static{
+
+	static {
+
 		try {
 			pWriter = new PrintWriter("E:/Users/admin/Desktop/CC/新建文件夹/记录.txt");
+		} catch (Exception e4) {
 			try {
-				pWriter = new PrintWriter(ConstantsHBase.class.getClass()+"/记录1.txt");
-			} catch (Exception e) {
-				try {
-					pWriter = new PrintWriter(ConstantsHBase.class.getClassLoader()+"/记录2.txt");
-				} catch (Exception e1) {
-					try {
-						pWriter = new PrintWriter(ConstantsHBase.class+"/记录3.txt");
-					} catch (Exception e2) {
-						try {
-							pWriter = new PrintWriter("C:/记录.txt");
-						} catch (Exception e3) {
-							// TODO Auto-generated catch block
-							e3.printStackTrace();
-						}
-					}
-				}
+				pWriter = new PrintWriter("记录4.txt");
+			} catch (Exception e3) {
 			}
-		} catch (FileNotFoundException e) {
-			
+		}
+
+	}
+
+	public static void toJson(Object object) {
+		try {
+			pWriter.println(object);
+			pWriter.println(new Gson().toJson(object).toString());
+			pWriter.println();
+			pWriter.flush();
+		} catch (Exception e) {
 		}
 	}
-	public static void toJson(Object object) {
-		pWriter.println(object);
-		pWriter.println(new Gson().toJson(object).toString());
-		pWriter.println();
-		pWriter.flush();
-	}
+
 	public static void println(Object object) {
-		pWriter.println();
-		pWriter.println(object);
-		pWriter.flush();
+		try {
+			pWriter.println();
+			pWriter.println(object);
+			pWriter.flush();
+		} catch (Exception e) {
+		}
 	}
-	
+
 	@Before
 	public void init() {
 		System.out.println("start");
@@ -131,8 +125,7 @@ public class HbaseTest {
 		sourceQualifiers.add(ConstantsHBase.QUALIFIER_USER);
 		sourceQualifiers.add(ConstantsHBase.QUALIFIER_PROJECT);
 		sourceQualifiers.add(ConstantsHBase.QUALIFIER_CREATE);
-		PhoenixClient.createView(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id,
-				sourceQualifiers);
+		PhoenixClient.createView(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, sourceQualifiers);
 
 		List<String> nodeQualifiers = new ArrayList<>();
 		nodeQualifiers.add(ConstantsHBase.QUALIFIER_FORMATTYPE);
@@ -173,7 +166,7 @@ public class HbaseTest {
 			System.out.println(String.valueOf(formatField.getFf_id()));
 		}
 		PhoenixClient.alterViewAddColumns(ConstantsHBase.TABLE_PREFIX_FORMAT_ + cs_id + "_" + ft_id,
-				 formatFieldQualifiers);
+				formatFieldQualifiers);
 	}
 
 	public static void main(String[] args) {
@@ -182,51 +175,46 @@ public class HbaseTest {
 
 	@Test
 	public void test() {
-		String a=null;
+		String a = null;
 		if (a == null) {
-			a=" ";
+			a = " ";
 		}
-		System.out.println("a"+a.isEmpty());
-		System.out.println("a"+a.trim().isEmpty());
-		
-		
-		String b="dsadad";
-		
-		
-//		
-//		HBaseDB db=new HBaseDB();
-//		String tableName =ConstantsHBase.TABLE_PREFIX_SOURCE_+ "71";
-//		String family = ConstantsHBase.FAMILY_INFO;
-//		List<String> qualifiers = new ArrayList<>();
-//		// qualifiers.add(ConstantsHBase.QUALIFIER_PROJECT);
-//		qualifiers.add("E");
-//		qualifiers.add("D");
-//		qualifiers.add("F");
-////		db.deleteTable(tableName);
-//		db.createTable(tableName, new String[]{family}, 1);
-		
-	/*	int i = 0;
-		String s = "ERROR 1012 (42M03): Table undefined. tableName\u003dSOURCE_4845   AND   ";
-		System.out.println(i++ + "" + (s.contentEquals("Table undefined")));//false
-		System.out.println(i++ + "" + (s.contains("Table undefined")));//true
-		System.out.println(i++ + "" + (s.startsWith("ERROR 1012 (42M03): Table undefined.")));//true
-		System.out.println(i++ + "" + (s.trim())+"PP");
-		System.out.println(i++ + "" + (s.trim().endsWith("AND")));
-		// HBaseFormatDataDao.deleteFormatDataTable("1", "2");
-		int cs_id = 48;
-		String tableStr = "FORMAT_62_45";
-		String rowkeyStr = "10437";
-		String familyStr = ConstantsHBase.FAMILY_INFO;
-		String columnStr1 = ConstantsHBase.QUALIFIER_USER;
-		String columnStr2 = ConstantsHBase.QUALIFIER_PROJECT;
-		String valueStr1 = "1";
-		String valueStr2 = "77";
-		List<Put> puts = new ArrayList<>();
-		for (i = 73; i < 78; i++) {
-			Put put3 = new Put(Bytes.toBytes(String.valueOf("30_48_" + i)));
-			put3.addColumn(Bytes.toBytes(familyStr), Bytes.toBytes(""+i), Bytes.toBytes(""));
-			puts.add(put3);
-		}*/
+		System.out.println("a" + a.isEmpty());
+		System.out.println("a" + a.trim().isEmpty());
+
+		String b = "dsadad";
+
+		//
+		// HBaseDB db=new HBaseDB();
+		// String tableName =ConstantsHBase.TABLE_PREFIX_SOURCE_+ "71";
+		// String family = ConstantsHBase.FAMILY_INFO;
+		// List<String> qualifiers = new ArrayList<>();
+		// // qualifiers.add(ConstantsHBase.QUALIFIER_PROJECT);
+		// qualifiers.add("E");
+		// qualifiers.add("D");
+		// qualifiers.add("F");
+		//// db.deleteTable(tableName);
+		// db.createTable(tableName, new String[]{family}, 1);
+
+		/*
+		 * int i = 0; String s =
+		 * "ERROR 1012 (42M03): Table undefined. tableName\u003dSOURCE_4845   AND   "
+		 * ; System.out.println(i++ + "" +
+		 * (s.contentEquals("Table undefined")));//false System.out.println(i++
+		 * + "" + (s.contains("Table undefined")));//true System.out.println(i++
+		 * + "" + (s.startsWith("ERROR 1012 (42M03): Table undefined.")));//true
+		 * System.out.println(i++ + "" + (s.trim())+"PP");
+		 * System.out.println(i++ + "" + (s.trim().endsWith("AND"))); //
+		 * HBaseFormatDataDao.deleteFormatDataTable("1", "2"); int cs_id = 48;
+		 * String tableStr = "FORMAT_62_45"; String rowkeyStr = "10437"; String
+		 * familyStr = ConstantsHBase.FAMILY_INFO; String columnStr1 =
+		 * ConstantsHBase.QUALIFIER_USER; String columnStr2 =
+		 * ConstantsHBase.QUALIFIER_PROJECT; String valueStr1 = "1"; String
+		 * valueStr2 = "77"; List<Put> puts = new ArrayList<>(); for (i = 73; i
+		 * < 78; i++) { Put put3 = new Put(Bytes.toBytes(String.valueOf("30_48_"
+		 * + i))); put3.addColumn(Bytes.toBytes(familyStr), Bytes.toBytes(""+i),
+		 * Bytes.toBytes("")); puts.add(put3); }
+		 */
 		//// for (int i = 1; i < 17; i++) {
 		//// Put put3 = new Put(Bytes.toBytes(String.valueOf("30_48_"+i)));
 		//// put3.addColumn(Bytes.toBytes(familyStr), Bytes.toBytes(columnStr1),
@@ -289,24 +277,25 @@ public class HbaseTest {
 		try {
 			HBaseDB db = HBaseDB.getInstance();
 			Table table = db.getTable(tableStr);
-			List<Put> puts=new ArrayList<>();
+			List<Put> puts = new ArrayList<>();
 			for (int i = 1; i < 4; i++) {
-				Put put = new Put(Bytes.toBytes("45_62_"+i));
+				Put put = new Put(Bytes.toBytes("45_62_" + i));
 				for (int j = 89; j < 92; j++) {
-					put.addColumn(Bytes.toBytes(familyStr),Bytes.toBytes(""+j), Bytes.toBytes(i+"value"+j));
-					
+					put.addColumn(Bytes.toBytes(familyStr), Bytes.toBytes("" + j), Bytes.toBytes(i + "value" + j));
+
 				}
-//				put.addColumn(Bytes.toBytes(familyStr), Bytes.toBytes("USER"),Bytes.toBytes("1_62_1"));
-				put.addColumn(Bytes.toBytes(familyStr), Bytes.toBytes("PROJECT"),Bytes.toBytes("94"));
+				// put.addColumn(Bytes.toBytes(familyStr),
+				// Bytes.toBytes("USER"),Bytes.toBytes("1_62_1"));
+				put.addColumn(Bytes.toBytes(familyStr), Bytes.toBytes("PROJECT"), Bytes.toBytes("94"));
 				puts.add(put);
 			}
 			Put put = new Put(Bytes.toBytes(1_62_2));
 			for (int j = 89; j < 95; j++) {
-				put.addColumn(Bytes.toBytes(familyStr),Bytes.toBytes(""+j), Bytes.toBytes("value"+j));
-				
+				put.addColumn(Bytes.toBytes(familyStr), Bytes.toBytes("" + j), Bytes.toBytes("value" + j));
+
 			}
-			put.addColumn(Bytes.toBytes(familyStr), Bytes.toBytes("USER"),Bytes.toBytes("1"));
-			put.addColumn(Bytes.toBytes(familyStr), Bytes.toBytes("PROJECT"),Bytes.toBytes("114"));
+			put.addColumn(Bytes.toBytes(familyStr), Bytes.toBytes("USER"), Bytes.toBytes("1"));
+			put.addColumn(Bytes.toBytes(familyStr), Bytes.toBytes("PROJECT"), Bytes.toBytes("114"));
 			puts.add(put);
 			table.put(puts);
 			table.close();
@@ -350,17 +339,20 @@ public class HbaseTest {
 			sourceFieldDatas.put(ConstantsHBase.QUALIFIER_SOURCEDATAID, "1_72_13");
 			sourceFieldDatas.put(ConstantsHBase.QUALIFIER_PROJECT, "118");
 
-//			FilterList filterList = new FilterList(Operator.MUST_PASS_ALL);
-//			for (Entry<String, String> sourceFieldData : sourceFieldDatas.entrySet()) {
-//				filterList.addFilter(new SingleColumnValueFilter(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
-//						Bytes.toBytes(sourceFieldData.getKey()), CompareOp.EQUAL,
-//						new BinaryComparator(Bytes.toBytes(sourceFieldData.getValue()))));
-//			}
-			Filter filter=new SingleColumnValueFilter(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+			// FilterList filterList = new FilterList(Operator.MUST_PASS_ALL);
+			// for (Entry<String, String> sourceFieldData :
+			// sourceFieldDatas.entrySet()) {
+			// filterList.addFilter(new
+			// SingleColumnValueFilter(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+			// Bytes.toBytes(sourceFieldData.getKey()), CompareOp.EQUAL,
+			// new
+			// BinaryComparator(Bytes.toBytes(sourceFieldData.getValue()))));
+			// }
+			Filter filter = new SingleColumnValueFilter(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
 					Bytes.toBytes(ConstantsHBase.QUALIFIER_SOURCEDATAID), CompareOp.EQUAL,
 					new BinaryComparator(Bytes.toBytes("1_72_13")));
-			FilterList filterList = new FilterList(Operator.MUST_PASS_ALL,filter);
-//			filterList.addFilter(filter);
+			FilterList filterList = new FilterList(Operator.MUST_PASS_ALL, filter);
+			// filterList.addFilter(filter);
 			scan.setFilter(filterList);
 
 			ResultScanner resultScanner = table.getScanner(scan);
