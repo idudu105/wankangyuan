@@ -96,6 +96,18 @@
                         afriendMMlTTz[index].className="friendMMlTTz active2";
                         zuzhi_PD[index]=0;
                     }
+                    var oko_orgers=document.getElementById('ko_orgers');
+                    var oko_friends=document.getElementById('ko_friends');
+                    
+                    
+                    //afriendMMrz[0].className="friendMMrz active";
+                    //afriendMMrz[1].className="friendMMrz";
+                    
+                    oko_orgers.style.display="block";
+                    oko_friends.style.display="none";
+                    //console.log(1);
+                    
+
 
                 }
             })(i)
@@ -182,6 +194,16 @@
                         afriendMMlTTzBz2Mk[index].style.display="none";
                         teshuzuPD[index]=0;
                     }
+                    
+                    var oko_orgers=document.getElementById('ko_orgers');
+                    var oko_friends=document.getElementById('ko_friends');
+                    
+                    
+                    //afriendMMrz[0].className="friendMMrz active";
+                    //afriendMMrz[1].className="friendMMrz";
+                    
+                    oko_orgers.style.display="block";
+                    oko_friends.style.display="none";
                     
                 }
             })(i)
@@ -445,7 +467,7 @@
                               <div data-bind="foreach: orgList">
                                 <div class="friendMMlTTz" data-bind="attr:{name: id}" ><!-- 每个组织结构 -->
                                     <div class="friendMMlTTzT">
-                                        <span class="fri_name" data-bind="text: organizationName"></span>
+                                        <span class="fri_name" data-bind="text: organizationName,click:$root.removeAllOrgers"></span>
                                         <div class="friendMMlTTzTi"></div>
                                     </div>
                                     <div class="friendMMlTTzB">
@@ -1056,7 +1078,7 @@
 <script id="orgTmpl" type="text/html">
 <!-- ko if:groupList.length -->
 <div class="friendMMlTTzBz2" data-bind="attr:{name: id}" data-bind="text: organizationName">
-    <div class="friendMMlTTzBz2Tk">
+    <div class="friendMMlTTzBz2Tk" data-bind="click:$root.removeAllOrgers">
         <img src="<%=request.getContextPath()%>/static/img/folder.png" alt="" class="friendMMlTTzBzi" />
         <div class="friendMMlTTzBzt" data-bind="text: organizationName"></div>
         <div class="friendMMlTTzTi"></div>
@@ -1149,6 +1171,10 @@ function ViewModel() {
             document.getElementById("ko_friends").style.display="none";
             friendmanage_quanxuan();
         });
+    }
+    self.removeAllOrgers = function(){
+        $('#groupId').val("");
+        self.orgers.removeAll();
     }
     
     self.searchOrgers = function(data, event) {
