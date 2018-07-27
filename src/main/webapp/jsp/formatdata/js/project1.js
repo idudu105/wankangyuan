@@ -1644,14 +1644,14 @@ function data_dataclick(){
 	                oxuanzhong=aprodaclmRzBz[i];
 	            }
 	        }
-	        var aPJliCli2=oxuanzhong.querySelectorAll('.PJliCli2');
+	        var aprodaclmRzTt3=oxuanzhong.querySelectorAll('.prodaclmRzTt3');
 	// var oclmReditK1=document.querySelectorAll('.clmReditK')[0];
 	        var oclmReditM=oclmReditK.querySelectorAll('.clmReditM')[0];
 	        var aclmReditMzp=oclmReditM.querySelectorAll('.clmReditMzp');
 // console.log(aclmReditMzp1);
-	        for(var i=0;i<aPJliCli2.length;i++){
-	            var ospan=aPJliCli2[i].getElementsByTagName('span')[0];
-	            console.log(aPJliCli2[i]);
+	        for(var i=0;i<aprodaclmRzTt3.length;i++){
+	            var ospan=aprodaclmRzTt3[i].getElementsByTagName('span')[0];
+	            console.log(aprodaclmRzTt3[i]);
 	            aclmReditMzp[i].value=ospan.innerHTML;
 	        }
     	}else if(fuxuanPD2==0){

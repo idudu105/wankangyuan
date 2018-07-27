@@ -213,7 +213,7 @@
 											<c:if test="${status.index != 0 }">
 												<%-- <div class="prodaclmRzTt3 prodaclmRzTtsj3">${dataDataTempTemp}</div>
 											 --%>
-												<div class="PJliCli2">
+												<div class="prodaclmRzTt3">
 													<span>${dataDataTempTemp}</span>
 												</div>
 											</c:if>
