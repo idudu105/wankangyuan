@@ -3687,7 +3687,7 @@ input{
 }
 
 .adddataK{
-    width:776px;
+    /*width:600px;*/
     /*height:500px;*/
     position:absolute;
     top:40px;
@@ -3729,14 +3729,15 @@ input{
     margin-bottom:20px;
 }
 .adddataMlit{
-    float:left;
-    width:450px;
+    float:right;
+    min-width:150px;
+    max-width:550px;
     /*font-family:PingFangSC-Medium;*/
     font-weight: 700;
     font-size:18px;
     color:#696969;
     line-height: 35px;
-    text-align: left;
+    text-align: right;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;

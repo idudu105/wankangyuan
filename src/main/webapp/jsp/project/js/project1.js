@@ -59,6 +59,11 @@ function pro_appendre2(){
 
 //  项目0
 function project0(){
+	var ologo=document.querySelectorAll('.logo')[0];
+    ologo.onclick=function(){
+        window.location.href = "/wankangyuan";
+    }
+	
     var obox=document.querySelectorAll('.box')[0];
     obox.style.minHeight=window.screen.availHeight-200+'px';
     console.log(document.body.clientWidth);

@@ -187,7 +187,9 @@
 						<div class="adddataTt">添加源数据</div>
 						<div class="adddataTx"></div>
 					</div>
-					<div class="adddataM" id="adddataM"></div>
+					<div class="adddataM" id="adddataM">
+					<table id="adddataMtable"></table>
+					</div>
 					<div class="adddataB">
 						<input type="button" class="adddataBb" value="提交" />
 					</div>

@@ -1093,16 +1093,16 @@ function data_create(){
         		success : function(data){
         			if(data.result == true){
         				// 对表单进行填充
-        				var adddataM = $("#adddataM");
+        				var adddataM = $("#adddataMtable");
         				adddataM.empty();
         				
         				var sourceFields = data.source.sourceFields;
         				for(var index in sourceFields){
         					
-        					adddataM.append('<div class="adddataMli">'+
-                                   				'<div class="adddataMlit">'+sourceFields[index].csf_name+'</div>'+
-                                    			'<input type="text" id="'+sourceFields[index].csf_id+'" class="adddataMliTT adddataMliT" />'+
-                                			'</div>');
+        					adddataM.append('<tr>'+
+                                   				'<td><div class="adddataMlit">'+sourceFields[index].csf_name+':</div></td>'+
+                                    			'<td><input type="text" id="'+sourceFields[index].csf_id+'" class="adddataMliTT adddataMliT" /></td>'+
+                                			'</tr>');
 
         				}
         	            oadddataK.style.display="block";
