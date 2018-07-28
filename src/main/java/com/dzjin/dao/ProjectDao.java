@@ -107,6 +107,19 @@ public interface ProjectDao {
 			+ "order by project.id desc")
 	public List<Project> selectMyProject(@Param("user_id")Integer user_id);
 	
+
+	@Select("SELECT project_user.id AS id,project_user.project_id AS project_id,"
+			+ "project_user.user_id AS user_id,project_user.role_id AS role_id "
+			+ "from project,project_user,user where project.creator=user.id "
+			+ "and project.id=project_user.project_id "
+			+ "and project_user.user_id=#{user_id} ORDER BY project_id DESC")
+	public List<ProjectUser> getProjectUser(@Param("user_id") Integer user_id);
+
+	
+	@Select("SELECT	user_id,project_id,role_id FROM project_user WHERE user_id=#{user_id}")
+	public List<Project> selectMyProject1(@Param("user_id")Integer user_id);
+	
+	
 	@Update("insert into project_user(project_id,user_id,bind_date_time,role_id,linkman_id) "
 			+ "values(#{project_id},#{user_id},#{bind_date_time},#{role_id},#{linkman_id})")
 	public int addPublicProjectToMine(ProjectUser projectUser);

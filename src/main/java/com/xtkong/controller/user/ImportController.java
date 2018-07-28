@@ -110,7 +110,7 @@ public class ImportController {
 			// }
 			// }
 
-			for (int i = sheetAt.getFirstRowNum() + 1; i < sheetAt.getPhysicalNumberOfRows(); i++) {
+			for (int i = sheetAt.getFirstRowNum() + 1; i <= sheetAt.getLastRowNum(); i++) {
 				row = sheetAt.getRow(i);
 				if (row == null) {
 					continue;
@@ -188,7 +188,7 @@ public class ImportController {
 							String.valueOf(formatField.getFf_id()));
 				}
 			}
-			for (int i = sheetAt.getFirstRowNum() + 1; i < sheetAt.getPhysicalNumberOfRows(); i++) {
+			for (int i = sheetAt.getFirstRowNum() + 1; i <= sheetAt.getLastRowNum(); i++) {
 				row = sheetAt.getRow(i);
 				if (row == null) {
 					continue;
@@ -269,7 +269,8 @@ public class ImportController {
 			HSSFSheet childSheet = wbs.getSheetAt(0);
 			// System.out.println(childSheet.getPhysicalNumberOfRows());
 			System.out.println("有行数" + childSheet.getLastRowNum());
-			for (int j = 0; j < childSheet.getPhysicalNumberOfRows(); j++) {
+			int n=childSheet.getLastRowNum();
+			for (int j = 0; j <= n; j++) {
 				HSSFRow row = childSheet.getRow(j);
 				// System.out.println(row.getPhysicalNumberOfCells());
 				// System.out.println("有列数" + row.getLastCellNum());

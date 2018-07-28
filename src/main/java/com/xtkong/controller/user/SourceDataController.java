@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.dzjin.model.Project;
-import com.dzjin.service.ProjectService;
+import com.dzjin.model.ProjectCustomRole;
+import com.dzjin.service.ProjectCustomRoleService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.liutianjun.pojo.User;
@@ -43,7 +43,7 @@ public class SourceDataController {
 	@Autowired
 	FormatFieldService formatFieldService;
 	@Autowired
-	ProjectService projectService;
+	ProjectCustomRoleService projectCustomRoleService;
 	@Autowired
 	UserDataService userDataService;
 
@@ -88,7 +88,7 @@ public class SourceDataController {
 		if (strip == null) {
 			strip = 12;
 		}
-		List<Project> projects;
+		List<ProjectCustomRole> projects;
 		List<Source> sources = sourceService.getSourcesForUser();
 		List<List<String>> sourceDatas = new ArrayList<>();
 		Integer total = 0;
@@ -293,7 +293,11 @@ public class SourceDataController {
 		}
 		switch (type) {
 		case "1":
-			projects = projectService.selectMyProject(user.getId());
+			List<String> authority_numbers=new ArrayList<>();
+			authority_numbers.add("30");
+			authority_numbers.add("31");
+			projects =projectCustomRoleService.selectProjectCustomRolesByUID(user.getId(),authority_numbers);
+//			projects = projectCustomRoleService.selectMyProject(user.getId());
 			httpSession.setAttribute("projects", projects);// 项目列表
 			return "redirect:/jsp/formatdata/data_mine.jsp";
 		case "2":		

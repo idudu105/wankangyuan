@@ -18,6 +18,7 @@ public class ProjectCustomRole {
 	private int id;
 	private String rolename;
 	private int p_id;
+	private String p_name;	//项目名称
 	private String authorities;
 	private int creator_id;
 	private String create_datetime;
@@ -74,8 +75,14 @@ public class ProjectCustomRole {
 	}
 	@Override
 	public String toString() {
-		return "ProjectCustomRole [id=" + id + ", rolename=" + rolename + ", p_id=" + p_id + ", authorities="
+		return "ProjectCustomRole [id=" + id + ", rolename=" + rolename + ", p_id=" + p_id +",p_name="+p_name+ ", authorities="
 				+ authorities + ", creator_id=" + creator_id + ", create_datetime=" + create_datetime + ", updater_id="
 				+ updater_id + ", update_datetime=" + update_datetime + "]";
+	}
+	public String getP_name() {
+		return p_name;
+	}
+	public void setP_name(String p_name) {
+		this.p_name = p_name;
 	}
 }

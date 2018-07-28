@@ -139,6 +139,10 @@ public class ProjectService {
 		return projectDao.selectMyProject(user_id);
 
 	}
+	public List<Project> selectMyProject1(Integer user_id){
+		return projectDao.selectMyProject(user_id);
+
+	}
 	
 	/**
 	 * 将公共的项目添加到我的项目中
