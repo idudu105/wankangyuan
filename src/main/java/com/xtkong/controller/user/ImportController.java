@@ -118,8 +118,11 @@ public class ImportController {
 				Map<String, String> sourceFieldDatas = new HashMap<>();
 				for (Entry<Integer, String> index_csfId : index_csfIdMap.entrySet()) {
 					try {
-						cell = row.getCell(index_csfId.getKey());
-						sourceFieldDatas.put(index_csfId.getValue(), getStringCellValue(cell));
+						cell = row.getCell(index_csfId.getKey());						
+						String cellValue=getStringCellValue(cell);
+						if(!cellValue.trim().isEmpty()){
+							sourceFieldDatas.put(index_csfId.getValue(), cellValue);
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						continue;
@@ -196,8 +199,11 @@ public class ImportController {
 				Map<String, String> formatFieldDatas = new HashMap<>();
 				for (Entry<Integer, String> index_csfId : index_ffIdMap.entrySet()) {
 					try {
-						cell = row.getCell(index_csfId.getKey());
-						formatFieldDatas.put(index_csfId.getValue(), getStringCellValue(cell));
+						cell = row.getCell(index_csfId.getKey());						
+						String cellValue=getStringCellValue(cell);
+						if(!cellValue.trim().isEmpty()){
+							formatFieldDatas.put(index_csfId.getValue(), cellValue);
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						continue;
@@ -267,14 +273,14 @@ public class ImportController {
 			FileInputStream is = new FileInputStream(f);
 			HSSFWorkbook wbs = new HSSFWorkbook(is);
 			HSSFSheet childSheet = wbs.getSheetAt(0);
-			// System.out.println(childSheet.getPhysicalNumberOfRows());
-			System.out.println("有行数" + childSheet.getLastRowNum());
+			 System.out.println(childSheet.getLastRowNum());
+			System.out.println("有行数" + childSheet.getPhysicalNumberOfRows());
 			int n=childSheet.getLastRowNum();
 			for (int j = 0; j <= n; j++) {
 				HSSFRow row = childSheet.getRow(j);
 				// System.out.println(row.getPhysicalNumberOfCells());
 				// System.out.println("有列数" + row.getLastCellNum());
-				System.out.print(j + "--\t");
+				System.out.print(j+"--\t");
 				if (null != row) {
 					for (int k = 0; k < row.getLastCellNum(); k++) {
 						HSSFCell cell = row.getCell(k);

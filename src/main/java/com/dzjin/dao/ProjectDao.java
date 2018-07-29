@@ -116,8 +116,6 @@ public interface ProjectDao {
 	public List<ProjectUser> getProjectUser(@Param("user_id") Integer user_id);
 
 	
-	@Select("SELECT	user_id,project_id,role_id FROM project_user WHERE user_id=#{user_id}")
-	public List<Project> selectMyProject1(@Param("user_id")Integer user_id);
 	
 	
 	@Update("insert into project_user(project_id,user_id,bind_date_time,role_id,linkman_id) "
