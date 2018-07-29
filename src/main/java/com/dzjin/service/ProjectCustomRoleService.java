@@ -40,15 +40,15 @@ public class ProjectCustomRoleService {
 		return projectCustomRoleDao.selectProjectCustomRoleByPId(p_id);
 	}
 
-	public List<ProjectCustomRole> selectProjectCustomRolesByUID(Integer user_id,List<String> authority_numbers) {
-		 List<ProjectCustomRole>  projectCustomRoles=projectCustomRoleDao.selectProjectCustomRolesByUID(user_id);
+	public List<ProjectCustomRole> selectProjectCustomRolesByUID(Integer user_id, List<String> authority_numbers) {
+		List<ProjectCustomRole> projectCustomRoles = projectCustomRoleDao.selectProjectCustomRolesByUID(user_id);
 		for (ProjectCustomRole projectCustomRole : projectCustomRoles) {
 			String[] authorities = projectCustomRole.getAuthorities().split(",");
-			boolean b=true;
+			boolean b = true;
 			for (String authority_number : authority_numbers) {
 				for (String authority : authorities) {
 					if (authority.equals(authority_number)) {
-						b=false;
+						b = false;
 						break;
 					}
 				}
@@ -61,6 +61,20 @@ public class ProjectCustomRoleService {
 			}
 		}
 		return projectCustomRoles;
+	}
+
+	public ProjectCustomRole selectProjectCustomRolesByUIDPID(Integer user_id, Integer p_id,
+			List<String> authority_numbers) {
+		ProjectCustomRole projectCustomRole = projectCustomRoleDao.selectProjectCustomRolesByPIDUID(user_id, p_id);
+		String[] authorities = projectCustomRole.getAuthorities().split(",");
+		for (String authority_number : authority_numbers) {
+			for (String authority : authorities) {
+				if (authority.equals(authority_number)) {
+					return projectCustomRole;
+				}
+			}
+		}
+		return null;
 	}
 
 	public ProjectCustomRole getProjectCustomRole(Integer id) {

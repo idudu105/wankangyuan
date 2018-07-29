@@ -36,6 +36,9 @@ public interface ProjectCustomRoleDao {
 	@Select("SELECT project.id AS p_id, project.p_name, project_custom_role.authorities, project_custom_role.rolename FROM project , project_user , project_custom_role WHERE project.id = project_user.project_id AND project_user.user_id =#{user_id} AND project_custom_role.id = project_user.role_id ORDER BY p_id DESC ")
 	public List<ProjectCustomRole> selectProjectCustomRolesByUID(@Param("user_id") Integer user_id);
 
+	@Select("SELECT project.id AS p_id, project.p_name, project_custom_role.authorities, project_custom_role.rolename FROM project , project_user , project_custom_role WHERE project.id =project_user.project_id AND project_user.user_id =#{user_id}  AND p_id =#{p_id} AND project_custom_role.id = project_user.role_id ORDER BY p_id DESC ")
+	public ProjectCustomRole selectProjectCustomRolesByPIDUID(@Param("user_id") Integer user_id,@Param("p_id") Integer p_id);
+
 	@Select("select * from project_custom_role where id=#{id}")
 	public ProjectCustomRole getProjectCustomRole(@Param("id") Integer id);
 

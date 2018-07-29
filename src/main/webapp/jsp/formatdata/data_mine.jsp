@@ -150,7 +150,7 @@
 				</div>
 				<div class="pro_addul">
 					<c:forEach items="${projects}" var="projectTemp">
-						<div class="pro_addli" id="${projectTemp.id }">${projectTemp.p_name}</div>
+						<div class="pro_addli" id="${projectTemp.p_id }">${projectTemp.p_name}</div>
 					</c:forEach>
 				</div>
 				<div class="shaixuanZK">

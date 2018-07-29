@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.xtkong.service.ProjectDataService;
 import com.xtkong.service.ProjectNodeDataService;
 import com.xtkong.service.ProjectNodeService;
+import com.dzjin.model.ProjectCustomRole;
+import com.dzjin.service.ProjectCustomRoleService;
 import com.liutianjun.pojo.User;
 import com.xtkong.dao.hbase.HBaseFormatNodeDao;
 import com.xtkong.dao.hbase.HBaseProjectDataDao;
@@ -44,6 +46,8 @@ public class ProjectFormatDataController {
 	ProjectNodeService projectNodeService;
 	@Autowired
 	ProjectNodeDataService projectNodeDataService;
+	@Autowired
+	ProjectCustomRoleService projectCustomRoleService;
 
 	@RequestMapping("/insert")
 	@ResponseBody
@@ -101,10 +105,22 @@ public class ProjectFormatDataController {
 
 	@RequestMapping("/remove")
 	@ResponseBody
-	public Map<String, Object> remove(HttpSession session, Integer p_id, String sourceDataIds, String cs_id) {
+	public Map<String, Object> remove(HttpServletRequest request,HttpSession session, Integer p_id, String sourceDataIds, String cs_id) {
 
 		Map<String, Object> map = new HashMap<>();
+		
+		User user = (User) request.getAttribute("user");
+		Integer user_id = user.getId();
+		List<String> authority_numbers=new ArrayList<>();
+		authority_numbers.add("31");
+		ProjectCustomRole projects = projectCustomRoleService.selectProjectCustomRolesByUIDPID(user_id, p_id, authority_numbers);
+		if (projects == null) {
+			map.put("result", false);
+			map.put("message", "权限不足");
 
+			return map;
+		}
+		
 		String[] source_data_id = sourceDataIds.split(",");
 		// Map<String, String> sourceFieldDatas = new HashMap<>();
 		// sourceFieldDatas.put(ConstantsHBase.QUALIFIER_PROJECT,
