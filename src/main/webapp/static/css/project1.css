@@ -1130,6 +1130,7 @@ input{
     z-index: 300;
     display:none;
     padding:11px;
+    border:1px solid #ccc;
 }
 .BTSX2{
     width:300px;

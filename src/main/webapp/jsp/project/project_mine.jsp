@@ -201,7 +201,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </div>
                         <div class="BTSXcli">
                             <div class="BTSXcliT">过滤：</div>
-                            <input type="text" class="BTSXcliGLK" value="${projectQueryCondition.filter}"/>
+                            <input type="text" class="BTSXcliGLK" value="<%-- ${projectQueryCondition.filter} --%>"/>
                             <button id="guolv">过滤</button>
                         </div>
                         <div class="BTSXcli">
@@ -412,6 +412,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     				layer.msg("联网失败");
     			}
     		});
+    		
+    		$(".BTSXcliGLK").val("")
     	}
     	
     	//重置按钮
