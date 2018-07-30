@@ -587,6 +587,44 @@ input{
     position:relative;
     min-height: 500px;
 }
+.PJulk{
+    width:max-content;
+    overflow:auto;
+}
+.PJul{
+    text-align: center;
+    border-collapse:separate;
+    border-spacing:0px 10px;
+}
+.PJul tr{
+    text-align: center;
+}
+.PJul tr:hover{
+    background:#f1f1f1;
+}
+.PJul td{
+    text-align: center !important;
+    min-width:100px;
+    padding:6px 10px;
+    width:max-content;
+}
+.PJul td .PJListli{
+    /*width:max-content;*/
+    width:100%;
+    text-align: center !important;
+    margin:0 auto;
+}
+.PJul td .PJliCli2{
+    /*width:max-content;*/
+    width:100%;
+    text-align: center !important;
+    margin:0 auto;
+}
+.PJul td span{
+    width:max-content;
+    text-align: center !important;
+    margin:0 auto;
+}
 .PJList{
     width:max-content;
     color:#16579b;

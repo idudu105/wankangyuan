@@ -163,7 +163,7 @@ function project1(){
     var oPJList=document.querySelectorAll('.PJList')[0];// 项目表头
     var oPJListline=document.querySelectorAll('.PJListline')[0];// 分割线
 
-    oPJListline.style.width=oPJList.offsetWidth*0.98+"px";
+    //oPJListline.style.width=oPJList.offsetWidth*0.98+"px";
     // console.log(oPJListline.offsetWidth);
 
 // 点击表头的排序筛选功能
