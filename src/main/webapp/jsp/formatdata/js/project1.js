@@ -128,12 +128,22 @@ function project1(){
                 if(shaixuanBTPD[j]==0){
                     ashaixuanZKliI[j].className="shaixuanZKliI active";
                     aPJListli[j].style.display="block";
+                    var otd=aPJListli[j].parentNode;
+                    if(otd.tagName=="TD"){
+                        console.log(otd.tagName);
+                        otd.style.display="";
+                    }
                     for(var o=0;o<aPJli.length;o++){
                         if(aPJli[o].querySelectorAll('.PJliCli2')[0]){
-                            var aPJliCli=aPJli[o].querySelectorAll('.PJliCli2');// 格式数据表项
+                            var aPJliCli=aPJli[o].querySelectorAll('.PJliCli2');//格式数据表项
                             aPJliCli[j].style.display="-webkit-box";
+                            var otd2=aPJliCli[j].parentNode;
+                            if(otd2.tagName=="TD"){
+                                console.log(otd2.tagName);
+                                otd2.style.display="";
+                            }
                         }else if(aPJli[o].querySelectorAll('.PJliCli')[0]){
-                            var aPJliCli=aPJli[o].querySelectorAll('.PJliCli');// 项目表项
+                            var aPJliCli=aPJli[o].querySelectorAll('.PJliCli');//项目表项
                             aPJliCli[j].style.display="-webkit-box";
                         }
                     }
@@ -141,12 +151,22 @@ function project1(){
                 }else{
                     ashaixuanZKliI[j].className="shaixuanZKliI";
                     aPJListli[j].style.display="none";
+                    var otd=aPJListli[j].parentNode;
+                    if(otd.tagName=="TD"){
+                        console.log(otd.tagName);
+                        otd.style.display="none";
+                    }
                     for(var o=0;o<aPJli.length;o++){
                         if(aPJli[o].querySelectorAll('.PJliCli2')[0]){
-                            var aPJliCli=aPJli[o].querySelectorAll('.PJliCli2');// 格式数据表项
+                            var aPJliCli=aPJli[o].querySelectorAll('.PJliCli2');//格式数据表项
                             aPJliCli[j].style.display="none";
+                            var otd2=aPJliCli[j].parentNode;
+                            if(otd2.tagName=="TD"){
+                                console.log(otd2.tagName);
+                                otd2.style.display="none";
+                            }
                         }else if(aPJli[o].querySelectorAll('.PJliCli')[0]){
-                            var aPJliCli=aPJli[o].querySelectorAll('.PJliCli');// 项目表项
+                            var aPJliCli=aPJli[o].querySelectorAll('.PJliCli');//项目表项
                             aPJliCli[j].style.display="none";
                         }
                         
