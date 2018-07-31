@@ -727,14 +727,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	$("#isOpenGl").val(filter);
             }
     		
-    		var pNameGl = "";
-            var pNumberGl = "";
-            var pCreatorGl = "";
-            var createDatetimeGl = "";
-            var keyWordsGl = "";
-            var isOpenGl = "";
+    		var pNameGl = $("#pNameGl").val();
+            var pNumberGl = $("#pNumberGl").val();
+            var pCreatorGl = $("#pCreatorGl").val();
+            var createDatetimeGl = $("#createDatetimeGl").val();
+            var keyWordsGl = $("#keyWordsGl").val();
+            var isOpenGl = $("#isOpenGl").val();
             
-            if(getParam("pNameGl") != null && getParam("pNameGl") != "null" && getParam("pNameGl") != ""){
+            /* if(getParam("pNameGl") != null && getParam("pNameGl") != "null" && getParam("pNameGl") != ""){
             	pNameGl = getParam("pNameGl");
             }else{
             	pNameGl = $("#pNameGl").val();
@@ -768,7 +768,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	isOpenGl = getParam("isOpenGl");
             }else{
             	isOpenGl = $("#isOpenGl").val();
-            }
+            } */
             
     		$.ajax({
     			url:"/wankangyuan/projectFilter/getDistinctColumnValueByColumnNameAndUidCreated1",
@@ -885,14 +885,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             var keyWords = $("#keyWords").val();
             var isOpen = $("#isOpen").val();
             
-            var pNameGl = "";
-            var pNumberGl = "";
-            var pCreatorGl = "";
-            var createDatetimeGl = "";
-            var keyWordsGl = "";
-            var isOpenGl = "";
+            var pNameGl = $("#pNameGl").val();
+            var pNumberGl = $("#pNumberGl").val();
+            var pCreatorGl = $("#pCreatorGl").val();
+            var createDatetimeGl = $("#createDatetimeGl").val();
+            var keyWordsGl = $("#keyWordsGl").val();
+            var isOpenGl = $("#isOpenGl").val();
             
-            if(getParam("pNameGl") != null && getParam("pNameGl") != "null" && getParam("pNameGl") != ""){
+            /* if(getParam("pNameGl") != null && getParam("pNameGl") != "null" && getParam("pNameGl") != ""){
             	pNameGl = getParam("pNameGl");
             }else{
             	pNameGl = $("#pNameGl").val();
@@ -926,7 +926,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	isOpenGl = getParam("isOpenGl");
             }else{
             	isOpenGl = $("#isOpenGl").val();
-            }
+            } */
             
             
             
