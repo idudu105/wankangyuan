@@ -98,7 +98,8 @@ public class ProjectFilterController {
 	public String selectCreatedProject1(HttpSession httpSession , HttpServletRequest request ,
 			Integer page , Integer strip , String searchWord , Integer type , 
 			QueryCondition projectQueryCondition, String pName, String pNumber, String pCreator,
-			String createDatetime, String keyWords, String isOpen){
+			String createDatetime, String keyWords, String isOpen, String pNameGl, String pNumberGl, String pCreatorGl,
+			String createDatetimeGl, String keyWordsGl, String isOpenGl){
 		if(page == null){
 			page = 1;
 		}
@@ -122,7 +123,7 @@ public class ProjectFilterController {
 		Map<String, Object> map = new HashMap<String , Object>();
 		User user = (User)request.getAttribute("user");
 		map = projectFilterService.selectCreatedProjectByFilterCondition1(user.getId(), page, strip, searchWord, projectQueryCondition, pName, pNumber, pCreator,
-				createDatetime, keyWords, isOpen);
+				createDatetime, keyWords, isOpen, pNameGl, pNumberGl, pCreatorGl, createDatetimeGl, keyWordsGl, isOpenGl);
 		httpSession.setAttribute("projects", map.get("list"));
 		httpSession.setAttribute("total", map.get("total"));
 		httpSession.setAttribute("page", page);
@@ -134,6 +135,13 @@ public class ProjectFilterController {
 		httpSession.setAttribute("createDatetime", createDatetime);
 		httpSession.setAttribute("keyWords", keyWords);
 		httpSession.setAttribute("isOpen", isOpen);
+		
+		httpSession.setAttribute("pNameGl", pNameGl);
+		httpSession.setAttribute("pNumberGl", pNumberGl);
+		httpSession.setAttribute("pCreatorGl", pCreatorGl);
+		httpSession.setAttribute("createDatetimeGl", createDatetimeGl);
+		httpSession.setAttribute("keyWordsGl", keyWordsGl);
+		httpSession.setAttribute("isOpenGl", isOpenGl);
 	
 		if(type == null || type == 1){
 			return "/jsp/project/project_create.jsp";
@@ -206,7 +214,8 @@ public class ProjectFilterController {
 	public String selectMyProject1(HttpSession httpSession , HttpServletRequest request , 
 			Integer page , Integer strip, String searchWord , Integer type , 
 			QueryCondition projectQueryCondition, String pName, String pNumber, String pCreator,
-			String createDatetime, String keyWords, String isOpen){
+			String createDatetime, String keyWords, String isOpen, String pNameGl, String pNumberGl, String pCreatorGl,
+			String createDatetimeGl, String keyWordsGl, String isOpenGl){
 		
 		if(page == null){
 			page = 1;
@@ -230,7 +239,7 @@ public class ProjectFilterController {
 		User user = (User)request.getAttribute("user");
 		Map<String, Object> map = new HashMap<String , Object>();
 		map = projectFilterService.selectMineProjectByFilterCondition1(user.getId(), page, strip, searchWord, projectQueryCondition, pName, pNumber, pCreator,
-				createDatetime, keyWords, isOpen);
+				createDatetime, keyWords, isOpen, pNameGl, pNumberGl, pCreatorGl, createDatetimeGl, keyWordsGl, isOpenGl);
 		httpSession.setAttribute("projects", map.get("list"));
 		httpSession.setAttribute("total", map.get("total"));
 		httpSession.setAttribute("page", page);
@@ -242,6 +251,13 @@ public class ProjectFilterController {
 		httpSession.setAttribute("createDatetime", createDatetime);
 		httpSession.setAttribute("keyWords", keyWords);
 		httpSession.setAttribute("isOpen", isOpen);
+		
+		httpSession.setAttribute("pNameGl", pNameGl);
+		httpSession.setAttribute("pNumberGl", pNumberGl);
+		httpSession.setAttribute("pCreatorGl", pCreatorGl);
+		httpSession.setAttribute("createDatetimeGl", createDatetimeGl);
+		httpSession.setAttribute("keyWordsGl", keyWordsGl);
+		httpSession.setAttribute("isOpenGl", isOpenGl);
 		
 		if(type == null || type == 1){
 			return "/jsp/project/project_mine.jsp";
@@ -311,7 +327,8 @@ public class ProjectFilterController {
 	@RequestMapping("/selectPublicProjectByFilterCondition1")
 	public String selectPublicProject1(HttpSession httpSession ,  Integer page , Integer strip, 
 			String searchWord , Integer type , QueryCondition projectQueryCondition, String pName, String pNumber, String pCreator,
-			String createDatetime, String keyWords, String isOpen){		
+			String createDatetime, String keyWords, String isOpen, String pNameGl, String pNumberGl, String pCreatorGl,
+			String createDatetimeGl, String keyWordsGl, String isOpenGl){		
 		if(page == null){
 			page = 1;
 		}
@@ -333,7 +350,7 @@ public class ProjectFilterController {
 		
 		Map<String, Object> map = new HashMap<String , Object>();
 		map = projectFilterService.selectPublicProjectByFilterCondition1(page, strip, searchWord, projectQueryCondition, pName, pNumber, pCreator,
-				createDatetime, keyWords, isOpen);
+				createDatetime, keyWords, isOpen, pNameGl, pNumberGl, pCreatorGl, createDatetimeGl, keyWordsGl, isOpenGl);
 		httpSession.setAttribute("projects", map.get("list"));
 		httpSession.setAttribute("total", map.get("total"));
 		httpSession.setAttribute("page", page);
@@ -376,6 +393,29 @@ public class ProjectFilterController {
 	}
 	
 	/**
+	 * 根据过滤条件筛选某个字段的值我创建的项目
+	 * @param session
+	 * @param request
+	 * @param projectQueryCondition
+	 * @return
+	 */
+	@RequestMapping("/getDistinctColumnValueByColumnNameAndUidCreated1")
+	@ResponseBody
+	public Map<String, Object> getDistinctColumnValueByColumnNameAndUidCreated1(
+			HttpSession session , HttpServletRequest request , 
+			QueryCondition projectQueryCondition, String pNameGl, String pNumberGl, String pCreatorGl,
+			String createDatetimeGl, String keyWordsGl){
+		User user = (User)request.getAttribute("user");
+		List<String> strings = projectFilterService.selectDistinctColumnValueCreated1(
+				projectQueryCondition.getColumnName(), user.getId() , projectQueryCondition.getFilter(), 
+				pNameGl, pNumberGl, pCreatorGl, createDatetimeGl, keyWordsGl);
+		Map<String, Object> map = new HashMap<>();
+		map.put("result", true);
+		map.put("message", strings);
+		return map;
+	}
+	
+	/**
 	 * 根据过滤条件筛选某个字段的值我的项目
 	 * @param session
 	 * @param request
@@ -396,6 +436,30 @@ public class ProjectFilterController {
 		return map;
 	}
 	
+	
+	/**
+	 * 根据过滤条件筛选某个字段的值我的项目
+	 * @param session
+	 * @param request
+	 * @param projectQueryCondition
+	 * @return
+	 */
+	@RequestMapping("/getDistinctColumnValueByColumnNameAndUidMine1")
+	@ResponseBody
+	public Map<String, Object> getDistinctColumnValueByColumnNameAndUidMine1(
+			HttpSession session , HttpServletRequest request , 
+			QueryCondition projectQueryCondition, String pNameGl, String pNumberGl, String pCreatorGl,
+			String createDatetimeGl, String keyWordsGl){
+		User user = (User)request.getAttribute("user");
+		List<String> strings = projectFilterService.selectDistinctColumnValueMine1(
+				projectQueryCondition.getColumnName(), user.getId() , projectQueryCondition.getFilter(), 
+				pNameGl, pNumberGl, pCreatorGl, createDatetimeGl, keyWordsGl);
+		Map<String, Object> map = new HashMap<>();
+		map.put("result", true);
+		map.put("message", strings);
+		return map;
+	}
+	
 	/**
 	 * 根据过滤条件筛选某个字段的值公开的项目
 	 * @param session
@@ -410,6 +474,28 @@ public class ProjectFilterController {
 			QueryCondition projectQueryCondition){
 		List<String> strings = projectFilterService.selectDistinctColumnValuePublic(
 				projectQueryCondition.getColumnName(), projectQueryCondition.getFilter());
+		Map<String, Object> map = new HashMap<>();
+		map.put("result", true);
+		map.put("message", strings);
+		return map;
+	}
+	
+	/**
+	 * 根据过滤条件筛选某个字段的值公开的项目
+	 * @param session
+	 * @param request
+	 * @param projectQueryCondition
+	 * @return
+	 */
+	@RequestMapping("/getDistinctColumnValueByColumnNameAndUidPublic1")
+	@ResponseBody
+	public Map<String, Object> getDistinctColumnValueByColumnNameAndUidPublic1(
+			HttpSession session , HttpServletRequest request , 
+			QueryCondition projectQueryCondition, String pNameGl, String pNumberGl, String pCreatorGl,
+			String createDatetimeGl, String keyWordsGl){
+		List<String> strings = projectFilterService.selectDistinctColumnValuePublic1(
+				projectQueryCondition.getColumnName(), projectQueryCondition.getFilter(), 
+				pNameGl, pNumberGl, pCreatorGl, createDatetimeGl, keyWordsGl);
 		Map<String, Object> map = new HashMap<>();
 		map.put("result", true);
 		map.put("message", strings);

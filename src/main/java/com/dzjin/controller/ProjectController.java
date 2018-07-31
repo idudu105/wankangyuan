@@ -300,6 +300,13 @@ public class ProjectController {
 		httpSession.setAttribute("keyWords", "");
 		httpSession.setAttribute("isOpen", "");
 		
+		httpSession.setAttribute("pNameGl", "");
+		httpSession.setAttribute("pNumberGl", "");
+		httpSession.setAttribute("creatorGl", "");
+		httpSession.setAttribute("createDatetimeGl", "");
+		httpSession.setAttribute("keyWordsGl", "");
+		httpSession.setAttribute("isOpenGl", "");
+		
 		if(type == null || type == 1){
 			return "/jsp/project/project_public.jsp";
 		}else{
@@ -350,6 +357,13 @@ public class ProjectController {
 		httpSession.setAttribute("createDatetime", "");
 		httpSession.setAttribute("keyWords", "");
 		httpSession.setAttribute("isOpen", "");
+		
+		httpSession.setAttribute("pNameGl", "");
+		httpSession.setAttribute("pNumberGl", "");
+		httpSession.setAttribute("creatorGl", "");
+		httpSession.setAttribute("createDatetimeGl", "");
+		httpSession.setAttribute("keyWordsGl", "");
+		httpSession.setAttribute("isOpenGl", "");
 		if(type == null || type == 1){
 			return "/jsp/project/project_create.jsp";
 		}else{
@@ -400,6 +414,13 @@ public class ProjectController {
 		httpSession.setAttribute("createDatetime", "");
 		httpSession.setAttribute("keyWords", "");
 		httpSession.setAttribute("isOpen", "");
+		
+		httpSession.setAttribute("pNameGl", "");
+		httpSession.setAttribute("pNumberGl", "");
+		httpSession.setAttribute("creatorGl", "");
+		httpSession.setAttribute("createDatetimeGl", "");
+		httpSession.setAttribute("keyWordsGl", "");
+		httpSession.setAttribute("isOpenGl", "");
 		if(type == null || type == 1){
 			return "/jsp/project/project_mine.jsp";
 		}else{
@@ -441,7 +462,8 @@ public class ProjectController {
 	@ResponseBody
 	public Map<String, Object> addPublicProjectToMine1(HttpSession session , HttpServletRequest request , String ids,String searchWord,String allValue, String noChangId,
 			String pName, String pNumber, String pCreator, 
-			String createDatetime, String keyWords, String isOpen){
+			String createDatetime, String keyWords, String isOpen, String pNameGl, String pNumberGl, String pCreatorGl, 
+			String createDatetimeGl, String keyWordsGl, String isOpenGl){
 		User user = (User)request.getAttribute("user");
 		Map<String, Object> map = new HashMap<>();
 		String projecIds="";
@@ -449,6 +471,22 @@ public class ProjectController {
 			String sql="";
 			if(noChangId != null && !noChangId.equals("")){
 				sql += " and project.id not in("+noChangId+")";
+			}
+			
+			if(pNameGl != null && !pNameGl.equals("")){
+				sql += " and project.p_name like '%"+pNameGl+"%' ";
+			}
+			if(pNumberGl != null && !pNumberGl.equals("")){
+				sql += " and project.p_number like '%"+pNumberGl+"%' ";
+			}
+			if(pCreatorGl != null && !pCreatorGl.equals("")){
+				sql += " and user.username like '%"+pCreatorGl+"%' ";
+			}
+			if(createDatetimeGl != null && !createDatetimeGl.equals("")){
+				sql += " and project.create_datetime like '%"+createDatetimeGl+"%' ";
+			}
+			if(keyWordsGl != null && !keyWordsGl.equals("")){
+				sql += " and project.key_words like '%"+keyWordsGl+"%' ";
 			}
 			
 			if(pName != null && !pName.equals("")){
@@ -627,7 +665,8 @@ public class ProjectController {
 	@ResponseBody
 	public Map<String, Object> updateProjectOpenState1(HttpServletRequest request, String ids , Integer is_open, String searchWord, String allValue, String noChangId,
 			String pName, String pNumber, String pCreator, 
-			String createDatetime, String keyWords, String isOpen){
+			String createDatetime, String keyWords, String isOpen, String pNameGl, String pNumberGl, String pCreatorGl, 
+			String createDatetimeGl, String keyWordsGl, String isOpenGl){
 		Map<String, Object> map = new HashMap<>();
 		
 		String projecIds="";
@@ -637,6 +676,23 @@ public class ProjectController {
 			if(noChangId != null && !noChangId.equals("")){
 				sql += " and project.id not in("+noChangId+")";
 			}
+			
+			if(pNameGl != null && !pNameGl.equals("")){
+				sql += " and project.p_name like '%"+pNameGl+"%' ";
+			}
+			if(pNumberGl != null && !pNumberGl.equals("")){
+				sql += " and project.p_number like '%"+pNumberGl+"%' ";
+			}
+			if(pCreatorGl != null && !pCreatorGl.equals("")){
+				sql += " and user.username like '%"+pCreatorGl+"%' ";
+			}
+			if(createDatetimeGl != null && !createDatetimeGl.equals("")){
+				sql += " and project.create_datetime like '%"+createDatetimeGl+"%' ";
+			}
+			if(keyWordsGl != null && !keyWordsGl.equals("")){
+				sql += " and project.key_words like '%"+keyWordsGl+"%' ";
+			}
+			
 			if(pName != null && !pName.equals("")){
 				if(pName.indexOf(",")>-1){
 					sql += "and (";
@@ -812,7 +868,8 @@ public class ProjectController {
 	@ResponseBody
 	public Map<String, Object> deleteProjects1(HttpServletRequest request, String ids , String searchWord, String allValue, String noChangId
 			, String pName, String pNumber, String pCreator, 
-			String createDatetime, String keyWords, String isOpen){
+			String createDatetime, String keyWords, String isOpen, String pNameGl, String pNumberGl, String pCreatorGl, 
+			String createDatetimeGl, String keyWordsGl, String isOpenGl){
 		Map<String, Object> map = new HashMap<>();
 		String projecIds="";
 		if(allValue != null && !allValue.equals("") && allValue.equals("true")){//全部
@@ -820,6 +877,22 @@ public class ProjectController {
 			String sql="";
 			if(noChangId != null && !noChangId.equals("")){
 				sql += " and project.id not in("+noChangId+")";
+			}
+			
+			if(pNameGl != null && !pNameGl.equals("")){
+				sql += " and project.p_name like '%"+pNameGl+"%' ";
+			}
+			if(pNumberGl != null && !pNumberGl.equals("")){
+				sql += " and project.p_number like '%"+pNumberGl+"%' ";
+			}
+			if(pCreatorGl != null && !pCreatorGl.equals("")){
+				sql += " and user.username like '%"+pCreatorGl+"%' ";
+			}
+			if(createDatetimeGl != null && !createDatetimeGl.equals("")){
+				sql += " and project.create_datetime like '%"+createDatetimeGl+"%' ";
+			}
+			if(keyWordsGl != null && !keyWordsGl.equals("")){
+				sql += " and project.key_words like '%"+keyWordsGl+"%' ";
 			}
 			
 			if(pName != null && !pName.equals("")){
@@ -998,7 +1071,8 @@ public class ProjectController {
 	@ResponseBody
 	public Map<String, Object> exit2(String ids , HttpServletRequest request, String searchWord, 
 			String allValue, String noChangId, String pName, String pNumber, String pCreator, 
-			String createDatetime, String keyWords, String isOpen){
+			String createDatetime, String keyWords, String isOpen, String pNameGl, String pNumberGl, String pCreatorGl, 
+			String createDatetimeGl, String keyWordsGl, String isOpenGl){
 		Map<String, Object> map = new HashMap<>();
 		String projecIds="";
 		User user = (User)request.getAttribute("user");
@@ -1007,6 +1081,22 @@ public class ProjectController {
 			String sql="";
 			if(noChangId != null && !noChangId.equals("")){
 				sql += " and project.id not in("+noChangId+")";
+			}
+			
+			if(pNameGl != null && !pNameGl.equals("")){
+				sql += " and project.p_name like '%"+pNameGl+"%' ";
+			}
+			if(pNumberGl != null && !pNumberGl.equals("")){
+				sql += " and project.p_number like '%"+pNumberGl+"%' ";
+			}
+			if(pCreatorGl != null && !pCreatorGl.equals("")){
+				sql += " and user.username like '%"+pCreatorGl+"%' ";
+			}
+			if(createDatetimeGl != null && !createDatetimeGl.equals("")){
+				sql += " and project.create_datetime like '%"+createDatetimeGl+"%' ";
+			}
+			if(keyWordsGl != null && !keyWordsGl.equals("")){
+				sql += " and project.key_words like '%"+keyWordsGl+"%' ";
 			}
 			
 			if(pName != null && !pName.equals("")){

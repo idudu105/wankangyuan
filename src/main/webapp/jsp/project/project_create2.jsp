@@ -187,9 +187,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	//改变项目公开状态
     	function updateProjectOpenState(is_open){
     		var searchWord = $(".searchCt").val();//搜索条件
-    		var allChang = "";
-    		if (sessionStorage.allChang){
-    			allChang = sessionStorage.allChang;
+    		var allChangCreate2 = "";
+    		if (sessionStorage.allChangCreate2){
+    			allChangCreate2 = sessionStorage.allChangCreate2;
 			 }
     		var noChangId = "";
     		if (sessionStorage.noChangId){
@@ -224,7 +224,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     		ids:ids.join(","),
                     		is_open:is_open,
                     		searchWord : searchWord,
-                    		allValue : allChang,
+                    		allValue : allChangCreate2,
                     		noChangId : noChangId
                     	},
                     	dataType:"json",
@@ -257,7 +257,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     		ids:ids.join(","),
                     		is_open:is_open,
                     		searchWord : searchWord,
-                    		allValue : allChang,
+                    		allValue : allChangCreate2,
                     		noChangId : noChangId
                     	},
                     	dataType:"json",
@@ -282,9 +282,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	//删除项目
     	function deleteProjects(){
     		var searchWord = $(".searchCt").val();//搜索条件
-    		var allChang = "";
-    		if (sessionStorage.allChang){
-    			allChang = sessionStorage.allChang;
+    		var allChangCreate2 = "";
+    		if (sessionStorage.allChangCreate2){
+    			allChangCreate2 = sessionStorage.allChangCreate2;
 			 }
     		var noChangId = "";
     		if (sessionStorage.noChangId){
@@ -317,7 +317,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 	data:{
                 		ids:ids.join(","),
                 		searchWord : searchWord,
-                		allValue : allChang,
+                		allValue : allChangCreate2,
                 		noChangId : noChangId
                 	},
                 	dataType:"json",
@@ -368,11 +368,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		if($("#check0").is(":checked")){
     			$("#all_value").val("all");
     			sessionStorage.setItem("noChangId",'');
-    			sessionStorage.setItem("allChang",'true');
+    			sessionStorage.setItem("allChangCreate2",'true');
     		}else{
     			$("#all_value").val("");
     			sessionStorage.setItem("changId",'');
-    			sessionStorage.setItem("allChang",'false');
+    			sessionStorage.setItem("allChangCreate2",'false');
     		}
     	});
     	
@@ -380,7 +380,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		 var arrs = []
     		 var narrs = []
     		var allValue = $("#all_value").val();
-    		 if(sessionStorage.allChang == 'true'){
+    		 if(sessionStorage.allChangCreate2 == 'true'){
     			 $("#check0").attr("checked",true);
     			 $(".input_checks").each(function () {
     				 $(this).attr('checked',true)    			 
@@ -440,7 +440,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	 
     	  function remove(){
     		 sessionStorage.setItem("noChangId",'');
-    		 sessionStorage.setItem("allChang",'false');
+    		 sessionStorage.setItem("allChangCreate2",'false');
     	 }
     
     </script>

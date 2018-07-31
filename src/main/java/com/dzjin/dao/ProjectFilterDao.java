@@ -48,6 +48,31 @@ public interface ProjectFilterDao {
 	public List<String> selectDistinctCreatorCreated(
 			@Param("creator")Integer creator , @Param("searchWord")String searchWord);
 	
+	@Select("select distinct project.p_name from user , project "
+			+ "where project.creator=#{creator} and project.creator=user.id ${sql}")
+	public List<String> selectDistinctP_nameCreated1(
+			@Param("creator")Integer creator , @Param("sql")String sql);
+	
+	@Select("select distinct project.p_number from user , project "
+			+ "where project.creator=#{creator} and project.creator=user.id ${sql}")
+	public List<String> selectDistinctP_numberCreated1(
+			@Param("creator")Integer creator , @Param("sql")String sql);
+	
+	@Select("select distinct project.key_words from user , project "
+			+ "where project.creator=#{creator} and project.creator=user.id ${sql}")
+	public List<String> selectDistinctKeyWordsCreated1(
+			@Param("creator")Integer creator , @Param("sql")String sql);
+	
+	@Select("select distinct project.create_datetime from user , project "
+			+ "where project.creator=#{creator} and project.creator=user.id ${sql}")
+	public List<String> selectDistinctCreateDatetimeCreated1(
+			@Param("creator")Integer creator , @Param("sql")String sql);
+	
+	@Select("select distinct user.username from user , project "
+			+ "where project.creator=#{creator} and project.creator=user.id ${sql}")
+	public List<String> selectDistinctCreatorCreated1(
+			@Param("creator")Integer creator , @Param("sql")String sql);
+	
 	//过滤我的项目
 	
 	@Select("select distinct project.p_name from project,project_user where project.id=project_user.project_id and project_user.user_id=#{user_id} and project.p_name like '%${searchWord}%'")
@@ -72,6 +97,35 @@ public interface ProjectFilterDao {
 			@Param("user_id")Integer user_id , @Param("searchWord")String searchWord);
 	
 	
+	
+	//过滤我的项目
+	
+		@Select("select distinct project.p_name from user , project , project_user "
+				+ "where  project.id=project_user.project_id and project_user.user_id=#{user_id} and user.id=project.creator ${sql}")
+		public List<String> selectDistinctP_nameMine1(
+				@Param("user_id")Integer user_id , @Param("sql")String sql);
+		
+		@Select("select distinct project.p_number from user , project , project_user "
+				+ "where  project.id=project_user.project_id and project_user.user_id=#{user_id} and user.id=project.creator ${sql}")
+		public List<String> selectDistinctP_numberMine1(
+				@Param("user_id")Integer user_id , @Param("sql")String sql);
+		
+		@Select("select distinct project.key_words from user , project , project_user "
+				+ "where  project.id=project_user.project_id and project_user.user_id=#{user_id} and user.id=project.creator ${sql}")
+		public List<String> selectDistinctKeyWordsMine1(
+				@Param("user_id")Integer user_id , @Param("sql")String sql);
+		
+		@Select("select distinct project.create_datetime from user , project , project_user "
+				+ "where  project.id=project_user.project_id and project_user.user_id=#{user_id} and user.id=project.creator ${sql}")
+		public List<String> selectDistinctCreateDatetimeMine1(
+				@Param("user_id")Integer user_id , @Param("sql")String sql);
+		
+		@Select("select distinct user.username from user , project , project_user "
+				+ "where  project.id=project_user.project_id and project_user.user_id=#{user_id} and user.id=project.creator ${sql}")
+		public List<String> selectDistinctCreatorMine1(
+				@Param("user_id")Integer user_id , @Param("sql")String sql);
+		
+	
 	//过滤公开的项目
 	
 	@Select("select distinct p_name from project where is_open=1 and p_name like '%${searchWord}%'")
@@ -89,6 +143,29 @@ public interface ProjectFilterDao {
 	@Select("select distinct user.username from user , project "
 			+ "where is_open=1 and project.creator=user.id and user.username like '%${searchWord}%'")
 	public List<String> selectDistinctCreatorPublic(@Param("searchWord")String searchWord);
+	
+	
+
+	@Select("select distinct project.p_name from user , project "
+			+ "where is_open=1 and project.creator=user.id ${sql}")
+	public List<String> selectDistinctP_namePublic1(@Param("sql")String sql);
+	
+	@Select("select distinct project.p_number from user , project "
+			+ "where is_open=1 and project.creator=user.id ${sql}")
+	public List<String> selectDistinctP_numberPublic1(@Param("sql")String sql);
+	
+	@Select("select distinct project.key_words from user , project "
+			+ "where is_open=1 and project.creator=user.id ${sql}")
+	public List<String> selectDistinctKeyWordsPublic1(@Param("sql")String sql);
+	
+	@Select("select distinct project.create_datetime from user , project "
+			+ "where is_open=1 and project.creator=user.id ${sql}")
+	public List<String> selectDistinctCreateDatetimePublic1( @Param("sql")String sql);
+	
+	@Select("select distinct user.username from user , project "
+			+ "where is_open=1 and project.creator=user.id ${sql}")
+	public List<String> selectDistinctCreatorPublic1(@Param("sql")String sql);
+	
 	
 	@SelectProvider(type=ProjectSqlBuilder.class , method="buildSelectCreatedProjectByFilterCondition") 
 	public List<Project> selectCreatedProjectByFilterCondition(Map<String, Object> map);

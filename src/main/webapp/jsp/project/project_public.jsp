@@ -188,6 +188,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 	<input type="hidden" id="keyWords" value="${keyWords}"/>
                 	<input type="hidden" id="isOpen" value="${isOpen}"/>
                 	
+                	<input type="hidden" id="pNameGl" value=""/>
+                	<input type="hidden" id="pNumberGl" value=""/>
+                	<input type="hidden" id="pCreatorGl" value=""/>
+                	<input type="hidden" id="createDatetimeGl" value=""/>
+                	<input type="hidden" id="keyWordsGl" value=""/>
+                	<input type="hidden" id="isOpenGl" value=""/>
+                	
                 	<input id="isFilter" value="${projectQueryCondition.isFilter}" style="display:none;"/>
                     <div class="BTSXc">
                         <div class="BTSXcli">
@@ -247,9 +254,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	//添加到我的项目中
     	function addToMine(){
     		var searchWord = $(".searchCt").val();//搜索条件
-    		var allChang = "";
-    		if (sessionStorage.allChang){
-    			allChang = sessionStorage.allChang;
+    		var allChangPublic = "";
+    		if (sessionStorage.allChangPublic){
+    			allChangPublic = sessionStorage.allChangPublic;
 			 }
     		var noChangId = "";
     		if (sessionStorage.noChangId){
@@ -262,6 +269,49 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             var createDatetime = $("#createDatetime").val();
             var keyWords = $("#keyWords").val();
             var isOpen = $("#isOpen").val();
+            
+            var pNameGl = "";
+            var pNumberGl = "";
+            var pCreatorGl = "";
+            var createDatetimeGl = "";
+            var keyWordsGl = "";
+            var isOpenGl = "";
+            
+            if(getParam("pNameGl") != null && getParam("pNameGl") != "null" && getParam("pNameGl") != ""){
+            	pNameGl = getParam("pNameGl");
+            }else{
+            	pNameGl = $("#pNameGl").val();
+            }
+            
+            if(getParam("pNumberGl") != null && getParam("pNumberGl") != "null" && getParam("pNumberGl") != ""){
+            	pNumberGl = getParam("pNumberGl");
+            }else{
+            	pNumberGl = $("#pNumberGl").val();
+            }
+            
+            if(getParam("pCreatorGl") != null && getParam("pCreatorGl") != "null" && getParam("pCreatorGl") != ""){
+            	pCreatorGl = getParam("pCreatorGl");
+            }else{
+            	pCreatorGl = $("#pCreatorGl").val();
+            }
+            
+            if(getParam("createDatetimeGl") != null && getParam("createDatetimeGl") != "null" && getParam("createDatetimeGl") != ""){
+            	createDatetimeGl = getParam("createDatetimeGl");
+            }else{
+            	createDatetimeGl = $("#createDatetimeGl").val();
+            }
+            
+            if(getParam("keyWordsGl") != null && getParam("keyWordsGl") != "null" && getParam("keyWordsGl") != ""){
+            	keyWordsGl = getParam("keyWordsGl");
+            }else{
+            	keyWordsGl = $("#keyWordsGl").val();
+            }
+            
+            if(getParam("isOpenGl") != null && getParam("isOpenGl") != "null" && getParam("isOpenGl") != ""){
+            	isOpenGl = getParam("isOpenGl");
+            }else{
+            	isOpenGl = $("#isOpenGl").val();
+            }
     		
     		var afuxuanK=document.querySelectorAll('.fuxuanK2');
             var afuxuan=[];
@@ -289,14 +339,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 	data:{
                 		ids:ids.join(","),
                 		searchWord : searchWord,
-                		allValue : allChang,
+                		allValue : allChangPublic,
                 		noChangId : noChangId,
                 		pName : pName,
                 		pNumber : pNumber,
                 		pCreator : pCreator,
                 		createDatetime : createDatetime,
                 		keyWords : keyWords,
-                		isOpen : isOpen
+                		isOpen : isOpen,
+                		
+                		pNameGl : pNameGl,
+                		pNumberGl : pNumberGl,
+                		pCreatorGl : pCreatorGl,
+                		createDatetimeGl : createDatetimeGl,
+                		keyWordsGl : keyWordsGl,
+                		isOpenGl : isOpenGl
                 	},
                 	dataType:"json",
                 	success : function(data){
@@ -350,7 +407,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	//点击项目标题栏
     	$(".PJListli").click(function (){
     		document.querySelectorAll(".BTSX")[0].id=this.id;//更新筛选框的筛选字段为当前点击的字段名
-   			filter();//然后自动执行过滤，筛选出十个数值
+    		$("#BTSXcli2").html("");
+   			//filter();//然后自动执行过滤，筛选出十个数值
     	});
 
     	//过滤框绑定enter事件
@@ -371,12 +429,75 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		var values = $("#values").val();//上次筛选操作中选中的值
     		var vals = values.split(",");//数组形式
     		var columnName = document.querySelectorAll(".BTSX")[0].id;//筛选字段名
+    		
+    		if(columnName == "p_name"){
+    			$("#pNameGl").val(filter);
+            }else if(columnName == "p_number"){
+            	$("#pNumberGl").val(filter);
+            }else if(columnName == "creator"){
+            	$("#pCreatorGl").val(filter);
+            }else if(columnName == "create_datetime"){
+            	$("#createDatetimeGl").val(filter);
+            }else if(columnName == "key_words"){
+            	$("#keyWordsGl").val(filter);
+            }else if(columnName == "is_open"){
+            	$("#isOpenGl").val(filter);
+            }
+    		
+    		var pNameGl = "";
+            var pNumberGl = "";
+            var pCreatorGl = "";
+            var createDatetimeGl = "";
+            var keyWordsGl = "";
+            var isOpenGl = "";
+            
+            if(getParam("pNameGl") != null && getParam("pNameGl") != "null" && getParam("pNameGl") != ""){
+            	pNameGl = getParam("pNameGl");
+            }else{
+            	pNameGl = $("#pNameGl").val();
+            }
+            
+            if(getParam("pNumberGl") != null && getParam("pNumberGl") != "null" && getParam("pNumberGl") != ""){
+            	pNumberGl = getParam("pNumberGl");
+            }else{
+            	pNumberGl = $("#pNumberGl").val();
+            }
+            
+            if(getParam("pCreatorGl") != null && getParam("pCreatorGl") != "null" && getParam("pCreatorGl") != ""){
+            	pCreatorGl = getParam("pCreatorGl");
+            }else{
+            	pCreatorGl = $("#pCreatorGl").val();
+            }
+            
+            if(getParam("createDatetimeGl") != null && getParam("createDatetimeGl") != "null" && getParam("createDatetimeGl") != ""){
+            	createDatetimeGl = getParam("createDatetimeGl");
+            }else{
+            	createDatetimeGl = $("#createDatetimeGl").val();
+            }
+            
+            if(getParam("keyWordsGl") != null && getParam("keyWordsGl") != "null" && getParam("keyWordsGl") != ""){
+            	keyWordsGl = getParam("keyWordsGl");
+            }else{
+            	keyWordsGl = $("#keyWordsGl").val();
+            }
+            
+            if(getParam("isOpenGl") != null && getParam("isOpenGl") != "null" && getParam("isOpenGl") != ""){
+            	isOpenGl = getParam("isOpenGl");
+            }else{
+            	isOpenGl = $("#isOpenGl").val();
+            }
+            
     		$.ajax({
-    			url:"/wankangyuan/projectFilter/getDistinctColumnValueByColumnNameAndUidPublic",
+    			url:"/wankangyuan/projectFilter/getDistinctColumnValueByColumnNameAndUidPublic1",
     			type:"post",
     			data:{
     				columnName:columnName,
-    				filter:filter
+    				filter:filter,
+    				pNameGl : pNameGl,
+    				pNumberGl : pNumberGl,
+    				pCreatorGl : pCreatorGl,
+    				createDatetimeGl : createDatetimeGl,
+    				keyWordsGl : keyWordsGl
     			},
     			dataType:"json",
     			success : function(data){
@@ -482,22 +603,67 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             var keyWords = $("#keyWords").val();
             var isOpen = $("#isOpen").val();
             
+            var pNameGl = "";
+            var pNumberGl = "";
+            var pCreatorGl = "";
+            var createDatetimeGl = "";
+            var keyWordsGl = "";
+            var isOpenGl = "";
+            
+            if(getParam("pNameGl") != null && getParam("pNameGl") != "null" && getParam("pNameGl") != ""){
+            	pNameGl = getParam("pNameGl");
+            }else{
+            	pNameGl = $("#pNameGl").val();
+            }
+            
+            if(getParam("pNumberGl") != null && getParam("pNumberGl") != "null" && getParam("pNumberGl") != ""){
+            	pNumberGl = getParam("pNumberGl");
+            }else{
+            	pNumberGl = $("#pNumberGl").val();
+            }
+            
+            if(getParam("pCreatorGl") != null && getParam("pCreatorGl") != "null" && getParam("pCreatorGl") != ""){
+            	pCreatorGl = getParam("pCreatorGl");
+            }else{
+            	pCreatorGl = $("#pCreatorGl").val();
+            }
+            
+            if(getParam("createDatetimeGl") != null && getParam("createDatetimeGl") != "null" && getParam("createDatetimeGl") != ""){
+            	createDatetimeGl = getParam("createDatetimeGl");
+            }else{
+            	createDatetimeGl = $("#createDatetimeGl").val();
+            }
+            
+            if(getParam("keyWordsGl") != null && getParam("keyWordsGl") != "null" && getParam("keyWordsGl") != ""){
+            	keyWordsGl = getParam("keyWordsGl");
+            }else{
+            	keyWordsGl = $("#keyWordsGl").val();
+            }
+            
+            if(getParam("isOpenGl") != null && getParam("isOpenGl") != "null" && getParam("isOpenGl") != ""){
+            	isOpenGl = getParam("isOpenGl");
+            }else{
+            	isOpenGl = $("#isOpenGl").val();
+            }
+            
+            
             $("#isFilter").val("true");//设置当前为筛选状态
             
             window.location.href="/wankangyuan/projectFilter/selectPublicProjectByFilterCondition1?page="+page+"&searchWord="
 			+searchWord+"&columnName="+columnName+"&order="+order+"&filter="+filter+"&values="+values+"&isFilter=true"
-			+"&pName="+pName+"&pNumber="+pNumber+"&pCreator="+pCreator+"&createDatetime="+createDatetime+"&keyWords="+keyWords+"&isOpen="+isOpen;
+			+"&pName="+pName+"&pNumber="+pNumber+"&pCreator="+pCreator+"&createDatetime="+createDatetime+"&keyWords="+keyWords+"&isOpen="+isOpen
+			+"&pNameGl="+pNameGl+"&pNumberGl="+pNumberGl+"&pCreatorGl="+pCreatorGl+"&createDatetimeGl="+createDatetimeGl+"&keyWordsGl="+keyWordsGl+"&isOpenGl="+isOpenGl;
     		
     	}
     	$("#check0").click(function(){
     		if($("#check0").is(":checked")){
     			$("#all_value").val("all");
     			sessionStorage.setItem("noChangId",'');
-    			sessionStorage.setItem("allChang",'true');
+    			sessionStorage.setItem("allChangPublic",'true');
     		}else{
     			$("#all_value").val("");
     			sessionStorage.setItem("changId",'');
-    			sessionStorage.setItem("allChang",'false');
+    			sessionStorage.setItem("allChangPublic",'false');
     		}
     	});
     	
@@ -505,7 +671,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		 var arrs = []
     		 var narrs = []
     		var allValue = $("#all_value").val();
-    		 if(sessionStorage.allChang == 'true'){
+    		 if(sessionStorage.allChangPublic == 'true'){
     			 $("#check0").attr("checked",true);
     			 $(".input_checks").each(function () {
     				 $(this).attr('checked',true)    			 
@@ -565,8 +731,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	 
     	 function remove(){
     		 sessionStorage.setItem("noChangId",'');
-    		 sessionStorage.setItem("allChang",'false');
+    		 sessionStorage.setItem("allChangPublic",'false');
     	 }
+    	 
+    	 function getParam(name){
+   	      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+   	      var r = window.location.search.substr(1).match(reg);
+   	      if(r!=null)return  unescape(r[2]); 
+   	      return null;
+   	 }
     </script>
     
 </body>

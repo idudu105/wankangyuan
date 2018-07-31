@@ -63,6 +63,53 @@ public class ProjectFilterService {
 	}
 	
 	/**
+	 * 根据过滤条件筛选我创建的项目的某个字段的值
+	 * @param columnName 字段名
+	 * @param creator 创建人
+	 * @param searchWord 过滤条件
+	 * @return
+	 */
+	public List<String> selectDistinctColumnValueCreated1(String columnName , Integer creator , String searchWord, String pNameGl, String pNumberGl, String pCreatorGl,
+			String createDatetimeGl, String keyWordsGl){
+		String sql = "";
+		if(pNameGl != null && !pNameGl.equals("")){
+			sql += " and project.p_name like '%"+pNameGl+"%' ";
+		}
+		if(pNumberGl != null && !pNumberGl.equals("")){
+			sql += " and project.p_number like '%"+pNumberGl+"%' ";
+		}
+		if(pCreatorGl != null && !pCreatorGl.equals("")){
+			sql += " and user.username like '%"+pCreatorGl+"%' ";
+		}
+		if(createDatetimeGl != null && !createDatetimeGl.equals("")){
+			sql += " and project.create_datetime like '%"+createDatetimeGl+"%' ";
+		}
+		if(keyWordsGl != null && !keyWordsGl.equals("")){
+			sql += " and project.key_words like '%"+keyWordsGl+"%' ";
+		}
+		
+		switch(columnName){
+			case "p_name":
+				return projectFilterDao.selectDistinctP_nameCreated1(creator, sql);
+			case "p_number":
+				return projectFilterDao.selectDistinctP_numberCreated1(creator, sql);
+			case "creator":
+				return projectFilterDao.selectDistinctCreatorCreated1(creator, sql);
+			case "create_datetime":
+				return projectFilterDao.selectDistinctCreateDatetimeCreated1(creator, sql);
+			case "is_open":
+				List<String> strings = new ArrayList<String>();
+				strings.add("已公开");
+				strings.add("未公开");
+				return strings;
+			case "key_words":
+				return projectFilterDao.selectDistinctKeyWordsCreated1(creator, sql);
+			default:
+				return null;
+		}
+	}
+	
+	/**
 	 * 根据过滤条件筛选我的项目的某个字段的值
 	 * @param columnName 字段名
 	 * @param user_id 用户名
@@ -92,6 +139,52 @@ public class ProjectFilterService {
 	}
 	
 	/**
+	 * 根据过滤条件筛选我的项目的某个字段的值
+	 * @param columnName 字段名
+	 * @param user_id 用户名
+	 * @param searchWord 过滤条件
+	 * @return
+	 */
+	public List<String> selectDistinctColumnValueMine1(String columnName , Integer user_id , String searchWord, 
+			String pNameGl, String pNumberGl, String pCreatorGl, String createDatetimeGl, String keyWordsGl){
+		String sql = "";
+		if(pNameGl != null && !pNameGl.equals("")){
+			sql += " and project.p_name like '%"+pNameGl+"%' ";
+		}
+		if(pNumberGl != null && !pNumberGl.equals("")){
+			sql += " and project.p_number like '%"+pNumberGl+"%' ";
+		}
+		if(pCreatorGl != null && !pCreatorGl.equals("")){
+			sql += " and user.username like '%"+pCreatorGl+"%' ";
+		}
+		if(createDatetimeGl != null && !createDatetimeGl.equals("")){
+			sql += " and project.create_datetime like '%"+createDatetimeGl+"%' ";
+		}
+		if(keyWordsGl != null && !keyWordsGl.equals("")){
+			sql += " and project.key_words like '%"+keyWordsGl+"%' ";
+		}
+		switch(columnName){
+			case "p_name":
+				return projectFilterDao.selectDistinctP_nameMine1(user_id, sql);
+			case "p_number":
+				return projectFilterDao.selectDistinctP_numberMine1(user_id, sql);
+			case "creator":
+				return projectFilterDao.selectDistinctCreatorMine1(user_id, sql);
+			case "create_datetime":
+				return projectFilterDao.selectDistinctCreateDatetimeMine1(user_id, sql);
+			case "is_open":
+				List<String> strings = new ArrayList<String>();
+				strings.add("已公开");
+				strings.add("未公开");
+				return strings;
+			case "key_words":
+				return projectFilterDao.selectDistinctKeyWordsMine1(user_id, sql);
+			default:
+				return null;
+		}
+	}
+	
+	/**
 	 * 根据过滤条件筛选公开项目的某个字段值
 	 * @param columnName 字段名
 	 * @param searchWord 过滤条件
@@ -114,6 +207,51 @@ public class ProjectFilterService {
 				return strings;
 			case "key_words":
 				return projectFilterDao.selectDistinctKeyWordsPublic(searchWord);
+			default:
+				return null;
+		}
+	}
+	
+	/**
+	 * 根据过滤条件筛选公开项目的某个字段值
+	 * @param columnName 字段名
+	 * @param searchWord 过滤条件
+	 * @return
+	 */
+	public List<String> selectDistinctColumnValuePublic1(String columnName , String searchWord, 
+			String pNameGl, String pNumberGl, String pCreatorGl, String createDatetimeGl, String keyWordsGl){
+		String sql = "";
+		if(pNameGl != null && !pNameGl.equals("")){
+			sql += " and project.p_name like '%"+pNameGl+"%' ";
+		}
+		if(pNumberGl != null && !pNumberGl.equals("")){
+			sql += " and project.p_number like '%"+pNumberGl+"%' ";
+		}
+		if(pCreatorGl != null && !pCreatorGl.equals("")){
+			sql += " and user.username like '%"+pCreatorGl+"%' ";
+		}
+		if(createDatetimeGl != null && !createDatetimeGl.equals("")){
+			sql += " and project.create_datetime like '%"+createDatetimeGl+"%' ";
+		}
+		if(keyWordsGl != null && !keyWordsGl.equals("")){
+			sql += " and project.key_words like '%"+keyWordsGl+"%' ";
+		}
+		switch(columnName){
+			case "p_name":
+				return projectFilterDao.selectDistinctP_namePublic1(sql);
+			case "p_number":
+				return projectFilterDao.selectDistinctP_numberPublic1(sql);
+			case "creator":
+				return projectFilterDao.selectDistinctCreatorPublic1(sql);
+			case "create_datetime":
+				return projectFilterDao.selectDistinctCreateDatetimePublic1(sql);
+			case "is_open":
+				List<String> strings = new ArrayList<String>();
+				strings.add("已公开");
+				strings.add("未公开");
+				return strings;
+			case "key_words":
+				return projectFilterDao.selectDistinctKeyWordsPublic1(sql);
 			default:
 				return null;
 		}
@@ -151,7 +289,8 @@ public class ProjectFilterService {
 	public Map<String, Object> selectCreatedProjectByFilterCondition1(Integer creator ,  
 			Integer page , Integer strip , 
 			String searchWord ,QueryCondition projectQueryCondition, String pName, String pNumber, String pCreator,
-			String createDatetime, String keyWords, String isOpen){
+			String createDatetime, String keyWords, String isOpen, String pNameGl, String pNumberGl, String pCreatorGl,
+			String createDatetimeGl, String keyWordsGl, String isOpenGl){
 		PageHelper.startPage(page, strip);
 		Map<String, Object> map = new HashMap<String , Object>();
 		//将相关的筛选条件放入到map中，方便动态构造sql语句的时候使用
@@ -188,6 +327,25 @@ public class ProjectFilterService {
 		sql += "select project.* , user.username as creatorName from project,user where ";
 		sql += "project.creator=user.id and creator="+creator+" and p_name like '"+"%"+searchWord+"%' ";//创建者ID以及搜索条件
 		sql += "and "+columnName+" like '%"+filter+"%' ";//某字段过滤条件
+		
+		if(pNameGl!= null && !pNameGl.equals("") && (pName == null || pName.equals(""))){
+			sql += "and p_name like '%"+pNameGl+"%' ";
+		}
+		if(pNumberGl!= null && !pNumberGl.equals("") && (pNumber == null || pNumber.equals(""))){
+			sql += "and p_number like '%"+pNumberGl+"%' ";
+		}
+		if(pCreatorGl!= null && !pCreatorGl.equals("") && (pCreator == null || pCreator.equals(""))){
+			sql += "and username like '%"+pCreatorGl+"%' ";
+		}
+		if(createDatetimeGl!= null && !createDatetimeGl.equals("") && (createDatetime == null || createDatetime.equals(""))){
+			sql += "and create_datetime like '%"+createDatetimeGl+"%' ";
+		}
+		if(keyWordsGl!= null && !keyWordsGl.equals("") && (keyWords == null || keyWords.equals(""))){
+			sql += "and key_words like '%"+keyWordsGl+"%' ";
+		}
+		/*if(isOpenGl!= null && !isOpenGl.equals("") && (pName == null || pName.equals(""))){
+			sql += "and is_open like '%"+isOpenGl+"%' ";
+		}*/
 		
 		if(pName != null && !pName.equals("")){
 			if(pName.indexOf(",")>-1){
@@ -365,7 +523,8 @@ public class ProjectFilterService {
 	public Map<String, Object> selectMineProjectByFilterCondition1(Integer user_id ,  
 			Integer page , Integer strip , 
 			String searchWord ,QueryCondition projectQueryCondition, String pName, String pNumber, String pCreator,
-			String createDatetime, String keyWords, String isOpen){
+			String createDatetime, String keyWords, String isOpen, String pNameGl, String pNumberGl, String pCreatorGl,
+			String createDatetimeGl, String keyWordsGl, String isOpenGl){
 		PageHelper.startPage(page, strip);
 		Map<String, Object> map = new HashMap<String , Object>();
 		//将相关的筛选条件放入到map中，方便动态构造sql语句的时候使用
@@ -403,6 +562,26 @@ public class ProjectFilterService {
 		sql += "select project.*,user.username as creatorName from project , project_user,user where ";
 		sql += "project.id=project_user.project_id and project.creator=user.id and project_user.user_id="+user_id+" and p_name like '"+"%"+searchWord+"%' ";//创建者ID以及搜索条件
 		sql += "and "+columnName+" like '%"+filter+"%' ";//某字段过滤条件
+		
+		
+		if(pNameGl!= null && !pNameGl.equals("") && (pName == null || pName.equals(""))){
+			sql += "and p_name like '%"+pNameGl+"%' ";
+		}
+		if(pNumberGl!= null && !pNumberGl.equals("") && (pNumber == null || pNumber.equals(""))){
+			sql += "and p_number like '%"+pNumberGl+"%' ";
+		}
+		if(pCreatorGl!= null && !pCreatorGl.equals("") && (pCreator == null || pCreator.equals(""))){
+			sql += "and username like '%"+pCreatorGl+"%' ";
+		}
+		if(createDatetimeGl!= null && !createDatetimeGl.equals("") && (createDatetime == null || createDatetime.equals(""))){
+			sql += "and create_datetime like '%"+createDatetimeGl+"%' ";
+		}
+		if(keyWordsGl!= null && !keyWordsGl.equals("") && (keyWords == null || keyWords.equals(""))){
+			sql += "and key_words like '%"+keyWordsGl+"%' ";
+		}
+		/*if(isOpenGl!= null && !isOpenGl.equals("") && (pName == null || pName.equals(""))){
+			sql += "and is_open like '%"+isOpenGl+"%' ";
+		}*/
 		
 		if(pName != null && !pName.equals("")){
 			if(pName.indexOf(",")>-1){
@@ -581,7 +760,8 @@ public class ProjectFilterService {
 	public Map<String, Object> selectPublicProjectByFilterCondition1(
 			Integer page , Integer strip , 
 			String searchWord ,QueryCondition projectQueryCondition, String pName, String pNumber, String pCreator,
-			String createDatetime, String keyWords, String isOpen){
+			String createDatetime, String keyWords, String isOpen, String pNameGl, String pNumberGl, String pCreatorGl,
+			String createDatetimeGl, String keyWordsGl, String isOpenGl){
 		PageHelper.startPage(page, strip);
 		Map<String, Object> map = new HashMap<String , Object>();
 		//将相关的筛选条件放入到map中，方便动态构造sql语句的时候使用
@@ -617,6 +797,25 @@ public class ProjectFilterService {
 		sql += "select project.* , user.username as creatorName from project,user ";
 		sql += "where project.creator=user.id and is_open=1 and p_name like '"+"%"+searchWord+"%' ";//创建者ID以及搜索条件
 		sql += "and "+columnName+" like '%"+filter+"%' ";//某字段过滤条件
+		
+		if(pNameGl!= null && !pNameGl.equals("") && (pName == null || pName.equals(""))){
+			sql += "and p_name like '%"+pNameGl+"%' ";
+		}
+		if(pNumberGl!= null && !pNumberGl.equals("") && (pNumber == null || pNumber.equals(""))){
+			sql += "and p_number like '%"+pNumberGl+"%' ";
+		}
+		if(pCreatorGl!= null && !pCreatorGl.equals("") && (pCreator == null || pCreator.equals(""))){
+			sql += "and username like '%"+pCreatorGl+"%' ";
+		}
+		if(createDatetimeGl!= null && !createDatetimeGl.equals("") && (createDatetime == null || createDatetime.equals(""))){
+			sql += "and create_datetime like '%"+createDatetimeGl+"%' ";
+		}
+		if(keyWordsGl!= null && !keyWordsGl.equals("") && (keyWords == null || keyWords.equals(""))){
+			sql += "and key_words like '%"+keyWordsGl+"%' ";
+		}
+		/*if(isOpenGl!= null && !isOpenGl.equals("") && (pName == null || pName.equals(""))){
+			sql += "and is_open like '%"+isOpenGl+"%' ";
+		}*/
 		
 		if(pName != null && !pName.equals("")){
 			if(pName.indexOf(",")>-1){

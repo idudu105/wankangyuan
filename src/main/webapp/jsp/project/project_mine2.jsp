@@ -154,9 +154,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	//退出项目
     	function exit(){
     		var searchWord = $(".searchCt").val();//搜索条件
-    		var allChang = "";
-    		if (sessionStorage.allChang){
-    			allChang = sessionStorage.allChang;
+    		var allChangMine2 = "";
+    		if (sessionStorage.allChangMine2){
+    			allChangMine2 = sessionStorage.allChangMine2;
 			 }
     		var noChangId = "";
     		if (sessionStorage.noChangId){
@@ -189,7 +189,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 	data:{
                 		ids:ids.join(","),
                 		searchWord : searchWord,
-                		allValue : allChang,
+                		allValue : allChangMine2,
                 		noChangId : noChangId
                 	},
                 	dataType:"json",
@@ -238,11 +238,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		if($("#check0").is(":checked")){
     			$("#all_value").val("all");
     			sessionStorage.setItem("noChangId",'');
-    			sessionStorage.setItem("allChang",'true');
+    			sessionStorage.setItem("allChangMine2",'true');
     		}else{
     			$("#all_value").val("");
     			sessionStorage.setItem("changId",'');
-    			sessionStorage.setItem("allChang",'false');
+    			sessionStorage.setItem("allChangMine2",'false');
     		}
     	});
     	
@@ -250,7 +250,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		 var arrs = []
     		 var narrs = []
     		var allValue = $("#all_value").val();
-    		 if(sessionStorage.allChang == 'true'){
+    		 if(sessionStorage.allChangMine2 == 'true'){
     			 $("#check0").attr("checked",true);
     			 $(".input_checks").each(function () {
     				 $(this).attr('checked',true)    			 
@@ -310,7 +310,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	 
     	  function remove(){
     		 sessionStorage.setItem("noChangId",'');
-    		 sessionStorage.setItem("allChang",'false');
+    		 sessionStorage.setItem("allChangMine2",'false');
     	 }
     
     </script>
