@@ -90,7 +90,7 @@
 				</a>
 			</div>
 
-					<div class="pro_menu pro_addK">
+					<%-- <div class="pro_menu pro_addK">
 						<div class="pro_addk">
 							<div class="pro_addT">添加至项目</div>
 							<div class="pro_addI"></div>
@@ -102,7 +102,7 @@
 					</c:forEach>
 					<div class="pro_addli">项目4</div>
 					<div class="pro_addli">项目5</div>
-				</div>
+				</div> --%>
 			<div class="top2">
 				<div class="top2C">
 					<a href="/wankangyuan/sourceData/firstIn?type=1">
