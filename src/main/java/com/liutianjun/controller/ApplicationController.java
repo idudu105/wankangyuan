@@ -173,7 +173,7 @@ public class ApplicationController {
 				appNameOption,creatorOption,isAsyncOption,keywordsOption,appIntroOption,createTimeOption,isDisplayOption);
 		typeList.remove(null);
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.setSerializationInclusion(Include.NON_EMPTY);
+		//mapper.setSerializationInclusion(Include.NON_EMPTY);
 		mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
 		return mapper.writeValueAsString(typeList);
 	}

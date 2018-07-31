@@ -1927,6 +1927,7 @@ input{
     overflow:auto;
     padding-left:36px;
     position:relative;
+    min-height:400px;
 }
 .prodainmL2{
     float:left;

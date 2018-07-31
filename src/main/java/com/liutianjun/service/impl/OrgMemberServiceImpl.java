@@ -76,6 +76,20 @@ public class OrgMemberServiceImpl implements OrgMemberService {
 		return i;
 	}
 	
+	//更新组织成员信息
+	public int updateMembersInfo(OrgMember orgMember) {
+		int i =0;
+		if(null != orgMember && orgMember.getUserId() != null) {
+			User user = userDao.selectByPrimaryKey(orgMember.getUserId());
+			orgMember.setHeadimg(user.getHeadimg());
+			orgMember.setEmail(user.getEmail());
+			orgMember.setUpdateTime(new Date());
+			i +=orgMemberDao.updateByPrimaryKey(orgMember);
+		}
+		
+		return i;
+	}
+	
 	/**
 	 * 查找组员
 	 * @Title: findOrgMember 
@@ -104,7 +118,11 @@ public class OrgMemberServiceImpl implements OrgMemberService {
 		OrgMemberQuery example = new OrgMemberQuery();
 		Criteria criteria = example.createCriteria();
 		criteria.andGroupIdEqualTo(groupId);
-		return orgMemberDao.selectByExample(example);
+		List<OrgMember> list = orgMemberDao.selectByExample(example);
+		for (OrgMember orgMember : list) {
+			updateMembersInfo(orgMember);
+		}
+		return list;
 	}
 	
 	/**
@@ -119,7 +137,11 @@ public class OrgMemberServiceImpl implements OrgMemberService {
 		OrgMemberQuery example = new OrgMemberQuery();
 		Criteria criteria = example.createCriteria();
 		criteria.andOrgIdEqualTo(orgId);
-		return orgMemberDao.selectByExample(example);
+		List<OrgMember> list = orgMemberDao.selectByExample(example);
+		for (OrgMember orgMember : list) {
+			updateMembersInfo(orgMember);
+		}
+		return list;
 	}
 	
 	/**
@@ -142,6 +164,7 @@ public class OrgMemberServiceImpl implements OrgMemberService {
 		}
 		//List<Integer> MyGroupIds = findMyGroupIds();
 		//criteria.andOrgIdIn(MyGroupIds);
+		
 		return orgMemberDao.selectByExample(example);
 	}
 
