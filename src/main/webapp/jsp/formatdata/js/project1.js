@@ -883,12 +883,20 @@ function data_mine(){
 
 // 格式数据添加至项目框显示隐藏
     var opro_addK=document.querySelectorAll('.pro_addK')[0];// 格式数据添加至项目
-    var opro_addk=opro_addK.querySelectorAll('.pro_addk')[0];// 添加按钮
+    if(opro_addK){
+    	var opro_addk=opro_addK.querySelectorAll('.pro_addk')[0];// 添加按钮
+    }
+    
     var opro_addul=document.querySelectorAll('.pro_addul')[0];// 添加项目列表
-    var apro_addli=opro_addul.querySelectorAll('.pro_addli');// 添加各个项目
+    if(opro_addul){
+    	var apro_addli=opro_addul.querySelectorAll('.pro_addli');// 添加各个项目
+    }
+    
 
     // pro_addkPD=0;
-
+    if(opro_addk){
+    	
+    
     opro_addk.onclick=function(event){
         // if(pro_addkPD==0){
             opro_addul.style.display="block";
@@ -899,9 +907,15 @@ function data_mine(){
         // }
         event.stopPropagation();
     }
-    document.onclick=function(){
-        opro_addul.style.display="none";
     }
+    document.onclick=function(){
+    	if(opro_addul){
+        opro_addul.style.display="none";
+    	}
+    }
+    if(apro_addli){
+    	
+    
     for(var i=0;i<apro_addli.length;i++){
         (function(index){
             apro_addli[index].onclick=function(){
@@ -910,11 +924,13 @@ function data_mine(){
             }
         })(i)
     }
-
+    }
 
     var opro_addul=document.querySelectorAll('.pro_addul')[0];
-
+    if(opro_addul){
+    
     opro_addul.style.right="0";
+    }
 }
 
 
