@@ -162,7 +162,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 		ApplicationQuery example = new ApplicationQuery();
 		Criteria criteria = example.createCriteria();
 		if(StringUtils.isNotBlank(appName)) {
-			criteria.andAppNameLike("%"+appName+"%");
+			//criteria.andAppNameLike("%"+appName+"%");
+			criteria.andOrSearch(appName);
 		}
 		if(StringUtils.isNotBlank(appType)) {
 			criteria.andAppTypeEqualTo(appType);
@@ -245,7 +246,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 		ApplicationQuery example = new ApplicationQuery();
 		Criteria criteria = example.createCriteria();
 		if(StringUtils.isNotBlank(appName)) {
-			criteria.andAppNameLike("%"+appName+"%");
+			//criteria.andAppNameLike("%"+appName+"%");
+			criteria.andOrSearch(appName);
 		}
 		if(StringUtils.isNotBlank(appType)) {
 			criteria.andAppTypeEqualTo(appType);

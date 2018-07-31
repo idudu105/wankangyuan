@@ -550,6 +550,7 @@ function ViewModel() {
 		self.fieldList.removeAll();
 	    $(".BTSXpd").val($(this).attr("name"));
 	    $(".BTSXpd").attr("order",$(this).attr("order"));
+	    $(".BTSXcliGLK").val("");
 	});
 	
 	/* -------------------------------------------- */

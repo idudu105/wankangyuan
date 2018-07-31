@@ -177,7 +177,8 @@ public class UserAppRelationServiceImpl implements UserAppRelationService {
 	    Criteria criteria = example.createCriteria();
 	    criteria.andUserIdEqualTo(userId);
 	    if(StringUtils.isNotBlank(appName)) {
-	    	criteria.andAppNameLike("%"+appName+"%");
+	    	//criteria.andAppNameLike("%"+appName+"%");
+	    	criteria.andOrSearch(appName);
 	    }
 	    if(StringUtils.isNotBlank(appType)) {
 	    	criteria.andAppTypeEqualTo(appType);

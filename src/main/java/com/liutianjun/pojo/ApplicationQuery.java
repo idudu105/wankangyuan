@@ -1276,6 +1276,12 @@ public class ApplicationQuery {
             addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
+        
+        public Criteria andOrSearch(String appName) {
+        	addCriterion("(app_name like '%"+appName+"%' or creator like '%"+appName+"%' or "
+        			+ "keywords like '%" + appName +"%' or app_intro like '%"+appName+"%')");
+        	return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

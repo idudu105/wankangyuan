@@ -796,6 +796,12 @@ public class UserAppRelationQuery {
             addCriterion("app_overview not between", value1, value2, "appOverview");
             return (Criteria) this;
         }
+        
+        public Criteria andOrSearch(String appName) {
+        	addCriterion("(app_name like '%"+appName+"%' or creator like '%"+appName+"%' or "
+        			+ "keywords like '%" + appName +"%' or app_overview like '%"+appName+"%')");
+        	return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
