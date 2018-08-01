@@ -599,9 +599,9 @@ input{
 .PJul tr{
     text-align: center;
 }
-.PJul tr:hover{
+/* .PJul tr:hover{
     background:#f1f1f1;
-}
+} */
 .PJul td{
     text-align: center !important;
     min-width:100px;
@@ -625,6 +625,14 @@ input{
     text-align: center !important;
     margin:0 auto;
 }
+tr.PJList td{
+    border-bottom:2px solid #013f73;
+}
+
+tr.PJli td{
+    border-bottom:1px solid #e7e7e7;
+}
+
 .PJList{
     width:max-content;
     color:#16579b;
@@ -1137,7 +1145,7 @@ input{
     /*height:311px;*/
     background:#fff;
     position:absolute;
-    top:100px;
+    top:145px;
     z-index: 300;
     display:none;
     padding:11px;
@@ -1972,7 +1980,7 @@ input{
 .prodaclmR{
     border:1px solid #979797;
     width:828px;
-    height:639px;
+    height:750px;
     padding:50px 24px;
     float:left;
     position:relative;
@@ -2110,12 +2118,13 @@ input{
     line-height: 45px;
 }
 .prodaclmRzTtmz{
-    width:200px;
+	min-width:200px;
+    /*width:200px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
-    word-wrap: break-word;
+    word-wrap: break-word;*/
 }
 .prodaclmRzTtnr{
     width:400px;
@@ -2141,11 +2150,11 @@ input{
     /*font-family: PingFangSC-Medium;*/
     font-weight: 700;
     line-height: 45px;
-    display: -webkit-box;
+    /*display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
-    word-wrap: break-word;
+    word-wrap: break-word;*/
 }
 .prodaclmRzTtnr2{
     line-height: 33px;
@@ -2262,25 +2271,30 @@ input{
     font-size:16px;
     color:#16579b;
     line-height: 45px;
-    width:150px;
     float:left;
+    min-width:150px;
+    width:100%;
+    position:relative;
+    cursor:pointer;
+    /*width:150px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
-    word-wrap: break-word;
+    word-wrap: break-word;*/
 }
 .prodaclmRzTt3{
     font-size:16px;
     color:#16579b;
     line-height: 45px;
-    width:150px;
     float:left;
+    min-width:150px;
+    /*width:150px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
-    word-wrap: break-word;
+    word-wrap: break-word;*/
 }
 .clmReditK{
     position:absolute;

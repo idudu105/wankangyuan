@@ -162,21 +162,20 @@
 
 				<div class="prodaclmR">
 					<div class="prodaclmRz">
-						<div class="pdclmRz_ul"></div>
-						<div class="prodaclmRzT">
+					    <table class="PJul" >
+					    <tr class="PJList">
 
-							<div class="prodaclmRzTt prodaclmRzTtmz">名称</div>
-							<div class="prodaclmRzTt prodaclmRzTtnr">内容</div>
-						</div>
-						<div class="prodaclmRzB">
+							<td><div class="prodaclmRzTt prodaclmRzTtmz">名称</div></td>
+							<td><div class="prodaclmRzTt prodaclmRzTtmz">内容</div></td>
+						</tr>
 							<c:forEach items="${metaDatas}" var="metaDataListTemp">
-								<div class="prodaclmRzBz">
-									<div class="prodaclmRzBzt prodaclmRzTtmz">${metaDataListTemp[1] }</div>
-									<div class="prodaclmRzBzt prodaclmRzTtmz">
-										${metaDataListTemp[2] }</div>
-								</div>
+						 <tr class="PJli">
+									<td><div class="prodaclmRzBzt prodaclmRzTtmz">${metaDataListTemp[1] }</div></td>
+									<td><div class="prodaclmRzBzt prodaclmRzTtmz">
+										${metaDataListTemp[2] }</div></td>
+						</tr>
 							</c:forEach>
-						</div>
+						</table>
 					</div>
 					<br>
 
@@ -219,40 +218,44 @@
 						</div>
 
 						<div class="prodaclmRsjK">
-							<div class="prodaclmRzT">
+							<table class="PJul" >
+                        <tr class="PJList">
+                            <td>
 								<div class="quanxuanK fxK1">
 									<input type="checkbox" class="input_check" id="check4_0">
 									<label for="check4_0"></label>
 								</div>
+								</td>
 								<c:forEach items="${data}" var="dataTemp">
-									<div class="prodaclmRzTt2" id="${dataTemp.ff_id}">${dataTemp.ff_name }</div>
+									<td><div class="prodaclmRzTt2" id="${dataTemp.ff_id}">${dataTemp.ff_name }</div></td>
 								</c:forEach>
-							</div>
-							<div class="prodaclmRzB">
+							</tr>
 
 								<c:forEach items="${dataDatas}" var="dataDataTemp">
-									<div class="prodaclmRzBz">
+									<tr class="PJli">
 										<c:forEach items="${dataDataTemp}" var="dataDataTempTemp"
 											varStatus="status">
 											<c:if test="${status.index == 0 }">
+											<td>
 												<div class="fuxuanK5 fxK1 fx4">
 													<input type="checkbox" class="input_check"
 														name="${dataDataTempTemp}" id="check4_${dataDataTempTemp}">
 													<label for="check4_${dataDataTempTemp}"></label>
 												</div>
+										      </td>
 											</c:if>
 											<c:if test="${status.index != 0 }">
 												<%-- <div class="prodaclmRzTt3 prodaclmRzTtsj3">${dataDataTempTemp}</div>
 											 --%>
-												<div class="prodaclmRzTt3">
+												<td><div class="prodaclmRzTt3">
 													<span>${dataDataTempTemp}</span>
-												</div>
+												</div></td>
 											</c:if>
 										</c:forEach>
-									</div>
+									</tr>
 								</c:forEach>
+							</table>
 								<div class="pageK" id="box"></div>
-							</div>
 						</div>
 
 						<div class="BTSX2">
@@ -563,23 +566,24 @@
                     if(document.querySelectorAll('.BTSXpd')[0]){
                         var oBTSXpd=document.querySelectorAll('.BTSXpd')[0];//项目表头筛选框判断
                         oBTSXpd.value=aprodaclmRzTt2[j].title;
-                        console.log(oBTSXpd.value);
+                        //console.log(oBTSXpd.value);
                     }
                     
                     
-                    console.log(BTSXleft);
+                    //console.log(aprodaclmRzTt2[j].offsetLeft);
+                    //console.log(BTSXleft);
                     if(BTSXleft>1118){
                         BTSXleft=1118;
                     }
-                    oBTSX2.style.left=BTSXleft-130+'px'; 
+                    oBTSX2.style.left=BTSXleft-100+'px'; 
                     event.stopPropagation();
                 }
             })(i)
         }
-        window.onclick=function(){
-        //    console.log(1);
-            oBTSX2.style.display="none";
-        }
+        $(window).click(function(){
+        	oBTSX2.style.display="none";
+        })
+        
         oBTSX2.onclick=function(){
             event.stopPropagation();
         }

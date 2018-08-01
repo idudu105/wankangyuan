@@ -189,52 +189,54 @@
 				</div>
 			</div>
 			<div class="PJK">
-				<div class="PJList">
-					<div class="allK">
-						<div class="allX">
-							<!-- <img src="img/greentrue.png" alt="" class="allI" /> -->
-						</div>
-						<div class="allT">全选</div>
-					</div>
-					<c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
-						<div class="PJListli" id="${sourceFieldTemp.csf_id}">${sourceFieldTemp.csf_name}</div>
-					</c:forEach>
-				</div>
-				<div class="PJListline"></div>
-				<div class="PJul">
-					<c:forEach items="${sourceDatas}" var="sourceData">
-						<div class="PJli">
-							<div class="PJliC">
-
-								<c:forEach items="${sourceData}" var="sourceDataField"
-									varStatus="status">
-
-									<c:if test="${status.index==0}">
-										<div class="fuxuanK2">
-											<input type="checkbox" class="input_check"
-												name="${sourceDataField}" id="check${sourceDataField}">
-											<label for="check${sourceDataField}"></label>
-										</div>
-									</c:if>
-
-									<c:if test="${status.index!=0}">
-										<a href="#" onclick="datainHref('${sourceData[0]}')">
-											<div class="PJliCli2">
-												<span>${sourceDataField}</span>
-											</div>
-										</a>
-									</c:if>
-									<%-- 
-									<c:if test="${status.index!=0 && status.index!=1}">
-										<div class="PJliCli2">${sourceDataField}</div>
-									</c:if> --%>
-
-								</c:forEach>
-							</div>
-							<div class="PJliline"></div>
-
-						</div>
-					</c:forEach>
+				<div class="PJulk">
+                    <table class="PJul" >
+                        <tr class="PJList">
+                            <td>
+                                <div class="allK">
+                                    <div class="quanxuanK">
+                                        <input type="checkbox" class="input_check" id="check0">
+                                        <label for="check0"></label>
+                                    </div>
+                                    <div class="allT">全选</div>
+                                </div>
+                            </td>
+                            <c:forEach items="${source.sourceFields}" var="sourceFieldTemp">
+                            <td>
+                                <div class="PJListli" id="${sourceFieldTemp.csf_id}">${sourceFieldTemp.csf_name}</div>
+                            </td>
+                            </c:forEach>
+                        </tr>
+                        <c:forEach items="${sourceDatas}" var="sourceData">
+                        <tr class="PJli">
+                            <c:forEach items="${sourceData}" var="sourceDataField" varStatus="status">
+                                <c:if test="${status.index==0}">
+                                <td>
+                                <div class="fuxuanK2">
+                                    <input type="checkbox" class="input_check" name="${sourceDataField}" id="check${sourceDataField}">
+                                    <label for="check${sourceDataField}"></label>
+                                </div>
+                                </td>
+                                </c:if>
+                             <c:if test="${status.index!=0}">
+                                <td>
+                                <div class="PJliCli2">
+                                    <a href="#" onclick="datainHref('${sourceData[0]}')">
+                                        <span>${sourceDataField}</span>
+                                    </a>
+                                </div>
+                                </td>
+                             </c:if>
+                                <%-- <c:if test="${status.index!=0 && status.index!=1}">
+                                <td>
+                                    <div class="PJliCli2">${sourceDataField}</div>
+                                </td>
+                                </c:if> --%>
+                            </c:forEach>
+                            
+                        </tr>
+                        </c:forEach>
+                    </table>
 				</div>
 				<div class="BTSX">
 					<div class="BTSXc">

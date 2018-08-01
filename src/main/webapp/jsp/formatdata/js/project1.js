@@ -88,6 +88,7 @@ function project1(){
     var oshaixuanZK=document.querySelectorAll('.shaixuanZK')[0];// 获取筛选菜单
     var shaixuanPD=0;
 
+    if(oshaixuanBT){
     oshaixuanBT.onclick=function(event){
         if(shaixuanPD==0){
             oshaixuanZK.className="shaixuanZK active";
@@ -98,6 +99,7 @@ function project1(){
         }
         // event.stopPropagation();
         // console.log(1);
+    }
     }
     // document.onclick=function(){
     // oshaixuanZK.className="shaixuanZK";
@@ -220,19 +222,27 @@ function project1(){
             }
         })(i)
     }
+    if(oBTSX){
+    	
+    
     oBTSX.onclick=function(){
     	event.stopPropagation();
     }
+    }
     window.onclick=function(){
         // console.log(1);
+    	if(oBTSX){
+    		oBTSX.style.display="none";
+    	}
     	
-    	oBTSX.style.display="none";
     	
     }
     document.onclick=function(){
         // console.log(1);
     	
-    	oBTSX.style.display="none";
+    	if(oBTSX){
+    		oBTSX.style.display="none";
+    	}
     }
 
 }
@@ -540,10 +550,16 @@ function pro_dataclick(){
     var oshaixuanZK=document.querySelectorAll('.shaixuanZK')[0];// 获取筛选菜单
     var ashaixuanZKliI=document.querySelectorAll('.shaixuanZKliI');// 获取所有筛选按钮
     var oprodaclmRzT=document.querySelectorAll('.prodaclmRzT')[1];// 项目表头栏
-    var aprodaclmRzTt2=oprodaclmRzT.querySelectorAll('.prodaclmRzTt2');// 项目表头
+    if(oprodaclmRzT){
+    	var aprodaclmRzTt2=oprodaclmRzT.querySelectorAll('.prodaclmRzTt2');// 项目表头
+    }
     var oprodaclmRsjK=document.querySelectorAll('.prodaclmRsjK')[0];
-    var oprodaclmRzB=oprodaclmRsjK.querySelectorAll('.prodaclmRzB')[0];// 项目栏
-    var aprodaclmRzBz=oprodaclmRzB.querySelectorAll('.prodaclmRzBz');// 每一条项目
+    if(oprodaclmRsjK){
+    	var oprodaclmRzB=oprodaclmRsjK.querySelectorAll('.prodaclmRzB')[0];// 项目栏
+    }
+    if(oprodaclmRzB){
+    	var aprodaclmRzBz=oprodaclmRzB.querySelectorAll('.prodaclmRzBz');// 每一条项目
+    }
     
     console.log(aprodaclmRzTt2);
 
