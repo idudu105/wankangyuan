@@ -161,7 +161,9 @@
 	                    	<div class="PJK2litimeT1"><fmt:formatDate type="date" value="${app.createTime }" /></div>
 	                    </div>
 	                    <div class="PJK2lidetail">${app.appIntro }</div>
+	                    <a href='/wankangyuan/application/explain?id=${app.id }'>
 	                    <div class="PJK2liex">应用说明</div>
+	                    </a>
 	                </div>
                 </c:forEach>
             </div>

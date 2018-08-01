@@ -86,7 +86,7 @@ public class UserController {
         } else if(IncorrectCredentialsException.class.getName().equals(exceptionClassName)) {
             error = "用户名/密码错误";
         } else if ("kaptchaValidateFailed".equals(exceptionClassName)) {
-        	error = "验证码错误";
+        	error = "动态验证码错误";
         } else if ("forbidUserLoginFailed".equals(exceptionClassName)) {
         	error = "普通用户不能登录后台";
 		} else if (LockedAccountException.class.getName().equals(exceptionClassName)) {
@@ -141,7 +141,7 @@ public class UserController {
 		}
 		//检查验证码
 		if(!VerifyCodeUtils.verifyCode(randomCode,VerifyCodeUtils.V_CODE)) {
-			resultMap.put("message", "图片验证码错误!");
+			resultMap.put("message", "动态验证码错误!");
 			return resultMap;
 		}
 		//检查用户名
@@ -373,12 +373,12 @@ public class UserController {
 	public Map<String,Object> updateUserEmail(String emailCode,String email,String newEmailCode) {
 		resultMap.put("status", 400);
 		if(!VerifyCodeUtils.verifyCode(emailCode, VerifyCodeUtils.V_EMAILCODE)) {
-			resultMap.put("message", "邮箱验证码错误!");
+			resultMap.put("message", "旧邮箱验证码错误!");
 			return resultMap;
 		}
 		
 		if(!VerifyCodeUtils.verifyCode(newEmailCode, VerifyCodeUtils.V_NEWEMAILCODE)) {
-			resultMap.put("message", "邮箱验证码错误!");
+			resultMap.put("message", "新邮箱验证码错误!");
 			return resultMap;
 		}
 		//检查邮箱

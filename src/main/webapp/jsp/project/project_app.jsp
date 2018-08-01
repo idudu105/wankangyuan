@@ -198,6 +198,7 @@
                 
                 <div class="PJul">
                 <c:forEach items="${projectApplications}" var="app" varStatus="appList">
+                <a href='/wankangyuan/application/explain?id=${app.id }'>
                     <div class="PJli">
                         <div class="PJliC">
                             <div class="fuxuanK2">
@@ -224,6 +225,7 @@
                         </div>
                         <div class="PJliline"></div>
                     </div>
+                </a>
                 </c:forEach>
                 </div>
 

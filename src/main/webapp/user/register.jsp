@@ -144,6 +144,7 @@ $("#sendPhoneCode").click(function(){
 	var email = $("#email").val();
 	var emailReg =/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 	if (!emailReg.test(email)) {  
+		$(".loginMzRi").click();
         return layer.msg('请输入有效的邮箱！',function(){}),!1;
     }else{
         anniu.style.display="none";
@@ -176,28 +177,31 @@ $("#sendPhoneCode").click(function(){
 function register(){
 	
 	if(!$("#username").val().match(/^[\u4E00-\u9FA5a-zA-Z0-9_]{3,20}$/)){
+		$(".loginMzRi").click();
 		return layer.msg('账户名称不规范！',function(){}),!1;
 	}
 	
 	if($("#password").val().length < 8){
+		$(".loginMzRi").click();
 		return layer.msg('密码不少于8个字符！',function(){}),!1;
 	}
 	
 	if($("#phone").val().trim() != ''){
-		//return layer.msg('请输入手机号!',function(){}),!1;
-		
 		var phoneReg = /(^1[3|4|5|6|7|8]\d{9}$)|(^09\d{8}$)/;  
 	    var phone = $("#phone").val();  
 	    if (!phoneReg.test(phone)) {  
+	    	$(".loginMzRi").click();
 	        return layer.msg('请输入有效的手机号码！',function(){}),!1;
 	    }
 	}
 	
 	if($("#password").val() != $("#re_password").val()){
+		$(".loginMzRi").click();
         return layer.msg('2次密码输出不一样！',function(){}),!1;
     }
 	
 	if($('#emailCode').val().length != 6){
+		$(".loginMzRi").click();
         return layer.msg('邮箱验证码的长度为6位！',function(){}),!1;
     }
 	
@@ -206,6 +210,7 @@ function register(){
     $.post("/wankangyuan/register",$("#_form").serialize() ,function(result){
         layer.close(load);
         if(result && result.status!= 200){
+        	$(".loginMzRi").click();
             return layer.msg(result.message,function(){}),!1;
         }else{
             layer.msg('注册成功!', {

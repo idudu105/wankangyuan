@@ -268,7 +268,7 @@ public class ProjectFloderFileController {
 		//返回结果
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		if(file.getSize()>1024*1024*1024) {
+		if(file.getSize()>1024*1024*10) {
 			map.put("result", false);
 			map.put("message", "文件不能超过10M");
 			return map;

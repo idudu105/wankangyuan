@@ -289,22 +289,31 @@ kongjian(${sysConfig.size },realSize);
 $("#sendEmailCode,#sendEmailCode1").click(function(){
 	var anniu=document.querySelectorAll('.udPSyzfs')[0];//发送验证码
     var anniu2=document.querySelectorAll('.udPSyzfs2')[0];//禁用发送验证码
+	var anniud=document.querySelectorAll('.udPHyzfs')[0];//发送验证码
+    var anniud2=document.querySelectorAll('.udPHyzfs2')[0];//禁用发送验证码
+    
     
     var email = "${user.email}";
     anniu.style.display="none";
     anniu2.style.display="block";
+    anniud.style.display="none";
+    anniud2.style.display="block";
 
     var time= 60;
     var YZMjishi=0;
     anniu2.innerHTML=time+"s后重试";
+    anniud2.innerHTML=time+"s后重试";
 
     YZMjishi=setInterval(function(){
         time--;
         anniu2.innerHTML=time+"s后重试";
+        anniud2.innerHTML=time+"s后重试";
         if(time<=0){
             clearInterval(YZMjishi);
             anniu.style.display="block";
             anniu2.style.display="none";
+            anniud.style.display="block";
+            anniud2.style.display="none";
         }
     },1000);
 	
@@ -317,7 +326,24 @@ $("#sendEmailCode,#sendEmailCode1").click(function(){
   });
 });
 $("#sendNewEmailCode").click(function(){
+	var anniud3=document.querySelectorAll('.udPHyzfs3')[0];//发送验证码
+    var anniud4=document.querySelectorAll('.udPHyzfs4')[0];//禁用发送验证码
+    anniud3.style.display="none";
+    anniud4.style.display="block";
     var email = $("#newEmail").val();
+    var time= 60;
+    var YZMjishi=0;
+    anniud4.innerHTML=time+"s后重试";
+    YZMjishi=setInterval(function(){
+        time--;
+        anniud4.innerHTML=time+"s后重试";
+        if(time<=0){
+            clearInterval(YZMjishi);
+            anniud3.style.display="block";
+            anniud4.style.display="none";
+        }
+    },1000);
+    
   $.get("/wankangyuan/open/getNewEmailCode?email="+email, function(result){
     if(result != 0){
         layer.msg("已发送验证码，请注意接收!");
