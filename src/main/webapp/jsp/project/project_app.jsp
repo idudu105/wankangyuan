@@ -214,7 +214,7 @@
                             	<c:if test="${app.isDisplay eq 0}">私有</c:if>
 	                            <c:if test="${app.isDisplay eq 1}">公开</c:if>
 	                        </div>
-                            <div class="PJliCli PJyibu">${app.isAsync}
+                            <div class="PJliCli PJyibu">
 	                            <c:if test="${app.isAsync eq 0}">同步</c:if>
 	                            <c:if test="${app.isAsync eq 1}">异步</c:if>
                             </div>

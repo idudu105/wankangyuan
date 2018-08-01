@@ -141,7 +141,7 @@ public class UserController {
 		}
 		//检查验证码
 		if(!VerifyCodeUtils.verifyCode(randomCode,VerifyCodeUtils.V_CODE)) {
-			resultMap.put("message", "验证码不正确!");
+			resultMap.put("message", "图片验证码错误!");
 			return resultMap;
 		}
 		//检查用户名

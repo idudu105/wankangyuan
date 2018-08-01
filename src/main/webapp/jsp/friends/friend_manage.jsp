@@ -270,18 +270,18 @@
                                 <input id="groupMemberSearch" type="text" class="searchCt"  placeholder="组内成员" data-bind="event: { keyup: searchOrgers}" />
                             </div>
                         </div>
-                        <div class="friendMTrs" style="display:none;">
+                        <!-- <div class="friendMTrs" style="display:none;">
                             <select id="orgRole" name="orgRole" data-bind="event: { change:getOrgers }">
-                                <option value="">无</option>
+                                <option value="">所有角色</option>
                                 <option value="管理员">管理员</option>
                                 <option value="成员">成员</option>
                             </select>
-                        </div>
-                        <div class="friendMTrss" style="display:none;">
+                        </div> -->
+                        <!-- <div class="friendMTrss" style="display:none;">
                             <select id="sysRoles" name="sysRoles" data-bind="foreach:sysRoles,event: { change:getMyFriends }">
                                 <option data-bind="text:description,value:description"></option>
                             </select>
-                        </div>
+                        </div> -->
                         <div class="friendMTrb friend_qunfa">群发消息</div>
                         <div class="friendMTrb friend_yichuzu">从组中移除</div>
                         <div class="friendMTrb friend_yichuhy">移除好友</div>
@@ -370,7 +370,13 @@
                                         <th class="touxiangk">头像</th>
                                         <th class="yonghuming">用户名</th>
                                         <th class="youxiang">邮箱</th>
-                                        <th class="juese">角色</th>
+                                        <th class="juese">
+                                        <select id="orgRole" name="orgRole" data-bind="event: { change:getOrgers }">
+                                            <option value="">所有角色</option>
+                                            <option value="管理员">管理员</option>
+                                            <option value="成员">成员</option>
+                                        </select>
+                                        </th>
                                         <th class="caozuo">操作</th>
                                     </tr>
                                     
@@ -413,7 +419,11 @@
                                         <th class="touxiangk">头像</th>
                                         <th class="yonghuming">用户名</th>
                                         <th class="youxiang">邮箱</th>
-                                        <th class="juese">角色</th>
+                                        <th class="juese">
+				                            <select id="sysRoles" name="sysRoles" data-bind="foreach:sysRoles,event: { change:getMyFriends }">
+				                                <option data-bind="text:description,value:description"></option>
+				                            </select>
+                                        </th>
                                         <th class="caozuo">操作</th>
                                     </tr>
                                     <tbody data-bind="foreach:friends">
@@ -721,6 +731,7 @@ function ViewModel() {
     }
     self.removeAllOrgers = function(){
     	$('#groupId').val("");
+    	
     	self.orgers.removeAll();
     }
     
@@ -819,7 +830,7 @@ function ViewModel() {
     	self.sysRoles.removeAll();
         $.get("/wankangyuan/role/getRoleList",{},function(data){
             roles = JSON.parse(data);
-            roles[0].description = "无";
+            roles[0].description = "所有角色";
             self.sysRoles.push(roles[0]);
             roles = JSON.parse(data);
             for (var i in roles){
@@ -838,6 +849,7 @@ function ViewModel() {
     self.friends = ko.observableArray();
     var myfriends;
     self.getMyFriends = function() {
+    	$('#groupId').val("");
     	self.friends.removeAll();
     	$.get("/wankangyuan/friends/getMyFriends",{
     		friendName:$("#myFriendSearch").val(),

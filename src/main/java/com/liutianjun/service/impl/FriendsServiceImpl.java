@@ -122,7 +122,7 @@ public class FriendsServiceImpl implements FriendsService {
 		if(null != friendName) {
 			criteria.andFriendNameLike("%"+friendName+"%");
 		}
-		if(null != sysRoles && !"无".equals(sysRoles) && !"".equals(sysRoles)) {
+		if(null != sysRoles && !"所有角色".equals(sysRoles) && !"".equals(sysRoles)) {
 			criteria.andFriendRolenameEqualTo(sysRoles);
 		}
 		return friendsDao.selectByExample(example);

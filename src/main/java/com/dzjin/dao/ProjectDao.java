@@ -143,7 +143,7 @@ public interface ProjectDao {
 			+ "project_floder.id=project_file.floder_id")
 	public int countProjectFile(@Param("id")Integer id);
 	
-	@Select("select count(*) from project_app_relation where project_id=#{id}")
+	@Select("select count(*) from application where id in (select app_id from project_app_relation where project_id=#{id})")
 	public int countProjectApp(@Param("id")Integer id);
 	
 	@Select("select count(*) from project_app_task where project_id=#{id}")

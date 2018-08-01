@@ -499,18 +499,18 @@
                                 <input id="orgMemberSearch" type="text" class="searchCt"  placeholder="组内成员" data-bind="event: { keyup: searchOrgers}" />
                             </div>
                         </div>
-                        <div class="friendMTrs" style="display:none;">
+                        <!-- <div class="friendMTrs" style="display:none;">
                             <select id="orgRole" name="orgRole" data-bind="event: { change:getOrgers }">
                                 <option value="">无</option>
                                 <option value="管理员">管理员</option>
                                 <option value="成员">成员</option>
                             </select>
-                        </div>
-                        <div class="friendMTrss" style="display:none;">
+                        </div> -->
+                        <!-- <div class="friendMTrss" style="display:none;">
                             <select id="sysRoles" name="sysRoles" data-bind="foreach:sysRoles,event: { change:getMyFriends }">
                                 <option data-bind="text:description,value:description"></option>
                             </select>
-                        </div>
+                        </div> -->
                         <div class="friendMMrz">
                     	<table class="friMMrtab">
 	                    	<tr class="biaotou">
@@ -523,7 +523,21 @@
                                 <th class="touxiangk">头像</th>
                                 <th class="yonghuming">用户名</th>
                                 <th class="youxiang">邮箱</th>
-                                <th class="juese">角色</th>
+                                <th class="juese">
+                                <div class="friendMTrs" style="display:none;">
+		                            <select id="orgRole" name="orgRole" data-bind="event: { change:getOrgers }">
+		                                <option value="">所有角色</option>
+		                                <option value="管理员">管理员</option>
+		                                <option value="成员">成员</option>
+		                            </select>
+		                        </div>
+		                        <div class="friendMTrss">
+		                            <select id="sysRoles" name="sysRoles" data-bind="foreach:sysRoles,event: { change:getMyFriends }">
+		                                <option data-bind="text:description,value:description"></option>
+		                            </select>
+		                        </div>
+		                        
+                                </th>
                             </tr>
 	                        <tbody id="ko_orgers" data-bind="foreach:orgers">
 		                        <tr class="">
@@ -1272,7 +1286,7 @@ function ViewModel() {
         self.sysRoles.removeAll();
         $.get("/wankangyuan/role/getRoleList",{},function(data){
             roles = JSON.parse(data);
-            roles[0].description = "无";
+            roles[0].description = "所有角色";
             self.sysRoles.push(roles[0]);
             roles = JSON.parse(data);
             for (var i in roles){

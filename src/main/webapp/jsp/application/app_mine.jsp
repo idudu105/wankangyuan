@@ -143,6 +143,10 @@
 	                        <div class="shaixuanZKliI active"></div>
 	                        <div class="shaixuanZKliT">应用描述</div>
 	                    </div>
+	                    <div class="shaixuanZKli">
+                            <div class="shaixuanZKliI active"></div>
+                            <div class="shaixuanZKliT">应用类别</div>
+                        </div>
 	                </div>
                 </div>
                 <div class="app_typeul" data-bind="foreach:{data:appTypeList, as:'appType'}">
@@ -169,6 +173,7 @@
                     <div class="PJListli PJyibu" name="isAsync" order="is_async">异步/同步</div>
                     <div class="PJListli PJkeyword" name="keywords" order="keywords">关键字</div>
                     <div class="PJListli appexplain" name="appOverview" order="app_overview">应用描述</div>
+                    <div class="PJListli apptype" name="appType" order="app_type" >应用类别</div>
                 </div>
                 <div class="PJListline"></div>
                 <div class="PJul">
@@ -190,6 +195,7 @@
                             </div>
                             <div class="PJliCli PJkeyword" data-bind="text:keywords"></div>
                             <div class="PJliCli appexplain" data-bind="text:appOverview"></div>
+                            <div class="PJliCli apptype" data-bind="text:appType"></div>
                         </a>
                     </div>
                     <div class="PJliline"></div>

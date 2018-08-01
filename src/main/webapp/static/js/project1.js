@@ -189,7 +189,16 @@ function project1(){
                 //     oBTSX.style.display="none";
                 //     BTSXpd=-1;
                 // }else{
-                    oBTSX.style.display="block";
+            	var thisclass=this.className;
+            	//console.log(thisclass);
+            	if(thisclass.indexOf("apptype")!=-1){
+            		//console.log(thisclass.indexOf("apptype"));
+            		return;
+            		
+            	}
+            		oBTSX.style.display="block";
+            	
+                    
                     // BTSXpd=j;
                 // }
                 var BTSXleft=aPJListli[j].offsetLeft;
@@ -1894,7 +1903,7 @@ function friend_manage(){
     }
 
 //console.log(afriendMMlTTz.length);
-//组织结构点击效果
+  //组织结构点击效果
     for(var i=0;i<afriendMMlTTz.length;i++){
         (function(index){
             var ofriendMMlTTzT=afriendMMlTTz[index].querySelectorAll('.friendMMlTTzT')[0];
@@ -1934,8 +1943,8 @@ function friend_manage(){
                 ofriend_qunfa.style.display="none";
                 ofriend_yichuzu.style.display="inline-block";
                 ofriend_yichuhy.style.display="none";
-                ofriendMTrs.style.display="inline-block";
-                ofriendMTrss.style.display="none";
+                //ofriendMTrs.style.display="inline-block";
+                //ofriendMTrss.style.display="none";
                 
 
                 osearch_2.className="search_2";
@@ -1957,11 +1966,11 @@ function friend_manage(){
                 //console.log("添加组预存框"+ozzsyKpd.value);
 
 
-                for(var j=0;j<afriendMMlTTzBz.length;j++){
-                    afriendMMlTTzBz[j].style.color="#666";
-                }
-                ofriendMMlTBa.className="friendMMlTBa";
-                afriendMMlTTzBz[index].style.color="#5ca0e5";
+                // for(var j=0;j<afriendMMlTTzBz.length;j++){
+                //     afriendMMlTTzBz[j].style.color="#666";
+                // }
+                // ofriendMMlTBa.className="friendMMlTBa";
+                // afriendMMlTTzBz[index].style.color="#5ca0e5";
 
                 //组修改框内置预存框的写入
                 if(ozzsy_editKpd){
@@ -1984,8 +1993,8 @@ function friend_manage(){
                 ofriend_qunfa.style.display="none";
                 ofriend_yichuzu.style.display="inline-block";
                 ofriend_yichuhy.style.display="none";
-                ofriendMTrs.style.display="inline-block";
-                ofriendMTrss.style.display="none";
+                // ofriendMTrs.style.display="inline-block";
+                //ofriendMTrss.style.display="none";
                 
 
                 osearch_2.className="search_2";
@@ -2042,8 +2051,8 @@ function friend_manage(){
                 ofriend_qunfa.style.display="none";
                 ofriend_yichuzu.style.display="inline-block";
                 ofriend_yichuhy.style.display="none";
-                ofriendMTrs.style.display="inline-block";
-                ofriendMTrss.style.display="none";
+                /*ofriendMTrs.style.display="inline-block";
+                ofriendMTrss.style.display="none";*/
                 
 
                 osearch_2.className="search_2";
@@ -2056,14 +2065,21 @@ function friend_manage(){
     
 // 我的好友点击效果
     ofriendMMlTBa.onclick=function(){
-        for(var j=0;j<afriendMMlTTzBz.length;j++){
-            afriendMMlTTzBz[j].style.color="#666";
-        }
-        ofriendMMlTBa.className="friendMMlTBa active";
+        // for(var j=0;j<afriendMMlTTzBz.length;j++){
+        //     afriendMMlTTzBz[j].style.color="#666";
+        // }
+        // ofriendMMlTBa.className="friendMMlTBa active";
+
+        ofriendMMlTBa.appendChild(ozhizhen);//插入指针图片
 
         // 组修改框和组删除框内置预存框清空
         ozzsy_editKpd.value="";
         ozzsy_delKpd.value="";
+
+        //添加组预存框清空
+        if(ozzsyKpd){
+            ozzsyKpd.value="";
+        }
 
         //右侧框切换
         afriendMMrz[0].className="friendMMrz";
@@ -2072,8 +2088,8 @@ function friend_manage(){
         ofriend_qunfa.style.display="inline-block";
         ofriend_yichuzu.style.display="none";
         ofriend_yichuhy.style.display="inline-block";
-        ofriendMTrs.style.display="none";
-        ofriendMTrss.style.display="inline-block";
+        // ofriendMTrs.style.display="none";
+        //ofriendMTrss.style.display="inline-block";
 
         //搜索栏的显示
         osearch_2.className="search_2 active";
