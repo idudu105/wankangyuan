@@ -232,71 +232,78 @@
 						</div>
 
 						<div class="prodaclmRsjK">
-							<div class="prodaclmRzT">
-								<div class="quanxuanK fxK1">
-									<input type="checkbox" class="input_check" id="check4_0">
-									<label for="check4_0"></label>
-								</div>
-								<c:forEach items="${data}" var="dataTemp">
-									<div class="prodaclmRzTt2" id="${dataTemp.ff_id}">${dataTemp.ff_name }</div>
-								</c:forEach>
-							</div>
-							<div class="prodaclmRzB">
-								<c:forEach items="${dataDatas}" var="dataDataTemp">
-									<div class="prodaclmRzBz">
-										<c:forEach items="${dataDataTemp}" var="dataDataTempTemp"
-											varStatus="status">
-											<c:if test="${status.index == 0 }">
-												<div class="fuxuanK5 fxK1 fx4">
-													<input type="checkbox" class="input_check"
-														name="${dataDataTempTemp}" id="check4_${dataDataTempTemp}">
-													<label for="check4_${dataDataTempTemp}"></label>
-												</div>
-											</c:if>
-											<c:if test="${status.index != 0 }">
-												<%-- <div class="prodaclmRzTt3 prodaclmRzTtsj3">${dataDataTempTemp}</div>
-											 --%>
-												<div class="prodaclmRzTt3">
-													<span>${dataDataTempTemp}</span>
-												</div>
+							<table class="PJul" >
+                        <tr class="PJList">
+                            <td>
+                                <div class="quanxuanK fxK1">
+                                    <input type="checkbox" class="input_check" id="check4_0">
+                                    <label for="check4_0"></label>
+                                </div>
+                                </td>
+                                <c:forEach items="${data}" var="dataTemp">
+                                    <td><div class="prodaclmRzTt2" id="${dataTemp.ff_id}">${dataTemp.ff_name }</div></td>
+                                </c:forEach>
+                            </tr>
 
-											</c:if>
-										</c:forEach>
-									</div>
-								</c:forEach>
+                                <c:forEach items="${dataDatas}" var="dataDataTemp">
+                                    <tr class="PJli">
+                                        <c:forEach items="${dataDataTemp}" var="dataDataTempTemp"
+                                            varStatus="status">
+                                            <c:if test="${status.index == 0 }">
+                                            <td>
+                                                <div class="fuxuanK5 fxK1 fx4">
+                                                    <input type="checkbox" class="input_check"
+                                                        name="${dataDataTempTemp}" id="check4_${dataDataTempTemp}">
+                                                    <label for="check4_${dataDataTempTemp}"></label>
+                                                </div>
+                                              </td>
+                                            </c:if>
+                                            <c:if test="${status.index != 0 }">
+                                                <%-- <div class="prodaclmRzTt3 prodaclmRzTtsj3">${dataDataTempTemp}</div>
+                                             --%>
+                                                <td><div class="prodaclmRzTt3">
+                                                    <span>${dataDataTempTemp}</span>
+                                                </div></td>
+                                            </c:if>
+                                        </c:forEach>
+                                    </tr>
+                                </c:forEach>
+                            </table>
 								<div class="pageK" id="box"></div>
+								
 							</div>
+							<div class="BTSX2">
+                            <div class="BTSXc">
+                                <div class="BTSXcli">
+                                    <div class="BTSXcliT">排序：</div>
+                                    <img src="/wankangyuan/static/img/sort_up.png" alt=""
+                                        class="BTSXcliI" /> <img
+                                        src="/wankangyuan/static/img/sort_down.png" alt=""
+                                        class="BTSXcliI" /> <input type="text" class="BTSXcliIpd"
+                                        style="display: none;" />
+                                </div>
+                                <div class="BTSXcli">
+                                    <div class="BTSXcliT">过滤：</div>
+                                    <input type="text" class="BTSXcliGLK" />
+                                    <button id="guolv">过滤</button>
+                                </div>
+                                <div class="BTSXcli">
+                                    <div class="BTSXcliT">值筛选：</div>
+                                </div>
+                                <div class="BTSXcli2">
+                                    <div class="BTSXcli2li">
+                                        <input type="checkbox" class="BTSXcli2liI" />
+                                        <div class="BTSXcli2liT">空值</div>
+                                    </div>
+                                </div>
+                                <div class="BTSXcli3">
+                                    <div class="BTSXcli3BT BTSXcli3BTent" onclick="shaixuan(1)">筛选</div>
+                                    <div class="BTSXcli3BT BTSXcli3BTent" onclick="chongzhi()">重置</div>
+                                </div>
+                            </div>
+                        </div>
 						</div>
-						<div class="BTSX2">
-							<div class="BTSXc">
-								<div class="BTSXcli">
-									<div class="BTSXcliT">排序：</div>
-									<img src="/wankangyuan/static/img/sort_up.png" alt=""
-										class="BTSXcliI" /> <img
-										src="/wankangyuan/static/img/sort_down.png" alt=""
-										class="BTSXcliI" /> <input type="text" class="BTSXcliIpd"
-										style="display: none;" />
-								</div>
-								<div class="BTSXcli">
-									<div class="BTSXcliT">过滤：</div>
-									<input type="text" class="BTSXcliGLK" />
-									<button id="guolv">过滤</button>
-								</div>
-								<div class="BTSXcli">
-									<div class="BTSXcliT">值筛选：</div>
-								</div>
-								<div class="BTSXcli2">
-									<div class="BTSXcli2li">
-										<input type="checkbox" class="BTSXcli2liI" />
-										<div class="BTSXcli2liT">空值</div>
-									</div>
-								</div>
-								<div class="BTSXcli3">
-									<div class="BTSXcli3BT BTSXcli3BTent" onclick="shaixuan(1)">筛选</div>
-									<div class="BTSXcli3BT BTSXcli3BTent" onclick="chongzhi()">重置</div>
-								</div>
-							</div>
-						</div>
+						
 					</div>
 					<div class="clmReditK">
 						<div class="clmReditT">
@@ -1024,6 +1031,7 @@
                         BTSXleft=1118;
                     }
                     oBTSX.style.left=BTSXleft-130+'px'; 
+                    //oBTSX.style.top="100px";
                     event.stopPropagation();
                 }
             })(i)

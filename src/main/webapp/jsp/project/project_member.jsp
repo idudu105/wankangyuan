@@ -20,6 +20,7 @@
 <script type="text/javascript">
     window.onload=function(){
         project0();
+        //project1();
         
      // 筛选菜单框显示隐藏
         var oshaixuanBT=document.querySelectorAll('.shaixuanBT')[0];//获取筛选下拉按钮
@@ -27,19 +28,20 @@
         var shaixuanPD=0;
 
         oshaixuanBT.onclick=function(event){
-            if(shaixuanPD==0){
+            // if(shaixuanPD==0){
                 oshaixuanZK.className="shaixuanZK active";
-                shaixuanPD=1;
-            }else{
-                oshaixuanZK.className="shaixuanZK";
-                shaixuanPD=0;
-            }
-            // event.stopPropagation();
+                // shaixuanPD=1;
+            // }else{
+            //     oshaixuanZK.className="shaixuanZK";
+            //     shaixuanPD=0;
+            // }
+            event.stopPropagation();
+            oBTSX.style.display="none";
             // console.log(1);
         }
-        // document.onclick=function(){
-        //     oshaixuanZK.className="shaixuanZK";
-        // }
+        oshaixuanZK.onclick=function(event){
+            event.stopPropagation();
+        }
 
     //筛选按钮显示隐藏选项
         var oshaixuanZK=document.querySelectorAll('.shaixuanZK')[0];//获取筛选菜单
@@ -141,6 +143,7 @@
                     }
                     oBTSX.style.left=BTSXleft-20+'px'; 
                     event.stopPropagation();
+                    oshaixuanZK.className="shaixuanZK";
                 }
             })(i)
         }
@@ -151,10 +154,12 @@
         window.onclick=function(){
             //console.log(1);
             oBTSX.style.display="none";
+            oshaixuanZK.className="shaixuanZK";
         }
         document.onclick=function(){
             //console.log(1);
             oBTSX.style.display="none";
+            oshaixuanZK.className="shaixuanZK";
         }
         oBTSX.onclick=function(){
             event.stopPropagation();
@@ -427,6 +432,7 @@
 
                 oquanxuanK.onchange=function(){
                     if(oquanxuan.checked){
+                    	console.log(1);
                         for(var i=0;i<afuxuanK.length;i++){
                             afuxuan[i].checked=1;
                         }
@@ -607,30 +613,32 @@
                     </div>
                 </div>
                 <div class="shaixuanZK">
+                <div class="shaixuanZKC">
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">名称</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">角色</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">联系人</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">进组时间</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">上传文件</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">发表/回复话题</div>
                         <div class="shaixuanZKliI active"></div>
+                        <div class="shaixuanZKliT">发表/回复话题</div>
                     </div>
+                </div>
                 </div>
             </div>
             <div class="memaddK">
@@ -861,8 +869,8 @@
                     <div class="PJListli PJListli1 memrole" id="rolename">角色</div>
                     <div class="PJListli PJListli1 memcontact" id="linkman">联系人</div>
                     <div class="PJListli PJListli1 memintime" id="bind_date_time">进组时间</div>
-                    <div class="PJListli memupfile" >上传文件</div>
-                    <div class="PJListli memtopic" >发表/回复话题</div>
+                    <div class="PJListli PJListli1 memupfile" >上传文件</div>
+                    <div class="PJListli PJListli1 memtopic" >发表/回复话题</div>
                 </div>
                 <div class="PJListline"></div>
                 <div class="PJul">
@@ -1038,28 +1046,39 @@
             	layer.msg("请勾选成员");
             	return;
             }
-            $.ajax({
-            	url:"/wankangyuan/projectMember/deleteProjectMembers",
-            	type:"post",
-            	data:{
-            		ids:ids.join(",")
-            	},
-            	dataType:"json",
-            	success : function(data){
-            		if(data.result == true){
-            			layer.msg(data.message, {
-                            anim: 0,
-                            end: function (index) {
-                            	var searchWord = $(".search2Ct").val();
-                                window.location.href="/wankangyuan/projectMember/selectProjectMember?searchWord="+searchWord;
-                            }
-                        });
-            		}
-            	},
-            	error : function(){
-            		layer.msg("联网失败");
-            	}
-            });
+            
+            layer.confirm('请确认是否删除?',{
+                btn: ['确认','取消'], //按钮
+                icon: 2
+              }, function(){
+            	  $.ajax({
+                      url:"/wankangyuan/projectMember/deleteProjectMembers",
+                      type:"post",
+                      data:{
+                          ids:ids.join(",")
+                      },
+                      dataType:"json",
+                      success : function(data){
+                          if(data.result == true){
+                              layer.msg(data.message, {
+                                  anim: 0,
+                                  end: function (index) {
+                                      var searchWord = $(".search2Ct").val();
+                                      window.location.href="/wankangyuan/projectMember/selectProjectMember?searchWord="+searchWord;
+                                  }
+                              });
+                          }
+                      },
+                      error:function(result){
+                    	  layer.msg("联网失败");
+                      }
+                  });
+                  
+              }, function(){
+                  return;
+              });
+            
+            
         });
         var role_id = 0;
         var role_name = 'rolename';

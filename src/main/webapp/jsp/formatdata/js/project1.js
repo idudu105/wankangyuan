@@ -88,22 +88,39 @@ function project1(){
     var oshaixuanZK=document.querySelectorAll('.shaixuanZK')[0];// 获取筛选菜单
     var shaixuanPD=0;
 
+//    if(oshaixuanBT){
+//    oshaixuanBT.onclick=function(event){
+//        if(shaixuanPD==0){
+//            oshaixuanZK.className="shaixuanZK active";
+//            shaixuanPD=1;
+//        }else{
+//            oshaixuanZK.className="shaixuanZK";
+//            shaixuanPD=0;
+//        }
+//        // event.stopPropagation();
+//        // console.log(1);
+//    }
+//    }
+//    // document.onclick=function(){
+//    // oshaixuanZK.className="shaixuanZK";
+//    // }
     if(oshaixuanBT){
     oshaixuanBT.onclick=function(event){
-        if(shaixuanPD==0){
+        // if(shaixuanPD==0){
             oshaixuanZK.className="shaixuanZK active";
-            shaixuanPD=1;
-        }else{
-            oshaixuanZK.className="shaixuanZK";
-            shaixuanPD=0;
-        }
-        // event.stopPropagation();
+            // shaixuanPD=1;
+        // }else{
+        //     oshaixuanZK.className="shaixuanZK";
+        //     shaixuanPD=0;
+        // }
+        event.stopPropagation();
+        oBTSX.style.display="none";
         // console.log(1);
     }
+    oshaixuanZK.onclick=function(event){
+        event.stopPropagation();
     }
-    // document.onclick=function(){
-    // oshaixuanZK.className="shaixuanZK";
-    // }
+    }
 
 // 筛选按钮显示隐藏选项
     var oshaixuanZK=document.querySelectorAll('.shaixuanZK')[0];// 获取筛选菜单
@@ -233,6 +250,7 @@ function project1(){
         // console.log(1);
     	if(oBTSX){
     		oBTSX.style.display="none";
+    		oshaixuanZK.className="shaixuanZK";
     	}
     	
     	
@@ -242,6 +260,7 @@ function project1(){
     	
     	if(oBTSX){
     		oBTSX.style.display="none";
+    		oshaixuanZK.className="shaixuanZK";
     	}
     }
 

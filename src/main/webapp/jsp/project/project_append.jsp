@@ -338,46 +338,48 @@
                     </div>
                 </div>
                 <div class="shaixuanZK">
+                <div class="shaixuanZKC">
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">结果名称</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">应用名称</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">创建者</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">运行时间</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">运行使用参数</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">运行结果描述</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">进度</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">发布状态</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">异步/即时</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">结果文件</div>
                         <div class="shaixuanZKliI active"></div>
+                        <div class="shaixuanZKliT">结果文件</div>
                     </div>
+                </div>
                 </div>
             </div>
             <div class="PJK">

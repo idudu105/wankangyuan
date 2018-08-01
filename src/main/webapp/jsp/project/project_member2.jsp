@@ -818,24 +818,36 @@
             	return;
             }
             
-            $.ajax({
-            	url:"/wankangyuan/projectMember/deleteProjectMembers",
-            	type:"post",
-            	data:{
-            		ids:ids.join(",")
-            	},
-            	dataType:"json",
-            	success : function(data){
-            		if(data.result == true){
-            			layer.msg(data.message);
-            			var searchWord = $(".search2Ct").val();
-            			window.location.href="/wankangyuan/projectMember/selectProjectMember?type=2&searchWord="+searchWord;
-            		}
-            	},
-            	error : function(){
-            		layer.msg("联网失败");
-            	}
-            });
+            layer.confirm('请确认是否删除?',{
+                btn: ['确认','取消'], //按钮
+                icon: 2
+              }, function(){
+                  $.ajax({
+                      url:"/wankangyuan/projectMember/deleteProjectMembers",
+                      type:"post",
+                      data:{
+                          ids:ids.join(",")
+                      },
+                      dataType:"json",
+                      success : function(data){
+                          if(data.result == true){
+                              layer.msg(data.message, {
+                                  anim: 0,
+                                  end: function (index) {
+                                      var searchWord = $(".search2Ct").val();
+                                      window.location.href="/wankangyuan/projectMember/selectProjectMember?type=2&searchWord="+searchWord;
+                                  }
+                              });
+                          }
+                      },
+                      error:function(result){
+                          layer.msg("联网失败");
+                      }
+                  });
+                  
+              }, function(){
+                  return;
+              });
         });
         
         var role_id = 0;

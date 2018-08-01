@@ -147,33 +147,35 @@
                     </div>
                 </div>
                 <div class="shaixuanZK">
+                <div class="shaixuanZKC">
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">应用名称</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">创建人</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">创建时间</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">是否公开</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">异步/同步</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
+                        <div class="shaixuanZKliI active"></div>
                         <div class="shaixuanZKliT">关键字</div>
-                        <div class="shaixuanZKliI active"></div>
                     </div>
                     <div class="shaixuanZKli">
-                        <div class="shaixuanZKliT">应用描述</div>
                         <div class="shaixuanZKliI active"></div>
+                        <div class="shaixuanZKliT">应用描述</div>
+                    </div>
                     </div>
                 </div>
             </div>

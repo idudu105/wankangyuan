@@ -94,19 +94,20 @@ function project1(){
     var shaixuanPD=0;
 
     oshaixuanBT.onclick=function(event){
-        if(shaixuanPD==0){
+        // if(shaixuanPD==0){
             oshaixuanZK.className="shaixuanZK active";
-            shaixuanPD=1;
-        }else{
-            oshaixuanZK.className="shaixuanZK";
-            shaixuanPD=0;
-        }
-        // event.stopPropagation();
+            // shaixuanPD=1;
+        // }else{
+        //     oshaixuanZK.className="shaixuanZK";
+        //     shaixuanPD=0;
+        // }
+        event.stopPropagation();
+        oBTSX.style.display="none";
         // console.log(1);
     }
-    // document.onclick=function(){
-    //     oshaixuanZK.className="shaixuanZK";
-    // }
+    oshaixuanZK.onclick=function(event){
+        event.stopPropagation();
+    }
 
 //筛选按钮显示隐藏选项
     var oshaixuanZK=document.querySelectorAll('.shaixuanZK')[0];//获取筛选菜单
@@ -181,7 +182,7 @@ function project1(){
 
     // var BTSXpd=-1;//项目表头筛选框判断
 
-    //点击设置排序筛选框
+  //点击设置排序筛选框
     for(var i=0;i<aPJListli.length;i++){
         (function(j){
             aPJListli[j].onclick=function(){
@@ -189,31 +190,25 @@ function project1(){
                 //     oBTSX.style.display="none";
                 //     BTSXpd=-1;
                 // }else{
-            	var thisclass=this.className;
-            	//console.log(thisclass);
-            	if(thisclass.indexOf("apptype")!=-1){
-            		//console.log(thisclass.indexOf("apptype"));
-            		return;
-            		
-            	}
-            		oBTSX.style.display="block";
-            	
-                    
+                    oBTSX.style.display="block";
                     // BTSXpd=j;
                 // }
                 var BTSXleft=aPJListli[j].offsetLeft;
                 // oBTSX.name=aPJListli[j].innerHTML;
                 if(document.querySelectorAll('.BTSXpd')[0]){
                     var oBTSXpd=document.querySelectorAll('.BTSXpd')[0];//项目表头筛选框判断
-                    oBTSXpd.value=$(aPJListli[j]).attr('name');
+                    oBTSXpd.value=aPJListli[j].title;
+                    //console.log(oBTSXpd.value);
                 }
                 
                 
+                //console.log(BTSXleft);
                 if(BTSXleft>1118){
                     BTSXleft=1118;
                 }
                 oBTSX.style.left=BTSXleft-20+'px'; 
                 event.stopPropagation();
+                oshaixuanZK.className="shaixuanZK";
             }
         })(i)
     }
@@ -223,10 +218,7 @@ function project1(){
     window.onclick=function(){
         //console.log(1);
         oBTSX.style.display="none";
-    }
-    document.onclick=function(){
-        //console.log(1);
-        oBTSX.style.display="none";
+        oshaixuanZK.className="shaixuanZK";
     }
     oBTSX.onclick=function(){
         event.stopPropagation();
