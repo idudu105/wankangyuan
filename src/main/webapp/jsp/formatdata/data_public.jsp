@@ -228,9 +228,9 @@
                                 </td>
                                 </c:if>
                              <c:if test="${status.index!=0}">
-                                <td>
+                                <td onclick="datainHref('${sourceData[0]}')" style="cursor:pointer;">
                                 <div class="PJliCli2">
-                                    <a href="#" onclick="datainHref('${sourceData[0]}')">
+                                    <a href="#" >
                                         <span>${sourceDataField}</span>
                                     </a>
                                 </div>
