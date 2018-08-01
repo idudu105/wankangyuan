@@ -592,10 +592,12 @@
                             	<c:forEach items="${projectCustomRoles }" var="projectCustomRoleTemp">
                             		<div class="QXGLkMlz">
                             			<input id="${projectCustomRoleTemp.id}" class="QXGLkMlzt1" style="display:none;" value="${projectCustomRoleTemp.rolename}"/>
-	                                    <div class="QXGLkMlzt" onclick="clickCustomRole(${projectCustomRoleTemp.id},'${projectCustomRoleTemp.rolename}')">
+	                                    <div class="QXGLkMlzt" onclick="clickCustomRole(${projectCustomRoleTemp.id},'${projectCustomRoleTemp.rolename}',this)">
 	                                    	${projectCustomRoleTemp.rolename }
 	                                    </div>
-	                                    <div class="QXGLkMlzi" onclick="deleteCustomRole(${projectCustomRoleTemp.id},'${projectCustomRoleTemp.rolename}')"></div>
+	                                    <c:if test="${projectCustomRoleTemp.rolename ne '创建者' && projectCustomRoleTemp.rolename ne '项目成员' && projectCustomRoleTemp.rolename ne '访问者'}">
+                                        <div class="QXGLkMlzi" onclick="deleteCustomRole(${projectCustomRoleTemp.id},'${projectCustomRoleTemp.rolename}')"></div>
+                                        </c:if>
 	                                </div>
                             	</c:forEach>
                             </div>
@@ -903,7 +905,9 @@
         });
         
       	//请求自定义角色的权限列表
-        function clickCustomRole(id , rolename){
+        function clickCustomRole(id , rolename,event){
+        	$(".QXGLkMlzt").css("color","#5ca0e5");
+            $(event).css("color","#000");
         	$.ajax({
         		url:"/wankangyuan/projectMember/getProjectCustomRoleAuthorities",
         		type:"post",
