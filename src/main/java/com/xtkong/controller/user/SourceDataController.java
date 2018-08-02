@@ -118,6 +118,17 @@ public class SourceDataController {
 			for (SourceField sourceField : source.getSourceFields()) {
 				qualifiers.add(String.valueOf(sourceField.getCsf_id()));
 			}
+
+			SourceField creator = new SourceField();
+			creator.setCs_id(cs_id);
+			creator.setCsf_name("创建人");
+			source.getSourceFields().add(creator);
+			qualifiers.add(ConstantsHBase.QUALIFIER_CREATOR);
+			SourceField createDate = new SourceField();
+			createDate.setCs_id(cs_id);
+			createDate.setCsf_name("创建时间");
+			source.getSourceFields().add(createDate);
+			qualifiers.add(ConstantsHBase.QUALIFIER_CREATE_DATETIME);
 			// 源数据字段数据，注：每个列表第一个值sourceDataId不显示
 			switch (type) {
 			case "1":
@@ -153,16 +164,6 @@ public class SourceDataController {
 				conditionEqual.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
 				break;
 			}
-			SourceField creator = new SourceField();
-			creator.setCs_id(cs_id);
-			creator.setCsf_name("创建人");
-			source.getSourceFields().add(creator);
-			qualifiers.add(ConstantsHBase.QUALIFIER_CREATOR);
-			SourceField createDate = new SourceField();
-			createDate.setCs_id(cs_id);
-			createDate.setCsf_name("创建时间");
-			source.getSourceFields().add(createDate);
-			qualifiers.add(ConstantsHBase.QUALIFIER_CREATE_DATETIME);
 			// 头筛选
 			if (searchFirstWord != null && !searchFirstWord.trim().isEmpty()) {
 				if (oldCondition == null) {
