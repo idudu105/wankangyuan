@@ -22,7 +22,6 @@ import java.util.concurrent.TimeoutException;
 
 import com.google.gson.Gson;
 import com.xtkong.util.ConstantsHBase;
-import com.xtkong.util.HbaseTest;
 
 /**
  * 利用Phoenix访问Hbase
@@ -146,7 +145,6 @@ public class PhoenixClient {
 				map.put("msg", msg);
 				return map;
 			}
-HbaseTest.println(phoenixSQL);
 			PreparedStatement stmt = conn.prepareStatement(phoenixSQL);
 			ResultSet set = stmt.executeQuery(phoenixSQL);
 			// 查询出来的列是不固定的，所以这里通过遍历的方式获取列名
@@ -177,7 +175,6 @@ HbaseTest.println(phoenixSQL);
 
 			msg.put("msg", "success");
 			map.put("msg", msg);
-			HbaseTest.println(map);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			msg.put("msg", "SQL执行出错：\n SQL:  " + phoenixSQL + "\n异常信息:  " + e.getMessage());

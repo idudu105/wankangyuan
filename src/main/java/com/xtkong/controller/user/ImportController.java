@@ -135,7 +135,7 @@ public class ImportController {
 				// getStringCellValue(cell));
 				// }
 				if (!sourceFieldDatas.isEmpty()) {
-					HBaseSourceDataDao.insertSourceData(cs_id, String.valueOf(user.getId()), sourceFieldDatas);
+					HBaseSourceDataDao.insertSourceData(cs_id, String.valueOf(user.getId()), sourceFieldDatas,user.getUsername());
 				}
 			}
 			hssfWorkbook.close();

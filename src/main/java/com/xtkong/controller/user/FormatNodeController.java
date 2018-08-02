@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dzjin.model.ProjectCustomRole;
+import com.dzjin.service.ProjectCustomRoleService;
 import com.dzjin.service.ProjectService;
+import com.liutianjun.pojo.User;
 import com.xtkong.dao.hbase.HBaseFormatNodeDao;
 import com.xtkong.model.FormatField;
 import com.xtkong.model.FormatType;
@@ -37,6 +41,10 @@ public class FormatNodeController {
 	FormatFieldService formatFieldService;
 	@Autowired
 	ProjectService projectService;
+	@Autowired
+	ProjectCustomRoleService projectCustomRoleService;
+	
+	
 	@RequestMapping("/insertFormatNode")
 	@ResponseBody
 	public Map<String, Object> insertFormatNode(String cs_id, String sourceDataId, String ft_id, String nodeName) {
@@ -79,7 +87,7 @@ public class FormatNodeController {
 
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/getFormatNodeById")
-	public String getFormatNodeById(HttpSession httpSession, String cs_id, String sourceDataId, String ft_id,
+	public String getFormatNodeById(HttpServletRequest request,HttpSession httpSession, String cs_id, String sourceDataId, String ft_id,
 			String formatNodeId, String type, Integer page, Integer strip, Integer searchId, String desc_asc,
 			String chooseDatas, String oldConditionNode8, String searchWord, String searchFirstWord, String fieldIds,
 			String likeSearch) {
@@ -89,7 +97,7 @@ public class FormatNodeController {
 		if (strip == null) {
 			strip = 12;
 		}
-
+		User user = (User) request.getAttribute("user");
 		List<FormatType> formatTypeFolders = new ArrayList<>();
 		List<List<String>> metaDataListTemp = new ArrayList<>();
 		List<FormatField> data = new ArrayList<>();
@@ -354,6 +362,13 @@ public class FormatNodeController {
 
 		switch (type) {
 		case "1":
+			List<String> authority_numbers=new ArrayList<>();
+			authority_numbers.add("30");
+			authority_numbers.add("31");
+			List<ProjectCustomRole> projects =projectCustomRoleService.selectProjectCustomRolesByUID(user.getId(),authority_numbers);
+//			projects = projectCustomRoleService.selectMyProject(user.getId());
+			httpSession.setAttribute("projects", projects);// 项目列表
+		
 			return "redirect:/jsp/formatdata/data_dataclick.jsp";
 		case "2":
 			return "redirect:/jsp/formatdata/data_dataclick2.jsp";

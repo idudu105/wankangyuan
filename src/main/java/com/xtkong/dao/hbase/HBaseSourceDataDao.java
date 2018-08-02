@@ -1,7 +1,9 @@
 package com.xtkong.dao.hbase;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -72,6 +74,35 @@ public class HBaseSourceDataDao {
 				Bytes.toBytes(String.valueOf(uid)));
 		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(ConstantsHBase.QUALIFIER_PUBLIC),
 				Bytes.toBytes(ConstantsHBase.VALUE_PUBLIC_FALSE));
+		for (Entry<String, String> sourceFieldData : sourceFieldDatas.entrySet()) {
+			put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(sourceFieldData.getKey()),
+					Bytes.toBytes(sourceFieldData.getValue()));
+		}
+		if (db.putRow(ConstantsHBase.TABLE_PREFIX_SOURCE_ + cs_id, put)) {
+			return rowKey;
+		}
+		return null;
+	}
+
+	public static String insertSourceData(String cs_id, String uid, Map<String, String> sourceFieldDatas,
+			String username) {
+		HBaseDB db = HBaseDB.getInstance();
+		Long count = db.getNewId(ConstantsHBase.TABLE_GID, uid + "_" + cs_id, ConstantsHBase.FAMILY_GID_GID,
+				ConstantsHBase.QUALIFIER_GID_GID_GID);
+		String rowKey = uid + "_" + cs_id + "_" + count;
+		Put put = new Put(Bytes.toBytes(rowKey));
+		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(ConstantsHBase.QUALIFIER_CREATE),
+				Bytes.toBytes(String.valueOf(uid)));
+		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(ConstantsHBase.QUALIFIER_USER),
+				Bytes.toBytes(String.valueOf(uid)));
+		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(ConstantsHBase.QUALIFIER_PUBLIC),
+				Bytes.toBytes(ConstantsHBase.VALUE_PUBLIC_FALSE));
+		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(ConstantsHBase.QUALIFIER_CREATOR),
+				Bytes.toBytes(username));
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO),
+				Bytes.toBytes(ConstantsHBase.QUALIFIER_CREATE_DATETIME),
+				Bytes.toBytes(String.valueOf(simpleDateFormat.format(new Date()))));
 		for (Entry<String, String> sourceFieldData : sourceFieldDatas.entrySet()) {
 			put.addColumn(Bytes.toBytes(ConstantsHBase.FAMILY_INFO), Bytes.toBytes(sourceFieldData.getKey()),
 					Bytes.toBytes(sourceFieldData.getValue()));
@@ -599,7 +630,6 @@ public class HBaseSourceDataDao {
 		}
 	}
 
-	
 	/**
 	 * 获取行键
 	 * 
@@ -675,10 +705,7 @@ public class HBaseSourceDataDao {
 		scan.setFilter(filterList);
 		return getSourceDataId(tableName, scan);
 	}
-	
-	
-	
-	
+
 	// ---------------------------------
 	public static List<List<String>> getSourceDatasByIds(String cs_id, List<String> sourceDataIds,
 			List<SourceField> sourceFields) {

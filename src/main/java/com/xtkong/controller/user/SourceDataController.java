@@ -88,7 +88,6 @@ public class SourceDataController {
 		if (strip == null) {
 			strip = 12;
 		}
-		List<ProjectCustomRole> projects;
 		List<Source> sources = sourceService.getSourcesForUser();
 		List<List<String>> sourceDatas = new ArrayList<>();
 		Integer total = 0;
@@ -154,7 +153,16 @@ public class SourceDataController {
 				conditionEqual.put(ConstantsHBase.QUALIFIER_PROJECT, String.valueOf(p_id));
 				break;
 			}
-
+			SourceField creator = new SourceField();
+			creator.setCs_id(cs_id);
+			creator.setCsf_name("创建人");
+			source.getSourceFields().add(creator);
+			qualifiers.add(ConstantsHBase.QUALIFIER_CREATOR);
+			SourceField createDate = new SourceField();
+			createDate.setCs_id(cs_id);
+			createDate.setCsf_name("创建时间");
+			source.getSourceFields().add(createDate);
+			qualifiers.add(ConstantsHBase.QUALIFIER_CREATE_DATETIME);
 			// 头筛选
 			if (searchFirstWord != null && !searchFirstWord.trim().isEmpty()) {
 				if (oldCondition == null) {
@@ -293,14 +301,16 @@ public class SourceDataController {
 		}
 		switch (type) {
 		case "1":
-			List<String> authority_numbers=new ArrayList<>();
+			List<String> authority_numbers = new ArrayList<>();
 			authority_numbers.add("30");
 			authority_numbers.add("31");
-			projects =projectCustomRoleService.selectProjectCustomRolesByUID(user.getId(),authority_numbers);
-//			projects = projectCustomRoleService.selectMyProject(user.getId());
+			List<ProjectCustomRole> projects = projectCustomRoleService.selectProjectCustomRolesByUID(user.getId(),
+					authority_numbers);
+			// projects =
+			// projectCustomRoleService.selectMyProject(user.getId());
 			httpSession.setAttribute("projects", projects);// 项目列表
 			return "redirect:/jsp/formatdata/data_mine.jsp";
-		case "2":		
+		case "2":
 			return "redirect:/jsp/formatdata/data_create.jsp";
 		case "3":
 			return "redirect:/jsp/formatdata/data_public.jsp";
@@ -352,7 +362,7 @@ public class SourceDataController {
 			List<String> qualifiers = new ArrayList<>();
 			Map<String, String> conditionEqual = new HashMap<>();
 			Map<String, String> conditionLike = new HashMap<>();
-			String condition ="";
+			String condition = "";
 			String phoenixSQL = null;
 
 			qualifiers.add(String.valueOf(searchId));
@@ -405,24 +415,33 @@ public class SourceDataController {
 			// null, null);
 			// phoenixSQL = "SELECT DISTINCT
 			// "+phoenixSQL.substring(phoenixSQL.indexOf("SELECT ID ,"));
-			
-			String select= "SELECT DISTINCT " ;
-			phoenixSQL=PhoenixClient.getPhoenixSQL(tableName, select, qualifiers, conditionEqual, conditionLike, condition, null, null)+ " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId));;
-			
-//			if (condition == null || condition.trim().isEmpty()) {
-//				phoenixSQL = "SELECT DISTINCT " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId))
-//						+ " FROM \"" + tableName + "\"  WHERE  "
-//						+ PhoenixClient.getSQLConditionEquals(tableName, conditionEqual, "AND") + " AND "
-//						+ PhoenixClient.getSQLConditionLikes(tableName, conditionLike, "AND") + " ORDER BY "
-//						+ PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId));
-//
-//			} else {
-//				phoenixSQL = "SELECT DISTINCT " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId))
-//						+ " FROM \"" + tableName + "\"  WHERE  "
-//						+ PhoenixClient.getSQLConditionEquals(tableName, conditionEqual, "AND") + " AND "
-//						+ PhoenixClient.getSQLConditionLikes(tableName, conditionLike, "AND") + " AND " + condition
-//						+ " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId));
-//			}
+
+			String select = "SELECT DISTINCT ";
+			phoenixSQL = PhoenixClient.getPhoenixSQL(tableName, select, qualifiers, conditionEqual, conditionLike,
+					condition, null, null) + " ORDER BY " + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId));
+			;
+
+			// if (condition == null || condition.trim().isEmpty()) {
+			// phoenixSQL = "SELECT DISTINCT " +
+			// PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId))
+			// + " FROM \"" + tableName + "\" WHERE "
+			// + PhoenixClient.getSQLConditionEquals(tableName, conditionEqual,
+			// "AND") + " AND "
+			// + PhoenixClient.getSQLConditionLikes(tableName, conditionLike,
+			// "AND") + " ORDER BY "
+			// + PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId));
+			//
+			// } else {
+			// phoenixSQL = "SELECT DISTINCT " +
+			// PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId))
+			// + " FROM \"" + tableName + "\" WHERE "
+			// + PhoenixClient.getSQLConditionEquals(tableName, conditionEqual,
+			// "AND") + " AND "
+			// + PhoenixClient.getSQLConditionLikes(tableName, conditionLike,
+			// "AND") + " AND " + condition
+			// + " ORDER BY " +
+			// PhoenixClient.getSQLFamilyColumn(String.valueOf(searchId));
+			// }
 			result = PhoenixClient.select(phoenixSQL);
 
 			List<String> csfDatas = new ArrayList<>();
@@ -490,10 +509,10 @@ public class SourceDataController {
 	public Map<String, Object> insertSourceData(HttpServletRequest request, String cs_id, String sourceFieldDatas) {
 		User user = (User) request.getAttribute("user");
 		Map<String, Object> map = new HashMap<String, Object>();
-
+		
 		if (HBaseSourceDataDao.insertSourceData(cs_id, String.valueOf(user.getId()),
 				new Gson().fromJson(sourceFieldDatas, new TypeToken<Map<String, String>>() {
-				}.getType())) != null) {
+				}.getType()),user.getUsername()) != null) {
 			map.put("result", true);
 			map.put("message", "新增成功");
 		} else {
@@ -538,8 +557,8 @@ public class SourceDataController {
 	 * @return
 	 */
 	@RequestMapping("/getSourceDataById")
-	public String getSourceDataById(HttpSession httpSession, String cs_id, String sourceDataId, String type) {
-
+	public String getSourceDataById(HttpServletRequest request,HttpSession httpSession, String cs_id, String sourceDataId, String type) {
+		User user = (User) request.getAttribute("user");
 		Source source = sourceService.getSourceByCs_id(Integer.valueOf(cs_id));
 		source.setSourceFields(sourceFieldService.getSourceFields(Integer.valueOf(cs_id)));
 
@@ -557,13 +576,27 @@ public class SourceDataController {
 				formatTypeMap);
 		httpSession.setAttribute("formatTypeFolders", formatTypeFolders);
 		httpSession.setAttribute("type123", type);
-		if (type.equals("2")) {
+
+		switch (type) {
+		case "1":
+			List<String> authority_numbers=new ArrayList<>();
+			authority_numbers.add("30");
+			authority_numbers.add("31");
+			List<ProjectCustomRole> projects =projectCustomRoleService.selectProjectCustomRolesByUID(user.getId(),authority_numbers);
+//			projects = projectCustomRoleService.selectMyProject(user.getId());
+			httpSession.setAttribute("projects", projects);// 项目列表
+		
+			return "redirect:/jsp/formatdata/data_datain.jsp";
+		case "2":
 			return "redirect:/jsp/formatdata/data_datain2.jsp";
-		} else if (type.equals("4")) {
+		case "3":
+			return "redirect:/jsp/formatdata/data_datain3.jsp";
+		case "4":
 			return "redirect:/jsp/project/project_datain.jsp";
-		} else {
+		default:
 			return "redirect:/jsp/formatdata/data_datain.jsp";
 		}
+
 	}
 
 	/**

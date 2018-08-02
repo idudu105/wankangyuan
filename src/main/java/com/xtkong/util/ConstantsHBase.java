@@ -29,6 +29,8 @@ public class ConstantsHBase {
 	public static final String QUALIFIER_CREATE = "CREATE";// 我创建的
 	public static final String QUALIFIER_USER = "USER";// 我的
 	public static final String QUALIFIER_PUBLIC = "PUBLIC";// 公共，1公共，0不公开（默认）
+	public static final String QUALIFIER_CREATOR = "CREATOR";// 
+	public static final String QUALIFIER_CREATE_DATETIME = "CREATEDATETIME";// 
 	// node
 	public static final String QUALIFIER_FORMATTYPE = "FORMATTYPE";// 结点格式类型
 	public static final String QUALIFIER_NODENAME = "NODENAME";// 结点名
