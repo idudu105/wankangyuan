@@ -121,11 +121,13 @@ public class SourceDataController {
 
 			SourceField creator = new SourceField();
 			creator.setCs_id(cs_id);
+			creator.setCsf_id(Integer.valueOf(ConstantsHBase.QUALIFIER_CREATOR));
 			creator.setCsf_name("创建人");
 			source.getSourceFields().add(creator);
 			qualifiers.add(ConstantsHBase.QUALIFIER_CREATOR);
 			SourceField createDate = new SourceField();
 			createDate.setCs_id(cs_id);
+			creator.setCsf_id(Integer.valueOf(ConstantsHBase.QUALIFIER_CREATE_DATETIME));
 			createDate.setCsf_name("创建时间");
 			source.getSourceFields().add(createDate);
 			qualifiers.add(ConstantsHBase.QUALIFIER_CREATE_DATETIME);
