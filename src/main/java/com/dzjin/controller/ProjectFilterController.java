@@ -363,6 +363,13 @@ public class ProjectFilterController {
 		httpSession.setAttribute("keyWords", keyWords);
 		httpSession.setAttribute("isOpen", isOpen);
 		
+		httpSession.setAttribute("pNameGl", pNameGl);
+		httpSession.setAttribute("pNumberGl", pNumberGl);
+		httpSession.setAttribute("pCreatorGl", pCreatorGl);
+		httpSession.setAttribute("createDatetimeGl", createDatetimeGl);
+		httpSession.setAttribute("keyWordsGl", keyWordsGl);
+		httpSession.setAttribute("isOpenGl", isOpenGl);
+		
 		if(type == null || type == 1){
 			return "/jsp/project/project_public.jsp";
 		}else{
@@ -404,11 +411,12 @@ public class ProjectFilterController {
 	public Map<String, Object> getDistinctColumnValueByColumnNameAndUidCreated1(
 			HttpSession session , HttpServletRequest request , 
 			QueryCondition projectQueryCondition, String pNameGl, String pNumberGl, String pCreatorGl,
-			String createDatetimeGl, String keyWordsGl){
+			String createDatetimeGl, String keyWordsGl,String pName, String pNumber, String pCreator,
+			String createDatetime, String keyWords, String isOpen){
 		User user = (User)request.getAttribute("user");
 		List<String> strings = projectFilterService.selectDistinctColumnValueCreated1(
 				projectQueryCondition.getColumnName(), user.getId() , projectQueryCondition.getFilter(), 
-				pNameGl, pNumberGl, pCreatorGl, createDatetimeGl, keyWordsGl);
+				pNameGl, pNumberGl, pCreatorGl, createDatetimeGl, keyWordsGl,pName,pNumber,pCreator,createDatetime,keyWords,isOpen);
 		Map<String, Object> map = new HashMap<>();
 		map.put("result", true);
 		map.put("message", strings);
@@ -449,11 +457,12 @@ public class ProjectFilterController {
 	public Map<String, Object> getDistinctColumnValueByColumnNameAndUidMine1(
 			HttpSession session , HttpServletRequest request , 
 			QueryCondition projectQueryCondition, String pNameGl, String pNumberGl, String pCreatorGl,
-			String createDatetimeGl, String keyWordsGl){
+			String createDatetimeGl, String keyWordsGl,String pName, String pNumber, String pCreator,
+			String createDatetime, String keyWords, String isOpen){
 		User user = (User)request.getAttribute("user");
 		List<String> strings = projectFilterService.selectDistinctColumnValueMine1(
 				projectQueryCondition.getColumnName(), user.getId() , projectQueryCondition.getFilter(), 
-				pNameGl, pNumberGl, pCreatorGl, createDatetimeGl, keyWordsGl);
+				pNameGl, pNumberGl, pCreatorGl, createDatetimeGl, keyWordsGl,pName,pNumber,pCreator,createDatetime,keyWords,isOpen);
 		Map<String, Object> map = new HashMap<>();
 		map.put("result", true);
 		map.put("message", strings);
@@ -492,10 +501,11 @@ public class ProjectFilterController {
 	public Map<String, Object> getDistinctColumnValueByColumnNameAndUidPublic1(
 			HttpSession session , HttpServletRequest request , 
 			QueryCondition projectQueryCondition, String pNameGl, String pNumberGl, String pCreatorGl,
-			String createDatetimeGl, String keyWordsGl){
+			String createDatetimeGl, String keyWordsGl,String pName, String pNumber, String pCreator,
+			String createDatetime, String keyWords, String isOpen){
 		List<String> strings = projectFilterService.selectDistinctColumnValuePublic1(
 				projectQueryCondition.getColumnName(), projectQueryCondition.getFilter(), 
-				pNameGl, pNumberGl, pCreatorGl, createDatetimeGl, keyWordsGl);
+				pNameGl, pNumberGl, pCreatorGl, createDatetimeGl, keyWordsGl,pName,pNumber,pCreator,createDatetime,keyWords,isOpen);
 		Map<String, Object> map = new HashMap<>();
 		map.put("result", true);
 		map.put("message", strings);

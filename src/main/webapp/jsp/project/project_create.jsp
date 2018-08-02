@@ -25,7 +25,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         var columnName = document.querySelectorAll(".BTSX")[0].id;
         if(columnName!=null && columnName!=""){
         	//需要点击对应的头部
-        	document.getElementById(columnName).click();
+        	if(${page == 1}){
+        	    document.getElementById(columnName).click();
+        	}
         }
     }
 </script>
@@ -727,12 +729,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	$("#isOpenGl").val(filter);
             }
     		
-    		var pNameGl = $("#pNameGl").val();
-            var pNumberGl = $("#pNumberGl").val();
-            var pCreatorGl = $("#pCreatorGl").val();
-            var createDatetimeGl = $("#createDatetimeGl").val();
-            var keyWordsGl = $("#keyWordsGl").val();
-            var isOpenGl = $("#isOpenGl").val();
+    		var pName = '${pName}';
+            var pNumber = '${pNumber}';
+            var pCreator = '${pCreator}';
+            var createDatetime = '${createDatetime}';
+            var keyWords = '${keyWords}';
+            var isOpen = '${isOpen}';
+            
+            var pNameGl = $("#pNameGl").val() || '${pNameGl}';
+            var pNumberGl = $("#pNumberGl").val() || '${pNumberGl}';
+            var pCreatorGl = $("#pCreatorGl").val() || '${pCreatorGl}';
+            var createDatetimeGl = $("#createDatetimeGl").val() || '${createDatetimeGl}';
+            var keyWordsGl = $("#keyWordsGl").val() || '${keyWordsGl}';
+            var isOpenGl = $("#isOpenGl").val() || '${isOpenGl}';
             
             /* if(getParam("pNameGl") != null && getParam("pNameGl") != "null" && getParam("pNameGl") != ""){
             	pNameGl = getParam("pNameGl");
@@ -780,7 +789,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     				pNumberGl : pNumberGl,
     				pCreatorGl : pCreatorGl,
     				createDatetimeGl : createDatetimeGl,
-    				keyWordsGl : keyWordsGl
+    				keyWordsGl : keyWordsGl,
+                    pName : pName,
+                    pNumber : pNumber,
+                    pCreator : pCreator,
+                    createDatetime : createDatetime,
+                    keyWords : keyWords,
+                    isOpen : isOpen
     			},
     			dataType:"json",
     			success : function(data){
@@ -791,7 +806,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     						//if(index < 10){
     							BTSXcli2_html+='<div class="BTSXcli2li">';
     							if(vals.indexOf(data.message[index]) != -1){//如果筛选值在之前的筛选中被勾选了，再次选中它
-    								BTSXcli2_html+='<input type="checkbox" class="BTSXcli2liC" name="'+data.message[index]+'" checked/>';
+    								BTSXcli2_html+='<input type="checkbox" class="BTSXcli2liC" name="'+data.message[index]+'"/>';
     							}else{
     								BTSXcli2_html+='<input type="checkbox" class="BTSXcli2liC" name="'+data.message[index]+'"/>';
     							}

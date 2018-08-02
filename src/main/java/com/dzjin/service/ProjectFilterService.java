@@ -70,7 +70,8 @@ public class ProjectFilterService {
 	 * @return
 	 */
 	public List<String> selectDistinctColumnValueCreated1(String columnName , Integer creator , String searchWord, String pNameGl, String pNumberGl, String pCreatorGl,
-			String createDatetimeGl, String keyWordsGl){
+			String createDatetimeGl, String keyWordsGl,
+			String pName, String pNumber, String pCreator,String createDatetime, String keyWords, String isOpen){
 		String sql = "";
 		if(pNameGl != null && !pNameGl.equals("")){
 			sql += " and project.p_name like '%"+pNameGl+"%' ";
@@ -86,6 +87,137 @@ public class ProjectFilterService {
 		}
 		if(keyWordsGl != null && !keyWordsGl.equals("")){
 			sql += " and project.key_words like '%"+keyWordsGl+"%' ";
+		}
+		
+		if(pName != null && !pName.equals("")){
+			if(pName.indexOf(",")>-1){
+				sql += "and (";
+				String[] pname = pName.split(",");
+				for(int i=0;i<pname.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						//其他字段不需要进行转换
+						sql += "p_name"+"='"+String.valueOf(pname[i])+"'";
+						if(i != pname.length-1){
+							sql += " or ";	
+						}
+					
+				}
+				sql += ")";
+			}else{
+				sql += " and p_name in('"+pName+"')";
+			}
+			
+		}
+		
+		if(pNumber != null && !pNumber.equals("")){
+			if(pNumber.indexOf(",")>-1){
+				sql += "and (";
+				String[] pnumber = pNumber.split(",");
+				for(int i=0;i<pnumber.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						//其他字段不需要进行转换
+						sql += "p_number"+"='"+String.valueOf(pnumber[i])+"'";
+						if(i != pnumber.length-1){
+							sql += " or ";	
+						}
+					
+				}
+				sql += ")";
+			}else{
+				sql += " and p_number in('"+pNumber+"')";
+			}
+			
+		}
+		
+		if(pCreator != null && !pCreator.equals("")){
+			if(pCreator.indexOf(",")>-1){
+				sql += "and (";
+				String[] create = pCreator.split(",");
+				for(int i=0;i<create.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						//其他字段不需要进行转换
+						sql += "username"+"='"+String.valueOf(create[i])+"'";
+						if(i != create.length-1){
+							sql += " or ";	
+						}
+					
+				}
+				sql += ")";
+			}else{
+				sql += " and username in('"+pCreator+"')";
+			}
+			
+		}
+		
+		if(createDatetime != null && !createDatetime.equals("")){
+			if(createDatetime.indexOf(",")>-1){
+				sql += "and (";
+				String[] createdatetime = createDatetime.split(",");
+				for(int i=0;i<createdatetime.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						//其他字段不需要进行转换
+						sql += "create_datetime"+"='"+String.valueOf(createdatetime[i])+"'";
+						if(i != createdatetime.length-1){
+							sql += " or ";	
+						}
+					
+				}
+				sql += ")";
+			}else{
+				sql += " and create_datetime in('"+createDatetime+"')";
+			}
+			
+		}
+		
+		if(keyWords != null && !keyWords.equals("")){
+			if(keyWords.indexOf(",")>-1){
+				sql += "and (";
+				String[] keywords = keyWords.split(",");
+				for(int i=0;i<keywords.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						//其他字段不需要进行转换
+						sql += "key_words"+"='"+String.valueOf(keywords[i])+"'";
+						if(i != keywords.length-1){
+							sql += " or ";	
+						}
+					
+				}
+				sql += ")";
+			}else{
+				sql += " and key_words in('"+keyWords+"')";
+			}
+			
+		}
+		
+		if(isOpen != null && !isOpen.equals("")){
+			if(isOpen.indexOf(",")>-1){
+				sql += "and (";
+				String[] isopen = isOpen.split(",");
+				for(int i=0;i<isopen.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+					if(String.valueOf(isopen[i]).equals("已公开")){
+						sql += "is_open=1";
+						if(i != isopen.length-1){
+							sql += " or ";	
+						}
+					}
+					if(String.valueOf(isopen[i]).equals("未公开")){
+						sql += "is_open=1";
+						if(i != isopen.length-1){
+							sql += " or ";	
+						}
+					}
+				}
+				sql += ")";
+			}else{
+				if(isOpen.equals("已公开")){
+					isOpen = "1";
+				}else if(isOpen.equals("未公开")){
+					isOpen = "0";
+				}
+				sql += " and is_open ="+isOpen;
+			}
+			
 		}
 		
 		switch(columnName){
@@ -146,7 +278,8 @@ public class ProjectFilterService {
 	 * @return
 	 */
 	public List<String> selectDistinctColumnValueMine1(String columnName , Integer user_id , String searchWord, 
-			String pNameGl, String pNumberGl, String pCreatorGl, String createDatetimeGl, String keyWordsGl){
+			String pNameGl, String pNumberGl, String pCreatorGl, String createDatetimeGl, String keyWordsGl,
+			String pName, String pNumber, String pCreator,String createDatetime, String keyWords, String isOpen){
 		String sql = "";
 		if(pNameGl != null && !pNameGl.equals("")){
 			sql += " and project.p_name like '%"+pNameGl+"%' ";
@@ -163,6 +296,138 @@ public class ProjectFilterService {
 		if(keyWordsGl != null && !keyWordsGl.equals("")){
 			sql += " and project.key_words like '%"+keyWordsGl+"%' ";
 		}
+		
+		if(pName != null && !pName.equals("")){
+			if(pName.indexOf(",")>-1){
+				sql += "and (";
+				String[] pname = pName.split(",");
+				for(int i=0;i<pname.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						//其他字段不需要进行转换
+						sql += "p_name"+"='"+String.valueOf(pname[i])+"'";
+						if(i != pname.length-1){
+							sql += " or ";	
+						}
+					
+				}
+				sql += ")";
+			}else{
+				sql += " and p_name in('"+pName+"')";
+			}
+			
+		}
+		
+		if(pNumber != null && !pNumber.equals("")){
+			if(pNumber.indexOf(",")>-1){
+				sql += "and (";
+				String[] pnumber = pNumber.split(",");
+				for(int i=0;i<pnumber.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						//其他字段不需要进行转换
+						sql += "p_number"+"='"+String.valueOf(pnumber[i])+"'";
+						if(i != pnumber.length-1){
+							sql += " or ";	
+						}
+					
+				}
+				sql += ")";
+			}else{
+				sql += " and p_number in('"+pNumber+"')";
+			}
+			
+		}
+		
+		if(pCreator != null && !pCreator.equals("")){
+			if(pCreator.indexOf(",")>-1){
+				sql += "and (";
+				String[] create = pCreator.split(",");
+				for(int i=0;i<create.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						//其他字段不需要进行转换
+						sql += "username"+"='"+String.valueOf(create[i])+"'";
+						if(i != create.length-1){
+							sql += " or ";	
+						}
+					
+				}
+				sql += ")";
+			}else{
+				sql += " and username in('"+pCreator+"')";
+			}
+			
+		}
+		
+		if(createDatetime != null && !createDatetime.equals("")){
+			if(createDatetime.indexOf(",")>-1){
+				sql += "and (";
+				String[] createdatetime = createDatetime.split(",");
+				for(int i=0;i<createdatetime.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						//其他字段不需要进行转换
+						sql += "create_datetime"+"='"+String.valueOf(createdatetime[i])+"'";
+						if(i != createdatetime.length-1){
+							sql += " or ";	
+						}
+					
+				}
+				sql += ")";
+			}else{
+				sql += " and create_datetime in('"+createDatetime+"')";
+			}
+			
+		}
+		
+		if(keyWords != null && !keyWords.equals("")){
+			if(keyWords.indexOf(",")>-1){
+				sql += "and (";
+				String[] keywords = keyWords.split(",");
+				for(int i=0;i<keywords.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						//其他字段不需要进行转换
+						sql += "key_words"+"='"+String.valueOf(keywords[i])+"'";
+						if(i != keywords.length-1){
+							sql += " or ";	
+						}
+					
+				}
+				sql += ")";
+			}else{
+				sql += " and key_words in('"+keyWords+"')";
+			}
+			
+		}
+		
+		if(isOpen != null && !isOpen.equals("")){
+			if(isOpen.indexOf(",")>-1){
+				sql += "and (";
+				String[] isopen = isOpen.split(",");
+				for(int i=0;i<isopen.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+					if(String.valueOf(isopen[i]).equals("已公开")){
+						sql += "is_open=1";
+						if(i != isopen.length-1){
+							sql += " or ";	
+						}
+					}
+					if(String.valueOf(isopen[i]).equals("未公开")){
+						sql += "is_open=1";
+						if(i != isopen.length-1){
+							sql += " or ";	
+						}
+					}
+				}
+				sql += ")";
+			}else{
+				if(isOpen.equals("已公开")){
+					isOpen = "1";
+				}else if(isOpen.equals("未公开")){
+					isOpen = "0";
+				}
+				sql += " and is_open ="+isOpen;
+			}
+			
+		}
+		
 		switch(columnName){
 			case "p_name":
 				return projectFilterDao.selectDistinctP_nameMine1(user_id, sql);
@@ -219,7 +484,8 @@ public class ProjectFilterService {
 	 * @return
 	 */
 	public List<String> selectDistinctColumnValuePublic1(String columnName , String searchWord, 
-			String pNameGl, String pNumberGl, String pCreatorGl, String createDatetimeGl, String keyWordsGl){
+			String pNameGl, String pNumberGl, String pCreatorGl, String createDatetimeGl, String keyWordsGl,
+			String pName, String pNumber, String pCreator,String createDatetime, String keyWords, String isOpen){
 		String sql = "";
 		if(pNameGl != null && !pNameGl.equals("")){
 			sql += " and project.p_name like '%"+pNameGl+"%' ";
@@ -236,6 +502,138 @@ public class ProjectFilterService {
 		if(keyWordsGl != null && !keyWordsGl.equals("")){
 			sql += " and project.key_words like '%"+keyWordsGl+"%' ";
 		}
+		
+		if(pName != null && !pName.equals("")){
+			if(pName.indexOf(",")>-1){
+				sql += "and (";
+				String[] pname = pName.split(",");
+				for(int i=0;i<pname.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						//其他字段不需要进行转换
+						sql += "p_name"+"='"+String.valueOf(pname[i])+"'";
+						if(i != pname.length-1){
+							sql += " or ";	
+						}
+					
+				}
+				sql += ")";
+			}else{
+				sql += " and p_name in('"+pName+"')";
+			}
+			
+		}
+		
+		if(pNumber != null && !pNumber.equals("")){
+			if(pNumber.indexOf(",")>-1){
+				sql += "and (";
+				String[] pnumber = pNumber.split(",");
+				for(int i=0;i<pnumber.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						//其他字段不需要进行转换
+						sql += "p_number"+"='"+String.valueOf(pnumber[i])+"'";
+						if(i != pnumber.length-1){
+							sql += " or ";	
+						}
+					
+				}
+				sql += ")";
+			}else{
+				sql += " and p_number in('"+pNumber+"')";
+			}
+			
+		}
+		
+		if(pCreator != null && !pCreator.equals("")){
+			if(pCreator.indexOf(",")>-1){
+				sql += "and (";
+				String[] create = pCreator.split(",");
+				for(int i=0;i<create.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						//其他字段不需要进行转换
+						sql += "username"+"='"+String.valueOf(create[i])+"'";
+						if(i != create.length-1){
+							sql += " or ";	
+						}
+					
+				}
+				sql += ")";
+			}else{
+				sql += " and username in('"+pCreator+"')";
+			}
+			
+		}
+		
+		if(createDatetime != null && !createDatetime.equals("")){
+			if(createDatetime.indexOf(",")>-1){
+				sql += "and (";
+				String[] createdatetime = createDatetime.split(",");
+				for(int i=0;i<createdatetime.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						//其他字段不需要进行转换
+						sql += "create_datetime"+"='"+String.valueOf(createdatetime[i])+"'";
+						if(i != createdatetime.length-1){
+							sql += " or ";	
+						}
+					
+				}
+				sql += ")";
+			}else{
+				sql += " and create_datetime in('"+createDatetime+"')";
+			}
+			
+		}
+		
+		if(keyWords != null && !keyWords.equals("")){
+			if(keyWords.indexOf(",")>-1){
+				sql += "and (";
+				String[] keywords = keyWords.split(",");
+				for(int i=0;i<keywords.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+						//其他字段不需要进行转换
+						sql += "key_words"+"='"+String.valueOf(keywords[i])+"'";
+						if(i != keywords.length-1){
+							sql += " or ";	
+						}
+					
+				}
+				sql += ")";
+			}else{
+				sql += " and key_words in('"+keyWords+"')";
+			}
+			
+		}
+		
+		if(isOpen != null && !isOpen.equals("")){
+			if(isOpen.indexOf(",")>-1){
+				sql += "and (";
+				String[] isopen = isOpen.split(",");
+				for(int i=0;i<isopen.length;i++){
+					//如果筛选字段是is_open，同样需要将可视的字段值转换成数据库中对应的0-1值
+					if(String.valueOf(isopen[i]).equals("已公开")){
+						sql += "is_open=1";
+						if(i != isopen.length-1){
+							sql += " or ";	
+						}
+					}
+					if(String.valueOf(isopen[i]).equals("未公开")){
+						sql += "is_open=1";
+						if(i != isopen.length-1){
+							sql += " or ";	
+						}
+					}
+				}
+				sql += ")";
+			}else{
+				if(isOpen.equals("已公开")){
+					isOpen = "1";
+				}else if(isOpen.equals("未公开")){
+					isOpen = "0";
+				}
+				sql += " and is_open ="+isOpen;
+			}
+			
+		}
+		
 		switch(columnName){
 			case "p_name":
 				return projectFilterDao.selectDistinctP_namePublic1(sql);
